@@ -11,7 +11,7 @@
         }
     ],
     "relationships": [],
-    "changelogDate": "20200507124300",
+    "changelogDate": "20200508173300",
     "entityTableName": "tempo_experiencia",
     "dto": "mapstruct",
     "pagination": "pagination",

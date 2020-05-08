@@ -2,6 +2,7 @@
 import React from 'react';
 import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
 import { connect } from 'react-redux';
+import Select from 'react-select';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import {
   Button,
@@ -206,32 +207,33 @@ export class PadItem extends React.Component<IPadItemProps, IPadItemState> {
     const { padItemList, match, totalItems } = this.props;
     return (
       <div>
-        <ol className="breadcrumb float-xl-right">
+        <h2 id="page-heading">
+          <span className="page-header">Pad Items</span>
+          <Button id="togglerFilterPadItem" className="btn btn-primary float-right jh-create-entity">
+            <Translate contentKey="generadorApp.padItem.home.btn_filter_open">Filters</Translate>
+            &nbsp;
+            <FontAwesomeIcon icon="caret-down" />
+          </Button>{' '}
+          &nbsp;
+          <Link
+            to={`${match.url}/new?${this.getFiltersURL()}`}
+            className="btn btn-primary float-right jh-create-entity"
+            id="jh-create-entity"
+          >
+            <FontAwesomeIcon icon="plus" />
+            &nbsp;
+            <Translate contentKey="generadorApp.padItem.home.createLabel">Create a new Pad Item</Translate>
+          </Link>{' '}
+          &nbsp;
+        </h2>
+
+        <ol className="breadcrumb">
           <li className="breadcrumb-item">
             <Link to="/">Inicio</Link>
           </li>
           <li className="breadcrumb-item active">Pad Items</li>
         </ol>
-        <h1 className="page-header">&nbsp;&nbsp;</h1>
         <Panel>
-          <PanelHeader>
-            <h2 id="page-heading">
-              <span className="page-header ml-3">Pad Items</span>
-              <Button id="togglerFilterPadItem" className="btn btn-primary float-right jh-create-entity">
-                Filtros&nbsp;
-                <FontAwesomeIcon icon="caret-down" />
-              </Button>
-              <Link
-                to={`${match.url}/new?${this.getFiltersURL()}`}
-                className="btn btn-primary float-right jh-create-entity"
-                id="jh-create-entity"
-              >
-                <FontAwesomeIcon icon="plus" />
-                &nbsp;
-                <Translate contentKey="generadorApp.padItem.home.createLabel">Create a new Pad Item</Translate>
-              </Link>
-            </h2>
-          </PanelHeader>
           <PanelBody>
             <div className="table-responsive">
               <UncontrolledCollapse toggler="#togglerFilterPadItem">
@@ -240,7 +242,7 @@ export class PadItem extends React.Component<IPadItemProps, IPadItemState> {
                     <div className="row mt-1 ml-3 mr-3">
                       {this.state.baseFilters !== 'idPedido' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="idPedidoLabel" for="pad-item-idPedido">
                               <Translate contentKey="generadorApp.padItem.idPedido">Id Pedido</Translate>
                             </Label>
@@ -252,7 +254,7 @@ export class PadItem extends React.Component<IPadItemProps, IPadItemState> {
 
                       {this.state.baseFilters !== 'dataInicio' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="dataInicioLabel" for="pad-item-dataInicio">
                               <Translate contentKey="generadorApp.padItem.dataInicio">Data Inicio</Translate>
                             </Label>
@@ -263,7 +265,7 @@ export class PadItem extends React.Component<IPadItemProps, IPadItemState> {
 
                       {this.state.baseFilters !== 'dataFim' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="dataFimLabel" for="pad-item-dataFim">
                               <Translate contentKey="generadorApp.padItem.dataFim">Data Fim</Translate>
                             </Label>
@@ -274,7 +276,7 @@ export class PadItem extends React.Component<IPadItemProps, IPadItemState> {
 
                       {this.state.baseFilters !== 'qtdSessoes' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="qtdSessoesLabel" for="pad-item-qtdSessoes">
                               <Translate contentKey="generadorApp.padItem.qtdSessoes">Qtd Sessoes</Translate>
                             </Label>
@@ -285,7 +287,7 @@ export class PadItem extends React.Component<IPadItemProps, IPadItemState> {
 
                       {this.state.baseFilters !== 'observacao' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="observacaoLabel" for="pad-item-observacao">
                               <Translate contentKey="generadorApp.padItem.observacao">Observacao</Translate>
                             </Label>
@@ -296,7 +298,7 @@ export class PadItem extends React.Component<IPadItemProps, IPadItemState> {
 
                       {this.state.baseFilters !== 'sub' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="subLabel" for="pad-item-sub">
                               <Translate contentKey="generadorApp.padItem.sub">Sub</Translate>
                             </Label>
@@ -307,7 +309,7 @@ export class PadItem extends React.Component<IPadItemProps, IPadItemState> {
 
                       {this.state.baseFilters !== 'ativo' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="ativoLabel" for="pad-item-ativo">
                               <Translate contentKey="generadorApp.padItem.ativo">Ativo</Translate>
                             </Label>
@@ -318,7 +320,7 @@ export class PadItem extends React.Component<IPadItemProps, IPadItemState> {
 
                       {this.state.baseFilters !== 'dataPadItemIncompleto' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="dataPadItemIncompletoLabel" for="pad-item-dataPadItemIncompleto">
                               <Translate contentKey="generadorApp.padItem.dataPadItemIncompleto">Data Pad Item Incompleto</Translate>
                             </Label>
@@ -336,7 +338,7 @@ export class PadItem extends React.Component<IPadItemProps, IPadItemState> {
 
                       {this.state.baseFilters !== 'dataPadItemCompleto' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="dataPadItemCompletoLabel" for="pad-item-dataPadItemCompleto">
                               <Translate contentKey="generadorApp.padItem.dataPadItemCompleto">Data Pad Item Completo</Translate>
                             </Label>
@@ -354,7 +356,7 @@ export class PadItem extends React.Component<IPadItemProps, IPadItemState> {
 
                       {this.state.baseFilters !== 'numGhc' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="numGhcLabel" for="pad-item-numGhc">
                               <Translate contentKey="generadorApp.padItem.numGhc">Num Ghc</Translate>
                             </Label>
@@ -366,7 +368,7 @@ export class PadItem extends React.Component<IPadItemProps, IPadItemState> {
 
                       {this.state.baseFilters !== 'cidXPtaNovo' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="cidXPtaNovoLabel" for="pad-item-cidXPtaNovo">
                               <Translate contentKey="generadorApp.padItem.cidXPtaNovo">Cid X Pta Novo</Translate>
                             </Label>
@@ -377,7 +379,7 @@ export class PadItem extends React.Component<IPadItemProps, IPadItemState> {
 
                       {this.state.baseFilters !== 'categoriaId' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="categoriaIdLabel" for="pad-item-categoriaId">
                               <Translate contentKey="generadorApp.padItem.categoriaId">Categoria Id</Translate>
                             </Label>
@@ -388,7 +390,7 @@ export class PadItem extends React.Component<IPadItemProps, IPadItemState> {
 
                       {this.state.baseFilters !== 'score' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="scoreLabel" for="pad-item-score">
                               <Translate contentKey="generadorApp.padItem.score">Score</Translate>
                             </Label>
@@ -402,13 +404,13 @@ export class PadItem extends React.Component<IPadItemProps, IPadItemState> {
                       <Button className="btn btn-success" type="submit">
                         <i className="fa fa-filter" aria-hidden={'true'}></i>
                         &nbsp;
-                        <Translate contentKey="entity.validation.filter">Filter</Translate>
+                        <Translate contentKey="generadorApp.padItem.home.btn_filter">Filter</Translate>
                       </Button>
                       &nbsp;
                       <div className="btn btn-secondary hand" onClick={this.cancelCourse}>
                         <FontAwesomeIcon icon="trash-alt" />
                         &nbsp;
-                        <Translate contentKey="entity.validation.clean">Clean</Translate>
+                        <Translate contentKey="generadorApp.padItem.home.btn_filter_clean">Clean</Translate>
                       </div>
                     </div>
                   </AvForm>

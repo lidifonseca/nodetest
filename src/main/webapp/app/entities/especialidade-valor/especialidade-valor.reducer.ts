@@ -40,6 +40,7 @@ export interface IEspecialidadeValorBaseState {
 
 export interface IEspecialidadeValorUpdateState {
   fieldsBase: IEspecialidadeValorBaseState;
+
   isNew: boolean;
 }
 

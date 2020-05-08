@@ -40,6 +40,7 @@ export interface ITermosUsoBaseState {
 
 export interface ITermosUsoUpdateState {
   fieldsBase: ITermosUsoBaseState;
+
   isNew: boolean;
 }
 

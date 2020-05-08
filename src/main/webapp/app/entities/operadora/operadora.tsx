@@ -2,6 +2,7 @@
 import React from 'react';
 import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
 import { connect } from 'react-redux';
+import Select from 'react-select';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import {
   Button,

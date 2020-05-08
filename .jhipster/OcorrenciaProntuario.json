@@ -19,7 +19,7 @@
         }
     ],
     "relationships": [],
-    "changelogDate": "20200507112500",
+    "changelogDate": "20200508161500",
     "entityTableName": "ocorrencia_prontuario",
     "dto": "mapstruct",
     "pagination": "pagination",

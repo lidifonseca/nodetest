@@ -150,7 +150,7 @@
         }
     ],
     "relationships": [],
-    "changelogDate": "20200507105600",
+    "changelogDate": "20200508154600",
     "entityTableName": "empresa",
     "dto": "mapstruct",
     "pagination": "pagination",

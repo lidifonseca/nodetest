@@ -39,6 +39,7 @@ export interface IModulosPadBaseState {
 
 export interface IModulosPadUpdateState {
   fieldsBase: IModulosPadBaseState;
+
   isNew: boolean;
 }
 

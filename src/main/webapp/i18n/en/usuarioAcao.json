@@ -1,8 +1,14 @@
 {
   "generadorApp": {
     "usuarioAcao": {
+      "listButtons": {},
+      "viewButtons": {},
+      "dropdown_btn": "Ações",
       "home": {
         "title": "Usuario Acaos",
+        "btn_filter": "Filter",
+        "btn_filter_clean": "Clean Filters",
+        "btn_filter_open": "Filters",
         "createLabel": "Create a new Usuario Acao",
         "createOrEditLabel": "Create or edit a Usuario Acao",
         "notFound": "No Usuario Acaos found"

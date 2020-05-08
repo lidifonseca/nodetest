@@ -38,6 +38,7 @@ export interface IPadItemCepRecusadoBaseState {
 
 export interface IPadItemCepRecusadoUpdateState {
   fieldsBase: IPadItemCepRecusadoBaseState;
+
   isNew: boolean;
 }
 

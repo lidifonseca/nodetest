@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import Select from 'react-select';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 import { Button, Row, Col, Label } from 'reactstrap';
@@ -48,21 +49,11 @@ export class PadItemAlertaUpdate extends React.Component<IPadItemAlertaUpdatePro
 
   getFiltersURL = (offset = null) => {
     const fieldsBase = this.state.fieldsBase;
-    return (
-      '_back=1' +
-      (fieldsBase['baseFilters'] ? '&baseFilters=' + fieldsBase['baseFilters'] : '') +
-      (fieldsBase['activePage'] ? '&page=' + fieldsBase['activePage'] : '') +
-      (fieldsBase['itemsPerPage'] ? '&size=' + fieldsBase['itemsPerPage'] : '') +
-      (fieldsBase['sort'] ? '&sort=' + (fieldsBase['sort'] + ',' + fieldsBase['order']) : '') +
-      (offset !== null ? '&offset=' + offset : '') +
-      (fieldsBase['padItemMetaId'] ? '&padItemMetaId=' + fieldsBase['padItemMetaId'] : '') +
-      (fieldsBase['envioEmailEm'] ? '&envioEmailEm=' + fieldsBase['envioEmailEm'] : '') +
-      (fieldsBase['visualizadoEm'] ? '&visualizadoEm=' + fieldsBase['visualizadoEm'] : '') +
-      (fieldsBase['criadoEm'] ? '&criadoEm=' + fieldsBase['criadoEm'] : '') +
-      (fieldsBase['ativo'] ? '&ativo=' + fieldsBase['ativo'] : '') +
-      (fieldsBase['mensagem'] ? '&mensagem=' + fieldsBase['mensagem'] : '') +
-      ''
-    );
+    let url = '_back=1' + (offset !== null ? '&offset=' + offset : '');
+    Object.keys(fieldsBase).map(key => {
+      url += '&' + key + '=' + fieldsBase[key];
+    });
+    return url;
   };
   saveEntity = (event: any, errors: any, values: any) => {
     values.envioEmailEm = convertDateTimeToServer(values.envioEmailEm);
@@ -73,6 +64,7 @@ export class PadItemAlertaUpdate extends React.Component<IPadItemAlertaUpdatePro
       const { padItemAlertaEntity } = this.props;
       const entity = {
         ...padItemAlertaEntity,
+
         ...values
       };
 
@@ -95,14 +87,6 @@ export class PadItemAlertaUpdate extends React.Component<IPadItemAlertaUpdatePro
     const baseFilters = this.state.fieldsBase && this.state.fieldsBase['baseFilters'] ? this.state.fieldsBase['baseFilters'] : null;
     return (
       <div>
-        <ol className="breadcrumb float-xl-right">
-          <li className="breadcrumb-item">
-            <Link to="/">Inicio</Link>
-          </li>
-          <li className="breadcrumb-item active">Pad Item Alertas</li>
-          <li className="breadcrumb-item active">Pad Item Alertas edit</li>
-        </ol>
-        <h1 className="page-header">&nbsp;&nbsp;</h1>
         <AvForm
           model={
             isNew
@@ -113,34 +97,40 @@ export class PadItemAlertaUpdate extends React.Component<IPadItemAlertaUpdatePro
           }
           onSubmit={this.saveEntity}
         >
-          <Panel>
-            <PanelHeader>
-              <h2 id="page-heading">
-                <span className="page-header ml-3">
-                  <Translate contentKey="generadorApp.padItemAlerta.home.createOrEditLabel">Create or edit a PadItemAlerta</Translate>
-                </span>
+          <h2 id="page-heading">
+            <span className="page-header ml-3">
+              <Translate contentKey="generadorApp.padItemAlerta.home.createOrEditLabel">Create or edit a PadItemAlerta</Translate>
+            </span>
 
-                <Button color="primary" id="save-entity" type="submit" disabled={updating} className="float-right jh-create-entity">
-                  <FontAwesomeIcon icon="save" />
-                  &nbsp;
-                  <Translate contentKey="entity.action.save">Save</Translate>
-                </Button>
-                <Button
-                  tag={Link}
-                  id="cancel-save"
-                  to={'/pad-item-alerta?' + this.getFiltersURL()}
-                  replace
-                  color="info"
-                  className="float-right jh-create-entity"
-                >
-                  <FontAwesomeIcon icon="arrow-left" />
-                  &nbsp;
-                  <span className="d-none d-md-inline">
-                    <Translate contentKey="entity.action.back">Back</Translate>
-                  </span>
-                </Button>
-              </h2>
-            </PanelHeader>
+            <Button color="primary" id="save-entity" type="submit" disabled={updating} className="float-right jh-create-entity">
+              <FontAwesomeIcon icon="save" />
+              &nbsp;
+              <Translate contentKey="entity.action.save">Save</Translate>
+            </Button>
+            <Button
+              tag={Link}
+              id="cancel-save"
+              to={'/pad-item-alerta?' + this.getFiltersURL()}
+              replace
+              color="info"
+              className="float-right jh-create-entity"
+            >
+              <FontAwesomeIcon icon="arrow-left" />
+              &nbsp;
+              <span className="d-none d-md-inline">
+                <Translate contentKey="entity.action.back">Back</Translate>
+              </span>
+            </Button>
+          </h2>
+          <ol className="breadcrumb">
+            <li className="breadcrumb-item">
+              <Link to="/">Inicio</Link>
+            </li>
+            <li className="breadcrumb-item active">Pad Item Alertas</li>
+            <li className="breadcrumb-item active">Pad Item Alertas edit</li>
+          </ol>
+
+          <Panel>
             <PanelBody>
               <Row className="justify-content-center">
                 <Col md="8">
@@ -164,138 +154,17 @@ export class PadItemAlertaUpdate extends React.Component<IPadItemAlertaUpdatePro
                         </AvGroup>
                       ) : null}
                       <Row>
-                        {baseFilters !== 'padItemMetaId' ? (
-                          <Col md="padItemMetaId">
-                            <AvGroup>
-                              <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="padItemMetaIdLabel" for="pad-item-alerta-padItemMetaId">
-                                    <Translate contentKey="generadorApp.padItemAlerta.padItemMetaId">Pad Item Meta Id</Translate>
-                                  </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField id="pad-item-alerta-padItemMetaId" type="string" className="form-control" name="padItemMetaId" />
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
-                        ) : (
-                          <AvInput type="hidden" name="padItemMetaId" value={this.state.fieldsBase[baseFilters]} />
-                        )}
+                        <PadItemMetaIdComponentUpdate baseFilters />
 
-                        {baseFilters !== 'envioEmailEm' ? (
-                          <Col md="envioEmailEm">
-                            <AvGroup>
-                              <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="envioEmailEmLabel" for="pad-item-alerta-envioEmailEm">
-                                    <Translate contentKey="generadorApp.padItemAlerta.envioEmailEm">Envio Email Em</Translate>
-                                  </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvInput
-                                    id="pad-item-alerta-envioEmailEm"
-                                    type="datetime-local"
-                                    className="form-control"
-                                    name="envioEmailEm"
-                                    placeholder={'YYYY-MM-DD HH:mm'}
-                                    value={isNew ? null : convertDateTimeFromServer(this.props.padItemAlertaEntity.envioEmailEm)}
-                                  />
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
-                        ) : (
-                          <AvInput type="hidden" name="envioEmailEm" value={this.state.fieldsBase[baseFilters]} />
-                        )}
+                        <EnvioEmailEmComponentUpdate baseFilters />
 
-                        {baseFilters !== 'visualizadoEm' ? (
-                          <Col md="visualizadoEm">
-                            <AvGroup>
-                              <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="visualizadoEmLabel" for="pad-item-alerta-visualizadoEm">
-                                    <Translate contentKey="generadorApp.padItemAlerta.visualizadoEm">Visualizado Em</Translate>
-                                  </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvInput
-                                    id="pad-item-alerta-visualizadoEm"
-                                    type="datetime-local"
-                                    className="form-control"
-                                    name="visualizadoEm"
-                                    placeholder={'YYYY-MM-DD HH:mm'}
-                                    value={isNew ? null : convertDateTimeFromServer(this.props.padItemAlertaEntity.visualizadoEm)}
-                                  />
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
-                        ) : (
-                          <AvInput type="hidden" name="visualizadoEm" value={this.state.fieldsBase[baseFilters]} />
-                        )}
+                        <VisualizadoEmComponentUpdate baseFilters />
 
-                        {baseFilters !== 'criadoEm' ? (
-                          <Col md="criadoEm">
-                            <AvGroup>
-                              <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="criadoEmLabel" for="pad-item-alerta-criadoEm">
-                                    <Translate contentKey="generadorApp.padItemAlerta.criadoEm">Criado Em</Translate>
-                                  </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvInput
-                                    id="pad-item-alerta-criadoEm"
-                                    type="datetime-local"
-                                    className="form-control"
-                                    name="criadoEm"
-                                    placeholder={'YYYY-MM-DD HH:mm'}
-                                    value={isNew ? null : convertDateTimeFromServer(this.props.padItemAlertaEntity.criadoEm)}
-                                  />
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
-                        ) : (
-                          <AvInput type="hidden" name="criadoEm" value={this.state.fieldsBase[baseFilters]} />
-                        )}
+                        <CriadoEmComponentUpdate baseFilters />
 
-                        {baseFilters !== 'ativo' ? (
-                          <Col md="ativo">
-                            <AvGroup>
-                              <Row>
-                                <Col md="12">
-                                  <Label className="mt-2" id="ativoLabel" check>
-                                    <AvInput id="pad-item-alerta-ativo" type="checkbox" className="form-control" name="ativo" />
-                                    <Translate contentKey="generadorApp.padItemAlerta.ativo">Ativo</Translate>
-                                  </Label>
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
-                        ) : (
-                          <AvInput type="hidden" name="ativo" value={this.state.fieldsBase[baseFilters]} />
-                        )}
+                        <AtivoComponentUpdate baseFilters />
 
-                        {baseFilters !== 'mensagem' ? (
-                          <Col md="mensagem">
-                            <AvGroup>
-                              <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="mensagemLabel" for="pad-item-alerta-mensagem">
-                                    <Translate contentKey="generadorApp.padItemAlerta.mensagem">Mensagem</Translate>
-                                  </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField id="pad-item-alerta-mensagem" type="text" name="mensagem" />
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
-                        ) : (
-                          <AvInput type="hidden" name="mensagem" value={this.state.fieldsBase[baseFilters]} />
-                        )}
+                        <MensagemComponentUpdate baseFilters />
                       </Row>
                     </div>
                   )}
@@ -325,5 +194,150 @@ const mapDispatchToProps = {
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
+
+const PadItemMetaIdComponentUpdate = ({ baseFilters }) => {
+  return baseFilters !== 'padItemMetaId' ? (
+    <Col md="padItemMetaId">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" id="padItemMetaIdLabel" for="pad-item-alerta-padItemMetaId">
+              <Translate contentKey="generadorApp.padItemAlerta.padItemMetaId">Pad Item Meta Id</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <AvField id="pad-item-alerta-padItemMetaId" type="string" className="form-control" name="padItemMetaId" />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="padItemMetaId" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const EnvioEmailEmComponentUpdate = ({ baseFilters }) => {
+  return baseFilters !== 'envioEmailEm' ? (
+    <Col md="envioEmailEm">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" id="envioEmailEmLabel" for="pad-item-alerta-envioEmailEm">
+              <Translate contentKey="generadorApp.padItemAlerta.envioEmailEm">Envio Email Em</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <AvInput
+              id="pad-item-alerta-envioEmailEm"
+              type="datetime-local"
+              className="form-control"
+              name="envioEmailEm"
+              placeholder={'YYYY-MM-DD HH:mm'}
+              value={isNew ? null : convertDateTimeFromServer(this.props.padItemAlertaEntity.envioEmailEm)}
+            />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="envioEmailEm" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const VisualizadoEmComponentUpdate = ({ baseFilters }) => {
+  return baseFilters !== 'visualizadoEm' ? (
+    <Col md="visualizadoEm">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" id="visualizadoEmLabel" for="pad-item-alerta-visualizadoEm">
+              <Translate contentKey="generadorApp.padItemAlerta.visualizadoEm">Visualizado Em</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <AvInput
+              id="pad-item-alerta-visualizadoEm"
+              type="datetime-local"
+              className="form-control"
+              name="visualizadoEm"
+              placeholder={'YYYY-MM-DD HH:mm'}
+              value={isNew ? null : convertDateTimeFromServer(this.props.padItemAlertaEntity.visualizadoEm)}
+            />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="visualizadoEm" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const CriadoEmComponentUpdate = ({ baseFilters }) => {
+  return baseFilters !== 'criadoEm' ? (
+    <Col md="criadoEm">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" id="criadoEmLabel" for="pad-item-alerta-criadoEm">
+              <Translate contentKey="generadorApp.padItemAlerta.criadoEm">Criado Em</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <AvInput
+              id="pad-item-alerta-criadoEm"
+              type="datetime-local"
+              className="form-control"
+              name="criadoEm"
+              placeholder={'YYYY-MM-DD HH:mm'}
+              value={isNew ? null : convertDateTimeFromServer(this.props.padItemAlertaEntity.criadoEm)}
+            />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="criadoEm" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const AtivoComponentUpdate = ({ baseFilters }) => {
+  return baseFilters !== 'ativo' ? (
+    <Col md="ativo">
+      <AvGroup>
+        <Row>
+          <Col md="12">
+            <Label className="mt-2" id="ativoLabel" check>
+              <AvInput id="pad-item-alerta-ativo" type="checkbox" className="form-control" name="ativo" />
+              <Translate contentKey="generadorApp.padItemAlerta.ativo">Ativo</Translate>
+            </Label>
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="ativo" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const MensagemComponentUpdate = ({ baseFilters }) => {
+  return baseFilters !== 'mensagem' ? (
+    <Col md="mensagem">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" id="mensagemLabel" for="pad-item-alerta-mensagem">
+              <Translate contentKey="generadorApp.padItemAlerta.mensagem">Mensagem</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <AvField id="pad-item-alerta-mensagem" type="text" name="mensagem" />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="mensagem" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(PadItemAlertaUpdate);

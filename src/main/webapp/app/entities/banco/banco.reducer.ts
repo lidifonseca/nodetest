@@ -39,6 +39,7 @@ export interface IBancoBaseState {
 
 export interface IBancoUpdateState {
   fieldsBase: IBancoBaseState;
+
   isNew: boolean;
 }
 

@@ -41,6 +41,7 @@ export interface IPacienteDiarioBaseState {
 
 export interface IPacienteDiarioUpdateState {
   fieldsBase: IPacienteDiarioBaseState;
+
   isNew: boolean;
 }
 

@@ -39,6 +39,7 @@ export interface IGrupoRiscoBaseState {
 
 export interface IGrupoRiscoUpdateState {
   fieldsBase: IGrupoRiscoBaseState;
+
   isNew: boolean;
 }
 

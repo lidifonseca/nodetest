@@ -38,6 +38,7 @@ export interface IAtendimentoAtividadesBaseState {
 
 export interface IAtendimentoAtividadesUpdateState {
   fieldsBase: IAtendimentoAtividadesBaseState;
+
   isNew: boolean;
 }
 

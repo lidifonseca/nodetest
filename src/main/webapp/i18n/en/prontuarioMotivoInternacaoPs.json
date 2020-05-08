@@ -1,8 +1,14 @@
 {
   "generadorApp": {
     "prontuarioMotivoInternacaoPs": {
+      "listButtons": {},
+      "viewButtons": {},
+      "dropdown_btn": "Ações",
       "home": {
         "title": "Prontuario Motivo Internacao Ps",
+        "btn_filter": "Filter",
+        "btn_filter_clean": "Clean Filters",
+        "btn_filter_open": "Filters",
         "createLabel": "Create a new Prontuario Motivo Internacao Ps",
         "createOrEditLabel": "Create or edit a Prontuario Motivo Internacao Ps",
         "notFound": "No Prontuario Motivo Internacao Ps found"

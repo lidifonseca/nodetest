@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import Select from 'react-select';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 import { Button, Row, Col, Label } from 'reactstrap';
@@ -48,25 +49,18 @@ export class AlertasIndicadoresUpdate extends React.Component<IAlertasIndicadore
 
   getFiltersURL = (offset = null) => {
     const fieldsBase = this.state.fieldsBase;
-    return (
-      '_back=1' +
-      (fieldsBase['baseFilters'] ? '&baseFilters=' + fieldsBase['baseFilters'] : '') +
-      (fieldsBase['activePage'] ? '&page=' + fieldsBase['activePage'] : '') +
-      (fieldsBase['itemsPerPage'] ? '&size=' + fieldsBase['itemsPerPage'] : '') +
-      (fieldsBase['sort'] ? '&sort=' + (fieldsBase['sort'] + ',' + fieldsBase['order']) : '') +
-      (offset !== null ? '&offset=' + offset : '') +
-      (fieldsBase['pontuacao'] ? '&pontuacao=' + fieldsBase['pontuacao'] : '') +
-      (fieldsBase['alteracaoEsperada'] ? '&alteracaoEsperada=' + fieldsBase['alteracaoEsperada'] : '') +
-      (fieldsBase['observacoes'] ? '&observacoes=' + fieldsBase['observacoes'] : '') +
-      (fieldsBase['usuarioId'] ? '&usuarioId=' + fieldsBase['usuarioId'] : '') +
-      ''
-    );
+    let url = '_back=1' + (offset !== null ? '&offset=' + offset : '');
+    Object.keys(fieldsBase).map(key => {
+      url += '&' + key + '=' + fieldsBase[key];
+    });
+    return url;
   };
   saveEntity = (event: any, errors: any, values: any) => {
     if (errors.length === 0) {
       const { alertasIndicadoresEntity } = this.props;
       const entity = {
         ...alertasIndicadoresEntity,
+
         ...values
       };
 
@@ -89,14 +83,6 @@ export class AlertasIndicadoresUpdate extends React.Component<IAlertasIndicadore
     const baseFilters = this.state.fieldsBase && this.state.fieldsBase['baseFilters'] ? this.state.fieldsBase['baseFilters'] : null;
     return (
       <div>
-        <ol className="breadcrumb float-xl-right">
-          <li className="breadcrumb-item">
-            <Link to="/">Inicio</Link>
-          </li>
-          <li className="breadcrumb-item active">Alertas Indicadores</li>
-          <li className="breadcrumb-item active">Alertas Indicadores edit</li>
-        </ol>
-        <h1 className="page-header">&nbsp;&nbsp;</h1>
         <AvForm
           model={
             isNew
@@ -107,36 +93,40 @@ export class AlertasIndicadoresUpdate extends React.Component<IAlertasIndicadore
           }
           onSubmit={this.saveEntity}
         >
-          <Panel>
-            <PanelHeader>
-              <h2 id="page-heading">
-                <span className="page-header ml-3">
-                  <Translate contentKey="generadorApp.alertasIndicadores.home.createOrEditLabel">
-                    Create or edit a AlertasIndicadores
-                  </Translate>
-                </span>
+          <h2 id="page-heading">
+            <span className="page-header ml-3">
+              <Translate contentKey="generadorApp.alertasIndicadores.home.createOrEditLabel">Create or edit a AlertasIndicadores</Translate>
+            </span>
 
-                <Button color="primary" id="save-entity" type="submit" disabled={updating} className="float-right jh-create-entity">
-                  <FontAwesomeIcon icon="save" />
-                  &nbsp;
-                  <Translate contentKey="entity.action.save">Save</Translate>
-                </Button>
-                <Button
-                  tag={Link}
-                  id="cancel-save"
-                  to={'/alertas-indicadores?' + this.getFiltersURL()}
-                  replace
-                  color="info"
-                  className="float-right jh-create-entity"
-                >
-                  <FontAwesomeIcon icon="arrow-left" />
-                  &nbsp;
-                  <span className="d-none d-md-inline">
-                    <Translate contentKey="entity.action.back">Back</Translate>
-                  </span>
-                </Button>
-              </h2>
-            </PanelHeader>
+            <Button color="primary" id="save-entity" type="submit" disabled={updating} className="float-right jh-create-entity">
+              <FontAwesomeIcon icon="save" />
+              &nbsp;
+              <Translate contentKey="entity.action.save">Save</Translate>
+            </Button>
+            <Button
+              tag={Link}
+              id="cancel-save"
+              to={'/alertas-indicadores?' + this.getFiltersURL()}
+              replace
+              color="info"
+              className="float-right jh-create-entity"
+            >
+              <FontAwesomeIcon icon="arrow-left" />
+              &nbsp;
+              <span className="d-none d-md-inline">
+                <Translate contentKey="entity.action.back">Back</Translate>
+              </span>
+            </Button>
+          </h2>
+          <ol className="breadcrumb">
+            <li className="breadcrumb-item">
+              <Link to="/">Inicio</Link>
+            </li>
+            <li className="breadcrumb-item active">Alertas Indicadores</li>
+            <li className="breadcrumb-item active">Alertas Indicadores edit</li>
+          </ol>
+
+          <Panel>
             <PanelBody>
               <Row className="justify-content-center">
                 <Col md="8">
@@ -160,84 +150,13 @@ export class AlertasIndicadoresUpdate extends React.Component<IAlertasIndicadore
                         </AvGroup>
                       ) : null}
                       <Row>
-                        {baseFilters !== 'pontuacao' ? (
-                          <Col md="pontuacao">
-                            <AvGroup>
-                              <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="pontuacaoLabel" for="alertas-indicadores-pontuacao">
-                                    <Translate contentKey="generadorApp.alertasIndicadores.pontuacao">Pontuacao</Translate>
-                                  </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField id="alertas-indicadores-pontuacao" type="string" className="form-control" name="pontuacao" />
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
-                        ) : (
-                          <AvInput type="hidden" name="pontuacao" value={this.state.fieldsBase[baseFilters]} />
-                        )}
+                        <PontuacaoComponentUpdate baseFilters />
 
-                        {baseFilters !== 'alteracaoEsperada' ? (
-                          <Col md="alteracaoEsperada">
-                            <AvGroup>
-                              <Row>
-                                <Col md="12">
-                                  <Label className="mt-2" id="alteracaoEsperadaLabel" check>
-                                    <AvInput
-                                      id="alertas-indicadores-alteracaoEsperada"
-                                      type="checkbox"
-                                      className="form-control"
-                                      name="alteracaoEsperada"
-                                    />
-                                    <Translate contentKey="generadorApp.alertasIndicadores.alteracaoEsperada">Alteracao Esperada</Translate>
-                                  </Label>
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
-                        ) : (
-                          <AvInput type="hidden" name="alteracaoEsperada" value={this.state.fieldsBase[baseFilters]} />
-                        )}
+                        <AlteracaoEsperadaComponentUpdate baseFilters />
 
-                        {baseFilters !== 'observacoes' ? (
-                          <Col md="observacoes">
-                            <AvGroup>
-                              <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="observacoesLabel" for="alertas-indicadores-observacoes">
-                                    <Translate contentKey="generadorApp.alertasIndicadores.observacoes">Observacoes</Translate>
-                                  </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField id="alertas-indicadores-observacoes" type="text" name="observacoes" />
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
-                        ) : (
-                          <AvInput type="hidden" name="observacoes" value={this.state.fieldsBase[baseFilters]} />
-                        )}
+                        <ObservacoesComponentUpdate baseFilters />
 
-                        {baseFilters !== 'usuarioId' ? (
-                          <Col md="usuarioId">
-                            <AvGroup>
-                              <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="usuarioIdLabel" for="alertas-indicadores-usuarioId">
-                                    <Translate contentKey="generadorApp.alertasIndicadores.usuarioId">Usuario Id</Translate>
-                                  </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField id="alertas-indicadores-usuarioId" type="string" className="form-control" name="usuarioId" />
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
-                        ) : (
-                          <AvInput type="hidden" name="usuarioId" value={this.state.fieldsBase[baseFilters]} />
-                        )}
+                        <UsuarioIdComponentUpdate baseFilters />
                       </Row>
                     </div>
                   )}
@@ -267,5 +186,87 @@ const mapDispatchToProps = {
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
+
+const PontuacaoComponentUpdate = ({ baseFilters }) => {
+  return baseFilters !== 'pontuacao' ? (
+    <Col md="pontuacao">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" id="pontuacaoLabel" for="alertas-indicadores-pontuacao">
+              <Translate contentKey="generadorApp.alertasIndicadores.pontuacao">Pontuacao</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <AvField id="alertas-indicadores-pontuacao" type="string" className="form-control" name="pontuacao" />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="pontuacao" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const AlteracaoEsperadaComponentUpdate = ({ baseFilters }) => {
+  return baseFilters !== 'alteracaoEsperada' ? (
+    <Col md="alteracaoEsperada">
+      <AvGroup>
+        <Row>
+          <Col md="12">
+            <Label className="mt-2" id="alteracaoEsperadaLabel" check>
+              <AvInput id="alertas-indicadores-alteracaoEsperada" type="checkbox" className="form-control" name="alteracaoEsperada" />
+              <Translate contentKey="generadorApp.alertasIndicadores.alteracaoEsperada">Alteracao Esperada</Translate>
+            </Label>
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="alteracaoEsperada" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const ObservacoesComponentUpdate = ({ baseFilters }) => {
+  return baseFilters !== 'observacoes' ? (
+    <Col md="observacoes">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" id="observacoesLabel" for="alertas-indicadores-observacoes">
+              <Translate contentKey="generadorApp.alertasIndicadores.observacoes">Observacoes</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <AvField id="alertas-indicadores-observacoes" type="text" name="observacoes" />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="observacoes" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const UsuarioIdComponentUpdate = ({ baseFilters }) => {
+  return baseFilters !== 'usuarioId' ? (
+    <Col md="usuarioId">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" id="usuarioIdLabel" for="alertas-indicadores-usuarioId">
+              <Translate contentKey="generadorApp.alertasIndicadores.usuarioId">Usuario Id</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <AvField id="alertas-indicadores-usuarioId" type="string" className="form-control" name="usuarioId" />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="usuarioId" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(AlertasIndicadoresUpdate);

@@ -1,8 +1,14 @@
 {
   "generadorApp": {
     "vwApiAtendimentosAceite": {
+      "listButtons": {},
+      "viewButtons": {},
+      "dropdown_btn": "Ações",
       "home": {
         "title": "Vw Api Atendimentos Aceites",
+        "btn_filter": "Filter",
+        "btn_filter_clean": "Clean Filters",
+        "btn_filter_open": "Filters",
         "createLabel": "Create a new Vw Api Atendimentos Aceite",
         "createOrEditLabel": "Create or edit a Vw Api Atendimentos Aceite",
         "notFound": "No Vw Api Atendimentos Aceites found"

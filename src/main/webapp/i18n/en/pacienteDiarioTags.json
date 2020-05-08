@@ -1,8 +1,14 @@
 {
   "generadorApp": {
     "pacienteDiarioTags": {
+      "listButtons": {},
+      "viewButtons": {},
+      "dropdown_btn": "Ações",
       "home": {
         "title": "Paciente Diario Tags",
+        "btn_filter": "Filter",
+        "btn_filter_clean": "Clean Filters",
+        "btn_filter_open": "Filters",
         "createLabel": "Create a new Paciente Diario Tags",
         "createOrEditLabel": "Create or edit a Paciente Diario Tags",
         "notFound": "No Paciente Diario Tags found"

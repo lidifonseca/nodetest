@@ -2,6 +2,7 @@
 import React from 'react';
 import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
 import { connect } from 'react-redux';
+import Select from 'react-select';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import {
   Button,
@@ -256,32 +257,33 @@ export class UnidadeEasy extends React.Component<IUnidadeEasyProps, IUnidadeEasy
     const { categorias, unidadeEasyList, match, totalItems } = this.props;
     return (
       <div>
-        <ol className="breadcrumb float-xl-right">
+        <h2 id="page-heading">
+          <span className="page-header">Unidade Easies</span>
+          <Button id="togglerFilterUnidadeEasy" className="btn btn-primary float-right jh-create-entity">
+            <Translate contentKey="generadorApp.unidadeEasy.home.btn_filter_open">Filters</Translate>
+            &nbsp;
+            <FontAwesomeIcon icon="caret-down" />
+          </Button>{' '}
+          &nbsp;
+          <Link
+            to={`${match.url}/new?${this.getFiltersURL()}`}
+            className="btn btn-primary float-right jh-create-entity"
+            id="jh-create-entity"
+          >
+            <FontAwesomeIcon icon="plus" />
+            &nbsp;
+            <Translate contentKey="generadorApp.unidadeEasy.home.createLabel">Create a new Unidade Easy</Translate>
+          </Link>{' '}
+          &nbsp;
+        </h2>
+
+        <ol className="breadcrumb">
           <li className="breadcrumb-item">
             <Link to="/">Inicio</Link>
           </li>
           <li className="breadcrumb-item active">Unidade Easies</li>
         </ol>
-        <h1 className="page-header">&nbsp;&nbsp;</h1>
         <Panel>
-          <PanelHeader>
-            <h2 id="page-heading">
-              <span className="page-header ml-3">Unidade Easies</span>
-              <Button id="togglerFilterUnidadeEasy" className="btn btn-primary float-right jh-create-entity">
-                Filtros&nbsp;
-                <FontAwesomeIcon icon="caret-down" />
-              </Button>
-              <Link
-                to={`${match.url}/new?${this.getFiltersURL()}`}
-                className="btn btn-primary float-right jh-create-entity"
-                id="jh-create-entity"
-              >
-                <FontAwesomeIcon icon="plus" />
-                &nbsp;
-                <Translate contentKey="generadorApp.unidadeEasy.home.createLabel">Create a new Unidade Easy</Translate>
-              </Link>
-            </h2>
-          </PanelHeader>
           <PanelBody>
             <div className="table-responsive">
               <UncontrolledCollapse toggler="#togglerFilterUnidadeEasy">
@@ -290,7 +292,7 @@ export class UnidadeEasy extends React.Component<IUnidadeEasyProps, IUnidadeEasy
                     <div className="row mt-1 ml-3 mr-3">
                       {this.state.baseFilters !== 'razaoSocial' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="razaoSocialLabel" for="unidade-easy-razaoSocial">
                               <Translate contentKey="generadorApp.unidadeEasy.razaoSocial">Razao Social</Translate>
                             </Label>
@@ -302,7 +304,7 @@ export class UnidadeEasy extends React.Component<IUnidadeEasyProps, IUnidadeEasy
 
                       {this.state.baseFilters !== 'nomeFantasia' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="nomeFantasiaLabel" for="unidade-easy-nomeFantasia">
                               <Translate contentKey="generadorApp.unidadeEasy.nomeFantasia">Nome Fantasia</Translate>
                             </Label>
@@ -314,7 +316,7 @@ export class UnidadeEasy extends React.Component<IUnidadeEasyProps, IUnidadeEasy
 
                       {this.state.baseFilters !== 'cnpj' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="cnpjLabel" for="unidade-easy-cnpj">
                               <Translate contentKey="generadorApp.unidadeEasy.cnpj">Cnpj</Translate>
                             </Label>
@@ -326,7 +328,7 @@ export class UnidadeEasy extends React.Component<IUnidadeEasyProps, IUnidadeEasy
 
                       {this.state.baseFilters !== 'ie' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="ieLabel" for="unidade-easy-ie">
                               <Translate contentKey="generadorApp.unidadeEasy.ie">Ie</Translate>
                             </Label>
@@ -338,7 +340,7 @@ export class UnidadeEasy extends React.Component<IUnidadeEasyProps, IUnidadeEasy
 
                       {this.state.baseFilters !== 'telefone1' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="telefone1Label" for="unidade-easy-telefone1">
                               <Translate contentKey="generadorApp.unidadeEasy.telefone1">Telefone 1</Translate>
                             </Label>
@@ -350,7 +352,7 @@ export class UnidadeEasy extends React.Component<IUnidadeEasyProps, IUnidadeEasy
 
                       {this.state.baseFilters !== 'telefone2' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="telefone2Label" for="unidade-easy-telefone2">
                               <Translate contentKey="generadorApp.unidadeEasy.telefone2">Telefone 2</Translate>
                             </Label>
@@ -362,7 +364,7 @@ export class UnidadeEasy extends React.Component<IUnidadeEasyProps, IUnidadeEasy
 
                       {this.state.baseFilters !== 'endereco' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="enderecoLabel" for="unidade-easy-endereco">
                               <Translate contentKey="generadorApp.unidadeEasy.endereco">Endereco</Translate>
                             </Label>
@@ -374,7 +376,7 @@ export class UnidadeEasy extends React.Component<IUnidadeEasyProps, IUnidadeEasy
 
                       {this.state.baseFilters !== 'numero' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="numeroLabel" for="unidade-easy-numero">
                               <Translate contentKey="generadorApp.unidadeEasy.numero">Numero</Translate>
                             </Label>
@@ -386,7 +388,7 @@ export class UnidadeEasy extends React.Component<IUnidadeEasyProps, IUnidadeEasy
 
                       {this.state.baseFilters !== 'complemento' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="complementoLabel" for="unidade-easy-complemento">
                               <Translate contentKey="generadorApp.unidadeEasy.complemento">Complemento</Translate>
                             </Label>
@@ -398,7 +400,7 @@ export class UnidadeEasy extends React.Component<IUnidadeEasyProps, IUnidadeEasy
 
                       {this.state.baseFilters !== 'bairro' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="bairroLabel" for="unidade-easy-bairro">
                               <Translate contentKey="generadorApp.unidadeEasy.bairro">Bairro</Translate>
                             </Label>
@@ -410,7 +412,7 @@ export class UnidadeEasy extends React.Component<IUnidadeEasyProps, IUnidadeEasy
 
                       {this.state.baseFilters !== 'cidade' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="cidadeLabel" for="unidade-easy-cidade">
                               <Translate contentKey="generadorApp.unidadeEasy.cidade">Cidade</Translate>
                             </Label>
@@ -422,7 +424,7 @@ export class UnidadeEasy extends React.Component<IUnidadeEasyProps, IUnidadeEasy
 
                       {this.state.baseFilters !== 'uf' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="ufLabel" for="unidade-easy-uf">
                               <Translate contentKey="generadorApp.unidadeEasy.uf">Uf</Translate>
                             </Label>
@@ -434,7 +436,7 @@ export class UnidadeEasy extends React.Component<IUnidadeEasyProps, IUnidadeEasy
 
                       {this.state.baseFilters !== 'cep' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="cepLabel" for="unidade-easy-cep">
                               <Translate contentKey="generadorApp.unidadeEasy.cep">Cep</Translate>
                             </Label>
@@ -446,7 +448,7 @@ export class UnidadeEasy extends React.Component<IUnidadeEasyProps, IUnidadeEasy
 
                       {this.state.baseFilters !== 'regans' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="regansLabel" for="unidade-easy-regans">
                               <Translate contentKey="generadorApp.unidadeEasy.regans">Regans</Translate>
                             </Label>
@@ -458,7 +460,7 @@ export class UnidadeEasy extends React.Component<IUnidadeEasyProps, IUnidadeEasy
 
                       {this.state.baseFilters !== 'regcnes' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="regcnesLabel" for="unidade-easy-regcnes">
                               <Translate contentKey="generadorApp.unidadeEasy.regcnes">Regcnes</Translate>
                             </Label>
@@ -470,7 +472,7 @@ export class UnidadeEasy extends React.Component<IUnidadeEasyProps, IUnidadeEasy
 
                       {this.state.baseFilters !== 'tissresponsavel' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="tissresponsavelLabel" for="unidade-easy-tissresponsavel">
                               <Translate contentKey="generadorApp.unidadeEasy.tissresponsavel">Tissresponsavel</Translate>
                             </Label>
@@ -487,7 +489,7 @@ export class UnidadeEasy extends React.Component<IUnidadeEasyProps, IUnidadeEasy
 
                       {this.state.baseFilters !== 'tissconselho' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="tissconselhoLabel" for="unidade-easy-tissconselho">
                               <Translate contentKey="generadorApp.unidadeEasy.tissconselho">Tissconselho</Translate>
                             </Label>
@@ -499,7 +501,7 @@ export class UnidadeEasy extends React.Component<IUnidadeEasyProps, IUnidadeEasy
 
                       {this.state.baseFilters !== 'tissinscricao' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="tissinscricaoLabel" for="unidade-easy-tissinscricao">
                               <Translate contentKey="generadorApp.unidadeEasy.tissinscricao">Tissinscricao</Translate>
                             </Label>
@@ -511,7 +513,7 @@ export class UnidadeEasy extends React.Component<IUnidadeEasyProps, IUnidadeEasy
 
                       {this.state.baseFilters !== 'tisscbo' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="tisscboLabel" for="unidade-easy-tisscbo">
                               <Translate contentKey="generadorApp.unidadeEasy.tisscbo">Tisscbo</Translate>
                             </Label>
@@ -523,7 +525,7 @@ export class UnidadeEasy extends React.Component<IUnidadeEasyProps, IUnidadeEasy
 
                       {this.state.baseFilters !== 'tisscoduf' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="tisscodufLabel" for="unidade-easy-tisscoduf">
                               <Translate contentKey="generadorApp.unidadeEasy.tisscoduf">Tisscoduf</Translate>
                             </Label>
@@ -535,7 +537,7 @@ export class UnidadeEasy extends React.Component<IUnidadeEasyProps, IUnidadeEasy
 
                       {this.state.baseFilters !== 'ativo' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="ativoLabel" for="unidade-easy-ativo">
                               <Translate contentKey="generadorApp.unidadeEasy.ativo">Ativo</Translate>
                             </Label>
@@ -546,7 +548,7 @@ export class UnidadeEasy extends React.Component<IUnidadeEasyProps, IUnidadeEasy
 
                       {this.state.baseFilters !== 'categoria' ? (
                         <Col md="3">
-                          <Row></Row>
+                          <Row className="mr-1 mt-1"></Row>
                         </Col>
                       ) : null}
                     </div>
@@ -555,13 +557,13 @@ export class UnidadeEasy extends React.Component<IUnidadeEasyProps, IUnidadeEasy
                       <Button className="btn btn-success" type="submit">
                         <i className="fa fa-filter" aria-hidden={'true'}></i>
                         &nbsp;
-                        <Translate contentKey="entity.validation.filter">Filter</Translate>
+                        <Translate contentKey="generadorApp.unidadeEasy.home.btn_filter">Filter</Translate>
                       </Button>
                       &nbsp;
                       <div className="btn btn-secondary hand" onClick={this.cancelCourse}>
                         <FontAwesomeIcon icon="trash-alt" />
                         &nbsp;
-                        <Translate contentKey="entity.validation.clean">Clean</Translate>
+                        <Translate contentKey="generadorApp.unidadeEasy.home.btn_filter_clean">Clean</Translate>
                       </div>
                     </div>
                   </AvForm>

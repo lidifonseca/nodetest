@@ -2,6 +2,7 @@
 import React from 'react';
 import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
 import { connect } from 'react-redux';
+import Select from 'react-select';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import {
   Button,
@@ -243,34 +244,35 @@ export class ProfissionalDispositivoAtual extends React.Component<IProfissionalD
     const { profissionalDispositivoAtualList, match, totalItems } = this.props;
     return (
       <div>
-        <ol className="breadcrumb float-xl-right">
+        <h2 id="page-heading">
+          <span className="page-header">Profissional Dispositivo Atuals</span>
+          <Button id="togglerFilterProfissionalDispositivoAtual" className="btn btn-primary float-right jh-create-entity">
+            <Translate contentKey="generadorApp.profissionalDispositivoAtual.home.btn_filter_open">Filters</Translate>
+            &nbsp;
+            <FontAwesomeIcon icon="caret-down" />
+          </Button>{' '}
+          &nbsp;
+          <Link
+            to={`${match.url}/new?${this.getFiltersURL()}`}
+            className="btn btn-primary float-right jh-create-entity"
+            id="jh-create-entity"
+          >
+            <FontAwesomeIcon icon="plus" />
+            &nbsp;
+            <Translate contentKey="generadorApp.profissionalDispositivoAtual.home.createLabel">
+              Create a new Profissional Dispositivo Atual
+            </Translate>
+          </Link>{' '}
+          &nbsp;
+        </h2>
+
+        <ol className="breadcrumb">
           <li className="breadcrumb-item">
             <Link to="/">Inicio</Link>
           </li>
           <li className="breadcrumb-item active">Profissional Dispositivo Atuals</li>
         </ol>
-        <h1 className="page-header">&nbsp;&nbsp;</h1>
         <Panel>
-          <PanelHeader>
-            <h2 id="page-heading">
-              <span className="page-header ml-3">Profissional Dispositivo Atuals</span>
-              <Button id="togglerFilterProfissionalDispositivoAtual" className="btn btn-primary float-right jh-create-entity">
-                Filtros&nbsp;
-                <FontAwesomeIcon icon="caret-down" />
-              </Button>
-              <Link
-                to={`${match.url}/new?${this.getFiltersURL()}`}
-                className="btn btn-primary float-right jh-create-entity"
-                id="jh-create-entity"
-              >
-                <FontAwesomeIcon icon="plus" />
-                &nbsp;
-                <Translate contentKey="generadorApp.profissionalDispositivoAtual.home.createLabel">
-                  Create a new Profissional Dispositivo Atual
-                </Translate>
-              </Link>
-            </h2>
-          </PanelHeader>
           <PanelBody>
             <div className="table-responsive">
               <UncontrolledCollapse toggler="#togglerFilterProfissionalDispositivoAtual">
@@ -279,7 +281,7 @@ export class ProfissionalDispositivoAtual extends React.Component<IProfissionalD
                     <div className="row mt-1 ml-3 mr-3">
                       {this.state.baseFilters !== 'idProfissional' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="idProfissionalLabel" for="profissional-dispositivo-atual-idProfissional">
                               <Translate contentKey="generadorApp.profissionalDispositivoAtual.idProfissional">Id Profissional</Translate>
                             </Label>
@@ -295,7 +297,7 @@ export class ProfissionalDispositivoAtual extends React.Component<IProfissionalD
 
                       {this.state.baseFilters !== 'tqtTraqueostomia' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="tqtTraqueostomiaLabel" for="profissional-dispositivo-atual-tqtTraqueostomia">
                               <Translate contentKey="generadorApp.profissionalDispositivoAtual.tqtTraqueostomia">
                                 Tqt Traqueostomia
@@ -313,7 +315,7 @@ export class ProfissionalDispositivoAtual extends React.Component<IProfissionalD
 
                       {this.state.baseFilters !== 'gttGastrostomia' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="gttGastrostomiaLabel" for="profissional-dispositivo-atual-gttGastrostomia">
                               <Translate contentKey="generadorApp.profissionalDispositivoAtual.gttGastrostomia">Gtt Gastrostomia</Translate>
                             </Label>
@@ -329,7 +331,7 @@ export class ProfissionalDispositivoAtual extends React.Component<IProfissionalD
 
                       {this.state.baseFilters !== 'sneSondaNasoenteral' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="sneSondaNasoenteralLabel" for="profissional-dispositivo-atual-sneSondaNasoenteral">
                               <Translate contentKey="generadorApp.profissionalDispositivoAtual.sneSondaNasoenteral">
                                 Sne Sonda Nasoenteral
@@ -347,7 +349,7 @@ export class ProfissionalDispositivoAtual extends React.Component<IProfissionalD
 
                       {this.state.baseFilters !== 'svdSondaVesicalDeDemora' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="svdSondaVesicalDeDemoraLabel" for="profissional-dispositivo-atual-svdSondaVesicalDeDemora">
                               <Translate contentKey="generadorApp.profissionalDispositivoAtual.svdSondaVesicalDeDemora">
                                 Svd Sonda Vesical De Demora
@@ -365,7 +367,7 @@ export class ProfissionalDispositivoAtual extends React.Component<IProfissionalD
 
                       {this.state.baseFilters !== 'svaSondaVesicalDeAlivio' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="svaSondaVesicalDeAlivioLabel" for="profissional-dispositivo-atual-svaSondaVesicalDeAlivio">
                               <Translate contentKey="generadorApp.profissionalDispositivoAtual.svaSondaVesicalDeAlivio">
                                 Sva Sonda Vesical De Alivio
@@ -383,7 +385,7 @@ export class ProfissionalDispositivoAtual extends React.Component<IProfissionalD
 
                       {this.state.baseFilters !== 'portACath' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="portACathLabel" for="profissional-dispositivo-atual-portACath">
                               <Translate contentKey="generadorApp.profissionalDispositivoAtual.portACath">Port A Cath</Translate>
                             </Label>
@@ -399,7 +401,7 @@ export class ProfissionalDispositivoAtual extends React.Component<IProfissionalD
 
                       {this.state.baseFilters !== 'piccAcessoVenosoCentral' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="piccAcessoVenosoCentralLabel" for="profissional-dispositivo-atual-piccAcessoVenosoCentral">
                               <Translate contentKey="generadorApp.profissionalDispositivoAtual.piccAcessoVenosoCentral">
                                 Picc Acesso Venoso Central
@@ -417,7 +419,7 @@ export class ProfissionalDispositivoAtual extends React.Component<IProfissionalD
 
                       {this.state.baseFilters !== 'ventiladores' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="ventiladoresLabel" for="profissional-dispositivo-atual-ventiladores">
                               <Translate contentKey="generadorApp.profissionalDispositivoAtual.ventiladores">Ventiladores</Translate>
                             </Label>
@@ -433,7 +435,7 @@ export class ProfissionalDispositivoAtual extends React.Component<IProfissionalD
 
                       {this.state.baseFilters !== 'uppUlceraPorPressao' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="uppUlceraPorPressaoLabel" for="profissional-dispositivo-atual-uppUlceraPorPressao">
                               <Translate contentKey="generadorApp.profissionalDispositivoAtual.uppUlceraPorPressao">
                                 Upp Ulcera Por Pressao
@@ -451,7 +453,7 @@ export class ProfissionalDispositivoAtual extends React.Component<IProfissionalD
 
                       {this.state.baseFilters !== 'avpAcessoVenosoPeriferico' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="avpAcessoVenosoPerifericoLabel" for="profissional-dispositivo-atual-avpAcessoVenosoPeriferico">
                               <Translate contentKey="generadorApp.profissionalDispositivoAtual.avpAcessoVenosoPeriferico">
                                 Avp Acesso Venoso Periferico
@@ -469,7 +471,7 @@ export class ProfissionalDispositivoAtual extends React.Component<IProfissionalD
 
                       {this.state.baseFilters !== 'uripen' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="uripenLabel" for="profissional-dispositivo-atual-uripen">
                               <Translate contentKey="generadorApp.profissionalDispositivoAtual.uripen">Uripen</Translate>
                             </Label>
@@ -480,7 +482,7 @@ export class ProfissionalDispositivoAtual extends React.Component<IProfissionalD
 
                       {this.state.baseFilters !== 'fraldaGeriatrica' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="fraldaGeriatricaLabel" for="profissional-dispositivo-atual-fraldaGeriatrica">
                               <Translate contentKey="generadorApp.profissionalDispositivoAtual.fraldaGeriatrica">
                                 Fralda Geriatrica
@@ -498,7 +500,7 @@ export class ProfissionalDispositivoAtual extends React.Component<IProfissionalD
 
                       {this.state.baseFilters !== 'sngSondaNasogastrica' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="sngSondaNasogastricaLabel" for="profissional-dispositivo-atual-sngSondaNasogastrica">
                               <Translate contentKey="generadorApp.profissionalDispositivoAtual.sngSondaNasogastrica">
                                 Sng Sonda Nasogastrica
@@ -516,7 +518,7 @@ export class ProfissionalDispositivoAtual extends React.Component<IProfissionalD
 
                       {this.state.baseFilters !== 'bipap' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="bipapLabel" for="profissional-dispositivo-atual-bipap">
                               <Translate contentKey="generadorApp.profissionalDispositivoAtual.bipap">Bipap</Translate>
                             </Label>
@@ -527,7 +529,7 @@ export class ProfissionalDispositivoAtual extends React.Component<IProfissionalD
 
                       {this.state.baseFilters !== 'cpap' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="cpapLabel" for="profissional-dispositivo-atual-cpap">
                               <Translate contentKey="generadorApp.profissionalDispositivoAtual.cpap">Cpap</Translate>
                             </Label>
@@ -538,7 +540,7 @@ export class ProfissionalDispositivoAtual extends React.Component<IProfissionalD
 
                       {this.state.baseFilters !== 'cistostomia' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="cistostomiaLabel" for="profissional-dispositivo-atual-cistostomia">
                               <Translate contentKey="generadorApp.profissionalDispositivoAtual.cistostomia">Cistostomia</Translate>
                             </Label>
@@ -554,7 +556,7 @@ export class ProfissionalDispositivoAtual extends React.Component<IProfissionalD
 
                       {this.state.baseFilters !== 'cateterNasalDeOxigenio' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="cateterNasalDeOxigenioLabel" for="profissional-dispositivo-atual-cateterNasalDeOxigenio">
                               <Translate contentKey="generadorApp.profissionalDispositivoAtual.cateterNasalDeOxigenio">
                                 Cateter Nasal De Oxigenio
@@ -572,7 +574,7 @@ export class ProfissionalDispositivoAtual extends React.Component<IProfissionalD
 
                       {this.state.baseFilters !== 'mascaraDeVentilacao' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="mascaraDeVentilacaoLabel" for="profissional-dispositivo-atual-mascaraDeVentilacao">
                               <Translate contentKey="generadorApp.profissionalDispositivoAtual.mascaraDeVentilacao">
                                 Mascara De Ventilacao
@@ -590,7 +592,7 @@ export class ProfissionalDispositivoAtual extends React.Component<IProfissionalD
 
                       {this.state.baseFilters !== 'entubacaoOrotraqueal' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="entubacaoOrotraquealLabel" for="profissional-dispositivo-atual-entubacaoOrotraqueal">
                               <Translate contentKey="generadorApp.profissionalDispositivoAtual.entubacaoOrotraqueal">
                                 Entubacao Orotraqueal
@@ -611,13 +613,13 @@ export class ProfissionalDispositivoAtual extends React.Component<IProfissionalD
                       <Button className="btn btn-success" type="submit">
                         <i className="fa fa-filter" aria-hidden={'true'}></i>
                         &nbsp;
-                        <Translate contentKey="entity.validation.filter">Filter</Translate>
+                        <Translate contentKey="generadorApp.profissionalDispositivoAtual.home.btn_filter">Filter</Translate>
                       </Button>
                       &nbsp;
                       <div className="btn btn-secondary hand" onClick={this.cancelCourse}>
                         <FontAwesomeIcon icon="trash-alt" />
                         &nbsp;
-                        <Translate contentKey="entity.validation.clean">Clean</Translate>
+                        <Translate contentKey="generadorApp.profissionalDispositivoAtual.home.btn_filter_clean">Clean</Translate>
                       </div>
                     </div>
                   </AvForm>

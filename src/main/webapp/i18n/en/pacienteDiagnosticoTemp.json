@@ -1,8 +1,14 @@
 {
   "generadorApp": {
     "pacienteDiagnosticoTemp": {
+      "listButtons": {},
+      "viewButtons": {},
+      "dropdown_btn": "Ações",
       "home": {
         "title": "Paciente Diagnostico Temps",
+        "btn_filter": "Filter",
+        "btn_filter_clean": "Clean Filters",
+        "btn_filter_open": "Filters",
         "createLabel": "Create a new Paciente Diagnostico Temp",
         "createOrEditLabel": "Create or edit a Paciente Diagnostico Temp",
         "notFound": "No Paciente Diagnostico Temps found"

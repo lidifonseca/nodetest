@@ -1,8 +1,14 @@
 {
   "generadorApp": {
     "indicadores": {
+      "listButtons": {},
+      "viewButtons": {},
+      "dropdown_btn": "Ações",
       "home": {
         "title": "Indicadores",
+        "btn_filter": "Filter",
+        "btn_filter_clean": "Clean Filters",
+        "btn_filter_open": "Filters",
         "createLabel": "Create a new Indicadores",
         "createOrEditLabel": "Create or edit a Indicadores",
         "notFound": "No Indicadores found"

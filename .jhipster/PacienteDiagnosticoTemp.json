@@ -39,7 +39,7 @@
         }
     ],
     "relationships": [],
-    "changelogDate": "20200507113300",
+    "changelogDate": "20200508162300",
     "entityTableName": "paciente_diagnostico_temp",
     "dto": "mapstruct",
     "pagination": "pagination",

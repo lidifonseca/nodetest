@@ -1,8 +1,14 @@
 {
   "generadorApp": {
     "padPtaTemp": {
+      "listButtons": {},
+      "viewButtons": {},
+      "dropdown_btn": "Ações",
       "home": {
         "title": "Pad Pta Temps",
+        "btn_filter": "Filter",
+        "btn_filter_clean": "Clean Filters",
+        "btn_filter_open": "Filters",
         "createLabel": "Create a new Pad Pta Temp",
         "createOrEditLabel": "Create or edit a Pad Pta Temp",
         "notFound": "No Pad Pta Temps found"

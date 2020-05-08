@@ -41,6 +41,7 @@ export interface IProfissionalPushBaseState {
 
 export interface IProfissionalPushUpdateState {
   fieldsBase: IProfissionalPushBaseState;
+
   isNew: boolean;
 }
 

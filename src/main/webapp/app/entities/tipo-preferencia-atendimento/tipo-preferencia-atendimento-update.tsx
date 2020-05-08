@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import Select from 'react-select';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 import { Button, Row, Col, Label } from 'reactstrap';
@@ -51,23 +52,18 @@ export class TipoPreferenciaAtendimentoUpdate extends React.Component<
 
   getFiltersURL = (offset = null) => {
     const fieldsBase = this.state.fieldsBase;
-    return (
-      '_back=1' +
-      (fieldsBase['baseFilters'] ? '&baseFilters=' + fieldsBase['baseFilters'] : '') +
-      (fieldsBase['activePage'] ? '&page=' + fieldsBase['activePage'] : '') +
-      (fieldsBase['itemsPerPage'] ? '&size=' + fieldsBase['itemsPerPage'] : '') +
-      (fieldsBase['sort'] ? '&sort=' + (fieldsBase['sort'] + ',' + fieldsBase['order']) : '') +
-      (offset !== null ? '&offset=' + offset : '') +
-      (fieldsBase['nome'] ? '&nome=' + fieldsBase['nome'] : '') +
-      (fieldsBase['ativo'] ? '&ativo=' + fieldsBase['ativo'] : '') +
-      ''
-    );
+    let url = '_back=1' + (offset !== null ? '&offset=' + offset : '');
+    Object.keys(fieldsBase).map(key => {
+      url += '&' + key + '=' + fieldsBase[key];
+    });
+    return url;
   };
   saveEntity = (event: any, errors: any, values: any) => {
     if (errors.length === 0) {
       const { tipoPreferenciaAtendimentoEntity } = this.props;
       const entity = {
         ...tipoPreferenciaAtendimentoEntity,
+
         ...values
       };
 
@@ -90,14 +86,6 @@ export class TipoPreferenciaAtendimentoUpdate extends React.Component<
     const baseFilters = this.state.fieldsBase && this.state.fieldsBase['baseFilters'] ? this.state.fieldsBase['baseFilters'] : null;
     return (
       <div>
-        <ol className="breadcrumb float-xl-right">
-          <li className="breadcrumb-item">
-            <Link to="/">Inicio</Link>
-          </li>
-          <li className="breadcrumb-item active">Tipo Preferencia Atendimentos</li>
-          <li className="breadcrumb-item active">Tipo Preferencia Atendimentos edit</li>
-        </ol>
-        <h1 className="page-header">&nbsp;&nbsp;</h1>
         <AvForm
           model={
             isNew
@@ -108,36 +96,42 @@ export class TipoPreferenciaAtendimentoUpdate extends React.Component<
           }
           onSubmit={this.saveEntity}
         >
-          <Panel>
-            <PanelHeader>
-              <h2 id="page-heading">
-                <span className="page-header ml-3">
-                  <Translate contentKey="generadorApp.tipoPreferenciaAtendimento.home.createOrEditLabel">
-                    Create or edit a TipoPreferenciaAtendimento
-                  </Translate>
-                </span>
+          <h2 id="page-heading">
+            <span className="page-header ml-3">
+              <Translate contentKey="generadorApp.tipoPreferenciaAtendimento.home.createOrEditLabel">
+                Create or edit a TipoPreferenciaAtendimento
+              </Translate>
+            </span>
 
-                <Button color="primary" id="save-entity" type="submit" disabled={updating} className="float-right jh-create-entity">
-                  <FontAwesomeIcon icon="save" />
-                  &nbsp;
-                  <Translate contentKey="entity.action.save">Save</Translate>
-                </Button>
-                <Button
-                  tag={Link}
-                  id="cancel-save"
-                  to={'/tipo-preferencia-atendimento?' + this.getFiltersURL()}
-                  replace
-                  color="info"
-                  className="float-right jh-create-entity"
-                >
-                  <FontAwesomeIcon icon="arrow-left" />
-                  &nbsp;
-                  <span className="d-none d-md-inline">
-                    <Translate contentKey="entity.action.back">Back</Translate>
-                  </span>
-                </Button>
-              </h2>
-            </PanelHeader>
+            <Button color="primary" id="save-entity" type="submit" disabled={updating} className="float-right jh-create-entity">
+              <FontAwesomeIcon icon="save" />
+              &nbsp;
+              <Translate contentKey="entity.action.save">Save</Translate>
+            </Button>
+            <Button
+              tag={Link}
+              id="cancel-save"
+              to={'/tipo-preferencia-atendimento?' + this.getFiltersURL()}
+              replace
+              color="info"
+              className="float-right jh-create-entity"
+            >
+              <FontAwesomeIcon icon="arrow-left" />
+              &nbsp;
+              <span className="d-none d-md-inline">
+                <Translate contentKey="entity.action.back">Back</Translate>
+              </span>
+            </Button>
+          </h2>
+          <ol className="breadcrumb">
+            <li className="breadcrumb-item">
+              <Link to="/">Inicio</Link>
+            </li>
+            <li className="breadcrumb-item active">Tipo Preferencia Atendimentos</li>
+            <li className="breadcrumb-item active">Tipo Preferencia Atendimentos edit</li>
+          </ol>
+
+          <Panel>
             <PanelBody>
               <Row className="justify-content-center">
                 <Col md="8">
@@ -168,43 +162,9 @@ export class TipoPreferenciaAtendimentoUpdate extends React.Component<
                         </AvGroup>
                       ) : null}
                       <Row>
-                        {baseFilters !== 'nome' ? (
-                          <Col md="nome">
-                            <AvGroup>
-                              <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="nomeLabel" for="tipo-preferencia-atendimento-nome">
-                                    <Translate contentKey="generadorApp.tipoPreferenciaAtendimento.nome">Nome</Translate>
-                                  </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField id="tipo-preferencia-atendimento-nome" type="text" name="nome" />
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
-                        ) : (
-                          <AvInput type="hidden" name="nome" value={this.state.fieldsBase[baseFilters]} />
-                        )}
+                        <NomeComponentUpdate baseFilters />
 
-                        {baseFilters !== 'ativo' ? (
-                          <Col md="ativo">
-                            <AvGroup>
-                              <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="ativoLabel" for="tipo-preferencia-atendimento-ativo">
-                                    <Translate contentKey="generadorApp.tipoPreferenciaAtendimento.ativo">Ativo</Translate>
-                                  </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField id="tipo-preferencia-atendimento-ativo" type="string" className="form-control" name="ativo" />
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
-                        ) : (
-                          <AvInput type="hidden" name="ativo" value={this.state.fieldsBase[baseFilters]} />
-                        )}
+                        <AtivoComponentUpdate baseFilters />
                       </Row>
                     </div>
                   )}
@@ -234,5 +194,47 @@ const mapDispatchToProps = {
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
+
+const NomeComponentUpdate = ({ baseFilters }) => {
+  return baseFilters !== 'nome' ? (
+    <Col md="nome">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" id="nomeLabel" for="tipo-preferencia-atendimento-nome">
+              <Translate contentKey="generadorApp.tipoPreferenciaAtendimento.nome">Nome</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <AvField id="tipo-preferencia-atendimento-nome" type="text" name="nome" />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="nome" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const AtivoComponentUpdate = ({ baseFilters }) => {
+  return baseFilters !== 'ativo' ? (
+    <Col md="ativo">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" id="ativoLabel" for="tipo-preferencia-atendimento-ativo">
+              <Translate contentKey="generadorApp.tipoPreferenciaAtendimento.ativo">Ativo</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <AvField id="tipo-preferencia-atendimento-ativo" type="string" className="form-control" name="ativo" />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="ativo" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(TipoPreferenciaAtendimentoUpdate);

@@ -61,6 +61,7 @@ export interface IPacienteDispositivoAtualBaseState {
 
 export interface IPacienteDispositivoAtualUpdateState {
   fieldsBase: IPacienteDispositivoAtualBaseState;
+
   isNew: boolean;
 }
 

@@ -1,8 +1,14 @@
 {
   "generadorApp": {
     "cidade": {
+      "listButtons": {},
+      "viewButtons": {},
+      "dropdown_btn": "Ações",
       "home": {
         "title": "Cidades",
+        "btn_filter": "Filter",
+        "btn_filter_clean": "Clean Filters",
+        "btn_filter_open": "Filters",
         "createLabel": "Create a new Cidade",
         "createOrEditLabel": "Create or edit a Cidade",
         "notFound": "No Cidades found"

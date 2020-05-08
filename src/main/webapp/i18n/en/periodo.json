@@ -1,8 +1,14 @@
 {
   "generadorApp": {
     "periodo": {
+      "listButtons": {},
+      "viewButtons": {},
+      "dropdown_btn": "Ações",
       "home": {
         "title": "Periodos",
+        "btn_filter": "Filter",
+        "btn_filter_clean": "Clean Filters",
+        "btn_filter_open": "Filters",
         "createLabel": "Create a new Periodo",
         "createOrEditLabel": "Create or edit a Periodo",
         "notFound": "No Periodos found"

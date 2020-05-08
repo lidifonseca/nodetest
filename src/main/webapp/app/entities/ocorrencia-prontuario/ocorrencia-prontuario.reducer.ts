@@ -39,6 +39,7 @@ export interface IOcorrenciaProntuarioBaseState {
 
 export interface IOcorrenciaProntuarioUpdateState {
   fieldsBase: IOcorrenciaProntuarioBaseState;
+
   isNew: boolean;
 }
 

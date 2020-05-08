@@ -44,6 +44,7 @@ export interface IAtendimentoAcompanhamentoPushBaseState {
 
 export interface IAtendimentoAcompanhamentoPushUpdateState {
   fieldsBase: IAtendimentoAcompanhamentoPushBaseState;
+
   isNew: boolean;
 }
 

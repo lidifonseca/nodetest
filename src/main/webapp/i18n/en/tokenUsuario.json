@@ -1,8 +1,14 @@
 {
   "generadorApp": {
     "tokenUsuario": {
+      "listButtons": {},
+      "viewButtons": {},
+      "dropdown_btn": "Ações",
       "home": {
         "title": "Token Usuarios",
+        "btn_filter": "Filter",
+        "btn_filter_clean": "Clean Filters",
+        "btn_filter_open": "Filters",
         "createLabel": "Create a new Token Usuario",
         "createOrEditLabel": "Create or edit a Token Usuario",
         "notFound": "No Token Usuarios found"

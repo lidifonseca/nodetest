@@ -44,6 +44,7 @@ export interface IPadItemIndicadoresBaseState {
 
 export interface IPadItemIndicadoresUpdateState {
   fieldsBase: IPadItemIndicadoresBaseState;
+
   isNew: boolean;
 }
 

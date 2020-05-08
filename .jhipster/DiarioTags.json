@@ -28,7 +28,7 @@
         }
     ],
     "relationships": [],
-    "changelogDate": "20200507105500",
+    "changelogDate": "20200508154500",
     "entityTableName": "diario_tags",
     "dto": "mapstruct",
     "pagination": "pagination",

@@ -39,6 +39,7 @@ export interface IPadItemAtividadeBaseState {
 
 export interface IPadItemAtividadeUpdateState {
   fieldsBase: IPadItemAtividadeBaseState;
+
   isNew: boolean;
 }
 

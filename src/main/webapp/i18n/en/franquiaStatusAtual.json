@@ -1,8 +1,14 @@
 {
   "generadorApp": {
     "franquiaStatusAtual": {
+      "listButtons": {},
+      "viewButtons": {},
+      "dropdown_btn": "Ações",
       "home": {
         "title": "Franquia Status Atuals",
+        "btn_filter": "Filter",
+        "btn_filter_clean": "Clean Filters",
+        "btn_filter_open": "Filters",
         "createLabel": "Create a new Franquia Status Atual",
         "createOrEditLabel": "Create or edit a Franquia Status Atual",
         "notFound": "No Franquia Status Atuals found"

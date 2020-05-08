@@ -2,6 +2,7 @@
 import React from 'react';
 import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
 import { connect } from 'react-redux';
+import Select from 'react-select';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import {
   Button,
@@ -877,32 +878,33 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
     const { unidadeEasies, usuarioList, match, totalItems } = this.props;
     return (
       <div>
-        <ol className="breadcrumb float-xl-right">
+        <h2 id="page-heading">
+          <span className="page-header">Usuarios</span>
+          <Button id="togglerFilterUsuario" className="btn btn-primary float-right jh-create-entity">
+            <Translate contentKey="generadorApp.usuario.home.btn_filter_open">Filters</Translate>
+            &nbsp;
+            <FontAwesomeIcon icon="caret-down" />
+          </Button>{' '}
+          &nbsp;
+          <Link
+            to={`${match.url}/new?${this.getFiltersURL()}`}
+            className="btn btn-primary float-right jh-create-entity"
+            id="jh-create-entity"
+          >
+            <FontAwesomeIcon icon="plus" />
+            &nbsp;
+            <Translate contentKey="generadorApp.usuario.home.createLabel">Create a new Usuario</Translate>
+          </Link>{' '}
+          &nbsp;
+        </h2>
+
+        <ol className="breadcrumb">
           <li className="breadcrumb-item">
             <Link to="/">Inicio</Link>
           </li>
           <li className="breadcrumb-item active">Usuarios</li>
         </ol>
-        <h1 className="page-header">&nbsp;&nbsp;</h1>
         <Panel>
-          <PanelHeader>
-            <h2 id="page-heading">
-              <span className="page-header ml-3">Usuarios</span>
-              <Button id="togglerFilterUsuario" className="btn btn-primary float-right jh-create-entity">
-                Filtros&nbsp;
-                <FontAwesomeIcon icon="caret-down" />
-              </Button>
-              <Link
-                to={`${match.url}/new?${this.getFiltersURL()}`}
-                className="btn btn-primary float-right jh-create-entity"
-                id="jh-create-entity"
-              >
-                <FontAwesomeIcon icon="plus" />
-                &nbsp;
-                <Translate contentKey="generadorApp.usuario.home.createLabel">Create a new Usuario</Translate>
-              </Link>
-            </h2>
-          </PanelHeader>
           <PanelBody>
             <div className="table-responsive">
               <UncontrolledCollapse toggler="#togglerFilterUsuario">
@@ -911,7 +913,7 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
                     <div className="row mt-1 ml-3 mr-3">
                       {this.state.baseFilters !== 'idOperadora' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="idOperadoraLabel" for="usuario-idOperadora">
                               <Translate contentKey="generadorApp.usuario.idOperadora">Id Operadora</Translate>
                             </Label>
@@ -923,7 +925,7 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
 
                       {this.state.baseFilters !== 'senha' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="senhaLabel" for="usuario-senha">
                               <Translate contentKey="generadorApp.usuario.senha">Senha</Translate>
                             </Label>
@@ -935,7 +937,7 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
 
                       {this.state.baseFilters !== 'nome' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="nomeLabel" for="usuario-nome">
                               <Translate contentKey="generadorApp.usuario.nome">Nome</Translate>
                             </Label>
@@ -947,7 +949,7 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
 
                       {this.state.baseFilters !== 'email' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="emailLabel" for="usuario-email">
                               <Translate contentKey="generadorApp.usuario.email">Email</Translate>
                             </Label>
@@ -959,7 +961,7 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
 
                       {this.state.baseFilters !== 'telefone' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="telefoneLabel" for="usuario-telefone">
                               <Translate contentKey="generadorApp.usuario.telefone">Telefone</Translate>
                             </Label>
@@ -971,7 +973,7 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
 
                       {this.state.baseFilters !== 'celular' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="celularLabel" for="usuario-celular">
                               <Translate contentKey="generadorApp.usuario.celular">Celular</Translate>
                             </Label>
@@ -983,7 +985,7 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
 
                       {this.state.baseFilters !== 'cpf' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="cpfLabel" for="usuario-cpf">
                               <Translate contentKey="generadorApp.usuario.cpf">Cpf</Translate>
                             </Label>
@@ -995,7 +997,7 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
 
                       {this.state.baseFilters !== 'rg' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="rgLabel" for="usuario-rg">
                               <Translate contentKey="generadorApp.usuario.rg">Rg</Translate>
                             </Label>
@@ -1007,7 +1009,7 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
 
                       {this.state.baseFilters !== 'sexo' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="sexoLabel" for="usuario-sexo">
                               <Translate contentKey="generadorApp.usuario.sexo">Sexo</Translate>
                             </Label>
@@ -1018,7 +1020,7 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
 
                       {this.state.baseFilters !== 'nascimento' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="nascimentoLabel" for="usuario-nascimento">
                               <Translate contentKey="generadorApp.usuario.nascimento">Nascimento</Translate>
                             </Label>
@@ -1029,7 +1031,7 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
 
                       {this.state.baseFilters !== 'verAtendimento' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="verAtendimentoLabel" for="usuario-verAtendimento">
                               <Translate contentKey="generadorApp.usuario.verAtendimento">Ver Atendimento</Translate>
                             </Label>
@@ -1040,7 +1042,7 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
 
                       {this.state.baseFilters !== 'cadAtendimento' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="cadAtendimentoLabel" for="usuario-cadAtendimento">
                               <Translate contentKey="generadorApp.usuario.cadAtendimento">Cad Atendimento</Translate>
                             </Label>
@@ -1051,7 +1053,7 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
 
                       {this.state.baseFilters !== 'ediAtendimento' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="ediAtendimentoLabel" for="usuario-ediAtendimento">
                               <Translate contentKey="generadorApp.usuario.ediAtendimento">Edi Atendimento</Translate>
                             </Label>
@@ -1062,7 +1064,7 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
 
                       {this.state.baseFilters !== 'baixaManualAtendimento' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="baixaManualAtendimentoLabel" for="usuario-baixaManualAtendimento">
                               <Translate contentKey="generadorApp.usuario.baixaManualAtendimento">Baixa Manual Atendimento</Translate>
                             </Label>
@@ -1078,7 +1080,7 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
 
                       {this.state.baseFilters !== 'delAtendimento' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="delAtendimentoLabel" for="usuario-delAtendimento">
                               <Translate contentKey="generadorApp.usuario.delAtendimento">Del Atendimento</Translate>
                             </Label>
@@ -1089,7 +1091,7 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
 
                       {this.state.baseFilters !== 'relAtendimento' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="relAtendimentoLabel" for="usuario-relAtendimento">
                               <Translate contentKey="generadorApp.usuario.relAtendimento">Rel Atendimento</Translate>
                             </Label>
@@ -1100,7 +1102,7 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
 
                       {this.state.baseFilters !== 'verPad' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="verPadLabel" for="usuario-verPad">
                               <Translate contentKey="generadorApp.usuario.verPad">Ver Pad</Translate>
                             </Label>
@@ -1111,7 +1113,7 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
 
                       {this.state.baseFilters !== 'cadPad' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="cadPadLabel" for="usuario-cadPad">
                               <Translate contentKey="generadorApp.usuario.cadPad">Cad Pad</Translate>
                             </Label>
@@ -1122,7 +1124,7 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
 
                       {this.state.baseFilters !== 'ediPad' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="ediPadLabel" for="usuario-ediPad">
                               <Translate contentKey="generadorApp.usuario.ediPad">Edi Pad</Translate>
                             </Label>
@@ -1133,7 +1135,7 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
 
                       {this.state.baseFilters !== 'delPad' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="delPadLabel" for="usuario-delPad">
                               <Translate contentKey="generadorApp.usuario.delPad">Del Pad</Translate>
                             </Label>
@@ -1144,7 +1146,7 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
 
                       {this.state.baseFilters !== 'relPad' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="relPadLabel" for="usuario-relPad">
                               <Translate contentKey="generadorApp.usuario.relPad">Rel Pad</Translate>
                             </Label>
@@ -1155,7 +1157,7 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
 
                       {this.state.baseFilters !== 'verDiario' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="verDiarioLabel" for="usuario-verDiario">
                               <Translate contentKey="generadorApp.usuario.verDiario">Ver Diario</Translate>
                             </Label>
@@ -1166,7 +1168,7 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
 
                       {this.state.baseFilters !== 'cadDiario' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="cadDiarioLabel" for="usuario-cadDiario">
                               <Translate contentKey="generadorApp.usuario.cadDiario">Cad Diario</Translate>
                             </Label>
@@ -1177,7 +1179,7 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
 
                       {this.state.baseFilters !== 'ediDiario' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="ediDiarioLabel" for="usuario-ediDiario">
                               <Translate contentKey="generadorApp.usuario.ediDiario">Edi Diario</Translate>
                             </Label>
@@ -1188,7 +1190,7 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
 
                       {this.state.baseFilters !== 'delDiario' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="delDiarioLabel" for="usuario-delDiario">
                               <Translate contentKey="generadorApp.usuario.delDiario">Del Diario</Translate>
                             </Label>
@@ -1199,7 +1201,7 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
 
                       {this.state.baseFilters !== 'relDiario' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="relDiarioLabel" for="usuario-relDiario">
                               <Translate contentKey="generadorApp.usuario.relDiario">Rel Diario</Translate>
                             </Label>
@@ -1210,7 +1212,7 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
 
                       {this.state.baseFilters !== 'verCategoria' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="verCategoriaLabel" for="usuario-verCategoria">
                               <Translate contentKey="generadorApp.usuario.verCategoria">Ver Categoria</Translate>
                             </Label>
@@ -1221,7 +1223,7 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
 
                       {this.state.baseFilters !== 'cadCategoria' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="cadCategoriaLabel" for="usuario-cadCategoria">
                               <Translate contentKey="generadorApp.usuario.cadCategoria">Cad Categoria</Translate>
                             </Label>
@@ -1232,7 +1234,7 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
 
                       {this.state.baseFilters !== 'ediCategoria' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="ediCategoriaLabel" for="usuario-ediCategoria">
                               <Translate contentKey="generadorApp.usuario.ediCategoria">Edi Categoria</Translate>
                             </Label>
@@ -1243,7 +1245,7 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
 
                       {this.state.baseFilters !== 'delCategoria' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="delCategoriaLabel" for="usuario-delCategoria">
                               <Translate contentKey="generadorApp.usuario.delCategoria">Del Categoria</Translate>
                             </Label>
@@ -1254,7 +1256,7 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
 
                       {this.state.baseFilters !== 'verEspecialidade' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="verEspecialidadeLabel" for="usuario-verEspecialidade">
                               <Translate contentKey="generadorApp.usuario.verEspecialidade">Ver Especialidade</Translate>
                             </Label>
@@ -1270,7 +1272,7 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
 
                       {this.state.baseFilters !== 'cadEspecialidade' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="cadEspecialidadeLabel" for="usuario-cadEspecialidade">
                               <Translate contentKey="generadorApp.usuario.cadEspecialidade">Cad Especialidade</Translate>
                             </Label>
@@ -1286,7 +1288,7 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
 
                       {this.state.baseFilters !== 'ediEspecialidade' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="ediEspecialidadeLabel" for="usuario-ediEspecialidade">
                               <Translate contentKey="generadorApp.usuario.ediEspecialidade">Edi Especialidade</Translate>
                             </Label>
@@ -1302,7 +1304,7 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
 
                       {this.state.baseFilters !== 'delEspecialidade' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="delEspecialidadeLabel" for="usuario-delEspecialidade">
                               <Translate contentKey="generadorApp.usuario.delEspecialidade">Del Especialidade</Translate>
                             </Label>
@@ -1318,7 +1320,7 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
 
                       {this.state.baseFilters !== 'relEspecialidade' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="relEspecialidadeLabel" for="usuario-relEspecialidade">
                               <Translate contentKey="generadorApp.usuario.relEspecialidade">Rel Especialidade</Translate>
                             </Label>
@@ -1334,7 +1336,7 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
 
                       {this.state.baseFilters !== 'verEspecialidadeValor' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="verEspecialidadeValorLabel" for="usuario-verEspecialidadeValor">
                               <Translate contentKey="generadorApp.usuario.verEspecialidadeValor">Ver Especialidade Valor</Translate>
                             </Label>
@@ -1350,7 +1352,7 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
 
                       {this.state.baseFilters !== 'cadEspecialidadeValor' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="cadEspecialidadeValorLabel" for="usuario-cadEspecialidadeValor">
                               <Translate contentKey="generadorApp.usuario.cadEspecialidadeValor">Cad Especialidade Valor</Translate>
                             </Label>
@@ -1366,7 +1368,7 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
 
                       {this.state.baseFilters !== 'ediEspecialidadeValor' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="ediEspecialidadeValorLabel" for="usuario-ediEspecialidadeValor">
                               <Translate contentKey="generadorApp.usuario.ediEspecialidadeValor">Edi Especialidade Valor</Translate>
                             </Label>
@@ -1382,7 +1384,7 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
 
                       {this.state.baseFilters !== 'delEspecialidadeValor' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="delEspecialidadeValorLabel" for="usuario-delEspecialidadeValor">
                               <Translate contentKey="generadorApp.usuario.delEspecialidadeValor">Del Especialidade Valor</Translate>
                             </Label>
@@ -1398,7 +1400,7 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
 
                       {this.state.baseFilters !== 'relEspecialidadeValor' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="relEspecialidadeValorLabel" for="usuario-relEspecialidadeValor">
                               <Translate contentKey="generadorApp.usuario.relEspecialidadeValor">Rel Especialidade Valor</Translate>
                             </Label>
@@ -1414,7 +1416,7 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
 
                       {this.state.baseFilters !== 'verOperadora' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="verOperadoraLabel" for="usuario-verOperadora">
                               <Translate contentKey="generadorApp.usuario.verOperadora">Ver Operadora</Translate>
                             </Label>
@@ -1425,7 +1427,7 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
 
                       {this.state.baseFilters !== 'cadOperadora' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="cadOperadoraLabel" for="usuario-cadOperadora">
                               <Translate contentKey="generadorApp.usuario.cadOperadora">Cad Operadora</Translate>
                             </Label>
@@ -1436,7 +1438,7 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
 
                       {this.state.baseFilters !== 'ediOperadora' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="ediOperadoraLabel" for="usuario-ediOperadora">
                               <Translate contentKey="generadorApp.usuario.ediOperadora">Edi Operadora</Translate>
                             </Label>
@@ -1447,7 +1449,7 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
 
                       {this.state.baseFilters !== 'delOperadora' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="delOperadoraLabel" for="usuario-delOperadora">
                               <Translate contentKey="generadorApp.usuario.delOperadora">Del Operadora</Translate>
                             </Label>
@@ -1458,7 +1460,7 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
 
                       {this.state.baseFilters !== 'verPaciente' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="verPacienteLabel" for="usuario-verPaciente">
                               <Translate contentKey="generadorApp.usuario.verPaciente">Ver Paciente</Translate>
                             </Label>
@@ -1469,7 +1471,7 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
 
                       {this.state.baseFilters !== 'cadPaciente' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="cadPacienteLabel" for="usuario-cadPaciente">
                               <Translate contentKey="generadorApp.usuario.cadPaciente">Cad Paciente</Translate>
                             </Label>
@@ -1480,7 +1482,7 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
 
                       {this.state.baseFilters !== 'ediPaciente' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="ediPacienteLabel" for="usuario-ediPaciente">
                               <Translate contentKey="generadorApp.usuario.ediPaciente">Edi Paciente</Translate>
                             </Label>
@@ -1491,7 +1493,7 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
 
                       {this.state.baseFilters !== 'delPaciente' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="delPacienteLabel" for="usuario-delPaciente">
                               <Translate contentKey="generadorApp.usuario.delPaciente">Del Paciente</Translate>
                             </Label>
@@ -1502,7 +1504,7 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
 
                       {this.state.baseFilters !== 'relPaciente' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="relPacienteLabel" for="usuario-relPaciente">
                               <Translate contentKey="generadorApp.usuario.relPaciente">Rel Paciente</Translate>
                             </Label>
@@ -1513,7 +1515,7 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
 
                       {this.state.baseFilters !== 'verProfissional' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="verProfissionalLabel" for="usuario-verProfissional">
                               <Translate contentKey="generadorApp.usuario.verProfissional">Ver Profissional</Translate>
                             </Label>
@@ -1524,7 +1526,7 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
 
                       {this.state.baseFilters !== 'cadProfissional' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="cadProfissionalLabel" for="usuario-cadProfissional">
                               <Translate contentKey="generadorApp.usuario.cadProfissional">Cad Profissional</Translate>
                             </Label>
@@ -1535,7 +1537,7 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
 
                       {this.state.baseFilters !== 'ediProfissional' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="ediProfissionalLabel" for="usuario-ediProfissional">
                               <Translate contentKey="generadorApp.usuario.ediProfissional">Edi Profissional</Translate>
                             </Label>
@@ -1546,7 +1548,7 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
 
                       {this.state.baseFilters !== 'delProfissional' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="delProfissionalLabel" for="usuario-delProfissional">
                               <Translate contentKey="generadorApp.usuario.delProfissional">Del Profissional</Translate>
                             </Label>
@@ -1557,7 +1559,7 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
 
                       {this.state.baseFilters !== 'ativProfissional' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="ativProfissionalLabel" for="usuario-ativProfissional">
                               <Translate contentKey="generadorApp.usuario.ativProfissional">Ativ Profissional</Translate>
                             </Label>
@@ -1573,7 +1575,7 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
 
                       {this.state.baseFilters !== 'relProfissional' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="relProfissionalLabel" for="usuario-relProfissional">
                               <Translate contentKey="generadorApp.usuario.relProfissional">Rel Profissional</Translate>
                             </Label>
@@ -1584,7 +1586,7 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
 
                       {this.state.baseFilters !== 'verPush' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="verPushLabel" for="usuario-verPush">
                               <Translate contentKey="generadorApp.usuario.verPush">Ver Push</Translate>
                             </Label>
@@ -1595,7 +1597,7 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
 
                       {this.state.baseFilters !== 'cadPushPaciente' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="cadPushPacienteLabel" for="usuario-cadPushPaciente">
                               <Translate contentKey="generadorApp.usuario.cadPushPaciente">Cad Push Paciente</Translate>
                             </Label>
@@ -1606,7 +1608,7 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
 
                       {this.state.baseFilters !== 'cadPushProfissional' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="cadPushProfissionalLabel" for="usuario-cadPushProfissional">
                               <Translate contentKey="generadorApp.usuario.cadPushProfissional">Cad Push Profissional</Translate>
                             </Label>
@@ -1622,7 +1624,7 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
 
                       {this.state.baseFilters !== 'verTermoPaciente' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="verTermoPacienteLabel" for="usuario-verTermoPaciente">
                               <Translate contentKey="generadorApp.usuario.verTermoPaciente">Ver Termo Paciente</Translate>
                             </Label>
@@ -1638,7 +1640,7 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
 
                       {this.state.baseFilters !== 'ediTermoPaciente' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="ediTermoPacienteLabel" for="usuario-ediTermoPaciente">
                               <Translate contentKey="generadorApp.usuario.ediTermoPaciente">Edi Termo Paciente</Translate>
                             </Label>
@@ -1654,7 +1656,7 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
 
                       {this.state.baseFilters !== 'verTermoProfissional' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="verTermoProfissionalLabel" for="usuario-verTermoProfissional">
                               <Translate contentKey="generadorApp.usuario.verTermoProfissional">Ver Termo Profissional</Translate>
                             </Label>
@@ -1670,7 +1672,7 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
 
                       {this.state.baseFilters !== 'ediTermoProfissional' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="ediTermoProfissionalLabel" for="usuario-ediTermoProfissional">
                               <Translate contentKey="generadorApp.usuario.ediTermoProfissional">Edi Termo Profissional</Translate>
                             </Label>
@@ -1686,7 +1688,7 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
 
                       {this.state.baseFilters !== 'verOutros' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="verOutrosLabel" for="usuario-verOutros">
                               <Translate contentKey="generadorApp.usuario.verOutros">Ver Outros</Translate>
                             </Label>
@@ -1697,7 +1699,7 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
 
                       {this.state.baseFilters !== 'cadOutros' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="cadOutrosLabel" for="usuario-cadOutros">
                               <Translate contentKey="generadorApp.usuario.cadOutros">Cad Outros</Translate>
                             </Label>
@@ -1708,7 +1710,7 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
 
                       {this.state.baseFilters !== 'ediOutros' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="ediOutrosLabel" for="usuario-ediOutros">
                               <Translate contentKey="generadorApp.usuario.ediOutros">Edi Outros</Translate>
                             </Label>
@@ -1719,7 +1721,7 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
 
                       {this.state.baseFilters !== 'delOutros' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="delOutrosLabel" for="usuario-delOutros">
                               <Translate contentKey="generadorApp.usuario.delOutros">Del Outros</Translate>
                             </Label>
@@ -1730,7 +1732,7 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
 
                       {this.state.baseFilters !== 'relOutros' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="relOutrosLabel" for="usuario-relOutros">
                               <Translate contentKey="generadorApp.usuario.relOutros">Rel Outros</Translate>
                             </Label>
@@ -1741,7 +1743,7 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
 
                       {this.state.baseFilters !== 'verUnidadeEasy' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="verUnidadeEasyLabel" for="usuario-verUnidadeEasy">
                               <Translate contentKey="generadorApp.usuario.verUnidadeEasy">Ver Unidade Easy</Translate>
                             </Label>
@@ -1752,7 +1754,7 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
 
                       {this.state.baseFilters !== 'cadUnidadeEasy' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="cadUnidadeEasyLabel" for="usuario-cadUnidadeEasy">
                               <Translate contentKey="generadorApp.usuario.cadUnidadeEasy">Cad Unidade Easy</Translate>
                             </Label>
@@ -1763,7 +1765,7 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
 
                       {this.state.baseFilters !== 'ediUnidadeEasy' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="ediUnidadeEasyLabel" for="usuario-ediUnidadeEasy">
                               <Translate contentKey="generadorApp.usuario.ediUnidadeEasy">Edi Unidade Easy</Translate>
                             </Label>
@@ -1774,7 +1776,7 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
 
                       {this.state.baseFilters !== 'delUnidadeEasy' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="delUnidadeEasyLabel" for="usuario-delUnidadeEasy">
                               <Translate contentKey="generadorApp.usuario.delUnidadeEasy">Del Unidade Easy</Translate>
                             </Label>
@@ -1785,7 +1787,7 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
 
                       {this.state.baseFilters !== 'verUsuario' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="verUsuarioLabel" for="usuario-verUsuario">
                               <Translate contentKey="generadorApp.usuario.verUsuario">Ver Usuario</Translate>
                             </Label>
@@ -1796,7 +1798,7 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
 
                       {this.state.baseFilters !== 'cadUsuario' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="cadUsuarioLabel" for="usuario-cadUsuario">
                               <Translate contentKey="generadorApp.usuario.cadUsuario">Cad Usuario</Translate>
                             </Label>
@@ -1807,7 +1809,7 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
 
                       {this.state.baseFilters !== 'ediUsuario' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="ediUsuarioLabel" for="usuario-ediUsuario">
                               <Translate contentKey="generadorApp.usuario.ediUsuario">Edi Usuario</Translate>
                             </Label>
@@ -1818,7 +1820,7 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
 
                       {this.state.baseFilters !== 'delUsuario' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="delUsuarioLabel" for="usuario-delUsuario">
                               <Translate contentKey="generadorApp.usuario.delUsuario">Del Usuario</Translate>
                             </Label>
@@ -1829,7 +1831,7 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
 
                       {this.state.baseFilters !== 'verPtaResultado' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="verPtaResultadoLabel" for="usuario-verPtaResultado">
                               <Translate contentKey="generadorApp.usuario.verPtaResultado">Ver Pta Resultado</Translate>
                             </Label>
@@ -1840,7 +1842,7 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
 
                       {this.state.baseFilters !== 'cadPtaResultado' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="cadPtaResultadoLabel" for="usuario-cadPtaResultado">
                               <Translate contentKey="generadorApp.usuario.cadPtaResultado">Cad Pta Resultado</Translate>
                             </Label>
@@ -1851,7 +1853,7 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
 
                       {this.state.baseFilters !== 'delPtaResultado' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="delPtaResultadoLabel" for="usuario-delPtaResultado">
                               <Translate contentKey="generadorApp.usuario.delPtaResultado">Del Pta Resultado</Translate>
                             </Label>
@@ -1862,7 +1864,7 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
 
                       {this.state.baseFilters !== 'verPtaAtividade' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="verPtaAtividadeLabel" for="usuario-verPtaAtividade">
                               <Translate contentKey="generadorApp.usuario.verPtaAtividade">Ver Pta Atividade</Translate>
                             </Label>
@@ -1873,7 +1875,7 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
 
                       {this.state.baseFilters !== 'cadPtaAtividade' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="cadPtaAtividadeLabel" for="usuario-cadPtaAtividade">
                               <Translate contentKey="generadorApp.usuario.cadPtaAtividade">Cad Pta Atividade</Translate>
                             </Label>
@@ -1884,7 +1886,7 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
 
                       {this.state.baseFilters !== 'delPtaAtividade' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="delPtaAtividadeLabel" for="usuario-delPtaAtividade">
                               <Translate contentKey="generadorApp.usuario.delPtaAtividade">Del Pta Atividade</Translate>
                             </Label>
@@ -1895,7 +1897,7 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
 
                       {this.state.baseFilters !== 'permissaoUsuario' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="permissaoUsuarioLabel" for="usuario-permissaoUsuario">
                               <Translate contentKey="generadorApp.usuario.permissaoUsuario">Permissao Usuario</Translate>
                             </Label>
@@ -1911,7 +1913,7 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
 
                       {this.state.baseFilters !== 'verProntuario' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="verProntuarioLabel" for="usuario-verProntuario">
                               <Translate contentKey="generadorApp.usuario.verProntuario">Ver Prontuario</Translate>
                             </Label>
@@ -1922,7 +1924,7 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
 
                       {this.state.baseFilters !== 'cadProntuario' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="cadProntuarioLabel" for="usuario-cadProntuario">
                               <Translate contentKey="generadorApp.usuario.cadProntuario">Cad Prontuario</Translate>
                             </Label>
@@ -1933,7 +1935,7 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
 
                       {this.state.baseFilters !== 'ediProntuario' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="ediProntuarioLabel" for="usuario-ediProntuario">
                               <Translate contentKey="generadorApp.usuario.ediProntuario">Edi Prontuario</Translate>
                             </Label>
@@ -1944,7 +1946,7 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
 
                       {this.state.baseFilters !== 'delProntuario' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="delProntuarioLabel" for="usuario-delProntuario">
                               <Translate contentKey="generadorApp.usuario.delProntuario">Del Prontuario</Translate>
                             </Label>
@@ -1955,7 +1957,7 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
 
                       {this.state.baseFilters !== 'delProntuarioFoto' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="delProntuarioFotoLabel" for="usuario-delProntuarioFoto">
                               <Translate contentKey="generadorApp.usuario.delProntuarioFoto">Del Prontuario Foto</Translate>
                             </Label>
@@ -1971,7 +1973,7 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
 
                       {this.state.baseFilters !== 'valoresFinanceiro' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="valoresFinanceiroLabel" for="usuario-valoresFinanceiro">
                               <Translate contentKey="generadorApp.usuario.valoresFinanceiro">Valores Financeiro</Translate>
                             </Label>
@@ -1987,7 +1989,7 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
 
                       {this.state.baseFilters !== 'autorizacaoValorFinanceiro' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="autorizacaoValorFinanceiroLabel" for="usuario-autorizacaoValorFinanceiro">
                               <Translate contentKey="generadorApp.usuario.autorizacaoValorFinanceiro">
                                 Autorizacao Valor Financeiro
@@ -2005,7 +2007,7 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
 
                       {this.state.baseFilters !== 'confirmarPagamentoFinanceiro' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="confirmarPagamentoFinanceiroLabel" for="usuario-confirmarPagamentoFinanceiro">
                               <Translate contentKey="generadorApp.usuario.confirmarPagamentoFinanceiro">
                                 Confirmar Pagamento Financeiro
@@ -2023,7 +2025,7 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
 
                       {this.state.baseFilters !== 'gerenciarSorteios' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="gerenciarSorteiosLabel" for="usuario-gerenciarSorteios">
                               <Translate contentKey="generadorApp.usuario.gerenciarSorteios">Gerenciar Sorteios</Translate>
                             </Label>
@@ -2039,7 +2041,7 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
 
                       {this.state.baseFilters !== 'envioRecusa' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="envioRecusaLabel" for="usuario-envioRecusa">
                               <Translate contentKey="generadorApp.usuario.envioRecusa">Envio Recusa</Translate>
                             </Label>
@@ -2050,7 +2052,7 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
 
                       {this.state.baseFilters !== 'envioIntercorrencia' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="envioIntercorrenciaLabel" for="usuario-envioIntercorrencia">
                               <Translate contentKey="generadorApp.usuario.envioIntercorrencia">Envio Intercorrencia</Translate>
                             </Label>
@@ -2066,7 +2068,7 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
 
                       {this.state.baseFilters !== 'envioCancelamento' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="envioCancelamentoLabel" for="usuario-envioCancelamento">
                               <Translate contentKey="generadorApp.usuario.envioCancelamento">Envio Cancelamento</Translate>
                             </Label>
@@ -2082,7 +2084,7 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
 
                       {this.state.baseFilters !== 'envioAvaliacao' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="envioAvaliacaoLabel" for="usuario-envioAvaliacao">
                               <Translate contentKey="generadorApp.usuario.envioAvaliacao">Envio Avaliacao</Translate>
                             </Label>
@@ -2093,7 +2095,7 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
 
                       {this.state.baseFilters !== 'envioPedido' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="envioPedidoLabel" for="usuario-envioPedido">
                               <Translate contentKey="generadorApp.usuario.envioPedido">Envio Pedido</Translate>
                             </Label>
@@ -2104,7 +2106,7 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
 
                       {this.state.baseFilters !== 'alertaAtendimento' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="alertaAtendimentoLabel" for="usuario-alertaAtendimento">
                               <Translate contentKey="generadorApp.usuario.alertaAtendimento">Alerta Atendimento</Translate>
                             </Label>
@@ -2120,7 +2122,7 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
 
                       {this.state.baseFilters !== 'ativo' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="ativoLabel" for="usuario-ativo">
                               <Translate contentKey="generadorApp.usuario.ativo">Ativo</Translate>
                             </Label>
@@ -2131,7 +2133,7 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
 
                       {this.state.baseFilters !== 'envioGlosado' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="envioGlosadoLabel" for="usuario-envioGlosado">
                               <Translate contentKey="generadorApp.usuario.envioGlosado">Envio Glosado</Translate>
                             </Label>
@@ -2142,7 +2144,7 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
 
                       {this.state.baseFilters !== 'emergencia' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="emergenciaLabel" for="usuario-emergencia">
                               <Translate contentKey="generadorApp.usuario.emergencia">Emergencia</Translate>
                             </Label>
@@ -2153,7 +2155,7 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
 
                       {this.state.baseFilters !== 'token' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="tokenLabel" for="usuario-token">
                               <Translate contentKey="generadorApp.usuario.token">Token</Translate>
                             </Label>
@@ -2164,7 +2166,7 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
 
                       {this.state.baseFilters !== 'editAtendimento' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="editAtendimentoLabel" for="usuario-editAtendimento">
                               <Translate contentKey="generadorApp.usuario.editAtendimento">Edit Atendimento</Translate>
                             </Label>
@@ -2175,7 +2177,7 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
 
                       {this.state.baseFilters !== 'ouvirLigacao' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="ouvirLigacaoLabel" for="usuario-ouvirLigacao">
                               <Translate contentKey="generadorApp.usuario.ouvirLigacao">Ouvir Ligacao</Translate>
                             </Label>
@@ -2186,7 +2188,7 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
 
                       {this.state.baseFilters !== 'verPainelIndicadores' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="verPainelIndicadoresLabel" for="usuario-verPainelIndicadores">
                               <Translate contentKey="generadorApp.usuario.verPainelIndicadores">Ver Painel Indicadores</Translate>
                             </Label>
@@ -2202,7 +2204,7 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
 
                       {this.state.baseFilters !== 'prorrogarPad' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="prorrogarPadLabel" for="usuario-prorrogarPad">
                               <Translate contentKey="generadorApp.usuario.prorrogarPad">Prorrogar Pad</Translate>
                             </Label>
@@ -2213,7 +2215,7 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
 
                       {this.state.baseFilters !== 'cancelarAtendMassa' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="cancelarAtendMassaLabel" for="usuario-cancelarAtendMassa">
                               <Translate contentKey="generadorApp.usuario.cancelarAtendMassa">Cancelar Atend Massa</Translate>
                             </Label>
@@ -2229,7 +2231,7 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
 
                       {this.state.baseFilters !== 'cadMatMed' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="cadMatMedLabel" for="usuario-cadMatMed">
                               <Translate contentKey="generadorApp.usuario.cadMatMed">Cad Mat Med</Translate>
                             </Label>
@@ -2240,7 +2242,7 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
 
                       {this.state.baseFilters !== 'ediMatMed' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="ediMatMedLabel" for="usuario-ediMatMed">
                               <Translate contentKey="generadorApp.usuario.ediMatMed">Edi Mat Med</Translate>
                             </Label>
@@ -2251,7 +2253,7 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
 
                       {this.state.baseFilters !== 'delMatMed' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="delMatMedLabel" for="usuario-delMatMed">
                               <Translate contentKey="generadorApp.usuario.delMatMed">Del Mat Med</Translate>
                             </Label>
@@ -2262,7 +2264,7 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
 
                       {this.state.baseFilters !== 'verColPta' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="verColPtaLabel" for="usuario-verColPta">
                               <Translate contentKey="generadorApp.usuario.verColPta">Ver Col Pta</Translate>
                             </Label>
@@ -2273,7 +2275,7 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
 
                       {this.state.baseFilters !== 'verColFoto' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="verColFotoLabel" for="usuario-verColFoto">
                               <Translate contentKey="generadorApp.usuario.verColFoto">Ver Col Foto</Translate>
                             </Label>
@@ -2284,7 +2286,7 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
 
                       {this.state.baseFilters !== 'verColLc' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="verColLcLabel" for="usuario-verColLc">
                               <Translate contentKey="generadorApp.usuario.verColLc">Ver Col Lc</Translate>
                             </Label>
@@ -2295,7 +2297,7 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
 
                       {this.state.baseFilters !== 'verAtendCancelado' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="verAtendCanceladoLabel" for="usuario-verAtendCancelado">
                               <Translate contentKey="generadorApp.usuario.verAtendCancelado">Ver Atend Cancelado</Translate>
                             </Label>
@@ -2311,7 +2313,7 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
 
                       {this.state.baseFilters !== 'verAtendAgConfirmacao' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="verAtendAgConfirmacaoLabel" for="usuario-verAtendAgConfirmacao">
                               <Translate contentKey="generadorApp.usuario.verAtendAgConfirmacao">Ver Atend Ag Confirmacao</Translate>
                             </Label>
@@ -2327,7 +2329,7 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
 
                       {this.state.baseFilters !== 'ediGeoLocalizacaoAtendimento' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="ediGeoLocalizacaoAtendimentoLabel" for="usuario-ediGeoLocalizacaoAtendimento">
                               <Translate contentKey="generadorApp.usuario.ediGeoLocalizacaoAtendimento">
                                 Edi Geo Localizacao Atendimento
@@ -2345,7 +2347,7 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
 
                       {this.state.baseFilters !== 'copiarEvolucao' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="copiarEvolucaoLabel" for="usuario-copiarEvolucao">
                               <Translate contentKey="generadorApp.usuario.copiarEvolucao">Copiar Evolucao</Translate>
                             </Label>
@@ -2356,7 +2358,7 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
 
                       {this.state.baseFilters !== 'copiarNomeProf' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="copiarNomeProfLabel" for="usuario-copiarNomeProf">
                               <Translate contentKey="generadorApp.usuario.copiarNomeProf">Copiar Nome Prof</Translate>
                             </Label>
@@ -2367,7 +2369,7 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
 
                       {this.state.baseFilters !== 'copiarRegistroProf' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="copiarRegistroProfLabel" for="usuario-copiarRegistroProf">
                               <Translate contentKey="generadorApp.usuario.copiarRegistroProf">Copiar Registro Prof</Translate>
                             </Label>
@@ -2383,7 +2385,7 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
 
                       {this.state.baseFilters !== 'idAreaAtuacao' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="idAreaAtuacaoLabel" for="usuario-idAreaAtuacao">
                               <Translate contentKey="generadorApp.usuario.idAreaAtuacao">Id Area Atuacao</Translate>
                             </Label>
@@ -2395,7 +2397,7 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
 
                       {this.state.baseFilters !== 'envioCidSemPta' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="envioCidSemPtaLabel" for="usuario-envioCidSemPta">
                               <Translate contentKey="generadorApp.usuario.envioCidSemPta">Envio Cid Sem Pta</Translate>
                             </Label>
@@ -2406,7 +2408,7 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
 
                       {this.state.baseFilters !== 'envioAnaliseResultadoEsperado' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="envioAnaliseResultadoEsperadoLabel" for="usuario-envioAnaliseResultadoEsperado">
                               <Translate contentKey="generadorApp.usuario.envioAnaliseResultadoEsperado">
                                 Envio Analise Resultado Esperado
@@ -2424,7 +2426,7 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
 
                       {this.state.baseFilters !== 'envioDescumprimento' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="envioDescumprimentoLabel" for="usuario-envioDescumprimento">
                               <Translate contentKey="generadorApp.usuario.envioDescumprimento">Envio Descumprimento</Translate>
                             </Label>
@@ -2440,7 +2442,7 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
 
                       {this.state.baseFilters !== 'envioMelhoraTempo' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="envioMelhoraTempoLabel" check>
                               <AvInput id="usuario-envioMelhoraTempo" type="checkbox" className="form-control" name="envioMelhoraTempo" />
                               <Translate contentKey="generadorApp.usuario.envioMelhoraTempo">Envio Melhora Tempo</Translate>
@@ -2451,21 +2453,28 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
 
                       {this.state.baseFilters !== 'unidade' ? (
                         <Col md="3">
-                          <Row>
-                            <div>
+                          <Row className="mr-1 mt-1">
+                            <div style={{ width: '100%' }}>
                               <Label for="usuario-unidade">
                                 <Translate contentKey="generadorApp.usuario.unidade">Unidade</Translate>
                               </Label>
-                              <AvInput id="usuario-unidade" type="select" className="form-control" name="unidadeId">
-                                <option value="" key="0" />
-                                {unidadeEasies
-                                  ? unidadeEasies.map(otherEntity => (
-                                      <option value={otherEntity.id} key={otherEntity.id}>
-                                        {otherEntity.razaoSocial}
-                                      </option>
-                                    ))
-                                  : null}
-                              </AvInput>
+                              <Select
+                                id="usuario-unidade"
+                                isMulti
+                                className={'css-select-control'}
+                                value={
+                                  unidadeEasies
+                                    ? unidadeEasies.map(p =>
+                                        this.state.unidade.split(',').indexOf(p.id) !== -1 ? { value: p.id, label: p.razaoSocial } : null
+                                      )
+                                    : null
+                                }
+                                options={
+                                  unidadeEasies ? unidadeEasies.map(option => ({ value: option.id, label: option.razaoSocial })) : null
+                                }
+                                onChange={options => this.setState({ unidade: options.map(option => option['value']).join(',') })}
+                                name={'unidade'}
+                              />
                             </div>
                           </Row>
                         </Col>
@@ -2476,13 +2485,13 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
                       <Button className="btn btn-success" type="submit">
                         <i className="fa fa-filter" aria-hidden={'true'}></i>
                         &nbsp;
-                        <Translate contentKey="entity.validation.filter">Filter</Translate>
+                        <Translate contentKey="generadorApp.usuario.home.btn_filter">Filter</Translate>
                       </Button>
                       &nbsp;
                       <div className="btn btn-secondary hand" onClick={this.cancelCourse}>
                         <FontAwesomeIcon icon="trash-alt" />
                         &nbsp;
-                        <Translate contentKey="entity.validation.clean">Clean</Translate>
+                        <Translate contentKey="generadorApp.usuario.home.btn_filter_clean">Clean</Translate>
                       </div>
                     </div>
                   </AvForm>

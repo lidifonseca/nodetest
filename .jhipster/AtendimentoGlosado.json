@@ -18,7 +18,7 @@
         }
     ],
     "relationships": [],
-    "changelogDate": "20200507103800",
+    "changelogDate": "20200508152800",
     "entityTableName": "atendimento_glosado",
     "dto": "mapstruct",
     "pagination": "pagination",

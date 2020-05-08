@@ -47,7 +47,7 @@
         }
     ],
     "relationships": [],
-    "changelogDate": "20200507105800",
+    "changelogDate": "20200508154800",
     "entityTableName": "especialidade_operadora",
     "dto": "mapstruct",
     "pagination": "pagination",

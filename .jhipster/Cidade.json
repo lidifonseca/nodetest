@@ -11,7 +11,7 @@
         }
     ],
     "relationships": [],
-    "changelogDate": "20200507105100",
+    "changelogDate": "20200508154100",
     "entityTableName": "cidade",
     "dto": "mapstruct",
     "pagination": "pagination",

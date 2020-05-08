@@ -43,7 +43,7 @@
         }
     ],
     "relationships": [],
-    "changelogDate": "20200507122400",
+    "changelogDate": "20200508171400",
     "entityTableName": "prontuario_motivo_manifestacao",
     "dto": "mapstruct",
     "pagination": "pagination",

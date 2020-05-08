@@ -1,8 +1,14 @@
 {
   "generadorApp": {
     "apiReturn": {
+      "listButtons": {},
+      "viewButtons": {},
+      "dropdown_btn": "Ações",
       "home": {
         "title": "Api Returns",
+        "btn_filter": "Filter",
+        "btn_filter_clean": "Clean Filters",
+        "btn_filter_open": "Filters",
         "createLabel": "Create a new Api Return",
         "createOrEditLabel": "Create or edit a Api Return",
         "notFound": "No Api Returns found"

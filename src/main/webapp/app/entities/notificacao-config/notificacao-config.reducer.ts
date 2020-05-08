@@ -46,6 +46,7 @@ export interface INotificacaoConfigBaseState {
 
 export interface INotificacaoConfigUpdateState {
   fieldsBase: INotificacaoConfigBaseState;
+
   isNew: boolean;
 }
 

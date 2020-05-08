@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import Select from 'react-select';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 import { Button, Row, Col, Label } from 'reactstrap';
@@ -51,22 +52,11 @@ export class AtendimentoAcompanhamentoPushUpdate extends React.Component<
 
   getFiltersURL = (offset = null) => {
     const fieldsBase = this.state.fieldsBase;
-    return (
-      '_back=1' +
-      (fieldsBase['baseFilters'] ? '&baseFilters=' + fieldsBase['baseFilters'] : '') +
-      (fieldsBase['activePage'] ? '&page=' + fieldsBase['activePage'] : '') +
-      (fieldsBase['itemsPerPage'] ? '&size=' + fieldsBase['itemsPerPage'] : '') +
-      (fieldsBase['sort'] ? '&sort=' + (fieldsBase['sort'] + ',' + fieldsBase['order']) : '') +
-      (offset !== null ? '&offset=' + offset : '') +
-      (fieldsBase['atendimentoId'] ? '&atendimentoId=' + fieldsBase['atendimentoId'] : '') +
-      (fieldsBase['pacienteId'] ? '&pacienteId=' + fieldsBase['pacienteId'] : '') +
-      (fieldsBase['profissionalId'] ? '&profissionalId=' + fieldsBase['profissionalId'] : '') +
-      (fieldsBase['timestampAtendimento'] ? '&timestampAtendimento=' + fieldsBase['timestampAtendimento'] : '') +
-      (fieldsBase['nomePaciente'] ? '&nomePaciente=' + fieldsBase['nomePaciente'] : '') +
-      (fieldsBase['nomeProfissioinal'] ? '&nomeProfissioinal=' + fieldsBase['nomeProfissioinal'] : '') +
-      (fieldsBase['timestampConfirmacao'] ? '&timestampConfirmacao=' + fieldsBase['timestampConfirmacao'] : '') +
-      ''
-    );
+    let url = '_back=1' + (offset !== null ? '&offset=' + offset : '');
+    Object.keys(fieldsBase).map(key => {
+      url += '&' + key + '=' + fieldsBase[key];
+    });
+    return url;
   };
   saveEntity = (event: any, errors: any, values: any) => {
     values.timestampAtendimento = convertDateTimeToServer(values.timestampAtendimento);
@@ -76,6 +66,7 @@ export class AtendimentoAcompanhamentoPushUpdate extends React.Component<
       const { atendimentoAcompanhamentoPushEntity } = this.props;
       const entity = {
         ...atendimentoAcompanhamentoPushEntity,
+
         ...values
       };
 
@@ -98,14 +89,6 @@ export class AtendimentoAcompanhamentoPushUpdate extends React.Component<
     const baseFilters = this.state.fieldsBase && this.state.fieldsBase['baseFilters'] ? this.state.fieldsBase['baseFilters'] : null;
     return (
       <div>
-        <ol className="breadcrumb float-xl-right">
-          <li className="breadcrumb-item">
-            <Link to="/">Inicio</Link>
-          </li>
-          <li className="breadcrumb-item active">Atendimento Acompanhamento Pushes</li>
-          <li className="breadcrumb-item active">Atendimento Acompanhamento Pushes edit</li>
-        </ol>
-        <h1 className="page-header">&nbsp;&nbsp;</h1>
         <AvForm
           model={
             isNew
@@ -116,36 +99,42 @@ export class AtendimentoAcompanhamentoPushUpdate extends React.Component<
           }
           onSubmit={this.saveEntity}
         >
-          <Panel>
-            <PanelHeader>
-              <h2 id="page-heading">
-                <span className="page-header ml-3">
-                  <Translate contentKey="generadorApp.atendimentoAcompanhamentoPush.home.createOrEditLabel">
-                    Create or edit a AtendimentoAcompanhamentoPush
-                  </Translate>
-                </span>
+          <h2 id="page-heading">
+            <span className="page-header ml-3">
+              <Translate contentKey="generadorApp.atendimentoAcompanhamentoPush.home.createOrEditLabel">
+                Create or edit a AtendimentoAcompanhamentoPush
+              </Translate>
+            </span>
 
-                <Button color="primary" id="save-entity" type="submit" disabled={updating} className="float-right jh-create-entity">
-                  <FontAwesomeIcon icon="save" />
-                  &nbsp;
-                  <Translate contentKey="entity.action.save">Save</Translate>
-                </Button>
-                <Button
-                  tag={Link}
-                  id="cancel-save"
-                  to={'/atendimento-acompanhamento-push?' + this.getFiltersURL()}
-                  replace
-                  color="info"
-                  className="float-right jh-create-entity"
-                >
-                  <FontAwesomeIcon icon="arrow-left" />
-                  &nbsp;
-                  <span className="d-none d-md-inline">
-                    <Translate contentKey="entity.action.back">Back</Translate>
-                  </span>
-                </Button>
-              </h2>
-            </PanelHeader>
+            <Button color="primary" id="save-entity" type="submit" disabled={updating} className="float-right jh-create-entity">
+              <FontAwesomeIcon icon="save" />
+              &nbsp;
+              <Translate contentKey="entity.action.save">Save</Translate>
+            </Button>
+            <Button
+              tag={Link}
+              id="cancel-save"
+              to={'/atendimento-acompanhamento-push?' + this.getFiltersURL()}
+              replace
+              color="info"
+              className="float-right jh-create-entity"
+            >
+              <FontAwesomeIcon icon="arrow-left" />
+              &nbsp;
+              <span className="d-none d-md-inline">
+                <Translate contentKey="entity.action.back">Back</Translate>
+              </span>
+            </Button>
+          </h2>
+          <ol className="breadcrumb">
+            <li className="breadcrumb-item">
+              <Link to="/">Inicio</Link>
+            </li>
+            <li className="breadcrumb-item active">Atendimento Acompanhamento Pushes</li>
+            <li className="breadcrumb-item active">Atendimento Acompanhamento Pushes edit</li>
+          </ol>
+
+          <Panel>
             <PanelBody>
               <Row className="justify-content-center">
                 <Col md="8">
@@ -176,199 +165,19 @@ export class AtendimentoAcompanhamentoPushUpdate extends React.Component<
                         </AvGroup>
                       ) : null}
                       <Row>
-                        {baseFilters !== 'atendimentoId' ? (
-                          <Col md="atendimentoId">
-                            <AvGroup>
-                              <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="atendimentoIdLabel" for="atendimento-acompanhamento-push-atendimentoId">
-                                    <Translate contentKey="generadorApp.atendimentoAcompanhamentoPush.atendimentoId">
-                                      Atendimento Id
-                                    </Translate>
-                                  </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField
-                                    id="atendimento-acompanhamento-push-atendimentoId"
-                                    type="string"
-                                    className="form-control"
-                                    name="atendimentoId"
-                                  />
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
-                        ) : (
-                          <AvInput type="hidden" name="atendimentoId" value={this.state.fieldsBase[baseFilters]} />
-                        )}
+                        <AtendimentoIdComponentUpdate baseFilters />
 
-                        {baseFilters !== 'pacienteId' ? (
-                          <Col md="pacienteId">
-                            <AvGroup>
-                              <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="pacienteIdLabel" for="atendimento-acompanhamento-push-pacienteId">
-                                    <Translate contentKey="generadorApp.atendimentoAcompanhamentoPush.pacienteId">Paciente Id</Translate>
-                                  </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField
-                                    id="atendimento-acompanhamento-push-pacienteId"
-                                    type="string"
-                                    className="form-control"
-                                    name="pacienteId"
-                                  />
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
-                        ) : (
-                          <AvInput type="hidden" name="pacienteId" value={this.state.fieldsBase[baseFilters]} />
-                        )}
+                        <PacienteIdComponentUpdate baseFilters />
 
-                        {baseFilters !== 'profissionalId' ? (
-                          <Col md="profissionalId">
-                            <AvGroup>
-                              <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="profissionalIdLabel" for="atendimento-acompanhamento-push-profissionalId">
-                                    <Translate contentKey="generadorApp.atendimentoAcompanhamentoPush.profissionalId">
-                                      Profissional Id
-                                    </Translate>
-                                  </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField
-                                    id="atendimento-acompanhamento-push-profissionalId"
-                                    type="string"
-                                    className="form-control"
-                                    name="profissionalId"
-                                  />
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
-                        ) : (
-                          <AvInput type="hidden" name="profissionalId" value={this.state.fieldsBase[baseFilters]} />
-                        )}
+                        <ProfissionalIdComponentUpdate baseFilters />
 
-                        {baseFilters !== 'timestampAtendimento' ? (
-                          <Col md="timestampAtendimento">
-                            <AvGroup>
-                              <Row>
-                                <Col md="3">
-                                  <Label
-                                    className="mt-2"
-                                    id="timestampAtendimentoLabel"
-                                    for="atendimento-acompanhamento-push-timestampAtendimento"
-                                  >
-                                    <Translate contentKey="generadorApp.atendimentoAcompanhamentoPush.timestampAtendimento">
-                                      Timestamp Atendimento
-                                    </Translate>
-                                  </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvInput
-                                    id="atendimento-acompanhamento-push-timestampAtendimento"
-                                    type="datetime-local"
-                                    className="form-control"
-                                    name="timestampAtendimento"
-                                    placeholder={'YYYY-MM-DD HH:mm'}
-                                    value={
-                                      isNew
-                                        ? null
-                                        : convertDateTimeFromServer(this.props.atendimentoAcompanhamentoPushEntity.timestampAtendimento)
-                                    }
-                                  />
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
-                        ) : (
-                          <AvInput type="hidden" name="timestampAtendimento" value={this.state.fieldsBase[baseFilters]} />
-                        )}
+                        <TimestampAtendimentoComponentUpdate baseFilters />
 
-                        {baseFilters !== 'nomePaciente' ? (
-                          <Col md="nomePaciente">
-                            <AvGroup>
-                              <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="nomePacienteLabel" for="atendimento-acompanhamento-push-nomePaciente">
-                                    <Translate contentKey="generadorApp.atendimentoAcompanhamentoPush.nomePaciente">
-                                      Nome Paciente
-                                    </Translate>
-                                  </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField id="atendimento-acompanhamento-push-nomePaciente" type="text" name="nomePaciente" />
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
-                        ) : (
-                          <AvInput type="hidden" name="nomePaciente" value={this.state.fieldsBase[baseFilters]} />
-                        )}
+                        <NomePacienteComponentUpdate baseFilters />
 
-                        {baseFilters !== 'nomeProfissioinal' ? (
-                          <Col md="nomeProfissioinal">
-                            <AvGroup>
-                              <Row>
-                                <Col md="3">
-                                  <Label
-                                    className="mt-2"
-                                    id="nomeProfissioinalLabel"
-                                    for="atendimento-acompanhamento-push-nomeProfissioinal"
-                                  >
-                                    <Translate contentKey="generadorApp.atendimentoAcompanhamentoPush.nomeProfissioinal">
-                                      Nome Profissioinal
-                                    </Translate>
-                                  </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField id="atendimento-acompanhamento-push-nomeProfissioinal" type="text" name="nomeProfissioinal" />
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
-                        ) : (
-                          <AvInput type="hidden" name="nomeProfissioinal" value={this.state.fieldsBase[baseFilters]} />
-                        )}
+                        <NomeProfissioinalComponentUpdate baseFilters />
 
-                        {baseFilters !== 'timestampConfirmacao' ? (
-                          <Col md="timestampConfirmacao">
-                            <AvGroup>
-                              <Row>
-                                <Col md="3">
-                                  <Label
-                                    className="mt-2"
-                                    id="timestampConfirmacaoLabel"
-                                    for="atendimento-acompanhamento-push-timestampConfirmacao"
-                                  >
-                                    <Translate contentKey="generadorApp.atendimentoAcompanhamentoPush.timestampConfirmacao">
-                                      Timestamp Confirmacao
-                                    </Translate>
-                                  </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvInput
-                                    id="atendimento-acompanhamento-push-timestampConfirmacao"
-                                    type="datetime-local"
-                                    className="form-control"
-                                    name="timestampConfirmacao"
-                                    placeholder={'YYYY-MM-DD HH:mm'}
-                                    value={
-                                      isNew
-                                        ? null
-                                        : convertDateTimeFromServer(this.props.atendimentoAcompanhamentoPushEntity.timestampConfirmacao)
-                                    }
-                                  />
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
-                        ) : (
-                          <AvInput type="hidden" name="timestampConfirmacao" value={this.state.fieldsBase[baseFilters]} />
-                        )}
+                        <TimestampConfirmacaoComponentUpdate baseFilters />
                       </Row>
                     </div>
                   )}
@@ -398,5 +207,166 @@ const mapDispatchToProps = {
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
+
+const AtendimentoIdComponentUpdate = ({ baseFilters }) => {
+  return baseFilters !== 'atendimentoId' ? (
+    <Col md="atendimentoId">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" id="atendimentoIdLabel" for="atendimento-acompanhamento-push-atendimentoId">
+              <Translate contentKey="generadorApp.atendimentoAcompanhamentoPush.atendimentoId">Atendimento Id</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <AvField id="atendimento-acompanhamento-push-atendimentoId" type="string" className="form-control" name="atendimentoId" />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="atendimentoId" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const PacienteIdComponentUpdate = ({ baseFilters }) => {
+  return baseFilters !== 'pacienteId' ? (
+    <Col md="pacienteId">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" id="pacienteIdLabel" for="atendimento-acompanhamento-push-pacienteId">
+              <Translate contentKey="generadorApp.atendimentoAcompanhamentoPush.pacienteId">Paciente Id</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <AvField id="atendimento-acompanhamento-push-pacienteId" type="string" className="form-control" name="pacienteId" />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="pacienteId" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const ProfissionalIdComponentUpdate = ({ baseFilters }) => {
+  return baseFilters !== 'profissionalId' ? (
+    <Col md="profissionalId">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" id="profissionalIdLabel" for="atendimento-acompanhamento-push-profissionalId">
+              <Translate contentKey="generadorApp.atendimentoAcompanhamentoPush.profissionalId">Profissional Id</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <AvField id="atendimento-acompanhamento-push-profissionalId" type="string" className="form-control" name="profissionalId" />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="profissionalId" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const TimestampAtendimentoComponentUpdate = ({ baseFilters }) => {
+  return baseFilters !== 'timestampAtendimento' ? (
+    <Col md="timestampAtendimento">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" id="timestampAtendimentoLabel" for="atendimento-acompanhamento-push-timestampAtendimento">
+              <Translate contentKey="generadorApp.atendimentoAcompanhamentoPush.timestampAtendimento">Timestamp Atendimento</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <AvInput
+              id="atendimento-acompanhamento-push-timestampAtendimento"
+              type="datetime-local"
+              className="form-control"
+              name="timestampAtendimento"
+              placeholder={'YYYY-MM-DD HH:mm'}
+              value={isNew ? null : convertDateTimeFromServer(this.props.atendimentoAcompanhamentoPushEntity.timestampAtendimento)}
+            />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="timestampAtendimento" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const NomePacienteComponentUpdate = ({ baseFilters }) => {
+  return baseFilters !== 'nomePaciente' ? (
+    <Col md="nomePaciente">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" id="nomePacienteLabel" for="atendimento-acompanhamento-push-nomePaciente">
+              <Translate contentKey="generadorApp.atendimentoAcompanhamentoPush.nomePaciente">Nome Paciente</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <AvField id="atendimento-acompanhamento-push-nomePaciente" type="text" name="nomePaciente" />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="nomePaciente" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const NomeProfissioinalComponentUpdate = ({ baseFilters }) => {
+  return baseFilters !== 'nomeProfissioinal' ? (
+    <Col md="nomeProfissioinal">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" id="nomeProfissioinalLabel" for="atendimento-acompanhamento-push-nomeProfissioinal">
+              <Translate contentKey="generadorApp.atendimentoAcompanhamentoPush.nomeProfissioinal">Nome Profissioinal</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <AvField id="atendimento-acompanhamento-push-nomeProfissioinal" type="text" name="nomeProfissioinal" />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="nomeProfissioinal" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const TimestampConfirmacaoComponentUpdate = ({ baseFilters }) => {
+  return baseFilters !== 'timestampConfirmacao' ? (
+    <Col md="timestampConfirmacao">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" id="timestampConfirmacaoLabel" for="atendimento-acompanhamento-push-timestampConfirmacao">
+              <Translate contentKey="generadorApp.atendimentoAcompanhamentoPush.timestampConfirmacao">Timestamp Confirmacao</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <AvInput
+              id="atendimento-acompanhamento-push-timestampConfirmacao"
+              type="datetime-local"
+              className="form-control"
+              name="timestampConfirmacao"
+              placeholder={'YYYY-MM-DD HH:mm'}
+              value={isNew ? null : convertDateTimeFromServer(this.props.atendimentoAcompanhamentoPushEntity.timestampConfirmacao)}
+            />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="timestampConfirmacao" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(AtendimentoAcompanhamentoPushUpdate);

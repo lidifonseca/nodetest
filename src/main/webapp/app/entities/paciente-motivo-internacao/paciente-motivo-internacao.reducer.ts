@@ -39,6 +39,7 @@ export interface IPacienteMotivoInternacaoBaseState {
 
 export interface IPacienteMotivoInternacaoUpdateState {
   fieldsBase: IPacienteMotivoInternacaoBaseState;
+
   isNew: boolean;
 }
 

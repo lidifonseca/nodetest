@@ -42,6 +42,7 @@ export interface IPacienteDadosCartaoBaseState {
 
 export interface IPacienteDadosCartaoUpdateState {
   fieldsBase: IPacienteDadosCartaoBaseState;
+
   isNew: boolean;
 }
 

@@ -1,8 +1,14 @@
 {
   "generadorApp": {
     "perguntasQuestionario": {
+      "listButtons": {},
+      "viewButtons": {},
+      "dropdown_btn": "Ações",
       "home": {
         "title": "Perguntas Questionarios",
+        "btn_filter": "Filter",
+        "btn_filter_clean": "Clean Filters",
+        "btn_filter_open": "Filters",
         "createLabel": "Create a new Perguntas Questionario",
         "createOrEditLabel": "Create or edit a Perguntas Questionario",
         "notFound": "No Perguntas Questionarios found"

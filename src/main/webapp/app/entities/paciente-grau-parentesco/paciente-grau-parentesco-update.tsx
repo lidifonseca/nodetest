@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import Select from 'react-select';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 import { Button, Row, Col, Label } from 'reactstrap';
@@ -48,23 +49,18 @@ export class PacienteGrauParentescoUpdate extends React.Component<IPacienteGrauP
 
   getFiltersURL = (offset = null) => {
     const fieldsBase = this.state.fieldsBase;
-    return (
-      '_back=1' +
-      (fieldsBase['baseFilters'] ? '&baseFilters=' + fieldsBase['baseFilters'] : '') +
-      (fieldsBase['activePage'] ? '&page=' + fieldsBase['activePage'] : '') +
-      (fieldsBase['itemsPerPage'] ? '&size=' + fieldsBase['itemsPerPage'] : '') +
-      (fieldsBase['sort'] ? '&sort=' + (fieldsBase['sort'] + ',' + fieldsBase['order']) : '') +
-      (offset !== null ? '&offset=' + offset : '') +
-      (fieldsBase['grauParentesco'] ? '&grauParentesco=' + fieldsBase['grauParentesco'] : '') +
-      (fieldsBase['ativo'] ? '&ativo=' + fieldsBase['ativo'] : '') +
-      ''
-    );
+    let url = '_back=1' + (offset !== null ? '&offset=' + offset : '');
+    Object.keys(fieldsBase).map(key => {
+      url += '&' + key + '=' + fieldsBase[key];
+    });
+    return url;
   };
   saveEntity = (event: any, errors: any, values: any) => {
     if (errors.length === 0) {
       const { pacienteGrauParentescoEntity } = this.props;
       const entity = {
         ...pacienteGrauParentescoEntity,
+
         ...values
       };
 
@@ -87,14 +83,6 @@ export class PacienteGrauParentescoUpdate extends React.Component<IPacienteGrauP
     const baseFilters = this.state.fieldsBase && this.state.fieldsBase['baseFilters'] ? this.state.fieldsBase['baseFilters'] : null;
     return (
       <div>
-        <ol className="breadcrumb float-xl-right">
-          <li className="breadcrumb-item">
-            <Link to="/">Inicio</Link>
-          </li>
-          <li className="breadcrumb-item active">Paciente Grau Parentescos</li>
-          <li className="breadcrumb-item active">Paciente Grau Parentescos edit</li>
-        </ol>
-        <h1 className="page-header">&nbsp;&nbsp;</h1>
         <AvForm
           model={
             isNew
@@ -105,36 +93,42 @@ export class PacienteGrauParentescoUpdate extends React.Component<IPacienteGrauP
           }
           onSubmit={this.saveEntity}
         >
-          <Panel>
-            <PanelHeader>
-              <h2 id="page-heading">
-                <span className="page-header ml-3">
-                  <Translate contentKey="generadorApp.pacienteGrauParentesco.home.createOrEditLabel">
-                    Create or edit a PacienteGrauParentesco
-                  </Translate>
-                </span>
+          <h2 id="page-heading">
+            <span className="page-header ml-3">
+              <Translate contentKey="generadorApp.pacienteGrauParentesco.home.createOrEditLabel">
+                Create or edit a PacienteGrauParentesco
+              </Translate>
+            </span>
 
-                <Button color="primary" id="save-entity" type="submit" disabled={updating} className="float-right jh-create-entity">
-                  <FontAwesomeIcon icon="save" />
-                  &nbsp;
-                  <Translate contentKey="entity.action.save">Save</Translate>
-                </Button>
-                <Button
-                  tag={Link}
-                  id="cancel-save"
-                  to={'/paciente-grau-parentesco?' + this.getFiltersURL()}
-                  replace
-                  color="info"
-                  className="float-right jh-create-entity"
-                >
-                  <FontAwesomeIcon icon="arrow-left" />
-                  &nbsp;
-                  <span className="d-none d-md-inline">
-                    <Translate contentKey="entity.action.back">Back</Translate>
-                  </span>
-                </Button>
-              </h2>
-            </PanelHeader>
+            <Button color="primary" id="save-entity" type="submit" disabled={updating} className="float-right jh-create-entity">
+              <FontAwesomeIcon icon="save" />
+              &nbsp;
+              <Translate contentKey="entity.action.save">Save</Translate>
+            </Button>
+            <Button
+              tag={Link}
+              id="cancel-save"
+              to={'/paciente-grau-parentesco?' + this.getFiltersURL()}
+              replace
+              color="info"
+              className="float-right jh-create-entity"
+            >
+              <FontAwesomeIcon icon="arrow-left" />
+              &nbsp;
+              <span className="d-none d-md-inline">
+                <Translate contentKey="entity.action.back">Back</Translate>
+              </span>
+            </Button>
+          </h2>
+          <ol className="breadcrumb">
+            <li className="breadcrumb-item">
+              <Link to="/">Inicio</Link>
+            </li>
+            <li className="breadcrumb-item active">Paciente Grau Parentescos</li>
+            <li className="breadcrumb-item active">Paciente Grau Parentescos edit</li>
+          </ol>
+
+          <Panel>
             <PanelBody>
               <Row className="justify-content-center">
                 <Col md="8">
@@ -165,43 +159,9 @@ export class PacienteGrauParentescoUpdate extends React.Component<IPacienteGrauP
                         </AvGroup>
                       ) : null}
                       <Row>
-                        {baseFilters !== 'grauParentesco' ? (
-                          <Col md="grauParentesco">
-                            <AvGroup>
-                              <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="grauParentescoLabel" for="paciente-grau-parentesco-grauParentesco">
-                                    <Translate contentKey="generadorApp.pacienteGrauParentesco.grauParentesco">Grau Parentesco</Translate>
-                                  </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField id="paciente-grau-parentesco-grauParentesco" type="text" name="grauParentesco" />
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
-                        ) : (
-                          <AvInput type="hidden" name="grauParentesco" value={this.state.fieldsBase[baseFilters]} />
-                        )}
+                        <GrauParentescoComponentUpdate baseFilters />
 
-                        {baseFilters !== 'ativo' ? (
-                          <Col md="ativo">
-                            <AvGroup>
-                              <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="ativoLabel" for="paciente-grau-parentesco-ativo">
-                                    <Translate contentKey="generadorApp.pacienteGrauParentesco.ativo">Ativo</Translate>
-                                  </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField id="paciente-grau-parentesco-ativo" type="string" className="form-control" name="ativo" />
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
-                        ) : (
-                          <AvInput type="hidden" name="ativo" value={this.state.fieldsBase[baseFilters]} />
-                        )}
+                        <AtivoComponentUpdate baseFilters />
                       </Row>
                     </div>
                   )}
@@ -231,5 +191,47 @@ const mapDispatchToProps = {
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
+
+const GrauParentescoComponentUpdate = ({ baseFilters }) => {
+  return baseFilters !== 'grauParentesco' ? (
+    <Col md="grauParentesco">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" id="grauParentescoLabel" for="paciente-grau-parentesco-grauParentesco">
+              <Translate contentKey="generadorApp.pacienteGrauParentesco.grauParentesco">Grau Parentesco</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <AvField id="paciente-grau-parentesco-grauParentesco" type="text" name="grauParentesco" />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="grauParentesco" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const AtivoComponentUpdate = ({ baseFilters }) => {
+  return baseFilters !== 'ativo' ? (
+    <Col md="ativo">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" id="ativoLabel" for="paciente-grau-parentesco-ativo">
+              <Translate contentKey="generadorApp.pacienteGrauParentesco.ativo">Ativo</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <AvField id="paciente-grau-parentesco-ativo" type="string" className="form-control" name="ativo" />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="ativo" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(PacienteGrauParentescoUpdate);

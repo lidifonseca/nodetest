@@ -11,7 +11,7 @@
         }
     ],
     "relationships": [],
-    "changelogDate": "20200507124200",
+    "changelogDate": "20200508173200",
     "entityTableName": "tela",
     "dto": "mapstruct",
     "pagination": "pagination",

@@ -10,7 +10,7 @@
         }
     ],
     "relationships": [],
-    "changelogDate": "20200507104000",
+    "changelogDate": "20200508153000",
     "entityTableName": "atendimento_sorteio_feito",
     "dto": "mapstruct",
     "pagination": "pagination",

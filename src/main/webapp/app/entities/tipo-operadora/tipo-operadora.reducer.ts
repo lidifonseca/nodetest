@@ -39,6 +39,7 @@ export interface ITipoOperadoraBaseState {
 
 export interface ITipoOperadoraUpdateState {
   fieldsBase: ITipoOperadoraBaseState;
+
   isNew: boolean;
 }
 

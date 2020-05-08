@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import Select from 'react-select';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 import { Button, Row, Col, Label } from 'reactstrap';
@@ -48,25 +49,18 @@ export class GeoPanicoUpdate extends React.Component<IGeoPanicoUpdateProps, IGeo
 
   getFiltersURL = (offset = null) => {
     const fieldsBase = this.state.fieldsBase;
-    return (
-      '_back=1' +
-      (fieldsBase['baseFilters'] ? '&baseFilters=' + fieldsBase['baseFilters'] : '') +
-      (fieldsBase['activePage'] ? '&page=' + fieldsBase['activePage'] : '') +
-      (fieldsBase['itemsPerPage'] ? '&size=' + fieldsBase['itemsPerPage'] : '') +
-      (fieldsBase['sort'] ? '&sort=' + (fieldsBase['sort'] + ',' + fieldsBase['order']) : '') +
-      (offset !== null ? '&offset=' + offset : '') +
-      (fieldsBase['idPanico'] ? '&idPanico=' + fieldsBase['idPanico'] : '') +
-      (fieldsBase['idPaciente'] ? '&idPaciente=' + fieldsBase['idPaciente'] : '') +
-      (fieldsBase['latitude'] ? '&latitude=' + fieldsBase['latitude'] : '') +
-      (fieldsBase['longitude'] ? '&longitude=' + fieldsBase['longitude'] : '') +
-      ''
-    );
+    let url = '_back=1' + (offset !== null ? '&offset=' + offset : '');
+    Object.keys(fieldsBase).map(key => {
+      url += '&' + key + '=' + fieldsBase[key];
+    });
+    return url;
   };
   saveEntity = (event: any, errors: any, values: any) => {
     if (errors.length === 0) {
       const { geoPanicoEntity } = this.props;
       const entity = {
         ...geoPanicoEntity,
+
         ...values
       };
 
@@ -89,14 +83,6 @@ export class GeoPanicoUpdate extends React.Component<IGeoPanicoUpdateProps, IGeo
     const baseFilters = this.state.fieldsBase && this.state.fieldsBase['baseFilters'] ? this.state.fieldsBase['baseFilters'] : null;
     return (
       <div>
-        <ol className="breadcrumb float-xl-right">
-          <li className="breadcrumb-item">
-            <Link to="/">Inicio</Link>
-          </li>
-          <li className="breadcrumb-item active">Geo Panicos</li>
-          <li className="breadcrumb-item active">Geo Panicos edit</li>
-        </ol>
-        <h1 className="page-header">&nbsp;&nbsp;</h1>
         <AvForm
           model={
             isNew
@@ -107,34 +93,40 @@ export class GeoPanicoUpdate extends React.Component<IGeoPanicoUpdateProps, IGeo
           }
           onSubmit={this.saveEntity}
         >
-          <Panel>
-            <PanelHeader>
-              <h2 id="page-heading">
-                <span className="page-header ml-3">
-                  <Translate contentKey="generadorApp.geoPanico.home.createOrEditLabel">Create or edit a GeoPanico</Translate>
-                </span>
+          <h2 id="page-heading">
+            <span className="page-header ml-3">
+              <Translate contentKey="generadorApp.geoPanico.home.createOrEditLabel">Create or edit a GeoPanico</Translate>
+            </span>
 
-                <Button color="primary" id="save-entity" type="submit" disabled={updating} className="float-right jh-create-entity">
-                  <FontAwesomeIcon icon="save" />
-                  &nbsp;
-                  <Translate contentKey="entity.action.save">Save</Translate>
-                </Button>
-                <Button
-                  tag={Link}
-                  id="cancel-save"
-                  to={'/geo-panico?' + this.getFiltersURL()}
-                  replace
-                  color="info"
-                  className="float-right jh-create-entity"
-                >
-                  <FontAwesomeIcon icon="arrow-left" />
-                  &nbsp;
-                  <span className="d-none d-md-inline">
-                    <Translate contentKey="entity.action.back">Back</Translate>
-                  </span>
-                </Button>
-              </h2>
-            </PanelHeader>
+            <Button color="primary" id="save-entity" type="submit" disabled={updating} className="float-right jh-create-entity">
+              <FontAwesomeIcon icon="save" />
+              &nbsp;
+              <Translate contentKey="entity.action.save">Save</Translate>
+            </Button>
+            <Button
+              tag={Link}
+              id="cancel-save"
+              to={'/geo-panico?' + this.getFiltersURL()}
+              replace
+              color="info"
+              className="float-right jh-create-entity"
+            >
+              <FontAwesomeIcon icon="arrow-left" />
+              &nbsp;
+              <span className="d-none d-md-inline">
+                <Translate contentKey="entity.action.back">Back</Translate>
+              </span>
+            </Button>
+          </h2>
+          <ol className="breadcrumb">
+            <li className="breadcrumb-item">
+              <Link to="/">Inicio</Link>
+            </li>
+            <li className="breadcrumb-item active">Geo Panicos</li>
+            <li className="breadcrumb-item active">Geo Panicos edit</li>
+          </ol>
+
+          <Panel>
             <PanelBody>
               <Row className="justify-content-center">
                 <Col md="8">
@@ -158,81 +150,13 @@ export class GeoPanicoUpdate extends React.Component<IGeoPanicoUpdateProps, IGeo
                         </AvGroup>
                       ) : null}
                       <Row>
-                        {baseFilters !== 'idPanico' ? (
-                          <Col md="idPanico">
-                            <AvGroup>
-                              <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="idPanicoLabel" for="geo-panico-idPanico">
-                                    <Translate contentKey="generadorApp.geoPanico.idPanico">Id Panico</Translate>
-                                  </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField id="geo-panico-idPanico" type="string" className="form-control" name="idPanico" />
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
-                        ) : (
-                          <AvInput type="hidden" name="idPanico" value={this.state.fieldsBase[baseFilters]} />
-                        )}
+                        <IdPanicoComponentUpdate baseFilters />
 
-                        {baseFilters !== 'idPaciente' ? (
-                          <Col md="idPaciente">
-                            <AvGroup>
-                              <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="idPacienteLabel" for="geo-panico-idPaciente">
-                                    <Translate contentKey="generadorApp.geoPanico.idPaciente">Id Paciente</Translate>
-                                  </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField id="geo-panico-idPaciente" type="string" className="form-control" name="idPaciente" />
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
-                        ) : (
-                          <AvInput type="hidden" name="idPaciente" value={this.state.fieldsBase[baseFilters]} />
-                        )}
+                        <IdPacienteComponentUpdate baseFilters />
 
-                        {baseFilters !== 'latitude' ? (
-                          <Col md="latitude">
-                            <AvGroup>
-                              <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="latitudeLabel" for="geo-panico-latitude">
-                                    <Translate contentKey="generadorApp.geoPanico.latitude">Latitude</Translate>
-                                  </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField id="geo-panico-latitude" type="text" name="latitude" />
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
-                        ) : (
-                          <AvInput type="hidden" name="latitude" value={this.state.fieldsBase[baseFilters]} />
-                        )}
+                        <LatitudeComponentUpdate baseFilters />
 
-                        {baseFilters !== 'longitude' ? (
-                          <Col md="longitude">
-                            <AvGroup>
-                              <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="longitudeLabel" for="geo-panico-longitude">
-                                    <Translate contentKey="generadorApp.geoPanico.longitude">Longitude</Translate>
-                                  </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField id="geo-panico-longitude" type="text" name="longitude" />
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
-                        ) : (
-                          <AvInput type="hidden" name="longitude" value={this.state.fieldsBase[baseFilters]} />
-                        )}
+                        <LongitudeComponentUpdate baseFilters />
                       </Row>
                     </div>
                   )}
@@ -262,5 +186,89 @@ const mapDispatchToProps = {
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
+
+const IdPanicoComponentUpdate = ({ baseFilters }) => {
+  return baseFilters !== 'idPanico' ? (
+    <Col md="idPanico">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" id="idPanicoLabel" for="geo-panico-idPanico">
+              <Translate contentKey="generadorApp.geoPanico.idPanico">Id Panico</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <AvField id="geo-panico-idPanico" type="string" className="form-control" name="idPanico" />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="idPanico" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const IdPacienteComponentUpdate = ({ baseFilters }) => {
+  return baseFilters !== 'idPaciente' ? (
+    <Col md="idPaciente">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" id="idPacienteLabel" for="geo-panico-idPaciente">
+              <Translate contentKey="generadorApp.geoPanico.idPaciente">Id Paciente</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <AvField id="geo-panico-idPaciente" type="string" className="form-control" name="idPaciente" />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="idPaciente" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const LatitudeComponentUpdate = ({ baseFilters }) => {
+  return baseFilters !== 'latitude' ? (
+    <Col md="latitude">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" id="latitudeLabel" for="geo-panico-latitude">
+              <Translate contentKey="generadorApp.geoPanico.latitude">Latitude</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <AvField id="geo-panico-latitude" type="text" name="latitude" />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="latitude" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const LongitudeComponentUpdate = ({ baseFilters }) => {
+  return baseFilters !== 'longitude' ? (
+    <Col md="longitude">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" id="longitudeLabel" for="geo-panico-longitude">
+              <Translate contentKey="generadorApp.geoPanico.longitude">Longitude</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <AvField id="geo-panico-longitude" type="text" name="longitude" />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="longitude" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(GeoPanicoUpdate);

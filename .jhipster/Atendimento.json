@@ -235,7 +235,7 @@
             "otherEntityField": "razaoSocial"
         }
     ],
-    "changelogDate": "20200507103200",
+    "changelogDate": "20200508152200",
     "entityTableName": "atendimento",
     "dto": "mapstruct",
     "pagination": "pagination",

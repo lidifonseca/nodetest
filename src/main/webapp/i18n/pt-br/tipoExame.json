@@ -1,8 +1,14 @@
 {
   "generadorApp": {
     "tipoExame": {
+      "listButtons": {},
+      "viewButtons": {},
+      "dropdown_btn": "Actions",
       "home": {
         "title": "Tipo Exames",
+        "btn_filter": "Filtrar",
+        "btn_filter_clean": "Limpar Filtros",
+        "btn_filter_open": "Filtros",
         "createLabel": "Criar novo Tipo Exame",
         "createOrEditLabel": "Criar ou editar Tipo Exame",
         "notFound": "Nenhum Tipo Exame encontrado"

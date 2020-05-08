@@ -1,8 +1,14 @@
 {
   "generadorApp": {
     "atendimento": {
+      "listButtons": {},
+      "viewButtons": {},
+      "dropdown_btn": "Ações",
       "home": {
         "title": "Atendimentos",
+        "btn_filter": "Filter",
+        "btn_filter_clean": "Clean Filters",
+        "btn_filter_open": "Filters",
         "createLabel": "Create a new Atendimento",
         "createOrEditLabel": "Create or edit a Atendimento",
         "notFound": "No Atendimentos found"
@@ -51,6 +57,7 @@
       "confidencialProfissional": "Confidencial Profissional",
       "confidencialPaciente": "Confidencial Paciente",
       "imagemAssinatura": "Imagem Assinatura",
+      "unidade_empty": "Without Unidade",
       "unidade": "Unidade"
     }
   }

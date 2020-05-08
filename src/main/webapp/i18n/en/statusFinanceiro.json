@@ -1,8 +1,14 @@
 {
   "generadorApp": {
     "statusFinanceiro": {
+      "listButtons": {},
+      "viewButtons": {},
+      "dropdown_btn": "Ações",
       "home": {
         "title": "Status Financeiros",
+        "btn_filter": "Filter",
+        "btn_filter_clean": "Clean Filters",
+        "btn_filter_open": "Filters",
         "createLabel": "Create a new Status Financeiro",
         "createOrEditLabel": "Create or edit a Status Financeiro",
         "notFound": "No Status Financeiros found"

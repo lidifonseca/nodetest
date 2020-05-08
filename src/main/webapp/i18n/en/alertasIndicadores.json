@@ -1,8 +1,14 @@
 {
   "generadorApp": {
     "alertasIndicadores": {
+      "listButtons": {},
+      "viewButtons": {},
+      "dropdown_btn": "Ações",
       "home": {
         "title": "Alertas Indicadores",
+        "btn_filter": "Filter",
+        "btn_filter_clean": "Clean Filters",
+        "btn_filter_open": "Filters",
         "createLabel": "Create a new Alertas Indicadores",
         "createOrEditLabel": "Create or edit a Alertas Indicadores",
         "notFound": "No Alertas Indicadores found"

@@ -11,7 +11,7 @@
         }
     ],
     "relationships": [],
-    "changelogDate": "20200507111800",
+    "changelogDate": "20200508160800",
     "entityTableName": "migracao",
     "dto": "mapstruct",
     "pagination": "pagination",

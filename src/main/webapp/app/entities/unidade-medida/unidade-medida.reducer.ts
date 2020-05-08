@@ -39,6 +39,7 @@ export interface IUnidadeMedidaBaseState {
 
 export interface IUnidadeMedidaUpdateState {
   fieldsBase: IUnidadeMedidaBaseState;
+
   isNew: boolean;
 }
 

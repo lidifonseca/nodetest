@@ -2,6 +2,7 @@
 import React from 'react';
 import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
 import { connect } from 'react-redux';
+import Select from 'react-select';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import {
   Button,
@@ -131,32 +132,33 @@ export class AtendimentoImagem extends React.Component<IAtendimentoImagemProps, 
     const { atendimentoImagemList, match, totalItems } = this.props;
     return (
       <div>
-        <ol className="breadcrumb float-xl-right">
+        <h2 id="page-heading">
+          <span className="page-header">Atendimento Imagems</span>
+          <Button id="togglerFilterAtendimentoImagem" className="btn btn-primary float-right jh-create-entity">
+            <Translate contentKey="generadorApp.atendimentoImagem.home.btn_filter_open">Filters</Translate>
+            &nbsp;
+            <FontAwesomeIcon icon="caret-down" />
+          </Button>{' '}
+          &nbsp;
+          <Link
+            to={`${match.url}/new?${this.getFiltersURL()}`}
+            className="btn btn-primary float-right jh-create-entity"
+            id="jh-create-entity"
+          >
+            <FontAwesomeIcon icon="plus" />
+            &nbsp;
+            <Translate contentKey="generadorApp.atendimentoImagem.home.createLabel">Create a new Atendimento Imagem</Translate>
+          </Link>{' '}
+          &nbsp;
+        </h2>
+
+        <ol className="breadcrumb">
           <li className="breadcrumb-item">
             <Link to="/">Inicio</Link>
           </li>
           <li className="breadcrumb-item active">Atendimento Imagems</li>
         </ol>
-        <h1 className="page-header">&nbsp;&nbsp;</h1>
         <Panel>
-          <PanelHeader>
-            <h2 id="page-heading">
-              <span className="page-header ml-3">Atendimento Imagems</span>
-              <Button id="togglerFilterAtendimentoImagem" className="btn btn-primary float-right jh-create-entity">
-                Filtros&nbsp;
-                <FontAwesomeIcon icon="caret-down" />
-              </Button>
-              <Link
-                to={`${match.url}/new?${this.getFiltersURL()}`}
-                className="btn btn-primary float-right jh-create-entity"
-                id="jh-create-entity"
-              >
-                <FontAwesomeIcon icon="plus" />
-                &nbsp;
-                <Translate contentKey="generadorApp.atendimentoImagem.home.createLabel">Create a new Atendimento Imagem</Translate>
-              </Link>
-            </h2>
-          </PanelHeader>
           <PanelBody>
             <div className="table-responsive">
               <UncontrolledCollapse toggler="#togglerFilterAtendimentoImagem">
@@ -165,7 +167,7 @@ export class AtendimentoImagem extends React.Component<IAtendimentoImagemProps, 
                     <div className="row mt-1 ml-3 mr-3">
                       {this.state.baseFilters !== 'atendimentoId' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="atendimentoIdLabel" for="atendimento-imagem-atendimentoId">
                               <Translate contentKey="generadorApp.atendimentoImagem.atendimentoId">Atendimento Id</Translate>
                             </Label>
@@ -181,7 +183,7 @@ export class AtendimentoImagem extends React.Component<IAtendimentoImagemProps, 
 
                       {this.state.baseFilters !== 'imagem' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="imagemLabel" for="atendimento-imagem-imagem">
                               <Translate contentKey="generadorApp.atendimentoImagem.imagem">Imagem</Translate>
                             </Label>
@@ -193,7 +195,7 @@ export class AtendimentoImagem extends React.Component<IAtendimentoImagemProps, 
 
                       {this.state.baseFilters !== 'criadoEm' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="criadoEmLabel" for="atendimento-imagem-criadoEm">
                               <Translate contentKey="generadorApp.atendimentoImagem.criadoEm">Criado Em</Translate>
                             </Label>
@@ -214,13 +216,13 @@ export class AtendimentoImagem extends React.Component<IAtendimentoImagemProps, 
                       <Button className="btn btn-success" type="submit">
                         <i className="fa fa-filter" aria-hidden={'true'}></i>
                         &nbsp;
-                        <Translate contentKey="entity.validation.filter">Filter</Translate>
+                        <Translate contentKey="generadorApp.atendimentoImagem.home.btn_filter">Filter</Translate>
                       </Button>
                       &nbsp;
                       <div className="btn btn-secondary hand" onClick={this.cancelCourse}>
                         <FontAwesomeIcon icon="trash-alt" />
                         &nbsp;
-                        <Translate contentKey="entity.validation.clean">Clean</Translate>
+                        <Translate contentKey="generadorApp.atendimentoImagem.home.btn_filter_clean">Clean</Translate>
                       </div>
                     </div>
                   </AvForm>

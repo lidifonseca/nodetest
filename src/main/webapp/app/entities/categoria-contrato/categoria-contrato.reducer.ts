@@ -40,6 +40,7 @@ export interface ICategoriaContratoBaseState {
 
 export interface ICategoriaContratoUpdateState {
   fieldsBase: ICategoriaContratoBaseState;
+
   isNew: boolean;
 }
 

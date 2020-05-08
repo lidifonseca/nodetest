@@ -40,6 +40,7 @@ export interface ITipoExameBaseState {
 
 export interface ITipoExameUpdateState {
   fieldsBase: ITipoExameBaseState;
+
   isNew: boolean;
 }
 

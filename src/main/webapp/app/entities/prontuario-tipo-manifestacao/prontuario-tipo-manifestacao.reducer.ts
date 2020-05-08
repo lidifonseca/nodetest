@@ -40,6 +40,7 @@ export interface IProntuarioTipoManifestacaoBaseState {
 
 export interface IProntuarioTipoManifestacaoUpdateState {
   fieldsBase: IProntuarioTipoManifestacaoBaseState;
+
   isNew: boolean;
 }
 

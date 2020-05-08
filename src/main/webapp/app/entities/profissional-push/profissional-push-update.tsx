@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import Select from 'react-select';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 import { Button, Row, Col, Label } from 'reactstrap';
@@ -48,25 +49,18 @@ export class ProfissionalPushUpdate extends React.Component<IProfissionalPushUpd
 
   getFiltersURL = (offset = null) => {
     const fieldsBase = this.state.fieldsBase;
-    return (
-      '_back=1' +
-      (fieldsBase['baseFilters'] ? '&baseFilters=' + fieldsBase['baseFilters'] : '') +
-      (fieldsBase['activePage'] ? '&page=' + fieldsBase['activePage'] : '') +
-      (fieldsBase['itemsPerPage'] ? '&size=' + fieldsBase['itemsPerPage'] : '') +
-      (fieldsBase['sort'] ? '&sort=' + (fieldsBase['sort'] + ',' + fieldsBase['order']) : '') +
-      (offset !== null ? '&offset=' + offset : '') +
-      (fieldsBase['idProfissional'] ? '&idProfissional=' + fieldsBase['idProfissional'] : '') +
-      (fieldsBase['idFranquia'] ? '&idFranquia=' + fieldsBase['idFranquia'] : '') +
-      (fieldsBase['mensagem'] ? '&mensagem=' + fieldsBase['mensagem'] : '') +
-      (fieldsBase['ativo'] ? '&ativo=' + fieldsBase['ativo'] : '') +
-      ''
-    );
+    let url = '_back=1' + (offset !== null ? '&offset=' + offset : '');
+    Object.keys(fieldsBase).map(key => {
+      url += '&' + key + '=' + fieldsBase[key];
+    });
+    return url;
   };
   saveEntity = (event: any, errors: any, values: any) => {
     if (errors.length === 0) {
       const { profissionalPushEntity } = this.props;
       const entity = {
         ...profissionalPushEntity,
+
         ...values
       };
 
@@ -89,14 +83,6 @@ export class ProfissionalPushUpdate extends React.Component<IProfissionalPushUpd
     const baseFilters = this.state.fieldsBase && this.state.fieldsBase['baseFilters'] ? this.state.fieldsBase['baseFilters'] : null;
     return (
       <div>
-        <ol className="breadcrumb float-xl-right">
-          <li className="breadcrumb-item">
-            <Link to="/">Inicio</Link>
-          </li>
-          <li className="breadcrumb-item active">Profissional Pushes</li>
-          <li className="breadcrumb-item active">Profissional Pushes edit</li>
-        </ol>
-        <h1 className="page-header">&nbsp;&nbsp;</h1>
         <AvForm
           model={
             isNew
@@ -107,34 +93,40 @@ export class ProfissionalPushUpdate extends React.Component<IProfissionalPushUpd
           }
           onSubmit={this.saveEntity}
         >
-          <Panel>
-            <PanelHeader>
-              <h2 id="page-heading">
-                <span className="page-header ml-3">
-                  <Translate contentKey="generadorApp.profissionalPush.home.createOrEditLabel">Create or edit a ProfissionalPush</Translate>
-                </span>
+          <h2 id="page-heading">
+            <span className="page-header ml-3">
+              <Translate contentKey="generadorApp.profissionalPush.home.createOrEditLabel">Create or edit a ProfissionalPush</Translate>
+            </span>
 
-                <Button color="primary" id="save-entity" type="submit" disabled={updating} className="float-right jh-create-entity">
-                  <FontAwesomeIcon icon="save" />
-                  &nbsp;
-                  <Translate contentKey="entity.action.save">Save</Translate>
-                </Button>
-                <Button
-                  tag={Link}
-                  id="cancel-save"
-                  to={'/profissional-push?' + this.getFiltersURL()}
-                  replace
-                  color="info"
-                  className="float-right jh-create-entity"
-                >
-                  <FontAwesomeIcon icon="arrow-left" />
-                  &nbsp;
-                  <span className="d-none d-md-inline">
-                    <Translate contentKey="entity.action.back">Back</Translate>
-                  </span>
-                </Button>
-              </h2>
-            </PanelHeader>
+            <Button color="primary" id="save-entity" type="submit" disabled={updating} className="float-right jh-create-entity">
+              <FontAwesomeIcon icon="save" />
+              &nbsp;
+              <Translate contentKey="entity.action.save">Save</Translate>
+            </Button>
+            <Button
+              tag={Link}
+              id="cancel-save"
+              to={'/profissional-push?' + this.getFiltersURL()}
+              replace
+              color="info"
+              className="float-right jh-create-entity"
+            >
+              <FontAwesomeIcon icon="arrow-left" />
+              &nbsp;
+              <span className="d-none d-md-inline">
+                <Translate contentKey="entity.action.back">Back</Translate>
+              </span>
+            </Button>
+          </h2>
+          <ol className="breadcrumb">
+            <li className="breadcrumb-item">
+              <Link to="/">Inicio</Link>
+            </li>
+            <li className="breadcrumb-item active">Profissional Pushes</li>
+            <li className="breadcrumb-item active">Profissional Pushes edit</li>
+          </ol>
+
+          <Panel>
             <PanelBody>
               <Row className="justify-content-center">
                 <Col md="8">
@@ -158,81 +150,13 @@ export class ProfissionalPushUpdate extends React.Component<IProfissionalPushUpd
                         </AvGroup>
                       ) : null}
                       <Row>
-                        {baseFilters !== 'idProfissional' ? (
-                          <Col md="idProfissional">
-                            <AvGroup>
-                              <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="idProfissionalLabel" for="profissional-push-idProfissional">
-                                    <Translate contentKey="generadorApp.profissionalPush.idProfissional">Id Profissional</Translate>
-                                  </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField id="profissional-push-idProfissional" type="text" name="idProfissional" />
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
-                        ) : (
-                          <AvInput type="hidden" name="idProfissional" value={this.state.fieldsBase[baseFilters]} />
-                        )}
+                        <IdProfissionalComponentUpdate baseFilters />
 
-                        {baseFilters !== 'idFranquia' ? (
-                          <Col md="idFranquia">
-                            <AvGroup>
-                              <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="idFranquiaLabel" for="profissional-push-idFranquia">
-                                    <Translate contentKey="generadorApp.profissionalPush.idFranquia">Id Franquia</Translate>
-                                  </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField id="profissional-push-idFranquia" type="text" name="idFranquia" />
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
-                        ) : (
-                          <AvInput type="hidden" name="idFranquia" value={this.state.fieldsBase[baseFilters]} />
-                        )}
+                        <IdFranquiaComponentUpdate baseFilters />
 
-                        {baseFilters !== 'mensagem' ? (
-                          <Col md="mensagem">
-                            <AvGroup>
-                              <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="mensagemLabel" for="profissional-push-mensagem">
-                                    <Translate contentKey="generadorApp.profissionalPush.mensagem">Mensagem</Translate>
-                                  </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField id="profissional-push-mensagem" type="text" name="mensagem" />
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
-                        ) : (
-                          <AvInput type="hidden" name="mensagem" value={this.state.fieldsBase[baseFilters]} />
-                        )}
+                        <MensagemComponentUpdate baseFilters />
 
-                        {baseFilters !== 'ativo' ? (
-                          <Col md="ativo">
-                            <AvGroup>
-                              <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="ativoLabel" for="profissional-push-ativo">
-                                    <Translate contentKey="generadorApp.profissionalPush.ativo">Ativo</Translate>
-                                  </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField id="profissional-push-ativo" type="string" className="form-control" name="ativo" />
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
-                        ) : (
-                          <AvInput type="hidden" name="ativo" value={this.state.fieldsBase[baseFilters]} />
-                        )}
+                        <AtivoComponentUpdate baseFilters />
                       </Row>
                     </div>
                   )}
@@ -262,5 +186,89 @@ const mapDispatchToProps = {
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
+
+const IdProfissionalComponentUpdate = ({ baseFilters }) => {
+  return baseFilters !== 'idProfissional' ? (
+    <Col md="idProfissional">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" id="idProfissionalLabel" for="profissional-push-idProfissional">
+              <Translate contentKey="generadorApp.profissionalPush.idProfissional">Id Profissional</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <AvField id="profissional-push-idProfissional" type="text" name="idProfissional" />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="idProfissional" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const IdFranquiaComponentUpdate = ({ baseFilters }) => {
+  return baseFilters !== 'idFranquia' ? (
+    <Col md="idFranquia">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" id="idFranquiaLabel" for="profissional-push-idFranquia">
+              <Translate contentKey="generadorApp.profissionalPush.idFranquia">Id Franquia</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <AvField id="profissional-push-idFranquia" type="text" name="idFranquia" />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="idFranquia" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const MensagemComponentUpdate = ({ baseFilters }) => {
+  return baseFilters !== 'mensagem' ? (
+    <Col md="mensagem">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" id="mensagemLabel" for="profissional-push-mensagem">
+              <Translate contentKey="generadorApp.profissionalPush.mensagem">Mensagem</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <AvField id="profissional-push-mensagem" type="text" name="mensagem" />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="mensagem" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const AtivoComponentUpdate = ({ baseFilters }) => {
+  return baseFilters !== 'ativo' ? (
+    <Col md="ativo">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" id="ativoLabel" for="profissional-push-ativo">
+              <Translate contentKey="generadorApp.profissionalPush.ativo">Ativo</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <AvField id="profissional-push-ativo" type="string" className="form-control" name="ativo" />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="ativo" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProfissionalPushUpdate);

@@ -58,6 +58,7 @@ export interface IVwApiAtendimentosAceiteBaseState {
 
 export interface IVwApiAtendimentosAceiteUpdateState {
   fieldsBase: IVwApiAtendimentosAceiteBaseState;
+
   isNew: boolean;
 }
 

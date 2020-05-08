@@ -1,8 +1,14 @@
 {
   "generadorApp": {
     "tipoPreferenciaAtendimento": {
+      "listButtons": {},
+      "viewButtons": {},
+      "dropdown_btn": "Ações",
       "home": {
         "title": "Tipo Preferencia Atendimentos",
+        "btn_filter": "Filter",
+        "btn_filter_clean": "Clean Filters",
+        "btn_filter_open": "Filters",
         "createLabel": "Create a new Tipo Preferencia Atendimento",
         "createOrEditLabel": "Create or edit a Tipo Preferencia Atendimento",
         "notFound": "No Tipo Preferencia Atendimentos found"

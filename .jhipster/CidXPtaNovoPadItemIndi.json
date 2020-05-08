@@ -43,7 +43,7 @@
         }
     ],
     "relationships": [],
-    "changelogDate": "20200507120200",
+    "changelogDate": "20200508154000",
     "entityTableName": "cid_x_pta_novo_pad_item_indi",
     "dto": "mapstruct",
     "pagination": "pagination",

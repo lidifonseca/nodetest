@@ -39,6 +39,7 @@ export interface IStatusFinanceiroBaseState {
 
 export interface IStatusFinanceiroUpdateState {
   fieldsBase: IStatusFinanceiroBaseState;
+
   isNew: boolean;
 }
 

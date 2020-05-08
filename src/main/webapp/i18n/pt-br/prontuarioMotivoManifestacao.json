@@ -1,8 +1,14 @@
 {
   "generadorApp": {
     "prontuarioMotivoManifestacao": {
+      "listButtons": {},
+      "viewButtons": {},
+      "dropdown_btn": "Actions",
       "home": {
         "title": "Prontuario Motivo Manifestacaos",
+        "btn_filter": "Filtrar",
+        "btn_filter_clean": "Limpar Filtros",
+        "btn_filter_open": "Filtros",
         "createLabel": "Criar novo Prontuario Motivo Manifestacao",
         "createOrEditLabel": "Criar ou editar Prontuario Motivo Manifestacao",
         "notFound": "Nenhum Prontuario Motivo Manifestacao encontrado"

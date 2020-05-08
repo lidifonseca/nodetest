@@ -16,7 +16,7 @@
         }
     ],
     "relationships": [],
-    "changelogDate": "20200507113400",
+    "changelogDate": "20200508162400",
     "entityTableName": "paciente_diario",
     "dto": "mapstruct",
     "pagination": "pagination",

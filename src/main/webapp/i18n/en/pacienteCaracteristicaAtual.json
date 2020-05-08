@@ -1,8 +1,14 @@
 {
   "generadorApp": {
     "pacienteCaracteristicaAtual": {
+      "listButtons": {},
+      "viewButtons": {},
+      "dropdown_btn": "Ações",
       "home": {
         "title": "Paciente Caracteristica Atuals",
+        "btn_filter": "Filter",
+        "btn_filter_clean": "Clean Filters",
+        "btn_filter_open": "Filters",
         "createLabel": "Create a new Paciente Caracteristica Atual",
         "createOrEditLabel": "Create or edit a Paciente Caracteristica Atual",
         "notFound": "No Paciente Caracteristica Atuals found"

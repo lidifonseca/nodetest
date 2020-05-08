@@ -1,8 +1,14 @@
 {
   "generadorApp": {
     "especialidade": {
+      "listButtons": {},
+      "viewButtons": {},
+      "dropdown_btn": "Ações",
       "home": {
         "title": "Especialidades",
+        "btn_filter": "Filter",
+        "btn_filter_clean": "Clean Filters",
+        "btn_filter_open": "Filters",
         "createLabel": "Create a new Especialidade",
         "createOrEditLabel": "Create or edit a Especialidade",
         "notFound": "No Especialidades found"
@@ -22,6 +28,7 @@
       "duracao": "Duracao",
       "importante": "Importante",
       "ativo": "Ativo",
+      "unidade_empty": "Without Unidade",
       "unidade": "Unidade"
     }
   }

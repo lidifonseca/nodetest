@@ -1,8 +1,14 @@
 {
   "generadorApp": {
     "controleDisparoAviso": {
+      "listButtons": {},
+      "viewButtons": {},
+      "dropdown_btn": "Ações",
       "home": {
         "title": "Controle Disparo Avisos",
+        "btn_filter": "Filter",
+        "btn_filter_clean": "Clean Filters",
+        "btn_filter_open": "Filters",
         "createLabel": "Create a new Controle Disparo Aviso",
         "createOrEditLabel": "Create or edit a Controle Disparo Aviso",
         "notFound": "No Controle Disparo Avisos found"

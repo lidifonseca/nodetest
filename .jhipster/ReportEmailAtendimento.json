@@ -11,7 +11,7 @@
         }
     ],
     "relationships": [],
-    "changelogDate": "20200507123000",
+    "changelogDate": "20200508172000",
     "entityTableName": "report_email_atendimento",
     "dto": "mapstruct",
     "pagination": "pagination",

@@ -38,6 +38,7 @@ export interface IGrauParentescoBaseState {
 
 export interface IGrauParentescoUpdateState {
   fieldsBase: IGrauParentescoBaseState;
+
   isNew: boolean;
 }
 

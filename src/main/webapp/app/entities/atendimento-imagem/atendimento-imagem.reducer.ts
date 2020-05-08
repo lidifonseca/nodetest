@@ -40,6 +40,7 @@ export interface IAtendimentoImagemBaseState {
 
 export interface IAtendimentoImagemUpdateState {
   fieldsBase: IAtendimentoImagemBaseState;
+
   isNew: boolean;
 }
 

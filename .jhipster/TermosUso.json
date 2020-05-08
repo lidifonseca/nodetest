@@ -12,7 +12,7 @@
         }
     ],
     "relationships": [],
-    "changelogDate": "20200507124400",
+    "changelogDate": "20200508173400",
     "entityTableName": "termos_uso",
     "dto": "mapstruct",
     "pagination": "pagination",

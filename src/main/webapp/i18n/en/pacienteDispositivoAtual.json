@@ -1,8 +1,14 @@
 {
   "generadorApp": {
     "pacienteDispositivoAtual": {
+      "listButtons": {},
+      "viewButtons": {},
+      "dropdown_btn": "Ações",
       "home": {
         "title": "Paciente Dispositivo Atuals",
+        "btn_filter": "Filter",
+        "btn_filter_clean": "Clean Filters",
+        "btn_filter_open": "Filters",
         "createLabel": "Create a new Paciente Dispositivo Atual",
         "createOrEditLabel": "Create or edit a Paciente Dispositivo Atual",
         "notFound": "No Paciente Dispositivo Atuals found"

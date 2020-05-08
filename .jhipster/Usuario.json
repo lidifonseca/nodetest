@@ -542,7 +542,7 @@
             "otherEntityField": "razaoSocial"
         }
     ],
-    "changelogDate": "20200507125800",
+    "changelogDate": "20200508174800",
     "entityTableName": "usuario",
     "dto": "mapstruct",
     "pagination": "pagination",

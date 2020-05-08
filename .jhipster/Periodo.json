@@ -15,7 +15,7 @@
         }
     ],
     "relationships": [],
-    "changelogDate": "20200507120500",
+    "changelogDate": "20200508165500",
     "entityTableName": "periodo",
     "dto": "mapstruct",
     "pagination": "pagination",

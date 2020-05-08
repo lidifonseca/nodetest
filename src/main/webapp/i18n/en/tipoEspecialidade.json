@@ -1,8 +1,14 @@
 {
   "generadorApp": {
     "tipoEspecialidade": {
+      "listButtons": {},
+      "viewButtons": {},
+      "dropdown_btn": "Ações",
       "home": {
         "title": "Tipo Especialidades",
+        "btn_filter": "Filter",
+        "btn_filter_clean": "Clean Filters",
+        "btn_filter_open": "Filters",
         "createLabel": "Create a new Tipo Especialidade",
         "createOrEditLabel": "Create or edit a Tipo Especialidade",
         "notFound": "No Tipo Especialidades found"

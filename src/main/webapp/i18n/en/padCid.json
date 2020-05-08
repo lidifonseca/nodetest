@@ -1,8 +1,14 @@
 {
   "generadorApp": {
     "padCid": {
+      "listButtons": {},
+      "viewButtons": {},
+      "dropdown_btn": "Ações",
       "home": {
         "title": "Pad Cids",
+        "btn_filter": "Filter",
+        "btn_filter_clean": "Clean Filters",
+        "btn_filter_open": "Filters",
         "createLabel": "Create a new Pad Cid",
         "createOrEditLabel": "Create or edit a Pad Cid",
         "notFound": "No Pad Cids found"

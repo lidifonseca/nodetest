@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import Select from 'react-select';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 import { Button, Row, Col, Label } from 'reactstrap';
@@ -37,6 +38,8 @@ export class PacienteStatusAtualUpdate extends React.Component<IPacienteStatusAt
     this.observacaoFileInput = React.createRef();
 
     this.state = {
+      pacienteSelectValue: null,
+      statusAtualSelectValue: null,
       fieldsBase: getPacienteStatusAtualState(this.props.location),
       pacienteId: '0',
       statusId: '0',
@@ -46,6 +49,32 @@ export class PacienteStatusAtualUpdate extends React.Component<IPacienteStatusAt
   componentDidUpdate(nextProps, nextState) {
     if (nextProps.updateSuccess !== this.props.updateSuccess && nextProps.updateSuccess) {
       this.handleClose();
+    }
+
+    if (
+      nextProps.pacientes.length > 0 &&
+      this.state.pacienteSelectValue === null &&
+      nextProps.pacienteStatusAtualEntity.paciente &&
+      nextProps.pacienteStatusAtualEntity.paciente.id
+    ) {
+      this.setState({
+        pacienteSelectValue: nextProps.pacientes.map(p =>
+          nextProps.pacienteStatusAtualEntity.paciente.id === p.id ? { value: p.id, label: p.nome } : null
+        )
+      });
+    }
+
+    if (
+      nextProps.statusAtuals.length > 0 &&
+      this.state.statusAtualSelectValue === null &&
+      nextProps.pacienteStatusAtualEntity.statusAtual &&
+      nextProps.pacienteStatusAtualEntity.statusAtual.id
+    ) {
+      this.setState({
+        statusAtualSelectValue: nextProps.statusAtuals.map(p =>
+          nextProps.pacienteStatusAtualEntity.statusAtual.id === p.id ? { value: p.id, label: p.statusAtual } : null
+        )
+      });
     }
   }
 
@@ -70,26 +99,19 @@ export class PacienteStatusAtualUpdate extends React.Component<IPacienteStatusAt
   };
   getFiltersURL = (offset = null) => {
     const fieldsBase = this.state.fieldsBase;
-    return (
-      '_back=1' +
-      (fieldsBase['baseFilters'] ? '&baseFilters=' + fieldsBase['baseFilters'] : '') +
-      (fieldsBase['activePage'] ? '&page=' + fieldsBase['activePage'] : '') +
-      (fieldsBase['itemsPerPage'] ? '&size=' + fieldsBase['itemsPerPage'] : '') +
-      (fieldsBase['sort'] ? '&sort=' + (fieldsBase['sort'] + ',' + fieldsBase['order']) : '') +
-      (offset !== null ? '&offset=' + offset : '') +
-      (fieldsBase['dataStatus'] ? '&dataStatus=' + fieldsBase['dataStatus'] : '') +
-      (fieldsBase['observacao'] ? '&observacao=' + fieldsBase['observacao'] : '') +
-      (fieldsBase['ativo'] ? '&ativo=' + fieldsBase['ativo'] : '') +
-      (fieldsBase['paciente'] ? '&paciente=' + fieldsBase['paciente'] : '') +
-      (fieldsBase['status'] ? '&status=' + fieldsBase['status'] : '') +
-      ''
-    );
+    let url = '_back=1' + (offset !== null ? '&offset=' + offset : '');
+    Object.keys(fieldsBase).map(key => {
+      url += '&' + key + '=' + fieldsBase[key];
+    });
+    return url;
   };
   saveEntity = (event: any, errors: any, values: any) => {
     if (errors.length === 0) {
       const { pacienteStatusAtualEntity } = this.props;
       const entity = {
         ...pacienteStatusAtualEntity,
+        paciente: this.state.pacienteSelectValue ? this.state.pacienteSelectValue['value'] : null,
+        statusAtual: this.state.statusAtualSelectValue ? this.state.statusAtualSelectValue['value'] : null,
         ...values
       };
 
@@ -113,14 +135,6 @@ export class PacienteStatusAtualUpdate extends React.Component<IPacienteStatusAt
     const baseFilters = this.state.fieldsBase && this.state.fieldsBase['baseFilters'] ? this.state.fieldsBase['baseFilters'] : null;
     return (
       <div>
-        <ol className="breadcrumb float-xl-right">
-          <li className="breadcrumb-item">
-            <Link to="/">Inicio</Link>
-          </li>
-          <li className="breadcrumb-item active">Paciente Status Atuals</li>
-          <li className="breadcrumb-item active">Paciente Status Atuals edit</li>
-        </ol>
-        <h1 className="page-header">&nbsp;&nbsp;</h1>
         <AvForm
           model={
             isNew
@@ -133,36 +147,42 @@ export class PacienteStatusAtualUpdate extends React.Component<IPacienteStatusAt
           }
           onSubmit={this.saveEntity}
         >
-          <Panel>
-            <PanelHeader>
-              <h2 id="page-heading">
-                <span className="page-header ml-3">
-                  <Translate contentKey="generadorApp.pacienteStatusAtual.home.createOrEditLabel">
-                    Create or edit a PacienteStatusAtual
-                  </Translate>
-                </span>
+          <h2 id="page-heading">
+            <span className="page-header ml-3">
+              <Translate contentKey="generadorApp.pacienteStatusAtual.home.createOrEditLabel">
+                Create or edit a PacienteStatusAtual
+              </Translate>
+            </span>
 
-                <Button color="primary" id="save-entity" type="submit" disabled={updating} className="float-right jh-create-entity">
-                  <FontAwesomeIcon icon="save" />
-                  &nbsp;
-                  <Translate contentKey="entity.action.save">Save</Translate>
-                </Button>
-                <Button
-                  tag={Link}
-                  id="cancel-save"
-                  to={'/paciente-status-atual?' + this.getFiltersURL()}
-                  replace
-                  color="info"
-                  className="float-right jh-create-entity"
-                >
-                  <FontAwesomeIcon icon="arrow-left" />
-                  &nbsp;
-                  <span className="d-none d-md-inline">
-                    <Translate contentKey="entity.action.back">Back</Translate>
-                  </span>
-                </Button>
-              </h2>
-            </PanelHeader>
+            <Button color="primary" id="save-entity" type="submit" disabled={updating} className="float-right jh-create-entity">
+              <FontAwesomeIcon icon="save" />
+              &nbsp;
+              <Translate contentKey="entity.action.save">Save</Translate>
+            </Button>
+            <Button
+              tag={Link}
+              id="cancel-save"
+              to={'/paciente-status-atual?' + this.getFiltersURL()}
+              replace
+              color="info"
+              className="float-right jh-create-entity"
+            >
+              <FontAwesomeIcon icon="arrow-left" />
+              &nbsp;
+              <span className="d-none d-md-inline">
+                <Translate contentKey="entity.action.back">Back</Translate>
+              </span>
+            </Button>
+          </h2>
+          <ol className="breadcrumb">
+            <li className="breadcrumb-item">
+              <Link to="/">Inicio</Link>
+            </li>
+            <li className="breadcrumb-item active">Paciente Status Atuals</li>
+            <li className="breadcrumb-item active">Paciente Status Atuals edit</li>
+          </ol>
+
+          <Panel>
             <PanelBody>
               <Row className="justify-content-center">
                 <Col md="8">
@@ -186,120 +206,15 @@ export class PacienteStatusAtualUpdate extends React.Component<IPacienteStatusAt
                         </AvGroup>
                       ) : null}
                       <Row>
-                        {baseFilters !== 'dataStatus' ? (
-                          <Col md="dataStatus">
-                            <AvGroup>
-                              <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="dataStatusLabel" for="paciente-status-atual-dataStatus">
-                                    <Translate contentKey="generadorApp.pacienteStatusAtual.dataStatus">Data Status</Translate>
-                                  </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField id="paciente-status-atual-dataStatus" type="date" className="form-control" name="dataStatus" />
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
-                        ) : (
-                          <AvInput type="hidden" name="dataStatus" value={this.state.fieldsBase[baseFilters]} />
-                        )}
+                        <DataStatusComponentUpdate baseFilters />
 
-                        {baseFilters !== 'observacao' ? (
-                          <Col md="observacao">
-                            <AvGroup>
-                              <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="observacaoLabel" for="paciente-status-atual-observacao">
-                                    <Translate contentKey="generadorApp.pacienteStatusAtual.observacao">Observacao</Translate>
-                                  </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvInput id="paciente-status-atual-observacao" type="textarea" name="observacao" />
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
-                        ) : (
-                          <AvInput type="hidden" name="observacao" value={this.state.fieldsBase[baseFilters]} />
-                        )}
+                        <ObservacaoComponentUpdate baseFilters />
 
-                        {baseFilters !== 'ativo' ? (
-                          <Col md="ativo">
-                            <AvGroup>
-                              <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="ativoLabel" for="paciente-status-atual-ativo">
-                                    <Translate contentKey="generadorApp.pacienteStatusAtual.ativo">Ativo</Translate>
-                                  </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField id="paciente-status-atual-ativo" type="string" className="form-control" name="ativo" />
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
-                        ) : (
-                          <AvInput type="hidden" name="ativo" value={this.state.fieldsBase[baseFilters]} />
-                        )}
-                        {baseFilters !== 'paciente' ? (
-                          <Col md="12">
-                            <AvGroup>
-                              <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" for="paciente-status-atual-paciente">
-                                    <Translate contentKey="generadorApp.pacienteStatusAtual.paciente">Paciente</Translate>
-                                  </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvInput id="paciente-status-atual-paciente" type="select" className="form-control" name="paciente">
-                                    <option value="null" key="0">
-                                      {translate('generadorApp.pacienteStatusAtual.paciente.empty')}
-                                    </option>
-                                    {pacientes
-                                      ? pacientes.map(otherEntity => (
-                                          <option value={otherEntity.id} key={otherEntity.id}>
-                                            {otherEntity.nome}
-                                          </option>
-                                        ))
-                                      : null}
-                                  </AvInput>
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
-                        ) : (
-                          <AvInput type="hidden" name="paciente" value={this.state.fieldsBase[baseFilters]} />
-                        )}
-                        {baseFilters !== 'status' ? (
-                          <Col md="12">
-                            <AvGroup>
-                              <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" for="paciente-status-atual-status">
-                                    <Translate contentKey="generadorApp.pacienteStatusAtual.status">Status</Translate>
-                                  </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvInput id="paciente-status-atual-status" type="select" className="form-control" name="status">
-                                    <option value="null" key="0">
-                                      {translate('generadorApp.pacienteStatusAtual.status.empty')}
-                                    </option>
-                                    {statusAtuals
-                                      ? statusAtuals.map(otherEntity => (
-                                          <option value={otherEntity.id} key={otherEntity.id}>
-                                            {otherEntity.statusAtual}
-                                          </option>
-                                        ))
-                                      : null}
-                                  </AvInput>
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
-                        ) : (
-                          <AvInput type="hidden" name="status" value={this.state.fieldsBase[baseFilters]} />
-                        )}
+                        <AtivoComponentUpdate baseFilters />
+
+                        <PacienteComponentUpdate baseFilter pacientes />
+
+                        <StatusComponentUpdate baseFilter statusAtuals />
                       </Row>
                     </div>
                   )}
@@ -334,5 +249,124 @@ const mapDispatchToProps = {
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
+
+const DataStatusComponentUpdate = ({ baseFilters }) => {
+  return baseFilters !== 'dataStatus' ? (
+    <Col md="dataStatus">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" id="dataStatusLabel" for="paciente-status-atual-dataStatus">
+              <Translate contentKey="generadorApp.pacienteStatusAtual.dataStatus">Data Status</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <AvField id="paciente-status-atual-dataStatus" type="date" className="form-control" name="dataStatus" />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="dataStatus" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const ObservacaoComponentUpdate = ({ baseFilters }) => {
+  return baseFilters !== 'observacao' ? (
+    <Col md="observacao">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" id="observacaoLabel" for="paciente-status-atual-observacao">
+              <Translate contentKey="generadorApp.pacienteStatusAtual.observacao">Observacao</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <AvInput id="paciente-status-atual-observacao" type="textarea" name="observacao" />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="observacao" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const AtivoComponentUpdate = ({ baseFilters }) => {
+  return baseFilters !== 'ativo' ? (
+    <Col md="ativo">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" id="ativoLabel" for="paciente-status-atual-ativo">
+              <Translate contentKey="generadorApp.pacienteStatusAtual.ativo">Ativo</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <AvField id="paciente-status-atual-ativo" type="string" className="form-control" name="ativo" />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="ativo" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const PacienteComponentUpdate = ({ baseFilters, pacientes }) => {
+  return baseFilters !== 'paciente' ? (
+    <Col md="12">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" for="paciente-status-atual-paciente">
+              <Translate contentKey="generadorApp.pacienteStatusAtual.paciente">Paciente</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <Select
+              id="paciente-status-atual-paciente"
+              className={'css-select-control'}
+              value={this.state.pacienteSelectValue}
+              options={pacientes ? pacientes.map(option => ({ value: option.id, label: option.nome })) : null}
+              onChange={options => this.setState({ pacienteSelectValue: options })}
+              name={'paciente'}
+            />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="paciente" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const StatusComponentUpdate = ({ baseFilters, statusAtuals }) => {
+  return baseFilters !== 'status' ? (
+    <Col md="12">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" for="paciente-status-atual-status">
+              <Translate contentKey="generadorApp.pacienteStatusAtual.status">Status</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <Select
+              id="paciente-status-atual-status"
+              className={'css-select-control'}
+              value={this.state.statusAtualSelectValue}
+              options={statusAtuals ? statusAtuals.map(option => ({ value: option.id, label: option.statusAtual })) : null}
+              onChange={options => this.setState({ statusAtualSelectValue: options })}
+              name={'status'}
+            />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="status" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(PacienteStatusAtualUpdate);

@@ -1,8 +1,14 @@
 {
   "generadorApp": {
     "notificacaoConfigUsuario": {
+      "listButtons": {},
+      "viewButtons": {},
+      "dropdown_btn": "Ações",
       "home": {
         "title": "Notificacao Config Usuarios",
+        "btn_filter": "Filter",
+        "btn_filter_clean": "Clean Filters",
+        "btn_filter_open": "Filters",
         "createLabel": "Create a new Notificacao Config Usuario",
         "createOrEditLabel": "Create or edit a Notificacao Config Usuario",
         "notFound": "No Notificacao Config Usuarios found"

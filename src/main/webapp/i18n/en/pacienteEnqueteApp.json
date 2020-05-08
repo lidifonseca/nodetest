@@ -1,8 +1,14 @@
 {
   "generadorApp": {
     "pacienteEnqueteApp": {
+      "listButtons": {},
+      "viewButtons": {},
+      "dropdown_btn": "Ações",
       "home": {
         "title": "Paciente Enquete Apps",
+        "btn_filter": "Filter",
+        "btn_filter_clean": "Clean Filters",
+        "btn_filter_open": "Filters",
         "createLabel": "Create a new Paciente Enquete App",
         "createOrEditLabel": "Create or edit a Paciente Enquete App",
         "notFound": "No Paciente Enquete Apps found"

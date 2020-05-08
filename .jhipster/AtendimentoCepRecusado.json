@@ -12,7 +12,7 @@
         }
     ],
     "relationships": [],
-    "changelogDate": "20200507103700",
+    "changelogDate": "20200508152700",
     "entityTableName": "atendimento_cep_recusado",
     "dto": "mapstruct",
     "pagination": "pagination",

@@ -1,8 +1,14 @@
 {
   "generadorApp": {
     "questionarios": {
+      "listButtons": {},
+      "viewButtons": {},
+      "dropdown_btn": "Actions",
       "home": {
         "title": "Questionarios",
+        "btn_filter": "Filtrar",
+        "btn_filter_clean": "Limpar Filtros",
+        "btn_filter_open": "Filtros",
         "createLabel": "Criar novo Questionarios",
         "createOrEditLabel": "Criar ou editar Questionarios",
         "notFound": "Nenhum Questionarios encontrado"
@@ -20,6 +26,7 @@
       "etapaAtual": "Etapa Atual",
       "finalizado": "Finalizado",
       "ultimaPerguntaRespondida": "Ultima Pergunta Respondida",
+      "paciente_empty": "Sem Paciente",
       "paciente": "Paciente"
     }
   }

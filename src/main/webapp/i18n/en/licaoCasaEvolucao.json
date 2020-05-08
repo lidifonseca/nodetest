@@ -1,8 +1,14 @@
 {
   "generadorApp": {
     "licaoCasaEvolucao": {
+      "listButtons": {},
+      "viewButtons": {},
+      "dropdown_btn": "Ações",
       "home": {
         "title": "Licao Casa Evolucaos",
+        "btn_filter": "Filter",
+        "btn_filter_clean": "Clean Filters",
+        "btn_filter_open": "Filters",
         "createLabel": "Create a new Licao Casa Evolucao",
         "createOrEditLabel": "Create or edit a Licao Casa Evolucao",
         "notFound": "No Licao Casa Evolucaos found"

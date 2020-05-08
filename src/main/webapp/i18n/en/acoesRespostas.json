@@ -1,8 +1,14 @@
 {
   "generadorApp": {
     "acoesRespostas": {
+      "listButtons": {},
+      "viewButtons": {},
+      "dropdown_btn": "Ações",
       "home": {
         "title": "Acoes Respostas",
+        "btn_filter": "Filter",
+        "btn_filter_clean": "Clean Filters",
+        "btn_filter_open": "Filters",
         "createLabel": "Create a new Acoes Respostas",
         "createOrEditLabel": "Create or edit a Acoes Respostas",
         "notFound": "No Acoes Respostas found"

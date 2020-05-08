@@ -38,6 +38,7 @@ export interface IPadItemSorteioFeitoBaseState {
 
 export interface IPadItemSorteioFeitoUpdateState {
   fieldsBase: IPadItemSorteioFeitoBaseState;
+
   isNew: boolean;
 }
 

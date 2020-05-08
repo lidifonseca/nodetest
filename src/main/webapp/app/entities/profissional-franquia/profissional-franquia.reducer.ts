@@ -39,6 +39,7 @@ export interface IProfissionalFranquiaBaseState {
 
 export interface IProfissionalFranquiaUpdateState {
   fieldsBase: IProfissionalFranquiaBaseState;
+
   isNew: boolean;
 }
 

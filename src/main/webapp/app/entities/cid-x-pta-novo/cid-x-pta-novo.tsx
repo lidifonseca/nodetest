@@ -2,6 +2,7 @@
 import React from 'react';
 import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
 import { connect } from 'react-redux';
+import Select from 'react-select';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import {
   Button,
@@ -126,32 +127,33 @@ export class CidXPtaNovo extends React.Component<ICidXPtaNovoProps, ICidXPtaNovo
     const { cidXPtaNovoList, match, totalItems } = this.props;
     return (
       <div>
-        <ol className="breadcrumb float-xl-right">
+        <h2 id="page-heading">
+          <span className="page-header">Cid X Pta Novos</span>
+          <Button id="togglerFilterCidXPtaNovo" className="btn btn-primary float-right jh-create-entity">
+            <Translate contentKey="generadorApp.cidXPtaNovo.home.btn_filter_open">Filters</Translate>
+            &nbsp;
+            <FontAwesomeIcon icon="caret-down" />
+          </Button>{' '}
+          &nbsp;
+          <Link
+            to={`${match.url}/new?${this.getFiltersURL()}`}
+            className="btn btn-primary float-right jh-create-entity"
+            id="jh-create-entity"
+          >
+            <FontAwesomeIcon icon="plus" />
+            &nbsp;
+            <Translate contentKey="generadorApp.cidXPtaNovo.home.createLabel">Create a new Cid X Pta Novo</Translate>
+          </Link>{' '}
+          &nbsp;
+        </h2>
+
+        <ol className="breadcrumb">
           <li className="breadcrumb-item">
             <Link to="/">Inicio</Link>
           </li>
           <li className="breadcrumb-item active">Cid X Pta Novos</li>
         </ol>
-        <h1 className="page-header">&nbsp;&nbsp;</h1>
         <Panel>
-          <PanelHeader>
-            <h2 id="page-heading">
-              <span className="page-header ml-3">Cid X Pta Novos</span>
-              <Button id="togglerFilterCidXPtaNovo" className="btn btn-primary float-right jh-create-entity">
-                Filtros&nbsp;
-                <FontAwesomeIcon icon="caret-down" />
-              </Button>
-              <Link
-                to={`${match.url}/new?${this.getFiltersURL()}`}
-                className="btn btn-primary float-right jh-create-entity"
-                id="jh-create-entity"
-              >
-                <FontAwesomeIcon icon="plus" />
-                &nbsp;
-                <Translate contentKey="generadorApp.cidXPtaNovo.home.createLabel">Create a new Cid X Pta Novo</Translate>
-              </Link>
-            </h2>
-          </PanelHeader>
           <PanelBody>
             <div className="table-responsive">
               <UncontrolledCollapse toggler="#togglerFilterCidXPtaNovo">
@@ -160,7 +162,7 @@ export class CidXPtaNovo extends React.Component<ICidXPtaNovoProps, ICidXPtaNovo
                     <div className="row mt-1 ml-3 mr-3">
                       {this.state.baseFilters !== 'complexidade' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="complexidadeLabel" for="cid-x-pta-novo-complexidade">
                               <Translate contentKey="generadorApp.cidXPtaNovo.complexidade">Complexidade</Translate>
                             </Label>
@@ -172,7 +174,7 @@ export class CidXPtaNovo extends React.Component<ICidXPtaNovoProps, ICidXPtaNovo
 
                       {this.state.baseFilters !== 'versao' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="versaoLabel" for="cid-x-pta-novo-versao">
                               <Translate contentKey="generadorApp.cidXPtaNovo.versao">Versao</Translate>
                             </Label>
@@ -183,7 +185,7 @@ export class CidXPtaNovo extends React.Component<ICidXPtaNovoProps, ICidXPtaNovo
 
                       {this.state.baseFilters !== 'score' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="scoreLabel" for="cid-x-pta-novo-score">
                               <Translate contentKey="generadorApp.cidXPtaNovo.score">Score</Translate>
                             </Label>
@@ -194,7 +196,7 @@ export class CidXPtaNovo extends React.Component<ICidXPtaNovoProps, ICidXPtaNovo
 
                       {this.state.baseFilters !== 'titulo' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="tituloLabel" for="cid-x-pta-novo-titulo">
                               <Translate contentKey="generadorApp.cidXPtaNovo.titulo">Titulo</Translate>
                             </Label>
@@ -209,13 +211,13 @@ export class CidXPtaNovo extends React.Component<ICidXPtaNovoProps, ICidXPtaNovo
                       <Button className="btn btn-success" type="submit">
                         <i className="fa fa-filter" aria-hidden={'true'}></i>
                         &nbsp;
-                        <Translate contentKey="entity.validation.filter">Filter</Translate>
+                        <Translate contentKey="generadorApp.cidXPtaNovo.home.btn_filter">Filter</Translate>
                       </Button>
                       &nbsp;
                       <div className="btn btn-secondary hand" onClick={this.cancelCourse}>
                         <FontAwesomeIcon icon="trash-alt" />
                         &nbsp;
-                        <Translate contentKey="entity.validation.clean">Clean</Translate>
+                        <Translate contentKey="generadorApp.cidXPtaNovo.home.btn_filter_clean">Clean</Translate>
                       </div>
                     </div>
                   </AvForm>

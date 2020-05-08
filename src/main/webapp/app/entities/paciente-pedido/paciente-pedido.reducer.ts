@@ -45,6 +45,8 @@ export interface IPacientePedidoBaseState {
 
 export interface IPacientePedidoUpdateState {
   fieldsBase: IPacientePedidoBaseState;
+
+  unidadeEasySelectValue: any;
   isNew: boolean;
   unidadeId: string;
 }

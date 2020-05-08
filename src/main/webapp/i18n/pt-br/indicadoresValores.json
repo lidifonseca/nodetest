@@ -1,8 +1,14 @@
 {
   "generadorApp": {
     "indicadoresValores": {
+      "listButtons": {},
+      "viewButtons": {},
+      "dropdown_btn": "Actions",
       "home": {
         "title": "Indicadores Valores",
+        "btn_filter": "Filtrar",
+        "btn_filter_clean": "Limpar Filtros",
+        "btn_filter_open": "Filtros",
         "createLabel": "Criar novo Indicadores Valores",
         "createOrEditLabel": "Criar ou editar Indicadores Valores",
         "notFound": "Nenhum Indicadores Valores encontrado"

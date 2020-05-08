@@ -2,6 +2,7 @@
 import React from 'react';
 import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
 import { connect } from 'react-redux';
+import Select from 'react-select';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import {
   Button,
@@ -361,32 +362,33 @@ export class Profissional extends React.Component<IProfissionalProps, IProfissio
     const { unidadeEasies, profissionalList, match, totalItems } = this.props;
     return (
       <div>
-        <ol className="breadcrumb float-xl-right">
+        <h2 id="page-heading">
+          <span className="page-header">Profissionals</span>
+          <Button id="togglerFilterProfissional" className="btn btn-primary float-right jh-create-entity">
+            <Translate contentKey="generadorApp.profissional.home.btn_filter_open">Filters</Translate>
+            &nbsp;
+            <FontAwesomeIcon icon="caret-down" />
+          </Button>{' '}
+          &nbsp;
+          <Link
+            to={`${match.url}/new?${this.getFiltersURL()}`}
+            className="btn btn-primary float-right jh-create-entity"
+            id="jh-create-entity"
+          >
+            <FontAwesomeIcon icon="plus" />
+            &nbsp;
+            <Translate contentKey="generadorApp.profissional.home.createLabel">Create a new Profissional</Translate>
+          </Link>{' '}
+          &nbsp;
+        </h2>
+
+        <ol className="breadcrumb">
           <li className="breadcrumb-item">
             <Link to="/">Inicio</Link>
           </li>
           <li className="breadcrumb-item active">Profissionals</li>
         </ol>
-        <h1 className="page-header">&nbsp;&nbsp;</h1>
         <Panel>
-          <PanelHeader>
-            <h2 id="page-heading">
-              <span className="page-header ml-3">Profissionals</span>
-              <Button id="togglerFilterProfissional" className="btn btn-primary float-right jh-create-entity">
-                Filtros&nbsp;
-                <FontAwesomeIcon icon="caret-down" />
-              </Button>
-              <Link
-                to={`${match.url}/new?${this.getFiltersURL()}`}
-                className="btn btn-primary float-right jh-create-entity"
-                id="jh-create-entity"
-              >
-                <FontAwesomeIcon icon="plus" />
-                &nbsp;
-                <Translate contentKey="generadorApp.profissional.home.createLabel">Create a new Profissional</Translate>
-              </Link>
-            </h2>
-          </PanelHeader>
           <PanelBody>
             <div className="table-responsive">
               <UncontrolledCollapse toggler="#togglerFilterProfissional">
@@ -395,7 +397,7 @@ export class Profissional extends React.Component<IProfissionalProps, IProfissio
                     <div className="row mt-1 ml-3 mr-3">
                       {this.state.baseFilters !== 'idCidade' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="idCidadeLabel" for="profissional-idCidade">
                               <Translate contentKey="generadorApp.profissional.idCidade">Id Cidade</Translate>
                             </Label>
@@ -407,7 +409,7 @@ export class Profissional extends React.Component<IProfissionalProps, IProfissio
 
                       {this.state.baseFilters !== 'idTempoExperiencia' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="idTempoExperienciaLabel" for="profissional-idTempoExperiencia">
                               <Translate contentKey="generadorApp.profissional.idTempoExperiencia">Id Tempo Experiencia</Translate>
                             </Label>
@@ -423,7 +425,7 @@ export class Profissional extends React.Component<IProfissionalProps, IProfissio
 
                       {this.state.baseFilters !== 'idBanco' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="idBancoLabel" for="profissional-idBanco">
                               <Translate contentKey="generadorApp.profissional.idBanco">Id Banco</Translate>
                             </Label>
@@ -434,7 +436,7 @@ export class Profissional extends React.Component<IProfissionalProps, IProfissio
 
                       {this.state.baseFilters !== 'senha' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="senhaLabel" for="profissional-senha">
                               <Translate contentKey="generadorApp.profissional.senha">Senha</Translate>
                             </Label>
@@ -446,7 +448,7 @@ export class Profissional extends React.Component<IProfissionalProps, IProfissio
 
                       {this.state.baseFilters !== 'nome' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="nomeLabel" for="profissional-nome">
                               <Translate contentKey="generadorApp.profissional.nome">Nome</Translate>
                             </Label>
@@ -458,7 +460,7 @@ export class Profissional extends React.Component<IProfissionalProps, IProfissio
 
                       {this.state.baseFilters !== 'email' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="emailLabel" for="profissional-email">
                               <Translate contentKey="generadorApp.profissional.email">Email</Translate>
                             </Label>
@@ -470,7 +472,7 @@ export class Profissional extends React.Component<IProfissionalProps, IProfissio
 
                       {this.state.baseFilters !== 'cpf' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="cpfLabel" for="profissional-cpf">
                               <Translate contentKey="generadorApp.profissional.cpf">Cpf</Translate>
                             </Label>
@@ -482,7 +484,7 @@ export class Profissional extends React.Component<IProfissionalProps, IProfissio
 
                       {this.state.baseFilters !== 'rg' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="rgLabel" for="profissional-rg">
                               <Translate contentKey="generadorApp.profissional.rg">Rg</Translate>
                             </Label>
@@ -494,7 +496,7 @@ export class Profissional extends React.Component<IProfissionalProps, IProfissio
 
                       {this.state.baseFilters !== 'nomeEmpresa' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="nomeEmpresaLabel" for="profissional-nomeEmpresa">
                               <Translate contentKey="generadorApp.profissional.nomeEmpresa">Nome Empresa</Translate>
                             </Label>
@@ -506,7 +508,7 @@ export class Profissional extends React.Component<IProfissionalProps, IProfissio
 
                       {this.state.baseFilters !== 'cnpj' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="cnpjLabel" for="profissional-cnpj">
                               <Translate contentKey="generadorApp.profissional.cnpj">Cnpj</Translate>
                             </Label>
@@ -518,7 +520,7 @@ export class Profissional extends React.Component<IProfissionalProps, IProfissio
 
                       {this.state.baseFilters !== 'registro' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="registroLabel" for="profissional-registro">
                               <Translate contentKey="generadorApp.profissional.registro">Registro</Translate>
                             </Label>
@@ -530,7 +532,7 @@ export class Profissional extends React.Component<IProfissionalProps, IProfissio
 
                       {this.state.baseFilters !== 'nascimento' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="nascimentoLabel" for="profissional-nascimento">
                               <Translate contentKey="generadorApp.profissional.nascimento">Nascimento</Translate>
                             </Label>
@@ -541,7 +543,7 @@ export class Profissional extends React.Component<IProfissionalProps, IProfissio
 
                       {this.state.baseFilters !== 'sexo' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="sexoLabel" for="profissional-sexo">
                               <Translate contentKey="generadorApp.profissional.sexo">Sexo</Translate>
                             </Label>
@@ -552,7 +554,7 @@ export class Profissional extends React.Component<IProfissionalProps, IProfissio
 
                       {this.state.baseFilters !== 'telefone1' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="telefone1Label" for="profissional-telefone1">
                               <Translate contentKey="generadorApp.profissional.telefone1">Telefone 1</Translate>
                             </Label>
@@ -564,7 +566,7 @@ export class Profissional extends React.Component<IProfissionalProps, IProfissio
 
                       {this.state.baseFilters !== 'telefone2' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="telefone2Label" for="profissional-telefone2">
                               <Translate contentKey="generadorApp.profissional.telefone2">Telefone 2</Translate>
                             </Label>
@@ -576,7 +578,7 @@ export class Profissional extends React.Component<IProfissionalProps, IProfissio
 
                       {this.state.baseFilters !== 'celular1' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="celular1Label" for="profissional-celular1">
                               <Translate contentKey="generadorApp.profissional.celular1">Celular 1</Translate>
                             </Label>
@@ -588,7 +590,7 @@ export class Profissional extends React.Component<IProfissionalProps, IProfissio
 
                       {this.state.baseFilters !== 'celular2' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="celular2Label" for="profissional-celular2">
                               <Translate contentKey="generadorApp.profissional.celular2">Celular 2</Translate>
                             </Label>
@@ -600,7 +602,7 @@ export class Profissional extends React.Component<IProfissionalProps, IProfissio
 
                       {this.state.baseFilters !== 'cep' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="cepLabel" for="profissional-cep">
                               <Translate contentKey="generadorApp.profissional.cep">Cep</Translate>
                             </Label>
@@ -612,7 +614,7 @@ export class Profissional extends React.Component<IProfissionalProps, IProfissio
 
                       {this.state.baseFilters !== 'endereco' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="enderecoLabel" for="profissional-endereco">
                               <Translate contentKey="generadorApp.profissional.endereco">Endereco</Translate>
                             </Label>
@@ -624,7 +626,7 @@ export class Profissional extends React.Component<IProfissionalProps, IProfissio
 
                       {this.state.baseFilters !== 'numero' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="numeroLabel" for="profissional-numero">
                               <Translate contentKey="generadorApp.profissional.numero">Numero</Translate>
                             </Label>
@@ -636,7 +638,7 @@ export class Profissional extends React.Component<IProfissionalProps, IProfissio
 
                       {this.state.baseFilters !== 'complemento' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="complementoLabel" for="profissional-complemento">
                               <Translate contentKey="generadorApp.profissional.complemento">Complemento</Translate>
                             </Label>
@@ -648,7 +650,7 @@ export class Profissional extends React.Component<IProfissionalProps, IProfissio
 
                       {this.state.baseFilters !== 'bairro' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="bairroLabel" for="profissional-bairro">
                               <Translate contentKey="generadorApp.profissional.bairro">Bairro</Translate>
                             </Label>
@@ -660,7 +662,7 @@ export class Profissional extends React.Component<IProfissionalProps, IProfissio
 
                       {this.state.baseFilters !== 'cidade' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="cidadeLabel" for="profissional-cidade">
                               <Translate contentKey="generadorApp.profissional.cidade">Cidade</Translate>
                             </Label>
@@ -672,7 +674,7 @@ export class Profissional extends React.Component<IProfissionalProps, IProfissio
 
                       {this.state.baseFilters !== 'uf' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="ufLabel" for="profissional-uf">
                               <Translate contentKey="generadorApp.profissional.uf">Uf</Translate>
                             </Label>
@@ -684,7 +686,7 @@ export class Profissional extends React.Component<IProfissionalProps, IProfissio
 
                       {this.state.baseFilters !== 'atendeCrianca' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="atendeCriancaLabel" for="profissional-atendeCrianca">
                               <Translate contentKey="generadorApp.profissional.atendeCrianca">Atende Crianca</Translate>
                             </Label>
@@ -695,7 +697,7 @@ export class Profissional extends React.Component<IProfissionalProps, IProfissio
 
                       {this.state.baseFilters !== 'atendeIdoso' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="atendeIdosoLabel" for="profissional-atendeIdoso">
                               <Translate contentKey="generadorApp.profissional.atendeIdoso">Atende Idoso</Translate>
                             </Label>
@@ -706,7 +708,7 @@ export class Profissional extends React.Component<IProfissionalProps, IProfissio
 
                       {this.state.baseFilters !== 'ag' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="agLabel" for="profissional-ag">
                               <Translate contentKey="generadorApp.profissional.ag">Ag</Translate>
                             </Label>
@@ -718,7 +720,7 @@ export class Profissional extends React.Component<IProfissionalProps, IProfissio
 
                       {this.state.baseFilters !== 'conta' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="contaLabel" for="profissional-conta">
                               <Translate contentKey="generadorApp.profissional.conta">Conta</Translate>
                             </Label>
@@ -730,7 +732,7 @@ export class Profissional extends React.Component<IProfissionalProps, IProfissio
 
                       {this.state.baseFilters !== 'tipoConta' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="tipoContaLabel" for="profissional-tipoConta">
                               <Translate contentKey="generadorApp.profissional.tipoConta">Tipo Conta</Translate>
                             </Label>
@@ -742,7 +744,7 @@ export class Profissional extends React.Component<IProfissionalProps, IProfissio
 
                       {this.state.baseFilters !== 'origemCadastro' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="origemCadastroLabel" for="profissional-origemCadastro">
                               <Translate contentKey="generadorApp.profissional.origemCadastro">Origem Cadastro</Translate>
                             </Label>
@@ -754,7 +756,7 @@ export class Profissional extends React.Component<IProfissionalProps, IProfissio
 
                       {this.state.baseFilters !== 'obs' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="obsLabel" for="profissional-obs">
                               <Translate contentKey="generadorApp.profissional.obs">Obs</Translate>
                             </Label>
@@ -765,7 +767,7 @@ export class Profissional extends React.Component<IProfissionalProps, IProfissio
 
                       {this.state.baseFilters !== 'chavePrivada' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="chavePrivadaLabel" for="profissional-chavePrivada">
                               <Translate contentKey="generadorApp.profissional.chavePrivada">Chave Privada</Translate>
                             </Label>
@@ -777,7 +779,7 @@ export class Profissional extends React.Component<IProfissionalProps, IProfissio
 
                       {this.state.baseFilters !== 'ativo' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="ativoLabel" for="profissional-ativo">
                               <Translate contentKey="generadorApp.profissional.ativo">Ativo</Translate>
                             </Label>
@@ -788,7 +790,7 @@ export class Profissional extends React.Component<IProfissionalProps, IProfissio
 
                       {this.state.baseFilters !== 'senhaOriginal' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="senhaOriginalLabel" for="profissional-senhaOriginal">
                               <Translate contentKey="generadorApp.profissional.senhaOriginal">Senha Original</Translate>
                             </Label>
@@ -800,7 +802,7 @@ export class Profissional extends React.Component<IProfissionalProps, IProfissio
 
                       {this.state.baseFilters !== 'dataSenha' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="dataSenhaLabel" for="profissional-dataSenha">
                               <Translate contentKey="generadorApp.profissional.dataSenha">Data Senha</Translate>
                             </Label>
@@ -818,7 +820,7 @@ export class Profissional extends React.Component<IProfissionalProps, IProfissio
 
                       {this.state.baseFilters !== 'expoToken' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="expoTokenLabel" for="profissional-expoToken">
                               <Translate contentKey="generadorApp.profissional.expoToken">Expo Token</Translate>
                             </Label>
@@ -830,7 +832,7 @@ export class Profissional extends React.Component<IProfissionalProps, IProfissio
 
                       {this.state.baseFilters !== 'preferenciaAtendimento' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="preferenciaAtendimentoLabel" for="profissional-preferenciaAtendimento">
                               <Translate contentKey="generadorApp.profissional.preferenciaAtendimento">Preferencia Atendimento</Translate>
                             </Label>
@@ -846,21 +848,28 @@ export class Profissional extends React.Component<IProfissionalProps, IProfissio
 
                       {this.state.baseFilters !== 'unidade' ? (
                         <Col md="3">
-                          <Row>
-                            <div>
+                          <Row className="mr-1 mt-1">
+                            <div style={{ width: '100%' }}>
                               <Label for="profissional-unidade">
                                 <Translate contentKey="generadorApp.profissional.unidade">Unidade</Translate>
                               </Label>
-                              <AvInput id="profissional-unidade" type="select" className="form-control" name="unidadeId">
-                                <option value="" key="0" />
-                                {unidadeEasies
-                                  ? unidadeEasies.map(otherEntity => (
-                                      <option value={otherEntity.id} key={otherEntity.id}>
-                                        {otherEntity.razaoSocial}
-                                      </option>
-                                    ))
-                                  : null}
-                              </AvInput>
+                              <Select
+                                id="profissional-unidade"
+                                isMulti
+                                className={'css-select-control'}
+                                value={
+                                  unidadeEasies
+                                    ? unidadeEasies.map(p =>
+                                        this.state.unidade.split(',').indexOf(p.id) !== -1 ? { value: p.id, label: p.razaoSocial } : null
+                                      )
+                                    : null
+                                }
+                                options={
+                                  unidadeEasies ? unidadeEasies.map(option => ({ value: option.id, label: option.razaoSocial })) : null
+                                }
+                                onChange={options => this.setState({ unidade: options.map(option => option['value']).join(',') })}
+                                name={'unidade'}
+                              />
                             </div>
                           </Row>
                         </Col>
@@ -871,13 +880,13 @@ export class Profissional extends React.Component<IProfissionalProps, IProfissio
                       <Button className="btn btn-success" type="submit">
                         <i className="fa fa-filter" aria-hidden={'true'}></i>
                         &nbsp;
-                        <Translate contentKey="entity.validation.filter">Filter</Translate>
+                        <Translate contentKey="generadorApp.profissional.home.btn_filter">Filter</Translate>
                       </Button>
                       &nbsp;
                       <div className="btn btn-secondary hand" onClick={this.cancelCourse}>
                         <FontAwesomeIcon icon="trash-alt" />
                         &nbsp;
-                        <Translate contentKey="entity.validation.clean">Clean</Translate>
+                        <Translate contentKey="generadorApp.profissional.home.btn_filter_clean">Clean</Translate>
                       </div>
                     </div>
                   </AvForm>

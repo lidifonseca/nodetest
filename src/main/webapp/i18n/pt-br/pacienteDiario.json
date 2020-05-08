@@ -1,8 +1,14 @@
 {
   "generadorApp": {
     "pacienteDiario": {
+      "listButtons": {},
+      "viewButtons": {},
+      "dropdown_btn": "Actions",
       "home": {
         "title": "Paciente Diarios",
+        "btn_filter": "Filtrar",
+        "btn_filter_clean": "Limpar Filtros",
+        "btn_filter_open": "Filtros",
         "createLabel": "Criar novo Paciente Diario",
         "createOrEditLabel": "Criar ou editar Paciente Diario",
         "notFound": "Nenhum Paciente Diario encontrado"

@@ -1,8 +1,14 @@
 {
   "generadorApp": {
     "descPta": {
+      "listButtons": {},
+      "viewButtons": {},
+      "dropdown_btn": "Ações",
       "home": {
         "title": "Desc Ptas",
+        "btn_filter": "Filter",
+        "btn_filter_clean": "Clean Filters",
+        "btn_filter_open": "Filters",
         "createLabel": "Create a new Desc Pta",
         "createOrEditLabel": "Create or edit a Desc Pta",
         "notFound": "No Desc Ptas found"

@@ -15,7 +15,7 @@
         }
     ],
     "relationships": [],
-    "changelogDate": "20200507120400",
+    "changelogDate": "20200508165400",
     "entityTableName": "periodicidade",
     "dto": "mapstruct",
     "pagination": "pagination",

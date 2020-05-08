@@ -1,8 +1,14 @@
 {
   "generadorApp": {
     "padItemCepRecusado": {
+      "listButtons": {},
+      "viewButtons": {},
+      "dropdown_btn": "Actions",
       "home": {
         "title": "Pad Item Cep Recusados",
+        "btn_filter": "Filtrar",
+        "btn_filter_clean": "Limpar Filtros",
+        "btn_filter_open": "Filtros",
         "createLabel": "Criar novo Pad Item Cep Recusado",
         "createOrEditLabel": "Criar ou editar Pad Item Cep Recusado",
         "notFound": "Nenhum Pad Item Cep Recusado encontrado"

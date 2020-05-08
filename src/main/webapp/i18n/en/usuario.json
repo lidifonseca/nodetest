@@ -1,8 +1,14 @@
 {
   "generadorApp": {
     "usuario": {
+      "listButtons": {},
+      "viewButtons": {},
+      "dropdown_btn": "Ações",
       "home": {
         "title": "Usuarios",
+        "btn_filter": "Filter",
+        "btn_filter_clean": "Clean Filters",
+        "btn_filter_open": "Filters",
         "createLabel": "Create a new Usuario",
         "createOrEditLabel": "Create or edit a Usuario",
         "notFound": "No Usuarios found"
@@ -139,6 +145,7 @@
       "envioAnaliseResultadoEsperado": "Envio Analise Resultado Esperado",
       "envioDescumprimento": "Envio Descumprimento",
       "envioMelhoraTempo": "Envio Melhora Tempo",
+      "unidade_empty": "Without Unidade",
       "unidade": "Unidade"
     }
   }

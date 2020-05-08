@@ -1,8 +1,14 @@
 {
   "generadorApp": {
     "pacienteGrauParentesco": {
+      "listButtons": {},
+      "viewButtons": {},
+      "dropdown_btn": "Ações",
       "home": {
         "title": "Paciente Grau Parentescos",
+        "btn_filter": "Filter",
+        "btn_filter_clean": "Clean Filters",
+        "btn_filter_open": "Filters",
         "createLabel": "Create a new Paciente Grau Parentesco",
         "createOrEditLabel": "Create or edit a Paciente Grau Parentesco",
         "notFound": "No Paciente Grau Parentescos found"

@@ -41,6 +41,7 @@ export interface IPadPtaTempBaseState {
 
 export interface IPadPtaTempUpdateState {
   fieldsBase: IPadPtaTempBaseState;
+
   isNew: boolean;
 }
 

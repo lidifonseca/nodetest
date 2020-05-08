@@ -1,8 +1,14 @@
 {
   "generadorApp": {
     "migracao": {
+      "listButtons": {},
+      "viewButtons": {},
+      "dropdown_btn": "Ações",
       "home": {
         "title": "Migracaos",
+        "btn_filter": "Filter",
+        "btn_filter_clean": "Clean Filters",
+        "btn_filter_open": "Filters",
         "createLabel": "Create a new Migracao",
         "createOrEditLabel": "Create or edit a Migracao",
         "notFound": "No Migracaos found"

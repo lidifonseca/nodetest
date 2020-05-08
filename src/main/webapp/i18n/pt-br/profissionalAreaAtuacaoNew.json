@@ -1,8 +1,14 @@
 {
   "generadorApp": {
     "profissionalAreaAtuacaoNew": {
+      "listButtons": {},
+      "viewButtons": {},
+      "dropdown_btn": "Actions",
       "home": {
         "title": "Profissional Area Atuacao News",
+        "btn_filter": "Filtrar",
+        "btn_filter_clean": "Limpar Filtros",
+        "btn_filter_open": "Filtros",
         "createLabel": "Criar novo Profissional Area Atuacao New",
         "createOrEditLabel": "Criar ou editar Profissional Area Atuacao New",
         "notFound": "Nenhum Profissional Area Atuacao New encontrado"

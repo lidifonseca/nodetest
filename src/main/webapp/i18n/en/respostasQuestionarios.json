@@ -1,8 +1,14 @@
 {
   "generadorApp": {
     "respostasQuestionarios": {
+      "listButtons": {},
+      "viewButtons": {},
+      "dropdown_btn": "Ações",
       "home": {
         "title": "Respostas Questionarios",
+        "btn_filter": "Filter",
+        "btn_filter_clean": "Clean Filters",
+        "btn_filter_open": "Filters",
         "createLabel": "Create a new Respostas Questionarios",
         "createOrEditLabel": "Create or edit a Respostas Questionarios",
         "notFound": "No Respostas Questionarios found"

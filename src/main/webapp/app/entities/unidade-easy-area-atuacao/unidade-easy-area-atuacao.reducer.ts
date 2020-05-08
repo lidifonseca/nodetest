@@ -40,6 +40,8 @@ export interface IUnidadeEasyAreaAtuacaoBaseState {
 
 export interface IUnidadeEasyAreaAtuacaoUpdateState {
   fieldsBase: IUnidadeEasyAreaAtuacaoBaseState;
+
+  unidadeEasySelectValue: any;
   isNew: boolean;
   unidadeId: string;
 }

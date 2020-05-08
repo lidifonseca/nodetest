@@ -31,7 +31,7 @@
             "otherEntityField": "nome"
         }
     ],
-    "changelogDate": "20200507122900",
+    "changelogDate": "20200508171900",
     "entityTableName": "questionarios",
     "dto": "mapstruct",
     "pagination": "pagination",

@@ -42,6 +42,7 @@ export interface IApiInputBaseState {
 
 export interface IApiInputUpdateState {
   fieldsBase: IApiInputBaseState;
+
   isNew: boolean;
 }
 

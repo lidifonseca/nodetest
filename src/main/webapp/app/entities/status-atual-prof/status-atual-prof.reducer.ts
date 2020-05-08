@@ -39,6 +39,7 @@ export interface IStatusAtualProfBaseState {
 
 export interface IStatusAtualProfUpdateState {
   fieldsBase: IStatusAtualProfBaseState;
+
   isNew: boolean;
 }
 

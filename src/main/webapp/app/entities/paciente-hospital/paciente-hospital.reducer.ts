@@ -39,6 +39,7 @@ export interface IPacienteHospitalBaseState {
 
 export interface IPacienteHospitalUpdateState {
   fieldsBase: IPacienteHospitalBaseState;
+
   isNew: boolean;
 }
 

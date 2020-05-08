@@ -1,8 +1,14 @@
 {
   "generadorApp": {
     "atendimentoGlosado": {
+      "listButtons": {},
+      "viewButtons": {},
+      "dropdown_btn": "Ações",
       "home": {
         "title": "Atendimento Glosados",
+        "btn_filter": "Filter",
+        "btn_filter_clean": "Clean Filters",
+        "btn_filter_open": "Filters",
         "createLabel": "Create a new Atendimento Glosado",
         "createOrEditLabel": "Create or edit a Atendimento Glosado",
         "notFound": "No Atendimento Glosados found"

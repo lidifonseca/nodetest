@@ -45,6 +45,7 @@ export interface INotificacaoConfigUsuarioBaseState {
 
 export interface INotificacaoConfigUsuarioUpdateState {
   fieldsBase: INotificacaoConfigUsuarioBaseState;
+
   isNew: boolean;
 }
 

@@ -38,6 +38,7 @@ export interface IAtendimentoAceiteBaseState {
 
 export interface IAtendimentoAceiteUpdateState {
   fieldsBase: IAtendimentoAceiteBaseState;
+
   isNew: boolean;
 }
 

@@ -1,8 +1,14 @@
 {
   "generadorApp": {
     "profissionalPush": {
+      "listButtons": {},
+      "viewButtons": {},
+      "dropdown_btn": "Ações",
       "home": {
         "title": "Profissional Pushes",
+        "btn_filter": "Filter",
+        "btn_filter_clean": "Clean Filters",
+        "btn_filter_open": "Filters",
         "createLabel": "Create a new Profissional Push",
         "createOrEditLabel": "Create or edit a Profissional Push",
         "notFound": "No Profissional Pushes found"

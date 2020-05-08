@@ -1,8 +1,14 @@
 {
   "generadorApp": {
     "imagemProntuario": {
+      "listButtons": {},
+      "viewButtons": {},
+      "dropdown_btn": "Actions",
       "home": {
         "title": "Imagem Prontuarios",
+        "btn_filter": "Filtrar",
+        "btn_filter_clean": "Limpar Filtros",
+        "btn_filter_open": "Filtros",
         "createLabel": "Criar novo Imagem Prontuario",
         "createOrEditLabel": "Criar ou editar Imagem Prontuario",
         "notFound": "Nenhum Imagem Prontuario encontrado"

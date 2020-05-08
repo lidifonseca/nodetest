@@ -1,8 +1,14 @@
 {
   "generadorApp": {
     "atendimentoStatusFinanceiro": {
+      "listButtons": {},
+      "viewButtons": {},
+      "dropdown_btn": "Ações",
       "home": {
         "title": "Atendimento Status Financeiros",
+        "btn_filter": "Filter",
+        "btn_filter_clean": "Clean Filters",
+        "btn_filter_open": "Filters",
         "createLabel": "Create a new Atendimento Status Financeiro",
         "createOrEditLabel": "Create or edit a Atendimento Status Financeiro",
         "notFound": "No Atendimento Status Financeiros found"

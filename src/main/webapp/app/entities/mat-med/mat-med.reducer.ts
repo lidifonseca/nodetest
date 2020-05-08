@@ -41,6 +41,7 @@ export interface IMatMedBaseState {
 
 export interface IMatMedUpdateState {
   fieldsBase: IMatMedBaseState;
+
   isNew: boolean;
 }
 

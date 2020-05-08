@@ -42,6 +42,7 @@ export interface IMotivoInternacaoBaseState {
 
 export interface IMotivoInternacaoUpdateState {
   fieldsBase: IMotivoInternacaoBaseState;
+
   isNew: boolean;
 }
 

@@ -43,6 +43,7 @@ export interface IPacienteDiagnosticoTempBaseState {
 
 export interface IPacienteDiagnosticoTempUpdateState {
   fieldsBase: IPacienteDiagnosticoTempBaseState;
+
   isNew: boolean;
 }
 

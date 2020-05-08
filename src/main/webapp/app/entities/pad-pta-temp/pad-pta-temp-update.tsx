@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import Select from 'react-select';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 import { Button, Row, Col, Label } from 'reactstrap';
@@ -48,25 +49,18 @@ export class PadPtaTempUpdate extends React.Component<IPadPtaTempUpdateProps, IP
 
   getFiltersURL = (offset = null) => {
     const fieldsBase = this.state.fieldsBase;
-    return (
-      '_back=1' +
-      (fieldsBase['baseFilters'] ? '&baseFilters=' + fieldsBase['baseFilters'] : '') +
-      (fieldsBase['activePage'] ? '&page=' + fieldsBase['activePage'] : '') +
-      (fieldsBase['itemsPerPage'] ? '&size=' + fieldsBase['itemsPerPage'] : '') +
-      (fieldsBase['sort'] ? '&sort=' + (fieldsBase['sort'] + ',' + fieldsBase['order']) : '') +
-      (offset !== null ? '&offset=' + offset : '') +
-      (fieldsBase['sessionId'] ? '&sessionId=' + fieldsBase['sessionId'] : '') +
-      (fieldsBase['idPta'] ? '&idPta=' + fieldsBase['idPta'] : '') +
-      (fieldsBase['idCid'] ? '&idCid=' + fieldsBase['idCid'] : '') +
-      (fieldsBase['cidXPtaNovoId'] ? '&cidXPtaNovoId=' + fieldsBase['cidXPtaNovoId'] : '') +
-      ''
-    );
+    let url = '_back=1' + (offset !== null ? '&offset=' + offset : '');
+    Object.keys(fieldsBase).map(key => {
+      url += '&' + key + '=' + fieldsBase[key];
+    });
+    return url;
   };
   saveEntity = (event: any, errors: any, values: any) => {
     if (errors.length === 0) {
       const { padPtaTempEntity } = this.props;
       const entity = {
         ...padPtaTempEntity,
+
         ...values
       };
 
@@ -89,14 +83,6 @@ export class PadPtaTempUpdate extends React.Component<IPadPtaTempUpdateProps, IP
     const baseFilters = this.state.fieldsBase && this.state.fieldsBase['baseFilters'] ? this.state.fieldsBase['baseFilters'] : null;
     return (
       <div>
-        <ol className="breadcrumb float-xl-right">
-          <li className="breadcrumb-item">
-            <Link to="/">Inicio</Link>
-          </li>
-          <li className="breadcrumb-item active">Pad Pta Temps</li>
-          <li className="breadcrumb-item active">Pad Pta Temps edit</li>
-        </ol>
-        <h1 className="page-header">&nbsp;&nbsp;</h1>
         <AvForm
           model={
             isNew
@@ -107,34 +93,40 @@ export class PadPtaTempUpdate extends React.Component<IPadPtaTempUpdateProps, IP
           }
           onSubmit={this.saveEntity}
         >
-          <Panel>
-            <PanelHeader>
-              <h2 id="page-heading">
-                <span className="page-header ml-3">
-                  <Translate contentKey="generadorApp.padPtaTemp.home.createOrEditLabel">Create or edit a PadPtaTemp</Translate>
-                </span>
+          <h2 id="page-heading">
+            <span className="page-header ml-3">
+              <Translate contentKey="generadorApp.padPtaTemp.home.createOrEditLabel">Create or edit a PadPtaTemp</Translate>
+            </span>
 
-                <Button color="primary" id="save-entity" type="submit" disabled={updating} className="float-right jh-create-entity">
-                  <FontAwesomeIcon icon="save" />
-                  &nbsp;
-                  <Translate contentKey="entity.action.save">Save</Translate>
-                </Button>
-                <Button
-                  tag={Link}
-                  id="cancel-save"
-                  to={'/pad-pta-temp?' + this.getFiltersURL()}
-                  replace
-                  color="info"
-                  className="float-right jh-create-entity"
-                >
-                  <FontAwesomeIcon icon="arrow-left" />
-                  &nbsp;
-                  <span className="d-none d-md-inline">
-                    <Translate contentKey="entity.action.back">Back</Translate>
-                  </span>
-                </Button>
-              </h2>
-            </PanelHeader>
+            <Button color="primary" id="save-entity" type="submit" disabled={updating} className="float-right jh-create-entity">
+              <FontAwesomeIcon icon="save" />
+              &nbsp;
+              <Translate contentKey="entity.action.save">Save</Translate>
+            </Button>
+            <Button
+              tag={Link}
+              id="cancel-save"
+              to={'/pad-pta-temp?' + this.getFiltersURL()}
+              replace
+              color="info"
+              className="float-right jh-create-entity"
+            >
+              <FontAwesomeIcon icon="arrow-left" />
+              &nbsp;
+              <span className="d-none d-md-inline">
+                <Translate contentKey="entity.action.back">Back</Translate>
+              </span>
+            </Button>
+          </h2>
+          <ol className="breadcrumb">
+            <li className="breadcrumb-item">
+              <Link to="/">Inicio</Link>
+            </li>
+            <li className="breadcrumb-item active">Pad Pta Temps</li>
+            <li className="breadcrumb-item active">Pad Pta Temps edit</li>
+          </ol>
+
+          <Panel>
             <PanelBody>
               <Row className="justify-content-center">
                 <Col md="8">
@@ -158,81 +150,13 @@ export class PadPtaTempUpdate extends React.Component<IPadPtaTempUpdateProps, IP
                         </AvGroup>
                       ) : null}
                       <Row>
-                        {baseFilters !== 'sessionId' ? (
-                          <Col md="sessionId">
-                            <AvGroup>
-                              <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="sessionIdLabel" for="pad-pta-temp-sessionId">
-                                    <Translate contentKey="generadorApp.padPtaTemp.sessionId">Session Id</Translate>
-                                  </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField id="pad-pta-temp-sessionId" type="text" name="sessionId" />
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
-                        ) : (
-                          <AvInput type="hidden" name="sessionId" value={this.state.fieldsBase[baseFilters]} />
-                        )}
+                        <SessionIdComponentUpdate baseFilters />
 
-                        {baseFilters !== 'idPta' ? (
-                          <Col md="idPta">
-                            <AvGroup>
-                              <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="idPtaLabel" for="pad-pta-temp-idPta">
-                                    <Translate contentKey="generadorApp.padPtaTemp.idPta">Id Pta</Translate>
-                                  </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField id="pad-pta-temp-idPta" type="string" className="form-control" name="idPta" />
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
-                        ) : (
-                          <AvInput type="hidden" name="idPta" value={this.state.fieldsBase[baseFilters]} />
-                        )}
+                        <IdPtaComponentUpdate baseFilters />
 
-                        {baseFilters !== 'idCid' ? (
-                          <Col md="idCid">
-                            <AvGroup>
-                              <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="idCidLabel" for="pad-pta-temp-idCid">
-                                    <Translate contentKey="generadorApp.padPtaTemp.idCid">Id Cid</Translate>
-                                  </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField id="pad-pta-temp-idCid" type="string" className="form-control" name="idCid" />
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
-                        ) : (
-                          <AvInput type="hidden" name="idCid" value={this.state.fieldsBase[baseFilters]} />
-                        )}
+                        <IdCidComponentUpdate baseFilters />
 
-                        {baseFilters !== 'cidXPtaNovoId' ? (
-                          <Col md="cidXPtaNovoId">
-                            <AvGroup>
-                              <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="cidXPtaNovoIdLabel" for="pad-pta-temp-cidXPtaNovoId">
-                                    <Translate contentKey="generadorApp.padPtaTemp.cidXPtaNovoId">Cid X Pta Novo Id</Translate>
-                                  </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField id="pad-pta-temp-cidXPtaNovoId" type="string" className="form-control" name="cidXPtaNovoId" />
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
-                        ) : (
-                          <AvInput type="hidden" name="cidXPtaNovoId" value={this.state.fieldsBase[baseFilters]} />
-                        )}
+                        <CidXPtaNovoIdComponentUpdate baseFilters />
                       </Row>
                     </div>
                   )}
@@ -262,5 +186,89 @@ const mapDispatchToProps = {
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
+
+const SessionIdComponentUpdate = ({ baseFilters }) => {
+  return baseFilters !== 'sessionId' ? (
+    <Col md="sessionId">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" id="sessionIdLabel" for="pad-pta-temp-sessionId">
+              <Translate contentKey="generadorApp.padPtaTemp.sessionId">Session Id</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <AvField id="pad-pta-temp-sessionId" type="text" name="sessionId" />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="sessionId" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const IdPtaComponentUpdate = ({ baseFilters }) => {
+  return baseFilters !== 'idPta' ? (
+    <Col md="idPta">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" id="idPtaLabel" for="pad-pta-temp-idPta">
+              <Translate contentKey="generadorApp.padPtaTemp.idPta">Id Pta</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <AvField id="pad-pta-temp-idPta" type="string" className="form-control" name="idPta" />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="idPta" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const IdCidComponentUpdate = ({ baseFilters }) => {
+  return baseFilters !== 'idCid' ? (
+    <Col md="idCid">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" id="idCidLabel" for="pad-pta-temp-idCid">
+              <Translate contentKey="generadorApp.padPtaTemp.idCid">Id Cid</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <AvField id="pad-pta-temp-idCid" type="string" className="form-control" name="idCid" />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="idCid" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const CidXPtaNovoIdComponentUpdate = ({ baseFilters }) => {
+  return baseFilters !== 'cidXPtaNovoId' ? (
+    <Col md="cidXPtaNovoId">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" id="cidXPtaNovoIdLabel" for="pad-pta-temp-cidXPtaNovoId">
+              <Translate contentKey="generadorApp.padPtaTemp.cidXPtaNovoId">Cid X Pta Novo Id</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <AvField id="pad-pta-temp-cidXPtaNovoId" type="string" className="form-control" name="cidXPtaNovoId" />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="cidXPtaNovoId" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(PadPtaTempUpdate);

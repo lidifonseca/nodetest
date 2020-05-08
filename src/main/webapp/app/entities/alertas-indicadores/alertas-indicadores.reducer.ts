@@ -41,6 +41,7 @@ export interface IAlertasIndicadoresBaseState {
 
 export interface IAlertasIndicadoresUpdateState {
   fieldsBase: IAlertasIndicadoresBaseState;
+
   isNew: boolean;
 }
 

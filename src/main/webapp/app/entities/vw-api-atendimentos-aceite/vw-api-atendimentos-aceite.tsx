@@ -2,6 +2,7 @@
 import React from 'react';
 import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
 import { connect } from 'react-redux';
+import Select from 'react-select';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import {
   Button,
@@ -245,34 +246,35 @@ export class VwApiAtendimentosAceite extends React.Component<IVwApiAtendimentosA
     const { vwApiAtendimentosAceiteList, match, totalItems } = this.props;
     return (
       <div>
-        <ol className="breadcrumb float-xl-right">
+        <h2 id="page-heading">
+          <span className="page-header">Vw Api Atendimentos Aceites</span>
+          <Button id="togglerFilterVwApiAtendimentosAceite" className="btn btn-primary float-right jh-create-entity">
+            <Translate contentKey="generadorApp.vwApiAtendimentosAceite.home.btn_filter_open">Filters</Translate>
+            &nbsp;
+            <FontAwesomeIcon icon="caret-down" />
+          </Button>{' '}
+          &nbsp;
+          <Link
+            to={`${match.url}/new?${this.getFiltersURL()}`}
+            className="btn btn-primary float-right jh-create-entity"
+            id="jh-create-entity"
+          >
+            <FontAwesomeIcon icon="plus" />
+            &nbsp;
+            <Translate contentKey="generadorApp.vwApiAtendimentosAceite.home.createLabel">
+              Create a new Vw Api Atendimentos Aceite
+            </Translate>
+          </Link>{' '}
+          &nbsp;
+        </h2>
+
+        <ol className="breadcrumb">
           <li className="breadcrumb-item">
             <Link to="/">Inicio</Link>
           </li>
           <li className="breadcrumb-item active">Vw Api Atendimentos Aceites</li>
         </ol>
-        <h1 className="page-header">&nbsp;&nbsp;</h1>
         <Panel>
-          <PanelHeader>
-            <h2 id="page-heading">
-              <span className="page-header ml-3">Vw Api Atendimentos Aceites</span>
-              <Button id="togglerFilterVwApiAtendimentosAceite" className="btn btn-primary float-right jh-create-entity">
-                Filtros&nbsp;
-                <FontAwesomeIcon icon="caret-down" />
-              </Button>
-              <Link
-                to={`${match.url}/new?${this.getFiltersURL()}`}
-                className="btn btn-primary float-right jh-create-entity"
-                id="jh-create-entity"
-              >
-                <FontAwesomeIcon icon="plus" />
-                &nbsp;
-                <Translate contentKey="generadorApp.vwApiAtendimentosAceite.home.createLabel">
-                  Create a new Vw Api Atendimentos Aceite
-                </Translate>
-              </Link>
-            </h2>
-          </PanelHeader>
           <PanelBody>
             <div className="table-responsive">
               <UncontrolledCollapse toggler="#togglerFilterVwApiAtendimentosAceite">
@@ -281,7 +283,7 @@ export class VwApiAtendimentosAceite extends React.Component<IVwApiAtendimentosA
                     <div className="row mt-1 ml-3 mr-3">
                       {this.state.baseFilters !== 'idPadItem' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="idPadItemLabel" for="vw-api-atendimentos-aceite-idPadItem">
                               <Translate contentKey="generadorApp.vwApiAtendimentosAceite.idPadItem">Id Pad Item</Translate>
                             </Label>
@@ -297,7 +299,7 @@ export class VwApiAtendimentosAceite extends React.Component<IVwApiAtendimentosA
 
                       {this.state.baseFilters !== 'idPaciente' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="idPacienteLabel" for="vw-api-atendimentos-aceite-idPaciente">
                               <Translate contentKey="generadorApp.vwApiAtendimentosAceite.idPaciente">Id Paciente</Translate>
                             </Label>
@@ -313,7 +315,7 @@ export class VwApiAtendimentosAceite extends React.Component<IVwApiAtendimentosA
 
                       {this.state.baseFilters !== 'idPeriodo' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="idPeriodoLabel" for="vw-api-atendimentos-aceite-idPeriodo">
                               <Translate contentKey="generadorApp.vwApiAtendimentosAceite.idPeriodo">Id Periodo</Translate>
                             </Label>
@@ -329,7 +331,7 @@ export class VwApiAtendimentosAceite extends React.Component<IVwApiAtendimentosA
 
                       {this.state.baseFilters !== 'idPeriodicidade' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="idPeriodicidadeLabel" for="vw-api-atendimentos-aceite-idPeriodicidade">
                               <Translate contentKey="generadorApp.vwApiAtendimentosAceite.idPeriodicidade">Id Periodicidade</Translate>
                             </Label>
@@ -345,7 +347,7 @@ export class VwApiAtendimentosAceite extends React.Component<IVwApiAtendimentosA
 
                       {this.state.baseFilters !== 'idProfissional' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="idProfissionalLabel" for="vw-api-atendimentos-aceite-idProfissional">
                               <Translate contentKey="generadorApp.vwApiAtendimentosAceite.idProfissional">Id Profissional</Translate>
                             </Label>
@@ -361,7 +363,7 @@ export class VwApiAtendimentosAceite extends React.Component<IVwApiAtendimentosA
 
                       {this.state.baseFilters !== 'aceito' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="aceitoLabel" for="vw-api-atendimentos-aceite-aceito">
                               <Translate contentKey="generadorApp.vwApiAtendimentosAceite.aceito">Aceito</Translate>
                             </Label>
@@ -372,7 +374,7 @@ export class VwApiAtendimentosAceite extends React.Component<IVwApiAtendimentosA
 
                       {this.state.baseFilters !== 'bairro' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="bairroLabel" for="vw-api-atendimentos-aceite-bairro">
                               <Translate contentKey="generadorApp.vwApiAtendimentosAceite.bairro">Bairro</Translate>
                             </Label>
@@ -383,7 +385,7 @@ export class VwApiAtendimentosAceite extends React.Component<IVwApiAtendimentosA
 
                       {this.state.baseFilters !== 'cep' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="cepLabel" for="vw-api-atendimentos-aceite-cep">
                               <Translate contentKey="generadorApp.vwApiAtendimentosAceite.cep">Cep</Translate>
                             </Label>
@@ -394,7 +396,7 @@ export class VwApiAtendimentosAceite extends React.Component<IVwApiAtendimentosA
 
                       {this.state.baseFilters !== 'cidade' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="cidadeLabel" for="vw-api-atendimentos-aceite-cidade">
                               <Translate contentKey="generadorApp.vwApiAtendimentosAceite.cidade">Cidade</Translate>
                             </Label>
@@ -405,7 +407,7 @@ export class VwApiAtendimentosAceite extends React.Component<IVwApiAtendimentosA
 
                       {this.state.baseFilters !== 'complemento' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="complementoLabel" for="vw-api-atendimentos-aceite-complemento">
                               <Translate contentKey="generadorApp.vwApiAtendimentosAceite.complemento">Complemento</Translate>
                             </Label>
@@ -421,7 +423,7 @@ export class VwApiAtendimentosAceite extends React.Component<IVwApiAtendimentosA
 
                       {this.state.baseFilters !== 'endereco' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="enderecoLabel" for="vw-api-atendimentos-aceite-endereco">
                               <Translate contentKey="generadorApp.vwApiAtendimentosAceite.endereco">Endereco</Translate>
                             </Label>
@@ -432,7 +434,7 @@ export class VwApiAtendimentosAceite extends React.Component<IVwApiAtendimentosA
 
                       {this.state.baseFilters !== 'especialidade' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="especialidadeLabel" for="vw-api-atendimentos-aceite-especialidade">
                               <Translate contentKey="generadorApp.vwApiAtendimentosAceite.especialidade">Especialidade</Translate>
                             </Label>
@@ -448,7 +450,7 @@ export class VwApiAtendimentosAceite extends React.Component<IVwApiAtendimentosA
 
                       {this.state.baseFilters !== 'latitude' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="latitudeLabel" for="vw-api-atendimentos-aceite-latitude">
                               <Translate contentKey="generadorApp.vwApiAtendimentosAceite.latitude">Latitude</Translate>
                             </Label>
@@ -459,7 +461,7 @@ export class VwApiAtendimentosAceite extends React.Component<IVwApiAtendimentosA
 
                       {this.state.baseFilters !== 'longitude' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="longitudeLabel" for="vw-api-atendimentos-aceite-longitude">
                               <Translate contentKey="generadorApp.vwApiAtendimentosAceite.longitude">Longitude</Translate>
                             </Label>
@@ -475,7 +477,7 @@ export class VwApiAtendimentosAceite extends React.Component<IVwApiAtendimentosA
 
                       {this.state.baseFilters !== 'numero' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="numeroLabel" for="vw-api-atendimentos-aceite-numero">
                               <Translate contentKey="generadorApp.vwApiAtendimentosAceite.numero">Numero</Translate>
                             </Label>
@@ -486,7 +488,7 @@ export class VwApiAtendimentosAceite extends React.Component<IVwApiAtendimentosA
 
                       {this.state.baseFilters !== 'paciente' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="pacienteLabel" for="vw-api-atendimentos-aceite-paciente">
                               <Translate contentKey="generadorApp.vwApiAtendimentosAceite.paciente">Paciente</Translate>
                             </Label>
@@ -497,7 +499,7 @@ export class VwApiAtendimentosAceite extends React.Component<IVwApiAtendimentosA
 
                       {this.state.baseFilters !== 'periodo' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="periodoLabel" for="vw-api-atendimentos-aceite-periodo">
                               <Translate contentKey="generadorApp.vwApiAtendimentosAceite.periodo">Periodo</Translate>
                             </Label>
@@ -508,7 +510,7 @@ export class VwApiAtendimentosAceite extends React.Component<IVwApiAtendimentosA
 
                       {this.state.baseFilters !== 'periodicidade' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="periodicidadeLabel" for="vw-api-atendimentos-aceite-periodicidade">
                               <Translate contentKey="generadorApp.vwApiAtendimentosAceite.periodicidade">Periodicidade</Translate>
                             </Label>
@@ -524,7 +526,7 @@ export class VwApiAtendimentosAceite extends React.Component<IVwApiAtendimentosA
 
                       {this.state.baseFilters !== 'qtdSessoes' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="qtdSessoesLabel" for="vw-api-atendimentos-aceite-qtdSessoes">
                               <Translate contentKey="generadorApp.vwApiAtendimentosAceite.qtdSessoes">Qtd Sessoes</Translate>
                             </Label>
@@ -540,7 +542,7 @@ export class VwApiAtendimentosAceite extends React.Component<IVwApiAtendimentosA
 
                       {this.state.baseFilters !== 'uf' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="ufLabel" for="vw-api-atendimentos-aceite-uf">
                               <Translate contentKey="generadorApp.vwApiAtendimentosAceite.uf">Uf</Translate>
                             </Label>
@@ -551,7 +553,7 @@ export class VwApiAtendimentosAceite extends React.Component<IVwApiAtendimentosA
 
                       {this.state.baseFilters !== 'valor' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="valorLabel" for="vw-api-atendimentos-aceite-valor">
                               <Translate contentKey="generadorApp.vwApiAtendimentosAceite.valor">Valor</Translate>
                             </Label>
@@ -565,13 +567,13 @@ export class VwApiAtendimentosAceite extends React.Component<IVwApiAtendimentosA
                       <Button className="btn btn-success" type="submit">
                         <i className="fa fa-filter" aria-hidden={'true'}></i>
                         &nbsp;
-                        <Translate contentKey="entity.validation.filter">Filter</Translate>
+                        <Translate contentKey="generadorApp.vwApiAtendimentosAceite.home.btn_filter">Filter</Translate>
                       </Button>
                       &nbsp;
                       <div className="btn btn-secondary hand" onClick={this.cancelCourse}>
                         <FontAwesomeIcon icon="trash-alt" />
                         &nbsp;
-                        <Translate contentKey="entity.validation.clean">Clean</Translate>
+                        <Translate contentKey="generadorApp.vwApiAtendimentosAceite.home.btn_filter_clean">Clean</Translate>
                       </div>
                     </div>
                   </AvForm>

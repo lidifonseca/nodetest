@@ -38,6 +38,7 @@ export interface IAcaoBaseState {
 
 export interface IAcaoUpdateState {
   fieldsBase: IAcaoBaseState;
+
   isNew: boolean;
 }
 

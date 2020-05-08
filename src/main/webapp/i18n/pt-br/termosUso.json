@@ -1,8 +1,14 @@
 {
   "generadorApp": {
     "termosUso": {
+      "listButtons": {},
+      "viewButtons": {},
+      "dropdown_btn": "Actions",
       "home": {
         "title": "Termos Usos",
+        "btn_filter": "Filtrar",
+        "btn_filter_clean": "Limpar Filtros",
+        "btn_filter_open": "Filtros",
         "createLabel": "Criar novo Termos Uso",
         "createOrEditLabel": "Criar ou editar Termos Uso",
         "notFound": "Nenhum Termos Uso encontrado"

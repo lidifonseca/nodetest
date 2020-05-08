@@ -42,6 +42,7 @@ export interface IApiReturnBaseState {
 
 export interface IApiReturnUpdateState {
   fieldsBase: IApiReturnBaseState;
+
   isNew: boolean;
 }
 

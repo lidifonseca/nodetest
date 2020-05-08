@@ -56,6 +56,7 @@ export interface IEmpresaBaseState {
 
 export interface IEmpresaUpdateState {
   fieldsBase: IEmpresaBaseState;
+
   isNew: boolean;
 }
 

@@ -1,8 +1,14 @@
 {
   "generadorApp": {
     "grupoRisco": {
+      "listButtons": {},
+      "viewButtons": {},
+      "dropdown_btn": "Actions",
       "home": {
         "title": "Grupo Riscos",
+        "btn_filter": "Filtrar",
+        "btn_filter_clean": "Limpar Filtros",
+        "btn_filter_open": "Filtros",
         "createLabel": "Criar novo Grupo Risco",
         "createOrEditLabel": "Criar ou editar Grupo Risco",
         "notFound": "Nenhum Grupo Risco encontrado"

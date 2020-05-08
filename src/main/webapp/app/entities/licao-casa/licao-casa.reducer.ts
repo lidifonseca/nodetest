@@ -53,6 +53,7 @@ export interface ILicaoCasaBaseState {
 
 export interface ILicaoCasaUpdateState {
   fieldsBase: ILicaoCasaBaseState;
+
   isNew: boolean;
 }
 

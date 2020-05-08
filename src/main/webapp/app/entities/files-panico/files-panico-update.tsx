@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import Select from 'react-select';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 import { Button, Row, Col, Label } from 'reactstrap';
@@ -48,20 +49,11 @@ export class FilesPanicoUpdate extends React.Component<IFilesPanicoUpdateProps, 
 
   getFiltersURL = (offset = null) => {
     const fieldsBase = this.state.fieldsBase;
-    return (
-      '_back=1' +
-      (fieldsBase['baseFilters'] ? '&baseFilters=' + fieldsBase['baseFilters'] : '') +
-      (fieldsBase['activePage'] ? '&page=' + fieldsBase['activePage'] : '') +
-      (fieldsBase['itemsPerPage'] ? '&size=' + fieldsBase['itemsPerPage'] : '') +
-      (fieldsBase['sort'] ? '&sort=' + (fieldsBase['sort'] + ',' + fieldsBase['order']) : '') +
-      (offset !== null ? '&offset=' + offset : '') +
-      (fieldsBase['idPanico'] ? '&idPanico=' + fieldsBase['idPanico'] : '') +
-      (fieldsBase['idPaciente'] ? '&idPaciente=' + fieldsBase['idPaciente'] : '') +
-      (fieldsBase['tipo'] ? '&tipo=' + fieldsBase['tipo'] : '') +
-      (fieldsBase['imagem'] ? '&imagem=' + fieldsBase['imagem'] : '') +
-      (fieldsBase['criadoEm'] ? '&criadoEm=' + fieldsBase['criadoEm'] : '') +
-      ''
-    );
+    let url = '_back=1' + (offset !== null ? '&offset=' + offset : '');
+    Object.keys(fieldsBase).map(key => {
+      url += '&' + key + '=' + fieldsBase[key];
+    });
+    return url;
   };
   saveEntity = (event: any, errors: any, values: any) => {
     values.criadoEm = convertDateTimeToServer(values.criadoEm);
@@ -70,6 +62,7 @@ export class FilesPanicoUpdate extends React.Component<IFilesPanicoUpdateProps, 
       const { filesPanicoEntity } = this.props;
       const entity = {
         ...filesPanicoEntity,
+
         ...values
       };
 
@@ -92,14 +85,6 @@ export class FilesPanicoUpdate extends React.Component<IFilesPanicoUpdateProps, 
     const baseFilters = this.state.fieldsBase && this.state.fieldsBase['baseFilters'] ? this.state.fieldsBase['baseFilters'] : null;
     return (
       <div>
-        <ol className="breadcrumb float-xl-right">
-          <li className="breadcrumb-item">
-            <Link to="/">Inicio</Link>
-          </li>
-          <li className="breadcrumb-item active">Files Panicos</li>
-          <li className="breadcrumb-item active">Files Panicos edit</li>
-        </ol>
-        <h1 className="page-header">&nbsp;&nbsp;</h1>
         <AvForm
           model={
             isNew
@@ -110,34 +95,40 @@ export class FilesPanicoUpdate extends React.Component<IFilesPanicoUpdateProps, 
           }
           onSubmit={this.saveEntity}
         >
-          <Panel>
-            <PanelHeader>
-              <h2 id="page-heading">
-                <span className="page-header ml-3">
-                  <Translate contentKey="generadorApp.filesPanico.home.createOrEditLabel">Create or edit a FilesPanico</Translate>
-                </span>
+          <h2 id="page-heading">
+            <span className="page-header ml-3">
+              <Translate contentKey="generadorApp.filesPanico.home.createOrEditLabel">Create or edit a FilesPanico</Translate>
+            </span>
 
-                <Button color="primary" id="save-entity" type="submit" disabled={updating} className="float-right jh-create-entity">
-                  <FontAwesomeIcon icon="save" />
-                  &nbsp;
-                  <Translate contentKey="entity.action.save">Save</Translate>
-                </Button>
-                <Button
-                  tag={Link}
-                  id="cancel-save"
-                  to={'/files-panico?' + this.getFiltersURL()}
-                  replace
-                  color="info"
-                  className="float-right jh-create-entity"
-                >
-                  <FontAwesomeIcon icon="arrow-left" />
-                  &nbsp;
-                  <span className="d-none d-md-inline">
-                    <Translate contentKey="entity.action.back">Back</Translate>
-                  </span>
-                </Button>
-              </h2>
-            </PanelHeader>
+            <Button color="primary" id="save-entity" type="submit" disabled={updating} className="float-right jh-create-entity">
+              <FontAwesomeIcon icon="save" />
+              &nbsp;
+              <Translate contentKey="entity.action.save">Save</Translate>
+            </Button>
+            <Button
+              tag={Link}
+              id="cancel-save"
+              to={'/files-panico?' + this.getFiltersURL()}
+              replace
+              color="info"
+              className="float-right jh-create-entity"
+            >
+              <FontAwesomeIcon icon="arrow-left" />
+              &nbsp;
+              <span className="d-none d-md-inline">
+                <Translate contentKey="entity.action.back">Back</Translate>
+              </span>
+            </Button>
+          </h2>
+          <ol className="breadcrumb">
+            <li className="breadcrumb-item">
+              <Link to="/">Inicio</Link>
+            </li>
+            <li className="breadcrumb-item active">Files Panicos</li>
+            <li className="breadcrumb-item active">Files Panicos edit</li>
+          </ol>
+
+          <Panel>
             <PanelBody>
               <Row className="justify-content-center">
                 <Col md="8">
@@ -161,110 +152,15 @@ export class FilesPanicoUpdate extends React.Component<IFilesPanicoUpdateProps, 
                         </AvGroup>
                       ) : null}
                       <Row>
-                        {baseFilters !== 'idPanico' ? (
-                          <Col md="idPanico">
-                            <AvGroup>
-                              <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="idPanicoLabel" for="files-panico-idPanico">
-                                    <Translate contentKey="generadorApp.filesPanico.idPanico">Id Panico</Translate>
-                                  </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField id="files-panico-idPanico" type="string" className="form-control" name="idPanico" />
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
-                        ) : (
-                          <AvInput type="hidden" name="idPanico" value={this.state.fieldsBase[baseFilters]} />
-                        )}
+                        <IdPanicoComponentUpdate baseFilters />
 
-                        {baseFilters !== 'idPaciente' ? (
-                          <Col md="idPaciente">
-                            <AvGroup>
-                              <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="idPacienteLabel" for="files-panico-idPaciente">
-                                    <Translate contentKey="generadorApp.filesPanico.idPaciente">Id Paciente</Translate>
-                                  </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField id="files-panico-idPaciente" type="string" className="form-control" name="idPaciente" />
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
-                        ) : (
-                          <AvInput type="hidden" name="idPaciente" value={this.state.fieldsBase[baseFilters]} />
-                        )}
+                        <IdPacienteComponentUpdate baseFilters />
 
-                        {baseFilters !== 'tipo' ? (
-                          <Col md="tipo">
-                            <AvGroup>
-                              <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="tipoLabel" for="files-panico-tipo">
-                                    <Translate contentKey="generadorApp.filesPanico.tipo">Tipo</Translate>
-                                  </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField id="files-panico-tipo" type="text" name="tipo" />
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
-                        ) : (
-                          <AvInput type="hidden" name="tipo" value={this.state.fieldsBase[baseFilters]} />
-                        )}
+                        <TipoComponentUpdate baseFilters />
 
-                        {baseFilters !== 'imagem' ? (
-                          <Col md="imagem">
-                            <AvGroup>
-                              <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="imagemLabel" for="files-panico-imagem">
-                                    <Translate contentKey="generadorApp.filesPanico.imagem">Imagem</Translate>
-                                  </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField id="files-panico-imagem" type="text" name="imagem" />
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
-                        ) : (
-                          <AvInput type="hidden" name="imagem" value={this.state.fieldsBase[baseFilters]} />
-                        )}
+                        <ImagemComponentUpdate baseFilters />
 
-                        {baseFilters !== 'criadoEm' ? (
-                          <Col md="criadoEm">
-                            <AvGroup>
-                              <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="criadoEmLabel" for="files-panico-criadoEm">
-                                    <Translate contentKey="generadorApp.filesPanico.criadoEm">Criado Em</Translate>
-                                  </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvInput
-                                    id="files-panico-criadoEm"
-                                    type="datetime-local"
-                                    className="form-control"
-                                    name="criadoEm"
-                                    placeholder={'YYYY-MM-DD HH:mm'}
-                                    value={isNew ? null : convertDateTimeFromServer(this.props.filesPanicoEntity.criadoEm)}
-                                    validate={{
-                                      required: { value: true, errorMessage: translate('entity.validation.required') }
-                                    }}
-                                  />
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
-                        ) : (
-                          <AvInput type="hidden" name="criadoEm" value={this.state.fieldsBase[baseFilters]} />
-                        )}
+                        <CriadoEmComponentUpdate baseFilters />
                       </Row>
                     </div>
                   )}
@@ -294,5 +190,120 @@ const mapDispatchToProps = {
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
+
+const IdPanicoComponentUpdate = ({ baseFilters }) => {
+  return baseFilters !== 'idPanico' ? (
+    <Col md="idPanico">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" id="idPanicoLabel" for="files-panico-idPanico">
+              <Translate contentKey="generadorApp.filesPanico.idPanico">Id Panico</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <AvField id="files-panico-idPanico" type="string" className="form-control" name="idPanico" />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="idPanico" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const IdPacienteComponentUpdate = ({ baseFilters }) => {
+  return baseFilters !== 'idPaciente' ? (
+    <Col md="idPaciente">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" id="idPacienteLabel" for="files-panico-idPaciente">
+              <Translate contentKey="generadorApp.filesPanico.idPaciente">Id Paciente</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <AvField id="files-panico-idPaciente" type="string" className="form-control" name="idPaciente" />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="idPaciente" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const TipoComponentUpdate = ({ baseFilters }) => {
+  return baseFilters !== 'tipo' ? (
+    <Col md="tipo">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" id="tipoLabel" for="files-panico-tipo">
+              <Translate contentKey="generadorApp.filesPanico.tipo">Tipo</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <AvField id="files-panico-tipo" type="text" name="tipo" />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="tipo" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const ImagemComponentUpdate = ({ baseFilters }) => {
+  return baseFilters !== 'imagem' ? (
+    <Col md="imagem">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" id="imagemLabel" for="files-panico-imagem">
+              <Translate contentKey="generadorApp.filesPanico.imagem">Imagem</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <AvField id="files-panico-imagem" type="text" name="imagem" />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="imagem" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const CriadoEmComponentUpdate = ({ baseFilters }) => {
+  return baseFilters !== 'criadoEm' ? (
+    <Col md="criadoEm">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" id="criadoEmLabel" for="files-panico-criadoEm">
+              <Translate contentKey="generadorApp.filesPanico.criadoEm">Criado Em</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <AvInput
+              id="files-panico-criadoEm"
+              type="datetime-local"
+              className="form-control"
+              name="criadoEm"
+              placeholder={'YYYY-MM-DD HH:mm'}
+              value={isNew ? null : convertDateTimeFromServer(this.props.filesPanicoEntity.criadoEm)}
+              validate={{
+                required: { value: true, errorMessage: translate('entity.validation.required') }
+              }}
+            />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="criadoEm" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(FilesPanicoUpdate);

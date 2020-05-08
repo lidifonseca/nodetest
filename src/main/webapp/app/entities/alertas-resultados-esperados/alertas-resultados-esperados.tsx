@@ -2,6 +2,7 @@
 import React from 'react';
 import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
 import { connect } from 'react-redux';
+import Select from 'react-select';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import {
   Button,
@@ -134,34 +135,35 @@ export class AlertasResultadosEsperados extends React.Component<IAlertasResultad
     const { alertasResultadosEsperadosList, match, totalItems } = this.props;
     return (
       <div>
-        <ol className="breadcrumb float-xl-right">
+        <h2 id="page-heading">
+          <span className="page-header">Alertas Resultados Esperados</span>
+          <Button id="togglerFilterAlertasResultadosEsperados" className="btn btn-primary float-right jh-create-entity">
+            <Translate contentKey="generadorApp.alertasResultadosEsperados.home.btn_filter_open">Filters</Translate>
+            &nbsp;
+            <FontAwesomeIcon icon="caret-down" />
+          </Button>{' '}
+          &nbsp;
+          <Link
+            to={`${match.url}/new?${this.getFiltersURL()}`}
+            className="btn btn-primary float-right jh-create-entity"
+            id="jh-create-entity"
+          >
+            <FontAwesomeIcon icon="plus" />
+            &nbsp;
+            <Translate contentKey="generadorApp.alertasResultadosEsperados.home.createLabel">
+              Create a new Alertas Resultados Esperados
+            </Translate>
+          </Link>{' '}
+          &nbsp;
+        </h2>
+
+        <ol className="breadcrumb">
           <li className="breadcrumb-item">
             <Link to="/">Inicio</Link>
           </li>
           <li className="breadcrumb-item active">Alertas Resultados Esperados</li>
         </ol>
-        <h1 className="page-header">&nbsp;&nbsp;</h1>
         <Panel>
-          <PanelHeader>
-            <h2 id="page-heading">
-              <span className="page-header ml-3">Alertas Resultados Esperados</span>
-              <Button id="togglerFilterAlertasResultadosEsperados" className="btn btn-primary float-right jh-create-entity">
-                Filtros&nbsp;
-                <FontAwesomeIcon icon="caret-down" />
-              </Button>
-              <Link
-                to={`${match.url}/new?${this.getFiltersURL()}`}
-                className="btn btn-primary float-right jh-create-entity"
-                id="jh-create-entity"
-              >
-                <FontAwesomeIcon icon="plus" />
-                &nbsp;
-                <Translate contentKey="generadorApp.alertasResultadosEsperados.home.createLabel">
-                  Create a new Alertas Resultados Esperados
-                </Translate>
-              </Link>
-            </h2>
-          </PanelHeader>
           <PanelBody>
             <div className="table-responsive">
               <UncontrolledCollapse toggler="#togglerFilterAlertasResultadosEsperados">
@@ -170,7 +172,7 @@ export class AlertasResultadosEsperados extends React.Component<IAlertasResultad
                     <div className="row mt-1 ml-3 mr-3">
                       {this.state.baseFilters !== 'pontuacao' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="pontuacaoLabel" for="alertas-resultados-esperados-pontuacao">
                               <Translate contentKey="generadorApp.alertasResultadosEsperados.pontuacao">Pontuacao</Translate>
                             </Label>
@@ -186,7 +188,7 @@ export class AlertasResultadosEsperados extends React.Component<IAlertasResultad
 
                       {this.state.baseFilters !== 'alteracaoEsperada' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="alteracaoEsperadaLabel" check>
                               <AvInput
                                 id="alertas-resultados-esperados-alteracaoEsperada"
@@ -204,7 +206,7 @@ export class AlertasResultadosEsperados extends React.Component<IAlertasResultad
 
                       {this.state.baseFilters !== 'observacoes' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="observacoesLabel" for="alertas-resultados-esperados-observacoes">
                               <Translate contentKey="generadorApp.alertasResultadosEsperados.observacoes">Observacoes</Translate>
                             </Label>
@@ -221,7 +223,7 @@ export class AlertasResultadosEsperados extends React.Component<IAlertasResultad
 
                       {this.state.baseFilters !== 'usuarioId' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="usuarioIdLabel" for="alertas-resultados-esperados-usuarioId">
                               <Translate contentKey="generadorApp.alertasResultadosEsperados.usuarioId">Usuario Id</Translate>
                             </Label>
@@ -237,7 +239,7 @@ export class AlertasResultadosEsperados extends React.Component<IAlertasResultad
 
                       {this.state.baseFilters !== 'valor' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="valorLabel" for="alertas-resultados-esperados-valor">
                               <Translate contentKey="generadorApp.alertasResultadosEsperados.valor">Valor</Translate>
                             </Label>
@@ -251,13 +253,13 @@ export class AlertasResultadosEsperados extends React.Component<IAlertasResultad
                       <Button className="btn btn-success" type="submit">
                         <i className="fa fa-filter" aria-hidden={'true'}></i>
                         &nbsp;
-                        <Translate contentKey="entity.validation.filter">Filter</Translate>
+                        <Translate contentKey="generadorApp.alertasResultadosEsperados.home.btn_filter">Filter</Translate>
                       </Button>
                       &nbsp;
                       <div className="btn btn-secondary hand" onClick={this.cancelCourse}>
                         <FontAwesomeIcon icon="trash-alt" />
                         &nbsp;
-                        <Translate contentKey="entity.validation.clean">Clean</Translate>
+                        <Translate contentKey="generadorApp.alertasResultadosEsperados.home.btn_filter_clean">Clean</Translate>
                       </div>
                     </div>
                   </AvForm>

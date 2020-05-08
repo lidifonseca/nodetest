@@ -1,8 +1,14 @@
 {
   "generadorApp": {
     "diarioTags": {
+      "listButtons": {},
+      "viewButtons": {},
+      "dropdown_btn": "Ações",
       "home": {
         "title": "Diario Tags",
+        "btn_filter": "Filter",
+        "btn_filter_clean": "Clean Filters",
+        "btn_filter_open": "Filters",
         "createLabel": "Create a new Diario Tags",
         "createOrEditLabel": "Create or edit a Diario Tags",
         "notFound": "No Diario Tags found"

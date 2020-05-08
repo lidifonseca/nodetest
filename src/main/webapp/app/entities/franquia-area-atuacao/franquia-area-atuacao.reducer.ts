@@ -40,6 +40,7 @@ export interface IFranquiaAreaAtuacaoBaseState {
 
 export interface IFranquiaAreaAtuacaoUpdateState {
   fieldsBase: IFranquiaAreaAtuacaoBaseState;
+
   isNew: boolean;
 }
 

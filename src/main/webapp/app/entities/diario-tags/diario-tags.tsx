@@ -2,6 +2,7 @@
 import React from 'react';
 import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
 import { connect } from 'react-redux';
+import Select from 'react-select';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import {
   Button,
@@ -126,32 +127,33 @@ export class DiarioTags extends React.Component<IDiarioTagsProps, IDiarioTagsSta
     const { diarioTagsList, match, totalItems } = this.props;
     return (
       <div>
-        <ol className="breadcrumb float-xl-right">
+        <h2 id="page-heading">
+          <span className="page-header">Diario Tags</span>
+          <Button id="togglerFilterDiarioTags" className="btn btn-primary float-right jh-create-entity">
+            <Translate contentKey="generadorApp.diarioTags.home.btn_filter_open">Filters</Translate>
+            &nbsp;
+            <FontAwesomeIcon icon="caret-down" />
+          </Button>{' '}
+          &nbsp;
+          <Link
+            to={`${match.url}/new?${this.getFiltersURL()}`}
+            className="btn btn-primary float-right jh-create-entity"
+            id="jh-create-entity"
+          >
+            <FontAwesomeIcon icon="plus" />
+            &nbsp;
+            <Translate contentKey="generadorApp.diarioTags.home.createLabel">Create a new Diario Tags</Translate>
+          </Link>{' '}
+          &nbsp;
+        </h2>
+
+        <ol className="breadcrumb">
           <li className="breadcrumb-item">
             <Link to="/">Inicio</Link>
           </li>
           <li className="breadcrumb-item active">Diario Tags</li>
         </ol>
-        <h1 className="page-header">&nbsp;&nbsp;</h1>
         <Panel>
-          <PanelHeader>
-            <h2 id="page-heading">
-              <span className="page-header ml-3">Diario Tags</span>
-              <Button id="togglerFilterDiarioTags" className="btn btn-primary float-right jh-create-entity">
-                Filtros&nbsp;
-                <FontAwesomeIcon icon="caret-down" />
-              </Button>
-              <Link
-                to={`${match.url}/new?${this.getFiltersURL()}`}
-                className="btn btn-primary float-right jh-create-entity"
-                id="jh-create-entity"
-              >
-                <FontAwesomeIcon icon="plus" />
-                &nbsp;
-                <Translate contentKey="generadorApp.diarioTags.home.createLabel">Create a new Diario Tags</Translate>
-              </Link>
-            </h2>
-          </PanelHeader>
           <PanelBody>
             <div className="table-responsive">
               <UncontrolledCollapse toggler="#togglerFilterDiarioTags">
@@ -160,7 +162,7 @@ export class DiarioTags extends React.Component<IDiarioTagsProps, IDiarioTagsSta
                     <div className="row mt-1 ml-3 mr-3">
                       {this.state.baseFilters !== 'nome' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="nomeLabel" for="diario-tags-nome">
                               <Translate contentKey="generadorApp.diarioTags.nome">Nome</Translate>
                             </Label>
@@ -172,7 +174,7 @@ export class DiarioTags extends React.Component<IDiarioTagsProps, IDiarioTagsSta
 
                       {this.state.baseFilters !== 'idPai' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="idPaiLabel" for="diario-tags-idPai">
                               <Translate contentKey="generadorApp.diarioTags.idPai">Id Pai</Translate>
                             </Label>
@@ -183,7 +185,7 @@ export class DiarioTags extends React.Component<IDiarioTagsProps, IDiarioTagsSta
 
                       {this.state.baseFilters !== 'nomeId' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="nomeIdLabel" for="diario-tags-nomeId">
                               <Translate contentKey="generadorApp.diarioTags.nomeId">Nome Id</Translate>
                             </Label>
@@ -195,7 +197,7 @@ export class DiarioTags extends React.Component<IDiarioTagsProps, IDiarioTagsSta
 
                       {this.state.baseFilters !== 'ativo' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="ativoLabel" for="diario-tags-ativo">
                               <Translate contentKey="generadorApp.diarioTags.ativo">Ativo</Translate>
                             </Label>
@@ -209,13 +211,13 @@ export class DiarioTags extends React.Component<IDiarioTagsProps, IDiarioTagsSta
                       <Button className="btn btn-success" type="submit">
                         <i className="fa fa-filter" aria-hidden={'true'}></i>
                         &nbsp;
-                        <Translate contentKey="entity.validation.filter">Filter</Translate>
+                        <Translate contentKey="generadorApp.diarioTags.home.btn_filter">Filter</Translate>
                       </Button>
                       &nbsp;
                       <div className="btn btn-secondary hand" onClick={this.cancelCourse}>
                         <FontAwesomeIcon icon="trash-alt" />
                         &nbsp;
-                        <Translate contentKey="entity.validation.clean">Clean</Translate>
+                        <Translate contentKey="generadorApp.diarioTags.home.btn_filter_clean">Clean</Translate>
                       </div>
                     </div>
                   </AvForm>

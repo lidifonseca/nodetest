@@ -1,8 +1,14 @@
 {
   "generadorApp": {
     "especialidadeUnidade": {
+      "listButtons": {},
+      "viewButtons": {},
+      "dropdown_btn": "Actions",
       "home": {
         "title": "Especialidade Unidades",
+        "btn_filter": "Filtrar",
+        "btn_filter_clean": "Limpar Filtros",
+        "btn_filter_open": "Filtros",
         "createLabel": "Criar novo Especialidade Unidade",
         "createOrEditLabel": "Criar ou editar Especialidade Unidade",
         "notFound": "Nenhum Especialidade Unidade encontrado"
@@ -21,6 +27,7 @@
       "valorPagar": "Valor Pagar",
       "publicar": "Publicar",
       "comentarioPreco": "Comentario Preco",
+      "unidade_empty": "Sem Unidade",
       "unidade": "Unidade"
     }
   }

@@ -39,6 +39,7 @@ export interface IPeriodicidadeBaseState {
 
 export interface IPeriodicidadeUpdateState {
   fieldsBase: IPeriodicidadeBaseState;
+
   isNew: boolean;
 }
 

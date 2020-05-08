@@ -1,8 +1,14 @@
 {
   "generadorApp": {
     "logPacAcesso": {
+      "listButtons": {},
+      "viewButtons": {},
+      "dropdown_btn": "Actions",
       "home": {
         "title": "Log Pac Acessos",
+        "btn_filter": "Filtrar",
+        "btn_filter_clean": "Limpar Filtros",
+        "btn_filter_open": "Filtros",
         "createLabel": "Criar novo Log Pac Acesso",
         "createOrEditLabel": "Criar ou editar Log Pac Acesso",
         "notFound": "Nenhum Log Pac Acesso encontrado"

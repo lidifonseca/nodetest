@@ -17,7 +17,7 @@
         }
     ],
     "relationships": [],
-    "changelogDate": "20200507114100",
+    "changelogDate": "20200508163100",
     "entityTableName": "paciente_motivo_internacao",
     "dto": "mapstruct",
     "pagination": "pagination",

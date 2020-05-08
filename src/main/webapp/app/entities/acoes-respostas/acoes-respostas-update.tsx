@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import Select from 'react-select';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 import { Button, Row, Col, Label } from 'reactstrap';
@@ -48,26 +49,18 @@ export class AcoesRespostasUpdate extends React.Component<IAcoesRespostasUpdateP
 
   getFiltersURL = (offset = null) => {
     const fieldsBase = this.state.fieldsBase;
-    return (
-      '_back=1' +
-      (fieldsBase['baseFilters'] ? '&baseFilters=' + fieldsBase['baseFilters'] : '') +
-      (fieldsBase['activePage'] ? '&page=' + fieldsBase['activePage'] : '') +
-      (fieldsBase['itemsPerPage'] ? '&size=' + fieldsBase['itemsPerPage'] : '') +
-      (fieldsBase['sort'] ? '&sort=' + (fieldsBase['sort'] + ',' + fieldsBase['order']) : '') +
-      (offset !== null ? '&offset=' + offset : '') +
-      (fieldsBase['abrirCampoPersonalizado'] ? '&abrirCampoPersonalizado=' + fieldsBase['abrirCampoPersonalizado'] : '') +
-      (fieldsBase['condicaoSexo'] ? '&condicaoSexo=' + fieldsBase['condicaoSexo'] : '') +
-      (fieldsBase['observacoes'] ? '&observacoes=' + fieldsBase['observacoes'] : '') +
-      (fieldsBase['tipoCampo1'] ? '&tipoCampo1=' + fieldsBase['tipoCampo1'] : '') +
-      (fieldsBase['tipoCampo2'] ? '&tipoCampo2=' + fieldsBase['tipoCampo2'] : '') +
-      ''
-    );
+    let url = '_back=1' + (offset !== null ? '&offset=' + offset : '');
+    Object.keys(fieldsBase).map(key => {
+      url += '&' + key + '=' + fieldsBase[key];
+    });
+    return url;
   };
   saveEntity = (event: any, errors: any, values: any) => {
     if (errors.length === 0) {
       const { acoesRespostasEntity } = this.props;
       const entity = {
         ...acoesRespostasEntity,
+
         ...values
       };
 
@@ -90,14 +83,6 @@ export class AcoesRespostasUpdate extends React.Component<IAcoesRespostasUpdateP
     const baseFilters = this.state.fieldsBase && this.state.fieldsBase['baseFilters'] ? this.state.fieldsBase['baseFilters'] : null;
     return (
       <div>
-        <ol className="breadcrumb float-xl-right">
-          <li className="breadcrumb-item">
-            <Link to="/">Inicio</Link>
-          </li>
-          <li className="breadcrumb-item active">Acoes Respostas</li>
-          <li className="breadcrumb-item active">Acoes Respostas edit</li>
-        </ol>
-        <h1 className="page-header">&nbsp;&nbsp;</h1>
         <AvForm
           model={
             isNew
@@ -108,34 +93,40 @@ export class AcoesRespostasUpdate extends React.Component<IAcoesRespostasUpdateP
           }
           onSubmit={this.saveEntity}
         >
-          <Panel>
-            <PanelHeader>
-              <h2 id="page-heading">
-                <span className="page-header ml-3">
-                  <Translate contentKey="generadorApp.acoesRespostas.home.createOrEditLabel">Create or edit a AcoesRespostas</Translate>
-                </span>
+          <h2 id="page-heading">
+            <span className="page-header ml-3">
+              <Translate contentKey="generadorApp.acoesRespostas.home.createOrEditLabel">Create or edit a AcoesRespostas</Translate>
+            </span>
 
-                <Button color="primary" id="save-entity" type="submit" disabled={updating} className="float-right jh-create-entity">
-                  <FontAwesomeIcon icon="save" />
-                  &nbsp;
-                  <Translate contentKey="entity.action.save">Save</Translate>
-                </Button>
-                <Button
-                  tag={Link}
-                  id="cancel-save"
-                  to={'/acoes-respostas?' + this.getFiltersURL()}
-                  replace
-                  color="info"
-                  className="float-right jh-create-entity"
-                >
-                  <FontAwesomeIcon icon="arrow-left" />
-                  &nbsp;
-                  <span className="d-none d-md-inline">
-                    <Translate contentKey="entity.action.back">Back</Translate>
-                  </span>
-                </Button>
-              </h2>
-            </PanelHeader>
+            <Button color="primary" id="save-entity" type="submit" disabled={updating} className="float-right jh-create-entity">
+              <FontAwesomeIcon icon="save" />
+              &nbsp;
+              <Translate contentKey="entity.action.save">Save</Translate>
+            </Button>
+            <Button
+              tag={Link}
+              id="cancel-save"
+              to={'/acoes-respostas?' + this.getFiltersURL()}
+              replace
+              color="info"
+              className="float-right jh-create-entity"
+            >
+              <FontAwesomeIcon icon="arrow-left" />
+              &nbsp;
+              <span className="d-none d-md-inline">
+                <Translate contentKey="entity.action.back">Back</Translate>
+              </span>
+            </Button>
+          </h2>
+          <ol className="breadcrumb">
+            <li className="breadcrumb-item">
+              <Link to="/">Inicio</Link>
+            </li>
+            <li className="breadcrumb-item active">Acoes Respostas</li>
+            <li className="breadcrumb-item active">Acoes Respostas edit</li>
+          </ol>
+
+          <Panel>
             <PanelBody>
               <Row className="justify-content-center">
                 <Col md="8">
@@ -159,105 +150,15 @@ export class AcoesRespostasUpdate extends React.Component<IAcoesRespostasUpdateP
                         </AvGroup>
                       ) : null}
                       <Row>
-                        {baseFilters !== 'abrirCampoPersonalizado' ? (
-                          <Col md="abrirCampoPersonalizado">
-                            <AvGroup>
-                              <Row>
-                                <Col md="12">
-                                  <Label className="mt-2" id="abrirCampoPersonalizadoLabel" check>
-                                    <AvInput
-                                      id="acoes-respostas-abrirCampoPersonalizado"
-                                      type="checkbox"
-                                      className="form-control"
-                                      name="abrirCampoPersonalizado"
-                                    />
-                                    <Translate contentKey="generadorApp.acoesRespostas.abrirCampoPersonalizado">
-                                      Abrir Campo Personalizado
-                                    </Translate>
-                                  </Label>
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
-                        ) : (
-                          <AvInput type="hidden" name="abrirCampoPersonalizado" value={this.state.fieldsBase[baseFilters]} />
-                        )}
+                        <AbrirCampoPersonalizadoComponentUpdate baseFilters />
 
-                        {baseFilters !== 'condicaoSexo' ? (
-                          <Col md="condicaoSexo">
-                            <AvGroup>
-                              <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="condicaoSexoLabel" for="acoes-respostas-condicaoSexo">
-                                    <Translate contentKey="generadorApp.acoesRespostas.condicaoSexo">Condicao Sexo</Translate>
-                                  </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField id="acoes-respostas-condicaoSexo" type="text" name="condicaoSexo" />
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
-                        ) : (
-                          <AvInput type="hidden" name="condicaoSexo" value={this.state.fieldsBase[baseFilters]} />
-                        )}
+                        <CondicaoSexoComponentUpdate baseFilters />
 
-                        {baseFilters !== 'observacoes' ? (
-                          <Col md="observacoes">
-                            <AvGroup>
-                              <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="observacoesLabel" for="acoes-respostas-observacoes">
-                                    <Translate contentKey="generadorApp.acoesRespostas.observacoes">Observacoes</Translate>
-                                  </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField id="acoes-respostas-observacoes" type="text" name="observacoes" />
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
-                        ) : (
-                          <AvInput type="hidden" name="observacoes" value={this.state.fieldsBase[baseFilters]} />
-                        )}
+                        <ObservacoesComponentUpdate baseFilters />
 
-                        {baseFilters !== 'tipoCampo1' ? (
-                          <Col md="tipoCampo1">
-                            <AvGroup>
-                              <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="tipoCampo1Label" for="acoes-respostas-tipoCampo1">
-                                    <Translate contentKey="generadorApp.acoesRespostas.tipoCampo1">Tipo Campo 1</Translate>
-                                  </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField id="acoes-respostas-tipoCampo1" type="text" name="tipoCampo1" />
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
-                        ) : (
-                          <AvInput type="hidden" name="tipoCampo1" value={this.state.fieldsBase[baseFilters]} />
-                        )}
+                        <TipoCampo1ComponentUpdate baseFilters />
 
-                        {baseFilters !== 'tipoCampo2' ? (
-                          <Col md="tipoCampo2">
-                            <AvGroup>
-                              <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="tipoCampo2Label" for="acoes-respostas-tipoCampo2">
-                                    <Translate contentKey="generadorApp.acoesRespostas.tipoCampo2">Tipo Campo 2</Translate>
-                                  </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField id="acoes-respostas-tipoCampo2" type="text" name="tipoCampo2" />
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
-                        ) : (
-                          <AvInput type="hidden" name="tipoCampo2" value={this.state.fieldsBase[baseFilters]} />
-                        )}
+                        <TipoCampo2ComponentUpdate baseFilters />
                       </Row>
                     </div>
                   )}
@@ -287,5 +188,113 @@ const mapDispatchToProps = {
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
+
+const AbrirCampoPersonalizadoComponentUpdate = ({ baseFilters }) => {
+  return baseFilters !== 'abrirCampoPersonalizado' ? (
+    <Col md="abrirCampoPersonalizado">
+      <AvGroup>
+        <Row>
+          <Col md="12">
+            <Label className="mt-2" id="abrirCampoPersonalizadoLabel" check>
+              <AvInput
+                id="acoes-respostas-abrirCampoPersonalizado"
+                type="checkbox"
+                className="form-control"
+                name="abrirCampoPersonalizado"
+              />
+              <Translate contentKey="generadorApp.acoesRespostas.abrirCampoPersonalizado">Abrir Campo Personalizado</Translate>
+            </Label>
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="abrirCampoPersonalizado" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const CondicaoSexoComponentUpdate = ({ baseFilters }) => {
+  return baseFilters !== 'condicaoSexo' ? (
+    <Col md="condicaoSexo">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" id="condicaoSexoLabel" for="acoes-respostas-condicaoSexo">
+              <Translate contentKey="generadorApp.acoesRespostas.condicaoSexo">Condicao Sexo</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <AvField id="acoes-respostas-condicaoSexo" type="text" name="condicaoSexo" />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="condicaoSexo" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const ObservacoesComponentUpdate = ({ baseFilters }) => {
+  return baseFilters !== 'observacoes' ? (
+    <Col md="observacoes">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" id="observacoesLabel" for="acoes-respostas-observacoes">
+              <Translate contentKey="generadorApp.acoesRespostas.observacoes">Observacoes</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <AvField id="acoes-respostas-observacoes" type="text" name="observacoes" />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="observacoes" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const TipoCampo1ComponentUpdate = ({ baseFilters }) => {
+  return baseFilters !== 'tipoCampo1' ? (
+    <Col md="tipoCampo1">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" id="tipoCampo1Label" for="acoes-respostas-tipoCampo1">
+              <Translate contentKey="generadorApp.acoesRespostas.tipoCampo1">Tipo Campo 1</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <AvField id="acoes-respostas-tipoCampo1" type="text" name="tipoCampo1" />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="tipoCampo1" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const TipoCampo2ComponentUpdate = ({ baseFilters }) => {
+  return baseFilters !== 'tipoCampo2' ? (
+    <Col md="tipoCampo2">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" id="tipoCampo2Label" for="acoes-respostas-tipoCampo2">
+              <Translate contentKey="generadorApp.acoesRespostas.tipoCampo2">Tipo Campo 2</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <AvField id="acoes-respostas-tipoCampo2" type="text" name="tipoCampo2" />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="tipoCampo2" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(AcoesRespostasUpdate);

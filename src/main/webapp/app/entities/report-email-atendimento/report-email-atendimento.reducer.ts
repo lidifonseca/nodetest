@@ -39,6 +39,7 @@ export interface IReportEmailAtendimentoBaseState {
 
 export interface IReportEmailAtendimentoUpdateState {
   fieldsBase: IReportEmailAtendimentoBaseState;
+
   isNew: boolean;
 }
 

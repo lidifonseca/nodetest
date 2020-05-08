@@ -31,7 +31,7 @@
         }
     ],
     "relationships": [],
-    "changelogDate": "20200507113100",
+    "changelogDate": "20200508162100",
     "entityTableName": "paciente_dados_cartao",
     "dto": "mapstruct",
     "pagination": "pagination",

@@ -11,7 +11,7 @@
         }
     ],
     "relationships": [],
-    "changelogDate": "20200507103500",
+    "changelogDate": "20200508152500",
     "entityTableName": "atendimento_assinaturas",
     "dto": "mapstruct",
     "pagination": "pagination",

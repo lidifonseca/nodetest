@@ -2,6 +2,7 @@
 import React from 'react';
 import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
 import { connect } from 'react-redux';
+import Select from 'react-select';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import {
   Button,
@@ -254,32 +255,33 @@ export class PadItemMeta extends React.Component<IPadItemMetaProps, IPadItemMeta
     const { padItemMetaList, match, totalItems } = this.props;
     return (
       <div>
-        <ol className="breadcrumb float-xl-right">
+        <h2 id="page-heading">
+          <span className="page-header">Pad Item Metas</span>
+          <Button id="togglerFilterPadItemMeta" className="btn btn-primary float-right jh-create-entity">
+            <Translate contentKey="generadorApp.padItemMeta.home.btn_filter_open">Filters</Translate>
+            &nbsp;
+            <FontAwesomeIcon icon="caret-down" />
+          </Button>{' '}
+          &nbsp;
+          <Link
+            to={`${match.url}/new?${this.getFiltersURL()}`}
+            className="btn btn-primary float-right jh-create-entity"
+            id="jh-create-entity"
+          >
+            <FontAwesomeIcon icon="plus" />
+            &nbsp;
+            <Translate contentKey="generadorApp.padItemMeta.home.createLabel">Create a new Pad Item Meta</Translate>
+          </Link>{' '}
+          &nbsp;
+        </h2>
+
+        <ol className="breadcrumb">
           <li className="breadcrumb-item">
             <Link to="/">Inicio</Link>
           </li>
           <li className="breadcrumb-item active">Pad Item Metas</li>
         </ol>
-        <h1 className="page-header">&nbsp;&nbsp;</h1>
         <Panel>
-          <PanelHeader>
-            <h2 id="page-heading">
-              <span className="page-header ml-3">Pad Item Metas</span>
-              <Button id="togglerFilterPadItemMeta" className="btn btn-primary float-right jh-create-entity">
-                Filtros&nbsp;
-                <FontAwesomeIcon icon="caret-down" />
-              </Button>
-              <Link
-                to={`${match.url}/new?${this.getFiltersURL()}`}
-                className="btn btn-primary float-right jh-create-entity"
-                id="jh-create-entity"
-              >
-                <FontAwesomeIcon icon="plus" />
-                &nbsp;
-                <Translate contentKey="generadorApp.padItemMeta.home.createLabel">Create a new Pad Item Meta</Translate>
-              </Link>
-            </h2>
-          </PanelHeader>
           <PanelBody>
             <div className="table-responsive">
               <UncontrolledCollapse toggler="#togglerFilterPadItemMeta">
@@ -288,7 +290,7 @@ export class PadItemMeta extends React.Component<IPadItemMetaProps, IPadItemMeta
                     <div className="row mt-1 ml-3 mr-3">
                       {this.state.baseFilters !== 'unidadeMedidaId' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="unidadeMedidaIdLabel" for="pad-item-meta-unidadeMedidaId">
                               <Translate contentKey="generadorApp.padItemMeta.unidadeMedidaId">Unidade Medida Id</Translate>
                             </Label>
@@ -304,7 +306,7 @@ export class PadItemMeta extends React.Component<IPadItemMetaProps, IPadItemMeta
 
                       {this.state.baseFilters !== 'indicadorId' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="indicadorIdLabel" for="pad-item-meta-indicadorId">
                               <Translate contentKey="generadorApp.padItemMeta.indicadorId">Indicador Id</Translate>
                             </Label>
@@ -315,7 +317,7 @@ export class PadItemMeta extends React.Component<IPadItemMetaProps, IPadItemMeta
 
                       {this.state.baseFilters !== 'idPaciente' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="idPacienteLabel" for="pad-item-meta-idPaciente">
                               <Translate contentKey="generadorApp.padItemMeta.idPaciente">Id Paciente</Translate>
                             </Label>
@@ -326,7 +328,7 @@ export class PadItemMeta extends React.Component<IPadItemMetaProps, IPadItemMeta
 
                       {this.state.baseFilters !== 'idPad' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="idPadLabel" for="pad-item-meta-idPad">
                               <Translate contentKey="generadorApp.padItemMeta.idPad">Id Pad</Translate>
                             </Label>
@@ -337,7 +339,7 @@ export class PadItemMeta extends React.Component<IPadItemMetaProps, IPadItemMeta
 
                       {this.state.baseFilters !== 'idPadItem' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="idPadItemLabel" for="pad-item-meta-idPadItem">
                               <Translate contentKey="generadorApp.padItemMeta.idPadItem">Id Pad Item</Translate>
                             </Label>
@@ -348,7 +350,7 @@ export class PadItemMeta extends React.Component<IPadItemMetaProps, IPadItemMeta
 
                       {this.state.baseFilters !== 'minimo' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="minimoLabel" for="pad-item-meta-minimo">
                               <Translate contentKey="generadorApp.padItemMeta.minimo">Minimo</Translate>
                             </Label>
@@ -360,7 +362,7 @@ export class PadItemMeta extends React.Component<IPadItemMetaProps, IPadItemMeta
 
                       {this.state.baseFilters !== 'maximo' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="maximoLabel" for="pad-item-meta-maximo">
                               <Translate contentKey="generadorApp.padItemMeta.maximo">Maximo</Translate>
                             </Label>
@@ -372,7 +374,7 @@ export class PadItemMeta extends React.Component<IPadItemMetaProps, IPadItemMeta
 
                       {this.state.baseFilters !== 'meta' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="metaLabel" for="pad-item-meta-meta">
                               <Translate contentKey="generadorApp.padItemMeta.meta">Meta</Translate>
                             </Label>
@@ -384,7 +386,7 @@ export class PadItemMeta extends React.Component<IPadItemMetaProps, IPadItemMeta
 
                       {this.state.baseFilters !== 'valorAtual' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="valorAtualLabel" for="pad-item-meta-valorAtual">
                               <Translate contentKey="generadorApp.padItemMeta.valorAtual">Valor Atual</Translate>
                             </Label>
@@ -396,7 +398,7 @@ export class PadItemMeta extends React.Component<IPadItemMetaProps, IPadItemMeta
 
                       {this.state.baseFilters !== 'atualizadoEm' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="atualizadoEmLabel" for="pad-item-meta-atualizadoEm">
                               <Translate contentKey="generadorApp.padItemMeta.atualizadoEm">Atualizado Em</Translate>
                             </Label>
@@ -414,7 +416,7 @@ export class PadItemMeta extends React.Component<IPadItemMetaProps, IPadItemMeta
 
                       {this.state.baseFilters !== 'dataLimite' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="dataLimiteLabel" for="pad-item-meta-dataLimite">
                               <Translate contentKey="generadorApp.padItemMeta.dataLimite">Data Limite</Translate>
                             </Label>
@@ -432,7 +434,7 @@ export class PadItemMeta extends React.Component<IPadItemMetaProps, IPadItemMeta
 
                       {this.state.baseFilters !== 'frequenciaMedicaoHoras' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="frequenciaMedicaoHorasLabel" for="pad-item-meta-frequenciaMedicaoHoras">
                               <Translate contentKey="generadorApp.padItemMeta.frequenciaMedicaoHoras">Frequencia Medicao Horas</Translate>
                             </Label>
@@ -448,7 +450,7 @@ export class PadItemMeta extends React.Component<IPadItemMetaProps, IPadItemMeta
 
                       {this.state.baseFilters !== 'tipoAcompanhamento' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="tipoAcompanhamentoLabel" for="pad-item-meta-tipoAcompanhamento">
                               <Translate contentKey="generadorApp.padItemMeta.tipoAcompanhamento">Tipo Acompanhamento</Translate>
                             </Label>
@@ -468,7 +470,7 @@ export class PadItemMeta extends React.Component<IPadItemMetaProps, IPadItemMeta
 
                       {this.state.baseFilters !== 'atendimentoId' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="atendimentoIdLabel" for="pad-item-meta-atendimentoId">
                               <Translate contentKey="generadorApp.padItemMeta.atendimentoId">Atendimento Id</Translate>
                             </Label>
@@ -479,7 +481,7 @@ export class PadItemMeta extends React.Component<IPadItemMetaProps, IPadItemMeta
 
                       {this.state.baseFilters !== 'email' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="emailLabel" for="pad-item-meta-email">
                               <Translate contentKey="generadorApp.padItemMeta.email">Email</Translate>
                             </Label>
@@ -490,7 +492,7 @@ export class PadItemMeta extends React.Component<IPadItemMetaProps, IPadItemMeta
 
                       {this.state.baseFilters !== 'minimoSistolica' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="minimoSistolicaLabel" for="pad-item-meta-minimoSistolica">
                               <Translate contentKey="generadorApp.padItemMeta.minimoSistolica">Minimo Sistolica</Translate>
                             </Label>
@@ -507,7 +509,7 @@ export class PadItemMeta extends React.Component<IPadItemMetaProps, IPadItemMeta
 
                       {this.state.baseFilters !== 'maximoSistolica' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="maximoSistolicaLabel" for="pad-item-meta-maximoSistolica">
                               <Translate contentKey="generadorApp.padItemMeta.maximoSistolica">Maximo Sistolica</Translate>
                             </Label>
@@ -524,7 +526,7 @@ export class PadItemMeta extends React.Component<IPadItemMetaProps, IPadItemMeta
 
                       {this.state.baseFilters !== 'minimoDiastolica' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="minimoDiastolicaLabel" for="pad-item-meta-minimoDiastolica">
                               <Translate contentKey="generadorApp.padItemMeta.minimoDiastolica">Minimo Diastolica</Translate>
                             </Label>
@@ -541,7 +543,7 @@ export class PadItemMeta extends React.Component<IPadItemMetaProps, IPadItemMeta
 
                       {this.state.baseFilters !== 'maximoDiastolica' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="maximoDiastolicaLabel" for="pad-item-meta-maximoDiastolica">
                               <Translate contentKey="generadorApp.padItemMeta.maximoDiastolica">Maximo Diastolica</Translate>
                             </Label>
@@ -558,7 +560,7 @@ export class PadItemMeta extends React.Component<IPadItemMetaProps, IPadItemMeta
 
                       {this.state.baseFilters !== 'score' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="scoreLabel" for="pad-item-meta-score">
                               <Translate contentKey="generadorApp.padItemMeta.score">Score</Translate>
                             </Label>
@@ -569,7 +571,7 @@ export class PadItemMeta extends React.Component<IPadItemMetaProps, IPadItemMeta
 
                       {this.state.baseFilters !== 'alteracaoEsperada' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="alteracaoEsperadaLabel" check>
                               <AvInput
                                 id="pad-item-meta-alteracaoEsperada"
@@ -588,13 +590,13 @@ export class PadItemMeta extends React.Component<IPadItemMetaProps, IPadItemMeta
                       <Button className="btn btn-success" type="submit">
                         <i className="fa fa-filter" aria-hidden={'true'}></i>
                         &nbsp;
-                        <Translate contentKey="entity.validation.filter">Filter</Translate>
+                        <Translate contentKey="generadorApp.padItemMeta.home.btn_filter">Filter</Translate>
                       </Button>
                       &nbsp;
                       <div className="btn btn-secondary hand" onClick={this.cancelCourse}>
                         <FontAwesomeIcon icon="trash-alt" />
                         &nbsp;
-                        <Translate contentKey="entity.validation.clean">Clean</Translate>
+                        <Translate contentKey="generadorApp.padItemMeta.home.btn_filter_clean">Clean</Translate>
                       </div>
                     </div>
                   </AvForm>

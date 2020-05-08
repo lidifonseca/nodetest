@@ -11,7 +11,7 @@
         }
     ],
     "relationships": [],
-    "changelogDate": "20200507102500",
+    "changelogDate": "20200508151500",
     "entityTableName": "acao",
     "dto": "mapstruct",
     "pagination": "pagination",

@@ -41,6 +41,7 @@ export interface IPadMatMedBaseState {
 
 export interface IPadMatMedUpdateState {
   fieldsBase: IPadMatMedBaseState;
+
   isNew: boolean;
 }
 

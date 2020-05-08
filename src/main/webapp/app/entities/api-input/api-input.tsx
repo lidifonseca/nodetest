@@ -2,6 +2,7 @@
 import React from 'react';
 import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
 import { connect } from 'react-redux';
+import Select from 'react-select';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import {
   Button,
@@ -130,32 +131,33 @@ export class ApiInput extends React.Component<IApiInputProps, IApiInputState> {
     const { apiInputList, match, totalItems } = this.props;
     return (
       <div>
-        <ol className="breadcrumb float-xl-right">
+        <h2 id="page-heading">
+          <span className="page-header">Api Inputs</span>
+          <Button id="togglerFilterApiInput" className="btn btn-primary float-right jh-create-entity">
+            <Translate contentKey="generadorApp.apiInput.home.btn_filter_open">Filters</Translate>
+            &nbsp;
+            <FontAwesomeIcon icon="caret-down" />
+          </Button>{' '}
+          &nbsp;
+          <Link
+            to={`${match.url}/new?${this.getFiltersURL()}`}
+            className="btn btn-primary float-right jh-create-entity"
+            id="jh-create-entity"
+          >
+            <FontAwesomeIcon icon="plus" />
+            &nbsp;
+            <Translate contentKey="generadorApp.apiInput.home.createLabel">Create a new Api Input</Translate>
+          </Link>{' '}
+          &nbsp;
+        </h2>
+
+        <ol className="breadcrumb">
           <li className="breadcrumb-item">
             <Link to="/">Inicio</Link>
           </li>
           <li className="breadcrumb-item active">Api Inputs</li>
         </ol>
-        <h1 className="page-header">&nbsp;&nbsp;</h1>
         <Panel>
-          <PanelHeader>
-            <h2 id="page-heading">
-              <span className="page-header ml-3">Api Inputs</span>
-              <Button id="togglerFilterApiInput" className="btn btn-primary float-right jh-create-entity">
-                Filtros&nbsp;
-                <FontAwesomeIcon icon="caret-down" />
-              </Button>
-              <Link
-                to={`${match.url}/new?${this.getFiltersURL()}`}
-                className="btn btn-primary float-right jh-create-entity"
-                id="jh-create-entity"
-              >
-                <FontAwesomeIcon icon="plus" />
-                &nbsp;
-                <Translate contentKey="generadorApp.apiInput.home.createLabel">Create a new Api Input</Translate>
-              </Link>
-            </h2>
-          </PanelHeader>
           <PanelBody>
             <div className="table-responsive">
               <UncontrolledCollapse toggler="#togglerFilterApiInput">
@@ -164,7 +166,7 @@ export class ApiInput extends React.Component<IApiInputProps, IApiInputState> {
                     <div className="row mt-1 ml-3 mr-3">
                       {this.state.baseFilters !== 'idApiName' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="idApiNameLabel" for="api-input-idApiName">
                               <Translate contentKey="generadorApp.apiInput.idApiName">Id Api Name</Translate>
                             </Label>
@@ -175,7 +177,7 @@ export class ApiInput extends React.Component<IApiInputProps, IApiInputState> {
 
                       {this.state.baseFilters !== 'apiInput' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="apiInputLabel" for="api-input-apiInput">
                               <Translate contentKey="generadorApp.apiInput.apiInput">Api Input</Translate>
                             </Label>
@@ -187,7 +189,7 @@ export class ApiInput extends React.Component<IApiInputProps, IApiInputState> {
 
                       {this.state.baseFilters !== 'apiType' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="apiTypeLabel" for="api-input-apiType">
                               <Translate contentKey="generadorApp.apiInput.apiType">Api Type</Translate>
                             </Label>
@@ -199,7 +201,7 @@ export class ApiInput extends React.Component<IApiInputProps, IApiInputState> {
 
                       {this.state.baseFilters !== 'obs' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="obsLabel" for="api-input-obs">
                               <Translate contentKey="generadorApp.apiInput.obs">Obs</Translate>
                             </Label>
@@ -211,7 +213,7 @@ export class ApiInput extends React.Component<IApiInputProps, IApiInputState> {
 
                       {this.state.baseFilters !== 'ativo' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="ativoLabel" for="api-input-ativo">
                               <Translate contentKey="generadorApp.apiInput.ativo">Ativo</Translate>
                             </Label>
@@ -225,13 +227,13 @@ export class ApiInput extends React.Component<IApiInputProps, IApiInputState> {
                       <Button className="btn btn-success" type="submit">
                         <i className="fa fa-filter" aria-hidden={'true'}></i>
                         &nbsp;
-                        <Translate contentKey="entity.validation.filter">Filter</Translate>
+                        <Translate contentKey="generadorApp.apiInput.home.btn_filter">Filter</Translate>
                       </Button>
                       &nbsp;
                       <div className="btn btn-secondary hand" onClick={this.cancelCourse}>
                         <FontAwesomeIcon icon="trash-alt" />
                         &nbsp;
-                        <Translate contentKey="entity.validation.clean">Clean</Translate>
+                        <Translate contentKey="generadorApp.apiInput.home.btn_filter_clean">Clean</Translate>
                       </div>
                     </div>
                   </AvForm>

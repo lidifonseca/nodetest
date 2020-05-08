@@ -1,8 +1,14 @@
 {
   "generadorApp": {
     "cidPta": {
+      "listButtons": {},
+      "viewButtons": {},
+      "dropdown_btn": "Ações",
       "home": {
         "title": "Cid Ptas",
+        "btn_filter": "Filter",
+        "btn_filter_clean": "Clean Filters",
+        "btn_filter_open": "Filters",
         "createLabel": "Create a new Cid Pta",
         "createOrEditLabel": "Create or edit a Cid Pta",
         "notFound": "No Cid Ptas found"

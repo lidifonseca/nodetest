@@ -1,8 +1,14 @@
 {
   "generadorApp": {
     "categoriaAtividade": {
+      "listButtons": {},
+      "viewButtons": {},
+      "dropdown_btn": "Actions",
       "home": {
         "title": "Categoria Atividades",
+        "btn_filter": "Filtrar",
+        "btn_filter_clean": "Limpar Filtros",
+        "btn_filter_open": "Filtros",
         "createLabel": "Criar novo Categoria Atividade",
         "createOrEditLabel": "Criar ou editar Categoria Atividade",
         "notFound": "Nenhum Categoria Atividade encontrado"
@@ -17,6 +23,7 @@
         "title": "Categoria Atividade"
       },
       "atividade": "Atividade",
+      "unidade_empty": "Sem Unidade",
       "unidade": "Unidade"
     }
   }

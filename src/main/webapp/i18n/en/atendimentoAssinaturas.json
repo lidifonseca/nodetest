@@ -1,8 +1,14 @@
 {
   "generadorApp": {
     "atendimentoAssinaturas": {
+      "listButtons": {},
+      "viewButtons": {},
+      "dropdown_btn": "Ações",
       "home": {
         "title": "Atendimento Assinaturas",
+        "btn_filter": "Filter",
+        "btn_filter_clean": "Clean Filters",
+        "btn_filter_open": "Filters",
         "createLabel": "Create a new Atendimento Assinaturas",
         "createOrEditLabel": "Create or edit a Atendimento Assinaturas",
         "notFound": "No Atendimento Assinaturas found"

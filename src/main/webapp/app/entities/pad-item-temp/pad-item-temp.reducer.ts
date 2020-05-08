@@ -48,6 +48,7 @@ export interface IPadItemTempBaseState {
 
 export interface IPadItemTempUpdateState {
   fieldsBase: IPadItemTempBaseState;
+
   isNew: boolean;
 }
 

@@ -63,7 +63,7 @@
             "otherEntityField": "razaoSocial"
         }
     ],
-    "changelogDate": "20200507114800",
+    "changelogDate": "20200508163800",
     "entityTableName": "pad",
     "dto": "mapstruct",
     "pagination": "pagination",

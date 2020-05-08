@@ -1,8 +1,14 @@
 {
   "generadorApp": {
     "pacienteStatusAtual": {
+      "listButtons": {},
+      "viewButtons": {},
+      "dropdown_btn": "Ações",
       "home": {
         "title": "Paciente Status Atuals",
+        "btn_filter": "Filter",
+        "btn_filter_clean": "Clean Filters",
+        "btn_filter_open": "Filters",
         "createLabel": "Create a new Paciente Status Atual",
         "createOrEditLabel": "Create or edit a Paciente Status Atual",
         "notFound": "No Paciente Status Atuals found"
@@ -19,7 +25,9 @@
       "dataStatus": "Data Status",
       "observacao": "Observacao",
       "ativo": "Ativo",
+      "paciente_empty": "Without Paciente",
       "paciente": "Paciente",
+      "status_empty": "Without Status",
       "status": "Status"
     }
   }

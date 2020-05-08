@@ -2,6 +2,7 @@
 import React from 'react';
 import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
 import { connect } from 'react-redux';
+import Select from 'react-select';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import {
   Button,
@@ -242,32 +243,33 @@ export class Empresa extends React.Component<IEmpresaProps, IEmpresaState> {
     const { empresaList, match, totalItems } = this.props;
     return (
       <div>
-        <ol className="breadcrumb float-xl-right">
+        <h2 id="page-heading">
+          <span className="page-header">Empresas</span>
+          <Button id="togglerFilterEmpresa" className="btn btn-primary float-right jh-create-entity">
+            <Translate contentKey="generadorApp.empresa.home.btn_filter_open">Filters</Translate>
+            &nbsp;
+            <FontAwesomeIcon icon="caret-down" />
+          </Button>{' '}
+          &nbsp;
+          <Link
+            to={`${match.url}/new?${this.getFiltersURL()}`}
+            className="btn btn-primary float-right jh-create-entity"
+            id="jh-create-entity"
+          >
+            <FontAwesomeIcon icon="plus" />
+            &nbsp;
+            <Translate contentKey="generadorApp.empresa.home.createLabel">Create a new Empresa</Translate>
+          </Link>{' '}
+          &nbsp;
+        </h2>
+
+        <ol className="breadcrumb">
           <li className="breadcrumb-item">
             <Link to="/">Inicio</Link>
           </li>
           <li className="breadcrumb-item active">Empresas</li>
         </ol>
-        <h1 className="page-header">&nbsp;&nbsp;</h1>
         <Panel>
-          <PanelHeader>
-            <h2 id="page-heading">
-              <span className="page-header ml-3">Empresas</span>
-              <Button id="togglerFilterEmpresa" className="btn btn-primary float-right jh-create-entity">
-                Filtros&nbsp;
-                <FontAwesomeIcon icon="caret-down" />
-              </Button>
-              <Link
-                to={`${match.url}/new?${this.getFiltersURL()}`}
-                className="btn btn-primary float-right jh-create-entity"
-                id="jh-create-entity"
-              >
-                <FontAwesomeIcon icon="plus" />
-                &nbsp;
-                <Translate contentKey="generadorApp.empresa.home.createLabel">Create a new Empresa</Translate>
-              </Link>
-            </h2>
-          </PanelHeader>
           <PanelBody>
             <div className="table-responsive">
               <UncontrolledCollapse toggler="#togglerFilterEmpresa">
@@ -276,7 +278,7 @@ export class Empresa extends React.Component<IEmpresaProps, IEmpresaState> {
                     <div className="row mt-1 ml-3 mr-3">
                       {this.state.baseFilters !== 'empresa' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="empresaLabel" for="empresa-empresa">
                               <Translate contentKey="generadorApp.empresa.empresa">Empresa</Translate>
                             </Label>
@@ -288,7 +290,7 @@ export class Empresa extends React.Component<IEmpresaProps, IEmpresaState> {
 
                       {this.state.baseFilters !== 'nome' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="nomeLabel" for="empresa-nome">
                               <Translate contentKey="generadorApp.empresa.nome">Nome</Translate>
                             </Label>
@@ -300,7 +302,7 @@ export class Empresa extends React.Component<IEmpresaProps, IEmpresaState> {
 
                       {this.state.baseFilters !== 'email' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="emailLabel" for="empresa-email">
                               <Translate contentKey="generadorApp.empresa.email">Email</Translate>
                             </Label>
@@ -312,7 +314,7 @@ export class Empresa extends React.Component<IEmpresaProps, IEmpresaState> {
 
                       {this.state.baseFilters !== 'cpf' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="cpfLabel" for="empresa-cpf">
                               <Translate contentKey="generadorApp.empresa.cpf">Cpf</Translate>
                             </Label>
@@ -324,7 +326,7 @@ export class Empresa extends React.Component<IEmpresaProps, IEmpresaState> {
 
                       {this.state.baseFilters !== 'rg' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="rgLabel" for="empresa-rg">
                               <Translate contentKey="generadorApp.empresa.rg">Rg</Translate>
                             </Label>
@@ -336,7 +338,7 @@ export class Empresa extends React.Component<IEmpresaProps, IEmpresaState> {
 
                       {this.state.baseFilters !== 'nascimento' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="nascimentoLabel" for="empresa-nascimento">
                               <Translate contentKey="generadorApp.empresa.nascimento">Nascimento</Translate>
                             </Label>
@@ -347,7 +349,7 @@ export class Empresa extends React.Component<IEmpresaProps, IEmpresaState> {
 
                       {this.state.baseFilters !== 'sexo' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="sexoLabel" for="empresa-sexo">
                               <Translate contentKey="generadorApp.empresa.sexo">Sexo</Translate>
                             </Label>
@@ -358,7 +360,7 @@ export class Empresa extends React.Component<IEmpresaProps, IEmpresaState> {
 
                       {this.state.baseFilters !== 'telefone1' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="telefone1Label" for="empresa-telefone1">
                               <Translate contentKey="generadorApp.empresa.telefone1">Telefone 1</Translate>
                             </Label>
@@ -370,7 +372,7 @@ export class Empresa extends React.Component<IEmpresaProps, IEmpresaState> {
 
                       {this.state.baseFilters !== 'telefone2' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="telefone2Label" for="empresa-telefone2">
                               <Translate contentKey="generadorApp.empresa.telefone2">Telefone 2</Translate>
                             </Label>
@@ -382,7 +384,7 @@ export class Empresa extends React.Component<IEmpresaProps, IEmpresaState> {
 
                       {this.state.baseFilters !== 'celular1' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="celular1Label" for="empresa-celular1">
                               <Translate contentKey="generadorApp.empresa.celular1">Celular 1</Translate>
                             </Label>
@@ -394,7 +396,7 @@ export class Empresa extends React.Component<IEmpresaProps, IEmpresaState> {
 
                       {this.state.baseFilters !== 'celular2' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="celular2Label" for="empresa-celular2">
                               <Translate contentKey="generadorApp.empresa.celular2">Celular 2</Translate>
                             </Label>
@@ -406,7 +408,7 @@ export class Empresa extends React.Component<IEmpresaProps, IEmpresaState> {
 
                       {this.state.baseFilters !== 'cep' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="cepLabel" for="empresa-cep">
                               <Translate contentKey="generadorApp.empresa.cep">Cep</Translate>
                             </Label>
@@ -418,7 +420,7 @@ export class Empresa extends React.Component<IEmpresaProps, IEmpresaState> {
 
                       {this.state.baseFilters !== 'endereco' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="enderecoLabel" for="empresa-endereco">
                               <Translate contentKey="generadorApp.empresa.endereco">Endereco</Translate>
                             </Label>
@@ -430,7 +432,7 @@ export class Empresa extends React.Component<IEmpresaProps, IEmpresaState> {
 
                       {this.state.baseFilters !== 'numero' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="numeroLabel" for="empresa-numero">
                               <Translate contentKey="generadorApp.empresa.numero">Numero</Translate>
                             </Label>
@@ -442,7 +444,7 @@ export class Empresa extends React.Component<IEmpresaProps, IEmpresaState> {
 
                       {this.state.baseFilters !== 'complemento' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="complementoLabel" for="empresa-complemento">
                               <Translate contentKey="generadorApp.empresa.complemento">Complemento</Translate>
                             </Label>
@@ -454,7 +456,7 @@ export class Empresa extends React.Component<IEmpresaProps, IEmpresaState> {
 
                       {this.state.baseFilters !== 'bairro' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="bairroLabel" for="empresa-bairro">
                               <Translate contentKey="generadorApp.empresa.bairro">Bairro</Translate>
                             </Label>
@@ -466,7 +468,7 @@ export class Empresa extends React.Component<IEmpresaProps, IEmpresaState> {
 
                       {this.state.baseFilters !== 'cidade' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="cidadeLabel" for="empresa-cidade">
                               <Translate contentKey="generadorApp.empresa.cidade">Cidade</Translate>
                             </Label>
@@ -478,7 +480,7 @@ export class Empresa extends React.Component<IEmpresaProps, IEmpresaState> {
 
                       {this.state.baseFilters !== 'uf' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="ufLabel" for="empresa-uf">
                               <Translate contentKey="generadorApp.empresa.uf">Uf</Translate>
                             </Label>
@@ -490,7 +492,7 @@ export class Empresa extends React.Component<IEmpresaProps, IEmpresaState> {
 
                       {this.state.baseFilters !== 'tipo' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="tipoLabel" for="empresa-tipo">
                               <Translate contentKey="generadorApp.empresa.tipo">Tipo</Translate>
                             </Label>
@@ -504,13 +506,13 @@ export class Empresa extends React.Component<IEmpresaProps, IEmpresaState> {
                       <Button className="btn btn-success" type="submit">
                         <i className="fa fa-filter" aria-hidden={'true'}></i>
                         &nbsp;
-                        <Translate contentKey="entity.validation.filter">Filter</Translate>
+                        <Translate contentKey="generadorApp.empresa.home.btn_filter">Filter</Translate>
                       </Button>
                       &nbsp;
                       <div className="btn btn-secondary hand" onClick={this.cancelCourse}>
                         <FontAwesomeIcon icon="trash-alt" />
                         &nbsp;
-                        <Translate contentKey="entity.validation.clean">Clean</Translate>
+                        <Translate contentKey="generadorApp.empresa.home.btn_filter_clean">Clean</Translate>
                       </div>
                     </div>
                   </AvForm>

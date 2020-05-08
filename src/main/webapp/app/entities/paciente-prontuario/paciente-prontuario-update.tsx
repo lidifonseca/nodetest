@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import Select from 'react-select';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 import { Button, Row, Col, Label } from 'reactstrap';
@@ -65,31 +66,11 @@ export class PacienteProntuarioUpdate extends React.Component<IPacienteProntuari
   };
   getFiltersURL = (offset = null) => {
     const fieldsBase = this.state.fieldsBase;
-    return (
-      '_back=1' +
-      (fieldsBase['baseFilters'] ? '&baseFilters=' + fieldsBase['baseFilters'] : '') +
-      (fieldsBase['activePage'] ? '&page=' + fieldsBase['activePage'] : '') +
-      (fieldsBase['itemsPerPage'] ? '&size=' + fieldsBase['itemsPerPage'] : '') +
-      (fieldsBase['sort'] ? '&sort=' + (fieldsBase['sort'] + ',' + fieldsBase['order']) : '') +
-      (offset !== null ? '&offset=' + offset : '') +
-      (fieldsBase['idPaciente'] ? '&idPaciente=' + fieldsBase['idPaciente'] : '') +
-      (fieldsBase['idTipoProntuario'] ? '&idTipoProntuario=' + fieldsBase['idTipoProntuario'] : '') +
-      (fieldsBase['oQue'] ? '&oQue=' + fieldsBase['oQue'] : '') +
-      (fieldsBase['resultado'] ? '&resultado=' + fieldsBase['resultado'] : '') +
-      (fieldsBase['ativo'] ? '&ativo=' + fieldsBase['ativo'] : '') +
-      (fieldsBase['idEspecialidade'] ? '&idEspecialidade=' + fieldsBase['idEspecialidade'] : '') +
-      (fieldsBase['dataConsulta'] ? '&dataConsulta=' + fieldsBase['dataConsulta'] : '') +
-      (fieldsBase['idExame'] ? '&idExame=' + fieldsBase['idExame'] : '') +
-      (fieldsBase['idTipoExame'] ? '&idTipoExame=' + fieldsBase['idTipoExame'] : '') +
-      (fieldsBase['dataExame'] ? '&dataExame=' + fieldsBase['dataExame'] : '') +
-      (fieldsBase['dataInternacao'] ? '&dataInternacao=' + fieldsBase['dataInternacao'] : '') +
-      (fieldsBase['dataAlta'] ? '&dataAlta=' + fieldsBase['dataAlta'] : '') +
-      (fieldsBase['dataPs'] ? '&dataPs=' + fieldsBase['dataPs'] : '') +
-      (fieldsBase['dataOcorrencia'] ? '&dataOcorrencia=' + fieldsBase['dataOcorrencia'] : '') +
-      (fieldsBase['idOcorrenciaProntuario'] ? '&idOcorrenciaProntuario=' + fieldsBase['idOcorrenciaProntuario'] : '') +
-      (fieldsBase['dataManifestacao'] ? '&dataManifestacao=' + fieldsBase['dataManifestacao'] : '') +
-      ''
-    );
+    let url = '_back=1' + (offset !== null ? '&offset=' + offset : '');
+    Object.keys(fieldsBase).map(key => {
+      url += '&' + key + '=' + fieldsBase[key];
+    });
+    return url;
   };
   saveEntity = (event: any, errors: any, values: any) => {
     values.dataConsulta = convertDateTimeToServer(values.dataConsulta);
@@ -98,6 +79,7 @@ export class PacienteProntuarioUpdate extends React.Component<IPacienteProntuari
       const { pacienteProntuarioEntity } = this.props;
       const entity = {
         ...pacienteProntuarioEntity,
+
         ...values
       };
 
@@ -121,14 +103,6 @@ export class PacienteProntuarioUpdate extends React.Component<IPacienteProntuari
     const baseFilters = this.state.fieldsBase && this.state.fieldsBase['baseFilters'] ? this.state.fieldsBase['baseFilters'] : null;
     return (
       <div>
-        <ol className="breadcrumb float-xl-right">
-          <li className="breadcrumb-item">
-            <Link to="/">Inicio</Link>
-          </li>
-          <li className="breadcrumb-item active">Paciente Prontuarios</li>
-          <li className="breadcrumb-item active">Paciente Prontuarios edit</li>
-        </ol>
-        <h1 className="page-header">&nbsp;&nbsp;</h1>
         <AvForm
           model={
             isNew
@@ -139,36 +113,40 @@ export class PacienteProntuarioUpdate extends React.Component<IPacienteProntuari
           }
           onSubmit={this.saveEntity}
         >
-          <Panel>
-            <PanelHeader>
-              <h2 id="page-heading">
-                <span className="page-header ml-3">
-                  <Translate contentKey="generadorApp.pacienteProntuario.home.createOrEditLabel">
-                    Create or edit a PacienteProntuario
-                  </Translate>
-                </span>
+          <h2 id="page-heading">
+            <span className="page-header ml-3">
+              <Translate contentKey="generadorApp.pacienteProntuario.home.createOrEditLabel">Create or edit a PacienteProntuario</Translate>
+            </span>
 
-                <Button color="primary" id="save-entity" type="submit" disabled={updating} className="float-right jh-create-entity">
-                  <FontAwesomeIcon icon="save" />
-                  &nbsp;
-                  <Translate contentKey="entity.action.save">Save</Translate>
-                </Button>
-                <Button
-                  tag={Link}
-                  id="cancel-save"
-                  to={'/paciente-prontuario?' + this.getFiltersURL()}
-                  replace
-                  color="info"
-                  className="float-right jh-create-entity"
-                >
-                  <FontAwesomeIcon icon="arrow-left" />
-                  &nbsp;
-                  <span className="d-none d-md-inline">
-                    <Translate contentKey="entity.action.back">Back</Translate>
-                  </span>
-                </Button>
-              </h2>
-            </PanelHeader>
+            <Button color="primary" id="save-entity" type="submit" disabled={updating} className="float-right jh-create-entity">
+              <FontAwesomeIcon icon="save" />
+              &nbsp;
+              <Translate contentKey="entity.action.save">Save</Translate>
+            </Button>
+            <Button
+              tag={Link}
+              id="cancel-save"
+              to={'/paciente-prontuario?' + this.getFiltersURL()}
+              replace
+              color="info"
+              className="float-right jh-create-entity"
+            >
+              <FontAwesomeIcon icon="arrow-left" />
+              &nbsp;
+              <span className="d-none d-md-inline">
+                <Translate contentKey="entity.action.back">Back</Translate>
+              </span>
+            </Button>
+          </h2>
+          <ol className="breadcrumb">
+            <li className="breadcrumb-item">
+              <Link to="/">Inicio</Link>
+            </li>
+            <li className="breadcrumb-item active">Paciente Prontuarios</li>
+            <li className="breadcrumb-item active">Paciente Prontuarios edit</li>
+          </ol>
+
+          <Panel>
             <PanelBody>
               <Row className="justify-content-center">
                 <Col md="8">
@@ -192,348 +170,37 @@ export class PacienteProntuarioUpdate extends React.Component<IPacienteProntuari
                         </AvGroup>
                       ) : null}
                       <Row>
-                        {baseFilters !== 'idPaciente' ? (
-                          <Col md="idPaciente">
-                            <AvGroup>
-                              <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="idPacienteLabel" for="paciente-prontuario-idPaciente">
-                                    <Translate contentKey="generadorApp.pacienteProntuario.idPaciente">Id Paciente</Translate>
-                                  </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField id="paciente-prontuario-idPaciente" type="text" name="idPaciente" />
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
-                        ) : (
-                          <AvInput type="hidden" name="idPaciente" value={this.state.fieldsBase[baseFilters]} />
-                        )}
+                        <IdPacienteComponentUpdate baseFilters />
 
-                        {baseFilters !== 'idTipoProntuario' ? (
-                          <Col md="idTipoProntuario">
-                            <AvGroup>
-                              <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="idTipoProntuarioLabel" for="paciente-prontuario-idTipoProntuario">
-                                    <Translate contentKey="generadorApp.pacienteProntuario.idTipoProntuario">Id Tipo Prontuario</Translate>
-                                  </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField
-                                    id="paciente-prontuario-idTipoProntuario"
-                                    type="string"
-                                    className="form-control"
-                                    name="idTipoProntuario"
-                                  />
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
-                        ) : (
-                          <AvInput type="hidden" name="idTipoProntuario" value={this.state.fieldsBase[baseFilters]} />
-                        )}
+                        <IdTipoProntuarioComponentUpdate baseFilters />
 
-                        {baseFilters !== 'oQue' ? (
-                          <Col md="oQue">
-                            <AvGroup>
-                              <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="oQueLabel" for="paciente-prontuario-oQue">
-                                    <Translate contentKey="generadorApp.pacienteProntuario.oQue">O Que</Translate>
-                                  </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvInput id="paciente-prontuario-oQue" type="textarea" name="oQue" />
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
-                        ) : (
-                          <AvInput type="hidden" name="oQue" value={this.state.fieldsBase[baseFilters]} />
-                        )}
+                        <OQueComponentUpdate baseFilters />
 
-                        {baseFilters !== 'resultado' ? (
-                          <Col md="resultado">
-                            <AvGroup>
-                              <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="resultadoLabel" for="paciente-prontuario-resultado">
-                                    <Translate contentKey="generadorApp.pacienteProntuario.resultado">Resultado</Translate>
-                                  </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvInput id="paciente-prontuario-resultado" type="textarea" name="resultado" />
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
-                        ) : (
-                          <AvInput type="hidden" name="resultado" value={this.state.fieldsBase[baseFilters]} />
-                        )}
+                        <ResultadoComponentUpdate baseFilters />
 
-                        {baseFilters !== 'ativo' ? (
-                          <Col md="ativo">
-                            <AvGroup>
-                              <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="ativoLabel" for="paciente-prontuario-ativo">
-                                    <Translate contentKey="generadorApp.pacienteProntuario.ativo">Ativo</Translate>
-                                  </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField id="paciente-prontuario-ativo" type="string" className="form-control" name="ativo" />
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
-                        ) : (
-                          <AvInput type="hidden" name="ativo" value={this.state.fieldsBase[baseFilters]} />
-                        )}
+                        <AtivoComponentUpdate baseFilters />
 
-                        {baseFilters !== 'idEspecialidade' ? (
-                          <Col md="idEspecialidade">
-                            <AvGroup>
-                              <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="idEspecialidadeLabel" for="paciente-prontuario-idEspecialidade">
-                                    <Translate contentKey="generadorApp.pacienteProntuario.idEspecialidade">Id Especialidade</Translate>
-                                  </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField
-                                    id="paciente-prontuario-idEspecialidade"
-                                    type="string"
-                                    className="form-control"
-                                    name="idEspecialidade"
-                                  />
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
-                        ) : (
-                          <AvInput type="hidden" name="idEspecialidade" value={this.state.fieldsBase[baseFilters]} />
-                        )}
+                        <IdEspecialidadeComponentUpdate baseFilters />
 
-                        {baseFilters !== 'dataConsulta' ? (
-                          <Col md="dataConsulta">
-                            <AvGroup>
-                              <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="dataConsultaLabel" for="paciente-prontuario-dataConsulta">
-                                    <Translate contentKey="generadorApp.pacienteProntuario.dataConsulta">Data Consulta</Translate>
-                                  </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvInput
-                                    id="paciente-prontuario-dataConsulta"
-                                    type="datetime-local"
-                                    className="form-control"
-                                    name="dataConsulta"
-                                    placeholder={'YYYY-MM-DD HH:mm'}
-                                    value={isNew ? null : convertDateTimeFromServer(this.props.pacienteProntuarioEntity.dataConsulta)}
-                                  />
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
-                        ) : (
-                          <AvInput type="hidden" name="dataConsulta" value={this.state.fieldsBase[baseFilters]} />
-                        )}
+                        <DataConsultaComponentUpdate baseFilters />
 
-                        {baseFilters !== 'idExame' ? (
-                          <Col md="idExame">
-                            <AvGroup>
-                              <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="idExameLabel" for="paciente-prontuario-idExame">
-                                    <Translate contentKey="generadorApp.pacienteProntuario.idExame">Id Exame</Translate>
-                                  </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField id="paciente-prontuario-idExame" type="string" className="form-control" name="idExame" />
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
-                        ) : (
-                          <AvInput type="hidden" name="idExame" value={this.state.fieldsBase[baseFilters]} />
-                        )}
+                        <IdExameComponentUpdate baseFilters />
 
-                        {baseFilters !== 'idTipoExame' ? (
-                          <Col md="idTipoExame">
-                            <AvGroup>
-                              <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="idTipoExameLabel" for="paciente-prontuario-idTipoExame">
-                                    <Translate contentKey="generadorApp.pacienteProntuario.idTipoExame">Id Tipo Exame</Translate>
-                                  </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField id="paciente-prontuario-idTipoExame" type="string" className="form-control" name="idTipoExame" />
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
-                        ) : (
-                          <AvInput type="hidden" name="idTipoExame" value={this.state.fieldsBase[baseFilters]} />
-                        )}
+                        <IdTipoExameComponentUpdate baseFilters />
 
-                        {baseFilters !== 'dataExame' ? (
-                          <Col md="dataExame">
-                            <AvGroup>
-                              <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="dataExameLabel" for="paciente-prontuario-dataExame">
-                                    <Translate contentKey="generadorApp.pacienteProntuario.dataExame">Data Exame</Translate>
-                                  </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField id="paciente-prontuario-dataExame" type="date" className="form-control" name="dataExame" />
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
-                        ) : (
-                          <AvInput type="hidden" name="dataExame" value={this.state.fieldsBase[baseFilters]} />
-                        )}
+                        <DataExameComponentUpdate baseFilters />
 
-                        {baseFilters !== 'dataInternacao' ? (
-                          <Col md="dataInternacao">
-                            <AvGroup>
-                              <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="dataInternacaoLabel" for="paciente-prontuario-dataInternacao">
-                                    <Translate contentKey="generadorApp.pacienteProntuario.dataInternacao">Data Internacao</Translate>
-                                  </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField
-                                    id="paciente-prontuario-dataInternacao"
-                                    type="date"
-                                    className="form-control"
-                                    name="dataInternacao"
-                                  />
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
-                        ) : (
-                          <AvInput type="hidden" name="dataInternacao" value={this.state.fieldsBase[baseFilters]} />
-                        )}
+                        <DataInternacaoComponentUpdate baseFilters />
 
-                        {baseFilters !== 'dataAlta' ? (
-                          <Col md="dataAlta">
-                            <AvGroup>
-                              <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="dataAltaLabel" for="paciente-prontuario-dataAlta">
-                                    <Translate contentKey="generadorApp.pacienteProntuario.dataAlta">Data Alta</Translate>
-                                  </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField id="paciente-prontuario-dataAlta" type="date" className="form-control" name="dataAlta" />
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
-                        ) : (
-                          <AvInput type="hidden" name="dataAlta" value={this.state.fieldsBase[baseFilters]} />
-                        )}
+                        <DataAltaComponentUpdate baseFilters />
 
-                        {baseFilters !== 'dataPs' ? (
-                          <Col md="dataPs">
-                            <AvGroup>
-                              <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="dataPsLabel" for="paciente-prontuario-dataPs">
-                                    <Translate contentKey="generadorApp.pacienteProntuario.dataPs">Data Ps</Translate>
-                                  </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField id="paciente-prontuario-dataPs" type="date" className="form-control" name="dataPs" />
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
-                        ) : (
-                          <AvInput type="hidden" name="dataPs" value={this.state.fieldsBase[baseFilters]} />
-                        )}
+                        <DataPsComponentUpdate baseFilters />
 
-                        {baseFilters !== 'dataOcorrencia' ? (
-                          <Col md="dataOcorrencia">
-                            <AvGroup>
-                              <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="dataOcorrenciaLabel" for="paciente-prontuario-dataOcorrencia">
-                                    <Translate contentKey="generadorApp.pacienteProntuario.dataOcorrencia">Data Ocorrencia</Translate>
-                                  </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField
-                                    id="paciente-prontuario-dataOcorrencia"
-                                    type="date"
-                                    className="form-control"
-                                    name="dataOcorrencia"
-                                  />
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
-                        ) : (
-                          <AvInput type="hidden" name="dataOcorrencia" value={this.state.fieldsBase[baseFilters]} />
-                        )}
+                        <DataOcorrenciaComponentUpdate baseFilters />
 
-                        {baseFilters !== 'idOcorrenciaProntuario' ? (
-                          <Col md="idOcorrenciaProntuario">
-                            <AvGroup>
-                              <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="idOcorrenciaProntuarioLabel" for="paciente-prontuario-idOcorrenciaProntuario">
-                                    <Translate contentKey="generadorApp.pacienteProntuario.idOcorrenciaProntuario">
-                                      Id Ocorrencia Prontuario
-                                    </Translate>
-                                  </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField
-                                    id="paciente-prontuario-idOcorrenciaProntuario"
-                                    type="string"
-                                    className="form-control"
-                                    name="idOcorrenciaProntuario"
-                                  />
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
-                        ) : (
-                          <AvInput type="hidden" name="idOcorrenciaProntuario" value={this.state.fieldsBase[baseFilters]} />
-                        )}
+                        <IdOcorrenciaProntuarioComponentUpdate baseFilters />
 
-                        {baseFilters !== 'dataManifestacao' ? (
-                          <Col md="dataManifestacao">
-                            <AvGroup>
-                              <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="dataManifestacaoLabel" for="paciente-prontuario-dataManifestacao">
-                                    <Translate contentKey="generadorApp.pacienteProntuario.dataManifestacao">Data Manifestacao</Translate>
-                                  </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField
-                                    id="paciente-prontuario-dataManifestacao"
-                                    type="date"
-                                    className="form-control"
-                                    name="dataManifestacao"
-                                  />
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
-                        ) : (
-                          <AvInput type="hidden" name="dataManifestacao" value={this.state.fieldsBase[baseFilters]} />
-                        )}
+                        <DataManifestacaoComponentUpdate baseFilters />
                       </Row>
                     </div>
                   )}
@@ -564,5 +231,348 @@ const mapDispatchToProps = {
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
+
+const IdPacienteComponentUpdate = ({ baseFilters }) => {
+  return baseFilters !== 'idPaciente' ? (
+    <Col md="idPaciente">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" id="idPacienteLabel" for="paciente-prontuario-idPaciente">
+              <Translate contentKey="generadorApp.pacienteProntuario.idPaciente">Id Paciente</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <AvField id="paciente-prontuario-idPaciente" type="text" name="idPaciente" />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="idPaciente" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const IdTipoProntuarioComponentUpdate = ({ baseFilters }) => {
+  return baseFilters !== 'idTipoProntuario' ? (
+    <Col md="idTipoProntuario">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" id="idTipoProntuarioLabel" for="paciente-prontuario-idTipoProntuario">
+              <Translate contentKey="generadorApp.pacienteProntuario.idTipoProntuario">Id Tipo Prontuario</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <AvField id="paciente-prontuario-idTipoProntuario" type="string" className="form-control" name="idTipoProntuario" />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="idTipoProntuario" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const OQueComponentUpdate = ({ baseFilters }) => {
+  return baseFilters !== 'oQue' ? (
+    <Col md="oQue">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" id="oQueLabel" for="paciente-prontuario-oQue">
+              <Translate contentKey="generadorApp.pacienteProntuario.oQue">O Que</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <AvInput id="paciente-prontuario-oQue" type="textarea" name="oQue" />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="oQue" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const ResultadoComponentUpdate = ({ baseFilters }) => {
+  return baseFilters !== 'resultado' ? (
+    <Col md="resultado">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" id="resultadoLabel" for="paciente-prontuario-resultado">
+              <Translate contentKey="generadorApp.pacienteProntuario.resultado">Resultado</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <AvInput id="paciente-prontuario-resultado" type="textarea" name="resultado" />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="resultado" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const AtivoComponentUpdate = ({ baseFilters }) => {
+  return baseFilters !== 'ativo' ? (
+    <Col md="ativo">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" id="ativoLabel" for="paciente-prontuario-ativo">
+              <Translate contentKey="generadorApp.pacienteProntuario.ativo">Ativo</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <AvField id="paciente-prontuario-ativo" type="string" className="form-control" name="ativo" />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="ativo" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const IdEspecialidadeComponentUpdate = ({ baseFilters }) => {
+  return baseFilters !== 'idEspecialidade' ? (
+    <Col md="idEspecialidade">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" id="idEspecialidadeLabel" for="paciente-prontuario-idEspecialidade">
+              <Translate contentKey="generadorApp.pacienteProntuario.idEspecialidade">Id Especialidade</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <AvField id="paciente-prontuario-idEspecialidade" type="string" className="form-control" name="idEspecialidade" />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="idEspecialidade" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const DataConsultaComponentUpdate = ({ baseFilters }) => {
+  return baseFilters !== 'dataConsulta' ? (
+    <Col md="dataConsulta">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" id="dataConsultaLabel" for="paciente-prontuario-dataConsulta">
+              <Translate contentKey="generadorApp.pacienteProntuario.dataConsulta">Data Consulta</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <AvInput
+              id="paciente-prontuario-dataConsulta"
+              type="datetime-local"
+              className="form-control"
+              name="dataConsulta"
+              placeholder={'YYYY-MM-DD HH:mm'}
+              value={isNew ? null : convertDateTimeFromServer(this.props.pacienteProntuarioEntity.dataConsulta)}
+            />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="dataConsulta" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const IdExameComponentUpdate = ({ baseFilters }) => {
+  return baseFilters !== 'idExame' ? (
+    <Col md="idExame">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" id="idExameLabel" for="paciente-prontuario-idExame">
+              <Translate contentKey="generadorApp.pacienteProntuario.idExame">Id Exame</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <AvField id="paciente-prontuario-idExame" type="string" className="form-control" name="idExame" />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="idExame" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const IdTipoExameComponentUpdate = ({ baseFilters }) => {
+  return baseFilters !== 'idTipoExame' ? (
+    <Col md="idTipoExame">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" id="idTipoExameLabel" for="paciente-prontuario-idTipoExame">
+              <Translate contentKey="generadorApp.pacienteProntuario.idTipoExame">Id Tipo Exame</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <AvField id="paciente-prontuario-idTipoExame" type="string" className="form-control" name="idTipoExame" />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="idTipoExame" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const DataExameComponentUpdate = ({ baseFilters }) => {
+  return baseFilters !== 'dataExame' ? (
+    <Col md="dataExame">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" id="dataExameLabel" for="paciente-prontuario-dataExame">
+              <Translate contentKey="generadorApp.pacienteProntuario.dataExame">Data Exame</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <AvField id="paciente-prontuario-dataExame" type="date" className="form-control" name="dataExame" />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="dataExame" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const DataInternacaoComponentUpdate = ({ baseFilters }) => {
+  return baseFilters !== 'dataInternacao' ? (
+    <Col md="dataInternacao">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" id="dataInternacaoLabel" for="paciente-prontuario-dataInternacao">
+              <Translate contentKey="generadorApp.pacienteProntuario.dataInternacao">Data Internacao</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <AvField id="paciente-prontuario-dataInternacao" type="date" className="form-control" name="dataInternacao" />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="dataInternacao" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const DataAltaComponentUpdate = ({ baseFilters }) => {
+  return baseFilters !== 'dataAlta' ? (
+    <Col md="dataAlta">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" id="dataAltaLabel" for="paciente-prontuario-dataAlta">
+              <Translate contentKey="generadorApp.pacienteProntuario.dataAlta">Data Alta</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <AvField id="paciente-prontuario-dataAlta" type="date" className="form-control" name="dataAlta" />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="dataAlta" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const DataPsComponentUpdate = ({ baseFilters }) => {
+  return baseFilters !== 'dataPs' ? (
+    <Col md="dataPs">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" id="dataPsLabel" for="paciente-prontuario-dataPs">
+              <Translate contentKey="generadorApp.pacienteProntuario.dataPs">Data Ps</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <AvField id="paciente-prontuario-dataPs" type="date" className="form-control" name="dataPs" />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="dataPs" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const DataOcorrenciaComponentUpdate = ({ baseFilters }) => {
+  return baseFilters !== 'dataOcorrencia' ? (
+    <Col md="dataOcorrencia">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" id="dataOcorrenciaLabel" for="paciente-prontuario-dataOcorrencia">
+              <Translate contentKey="generadorApp.pacienteProntuario.dataOcorrencia">Data Ocorrencia</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <AvField id="paciente-prontuario-dataOcorrencia" type="date" className="form-control" name="dataOcorrencia" />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="dataOcorrencia" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const IdOcorrenciaProntuarioComponentUpdate = ({ baseFilters }) => {
+  return baseFilters !== 'idOcorrenciaProntuario' ? (
+    <Col md="idOcorrenciaProntuario">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" id="idOcorrenciaProntuarioLabel" for="paciente-prontuario-idOcorrenciaProntuario">
+              <Translate contentKey="generadorApp.pacienteProntuario.idOcorrenciaProntuario">Id Ocorrencia Prontuario</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <AvField id="paciente-prontuario-idOcorrenciaProntuario" type="string" className="form-control" name="idOcorrenciaProntuario" />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="idOcorrenciaProntuario" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const DataManifestacaoComponentUpdate = ({ baseFilters }) => {
+  return baseFilters !== 'dataManifestacao' ? (
+    <Col md="dataManifestacao">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" id="dataManifestacaoLabel" for="paciente-prontuario-dataManifestacao">
+              <Translate contentKey="generadorApp.pacienteProntuario.dataManifestacao">Data Manifestacao</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <AvField id="paciente-prontuario-dataManifestacao" type="date" className="form-control" name="dataManifestacao" />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="dataManifestacao" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(PacienteProntuarioUpdate);

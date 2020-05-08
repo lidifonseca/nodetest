@@ -2,6 +2,7 @@
 import React from 'react';
 import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
 import { connect } from 'react-redux';
+import Select from 'react-select';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import {
   Button,
@@ -134,32 +135,33 @@ export class PadItemIndicadores extends React.Component<IPadItemIndicadoresProps
     const { padItemIndicadoresList, match, totalItems } = this.props;
     return (
       <div>
-        <ol className="breadcrumb float-xl-right">
+        <h2 id="page-heading">
+          <span className="page-header">Pad Item Indicadores</span>
+          <Button id="togglerFilterPadItemIndicadores" className="btn btn-primary float-right jh-create-entity">
+            <Translate contentKey="generadorApp.padItemIndicadores.home.btn_filter_open">Filters</Translate>
+            &nbsp;
+            <FontAwesomeIcon icon="caret-down" />
+          </Button>{' '}
+          &nbsp;
+          <Link
+            to={`${match.url}/new?${this.getFiltersURL()}`}
+            className="btn btn-primary float-right jh-create-entity"
+            id="jh-create-entity"
+          >
+            <FontAwesomeIcon icon="plus" />
+            &nbsp;
+            <Translate contentKey="generadorApp.padItemIndicadores.home.createLabel">Create a new Pad Item Indicadores</Translate>
+          </Link>{' '}
+          &nbsp;
+        </h2>
+
+        <ol className="breadcrumb">
           <li className="breadcrumb-item">
             <Link to="/">Inicio</Link>
           </li>
           <li className="breadcrumb-item active">Pad Item Indicadores</li>
         </ol>
-        <h1 className="page-header">&nbsp;&nbsp;</h1>
         <Panel>
-          <PanelHeader>
-            <h2 id="page-heading">
-              <span className="page-header ml-3">Pad Item Indicadores</span>
-              <Button id="togglerFilterPadItemIndicadores" className="btn btn-primary float-right jh-create-entity">
-                Filtros&nbsp;
-                <FontAwesomeIcon icon="caret-down" />
-              </Button>
-              <Link
-                to={`${match.url}/new?${this.getFiltersURL()}`}
-                className="btn btn-primary float-right jh-create-entity"
-                id="jh-create-entity"
-              >
-                <FontAwesomeIcon icon="plus" />
-                &nbsp;
-                <Translate contentKey="generadorApp.padItemIndicadores.home.createLabel">Create a new Pad Item Indicadores</Translate>
-              </Link>
-            </h2>
-          </PanelHeader>
           <PanelBody>
             <div className="table-responsive">
               <UncontrolledCollapse toggler="#togglerFilterPadItemIndicadores">
@@ -168,7 +170,7 @@ export class PadItemIndicadores extends React.Component<IPadItemIndicadoresProps
                     <div className="row mt-1 ml-3 mr-3">
                       {this.state.baseFilters !== 'idUnidadeMedida' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="idUnidadeMedidaLabel" for="pad-item-indicadores-idUnidadeMedida">
                               <Translate contentKey="generadorApp.padItemIndicadores.idUnidadeMedida">Id Unidade Medida</Translate>
                             </Label>
@@ -184,7 +186,7 @@ export class PadItemIndicadores extends React.Component<IPadItemIndicadoresProps
 
                       {this.state.baseFilters !== 'titulo' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="tituloLabel" for="pad-item-indicadores-titulo">
                               <Translate contentKey="generadorApp.padItemIndicadores.titulo">Titulo</Translate>
                             </Label>
@@ -196,7 +198,7 @@ export class PadItemIndicadores extends React.Component<IPadItemIndicadoresProps
 
                       {this.state.baseFilters !== 'descricao' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="descricaoLabel" for="pad-item-indicadores-descricao">
                               <Translate contentKey="generadorApp.padItemIndicadores.descricao">Descricao</Translate>
                             </Label>
@@ -207,7 +209,7 @@ export class PadItemIndicadores extends React.Component<IPadItemIndicadoresProps
 
                       {this.state.baseFilters !== 'meta' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="metaLabel" for="pad-item-indicadores-meta">
                               <Translate contentKey="generadorApp.padItemIndicadores.meta">Meta</Translate>
                             </Label>
@@ -218,7 +220,7 @@ export class PadItemIndicadores extends React.Component<IPadItemIndicadoresProps
 
                       {this.state.baseFilters !== 'maximoSt' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="maximoStLabel" for="pad-item-indicadores-maximoSt">
                               <Translate contentKey="generadorApp.padItemIndicadores.maximoSt">Maximo St</Translate>
                             </Label>
@@ -229,7 +231,7 @@ export class PadItemIndicadores extends React.Component<IPadItemIndicadoresProps
 
                       {this.state.baseFilters !== 'minimoSt' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="minimoStLabel" for="pad-item-indicadores-minimoSt">
                               <Translate contentKey="generadorApp.padItemIndicadores.minimoSt">Minimo St</Translate>
                             </Label>
@@ -243,13 +245,13 @@ export class PadItemIndicadores extends React.Component<IPadItemIndicadoresProps
                       <Button className="btn btn-success" type="submit">
                         <i className="fa fa-filter" aria-hidden={'true'}></i>
                         &nbsp;
-                        <Translate contentKey="entity.validation.filter">Filter</Translate>
+                        <Translate contentKey="generadorApp.padItemIndicadores.home.btn_filter">Filter</Translate>
                       </Button>
                       &nbsp;
                       <div className="btn btn-secondary hand" onClick={this.cancelCourse}>
                         <FontAwesomeIcon icon="trash-alt" />
                         &nbsp;
-                        <Translate contentKey="entity.validation.clean">Clean</Translate>
+                        <Translate contentKey="generadorApp.padItemIndicadores.home.btn_filter_clean">Clean</Translate>
                       </div>
                     </div>
                   </AvForm>

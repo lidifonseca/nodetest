@@ -7,7 +7,7 @@
         }
     ],
     "relationships": [],
-    "changelogDate": "20200507113800",
+    "changelogDate": "20200508162800",
     "entityTableName": "paciente_enquete_app",
     "dto": "mapstruct",
     "pagination": "pagination",

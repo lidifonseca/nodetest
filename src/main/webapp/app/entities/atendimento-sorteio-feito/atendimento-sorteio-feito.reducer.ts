@@ -38,6 +38,7 @@ export interface IAtendimentoSorteioFeitoBaseState {
 
 export interface IAtendimentoSorteioFeitoUpdateState {
   fieldsBase: IAtendimentoSorteioFeitoBaseState;
+
   isNew: boolean;
 }
 

@@ -43,6 +43,7 @@ export interface IPadItemAlertaBaseState {
 
 export interface IPadItemAlertaUpdateState {
   fieldsBase: IPadItemAlertaBaseState;
+
   isNew: boolean;
 }
 

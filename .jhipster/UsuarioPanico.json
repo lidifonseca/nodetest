@@ -33,7 +33,7 @@
         }
     ],
     "relationships": [],
-    "changelogDate": "20200507130100",
+    "changelogDate": "20200508175100",
     "entityTableName": "usuario_panico",
     "dto": "mapstruct",
     "pagination": "pagination",

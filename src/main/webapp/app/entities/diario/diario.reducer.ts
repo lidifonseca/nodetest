@@ -39,6 +39,7 @@ export interface IDiarioBaseState {
 
 export interface IDiarioUpdateState {
   fieldsBase: IDiarioBaseState;
+
   isNew: boolean;
 }
 

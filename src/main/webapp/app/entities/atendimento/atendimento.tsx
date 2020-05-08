@@ -2,6 +2,7 @@
 import React from 'react';
 import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
 import { connect } from 'react-redux';
+import Select from 'react-select';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import {
   Button,
@@ -349,32 +350,33 @@ export class Atendimento extends React.Component<IAtendimentoProps, IAtendimento
     const { unidadeEasies, atendimentoList, match, totalItems } = this.props;
     return (
       <div>
-        <ol className="breadcrumb float-xl-right">
+        <h2 id="page-heading">
+          <span className="page-header">Atendimentos</span>
+          <Button id="togglerFilterAtendimento" className="btn btn-primary float-right jh-create-entity">
+            <Translate contentKey="generadorApp.atendimento.home.btn_filter_open">Filters</Translate>
+            &nbsp;
+            <FontAwesomeIcon icon="caret-down" />
+          </Button>{' '}
+          &nbsp;
+          <Link
+            to={`${match.url}/new?${this.getFiltersURL()}`}
+            className="btn btn-primary float-right jh-create-entity"
+            id="jh-create-entity"
+          >
+            <FontAwesomeIcon icon="plus" />
+            &nbsp;
+            <Translate contentKey="generadorApp.atendimento.home.createLabel">Create a new Atendimento</Translate>
+          </Link>{' '}
+          &nbsp;
+        </h2>
+
+        <ol className="breadcrumb">
           <li className="breadcrumb-item">
             <Link to="/">Inicio</Link>
           </li>
           <li className="breadcrumb-item active">Atendimentos</li>
         </ol>
-        <h1 className="page-header">&nbsp;&nbsp;</h1>
         <Panel>
-          <PanelHeader>
-            <h2 id="page-heading">
-              <span className="page-header ml-3">Atendimentos</span>
-              <Button id="togglerFilterAtendimento" className="btn btn-primary float-right jh-create-entity">
-                Filtros&nbsp;
-                <FontAwesomeIcon icon="caret-down" />
-              </Button>
-              <Link
-                to={`${match.url}/new?${this.getFiltersURL()}`}
-                className="btn btn-primary float-right jh-create-entity"
-                id="jh-create-entity"
-              >
-                <FontAwesomeIcon icon="plus" />
-                &nbsp;
-                <Translate contentKey="generadorApp.atendimento.home.createLabel">Create a new Atendimento</Translate>
-              </Link>
-            </h2>
-          </PanelHeader>
           <PanelBody>
             <div className="table-responsive">
               <UncontrolledCollapse toggler="#togglerFilterAtendimento">
@@ -383,7 +385,7 @@ export class Atendimento extends React.Component<IAtendimentoProps, IAtendimento
                     <div className="row mt-1 ml-3 mr-3">
                       {this.state.baseFilters !== 'idFranquia' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="idFranquiaLabel" for="atendimento-idFranquia">
                               <Translate contentKey="generadorApp.atendimento.idFranquia">Id Franquia</Translate>
                             </Label>
@@ -395,7 +397,7 @@ export class Atendimento extends React.Component<IAtendimentoProps, IAtendimento
 
                       {this.state.baseFilters !== 'idProfissional' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="idProfissionalLabel" for="atendimento-idProfissional">
                               <Translate contentKey="generadorApp.atendimento.idProfissional">Id Profissional</Translate>
                             </Label>
@@ -407,7 +409,7 @@ export class Atendimento extends React.Component<IAtendimentoProps, IAtendimento
 
                       {this.state.baseFilters !== 'cep' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="cepLabel" for="atendimento-cep">
                               <Translate contentKey="generadorApp.atendimento.cep">Cep</Translate>
                             </Label>
@@ -419,7 +421,7 @@ export class Atendimento extends React.Component<IAtendimentoProps, IAtendimento
 
                       {this.state.baseFilters !== 'endereco' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="enderecoLabel" for="atendimento-endereco">
                               <Translate contentKey="generadorApp.atendimento.endereco">Endereco</Translate>
                             </Label>
@@ -431,7 +433,7 @@ export class Atendimento extends React.Component<IAtendimentoProps, IAtendimento
 
                       {this.state.baseFilters !== 'numero' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="numeroLabel" for="atendimento-numero">
                               <Translate contentKey="generadorApp.atendimento.numero">Numero</Translate>
                             </Label>
@@ -443,7 +445,7 @@ export class Atendimento extends React.Component<IAtendimentoProps, IAtendimento
 
                       {this.state.baseFilters !== 'complemento' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="complementoLabel" for="atendimento-complemento">
                               <Translate contentKey="generadorApp.atendimento.complemento">Complemento</Translate>
                             </Label>
@@ -455,7 +457,7 @@ export class Atendimento extends React.Component<IAtendimentoProps, IAtendimento
 
                       {this.state.baseFilters !== 'bairro' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="bairroLabel" for="atendimento-bairro">
                               <Translate contentKey="generadorApp.atendimento.bairro">Bairro</Translate>
                             </Label>
@@ -467,7 +469,7 @@ export class Atendimento extends React.Component<IAtendimentoProps, IAtendimento
 
                       {this.state.baseFilters !== 'cidade' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="cidadeLabel" for="atendimento-cidade">
                               <Translate contentKey="generadorApp.atendimento.cidade">Cidade</Translate>
                             </Label>
@@ -479,7 +481,7 @@ export class Atendimento extends React.Component<IAtendimentoProps, IAtendimento
 
                       {this.state.baseFilters !== 'uf' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="ufLabel" for="atendimento-uf">
                               <Translate contentKey="generadorApp.atendimento.uf">Uf</Translate>
                             </Label>
@@ -491,7 +493,7 @@ export class Atendimento extends React.Component<IAtendimentoProps, IAtendimento
 
                       {this.state.baseFilters !== 'latitude' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="latitudeLabel" for="atendimento-latitude">
                               <Translate contentKey="generadorApp.atendimento.latitude">Latitude</Translate>
                             </Label>
@@ -503,7 +505,7 @@ export class Atendimento extends React.Component<IAtendimentoProps, IAtendimento
 
                       {this.state.baseFilters !== 'longitude' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="longitudeLabel" for="atendimento-longitude">
                               <Translate contentKey="generadorApp.atendimento.longitude">Longitude</Translate>
                             </Label>
@@ -515,7 +517,7 @@ export class Atendimento extends React.Component<IAtendimentoProps, IAtendimento
 
                       {this.state.baseFilters !== 'dataAgenda' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="dataAgendaLabel" for="atendimento-dataAgenda">
                               <Translate contentKey="generadorApp.atendimento.dataAgenda">Data Agenda</Translate>
                             </Label>
@@ -533,7 +535,7 @@ export class Atendimento extends React.Component<IAtendimentoProps, IAtendimento
 
                       {this.state.baseFilters !== 'horario' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="horarioLabel" for="atendimento-horario">
                               <Translate contentKey="generadorApp.atendimento.horario">Horario</Translate>
                             </Label>
@@ -545,7 +547,7 @@ export class Atendimento extends React.Component<IAtendimentoProps, IAtendimento
 
                       {this.state.baseFilters !== 'dataChegada' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="dataChegadaLabel" for="atendimento-dataChegada">
                               <Translate contentKey="generadorApp.atendimento.dataChegada">Data Chegada</Translate>
                             </Label>
@@ -563,7 +565,7 @@ export class Atendimento extends React.Component<IAtendimentoProps, IAtendimento
 
                       {this.state.baseFilters !== 'latitudeChegada' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="latitudeChegadaLabel" for="atendimento-latitudeChegada">
                               <Translate contentKey="generadorApp.atendimento.latitudeChegada">Latitude Chegada</Translate>
                             </Label>
@@ -580,7 +582,7 @@ export class Atendimento extends React.Component<IAtendimentoProps, IAtendimento
 
                       {this.state.baseFilters !== 'longitudeChegada' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="longitudeChegadaLabel" for="atendimento-longitudeChegada">
                               <Translate contentKey="generadorApp.atendimento.longitudeChegada">Longitude Chegada</Translate>
                             </Label>
@@ -597,7 +599,7 @@ export class Atendimento extends React.Component<IAtendimentoProps, IAtendimento
 
                       {this.state.baseFilters !== 'dataSaida' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="dataSaidaLabel" for="atendimento-dataSaida">
                               <Translate contentKey="generadorApp.atendimento.dataSaida">Data Saida</Translate>
                             </Label>
@@ -615,7 +617,7 @@ export class Atendimento extends React.Component<IAtendimentoProps, IAtendimento
 
                       {this.state.baseFilters !== 'latitudeSaida' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="latitudeSaidaLabel" for="atendimento-latitudeSaida">
                               <Translate contentKey="generadorApp.atendimento.latitudeSaida">Latitude Saida</Translate>
                             </Label>
@@ -627,7 +629,7 @@ export class Atendimento extends React.Component<IAtendimentoProps, IAtendimento
 
                       {this.state.baseFilters !== 'longitudeSaida' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="longitudeSaidaLabel" for="atendimento-longitudeSaida">
                               <Translate contentKey="generadorApp.atendimento.longitudeSaida">Longitude Saida</Translate>
                             </Label>
@@ -639,7 +641,7 @@ export class Atendimento extends React.Component<IAtendimentoProps, IAtendimento
 
                       {this.state.baseFilters !== 'evolucao' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="evolucaoLabel" for="atendimento-evolucao">
                               <Translate contentKey="generadorApp.atendimento.evolucao">Evolucao</Translate>
                             </Label>
@@ -651,7 +653,7 @@ export class Atendimento extends React.Component<IAtendimentoProps, IAtendimento
 
                       {this.state.baseFilters !== 'observacao' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="observacaoLabel" for="atendimento-observacao">
                               <Translate contentKey="generadorApp.atendimento.observacao">Observacao</Translate>
                             </Label>
@@ -663,7 +665,7 @@ export class Atendimento extends React.Component<IAtendimentoProps, IAtendimento
 
                       {this.state.baseFilters !== 'intercorrencia' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="intercorrenciaLabel" for="atendimento-intercorrencia">
                               <Translate contentKey="generadorApp.atendimento.intercorrencia">Intercorrencia</Translate>
                             </Label>
@@ -679,7 +681,7 @@ export class Atendimento extends React.Component<IAtendimentoProps, IAtendimento
 
                       {this.state.baseFilters !== 'avaliacao' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="avaliacaoLabel" for="atendimento-avaliacao">
                               <Translate contentKey="generadorApp.atendimento.avaliacao">Avaliacao</Translate>
                             </Label>
@@ -690,7 +692,7 @@ export class Atendimento extends React.Component<IAtendimentoProps, IAtendimento
 
                       {this.state.baseFilters !== 'aceito' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="aceitoLabel" for="atendimento-aceito">
                               <Translate contentKey="generadorApp.atendimento.aceito">Aceito</Translate>
                             </Label>
@@ -701,7 +703,7 @@ export class Atendimento extends React.Component<IAtendimentoProps, IAtendimento
 
                       {this.state.baseFilters !== 'motivo' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="motivoLabel" for="atendimento-motivo">
                               <Translate contentKey="generadorApp.atendimento.motivo">Motivo</Translate>
                             </Label>
@@ -713,7 +715,7 @@ export class Atendimento extends React.Component<IAtendimentoProps, IAtendimento
 
                       {this.state.baseFilters !== 'valor' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="valorLabel" for="atendimento-valor">
                               <Translate contentKey="generadorApp.atendimento.valor">Valor</Translate>
                             </Label>
@@ -724,7 +726,7 @@ export class Atendimento extends React.Component<IAtendimentoProps, IAtendimento
 
                       {this.state.baseFilters !== 'ordemAtendimento' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="ordemAtendimentoLabel" for="atendimento-ordemAtendimento">
                               <Translate contentKey="generadorApp.atendimento.ordemAtendimento">Ordem Atendimento</Translate>
                             </Label>
@@ -740,7 +742,7 @@ export class Atendimento extends React.Component<IAtendimentoProps, IAtendimento
 
                       {this.state.baseFilters !== 'ativo' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="ativoLabel" for="atendimento-ativo">
                               <Translate contentKey="generadorApp.atendimento.ativo">Ativo</Translate>
                             </Label>
@@ -751,7 +753,7 @@ export class Atendimento extends React.Component<IAtendimentoProps, IAtendimento
 
                       {this.state.baseFilters !== 'dataForaHora' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="dataForaHoraLabel" for="atendimento-dataForaHora">
                               <Translate contentKey="generadorApp.atendimento.dataForaHora">Data Fora Hora</Translate>
                             </Label>
@@ -769,7 +771,7 @@ export class Atendimento extends React.Component<IAtendimentoProps, IAtendimento
 
                       {this.state.baseFilters !== 'idUsuarioCancelamento' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="idUsuarioCancelamentoLabel" for="atendimento-idUsuarioCancelamento">
                               <Translate contentKey="generadorApp.atendimento.idUsuarioCancelamento">Id Usuario Cancelamento</Translate>
                             </Label>
@@ -785,7 +787,7 @@ export class Atendimento extends React.Component<IAtendimentoProps, IAtendimento
 
                       {this.state.baseFilters !== 'dataCancelamento' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="dataCancelamentoLabel" for="atendimento-dataCancelamento">
                               <Translate contentKey="generadorApp.atendimento.dataCancelamento">Data Cancelamento</Translate>
                             </Label>
@@ -801,7 +803,7 @@ export class Atendimento extends React.Component<IAtendimentoProps, IAtendimento
 
                       {this.state.baseFilters !== 'tipoUsuarioCancelamento' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="tipoUsuarioCancelamentoLabel" for="atendimento-tipoUsuarioCancelamento">
                               <Translate contentKey="generadorApp.atendimento.tipoUsuarioCancelamento">Tipo Usuario Cancelamento</Translate>
                             </Label>
@@ -818,7 +820,7 @@ export class Atendimento extends React.Component<IAtendimentoProps, IAtendimento
 
                       {this.state.baseFilters !== 'confidencialProfissional' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="confidencialProfissionalLabel" for="atendimento-confidencialProfissional">
                               <Translate contentKey="generadorApp.atendimento.confidencialProfissional">
                                 Confidencial Profissional
@@ -837,7 +839,7 @@ export class Atendimento extends React.Component<IAtendimentoProps, IAtendimento
 
                       {this.state.baseFilters !== 'confidencialPaciente' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="confidencialPacienteLabel" for="atendimento-confidencialPaciente">
                               <Translate contentKey="generadorApp.atendimento.confidencialPaciente">Confidencial Paciente</Translate>
                             </Label>
@@ -854,7 +856,7 @@ export class Atendimento extends React.Component<IAtendimentoProps, IAtendimento
 
                       {this.state.baseFilters !== 'imagemAssinatura' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="imagemAssinaturaLabel" for="atendimento-imagemAssinatura">
                               <Translate contentKey="generadorApp.atendimento.imagemAssinatura">Imagem Assinatura</Translate>
                             </Label>
@@ -871,21 +873,28 @@ export class Atendimento extends React.Component<IAtendimentoProps, IAtendimento
 
                       {this.state.baseFilters !== 'unidade' ? (
                         <Col md="3">
-                          <Row>
-                            <div>
+                          <Row className="mr-1 mt-1">
+                            <div style={{ width: '100%' }}>
                               <Label for="atendimento-unidade">
                                 <Translate contentKey="generadorApp.atendimento.unidade">Unidade</Translate>
                               </Label>
-                              <AvInput id="atendimento-unidade" type="select" className="form-control" name="unidadeId">
-                                <option value="" key="0" />
-                                {unidadeEasies
-                                  ? unidadeEasies.map(otherEntity => (
-                                      <option value={otherEntity.id} key={otherEntity.id}>
-                                        {otherEntity.razaoSocial}
-                                      </option>
-                                    ))
-                                  : null}
-                              </AvInput>
+                              <Select
+                                id="atendimento-unidade"
+                                isMulti
+                                className={'css-select-control'}
+                                value={
+                                  unidadeEasies
+                                    ? unidadeEasies.map(p =>
+                                        this.state.unidade.split(',').indexOf(p.id) !== -1 ? { value: p.id, label: p.razaoSocial } : null
+                                      )
+                                    : null
+                                }
+                                options={
+                                  unidadeEasies ? unidadeEasies.map(option => ({ value: option.id, label: option.razaoSocial })) : null
+                                }
+                                onChange={options => this.setState({ unidade: options.map(option => option['value']).join(',') })}
+                                name={'unidade'}
+                              />
                             </div>
                           </Row>
                         </Col>
@@ -896,13 +905,13 @@ export class Atendimento extends React.Component<IAtendimentoProps, IAtendimento
                       <Button className="btn btn-success" type="submit">
                         <i className="fa fa-filter" aria-hidden={'true'}></i>
                         &nbsp;
-                        <Translate contentKey="entity.validation.filter">Filter</Translate>
+                        <Translate contentKey="generadorApp.atendimento.home.btn_filter">Filter</Translate>
                       </Button>
                       &nbsp;
                       <div className="btn btn-secondary hand" onClick={this.cancelCourse}>
                         <FontAwesomeIcon icon="trash-alt" />
                         &nbsp;
-                        <Translate contentKey="entity.validation.clean">Clean</Translate>
+                        <Translate contentKey="generadorApp.atendimento.home.btn_filter_clean">Clean</Translate>
                       </div>
                     </div>
                   </AvForm>

@@ -40,6 +40,7 @@ export interface IUsuarioAcaoBaseState {
 
 export interface IUsuarioAcaoUpdateState {
   fieldsBase: IUsuarioAcaoBaseState;
+
   isNew: boolean;
 }
 

@@ -42,6 +42,7 @@ export interface IPadItemResultadoBaseState {
 
 export interface IPadItemResultadoUpdateState {
   fieldsBase: IPadItemResultadoBaseState;
+
   isNew: boolean;
 }
 

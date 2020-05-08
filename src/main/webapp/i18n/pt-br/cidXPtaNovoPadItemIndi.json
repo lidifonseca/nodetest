@@ -1,8 +1,14 @@
 {
   "generadorApp": {
     "cidXPtaNovoPadItemIndi": {
+      "listButtons": {},
+      "viewButtons": {},
+      "dropdown_btn": "Actions",
       "home": {
         "title": "Cid X Pta Novo Pad Item Indis",
+        "btn_filter": "Filtrar",
+        "btn_filter_clean": "Limpar Filtros",
+        "btn_filter_open": "Filtros",
         "createLabel": "Criar novo Cid X Pta Novo Pad Item Indi",
         "createOrEditLabel": "Criar ou editar Cid X Pta Novo Pad Item Indi",
         "notFound": "Nenhum Cid X Pta Novo Pad Item Indi encontrado"

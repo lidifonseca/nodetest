@@ -1,8 +1,14 @@
 {
   "generadorApp": {
     "notificacaoConfig": {
+      "listButtons": {},
+      "viewButtons": {},
+      "dropdown_btn": "Ações",
       "home": {
         "title": "Notificacao Configs",
+        "btn_filter": "Filter",
+        "btn_filter_clean": "Clean Filters",
+        "btn_filter_open": "Filters",
         "createLabel": "Create a new Notificacao Config",
         "createOrEditLabel": "Create or edit a Notificacao Config",
         "notFound": "No Notificacao Configs found"

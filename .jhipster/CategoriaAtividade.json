@@ -19,7 +19,7 @@
             "otherEntityField": "razaoSocial"
         }
     ],
-    "changelogDate": "20200507104500",
+    "changelogDate": "20200508153500",
     "entityTableName": "categoria_atividade",
     "dto": "mapstruct",
     "pagination": "pagination",

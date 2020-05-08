@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import Select from 'react-select';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 import { Button, Row, Col, Label } from 'reactstrap';
@@ -48,23 +49,18 @@ export class ProfissionalFranquiaUpdate extends React.Component<IProfissionalFra
 
   getFiltersURL = (offset = null) => {
     const fieldsBase = this.state.fieldsBase;
-    return (
-      '_back=1' +
-      (fieldsBase['baseFilters'] ? '&baseFilters=' + fieldsBase['baseFilters'] : '') +
-      (fieldsBase['activePage'] ? '&page=' + fieldsBase['activePage'] : '') +
-      (fieldsBase['itemsPerPage'] ? '&size=' + fieldsBase['itemsPerPage'] : '') +
-      (fieldsBase['sort'] ? '&sort=' + (fieldsBase['sort'] + ',' + fieldsBase['order']) : '') +
-      (offset !== null ? '&offset=' + offset : '') +
-      (fieldsBase['idProfissional'] ? '&idProfissional=' + fieldsBase['idProfissional'] : '') +
-      (fieldsBase['idFranquia'] ? '&idFranquia=' + fieldsBase['idFranquia'] : '') +
-      ''
-    );
+    let url = '_back=1' + (offset !== null ? '&offset=' + offset : '');
+    Object.keys(fieldsBase).map(key => {
+      url += '&' + key + '=' + fieldsBase[key];
+    });
+    return url;
   };
   saveEntity = (event: any, errors: any, values: any) => {
     if (errors.length === 0) {
       const { profissionalFranquiaEntity } = this.props;
       const entity = {
         ...profissionalFranquiaEntity,
+
         ...values
       };
 
@@ -87,14 +83,6 @@ export class ProfissionalFranquiaUpdate extends React.Component<IProfissionalFra
     const baseFilters = this.state.fieldsBase && this.state.fieldsBase['baseFilters'] ? this.state.fieldsBase['baseFilters'] : null;
     return (
       <div>
-        <ol className="breadcrumb float-xl-right">
-          <li className="breadcrumb-item">
-            <Link to="/">Inicio</Link>
-          </li>
-          <li className="breadcrumb-item active">Profissional Franquias</li>
-          <li className="breadcrumb-item active">Profissional Franquias edit</li>
-        </ol>
-        <h1 className="page-header">&nbsp;&nbsp;</h1>
         <AvForm
           model={
             isNew
@@ -105,36 +93,42 @@ export class ProfissionalFranquiaUpdate extends React.Component<IProfissionalFra
           }
           onSubmit={this.saveEntity}
         >
-          <Panel>
-            <PanelHeader>
-              <h2 id="page-heading">
-                <span className="page-header ml-3">
-                  <Translate contentKey="generadorApp.profissionalFranquia.home.createOrEditLabel">
-                    Create or edit a ProfissionalFranquia
-                  </Translate>
-                </span>
+          <h2 id="page-heading">
+            <span className="page-header ml-3">
+              <Translate contentKey="generadorApp.profissionalFranquia.home.createOrEditLabel">
+                Create or edit a ProfissionalFranquia
+              </Translate>
+            </span>
 
-                <Button color="primary" id="save-entity" type="submit" disabled={updating} className="float-right jh-create-entity">
-                  <FontAwesomeIcon icon="save" />
-                  &nbsp;
-                  <Translate contentKey="entity.action.save">Save</Translate>
-                </Button>
-                <Button
-                  tag={Link}
-                  id="cancel-save"
-                  to={'/profissional-franquia?' + this.getFiltersURL()}
-                  replace
-                  color="info"
-                  className="float-right jh-create-entity"
-                >
-                  <FontAwesomeIcon icon="arrow-left" />
-                  &nbsp;
-                  <span className="d-none d-md-inline">
-                    <Translate contentKey="entity.action.back">Back</Translate>
-                  </span>
-                </Button>
-              </h2>
-            </PanelHeader>
+            <Button color="primary" id="save-entity" type="submit" disabled={updating} className="float-right jh-create-entity">
+              <FontAwesomeIcon icon="save" />
+              &nbsp;
+              <Translate contentKey="entity.action.save">Save</Translate>
+            </Button>
+            <Button
+              tag={Link}
+              id="cancel-save"
+              to={'/profissional-franquia?' + this.getFiltersURL()}
+              replace
+              color="info"
+              className="float-right jh-create-entity"
+            >
+              <FontAwesomeIcon icon="arrow-left" />
+              &nbsp;
+              <span className="d-none d-md-inline">
+                <Translate contentKey="entity.action.back">Back</Translate>
+              </span>
+            </Button>
+          </h2>
+          <ol className="breadcrumb">
+            <li className="breadcrumb-item">
+              <Link to="/">Inicio</Link>
+            </li>
+            <li className="breadcrumb-item active">Profissional Franquias</li>
+            <li className="breadcrumb-item active">Profissional Franquias edit</li>
+          </ol>
+
+          <Panel>
             <PanelBody>
               <Row className="justify-content-center">
                 <Col md="8">
@@ -158,43 +152,9 @@ export class ProfissionalFranquiaUpdate extends React.Component<IProfissionalFra
                         </AvGroup>
                       ) : null}
                       <Row>
-                        {baseFilters !== 'idProfissional' ? (
-                          <Col md="idProfissional">
-                            <AvGroup>
-                              <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="idProfissionalLabel" for="profissional-franquia-idProfissional">
-                                    <Translate contentKey="generadorApp.profissionalFranquia.idProfissional">Id Profissional</Translate>
-                                  </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField id="profissional-franquia-idProfissional" type="text" name="idProfissional" />
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
-                        ) : (
-                          <AvInput type="hidden" name="idProfissional" value={this.state.fieldsBase[baseFilters]} />
-                        )}
+                        <IdProfissionalComponentUpdate baseFilters />
 
-                        {baseFilters !== 'idFranquia' ? (
-                          <Col md="idFranquia">
-                            <AvGroup>
-                              <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="idFranquiaLabel" for="profissional-franquia-idFranquia">
-                                    <Translate contentKey="generadorApp.profissionalFranquia.idFranquia">Id Franquia</Translate>
-                                  </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField id="profissional-franquia-idFranquia" type="text" name="idFranquia" />
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
-                        ) : (
-                          <AvInput type="hidden" name="idFranquia" value={this.state.fieldsBase[baseFilters]} />
-                        )}
+                        <IdFranquiaComponentUpdate baseFilters />
                       </Row>
                     </div>
                   )}
@@ -224,5 +184,47 @@ const mapDispatchToProps = {
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
+
+const IdProfissionalComponentUpdate = ({ baseFilters }) => {
+  return baseFilters !== 'idProfissional' ? (
+    <Col md="idProfissional">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" id="idProfissionalLabel" for="profissional-franquia-idProfissional">
+              <Translate contentKey="generadorApp.profissionalFranquia.idProfissional">Id Profissional</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <AvField id="profissional-franquia-idProfissional" type="text" name="idProfissional" />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="idProfissional" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const IdFranquiaComponentUpdate = ({ baseFilters }) => {
+  return baseFilters !== 'idFranquia' ? (
+    <Col md="idFranquia">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" id="idFranquiaLabel" for="profissional-franquia-idFranquia">
+              <Translate contentKey="generadorApp.profissionalFranquia.idFranquia">Id Franquia</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <AvField id="profissional-franquia-idFranquia" type="text" name="idFranquia" />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="idFranquia" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProfissionalFranquiaUpdate);

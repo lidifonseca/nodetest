@@ -1,8 +1,14 @@
 {
   "generadorApp": {
     "statusAtendimento": {
+      "listButtons": {},
+      "viewButtons": {},
+      "dropdown_btn": "Ações",
       "home": {
         "title": "Status Atendimentos",
+        "btn_filter": "Filter",
+        "btn_filter_clean": "Clean Filters",
+        "btn_filter_open": "Filters",
         "createLabel": "Create a new Status Atendimento",
         "createOrEditLabel": "Create or edit a Status Atendimento",
         "notFound": "No Status Atendimentos found"

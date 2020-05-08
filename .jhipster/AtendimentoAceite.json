@@ -11,7 +11,7 @@
         }
     ],
     "relationships": [],
-    "changelogDate": "20200507103300",
+    "changelogDate": "20200508152300",
     "entityTableName": "atendimento_aceite",
     "dto": "mapstruct",
     "pagination": "pagination",

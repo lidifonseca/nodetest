@@ -1,8 +1,14 @@
 {
   "generadorApp": {
     "pacientePush": {
+      "listButtons": {},
+      "viewButtons": {},
+      "dropdown_btn": "Ações",
       "home": {
         "title": "Paciente Pushes",
+        "btn_filter": "Filter",
+        "btn_filter_clean": "Clean Filters",
+        "btn_filter_open": "Filters",
         "createLabel": "Create a new Paciente Push",
         "createOrEditLabel": "Create or edit a Paciente Push",
         "notFound": "No Paciente Pushes found"

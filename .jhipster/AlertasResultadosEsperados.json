@@ -27,7 +27,7 @@
         }
     ],
     "relationships": [],
-    "changelogDate": "20200507102800",
+    "changelogDate": "20200508151800",
     "entityTableName": "alertas_resultados_esperados",
     "dto": "mapstruct",
     "pagination": "pagination",

@@ -51,6 +51,7 @@ export interface IPadItemBaseState {
 
 export interface IPadItemUpdateState {
   fieldsBase: IPadItemBaseState;
+
   isNew: boolean;
 }
 

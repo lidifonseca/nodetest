@@ -39,6 +39,8 @@ export interface ICategoriaAtividadeBaseState {
 
 export interface ICategoriaAtividadeUpdateState {
   fieldsBase: ICategoriaAtividadeBaseState;
+
+  unidadeEasySelectValue: any;
   isNew: boolean;
   unidadeId: string;
 }

@@ -1,8 +1,14 @@
 {
   "generadorApp": {
     "especialidadeValor": {
+      "listButtons": {},
+      "viewButtons": {},
+      "dropdown_btn": "Ações",
       "home": {
         "title": "Especialidade Valors",
+        "btn_filter": "Filter",
+        "btn_filter_clean": "Clean Filters",
+        "btn_filter_open": "Filters",
         "createLabel": "Create a new Especialidade Valor",
         "createOrEditLabel": "Create or edit a Especialidade Valor",
         "notFound": "No Especialidade Valors found"

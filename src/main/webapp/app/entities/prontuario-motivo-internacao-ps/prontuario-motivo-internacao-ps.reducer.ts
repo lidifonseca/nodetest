@@ -40,6 +40,7 @@ export interface IProntuarioMotivoInternacaoPsBaseState {
 
 export interface IProntuarioMotivoInternacaoPsUpdateState {
   fieldsBase: IProntuarioMotivoInternacaoPsBaseState;
+
   isNew: boolean;
 }
 

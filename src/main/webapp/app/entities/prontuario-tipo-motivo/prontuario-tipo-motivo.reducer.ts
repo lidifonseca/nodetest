@@ -43,6 +43,7 @@ export interface IProntuarioTipoMotivoBaseState {
 
 export interface IProntuarioTipoMotivoUpdateState {
   fieldsBase: IProntuarioTipoMotivoBaseState;
+
   isNew: boolean;
 }
 

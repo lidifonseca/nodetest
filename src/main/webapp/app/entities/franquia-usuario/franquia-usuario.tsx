@@ -2,6 +2,7 @@
 import React from 'react';
 import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
 import { connect } from 'react-redux';
+import Select from 'react-select';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import {
   Button,
@@ -341,32 +342,33 @@ export class FranquiaUsuario extends React.Component<IFranquiaUsuarioProps, IFra
     const { franquiaUsuarioList, match, totalItems } = this.props;
     return (
       <div>
-        <ol className="breadcrumb float-xl-right">
+        <h2 id="page-heading">
+          <span className="page-header">Franquia Usuarios</span>
+          <Button id="togglerFilterFranquiaUsuario" className="btn btn-primary float-right jh-create-entity">
+            <Translate contentKey="generadorApp.franquiaUsuario.home.btn_filter_open">Filters</Translate>
+            &nbsp;
+            <FontAwesomeIcon icon="caret-down" />
+          </Button>{' '}
+          &nbsp;
+          <Link
+            to={`${match.url}/new?${this.getFiltersURL()}`}
+            className="btn btn-primary float-right jh-create-entity"
+            id="jh-create-entity"
+          >
+            <FontAwesomeIcon icon="plus" />
+            &nbsp;
+            <Translate contentKey="generadorApp.franquiaUsuario.home.createLabel">Create a new Franquia Usuario</Translate>
+          </Link>{' '}
+          &nbsp;
+        </h2>
+
+        <ol className="breadcrumb">
           <li className="breadcrumb-item">
             <Link to="/">Inicio</Link>
           </li>
           <li className="breadcrumb-item active">Franquia Usuarios</li>
         </ol>
-        <h1 className="page-header">&nbsp;&nbsp;</h1>
         <Panel>
-          <PanelHeader>
-            <h2 id="page-heading">
-              <span className="page-header ml-3">Franquia Usuarios</span>
-              <Button id="togglerFilterFranquiaUsuario" className="btn btn-primary float-right jh-create-entity">
-                Filtros&nbsp;
-                <FontAwesomeIcon icon="caret-down" />
-              </Button>
-              <Link
-                to={`${match.url}/new?${this.getFiltersURL()}`}
-                className="btn btn-primary float-right jh-create-entity"
-                id="jh-create-entity"
-              >
-                <FontAwesomeIcon icon="plus" />
-                &nbsp;
-                <Translate contentKey="generadorApp.franquiaUsuario.home.createLabel">Create a new Franquia Usuario</Translate>
-              </Link>
-            </h2>
-          </PanelHeader>
           <PanelBody>
             <div className="table-responsive">
               <UncontrolledCollapse toggler="#togglerFilterFranquiaUsuario">
@@ -375,7 +377,7 @@ export class FranquiaUsuario extends React.Component<IFranquiaUsuarioProps, IFra
                     <div className="row mt-1 ml-3 mr-3">
                       {this.state.baseFilters !== 'senha' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="senhaLabel" for="franquia-usuario-senha">
                               <Translate contentKey="generadorApp.franquiaUsuario.senha">Senha</Translate>
                             </Label>
@@ -387,7 +389,7 @@ export class FranquiaUsuario extends React.Component<IFranquiaUsuarioProps, IFra
 
                       {this.state.baseFilters !== 'nome' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="nomeLabel" for="franquia-usuario-nome">
                               <Translate contentKey="generadorApp.franquiaUsuario.nome">Nome</Translate>
                             </Label>
@@ -399,7 +401,7 @@ export class FranquiaUsuario extends React.Component<IFranquiaUsuarioProps, IFra
 
                       {this.state.baseFilters !== 'email' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="emailLabel" for="franquia-usuario-email">
                               <Translate contentKey="generadorApp.franquiaUsuario.email">Email</Translate>
                             </Label>
@@ -411,7 +413,7 @@ export class FranquiaUsuario extends React.Component<IFranquiaUsuarioProps, IFra
 
                       {this.state.baseFilters !== 'verProfissional' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="verProfissionalLabel" for="franquia-usuario-verProfissional">
                               <Translate contentKey="generadorApp.franquiaUsuario.verProfissional">Ver Profissional</Translate>
                             </Label>
@@ -427,7 +429,7 @@ export class FranquiaUsuario extends React.Component<IFranquiaUsuarioProps, IFra
 
                       {this.state.baseFilters !== 'cadProfissional' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="cadProfissionalLabel" for="franquia-usuario-cadProfissional">
                               <Translate contentKey="generadorApp.franquiaUsuario.cadProfissional">Cad Profissional</Translate>
                             </Label>
@@ -443,7 +445,7 @@ export class FranquiaUsuario extends React.Component<IFranquiaUsuarioProps, IFra
 
                       {this.state.baseFilters !== 'ediProfissional' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="ediProfissionalLabel" for="franquia-usuario-ediProfissional">
                               <Translate contentKey="generadorApp.franquiaUsuario.ediProfissional">Edi Profissional</Translate>
                             </Label>
@@ -459,7 +461,7 @@ export class FranquiaUsuario extends React.Component<IFranquiaUsuarioProps, IFra
 
                       {this.state.baseFilters !== 'delProfissional' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="delProfissionalLabel" for="franquia-usuario-delProfissional">
                               <Translate contentKey="generadorApp.franquiaUsuario.delProfissional">Del Profissional</Translate>
                             </Label>
@@ -475,7 +477,7 @@ export class FranquiaUsuario extends React.Component<IFranquiaUsuarioProps, IFra
 
                       {this.state.baseFilters !== 'relProfissional' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="relProfissionalLabel" for="franquia-usuario-relProfissional">
                               <Translate contentKey="generadorApp.franquiaUsuario.relProfissional">Rel Profissional</Translate>
                             </Label>
@@ -491,7 +493,7 @@ export class FranquiaUsuario extends React.Component<IFranquiaUsuarioProps, IFra
 
                       {this.state.baseFilters !== 'verPaciente' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="verPacienteLabel" for="franquia-usuario-verPaciente">
                               <Translate contentKey="generadorApp.franquiaUsuario.verPaciente">Ver Paciente</Translate>
                             </Label>
@@ -502,7 +504,7 @@ export class FranquiaUsuario extends React.Component<IFranquiaUsuarioProps, IFra
 
                       {this.state.baseFilters !== 'cadPaciente' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="cadPacienteLabel" for="franquia-usuario-cadPaciente">
                               <Translate contentKey="generadorApp.franquiaUsuario.cadPaciente">Cad Paciente</Translate>
                             </Label>
@@ -513,7 +515,7 @@ export class FranquiaUsuario extends React.Component<IFranquiaUsuarioProps, IFra
 
                       {this.state.baseFilters !== 'ediPaciente' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="ediPacienteLabel" for="franquia-usuario-ediPaciente">
                               <Translate contentKey="generadorApp.franquiaUsuario.ediPaciente">Edi Paciente</Translate>
                             </Label>
@@ -524,7 +526,7 @@ export class FranquiaUsuario extends React.Component<IFranquiaUsuarioProps, IFra
 
                       {this.state.baseFilters !== 'delPaciente' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="delPacienteLabel" for="franquia-usuario-delPaciente">
                               <Translate contentKey="generadorApp.franquiaUsuario.delPaciente">Del Paciente</Translate>
                             </Label>
@@ -535,7 +537,7 @@ export class FranquiaUsuario extends React.Component<IFranquiaUsuarioProps, IFra
 
                       {this.state.baseFilters !== 'relPaciente' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="relPacienteLabel" for="franquia-usuario-relPaciente">
                               <Translate contentKey="generadorApp.franquiaUsuario.relPaciente">Rel Paciente</Translate>
                             </Label>
@@ -546,7 +548,7 @@ export class FranquiaUsuario extends React.Component<IFranquiaUsuarioProps, IFra
 
                       {this.state.baseFilters !== 'verPad' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="verPadLabel" for="franquia-usuario-verPad">
                               <Translate contentKey="generadorApp.franquiaUsuario.verPad">Ver Pad</Translate>
                             </Label>
@@ -557,7 +559,7 @@ export class FranquiaUsuario extends React.Component<IFranquiaUsuarioProps, IFra
 
                       {this.state.baseFilters !== 'cadPad' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="cadPadLabel" for="franquia-usuario-cadPad">
                               <Translate contentKey="generadorApp.franquiaUsuario.cadPad">Cad Pad</Translate>
                             </Label>
@@ -568,7 +570,7 @@ export class FranquiaUsuario extends React.Component<IFranquiaUsuarioProps, IFra
 
                       {this.state.baseFilters !== 'ediPad' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="ediPadLabel" for="franquia-usuario-ediPad">
                               <Translate contentKey="generadorApp.franquiaUsuario.ediPad">Edi Pad</Translate>
                             </Label>
@@ -579,7 +581,7 @@ export class FranquiaUsuario extends React.Component<IFranquiaUsuarioProps, IFra
 
                       {this.state.baseFilters !== 'delPad' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="delPadLabel" for="franquia-usuario-delPad">
                               <Translate contentKey="generadorApp.franquiaUsuario.delPad">Del Pad</Translate>
                             </Label>
@@ -590,7 +592,7 @@ export class FranquiaUsuario extends React.Component<IFranquiaUsuarioProps, IFra
 
                       {this.state.baseFilters !== 'relPad' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="relPadLabel" for="franquia-usuario-relPad">
                               <Translate contentKey="generadorApp.franquiaUsuario.relPad">Rel Pad</Translate>
                             </Label>
@@ -601,7 +603,7 @@ export class FranquiaUsuario extends React.Component<IFranquiaUsuarioProps, IFra
 
                       {this.state.baseFilters !== 'verAtendimento' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="verAtendimentoLabel" for="franquia-usuario-verAtendimento">
                               <Translate contentKey="generadorApp.franquiaUsuario.verAtendimento">Ver Atendimento</Translate>
                             </Label>
@@ -617,7 +619,7 @@ export class FranquiaUsuario extends React.Component<IFranquiaUsuarioProps, IFra
 
                       {this.state.baseFilters !== 'cadAtendimento' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="cadAtendimentoLabel" for="franquia-usuario-cadAtendimento">
                               <Translate contentKey="generadorApp.franquiaUsuario.cadAtendimento">Cad Atendimento</Translate>
                             </Label>
@@ -633,7 +635,7 @@ export class FranquiaUsuario extends React.Component<IFranquiaUsuarioProps, IFra
 
                       {this.state.baseFilters !== 'ediAtendimento' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="ediAtendimentoLabel" for="franquia-usuario-ediAtendimento">
                               <Translate contentKey="generadorApp.franquiaUsuario.ediAtendimento">Edi Atendimento</Translate>
                             </Label>
@@ -649,7 +651,7 @@ export class FranquiaUsuario extends React.Component<IFranquiaUsuarioProps, IFra
 
                       {this.state.baseFilters !== 'delAtendimento' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="delAtendimentoLabel" for="franquia-usuario-delAtendimento">
                               <Translate contentKey="generadorApp.franquiaUsuario.delAtendimento">Del Atendimento</Translate>
                             </Label>
@@ -665,7 +667,7 @@ export class FranquiaUsuario extends React.Component<IFranquiaUsuarioProps, IFra
 
                       {this.state.baseFilters !== 'relAtendimento' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="relAtendimentoLabel" for="franquia-usuario-relAtendimento">
                               <Translate contentKey="generadorApp.franquiaUsuario.relAtendimento">Rel Atendimento</Translate>
                             </Label>
@@ -681,7 +683,7 @@ export class FranquiaUsuario extends React.Component<IFranquiaUsuarioProps, IFra
 
                       {this.state.baseFilters !== 'verPush' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="verPushLabel" for="franquia-usuario-verPush">
                               <Translate contentKey="generadorApp.franquiaUsuario.verPush">Ver Push</Translate>
                             </Label>
@@ -692,7 +694,7 @@ export class FranquiaUsuario extends React.Component<IFranquiaUsuarioProps, IFra
 
                       {this.state.baseFilters !== 'cadPush' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="cadPushLabel" for="franquia-usuario-cadPush">
                               <Translate contentKey="generadorApp.franquiaUsuario.cadPush">Cad Push</Translate>
                             </Label>
@@ -703,7 +705,7 @@ export class FranquiaUsuario extends React.Component<IFranquiaUsuarioProps, IFra
 
                       {this.state.baseFilters !== 'verEspecialidadeValor' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="verEspecialidadeValorLabel" for="franquia-usuario-verEspecialidadeValor">
                               <Translate contentKey="generadorApp.franquiaUsuario.verEspecialidadeValor">Ver Especialidade Valor</Translate>
                             </Label>
@@ -719,7 +721,7 @@ export class FranquiaUsuario extends React.Component<IFranquiaUsuarioProps, IFra
 
                       {this.state.baseFilters !== 'cadEspecialidadeValor' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="cadEspecialidadeValorLabel" for="franquia-usuario-cadEspecialidadeValor">
                               <Translate contentKey="generadorApp.franquiaUsuario.cadEspecialidadeValor">Cad Especialidade Valor</Translate>
                             </Label>
@@ -735,7 +737,7 @@ export class FranquiaUsuario extends React.Component<IFranquiaUsuarioProps, IFra
 
                       {this.state.baseFilters !== 'ediEspecialidadeValor' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="ediEspecialidadeValorLabel" for="franquia-usuario-ediEspecialidadeValor">
                               <Translate contentKey="generadorApp.franquiaUsuario.ediEspecialidadeValor">Edi Especialidade Valor</Translate>
                             </Label>
@@ -751,7 +753,7 @@ export class FranquiaUsuario extends React.Component<IFranquiaUsuarioProps, IFra
 
                       {this.state.baseFilters !== 'delEspecialidadeValor' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="delEspecialidadeValorLabel" for="franquia-usuario-delEspecialidadeValor">
                               <Translate contentKey="generadorApp.franquiaUsuario.delEspecialidadeValor">Del Especialidade Valor</Translate>
                             </Label>
@@ -767,7 +769,7 @@ export class FranquiaUsuario extends React.Component<IFranquiaUsuarioProps, IFra
 
                       {this.state.baseFilters !== 'verUsuario' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="verUsuarioLabel" for="franquia-usuario-verUsuario">
                               <Translate contentKey="generadorApp.franquiaUsuario.verUsuario">Ver Usuario</Translate>
                             </Label>
@@ -778,7 +780,7 @@ export class FranquiaUsuario extends React.Component<IFranquiaUsuarioProps, IFra
 
                       {this.state.baseFilters !== 'cadUsuario' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="cadUsuarioLabel" for="franquia-usuario-cadUsuario">
                               <Translate contentKey="generadorApp.franquiaUsuario.cadUsuario">Cad Usuario</Translate>
                             </Label>
@@ -789,7 +791,7 @@ export class FranquiaUsuario extends React.Component<IFranquiaUsuarioProps, IFra
 
                       {this.state.baseFilters !== 'ediUsuario' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="ediUsuarioLabel" for="franquia-usuario-ediUsuario">
                               <Translate contentKey="generadorApp.franquiaUsuario.ediUsuario">Edi Usuario</Translate>
                             </Label>
@@ -800,7 +802,7 @@ export class FranquiaUsuario extends React.Component<IFranquiaUsuarioProps, IFra
 
                       {this.state.baseFilters !== 'delUsuario' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="delUsuarioLabel" for="franquia-usuario-delUsuario">
                               <Translate contentKey="generadorApp.franquiaUsuario.delUsuario">Del Usuario</Translate>
                             </Label>
@@ -811,7 +813,7 @@ export class FranquiaUsuario extends React.Component<IFranquiaUsuarioProps, IFra
 
                       {this.state.baseFilters !== 'envioRecusa' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="envioRecusaLabel" for="franquia-usuario-envioRecusa">
                               <Translate contentKey="generadorApp.franquiaUsuario.envioRecusa">Envio Recusa</Translate>
                             </Label>
@@ -822,7 +824,7 @@ export class FranquiaUsuario extends React.Component<IFranquiaUsuarioProps, IFra
 
                       {this.state.baseFilters !== 'envioIntercorrencia' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="envioIntercorrenciaLabel" for="franquia-usuario-envioIntercorrencia">
                               <Translate contentKey="generadorApp.franquiaUsuario.envioIntercorrencia">Envio Intercorrencia</Translate>
                             </Label>
@@ -838,7 +840,7 @@ export class FranquiaUsuario extends React.Component<IFranquiaUsuarioProps, IFra
 
                       {this.state.baseFilters !== 'envioCancelamento' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="envioCancelamentoLabel" for="franquia-usuario-envioCancelamento">
                               <Translate contentKey="generadorApp.franquiaUsuario.envioCancelamento">Envio Cancelamento</Translate>
                             </Label>
@@ -854,7 +856,7 @@ export class FranquiaUsuario extends React.Component<IFranquiaUsuarioProps, IFra
 
                       {this.state.baseFilters !== 'ativo' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="ativoLabel" for="franquia-usuario-ativo">
                               <Translate contentKey="generadorApp.franquiaUsuario.ativo">Ativo</Translate>
                             </Label>
@@ -868,13 +870,13 @@ export class FranquiaUsuario extends React.Component<IFranquiaUsuarioProps, IFra
                       <Button className="btn btn-success" type="submit">
                         <i className="fa fa-filter" aria-hidden={'true'}></i>
                         &nbsp;
-                        <Translate contentKey="entity.validation.filter">Filter</Translate>
+                        <Translate contentKey="generadorApp.franquiaUsuario.home.btn_filter">Filter</Translate>
                       </Button>
                       &nbsp;
                       <div className="btn btn-secondary hand" onClick={this.cancelCourse}>
                         <FontAwesomeIcon icon="trash-alt" />
                         &nbsp;
-                        <Translate contentKey="entity.validation.clean">Clean</Translate>
+                        <Translate contentKey="generadorApp.franquiaUsuario.home.btn_filter_clean">Clean</Translate>
                       </div>
                     </div>
                   </AvForm>

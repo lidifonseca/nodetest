@@ -2,6 +2,7 @@
 import React from 'react';
 import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
 import { connect } from 'react-redux';
+import Select from 'react-select';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import {
   Button,
@@ -263,34 +264,35 @@ export class PacienteDispositivoAtual extends React.Component<IPacienteDispositi
     const { pacienteDispositivoAtualList, match, totalItems } = this.props;
     return (
       <div>
-        <ol className="breadcrumb float-xl-right">
+        <h2 id="page-heading">
+          <span className="page-header">Paciente Dispositivo Atuals</span>
+          <Button id="togglerFilterPacienteDispositivoAtual" className="btn btn-primary float-right jh-create-entity">
+            <Translate contentKey="generadorApp.pacienteDispositivoAtual.home.btn_filter_open">Filters</Translate>
+            &nbsp;
+            <FontAwesomeIcon icon="caret-down" />
+          </Button>{' '}
+          &nbsp;
+          <Link
+            to={`${match.url}/new?${this.getFiltersURL()}`}
+            className="btn btn-primary float-right jh-create-entity"
+            id="jh-create-entity"
+          >
+            <FontAwesomeIcon icon="plus" />
+            &nbsp;
+            <Translate contentKey="generadorApp.pacienteDispositivoAtual.home.createLabel">
+              Create a new Paciente Dispositivo Atual
+            </Translate>
+          </Link>{' '}
+          &nbsp;
+        </h2>
+
+        <ol className="breadcrumb">
           <li className="breadcrumb-item">
             <Link to="/">Inicio</Link>
           </li>
           <li className="breadcrumb-item active">Paciente Dispositivo Atuals</li>
         </ol>
-        <h1 className="page-header">&nbsp;&nbsp;</h1>
         <Panel>
-          <PanelHeader>
-            <h2 id="page-heading">
-              <span className="page-header ml-3">Paciente Dispositivo Atuals</span>
-              <Button id="togglerFilterPacienteDispositivoAtual" className="btn btn-primary float-right jh-create-entity">
-                Filtros&nbsp;
-                <FontAwesomeIcon icon="caret-down" />
-              </Button>
-              <Link
-                to={`${match.url}/new?${this.getFiltersURL()}`}
-                className="btn btn-primary float-right jh-create-entity"
-                id="jh-create-entity"
-              >
-                <FontAwesomeIcon icon="plus" />
-                &nbsp;
-                <Translate contentKey="generadorApp.pacienteDispositivoAtual.home.createLabel">
-                  Create a new Paciente Dispositivo Atual
-                </Translate>
-              </Link>
-            </h2>
-          </PanelHeader>
           <PanelBody>
             <div className="table-responsive">
               <UncontrolledCollapse toggler="#togglerFilterPacienteDispositivoAtual">
@@ -299,7 +301,7 @@ export class PacienteDispositivoAtual extends React.Component<IPacienteDispositi
                     <div className="row mt-1 ml-3 mr-3">
                       {this.state.baseFilters !== 'idPaciente' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="idPacienteLabel" for="paciente-dispositivo-atual-idPaciente">
                               <Translate contentKey="generadorApp.pacienteDispositivoAtual.idPaciente">Id Paciente</Translate>
                             </Label>
@@ -315,7 +317,7 @@ export class PacienteDispositivoAtual extends React.Component<IPacienteDispositi
 
                       {this.state.baseFilters !== 'idPacienteDispositivo' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="idPacienteDispositivoLabel" for="paciente-dispositivo-atual-idPacienteDispositivo">
                               <Translate contentKey="generadorApp.pacienteDispositivoAtual.idPacienteDispositivo">
                                 Id Paciente Dispositivo
@@ -333,7 +335,7 @@ export class PacienteDispositivoAtual extends React.Component<IPacienteDispositi
 
                       {this.state.baseFilters !== 'tqtTraqueostomia' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="tqtTraqueostomiaLabel" for="paciente-dispositivo-atual-tqtTraqueostomia">
                               <Translate contentKey="generadorApp.pacienteDispositivoAtual.tqtTraqueostomia">Tqt Traqueostomia</Translate>
                             </Label>
@@ -349,7 +351,7 @@ export class PacienteDispositivoAtual extends React.Component<IPacienteDispositi
 
                       {this.state.baseFilters !== 'gttGastrostomia' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="gttGastrostomiaLabel" for="paciente-dispositivo-atual-gttGastrostomia">
                               <Translate contentKey="generadorApp.pacienteDispositivoAtual.gttGastrostomia">Gtt Gastrostomia</Translate>
                             </Label>
@@ -365,7 +367,7 @@ export class PacienteDispositivoAtual extends React.Component<IPacienteDispositi
 
                       {this.state.baseFilters !== 'sneSondaNasoenteral' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="sneSondaNasoenteralLabel" for="paciente-dispositivo-atual-sneSondaNasoenteral">
                               <Translate contentKey="generadorApp.pacienteDispositivoAtual.sneSondaNasoenteral">
                                 Sne Sonda Nasoenteral
@@ -383,7 +385,7 @@ export class PacienteDispositivoAtual extends React.Component<IPacienteDispositi
 
                       {this.state.baseFilters !== 'svdSondaVesicalDeDemora' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="svdSondaVesicalDeDemoraLabel" for="paciente-dispositivo-atual-svdSondaVesicalDeDemora">
                               <Translate contentKey="generadorApp.pacienteDispositivoAtual.svdSondaVesicalDeDemora">
                                 Svd Sonda Vesical De Demora
@@ -401,7 +403,7 @@ export class PacienteDispositivoAtual extends React.Component<IPacienteDispositi
 
                       {this.state.baseFilters !== 'svaSondaVesicalDeAlivio' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="svaSondaVesicalDeAlivioLabel" for="paciente-dispositivo-atual-svaSondaVesicalDeAlivio">
                               <Translate contentKey="generadorApp.pacienteDispositivoAtual.svaSondaVesicalDeAlivio">
                                 Sva Sonda Vesical De Alivio
@@ -419,7 +421,7 @@ export class PacienteDispositivoAtual extends React.Component<IPacienteDispositi
 
                       {this.state.baseFilters !== 'portACath' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="portACathLabel" for="paciente-dispositivo-atual-portACath">
                               <Translate contentKey="generadorApp.pacienteDispositivoAtual.portACath">Port A Cath</Translate>
                             </Label>
@@ -435,7 +437,7 @@ export class PacienteDispositivoAtual extends React.Component<IPacienteDispositi
 
                       {this.state.baseFilters !== 'piccAcessoVenosoCentral' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="piccAcessoVenosoCentralLabel" for="paciente-dispositivo-atual-piccAcessoVenosoCentral">
                               <Translate contentKey="generadorApp.pacienteDispositivoAtual.piccAcessoVenosoCentral">
                                 Picc Acesso Venoso Central
@@ -453,7 +455,7 @@ export class PacienteDispositivoAtual extends React.Component<IPacienteDispositi
 
                       {this.state.baseFilters !== 'ventiladores' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="ventiladoresLabel" for="paciente-dispositivo-atual-ventiladores">
                               <Translate contentKey="generadorApp.pacienteDispositivoAtual.ventiladores">Ventiladores</Translate>
                             </Label>
@@ -469,7 +471,7 @@ export class PacienteDispositivoAtual extends React.Component<IPacienteDispositi
 
                       {this.state.baseFilters !== 'uppUlceraPorPressao' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="uppUlceraPorPressaoLabel" for="paciente-dispositivo-atual-uppUlceraPorPressao">
                               <Translate contentKey="generadorApp.pacienteDispositivoAtual.uppUlceraPorPressao">
                                 Upp Ulcera Por Pressao
@@ -487,7 +489,7 @@ export class PacienteDispositivoAtual extends React.Component<IPacienteDispositi
 
                       {this.state.baseFilters !== 'avpAcessoVenosoPeriferico' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="avpAcessoVenosoPerifericoLabel" for="paciente-dispositivo-atual-avpAcessoVenosoPeriferico">
                               <Translate contentKey="generadorApp.pacienteDispositivoAtual.avpAcessoVenosoPeriferico">
                                 Avp Acesso Venoso Periferico
@@ -505,7 +507,7 @@ export class PacienteDispositivoAtual extends React.Component<IPacienteDispositi
 
                       {this.state.baseFilters !== 'uripen' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="uripenLabel" for="paciente-dispositivo-atual-uripen">
                               <Translate contentKey="generadorApp.pacienteDispositivoAtual.uripen">Uripen</Translate>
                             </Label>
@@ -516,7 +518,7 @@ export class PacienteDispositivoAtual extends React.Component<IPacienteDispositi
 
                       {this.state.baseFilters !== 'fraldaGeriatrica' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="fraldaGeriatricaLabel" for="paciente-dispositivo-atual-fraldaGeriatrica">
                               <Translate contentKey="generadorApp.pacienteDispositivoAtual.fraldaGeriatrica">Fralda Geriatrica</Translate>
                             </Label>
@@ -532,7 +534,7 @@ export class PacienteDispositivoAtual extends React.Component<IPacienteDispositi
 
                       {this.state.baseFilters !== 'sngSondaNasogastrica' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="sngSondaNasogastricaLabel" for="paciente-dispositivo-atual-sngSondaNasogastrica">
                               <Translate contentKey="generadorApp.pacienteDispositivoAtual.sngSondaNasogastrica">
                                 Sng Sonda Nasogastrica
@@ -550,7 +552,7 @@ export class PacienteDispositivoAtual extends React.Component<IPacienteDispositi
 
                       {this.state.baseFilters !== 'bipap' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="bipapLabel" for="paciente-dispositivo-atual-bipap">
                               <Translate contentKey="generadorApp.pacienteDispositivoAtual.bipap">Bipap</Translate>
                             </Label>
@@ -561,7 +563,7 @@ export class PacienteDispositivoAtual extends React.Component<IPacienteDispositi
 
                       {this.state.baseFilters !== 'cpap' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="cpapLabel" for="paciente-dispositivo-atual-cpap">
                               <Translate contentKey="generadorApp.pacienteDispositivoAtual.cpap">Cpap</Translate>
                             </Label>
@@ -572,7 +574,7 @@ export class PacienteDispositivoAtual extends React.Component<IPacienteDispositi
 
                       {this.state.baseFilters !== 'cistostomia' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="cistostomiaLabel" for="paciente-dispositivo-atual-cistostomia">
                               <Translate contentKey="generadorApp.pacienteDispositivoAtual.cistostomia">Cistostomia</Translate>
                             </Label>
@@ -588,7 +590,7 @@ export class PacienteDispositivoAtual extends React.Component<IPacienteDispositi
 
                       {this.state.baseFilters !== 'cateterNasalDeOxigenio' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="cateterNasalDeOxigenioLabel" for="paciente-dispositivo-atual-cateterNasalDeOxigenio">
                               <Translate contentKey="generadorApp.pacienteDispositivoAtual.cateterNasalDeOxigenio">
                                 Cateter Nasal De Oxigenio
@@ -606,7 +608,7 @@ export class PacienteDispositivoAtual extends React.Component<IPacienteDispositi
 
                       {this.state.baseFilters !== 'mascaraDeVentilacao' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="mascaraDeVentilacaoLabel" for="paciente-dispositivo-atual-mascaraDeVentilacao">
                               <Translate contentKey="generadorApp.pacienteDispositivoAtual.mascaraDeVentilacao">
                                 Mascara De Ventilacao
@@ -624,7 +626,7 @@ export class PacienteDispositivoAtual extends React.Component<IPacienteDispositi
 
                       {this.state.baseFilters !== 'entubacaoOrotraqueal' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="entubacaoOrotraquealLabel" for="paciente-dispositivo-atual-entubacaoOrotraqueal">
                               <Translate contentKey="generadorApp.pacienteDispositivoAtual.entubacaoOrotraqueal">
                                 Entubacao Orotraqueal
@@ -642,7 +644,7 @@ export class PacienteDispositivoAtual extends React.Component<IPacienteDispositi
 
                       {this.state.baseFilters !== 'ileostomia' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="ileostomiaLabel" for="paciente-dispositivo-atual-ileostomia">
                               <Translate contentKey="generadorApp.pacienteDispositivoAtual.ileostomia">Ileostomia</Translate>
                             </Label>
@@ -658,7 +660,7 @@ export class PacienteDispositivoAtual extends React.Component<IPacienteDispositi
 
                       {this.state.baseFilters !== 'jejunostomia' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="jejunostomiaLabel" for="paciente-dispositivo-atual-jejunostomia">
                               <Translate contentKey="generadorApp.pacienteDispositivoAtual.jejunostomia">Jejunostomia</Translate>
                             </Label>
@@ -674,7 +676,7 @@ export class PacienteDispositivoAtual extends React.Component<IPacienteDispositi
 
                       {this.state.baseFilters !== 'colostomia' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="colostomiaLabel" for="paciente-dispositivo-atual-colostomia">
                               <Translate contentKey="generadorApp.pacienteDispositivoAtual.colostomia">Colostomia</Translate>
                             </Label>
@@ -693,13 +695,13 @@ export class PacienteDispositivoAtual extends React.Component<IPacienteDispositi
                       <Button className="btn btn-success" type="submit">
                         <i className="fa fa-filter" aria-hidden={'true'}></i>
                         &nbsp;
-                        <Translate contentKey="entity.validation.filter">Filter</Translate>
+                        <Translate contentKey="generadorApp.pacienteDispositivoAtual.home.btn_filter">Filter</Translate>
                       </Button>
                       &nbsp;
                       <div className="btn btn-secondary hand" onClick={this.cancelCourse}>
                         <FontAwesomeIcon icon="trash-alt" />
                         &nbsp;
-                        <Translate contentKey="entity.validation.clean">Clean</Translate>
+                        <Translate contentKey="generadorApp.pacienteDispositivoAtual.home.btn_filter_clean">Clean</Translate>
                       </div>
                     </div>
                   </AvForm>

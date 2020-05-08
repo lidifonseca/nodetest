@@ -41,6 +41,7 @@ export interface IStatusAtendimentoBaseState {
 
 export interface IStatusAtendimentoUpdateState {
   fieldsBase: IStatusAtendimentoBaseState;
+
   isNew: boolean;
 }
 

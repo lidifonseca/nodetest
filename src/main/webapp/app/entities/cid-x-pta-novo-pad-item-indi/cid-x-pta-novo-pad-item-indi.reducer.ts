@@ -43,6 +43,7 @@ export interface ICidXPtaNovoPadItemIndiBaseState {
 
 export interface ICidXPtaNovoPadItemIndiUpdateState {
   fieldsBase: ICidXPtaNovoPadItemIndiBaseState;
+
   isNew: boolean;
 }
 

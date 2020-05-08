@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import Select from 'react-select';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 import { Button, Row, Col, Label } from 'reactstrap';
@@ -61,28 +62,11 @@ export class PadItemUpdate extends React.Component<IPadItemUpdateProps, IPadItem
   };
   getFiltersURL = (offset = null) => {
     const fieldsBase = this.state.fieldsBase;
-    return (
-      '_back=1' +
-      (fieldsBase['baseFilters'] ? '&baseFilters=' + fieldsBase['baseFilters'] : '') +
-      (fieldsBase['activePage'] ? '&page=' + fieldsBase['activePage'] : '') +
-      (fieldsBase['itemsPerPage'] ? '&size=' + fieldsBase['itemsPerPage'] : '') +
-      (fieldsBase['sort'] ? '&sort=' + (fieldsBase['sort'] + ',' + fieldsBase['order']) : '') +
-      (offset !== null ? '&offset=' + offset : '') +
-      (fieldsBase['idPedido'] ? '&idPedido=' + fieldsBase['idPedido'] : '') +
-      (fieldsBase['dataInicio'] ? '&dataInicio=' + fieldsBase['dataInicio'] : '') +
-      (fieldsBase['dataFim'] ? '&dataFim=' + fieldsBase['dataFim'] : '') +
-      (fieldsBase['qtdSessoes'] ? '&qtdSessoes=' + fieldsBase['qtdSessoes'] : '') +
-      (fieldsBase['observacao'] ? '&observacao=' + fieldsBase['observacao'] : '') +
-      (fieldsBase['sub'] ? '&sub=' + fieldsBase['sub'] : '') +
-      (fieldsBase['ativo'] ? '&ativo=' + fieldsBase['ativo'] : '') +
-      (fieldsBase['dataPadItemIncompleto'] ? '&dataPadItemIncompleto=' + fieldsBase['dataPadItemIncompleto'] : '') +
-      (fieldsBase['dataPadItemCompleto'] ? '&dataPadItemCompleto=' + fieldsBase['dataPadItemCompleto'] : '') +
-      (fieldsBase['numGhc'] ? '&numGhc=' + fieldsBase['numGhc'] : '') +
-      (fieldsBase['cidXPtaNovo'] ? '&cidXPtaNovo=' + fieldsBase['cidXPtaNovo'] : '') +
-      (fieldsBase['categoriaId'] ? '&categoriaId=' + fieldsBase['categoriaId'] : '') +
-      (fieldsBase['score'] ? '&score=' + fieldsBase['score'] : '') +
-      ''
-    );
+    let url = '_back=1' + (offset !== null ? '&offset=' + offset : '');
+    Object.keys(fieldsBase).map(key => {
+      url += '&' + key + '=' + fieldsBase[key];
+    });
+    return url;
   };
   saveEntity = (event: any, errors: any, values: any) => {
     values.dataPadItemIncompleto = convertDateTimeToServer(values.dataPadItemIncompleto);
@@ -92,6 +76,7 @@ export class PadItemUpdate extends React.Component<IPadItemUpdateProps, IPadItem
       const { padItemEntity } = this.props;
       const entity = {
         ...padItemEntity,
+
         ...values
       };
 
@@ -115,14 +100,6 @@ export class PadItemUpdate extends React.Component<IPadItemUpdateProps, IPadItem
     const baseFilters = this.state.fieldsBase && this.state.fieldsBase['baseFilters'] ? this.state.fieldsBase['baseFilters'] : null;
     return (
       <div>
-        <ol className="breadcrumb float-xl-right">
-          <li className="breadcrumb-item">
-            <Link to="/">Inicio</Link>
-          </li>
-          <li className="breadcrumb-item active">Pad Items</li>
-          <li className="breadcrumb-item active">Pad Items edit</li>
-        </ol>
-        <h1 className="page-header">&nbsp;&nbsp;</h1>
         <AvForm
           model={
             isNew
@@ -133,34 +110,40 @@ export class PadItemUpdate extends React.Component<IPadItemUpdateProps, IPadItem
           }
           onSubmit={this.saveEntity}
         >
-          <Panel>
-            <PanelHeader>
-              <h2 id="page-heading">
-                <span className="page-header ml-3">
-                  <Translate contentKey="generadorApp.padItem.home.createOrEditLabel">Create or edit a PadItem</Translate>
-                </span>
+          <h2 id="page-heading">
+            <span className="page-header ml-3">
+              <Translate contentKey="generadorApp.padItem.home.createOrEditLabel">Create or edit a PadItem</Translate>
+            </span>
 
-                <Button color="primary" id="save-entity" type="submit" disabled={updating} className="float-right jh-create-entity">
-                  <FontAwesomeIcon icon="save" />
-                  &nbsp;
-                  <Translate contentKey="entity.action.save">Save</Translate>
-                </Button>
-                <Button
-                  tag={Link}
-                  id="cancel-save"
-                  to={'/pad-item?' + this.getFiltersURL()}
-                  replace
-                  color="info"
-                  className="float-right jh-create-entity"
-                >
-                  <FontAwesomeIcon icon="arrow-left" />
-                  &nbsp;
-                  <span className="d-none d-md-inline">
-                    <Translate contentKey="entity.action.back">Back</Translate>
-                  </span>
-                </Button>
-              </h2>
-            </PanelHeader>
+            <Button color="primary" id="save-entity" type="submit" disabled={updating} className="float-right jh-create-entity">
+              <FontAwesomeIcon icon="save" />
+              &nbsp;
+              <Translate contentKey="entity.action.save">Save</Translate>
+            </Button>
+            <Button
+              tag={Link}
+              id="cancel-save"
+              to={'/pad-item?' + this.getFiltersURL()}
+              replace
+              color="info"
+              className="float-right jh-create-entity"
+            >
+              <FontAwesomeIcon icon="arrow-left" />
+              &nbsp;
+              <span className="d-none d-md-inline">
+                <Translate contentKey="entity.action.back">Back</Translate>
+              </span>
+            </Button>
+          </h2>
+          <ol className="breadcrumb">
+            <li className="breadcrumb-item">
+              <Link to="/">Inicio</Link>
+            </li>
+            <li className="breadcrumb-item active">Pad Items</li>
+            <li className="breadcrumb-item active">Pad Items edit</li>
+          </ol>
+
+          <Panel>
             <PanelBody>
               <Row className="justify-content-center">
                 <Col md="8">
@@ -184,266 +167,31 @@ export class PadItemUpdate extends React.Component<IPadItemUpdateProps, IPadItem
                         </AvGroup>
                       ) : null}
                       <Row>
-                        {baseFilters !== 'idPedido' ? (
-                          <Col md="idPedido">
-                            <AvGroup>
-                              <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="idPedidoLabel" for="pad-item-idPedido">
-                                    <Translate contentKey="generadorApp.padItem.idPedido">Id Pedido</Translate>
-                                  </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField id="pad-item-idPedido" type="text" name="idPedido" />
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
-                        ) : (
-                          <AvInput type="hidden" name="idPedido" value={this.state.fieldsBase[baseFilters]} />
-                        )}
+                        <IdPedidoComponentUpdate baseFilters />
 
-                        {baseFilters !== 'dataInicio' ? (
-                          <Col md="dataInicio">
-                            <AvGroup>
-                              <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="dataInicioLabel" for="pad-item-dataInicio">
-                                    <Translate contentKey="generadorApp.padItem.dataInicio">Data Inicio</Translate>
-                                  </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField id="pad-item-dataInicio" type="date" className="form-control" name="dataInicio" />
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
-                        ) : (
-                          <AvInput type="hidden" name="dataInicio" value={this.state.fieldsBase[baseFilters]} />
-                        )}
+                        <DataInicioComponentUpdate baseFilters />
 
-                        {baseFilters !== 'dataFim' ? (
-                          <Col md="dataFim">
-                            <AvGroup>
-                              <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="dataFimLabel" for="pad-item-dataFim">
-                                    <Translate contentKey="generadorApp.padItem.dataFim">Data Fim</Translate>
-                                  </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField id="pad-item-dataFim" type="date" className="form-control" name="dataFim" />
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
-                        ) : (
-                          <AvInput type="hidden" name="dataFim" value={this.state.fieldsBase[baseFilters]} />
-                        )}
+                        <DataFimComponentUpdate baseFilters />
 
-                        {baseFilters !== 'qtdSessoes' ? (
-                          <Col md="qtdSessoes">
-                            <AvGroup>
-                              <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="qtdSessoesLabel" for="pad-item-qtdSessoes">
-                                    <Translate contentKey="generadorApp.padItem.qtdSessoes">Qtd Sessoes</Translate>
-                                  </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField id="pad-item-qtdSessoes" type="string" className="form-control" name="qtdSessoes" />
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
-                        ) : (
-                          <AvInput type="hidden" name="qtdSessoes" value={this.state.fieldsBase[baseFilters]} />
-                        )}
+                        <QtdSessoesComponentUpdate baseFilters />
 
-                        {baseFilters !== 'observacao' ? (
-                          <Col md="observacao">
-                            <AvGroup>
-                              <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="observacaoLabel" for="pad-item-observacao">
-                                    <Translate contentKey="generadorApp.padItem.observacao">Observacao</Translate>
-                                  </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvInput id="pad-item-observacao" type="textarea" name="observacao" />
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
-                        ) : (
-                          <AvInput type="hidden" name="observacao" value={this.state.fieldsBase[baseFilters]} />
-                        )}
+                        <ObservacaoComponentUpdate baseFilters />
 
-                        {baseFilters !== 'sub' ? (
-                          <Col md="sub">
-                            <AvGroup>
-                              <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="subLabel" for="pad-item-sub">
-                                    <Translate contentKey="generadorApp.padItem.sub">Sub</Translate>
-                                  </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField id="pad-item-sub" type="string" className="form-control" name="sub" />
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
-                        ) : (
-                          <AvInput type="hidden" name="sub" value={this.state.fieldsBase[baseFilters]} />
-                        )}
+                        <SubComponentUpdate baseFilters />
 
-                        {baseFilters !== 'ativo' ? (
-                          <Col md="ativo">
-                            <AvGroup>
-                              <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="ativoLabel" for="pad-item-ativo">
-                                    <Translate contentKey="generadorApp.padItem.ativo">Ativo</Translate>
-                                  </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField id="pad-item-ativo" type="string" className="form-control" name="ativo" />
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
-                        ) : (
-                          <AvInput type="hidden" name="ativo" value={this.state.fieldsBase[baseFilters]} />
-                        )}
+                        <AtivoComponentUpdate baseFilters />
 
-                        {baseFilters !== 'dataPadItemIncompleto' ? (
-                          <Col md="dataPadItemIncompleto">
-                            <AvGroup>
-                              <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="dataPadItemIncompletoLabel" for="pad-item-dataPadItemIncompleto">
-                                    <Translate contentKey="generadorApp.padItem.dataPadItemIncompleto">Data Pad Item Incompleto</Translate>
-                                  </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvInput
-                                    id="pad-item-dataPadItemIncompleto"
-                                    type="datetime-local"
-                                    className="form-control"
-                                    name="dataPadItemIncompleto"
-                                    placeholder={'YYYY-MM-DD HH:mm'}
-                                    value={isNew ? null : convertDateTimeFromServer(this.props.padItemEntity.dataPadItemIncompleto)}
-                                  />
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
-                        ) : (
-                          <AvInput type="hidden" name="dataPadItemIncompleto" value={this.state.fieldsBase[baseFilters]} />
-                        )}
+                        <DataPadItemIncompletoComponentUpdate baseFilters />
 
-                        {baseFilters !== 'dataPadItemCompleto' ? (
-                          <Col md="dataPadItemCompleto">
-                            <AvGroup>
-                              <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="dataPadItemCompletoLabel" for="pad-item-dataPadItemCompleto">
-                                    <Translate contentKey="generadorApp.padItem.dataPadItemCompleto">Data Pad Item Completo</Translate>
-                                  </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvInput
-                                    id="pad-item-dataPadItemCompleto"
-                                    type="datetime-local"
-                                    className="form-control"
-                                    name="dataPadItemCompleto"
-                                    placeholder={'YYYY-MM-DD HH:mm'}
-                                    value={isNew ? null : convertDateTimeFromServer(this.props.padItemEntity.dataPadItemCompleto)}
-                                  />
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
-                        ) : (
-                          <AvInput type="hidden" name="dataPadItemCompleto" value={this.state.fieldsBase[baseFilters]} />
-                        )}
+                        <DataPadItemCompletoComponentUpdate baseFilters />
 
-                        {baseFilters !== 'numGhc' ? (
-                          <Col md="numGhc">
-                            <AvGroup>
-                              <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="numGhcLabel" for="pad-item-numGhc">
-                                    <Translate contentKey="generadorApp.padItem.numGhc">Num Ghc</Translate>
-                                  </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField id="pad-item-numGhc" type="text" name="numGhc" />
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
-                        ) : (
-                          <AvInput type="hidden" name="numGhc" value={this.state.fieldsBase[baseFilters]} />
-                        )}
+                        <NumGhcComponentUpdate baseFilters />
 
-                        {baseFilters !== 'cidXPtaNovo' ? (
-                          <Col md="cidXPtaNovo">
-                            <AvGroup>
-                              <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="cidXPtaNovoLabel" for="pad-item-cidXPtaNovo">
-                                    <Translate contentKey="generadorApp.padItem.cidXPtaNovo">Cid X Pta Novo</Translate>
-                                  </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField id="pad-item-cidXPtaNovo" type="string" className="form-control" name="cidXPtaNovo" />
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
-                        ) : (
-                          <AvInput type="hidden" name="cidXPtaNovo" value={this.state.fieldsBase[baseFilters]} />
-                        )}
+                        <CidXPtaNovoComponentUpdate baseFilters />
 
-                        {baseFilters !== 'categoriaId' ? (
-                          <Col md="categoriaId">
-                            <AvGroup>
-                              <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="categoriaIdLabel" for="pad-item-categoriaId">
-                                    <Translate contentKey="generadorApp.padItem.categoriaId">Categoria Id</Translate>
-                                  </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField id="pad-item-categoriaId" type="string" className="form-control" name="categoriaId" />
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
-                        ) : (
-                          <AvInput type="hidden" name="categoriaId" value={this.state.fieldsBase[baseFilters]} />
-                        )}
+                        <CategoriaIdComponentUpdate baseFilters />
 
-                        {baseFilters !== 'score' ? (
-                          <Col md="score">
-                            <AvGroup>
-                              <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="scoreLabel" for="pad-item-score">
-                                    <Translate contentKey="generadorApp.padItem.score">Score</Translate>
-                                  </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField id="pad-item-score" type="string" className="form-control" name="score" />
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
-                        ) : (
-                          <AvInput type="hidden" name="score" value={this.state.fieldsBase[baseFilters]} />
-                        )}
+                        <ScoreComponentUpdate baseFilters />
                       </Row>
                     </div>
                   )}
@@ -474,5 +222,292 @@ const mapDispatchToProps = {
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
+
+const IdPedidoComponentUpdate = ({ baseFilters }) => {
+  return baseFilters !== 'idPedido' ? (
+    <Col md="idPedido">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" id="idPedidoLabel" for="pad-item-idPedido">
+              <Translate contentKey="generadorApp.padItem.idPedido">Id Pedido</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <AvField id="pad-item-idPedido" type="text" name="idPedido" />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="idPedido" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const DataInicioComponentUpdate = ({ baseFilters }) => {
+  return baseFilters !== 'dataInicio' ? (
+    <Col md="dataInicio">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" id="dataInicioLabel" for="pad-item-dataInicio">
+              <Translate contentKey="generadorApp.padItem.dataInicio">Data Inicio</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <AvField id="pad-item-dataInicio" type="date" className="form-control" name="dataInicio" />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="dataInicio" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const DataFimComponentUpdate = ({ baseFilters }) => {
+  return baseFilters !== 'dataFim' ? (
+    <Col md="dataFim">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" id="dataFimLabel" for="pad-item-dataFim">
+              <Translate contentKey="generadorApp.padItem.dataFim">Data Fim</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <AvField id="pad-item-dataFim" type="date" className="form-control" name="dataFim" />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="dataFim" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const QtdSessoesComponentUpdate = ({ baseFilters }) => {
+  return baseFilters !== 'qtdSessoes' ? (
+    <Col md="qtdSessoes">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" id="qtdSessoesLabel" for="pad-item-qtdSessoes">
+              <Translate contentKey="generadorApp.padItem.qtdSessoes">Qtd Sessoes</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <AvField id="pad-item-qtdSessoes" type="string" className="form-control" name="qtdSessoes" />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="qtdSessoes" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const ObservacaoComponentUpdate = ({ baseFilters }) => {
+  return baseFilters !== 'observacao' ? (
+    <Col md="observacao">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" id="observacaoLabel" for="pad-item-observacao">
+              <Translate contentKey="generadorApp.padItem.observacao">Observacao</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <AvInput id="pad-item-observacao" type="textarea" name="observacao" />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="observacao" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const SubComponentUpdate = ({ baseFilters }) => {
+  return baseFilters !== 'sub' ? (
+    <Col md="sub">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" id="subLabel" for="pad-item-sub">
+              <Translate contentKey="generadorApp.padItem.sub">Sub</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <AvField id="pad-item-sub" type="string" className="form-control" name="sub" />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="sub" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const AtivoComponentUpdate = ({ baseFilters }) => {
+  return baseFilters !== 'ativo' ? (
+    <Col md="ativo">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" id="ativoLabel" for="pad-item-ativo">
+              <Translate contentKey="generadorApp.padItem.ativo">Ativo</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <AvField id="pad-item-ativo" type="string" className="form-control" name="ativo" />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="ativo" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const DataPadItemIncompletoComponentUpdate = ({ baseFilters }) => {
+  return baseFilters !== 'dataPadItemIncompleto' ? (
+    <Col md="dataPadItemIncompleto">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" id="dataPadItemIncompletoLabel" for="pad-item-dataPadItemIncompleto">
+              <Translate contentKey="generadorApp.padItem.dataPadItemIncompleto">Data Pad Item Incompleto</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <AvInput
+              id="pad-item-dataPadItemIncompleto"
+              type="datetime-local"
+              className="form-control"
+              name="dataPadItemIncompleto"
+              placeholder={'YYYY-MM-DD HH:mm'}
+              value={isNew ? null : convertDateTimeFromServer(this.props.padItemEntity.dataPadItemIncompleto)}
+            />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="dataPadItemIncompleto" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const DataPadItemCompletoComponentUpdate = ({ baseFilters }) => {
+  return baseFilters !== 'dataPadItemCompleto' ? (
+    <Col md="dataPadItemCompleto">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" id="dataPadItemCompletoLabel" for="pad-item-dataPadItemCompleto">
+              <Translate contentKey="generadorApp.padItem.dataPadItemCompleto">Data Pad Item Completo</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <AvInput
+              id="pad-item-dataPadItemCompleto"
+              type="datetime-local"
+              className="form-control"
+              name="dataPadItemCompleto"
+              placeholder={'YYYY-MM-DD HH:mm'}
+              value={isNew ? null : convertDateTimeFromServer(this.props.padItemEntity.dataPadItemCompleto)}
+            />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="dataPadItemCompleto" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const NumGhcComponentUpdate = ({ baseFilters }) => {
+  return baseFilters !== 'numGhc' ? (
+    <Col md="numGhc">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" id="numGhcLabel" for="pad-item-numGhc">
+              <Translate contentKey="generadorApp.padItem.numGhc">Num Ghc</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <AvField id="pad-item-numGhc" type="text" name="numGhc" />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="numGhc" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const CidXPtaNovoComponentUpdate = ({ baseFilters }) => {
+  return baseFilters !== 'cidXPtaNovo' ? (
+    <Col md="cidXPtaNovo">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" id="cidXPtaNovoLabel" for="pad-item-cidXPtaNovo">
+              <Translate contentKey="generadorApp.padItem.cidXPtaNovo">Cid X Pta Novo</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <AvField id="pad-item-cidXPtaNovo" type="string" className="form-control" name="cidXPtaNovo" />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="cidXPtaNovo" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const CategoriaIdComponentUpdate = ({ baseFilters }) => {
+  return baseFilters !== 'categoriaId' ? (
+    <Col md="categoriaId">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" id="categoriaIdLabel" for="pad-item-categoriaId">
+              <Translate contentKey="generadorApp.padItem.categoriaId">Categoria Id</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <AvField id="pad-item-categoriaId" type="string" className="form-control" name="categoriaId" />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="categoriaId" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const ScoreComponentUpdate = ({ baseFilters }) => {
+  return baseFilters !== 'score' ? (
+    <Col md="score">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" id="scoreLabel" for="pad-item-score">
+              <Translate contentKey="generadorApp.padItem.score">Score</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <AvField id="pad-item-score" type="string" className="form-control" name="score" />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="score" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(PadItemUpdate);

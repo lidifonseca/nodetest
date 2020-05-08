@@ -39,6 +39,7 @@ export interface IPeriodoBaseState {
 
 export interface IPeriodoUpdateState {
   fieldsBase: IPeriodoBaseState;
+
   isNew: boolean;
 }
 

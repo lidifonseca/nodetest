@@ -1,8 +1,14 @@
 {
   "generadorApp": {
     "licaoCasa": {
+      "listButtons": {},
+      "viewButtons": {},
+      "dropdown_btn": "Ações",
       "home": {
         "title": "Licao Casas",
+        "btn_filter": "Filter",
+        "btn_filter_clean": "Clean Filters",
+        "btn_filter_open": "Filters",
         "createLabel": "Create a new Licao Casa",
         "createOrEditLabel": "Create or edit a Licao Casa",
         "notFound": "No Licao Casas found"

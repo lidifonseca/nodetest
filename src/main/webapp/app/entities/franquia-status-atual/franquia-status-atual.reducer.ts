@@ -40,6 +40,7 @@ export interface IFranquiaStatusAtualBaseState {
 
 export interface IFranquiaStatusAtualUpdateState {
   fieldsBase: IFranquiaStatusAtualBaseState;
+
   isNew: boolean;
 }
 

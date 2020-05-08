@@ -11,7 +11,7 @@
         }
     ],
     "relationships": [],
-    "changelogDate": "20200507110700",
+    "changelogDate": "20200508155700",
     "entityTableName": "grau_parentesco",
     "dto": "mapstruct",
     "pagination": "pagination",

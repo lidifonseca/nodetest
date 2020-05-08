@@ -1,8 +1,14 @@
 {
   "generadorApp": {
     "categoria": {
+      "listButtons": {},
+      "viewButtons": {},
+      "dropdown_btn": "Actions",
       "home": {
         "title": "Categorias",
+        "btn_filter": "Filtrar",
+        "btn_filter_clean": "Limpar Filtros",
+        "btn_filter_open": "Filtros",
         "createLabel": "Criar novo Categoria",
         "createOrEditLabel": "Criar ou editar Categoria",
         "notFound": "Nenhum Categoria encontrado"
@@ -22,6 +28,7 @@
       "publicar": "Publicar",
       "ordem": "Ordem",
       "publicarSite": "Publicar Site",
+      "unidade_empty": "Sem Unidade",
       "unidade": "Unidade"
     }
   }

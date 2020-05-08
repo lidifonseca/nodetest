@@ -2,6 +2,7 @@
 import React from 'react';
 import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
 import { connect } from 'react-redux';
+import Select from 'react-select';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import {
   Button,
@@ -167,34 +168,33 @@ export class EspecialidadeOperadora extends React.Component<IEspecialidadeOperad
     const { especialidadeOperadoraList, match, totalItems } = this.props;
     return (
       <div>
-        <ol className="breadcrumb float-xl-right">
+        <h2 id="page-heading">
+          <span className="page-header">Especialidade Operadoras</span>
+          <Button id="togglerFilterEspecialidadeOperadora" className="btn btn-primary float-right jh-create-entity">
+            <Translate contentKey="generadorApp.especialidadeOperadora.home.btn_filter_open">Filters</Translate>
+            &nbsp;
+            <FontAwesomeIcon icon="caret-down" />
+          </Button>{' '}
+          &nbsp;
+          <Link
+            to={`${match.url}/new?${this.getFiltersURL()}`}
+            className="btn btn-primary float-right jh-create-entity"
+            id="jh-create-entity"
+          >
+            <FontAwesomeIcon icon="plus" />
+            &nbsp;
+            <Translate contentKey="generadorApp.especialidadeOperadora.home.createLabel">Create a new Especialidade Operadora</Translate>
+          </Link>{' '}
+          &nbsp;
+        </h2>
+
+        <ol className="breadcrumb">
           <li className="breadcrumb-item">
             <Link to="/">Inicio</Link>
           </li>
           <li className="breadcrumb-item active">Especialidade Operadoras</li>
         </ol>
-        <h1 className="page-header">&nbsp;&nbsp;</h1>
         <Panel>
-          <PanelHeader>
-            <h2 id="page-heading">
-              <span className="page-header ml-3">Especialidade Operadoras</span>
-              <Button id="togglerFilterEspecialidadeOperadora" className="btn btn-primary float-right jh-create-entity">
-                Filtros&nbsp;
-                <FontAwesomeIcon icon="caret-down" />
-              </Button>
-              <Link
-                to={`${match.url}/new?${this.getFiltersURL()}`}
-                className="btn btn-primary float-right jh-create-entity"
-                id="jh-create-entity"
-              >
-                <FontAwesomeIcon icon="plus" />
-                &nbsp;
-                <Translate contentKey="generadorApp.especialidadeOperadora.home.createLabel">
-                  Create a new Especialidade Operadora
-                </Translate>
-              </Link>
-            </h2>
-          </PanelHeader>
           <PanelBody>
             <div className="table-responsive">
               <UncontrolledCollapse toggler="#togglerFilterEspecialidadeOperadora">
@@ -203,7 +203,7 @@ export class EspecialidadeOperadora extends React.Component<IEspecialidadeOperad
                     <div className="row mt-1 ml-3 mr-3">
                       {this.state.baseFilters !== 'codTuss' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="codTussLabel" for="especialidade-operadora-codTuss">
                               <Translate contentKey="generadorApp.especialidadeOperadora.codTuss">Cod Tuss</Translate>
                             </Label>
@@ -215,7 +215,7 @@ export class EspecialidadeOperadora extends React.Component<IEspecialidadeOperad
 
                       {this.state.baseFilters !== 'codDespesa' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="codDespesaLabel" for="especialidade-operadora-codDespesa">
                               <Translate contentKey="generadorApp.especialidadeOperadora.codDespesa">Cod Despesa</Translate>
                             </Label>
@@ -227,7 +227,7 @@ export class EspecialidadeOperadora extends React.Component<IEspecialidadeOperad
 
                       {this.state.baseFilters !== 'codTabela' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="codTabelaLabel" for="especialidade-operadora-codTabela">
                               <Translate contentKey="generadorApp.especialidadeOperadora.codTabela">Cod Tabela</Translate>
                             </Label>
@@ -239,7 +239,7 @@ export class EspecialidadeOperadora extends React.Component<IEspecialidadeOperad
 
                       {this.state.baseFilters !== 'valorCusto' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="valorCustoLabel" for="especialidade-operadora-valorCusto">
                               <Translate contentKey="generadorApp.especialidadeOperadora.valorCusto">Valor Custo</Translate>
                             </Label>
@@ -255,7 +255,7 @@ export class EspecialidadeOperadora extends React.Component<IEspecialidadeOperad
 
                       {this.state.baseFilters !== 'valorVenda' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="valorVendaLabel" for="especialidade-operadora-valorVenda">
                               <Translate contentKey="generadorApp.especialidadeOperadora.valorVenda">Valor Venda</Translate>
                             </Label>
@@ -271,7 +271,7 @@ export class EspecialidadeOperadora extends React.Component<IEspecialidadeOperad
 
                       {this.state.baseFilters !== 'descontoCusto' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="descontoCustoLabel" for="especialidade-operadora-descontoCusto">
                               <Translate contentKey="generadorApp.especialidadeOperadora.descontoCusto">Desconto Custo</Translate>
                             </Label>
@@ -287,7 +287,7 @@ export class EspecialidadeOperadora extends React.Component<IEspecialidadeOperad
 
                       {this.state.baseFilters !== 'descontoVenda' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="descontoVendaLabel" for="especialidade-operadora-descontoVenda">
                               <Translate contentKey="generadorApp.especialidadeOperadora.descontoVenda">Desconto Venda</Translate>
                             </Label>
@@ -303,7 +303,7 @@ export class EspecialidadeOperadora extends React.Component<IEspecialidadeOperad
 
                       {this.state.baseFilters !== 'ativo' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="ativoLabel" for="especialidade-operadora-ativo">
                               <Translate contentKey="generadorApp.especialidadeOperadora.ativo">Ativo</Translate>
                             </Label>
@@ -317,13 +317,13 @@ export class EspecialidadeOperadora extends React.Component<IEspecialidadeOperad
                       <Button className="btn btn-success" type="submit">
                         <i className="fa fa-filter" aria-hidden={'true'}></i>
                         &nbsp;
-                        <Translate contentKey="entity.validation.filter">Filter</Translate>
+                        <Translate contentKey="generadorApp.especialidadeOperadora.home.btn_filter">Filter</Translate>
                       </Button>
                       &nbsp;
                       <div className="btn btn-secondary hand" onClick={this.cancelCourse}>
                         <FontAwesomeIcon icon="trash-alt" />
                         &nbsp;
-                        <Translate contentKey="entity.validation.clean">Clean</Translate>
+                        <Translate contentKey="generadorApp.especialidadeOperadora.home.btn_filter_clean">Clean</Translate>
                       </div>
                     </div>
                   </AvForm>

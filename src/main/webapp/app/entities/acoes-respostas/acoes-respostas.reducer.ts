@@ -42,6 +42,7 @@ export interface IAcoesRespostasBaseState {
 
 export interface IAcoesRespostasUpdateState {
   fieldsBase: IAcoesRespostasBaseState;
+
   isNew: boolean;
 }
 

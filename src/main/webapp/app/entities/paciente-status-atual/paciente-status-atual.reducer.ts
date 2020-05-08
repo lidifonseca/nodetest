@@ -43,6 +43,9 @@ export interface IPacienteStatusAtualBaseState {
 
 export interface IPacienteStatusAtualUpdateState {
   fieldsBase: IPacienteStatusAtualBaseState;
+
+  pacienteSelectValue: any;
+  statusAtualSelectValue: any;
   isNew: boolean;
   pacienteId: string;
   statusId: string;

@@ -41,6 +41,7 @@ export interface IDiarioTagsBaseState {
 
 export interface IDiarioTagsUpdateState {
   fieldsBase: IDiarioTagsBaseState;
+
   isNew: boolean;
 }
 

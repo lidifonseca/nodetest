@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import Select from 'react-select';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 import { Button, Row, Col, Label } from 'reactstrap';
@@ -64,24 +65,18 @@ export class ProfissionalStatusAtualUpdate extends React.Component<
   };
   getFiltersURL = (offset = null) => {
     const fieldsBase = this.state.fieldsBase;
-    return (
-      '_back=1' +
-      (fieldsBase['baseFilters'] ? '&baseFilters=' + fieldsBase['baseFilters'] : '') +
-      (fieldsBase['activePage'] ? '&page=' + fieldsBase['activePage'] : '') +
-      (fieldsBase['itemsPerPage'] ? '&size=' + fieldsBase['itemsPerPage'] : '') +
-      (fieldsBase['sort'] ? '&sort=' + (fieldsBase['sort'] + ',' + fieldsBase['order']) : '') +
-      (offset !== null ? '&offset=' + offset : '') +
-      (fieldsBase['idProfissional'] ? '&idProfissional=' + fieldsBase['idProfissional'] : '') +
-      (fieldsBase['obs'] ? '&obs=' + fieldsBase['obs'] : '') +
-      (fieldsBase['ativo'] ? '&ativo=' + fieldsBase['ativo'] : '') +
-      ''
-    );
+    let url = '_back=1' + (offset !== null ? '&offset=' + offset : '');
+    Object.keys(fieldsBase).map(key => {
+      url += '&' + key + '=' + fieldsBase[key];
+    });
+    return url;
   };
   saveEntity = (event: any, errors: any, values: any) => {
     if (errors.length === 0) {
       const { profissionalStatusAtualEntity } = this.props;
       const entity = {
         ...profissionalStatusAtualEntity,
+
         ...values
       };
 
@@ -105,14 +100,6 @@ export class ProfissionalStatusAtualUpdate extends React.Component<
     const baseFilters = this.state.fieldsBase && this.state.fieldsBase['baseFilters'] ? this.state.fieldsBase['baseFilters'] : null;
     return (
       <div>
-        <ol className="breadcrumb float-xl-right">
-          <li className="breadcrumb-item">
-            <Link to="/">Inicio</Link>
-          </li>
-          <li className="breadcrumb-item active">Profissional Status Atuals</li>
-          <li className="breadcrumb-item active">Profissional Status Atuals edit</li>
-        </ol>
-        <h1 className="page-header">&nbsp;&nbsp;</h1>
         <AvForm
           model={
             isNew
@@ -123,36 +110,42 @@ export class ProfissionalStatusAtualUpdate extends React.Component<
           }
           onSubmit={this.saveEntity}
         >
-          <Panel>
-            <PanelHeader>
-              <h2 id="page-heading">
-                <span className="page-header ml-3">
-                  <Translate contentKey="generadorApp.profissionalStatusAtual.home.createOrEditLabel">
-                    Create or edit a ProfissionalStatusAtual
-                  </Translate>
-                </span>
+          <h2 id="page-heading">
+            <span className="page-header ml-3">
+              <Translate contentKey="generadorApp.profissionalStatusAtual.home.createOrEditLabel">
+                Create or edit a ProfissionalStatusAtual
+              </Translate>
+            </span>
 
-                <Button color="primary" id="save-entity" type="submit" disabled={updating} className="float-right jh-create-entity">
-                  <FontAwesomeIcon icon="save" />
-                  &nbsp;
-                  <Translate contentKey="entity.action.save">Save</Translate>
-                </Button>
-                <Button
-                  tag={Link}
-                  id="cancel-save"
-                  to={'/profissional-status-atual?' + this.getFiltersURL()}
-                  replace
-                  color="info"
-                  className="float-right jh-create-entity"
-                >
-                  <FontAwesomeIcon icon="arrow-left" />
-                  &nbsp;
-                  <span className="d-none d-md-inline">
-                    <Translate contentKey="entity.action.back">Back</Translate>
-                  </span>
-                </Button>
-              </h2>
-            </PanelHeader>
+            <Button color="primary" id="save-entity" type="submit" disabled={updating} className="float-right jh-create-entity">
+              <FontAwesomeIcon icon="save" />
+              &nbsp;
+              <Translate contentKey="entity.action.save">Save</Translate>
+            </Button>
+            <Button
+              tag={Link}
+              id="cancel-save"
+              to={'/profissional-status-atual?' + this.getFiltersURL()}
+              replace
+              color="info"
+              className="float-right jh-create-entity"
+            >
+              <FontAwesomeIcon icon="arrow-left" />
+              &nbsp;
+              <span className="d-none d-md-inline">
+                <Translate contentKey="entity.action.back">Back</Translate>
+              </span>
+            </Button>
+          </h2>
+          <ol className="breadcrumb">
+            <li className="breadcrumb-item">
+              <Link to="/">Inicio</Link>
+            </li>
+            <li className="breadcrumb-item active">Profissional Status Atuals</li>
+            <li className="breadcrumb-item active">Profissional Status Atuals edit</li>
+          </ol>
+
+          <Panel>
             <PanelBody>
               <Row className="justify-content-center">
                 <Col md="8">
@@ -183,62 +176,11 @@ export class ProfissionalStatusAtualUpdate extends React.Component<
                         </AvGroup>
                       ) : null}
                       <Row>
-                        {baseFilters !== 'idProfissional' ? (
-                          <Col md="idProfissional">
-                            <AvGroup>
-                              <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="idProfissionalLabel" for="profissional-status-atual-idProfissional">
-                                    <Translate contentKey="generadorApp.profissionalStatusAtual.idProfissional">Id Profissional</Translate>
-                                  </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField id="profissional-status-atual-idProfissional" type="text" name="idProfissional" />
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
-                        ) : (
-                          <AvInput type="hidden" name="idProfissional" value={this.state.fieldsBase[baseFilters]} />
-                        )}
+                        <IdProfissionalComponentUpdate baseFilters />
 
-                        {baseFilters !== 'obs' ? (
-                          <Col md="obs">
-                            <AvGroup>
-                              <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="obsLabel" for="profissional-status-atual-obs">
-                                    <Translate contentKey="generadorApp.profissionalStatusAtual.obs">Obs</Translate>
-                                  </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvInput id="profissional-status-atual-obs" type="textarea" name="obs" />
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
-                        ) : (
-                          <AvInput type="hidden" name="obs" value={this.state.fieldsBase[baseFilters]} />
-                        )}
+                        <ObsComponentUpdate baseFilters />
 
-                        {baseFilters !== 'ativo' ? (
-                          <Col md="ativo">
-                            <AvGroup>
-                              <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="ativoLabel" for="profissional-status-atual-ativo">
-                                    <Translate contentKey="generadorApp.profissionalStatusAtual.ativo">Ativo</Translate>
-                                  </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField id="profissional-status-atual-ativo" type="string" className="form-control" name="ativo" />
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
-                        ) : (
-                          <AvInput type="hidden" name="ativo" value={this.state.fieldsBase[baseFilters]} />
-                        )}
+                        <AtivoComponentUpdate baseFilters />
                       </Row>
                     </div>
                   )}
@@ -269,5 +211,68 @@ const mapDispatchToProps = {
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
+
+const IdProfissionalComponentUpdate = ({ baseFilters }) => {
+  return baseFilters !== 'idProfissional' ? (
+    <Col md="idProfissional">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" id="idProfissionalLabel" for="profissional-status-atual-idProfissional">
+              <Translate contentKey="generadorApp.profissionalStatusAtual.idProfissional">Id Profissional</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <AvField id="profissional-status-atual-idProfissional" type="text" name="idProfissional" />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="idProfissional" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const ObsComponentUpdate = ({ baseFilters }) => {
+  return baseFilters !== 'obs' ? (
+    <Col md="obs">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" id="obsLabel" for="profissional-status-atual-obs">
+              <Translate contentKey="generadorApp.profissionalStatusAtual.obs">Obs</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <AvInput id="profissional-status-atual-obs" type="textarea" name="obs" />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="obs" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const AtivoComponentUpdate = ({ baseFilters }) => {
+  return baseFilters !== 'ativo' ? (
+    <Col md="ativo">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" id="ativoLabel" for="profissional-status-atual-ativo">
+              <Translate contentKey="generadorApp.profissionalStatusAtual.ativo">Ativo</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <AvField id="profissional-status-atual-ativo" type="string" className="form-control" name="ativo" />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="ativo" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProfissionalStatusAtualUpdate);

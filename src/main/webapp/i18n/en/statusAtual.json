@@ -1,8 +1,14 @@
 {
   "generadorApp": {
     "statusAtual": {
+      "listButtons": {},
+      "viewButtons": {},
+      "dropdown_btn": "Ações",
       "home": {
         "title": "Status Atuals",
+        "btn_filter": "Filter",
+        "btn_filter_clean": "Clean Filters",
+        "btn_filter_open": "Filters",
         "createLabel": "Create a new Status Atual",
         "createOrEditLabel": "Create or edit a Status Atual",
         "notFound": "No Status Atuals found"

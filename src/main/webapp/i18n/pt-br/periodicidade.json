@@ -1,8 +1,14 @@
 {
   "generadorApp": {
     "periodicidade": {
+      "listButtons": {},
+      "viewButtons": {},
+      "dropdown_btn": "Actions",
       "home": {
         "title": "Periodicidades",
+        "btn_filter": "Filtrar",
+        "btn_filter_clean": "Limpar Filtros",
+        "btn_filter_open": "Filtros",
         "createLabel": "Criar novo Periodicidade",
         "createOrEditLabel": "Criar ou editar Periodicidade",
         "notFound": "Nenhum Periodicidade encontrado"

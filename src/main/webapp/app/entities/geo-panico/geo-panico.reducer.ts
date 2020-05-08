@@ -41,6 +41,7 @@ export interface IGeoPanicoBaseState {
 
 export interface IGeoPanicoUpdateState {
   fieldsBase: IGeoPanicoBaseState;
+
   isNew: boolean;
 }
 

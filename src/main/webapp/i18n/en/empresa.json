@@ -1,8 +1,14 @@
 {
   "generadorApp": {
     "empresa": {
+      "listButtons": {},
+      "viewButtons": {},
+      "dropdown_btn": "Ações",
       "home": {
         "title": "Empresas",
+        "btn_filter": "Filter",
+        "btn_filter_clean": "Clean Filters",
+        "btn_filter_open": "Filters",
         "createLabel": "Create a new Empresa",
         "createOrEditLabel": "Create or edit a Empresa",
         "notFound": "No Empresas found"

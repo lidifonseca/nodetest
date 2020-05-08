@@ -59,6 +59,8 @@ export interface IUnidadeEasyBaseState {
 
 export interface IUnidadeEasyUpdateState {
   fieldsBase: IUnidadeEasyBaseState;
+
+  categoriaSelectValue: any;
   isNew: boolean;
   categoriaId: string;
 }

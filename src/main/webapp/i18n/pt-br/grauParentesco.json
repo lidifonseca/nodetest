@@ -1,8 +1,14 @@
 {
   "generadorApp": {
     "grauParentesco": {
+      "listButtons": {},
+      "viewButtons": {},
+      "dropdown_btn": "Actions",
       "home": {
         "title": "Grau Parentescos",
+        "btn_filter": "Filtrar",
+        "btn_filter_clean": "Limpar Filtros",
+        "btn_filter_open": "Filtros",
         "createLabel": "Criar novo Grau Parentesco",
         "createOrEditLabel": "Criar ou editar Grau Parentesco",
         "notFound": "Nenhum Grau Parentesco encontrado"

@@ -38,6 +38,7 @@ export interface IProtocolosBaseState {
 
 export interface IProtocolosUpdateState {
   fieldsBase: IProtocolosBaseState;
+
   isNew: boolean;
 }
 

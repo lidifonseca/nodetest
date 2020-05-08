@@ -171,7 +171,7 @@
         }
     ],
     "relationships": [],
-    "changelogDate": "20200507113600",
+    "changelogDate": "20200508162600",
     "entityTableName": "paciente_dispositivo_atual",
     "dto": "mapstruct",
     "pagination": "pagination",

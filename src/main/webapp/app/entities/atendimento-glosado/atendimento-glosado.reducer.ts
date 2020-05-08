@@ -39,6 +39,7 @@ export interface IAtendimentoGlosadoBaseState {
 
 export interface IAtendimentoGlosadoUpdateState {
   fieldsBase: IAtendimentoGlosadoBaseState;
+
   isNew: boolean;
 }
 

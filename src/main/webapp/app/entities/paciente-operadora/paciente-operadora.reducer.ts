@@ -39,6 +39,7 @@ export interface IPacienteOperadoraBaseState {
 
 export interface IPacienteOperadoraUpdateState {
   fieldsBase: IPacienteOperadoraBaseState;
+
   isNew: boolean;
 }
 

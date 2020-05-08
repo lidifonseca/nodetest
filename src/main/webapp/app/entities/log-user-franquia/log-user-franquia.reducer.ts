@@ -39,6 +39,7 @@ export interface ILogUserFranquiaBaseState {
 
 export interface ILogUserFranquiaUpdateState {
   fieldsBase: ILogUserFranquiaBaseState;
+
   isNew: boolean;
 }
 

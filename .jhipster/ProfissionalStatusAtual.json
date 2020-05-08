@@ -16,7 +16,7 @@
         }
     ],
     "relationships": [],
-    "changelogDate": "20200507122100",
+    "changelogDate": "20200508171100",
     "entityTableName": "profissional_status_atual",
     "dto": "mapstruct",
     "pagination": "pagination",

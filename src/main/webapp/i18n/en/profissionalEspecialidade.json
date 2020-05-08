@@ -1,8 +1,14 @@
 {
   "generadorApp": {
     "profissionalEspecialidade": {
+      "listButtons": {},
+      "viewButtons": {},
+      "dropdown_btn": "Ações",
       "home": {
         "title": "Profissional Especialidades",
+        "btn_filter": "Filter",
+        "btn_filter_clean": "Clean Filters",
+        "btn_filter_open": "Filters",
         "createLabel": "Create a new Profissional Especialidade",
         "createOrEditLabel": "Create or edit a Profissional Especialidade",
         "notFound": "No Profissional Especialidades found"

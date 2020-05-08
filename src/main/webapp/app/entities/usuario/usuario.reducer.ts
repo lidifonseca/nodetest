@@ -161,6 +161,8 @@ export interface IUsuarioBaseState {
 
 export interface IUsuarioUpdateState {
   fieldsBase: IUsuarioBaseState;
+
+  unidadeEasySelectValue: any;
   isNew: boolean;
   unidadeId: string;
 }

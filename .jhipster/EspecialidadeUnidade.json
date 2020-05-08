@@ -35,7 +35,7 @@
             "otherEntityField": "razaoSocial"
         }
     ],
-    "changelogDate": "20200507105900",
+    "changelogDate": "20200508154900",
     "entityTableName": "especialidade_unidade",
     "dto": "mapstruct",
     "pagination": "pagination",

@@ -39,6 +39,7 @@ export interface ITipoMatMedBaseState {
 
 export interface ITipoMatMedUpdateState {
   fieldsBase: ITipoMatMedBaseState;
+
   isNew: boolean;
 }
 

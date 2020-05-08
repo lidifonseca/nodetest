@@ -2,6 +2,7 @@
 import React from 'react';
 import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
 import { connect } from 'react-redux';
+import Select from 'react-select';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import {
   Button,
@@ -154,32 +155,33 @@ export class Categoria extends React.Component<ICategoriaProps, ICategoriaState>
     const { unidadeEasies, categoriaList, match, totalItems } = this.props;
     return (
       <div>
-        <ol className="breadcrumb float-xl-right">
+        <h2 id="page-heading">
+          <span className="page-header">Categorias</span>
+          <Button id="togglerFilterCategoria" className="btn btn-primary float-right jh-create-entity">
+            <Translate contentKey="generadorApp.categoria.home.btn_filter_open">Filters</Translate>
+            &nbsp;
+            <FontAwesomeIcon icon="caret-down" />
+          </Button>{' '}
+          &nbsp;
+          <Link
+            to={`${match.url}/new?${this.getFiltersURL()}`}
+            className="btn btn-primary float-right jh-create-entity"
+            id="jh-create-entity"
+          >
+            <FontAwesomeIcon icon="plus" />
+            &nbsp;
+            <Translate contentKey="generadorApp.categoria.home.createLabel">Create a new Categoria</Translate>
+          </Link>{' '}
+          &nbsp;
+        </h2>
+
+        <ol className="breadcrumb">
           <li className="breadcrumb-item">
             <Link to="/">Inicio</Link>
           </li>
           <li className="breadcrumb-item active">Categorias</li>
         </ol>
-        <h1 className="page-header">&nbsp;&nbsp;</h1>
         <Panel>
-          <PanelHeader>
-            <h2 id="page-heading">
-              <span className="page-header ml-3">Categorias</span>
-              <Button id="togglerFilterCategoria" className="btn btn-primary float-right jh-create-entity">
-                Filtros&nbsp;
-                <FontAwesomeIcon icon="caret-down" />
-              </Button>
-              <Link
-                to={`${match.url}/new?${this.getFiltersURL()}`}
-                className="btn btn-primary float-right jh-create-entity"
-                id="jh-create-entity"
-              >
-                <FontAwesomeIcon icon="plus" />
-                &nbsp;
-                <Translate contentKey="generadorApp.categoria.home.createLabel">Create a new Categoria</Translate>
-              </Link>
-            </h2>
-          </PanelHeader>
           <PanelBody>
             <div className="table-responsive">
               <UncontrolledCollapse toggler="#togglerFilterCategoria">
@@ -188,7 +190,7 @@ export class Categoria extends React.Component<ICategoriaProps, ICategoriaState>
                     <div className="row mt-1 ml-3 mr-3">
                       {this.state.baseFilters !== 'categoria' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="categoriaLabel" for="categoria-categoria">
                               <Translate contentKey="generadorApp.categoria.categoria">Categoria</Translate>
                             </Label>
@@ -200,7 +202,7 @@ export class Categoria extends React.Component<ICategoriaProps, ICategoriaState>
 
                       {this.state.baseFilters !== 'styleCategoria' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="styleCategoriaLabel" for="categoria-styleCategoria">
                               <Translate contentKey="generadorApp.categoria.styleCategoria">Style Categoria</Translate>
                             </Label>
@@ -212,7 +214,7 @@ export class Categoria extends React.Component<ICategoriaProps, ICategoriaState>
 
                       {this.state.baseFilters !== 'icon' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="iconLabel" for="categoria-icon">
                               <Translate contentKey="generadorApp.categoria.icon">Icon</Translate>
                             </Label>
@@ -224,7 +226,7 @@ export class Categoria extends React.Component<ICategoriaProps, ICategoriaState>
 
                       {this.state.baseFilters !== 'publicar' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="publicarLabel" for="categoria-publicar">
                               <Translate contentKey="generadorApp.categoria.publicar">Publicar</Translate>
                             </Label>
@@ -235,7 +237,7 @@ export class Categoria extends React.Component<ICategoriaProps, ICategoriaState>
 
                       {this.state.baseFilters !== 'ordem' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="ordemLabel" for="categoria-ordem">
                               <Translate contentKey="generadorApp.categoria.ordem">Ordem</Translate>
                             </Label>
@@ -246,7 +248,7 @@ export class Categoria extends React.Component<ICategoriaProps, ICategoriaState>
 
                       {this.state.baseFilters !== 'publicarSite' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="publicarSiteLabel" for="categoria-publicarSite">
                               <Translate contentKey="generadorApp.categoria.publicarSite">Publicar Site</Translate>
                             </Label>
@@ -257,28 +259,28 @@ export class Categoria extends React.Component<ICategoriaProps, ICategoriaState>
 
                       {this.state.baseFilters !== 'unidade' ? (
                         <Col md="3">
-                          <Row>
-                            <div>
+                          <Row className="mr-1 mt-1">
+                            <div style={{ width: '100%' }}>
                               <Label for="categoria-unidade">
                                 <Translate contentKey="generadorApp.categoria.unidade">Unidade</Translate>
                               </Label>
-                              <AvInput
+                              <Select
                                 id="categoria-unidade"
-                                type="select"
-                                multiple
-                                className="form-control"
-                                name="unidades"
-                                value={categoriaEntity.unidades && categoriaEntity.unidades.map(e => e.id)}
-                              >
-                                <option value="" key="0" />
-                                {unidadeEasies
-                                  ? unidadeEasies.map(otherEntity => (
-                                      <option value={otherEntity.id} key={otherEntity.id}>
-                                        {otherEntity.razaoSocial}
-                                      </option>
-                                    ))
-                                  : null}
-                              </AvInput>
+                                isMulti
+                                className={'css-select-control'}
+                                value={
+                                  unidadeEasies
+                                    ? unidadeEasies.map(p =>
+                                        this.state.unidade.split(',').indexOf(p.id) !== -1 ? { value: p.id, label: p.razaoSocial } : null
+                                      )
+                                    : null
+                                }
+                                options={
+                                  unidadeEasies ? unidadeEasies.map(option => ({ value: option.id, label: option.razaoSocial })) : null
+                                }
+                                onChange={options => this.setState({ unidade: options.map(option => option['value']).join(',') })}
+                                name={'unidade'}
+                              />
                             </div>
                           </Row>
                         </Col>
@@ -289,13 +291,13 @@ export class Categoria extends React.Component<ICategoriaProps, ICategoriaState>
                       <Button className="btn btn-success" type="submit">
                         <i className="fa fa-filter" aria-hidden={'true'}></i>
                         &nbsp;
-                        <Translate contentKey="entity.validation.filter">Filter</Translate>
+                        <Translate contentKey="generadorApp.categoria.home.btn_filter">Filter</Translate>
                       </Button>
                       &nbsp;
                       <div className="btn btn-secondary hand" onClick={this.cancelCourse}>
                         <FontAwesomeIcon icon="trash-alt" />
                         &nbsp;
-                        <Translate contentKey="entity.validation.clean">Clean</Translate>
+                        <Translate contentKey="generadorApp.categoria.home.btn_filter_clean">Clean</Translate>
                       </div>
                     </div>
                   </AvForm>

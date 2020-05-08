@@ -1,8 +1,14 @@
 {
   "generadorApp": {
     "resultados": {
+      "listButtons": {},
+      "viewButtons": {},
+      "dropdown_btn": "Ações",
       "home": {
         "title": "Resultados",
+        "btn_filter": "Filter",
+        "btn_filter_clean": "Clean Filters",
+        "btn_filter_open": "Filters",
         "createLabel": "Create a new Resultados",
         "createOrEditLabel": "Create or edit a Resultados",
         "notFound": "No Resultados found"

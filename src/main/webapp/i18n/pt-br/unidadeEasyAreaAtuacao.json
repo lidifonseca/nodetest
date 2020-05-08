@@ -1,8 +1,14 @@
 {
   "generadorApp": {
     "unidadeEasyAreaAtuacao": {
+      "listButtons": {},
+      "viewButtons": {},
+      "dropdown_btn": "Actions",
       "home": {
         "title": "Unidade Easy Area Atuacaos",
+        "btn_filter": "Filtrar",
+        "btn_filter_clean": "Limpar Filtros",
+        "btn_filter_open": "Filtros",
         "createLabel": "Criar novo Unidade Easy Area Atuacao",
         "createOrEditLabel": "Criar ou editar Unidade Easy Area Atuacao",
         "notFound": "Nenhum Unidade Easy Area Atuacao encontrado"
@@ -18,6 +24,7 @@
       },
       "cepInicial": "Cep Inicial",
       "cepFinal": "Cep Final",
+      "unidade_empty": "Sem Unidade",
       "unidade": "Unidade"
     }
   }

@@ -58,6 +58,7 @@ export interface IPadItemMetaBaseState {
 
 export interface IPadItemMetaUpdateState {
   fieldsBase: IPadItemMetaBaseState;
+
   isNew: boolean;
 }
 

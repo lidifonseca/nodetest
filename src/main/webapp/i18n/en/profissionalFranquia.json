@@ -1,8 +1,14 @@
 {
   "generadorApp": {
     "profissionalFranquia": {
+      "listButtons": {},
+      "viewButtons": {},
+      "dropdown_btn": "Ações",
       "home": {
         "title": "Profissional Franquias",
+        "btn_filter": "Filter",
+        "btn_filter_clean": "Clean Filters",
+        "btn_filter_open": "Filters",
         "createLabel": "Create a new Profissional Franquia",
         "createOrEditLabel": "Create or edit a Profissional Franquia",
         "notFound": "No Profissional Franquias found"

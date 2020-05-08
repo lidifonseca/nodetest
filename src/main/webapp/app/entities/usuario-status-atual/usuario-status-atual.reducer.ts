@@ -40,6 +40,7 @@ export interface IUsuarioStatusAtualBaseState {
 
 export interface IUsuarioStatusAtualUpdateState {
   fieldsBase: IUsuarioStatusAtualBaseState;
+
   isNew: boolean;
 }
 

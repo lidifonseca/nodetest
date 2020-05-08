@@ -40,6 +40,7 @@ export interface IPacienteDispositivoComplexidadeBaseState {
 
 export interface IPacienteDispositivoComplexidadeUpdateState {
   fieldsBase: IPacienteDispositivoComplexidadeBaseState;
+
   isNew: boolean;
 }
 

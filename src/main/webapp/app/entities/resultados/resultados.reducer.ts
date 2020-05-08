@@ -43,6 +43,7 @@ export interface IResultadosBaseState {
 
 export interface IResultadosUpdateState {
   fieldsBase: IResultadosBaseState;
+
   isNew: boolean;
 }
 

@@ -1,8 +1,14 @@
 {
   "generadorApp": {
     "profissionalStatusAtualNew": {
+      "listButtons": {},
+      "viewButtons": {},
+      "dropdown_btn": "Actions",
       "home": {
         "title": "Profissional Status Atual News",
+        "btn_filter": "Filtrar",
+        "btn_filter_clean": "Limpar Filtros",
+        "btn_filter_open": "Filtros",
         "createLabel": "Criar novo Profissional Status Atual New",
         "createOrEditLabel": "Criar ou editar Profissional Status Atual New",
         "notFound": "Nenhum Profissional Status Atual New encontrado"

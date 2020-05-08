@@ -19,7 +19,7 @@
         }
     ],
     "relationships": [],
-    "changelogDate": "20200507122500",
+    "changelogDate": "20200508171500",
     "entityTableName": "prontuario_tipo_manifestacao",
     "dto": "mapstruct",
     "pagination": "pagination",

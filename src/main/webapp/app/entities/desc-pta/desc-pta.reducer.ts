@@ -40,6 +40,7 @@ export interface IDescPtaBaseState {
 
 export interface IDescPtaUpdateState {
   fieldsBase: IDescPtaBaseState;
+
   isNew: boolean;
 }
 

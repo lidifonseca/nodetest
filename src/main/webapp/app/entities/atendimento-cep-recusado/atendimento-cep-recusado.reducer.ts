@@ -38,6 +38,7 @@ export interface IAtendimentoCepRecusadoBaseState {
 
 export interface IAtendimentoCepRecusadoUpdateState {
   fieldsBase: IAtendimentoCepRecusadoBaseState;
+
   isNew: boolean;
 }
 

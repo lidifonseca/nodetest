@@ -1,8 +1,14 @@
 {
   "generadorApp": {
     "atividades": {
+      "listButtons": {},
+      "viewButtons": {},
+      "dropdown_btn": "Ações",
       "home": {
         "title": "Atividades",
+        "btn_filter": "Filter",
+        "btn_filter_clean": "Clean Filters",
+        "btn_filter_open": "Filters",
         "createLabel": "Create a new Atividades",
         "createOrEditLabel": "Create or edit a Atividades",
         "notFound": "No Atividades found"

@@ -1,8 +1,14 @@
 {
   "generadorApp": {
     "franquiaUsuario": {
+      "listButtons": {},
+      "viewButtons": {},
+      "dropdown_btn": "Ações",
       "home": {
         "title": "Franquia Usuarios",
+        "btn_filter": "Filter",
+        "btn_filter_clean": "Clean Filters",
+        "btn_filter_open": "Filters",
         "createLabel": "Create a new Franquia Usuario",
         "createOrEditLabel": "Create or edit a Franquia Usuario",
         "notFound": "No Franquia Usuarios found"

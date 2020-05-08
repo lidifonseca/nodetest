@@ -42,6 +42,7 @@ export interface IFilesPanicoBaseState {
 
 export interface IFilesPanicoUpdateState {
   fieldsBase: IFilesPanicoBaseState;
+
   isNew: boolean;
 }
 

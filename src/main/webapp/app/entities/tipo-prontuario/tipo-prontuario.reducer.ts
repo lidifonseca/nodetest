@@ -39,6 +39,7 @@ export interface ITipoProntuarioBaseState {
 
 export interface ITipoProntuarioUpdateState {
   fieldsBase: ITipoProntuarioBaseState;
+
   isNew: boolean;
 }
 

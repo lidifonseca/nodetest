@@ -1,8 +1,14 @@
 {
   "generadorApp": {
     "atendimentoCepRecusado": {
+      "listButtons": {},
+      "viewButtons": {},
+      "dropdown_btn": "Ações",
       "home": {
         "title": "Atendimento Cep Recusados",
+        "btn_filter": "Filter",
+        "btn_filter_clean": "Clean Filters",
+        "btn_filter_open": "Filters",
         "createLabel": "Create a new Atendimento Cep Recusado",
         "createOrEditLabel": "Create or edit a Atendimento Cep Recusado",
         "notFound": "No Atendimento Cep Recusados found"

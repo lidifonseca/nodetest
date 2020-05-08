@@ -34,20 +34,18 @@ export class TempoExperienciaDetail extends React.Component<ITempoExperienciaDet
     const { tempoExperienciaEntity } = this.props;
     return (
       <div>
-        <ol className="breadcrumb float-xl-right">
+        <h2 id="page-heading">
+          <span className="page-header ml-3">Tempo Experiencias</span>
+        </h2>
+        <ol className="breadcrumb">
           <li className="breadcrumb-item">
             <Link to="/">Inicio</Link>
           </li>
           <li className="breadcrumb-item active">Tempo Experiencias</li>
           <li className="breadcrumb-item active">Tempo Experiencias details</li>
         </ol>
-        <h1 className="page-header">&nbsp;&nbsp;</h1>
         <Panel>
-          <PanelHeader>
-            <h2 id="page-heading">
-              <span className="page-header ml-3">Tempo Experiencias</span>
-            </h2>
-          </PanelHeader>
+          <PanelHeader></PanelHeader>
           <PanelBody>
             <Row>
               <Col md="8">

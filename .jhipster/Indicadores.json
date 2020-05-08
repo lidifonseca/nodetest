@@ -11,7 +11,7 @@
         }
     ],
     "relationships": [],
-    "changelogDate": "20200507111000",
+    "changelogDate": "20200508160000",
     "entityTableName": "indicadores",
     "dto": "mapstruct",
     "pagination": "pagination",

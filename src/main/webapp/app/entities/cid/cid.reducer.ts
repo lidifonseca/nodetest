@@ -42,6 +42,7 @@ export interface ICidBaseState {
 
 export interface ICidUpdateState {
   fieldsBase: ICidBaseState;
+
   isNew: boolean;
 }
 

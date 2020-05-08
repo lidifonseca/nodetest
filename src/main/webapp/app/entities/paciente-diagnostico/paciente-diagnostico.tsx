@@ -2,6 +2,7 @@
 import React from 'react';
 import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
 import { connect } from 'react-redux';
+import Select from 'react-select';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import {
   Button,
@@ -130,32 +131,33 @@ export class PacienteDiagnostico extends React.Component<IPacienteDiagnosticoPro
     const { pacienteDiagnosticoList, match, totalItems } = this.props;
     return (
       <div>
-        <ol className="breadcrumb float-xl-right">
+        <h2 id="page-heading">
+          <span className="page-header">Paciente Diagnosticos</span>
+          <Button id="togglerFilterPacienteDiagnostico" className="btn btn-primary float-right jh-create-entity">
+            <Translate contentKey="generadorApp.pacienteDiagnostico.home.btn_filter_open">Filters</Translate>
+            &nbsp;
+            <FontAwesomeIcon icon="caret-down" />
+          </Button>{' '}
+          &nbsp;
+          <Link
+            to={`${match.url}/new?${this.getFiltersURL()}`}
+            className="btn btn-primary float-right jh-create-entity"
+            id="jh-create-entity"
+          >
+            <FontAwesomeIcon icon="plus" />
+            &nbsp;
+            <Translate contentKey="generadorApp.pacienteDiagnostico.home.createLabel">Create a new Paciente Diagnostico</Translate>
+          </Link>{' '}
+          &nbsp;
+        </h2>
+
+        <ol className="breadcrumb">
           <li className="breadcrumb-item">
             <Link to="/">Inicio</Link>
           </li>
           <li className="breadcrumb-item active">Paciente Diagnosticos</li>
         </ol>
-        <h1 className="page-header">&nbsp;&nbsp;</h1>
         <Panel>
-          <PanelHeader>
-            <h2 id="page-heading">
-              <span className="page-header ml-3">Paciente Diagnosticos</span>
-              <Button id="togglerFilterPacienteDiagnostico" className="btn btn-primary float-right jh-create-entity">
-                Filtros&nbsp;
-                <FontAwesomeIcon icon="caret-down" />
-              </Button>
-              <Link
-                to={`${match.url}/new?${this.getFiltersURL()}`}
-                className="btn btn-primary float-right jh-create-entity"
-                id="jh-create-entity"
-              >
-                <FontAwesomeIcon icon="plus" />
-                &nbsp;
-                <Translate contentKey="generadorApp.pacienteDiagnostico.home.createLabel">Create a new Paciente Diagnostico</Translate>
-              </Link>
-            </h2>
-          </PanelHeader>
           <PanelBody>
             <div className="table-responsive">
               <UncontrolledCollapse toggler="#togglerFilterPacienteDiagnostico">
@@ -164,7 +166,7 @@ export class PacienteDiagnostico extends React.Component<IPacienteDiagnosticoPro
                     <div className="row mt-1 ml-3 mr-3">
                       {this.state.baseFilters !== 'observacao' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="observacaoLabel" for="paciente-diagnostico-observacao">
                               <Translate contentKey="generadorApp.pacienteDiagnostico.observacao">Observacao</Translate>
                             </Label>
@@ -176,7 +178,7 @@ export class PacienteDiagnostico extends React.Component<IPacienteDiagnosticoPro
 
                       {this.state.baseFilters !== 'ativo' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="ativoLabel" for="paciente-diagnostico-ativo">
                               <Translate contentKey="generadorApp.pacienteDiagnostico.ativo">Ativo</Translate>
                             </Label>
@@ -187,7 +189,7 @@ export class PacienteDiagnostico extends React.Component<IPacienteDiagnosticoPro
 
                       {this.state.baseFilters !== 'cidPrimario' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="cidPrimarioLabel" check>
                               <AvInput id="paciente-diagnostico-cidPrimario" type="checkbox" className="form-control" name="cidPrimario" />
                               <Translate contentKey="generadorApp.pacienteDiagnostico.cidPrimario">Cid Primario</Translate>
@@ -198,7 +200,7 @@ export class PacienteDiagnostico extends React.Component<IPacienteDiagnosticoPro
 
                       {this.state.baseFilters !== 'complexidade' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="complexidadeLabel" for="paciente-diagnostico-complexidade">
                               <Translate contentKey="generadorApp.pacienteDiagnostico.complexidade">Complexidade</Translate>
                             </Label>
@@ -215,7 +217,7 @@ export class PacienteDiagnostico extends React.Component<IPacienteDiagnosticoPro
 
                       {this.state.baseFilters !== 'cidComAlta' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="cidComAltaLabel" check>
                               <AvInput id="paciente-diagnostico-cidComAlta" type="checkbox" className="form-control" name="cidComAlta" />
                               <Translate contentKey="generadorApp.pacienteDiagnostico.cidComAlta">Cid Com Alta</Translate>
@@ -229,13 +231,13 @@ export class PacienteDiagnostico extends React.Component<IPacienteDiagnosticoPro
                       <Button className="btn btn-success" type="submit">
                         <i className="fa fa-filter" aria-hidden={'true'}></i>
                         &nbsp;
-                        <Translate contentKey="entity.validation.filter">Filter</Translate>
+                        <Translate contentKey="generadorApp.pacienteDiagnostico.home.btn_filter">Filter</Translate>
                       </Button>
                       &nbsp;
                       <div className="btn btn-secondary hand" onClick={this.cancelCourse}>
                         <FontAwesomeIcon icon="trash-alt" />
                         &nbsp;
-                        <Translate contentKey="entity.validation.clean">Clean</Translate>
+                        <Translate contentKey="generadorApp.pacienteDiagnostico.home.btn_filter_clean">Clean</Translate>
                       </div>
                     </div>
                   </AvForm>

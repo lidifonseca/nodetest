@@ -2,6 +2,7 @@
 import React from 'react';
 import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
 import { connect } from 'react-redux';
+import Select from 'react-select';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import {
   Button,
@@ -227,32 +228,33 @@ export class Franquia extends React.Component<IFranquiaProps, IFranquiaState> {
     const { franquiaList, match, totalItems } = this.props;
     return (
       <div>
-        <ol className="breadcrumb float-xl-right">
+        <h2 id="page-heading">
+          <span className="page-header">Franquias</span>
+          <Button id="togglerFilterFranquia" className="btn btn-primary float-right jh-create-entity">
+            <Translate contentKey="generadorApp.franquia.home.btn_filter_open">Filters</Translate>
+            &nbsp;
+            <FontAwesomeIcon icon="caret-down" />
+          </Button>{' '}
+          &nbsp;
+          <Link
+            to={`${match.url}/new?${this.getFiltersURL()}`}
+            className="btn btn-primary float-right jh-create-entity"
+            id="jh-create-entity"
+          >
+            <FontAwesomeIcon icon="plus" />
+            &nbsp;
+            <Translate contentKey="generadorApp.franquia.home.createLabel">Create a new Franquia</Translate>
+          </Link>{' '}
+          &nbsp;
+        </h2>
+
+        <ol className="breadcrumb">
           <li className="breadcrumb-item">
             <Link to="/">Inicio</Link>
           </li>
           <li className="breadcrumb-item active">Franquias</li>
         </ol>
-        <h1 className="page-header">&nbsp;&nbsp;</h1>
         <Panel>
-          <PanelHeader>
-            <h2 id="page-heading">
-              <span className="page-header ml-3">Franquias</span>
-              <Button id="togglerFilterFranquia" className="btn btn-primary float-right jh-create-entity">
-                Filtros&nbsp;
-                <FontAwesomeIcon icon="caret-down" />
-              </Button>
-              <Link
-                to={`${match.url}/new?${this.getFiltersURL()}`}
-                className="btn btn-primary float-right jh-create-entity"
-                id="jh-create-entity"
-              >
-                <FontAwesomeIcon icon="plus" />
-                &nbsp;
-                <Translate contentKey="generadorApp.franquia.home.createLabel">Create a new Franquia</Translate>
-              </Link>
-            </h2>
-          </PanelHeader>
           <PanelBody>
             <div className="table-responsive">
               <UncontrolledCollapse toggler="#togglerFilterFranquia">
@@ -261,7 +263,7 @@ export class Franquia extends React.Component<IFranquiaProps, IFranquiaState> {
                     <div className="row mt-1 ml-3 mr-3">
                       {this.state.baseFilters !== 'idCidade' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="idCidadeLabel" for="franquia-idCidade">
                               <Translate contentKey="generadorApp.franquia.idCidade">Id Cidade</Translate>
                             </Label>
@@ -273,7 +275,7 @@ export class Franquia extends React.Component<IFranquiaProps, IFranquiaState> {
 
                       {this.state.baseFilters !== 'nomeFantasia' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="nomeFantasiaLabel" for="franquia-nomeFantasia">
                               <Translate contentKey="generadorApp.franquia.nomeFantasia">Nome Fantasia</Translate>
                             </Label>
@@ -285,7 +287,7 @@ export class Franquia extends React.Component<IFranquiaProps, IFranquiaState> {
 
                       {this.state.baseFilters !== 'razaoSocial' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="razaoSocialLabel" for="franquia-razaoSocial">
                               <Translate contentKey="generadorApp.franquia.razaoSocial">Razao Social</Translate>
                             </Label>
@@ -297,7 +299,7 @@ export class Franquia extends React.Component<IFranquiaProps, IFranquiaState> {
 
                       {this.state.baseFilters !== 'cnpj' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="cnpjLabel" for="franquia-cnpj">
                               <Translate contentKey="generadorApp.franquia.cnpj">Cnpj</Translate>
                             </Label>
@@ -309,7 +311,7 @@ export class Franquia extends React.Component<IFranquiaProps, IFranquiaState> {
 
                       {this.state.baseFilters !== 'ie' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="ieLabel" for="franquia-ie">
                               <Translate contentKey="generadorApp.franquia.ie">Ie</Translate>
                             </Label>
@@ -321,7 +323,7 @@ export class Franquia extends React.Component<IFranquiaProps, IFranquiaState> {
 
                       {this.state.baseFilters !== 'site' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="siteLabel" for="franquia-site">
                               <Translate contentKey="generadorApp.franquia.site">Site</Translate>
                             </Label>
@@ -333,7 +335,7 @@ export class Franquia extends React.Component<IFranquiaProps, IFranquiaState> {
 
                       {this.state.baseFilters !== 'telefone1' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="telefone1Label" for="franquia-telefone1">
                               <Translate contentKey="generadorApp.franquia.telefone1">Telefone 1</Translate>
                             </Label>
@@ -345,7 +347,7 @@ export class Franquia extends React.Component<IFranquiaProps, IFranquiaState> {
 
                       {this.state.baseFilters !== 'telefone2' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="telefone2Label" for="franquia-telefone2">
                               <Translate contentKey="generadorApp.franquia.telefone2">Telefone 2</Translate>
                             </Label>
@@ -357,7 +359,7 @@ export class Franquia extends React.Component<IFranquiaProps, IFranquiaState> {
 
                       {this.state.baseFilters !== 'celular' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="celularLabel" for="franquia-celular">
                               <Translate contentKey="generadorApp.franquia.celular">Celular</Translate>
                             </Label>
@@ -369,7 +371,7 @@ export class Franquia extends React.Component<IFranquiaProps, IFranquiaState> {
 
                       {this.state.baseFilters !== 'cep' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="cepLabel" for="franquia-cep">
                               <Translate contentKey="generadorApp.franquia.cep">Cep</Translate>
                             </Label>
@@ -381,7 +383,7 @@ export class Franquia extends React.Component<IFranquiaProps, IFranquiaState> {
 
                       {this.state.baseFilters !== 'endereco' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="enderecoLabel" for="franquia-endereco">
                               <Translate contentKey="generadorApp.franquia.endereco">Endereco</Translate>
                             </Label>
@@ -393,7 +395,7 @@ export class Franquia extends React.Component<IFranquiaProps, IFranquiaState> {
 
                       {this.state.baseFilters !== 'numero' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="numeroLabel" for="franquia-numero">
                               <Translate contentKey="generadorApp.franquia.numero">Numero</Translate>
                             </Label>
@@ -405,7 +407,7 @@ export class Franquia extends React.Component<IFranquiaProps, IFranquiaState> {
 
                       {this.state.baseFilters !== 'complemento' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="complementoLabel" for="franquia-complemento">
                               <Translate contentKey="generadorApp.franquia.complemento">Complemento</Translate>
                             </Label>
@@ -417,7 +419,7 @@ export class Franquia extends React.Component<IFranquiaProps, IFranquiaState> {
 
                       {this.state.baseFilters !== 'bairro' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="bairroLabel" for="franquia-bairro">
                               <Translate contentKey="generadorApp.franquia.bairro">Bairro</Translate>
                             </Label>
@@ -429,7 +431,7 @@ export class Franquia extends React.Component<IFranquiaProps, IFranquiaState> {
 
                       {this.state.baseFilters !== 'cidade' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="cidadeLabel" for="franquia-cidade">
                               <Translate contentKey="generadorApp.franquia.cidade">Cidade</Translate>
                             </Label>
@@ -441,7 +443,7 @@ export class Franquia extends React.Component<IFranquiaProps, IFranquiaState> {
 
                       {this.state.baseFilters !== 'uf' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="ufLabel" for="franquia-uf">
                               <Translate contentKey="generadorApp.franquia.uf">Uf</Translate>
                             </Label>
@@ -453,7 +455,7 @@ export class Franquia extends React.Component<IFranquiaProps, IFranquiaState> {
 
                       {this.state.baseFilters !== 'observacao' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="observacaoLabel" for="franquia-observacao">
                               <Translate contentKey="generadorApp.franquia.observacao">Observacao</Translate>
                             </Label>
@@ -465,7 +467,7 @@ export class Franquia extends React.Component<IFranquiaProps, IFranquiaState> {
 
                       {this.state.baseFilters !== 'ativo' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="ativoLabel" for="franquia-ativo">
                               <Translate contentKey="generadorApp.franquia.ativo">Ativo</Translate>
                             </Label>
@@ -479,13 +481,13 @@ export class Franquia extends React.Component<IFranquiaProps, IFranquiaState> {
                       <Button className="btn btn-success" type="submit">
                         <i className="fa fa-filter" aria-hidden={'true'}></i>
                         &nbsp;
-                        <Translate contentKey="entity.validation.filter">Filter</Translate>
+                        <Translate contentKey="generadorApp.franquia.home.btn_filter">Filter</Translate>
                       </Button>
                       &nbsp;
                       <div className="btn btn-secondary hand" onClick={this.cancelCourse}>
                         <FontAwesomeIcon icon="trash-alt" />
                         &nbsp;
-                        <Translate contentKey="entity.validation.clean">Clean</Translate>
+                        <Translate contentKey="generadorApp.franquia.home.btn_filter_clean">Clean</Translate>
                       </div>
                     </div>
                   </AvForm>

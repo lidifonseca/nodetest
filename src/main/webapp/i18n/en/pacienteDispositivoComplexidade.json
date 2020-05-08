@@ -1,8 +1,14 @@
 {
   "generadorApp": {
     "pacienteDispositivoComplexidade": {
+      "listButtons": {},
+      "viewButtons": {},
+      "dropdown_btn": "Ações",
       "home": {
         "title": "Paciente Dispositivo Complexidades",
+        "btn_filter": "Filter",
+        "btn_filter_clean": "Clean Filters",
+        "btn_filter_open": "Filters",
         "createLabel": "Create a new Paciente Dispositivo Complexidade",
         "createOrEditLabel": "Create or edit a Paciente Dispositivo Complexidade",
         "notFound": "No Paciente Dispositivo Complexidades found"

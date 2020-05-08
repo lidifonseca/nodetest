@@ -23,7 +23,7 @@
         }
     ],
     "relationships": [],
-    "changelogDate": "20200507102700",
+    "changelogDate": "20200508151700",
     "entityTableName": "alertas_indicadores",
     "dto": "mapstruct",
     "pagination": "pagination",

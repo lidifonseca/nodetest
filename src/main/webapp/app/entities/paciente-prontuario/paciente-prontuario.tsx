@@ -2,6 +2,7 @@
 import React from 'react';
 import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
 import { connect } from 'react-redux';
+import Select from 'react-select';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import {
   Button,
@@ -224,32 +225,33 @@ export class PacienteProntuario extends React.Component<IPacienteProntuarioProps
     const { pacienteProntuarioList, match, totalItems } = this.props;
     return (
       <div>
-        <ol className="breadcrumb float-xl-right">
+        <h2 id="page-heading">
+          <span className="page-header">Paciente Prontuarios</span>
+          <Button id="togglerFilterPacienteProntuario" className="btn btn-primary float-right jh-create-entity">
+            <Translate contentKey="generadorApp.pacienteProntuario.home.btn_filter_open">Filters</Translate>
+            &nbsp;
+            <FontAwesomeIcon icon="caret-down" />
+          </Button>{' '}
+          &nbsp;
+          <Link
+            to={`${match.url}/new?${this.getFiltersURL()}`}
+            className="btn btn-primary float-right jh-create-entity"
+            id="jh-create-entity"
+          >
+            <FontAwesomeIcon icon="plus" />
+            &nbsp;
+            <Translate contentKey="generadorApp.pacienteProntuario.home.createLabel">Create a new Paciente Prontuario</Translate>
+          </Link>{' '}
+          &nbsp;
+        </h2>
+
+        <ol className="breadcrumb">
           <li className="breadcrumb-item">
             <Link to="/">Inicio</Link>
           </li>
           <li className="breadcrumb-item active">Paciente Prontuarios</li>
         </ol>
-        <h1 className="page-header">&nbsp;&nbsp;</h1>
         <Panel>
-          <PanelHeader>
-            <h2 id="page-heading">
-              <span className="page-header ml-3">Paciente Prontuarios</span>
-              <Button id="togglerFilterPacienteProntuario" className="btn btn-primary float-right jh-create-entity">
-                Filtros&nbsp;
-                <FontAwesomeIcon icon="caret-down" />
-              </Button>
-              <Link
-                to={`${match.url}/new?${this.getFiltersURL()}`}
-                className="btn btn-primary float-right jh-create-entity"
-                id="jh-create-entity"
-              >
-                <FontAwesomeIcon icon="plus" />
-                &nbsp;
-                <Translate contentKey="generadorApp.pacienteProntuario.home.createLabel">Create a new Paciente Prontuario</Translate>
-              </Link>
-            </h2>
-          </PanelHeader>
           <PanelBody>
             <div className="table-responsive">
               <UncontrolledCollapse toggler="#togglerFilterPacienteProntuario">
@@ -258,7 +260,7 @@ export class PacienteProntuario extends React.Component<IPacienteProntuarioProps
                     <div className="row mt-1 ml-3 mr-3">
                       {this.state.baseFilters !== 'idPaciente' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="idPacienteLabel" for="paciente-prontuario-idPaciente">
                               <Translate contentKey="generadorApp.pacienteProntuario.idPaciente">Id Paciente</Translate>
                             </Label>
@@ -270,7 +272,7 @@ export class PacienteProntuario extends React.Component<IPacienteProntuarioProps
 
                       {this.state.baseFilters !== 'idTipoProntuario' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="idTipoProntuarioLabel" for="paciente-prontuario-idTipoProntuario">
                               <Translate contentKey="generadorApp.pacienteProntuario.idTipoProntuario">Id Tipo Prontuario</Translate>
                             </Label>
@@ -286,7 +288,7 @@ export class PacienteProntuario extends React.Component<IPacienteProntuarioProps
 
                       {this.state.baseFilters !== 'oQue' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="oQueLabel" for="paciente-prontuario-oQue">
                               <Translate contentKey="generadorApp.pacienteProntuario.oQue">O Que</Translate>
                             </Label>
@@ -297,7 +299,7 @@ export class PacienteProntuario extends React.Component<IPacienteProntuarioProps
 
                       {this.state.baseFilters !== 'resultado' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="resultadoLabel" for="paciente-prontuario-resultado">
                               <Translate contentKey="generadorApp.pacienteProntuario.resultado">Resultado</Translate>
                             </Label>
@@ -308,7 +310,7 @@ export class PacienteProntuario extends React.Component<IPacienteProntuarioProps
 
                       {this.state.baseFilters !== 'ativo' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="ativoLabel" for="paciente-prontuario-ativo">
                               <Translate contentKey="generadorApp.pacienteProntuario.ativo">Ativo</Translate>
                             </Label>
@@ -319,7 +321,7 @@ export class PacienteProntuario extends React.Component<IPacienteProntuarioProps
 
                       {this.state.baseFilters !== 'idEspecialidade' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="idEspecialidadeLabel" for="paciente-prontuario-idEspecialidade">
                               <Translate contentKey="generadorApp.pacienteProntuario.idEspecialidade">Id Especialidade</Translate>
                             </Label>
@@ -335,7 +337,7 @@ export class PacienteProntuario extends React.Component<IPacienteProntuarioProps
 
                       {this.state.baseFilters !== 'dataConsulta' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="dataConsultaLabel" for="paciente-prontuario-dataConsulta">
                               <Translate contentKey="generadorApp.pacienteProntuario.dataConsulta">Data Consulta</Translate>
                             </Label>
@@ -353,7 +355,7 @@ export class PacienteProntuario extends React.Component<IPacienteProntuarioProps
 
                       {this.state.baseFilters !== 'idExame' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="idExameLabel" for="paciente-prontuario-idExame">
                               <Translate contentKey="generadorApp.pacienteProntuario.idExame">Id Exame</Translate>
                             </Label>
@@ -364,7 +366,7 @@ export class PacienteProntuario extends React.Component<IPacienteProntuarioProps
 
                       {this.state.baseFilters !== 'idTipoExame' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="idTipoExameLabel" for="paciente-prontuario-idTipoExame">
                               <Translate contentKey="generadorApp.pacienteProntuario.idTipoExame">Id Tipo Exame</Translate>
                             </Label>
@@ -375,7 +377,7 @@ export class PacienteProntuario extends React.Component<IPacienteProntuarioProps
 
                       {this.state.baseFilters !== 'dataExame' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="dataExameLabel" for="paciente-prontuario-dataExame">
                               <Translate contentKey="generadorApp.pacienteProntuario.dataExame">Data Exame</Translate>
                             </Label>
@@ -386,7 +388,7 @@ export class PacienteProntuario extends React.Component<IPacienteProntuarioProps
 
                       {this.state.baseFilters !== 'dataInternacao' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="dataInternacaoLabel" for="paciente-prontuario-dataInternacao">
                               <Translate contentKey="generadorApp.pacienteProntuario.dataInternacao">Data Internacao</Translate>
                             </Label>
@@ -402,7 +404,7 @@ export class PacienteProntuario extends React.Component<IPacienteProntuarioProps
 
                       {this.state.baseFilters !== 'dataAlta' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="dataAltaLabel" for="paciente-prontuario-dataAlta">
                               <Translate contentKey="generadorApp.pacienteProntuario.dataAlta">Data Alta</Translate>
                             </Label>
@@ -413,7 +415,7 @@ export class PacienteProntuario extends React.Component<IPacienteProntuarioProps
 
                       {this.state.baseFilters !== 'dataPs' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="dataPsLabel" for="paciente-prontuario-dataPs">
                               <Translate contentKey="generadorApp.pacienteProntuario.dataPs">Data Ps</Translate>
                             </Label>
@@ -424,7 +426,7 @@ export class PacienteProntuario extends React.Component<IPacienteProntuarioProps
 
                       {this.state.baseFilters !== 'dataOcorrencia' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="dataOcorrenciaLabel" for="paciente-prontuario-dataOcorrencia">
                               <Translate contentKey="generadorApp.pacienteProntuario.dataOcorrencia">Data Ocorrencia</Translate>
                             </Label>
@@ -440,7 +442,7 @@ export class PacienteProntuario extends React.Component<IPacienteProntuarioProps
 
                       {this.state.baseFilters !== 'idOcorrenciaProntuario' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="idOcorrenciaProntuarioLabel" for="paciente-prontuario-idOcorrenciaProntuario">
                               <Translate contentKey="generadorApp.pacienteProntuario.idOcorrenciaProntuario">
                                 Id Ocorrencia Prontuario
@@ -458,7 +460,7 @@ export class PacienteProntuario extends React.Component<IPacienteProntuarioProps
 
                       {this.state.baseFilters !== 'dataManifestacao' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="dataManifestacaoLabel" for="paciente-prontuario-dataManifestacao">
                               <Translate contentKey="generadorApp.pacienteProntuario.dataManifestacao">Data Manifestacao</Translate>
                             </Label>
@@ -477,13 +479,13 @@ export class PacienteProntuario extends React.Component<IPacienteProntuarioProps
                       <Button className="btn btn-success" type="submit">
                         <i className="fa fa-filter" aria-hidden={'true'}></i>
                         &nbsp;
-                        <Translate contentKey="entity.validation.filter">Filter</Translate>
+                        <Translate contentKey="generadorApp.pacienteProntuario.home.btn_filter">Filter</Translate>
                       </Button>
                       &nbsp;
                       <div className="btn btn-secondary hand" onClick={this.cancelCourse}>
                         <FontAwesomeIcon icon="trash-alt" />
                         &nbsp;
-                        <Translate contentKey="entity.validation.clean">Clean</Translate>
+                        <Translate contentKey="generadorApp.pacienteProntuario.home.btn_filter_clean">Clean</Translate>
                       </div>
                     </div>
                   </AvForm>

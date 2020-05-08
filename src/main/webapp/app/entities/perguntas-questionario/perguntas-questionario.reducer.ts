@@ -41,6 +41,7 @@ export interface IPerguntasQuestionarioBaseState {
 
 export interface IPerguntasQuestionarioUpdateState {
   fieldsBase: IPerguntasQuestionarioBaseState;
+
   isNew: boolean;
 }
 

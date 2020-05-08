@@ -1,8 +1,14 @@
 {
   "generadorApp": {
     "pad": {
+      "listButtons": {},
+      "viewButtons": {},
+      "dropdown_btn": "Ações",
       "home": {
         "title": "Pads",
+        "btn_filter": "Filter",
+        "btn_filter_clean": "Clean Filters",
+        "btn_filter_open": "Filters",
         "createLabel": "Create a new Pad",
         "createOrEditLabel": "Create or edit a Pad",
         "notFound": "No Pads found"
@@ -27,6 +33,7 @@
       "novoModelo": "Novo Modelo",
       "imagePath": "Image Path",
       "score": "Score",
+      "unidade_empty": "Without Unidade",
       "unidade": "Unidade"
     }
   }

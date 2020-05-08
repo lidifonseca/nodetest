@@ -44,6 +44,8 @@ export interface ICategoriaBaseState {
 
 export interface ICategoriaUpdateState {
   fieldsBase: ICategoriaBaseState;
+
+  unidadeEasySelectValue: any;
   isNew: boolean;
   idsunidade: any[];
 }

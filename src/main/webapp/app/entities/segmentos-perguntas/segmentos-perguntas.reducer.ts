@@ -38,6 +38,7 @@ export interface ISegmentosPerguntasBaseState {
 
 export interface ISegmentosPerguntasUpdateState {
   fieldsBase: ISegmentosPerguntasBaseState;
+
   isNew: boolean;
 }
 

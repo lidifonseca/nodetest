@@ -27,7 +27,7 @@
         }
     ],
     "relationships": [],
-    "changelogDate": "20200507113700",
+    "changelogDate": "20200508162700",
     "entityTableName": "paciente_dispositivo_complexidade",
     "dto": "mapstruct",
     "pagination": "pagination",

@@ -45,6 +45,7 @@ export interface ILicaoCasaEvolucaoBaseState {
 
 export interface ILicaoCasaEvolucaoUpdateState {
   fieldsBase: ILicaoCasaEvolucaoBaseState;
+
   isNew: boolean;
 }
 

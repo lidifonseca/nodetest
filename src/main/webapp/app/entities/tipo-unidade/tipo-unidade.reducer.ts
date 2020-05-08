@@ -38,6 +38,7 @@ export interface ITipoUnidadeBaseState {
 
 export interface ITipoUnidadeUpdateState {
   fieldsBase: ITipoUnidadeBaseState;
+
   isNew: boolean;
 }
 

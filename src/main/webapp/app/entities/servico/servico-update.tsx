@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import Select from 'react-select';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 import { Button, Row, Col, Label } from 'reactstrap';
@@ -40,23 +41,18 @@ export class ServicoUpdate extends React.Component<IServicoUpdateProps, IServico
 
   getFiltersURL = (offset = null) => {
     const fieldsBase = this.state.fieldsBase;
-    return (
-      '_back=1' +
-      (fieldsBase['baseFilters'] ? '&baseFilters=' + fieldsBase['baseFilters'] : '') +
-      (fieldsBase['activePage'] ? '&page=' + fieldsBase['activePage'] : '') +
-      (fieldsBase['itemsPerPage'] ? '&size=' + fieldsBase['itemsPerPage'] : '') +
-      (fieldsBase['sort'] ? '&sort=' + (fieldsBase['sort'] + ',' + fieldsBase['order']) : '') +
-      (offset !== null ? '&offset=' + offset : '') +
-      (fieldsBase['servico'] ? '&servico=' + fieldsBase['servico'] : '') +
-      (fieldsBase['styleLabel'] ? '&styleLabel=' + fieldsBase['styleLabel'] : '') +
-      ''
-    );
+    let url = '_back=1' + (offset !== null ? '&offset=' + offset : '');
+    Object.keys(fieldsBase).map(key => {
+      url += '&' + key + '=' + fieldsBase[key];
+    });
+    return url;
   };
   saveEntity = (event: any, errors: any, values: any) => {
     if (errors.length === 0) {
       const { servicoEntity } = this.props;
       const entity = {
         ...servicoEntity,
+
         ...values
       };
 
@@ -79,14 +75,6 @@ export class ServicoUpdate extends React.Component<IServicoUpdateProps, IServico
     const baseFilters = this.state.fieldsBase && this.state.fieldsBase['baseFilters'] ? this.state.fieldsBase['baseFilters'] : null;
     return (
       <div>
-        <ol className="breadcrumb float-xl-right">
-          <li className="breadcrumb-item">
-            <Link to="/">Inicio</Link>
-          </li>
-          <li className="breadcrumb-item active">Servicos</li>
-          <li className="breadcrumb-item active">Servicos edit</li>
-        </ol>
-        <h1 className="page-header">&nbsp;&nbsp;</h1>
         <AvForm
           model={
             isNew
@@ -97,34 +85,40 @@ export class ServicoUpdate extends React.Component<IServicoUpdateProps, IServico
           }
           onSubmit={this.saveEntity}
         >
-          <Panel>
-            <PanelHeader>
-              <h2 id="page-heading">
-                <span className="page-header ml-3">
-                  <Translate contentKey="generadorApp.servico.home.createOrEditLabel">Create or edit a Servico</Translate>
-                </span>
+          <h2 id="page-heading">
+            <span className="page-header ml-3">
+              <Translate contentKey="generadorApp.servico.home.createOrEditLabel">Create or edit a Servico</Translate>
+            </span>
 
-                <Button color="primary" id="save-entity" type="submit" disabled={updating} className="float-right jh-create-entity">
-                  <FontAwesomeIcon icon="save" />
-                  &nbsp;
-                  <Translate contentKey="entity.action.save">Save</Translate>
-                </Button>
-                <Button
-                  tag={Link}
-                  id="cancel-save"
-                  to={'/servico?' + this.getFiltersURL()}
-                  replace
-                  color="info"
-                  className="float-right jh-create-entity"
-                >
-                  <FontAwesomeIcon icon="arrow-left" />
-                  &nbsp;
-                  <span className="d-none d-md-inline">
-                    <Translate contentKey="entity.action.back">Back</Translate>
-                  </span>
-                </Button>
-              </h2>
-            </PanelHeader>
+            <Button color="primary" id="save-entity" type="submit" disabled={updating} className="float-right jh-create-entity">
+              <FontAwesomeIcon icon="save" />
+              &nbsp;
+              <Translate contentKey="entity.action.save">Save</Translate>
+            </Button>
+            <Button
+              tag={Link}
+              id="cancel-save"
+              to={'/servico?' + this.getFiltersURL()}
+              replace
+              color="info"
+              className="float-right jh-create-entity"
+            >
+              <FontAwesomeIcon icon="arrow-left" />
+              &nbsp;
+              <span className="d-none d-md-inline">
+                <Translate contentKey="entity.action.back">Back</Translate>
+              </span>
+            </Button>
+          </h2>
+          <ol className="breadcrumb">
+            <li className="breadcrumb-item">
+              <Link to="/">Inicio</Link>
+            </li>
+            <li className="breadcrumb-item active">Servicos</li>
+            <li className="breadcrumb-item active">Servicos edit</li>
+          </ol>
+
+          <Panel>
             <PanelBody>
               <Row className="justify-content-center">
                 <Col md="8">
@@ -148,43 +142,9 @@ export class ServicoUpdate extends React.Component<IServicoUpdateProps, IServico
                         </AvGroup>
                       ) : null}
                       <Row>
-                        {baseFilters !== 'servico' ? (
-                          <Col md="servico">
-                            <AvGroup>
-                              <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="servicoLabel" for="servico-servico">
-                                    <Translate contentKey="generadorApp.servico.servico">Servico</Translate>
-                                  </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField id="servico-servico" type="text" name="servico" />
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
-                        ) : (
-                          <AvInput type="hidden" name="servico" value={this.state.fieldsBase[baseFilters]} />
-                        )}
+                        <ServicoComponentUpdate baseFilters />
 
-                        {baseFilters !== 'styleLabel' ? (
-                          <Col md="styleLabel">
-                            <AvGroup>
-                              <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="styleLabelLabel" for="servico-styleLabel">
-                                    <Translate contentKey="generadorApp.servico.styleLabel">Style Label</Translate>
-                                  </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField id="servico-styleLabel" type="text" name="styleLabel" />
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
-                        ) : (
-                          <AvInput type="hidden" name="styleLabel" value={this.state.fieldsBase[baseFilters]} />
-                        )}
+                        <StyleLabelComponentUpdate baseFilters />
                       </Row>
                     </div>
                   )}
@@ -214,5 +174,47 @@ const mapDispatchToProps = {
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
+
+const ServicoComponentUpdate = ({ baseFilters }) => {
+  return baseFilters !== 'servico' ? (
+    <Col md="servico">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" id="servicoLabel" for="servico-servico">
+              <Translate contentKey="generadorApp.servico.servico">Servico</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <AvField id="servico-servico" type="text" name="servico" />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="servico" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const StyleLabelComponentUpdate = ({ baseFilters }) => {
+  return baseFilters !== 'styleLabel' ? (
+    <Col md="styleLabel">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" id="styleLabelLabel" for="servico-styleLabel">
+              <Translate contentKey="generadorApp.servico.styleLabel">Style Label</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <AvField id="servico-styleLabel" type="text" name="styleLabel" />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="styleLabel" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(ServicoUpdate);

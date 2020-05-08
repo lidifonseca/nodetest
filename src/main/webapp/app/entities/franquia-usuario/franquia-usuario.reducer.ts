@@ -74,6 +74,7 @@ export interface IFranquiaUsuarioBaseState {
 
 export interface IFranquiaUsuarioUpdateState {
   fieldsBase: IFranquiaUsuarioBaseState;
+
   isNew: boolean;
 }
 

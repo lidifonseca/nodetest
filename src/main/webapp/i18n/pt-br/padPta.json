@@ -1,8 +1,14 @@
 {
   "generadorApp": {
     "padPta": {
+      "listButtons": {},
+      "viewButtons": {},
+      "dropdown_btn": "Actions",
       "home": {
         "title": "Pad Ptas",
+        "btn_filter": "Filtrar",
+        "btn_filter_clean": "Limpar Filtros",
+        "btn_filter_open": "Filtros",
         "createLabel": "Criar novo Pad Pta",
         "createOrEditLabel": "Criar ou editar Pad Pta",
         "notFound": "Nenhum Pad Pta encontrado"

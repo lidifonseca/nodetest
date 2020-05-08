@@ -41,6 +41,7 @@ export interface ICidXPtaNovoBaseState {
 
 export interface ICidXPtaNovoUpdateState {
   fieldsBase: ICidXPtaNovoBaseState;
+
   isNew: boolean;
 }
 

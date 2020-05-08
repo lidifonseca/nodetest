@@ -1,8 +1,14 @@
 {
   "generadorApp": {
     "franquiaAreaAtuacao": {
+      "listButtons": {},
+      "viewButtons": {},
+      "dropdown_btn": "Ações",
       "home": {
         "title": "Franquia Area Atuacaos",
+        "btn_filter": "Filter",
+        "btn_filter_clean": "Clean Filters",
+        "btn_filter_open": "Filters",
         "createLabel": "Create a new Franquia Area Atuacao",
         "createOrEditLabel": "Create or edit a Franquia Area Atuacao",
         "notFound": "No Franquia Area Atuacaos found"

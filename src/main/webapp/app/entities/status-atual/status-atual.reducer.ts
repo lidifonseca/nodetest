@@ -39,6 +39,7 @@ export interface IStatusAtualBaseState {
 
 export interface IStatusAtualUpdateState {
   fieldsBase: IStatusAtualBaseState;
+
   isNew: boolean;
 }
 

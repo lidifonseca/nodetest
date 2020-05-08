@@ -1,8 +1,14 @@
 {
   "generadorApp": {
     "logUserFranquia": {
+      "listButtons": {},
+      "viewButtons": {},
+      "dropdown_btn": "Ações",
       "home": {
         "title": "Log User Franquias",
+        "btn_filter": "Filter",
+        "btn_filter_clean": "Clean Filters",
+        "btn_filter_open": "Filters",
         "createLabel": "Create a new Log User Franquia",
         "createOrEditLabel": "Create or edit a Log User Franquia",
         "notFound": "No Log User Franquias found"

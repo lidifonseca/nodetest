@@ -2,6 +2,7 @@
 import React from 'react';
 import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
 import { connect } from 'react-redux';
+import Select from 'react-select';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import {
   Button,
@@ -131,34 +132,35 @@ export class PadItemHistDataIncComp extends React.Component<IPadItemHistDataIncC
     const { padItemHistDataIncCompList, match, totalItems } = this.props;
     return (
       <div>
-        <ol className="breadcrumb float-xl-right">
+        <h2 id="page-heading">
+          <span className="page-header">Pad Item Hist Data Inc Comps</span>
+          <Button id="togglerFilterPadItemHistDataIncComp" className="btn btn-primary float-right jh-create-entity">
+            <Translate contentKey="generadorApp.padItemHistDataIncComp.home.btn_filter_open">Filters</Translate>
+            &nbsp;
+            <FontAwesomeIcon icon="caret-down" />
+          </Button>{' '}
+          &nbsp;
+          <Link
+            to={`${match.url}/new?${this.getFiltersURL()}`}
+            className="btn btn-primary float-right jh-create-entity"
+            id="jh-create-entity"
+          >
+            <FontAwesomeIcon icon="plus" />
+            &nbsp;
+            <Translate contentKey="generadorApp.padItemHistDataIncComp.home.createLabel">
+              Create a new Pad Item Hist Data Inc Comp
+            </Translate>
+          </Link>{' '}
+          &nbsp;
+        </h2>
+
+        <ol className="breadcrumb">
           <li className="breadcrumb-item">
             <Link to="/">Inicio</Link>
           </li>
           <li className="breadcrumb-item active">Pad Item Hist Data Inc Comps</li>
         </ol>
-        <h1 className="page-header">&nbsp;&nbsp;</h1>
         <Panel>
-          <PanelHeader>
-            <h2 id="page-heading">
-              <span className="page-header ml-3">Pad Item Hist Data Inc Comps</span>
-              <Button id="togglerFilterPadItemHistDataIncComp" className="btn btn-primary float-right jh-create-entity">
-                Filtros&nbsp;
-                <FontAwesomeIcon icon="caret-down" />
-              </Button>
-              <Link
-                to={`${match.url}/new?${this.getFiltersURL()}`}
-                className="btn btn-primary float-right jh-create-entity"
-                id="jh-create-entity"
-              >
-                <FontAwesomeIcon icon="plus" />
-                &nbsp;
-                <Translate contentKey="generadorApp.padItemHistDataIncComp.home.createLabel">
-                  Create a new Pad Item Hist Data Inc Comp
-                </Translate>
-              </Link>
-            </h2>
-          </PanelHeader>
           <PanelBody>
             <div className="table-responsive">
               <UncontrolledCollapse toggler="#togglerFilterPadItemHistDataIncComp">
@@ -167,7 +169,7 @@ export class PadItemHistDataIncComp extends React.Component<IPadItemHistDataIncC
                     <div className="row mt-1 ml-3 mr-3">
                       {this.state.baseFilters !== 'idPadItem' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="idPadItemLabel" for="pad-item-hist-data-inc-comp-idPadItem">
                               <Translate contentKey="generadorApp.padItemHistDataIncComp.idPadItem">Id Pad Item</Translate>
                             </Label>
@@ -179,7 +181,7 @@ export class PadItemHistDataIncComp extends React.Component<IPadItemHistDataIncC
 
                       {this.state.baseFilters !== 'dataPadItemIncompleto' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="dataPadItemIncompletoLabel" for="pad-item-hist-data-inc-comp-dataPadItemIncompleto">
                               <Translate contentKey="generadorApp.padItemHistDataIncComp.dataPadItemIncompleto">
                                 Data Pad Item Incompleto
@@ -199,7 +201,7 @@ export class PadItemHistDataIncComp extends React.Component<IPadItemHistDataIncC
 
                       {this.state.baseFilters !== 'dataPadItemCompleto' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="dataPadItemCompletoLabel" for="pad-item-hist-data-inc-comp-dataPadItemCompleto">
                               <Translate contentKey="generadorApp.padItemHistDataIncComp.dataPadItemCompleto">
                                 Data Pad Item Completo
@@ -222,13 +224,13 @@ export class PadItemHistDataIncComp extends React.Component<IPadItemHistDataIncC
                       <Button className="btn btn-success" type="submit">
                         <i className="fa fa-filter" aria-hidden={'true'}></i>
                         &nbsp;
-                        <Translate contentKey="entity.validation.filter">Filter</Translate>
+                        <Translate contentKey="generadorApp.padItemHistDataIncComp.home.btn_filter">Filter</Translate>
                       </Button>
                       &nbsp;
                       <div className="btn btn-secondary hand" onClick={this.cancelCourse}>
                         <FontAwesomeIcon icon="trash-alt" />
                         &nbsp;
-                        <Translate contentKey="entity.validation.clean">Clean</Translate>
+                        <Translate contentKey="generadorApp.padItemHistDataIncComp.home.btn_filter_clean">Clean</Translate>
                       </div>
                     </div>
                   </AvForm>

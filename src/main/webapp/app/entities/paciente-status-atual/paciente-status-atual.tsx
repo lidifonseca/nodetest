@@ -2,6 +2,7 @@
 import React from 'react';
 import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
 import { connect } from 'react-redux';
+import Select from 'react-select';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import {
   Button,
@@ -147,32 +148,33 @@ export class PacienteStatusAtual extends React.Component<IPacienteStatusAtualPro
     const { pacientes, statusAtuals, pacienteStatusAtualList, match, totalItems } = this.props;
     return (
       <div>
-        <ol className="breadcrumb float-xl-right">
+        <h2 id="page-heading">
+          <span className="page-header">Paciente Status Atuals</span>
+          <Button id="togglerFilterPacienteStatusAtual" className="btn btn-primary float-right jh-create-entity">
+            <Translate contentKey="generadorApp.pacienteStatusAtual.home.btn_filter_open">Filters</Translate>
+            &nbsp;
+            <FontAwesomeIcon icon="caret-down" />
+          </Button>{' '}
+          &nbsp;
+          <Link
+            to={`${match.url}/new?${this.getFiltersURL()}`}
+            className="btn btn-primary float-right jh-create-entity"
+            id="jh-create-entity"
+          >
+            <FontAwesomeIcon icon="plus" />
+            &nbsp;
+            <Translate contentKey="generadorApp.pacienteStatusAtual.home.createLabel">Create a new Paciente Status Atual</Translate>
+          </Link>{' '}
+          &nbsp;
+        </h2>
+
+        <ol className="breadcrumb">
           <li className="breadcrumb-item">
             <Link to="/">Inicio</Link>
           </li>
           <li className="breadcrumb-item active">Paciente Status Atuals</li>
         </ol>
-        <h1 className="page-header">&nbsp;&nbsp;</h1>
         <Panel>
-          <PanelHeader>
-            <h2 id="page-heading">
-              <span className="page-header ml-3">Paciente Status Atuals</span>
-              <Button id="togglerFilterPacienteStatusAtual" className="btn btn-primary float-right jh-create-entity">
-                Filtros&nbsp;
-                <FontAwesomeIcon icon="caret-down" />
-              </Button>
-              <Link
-                to={`${match.url}/new?${this.getFiltersURL()}`}
-                className="btn btn-primary float-right jh-create-entity"
-                id="jh-create-entity"
-              >
-                <FontAwesomeIcon icon="plus" />
-                &nbsp;
-                <Translate contentKey="generadorApp.pacienteStatusAtual.home.createLabel">Create a new Paciente Status Atual</Translate>
-              </Link>
-            </h2>
-          </PanelHeader>
           <PanelBody>
             <div className="table-responsive">
               <UncontrolledCollapse toggler="#togglerFilterPacienteStatusAtual">
@@ -181,7 +183,7 @@ export class PacienteStatusAtual extends React.Component<IPacienteStatusAtualPro
                     <div className="row mt-1 ml-3 mr-3">
                       {this.state.baseFilters !== 'dataStatus' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="dataStatusLabel" for="paciente-status-atual-dataStatus">
                               <Translate contentKey="generadorApp.pacienteStatusAtual.dataStatus">Data Status</Translate>
                             </Label>
@@ -192,7 +194,7 @@ export class PacienteStatusAtual extends React.Component<IPacienteStatusAtualPro
 
                       {this.state.baseFilters !== 'observacao' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="observacaoLabel" for="paciente-status-atual-observacao">
                               <Translate contentKey="generadorApp.pacienteStatusAtual.observacao">Observacao</Translate>
                             </Label>
@@ -203,7 +205,7 @@ export class PacienteStatusAtual extends React.Component<IPacienteStatusAtualPro
 
                       {this.state.baseFilters !== 'ativo' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="ativoLabel" for="paciente-status-atual-ativo">
                               <Translate contentKey="generadorApp.pacienteStatusAtual.ativo">Ativo</Translate>
                             </Label>
@@ -214,21 +216,26 @@ export class PacienteStatusAtual extends React.Component<IPacienteStatusAtualPro
 
                       {this.state.baseFilters !== 'paciente' ? (
                         <Col md="3">
-                          <Row>
-                            <div>
+                          <Row className="mr-1 mt-1">
+                            <div style={{ width: '100%' }}>
                               <Label for="paciente-status-atual-paciente">
                                 <Translate contentKey="generadorApp.pacienteStatusAtual.paciente">Paciente</Translate>
                               </Label>
-                              <AvInput id="paciente-status-atual-paciente" type="select" className="form-control" name="pacienteId">
-                                <option value="" key="0" />
-                                {pacientes
-                                  ? pacientes.map(otherEntity => (
-                                      <option value={otherEntity.id} key={otherEntity.id}>
-                                        {otherEntity.nome}
-                                      </option>
-                                    ))
-                                  : null}
-                              </AvInput>
+                              <Select
+                                id="paciente-status-atual-paciente"
+                                isMulti
+                                className={'css-select-control'}
+                                value={
+                                  pacientes
+                                    ? pacientes.map(p =>
+                                        this.state.paciente.split(',').indexOf(p.id) !== -1 ? { value: p.id, label: p.nome } : null
+                                      )
+                                    : null
+                                }
+                                options={pacientes ? pacientes.map(option => ({ value: option.id, label: option.nome })) : null}
+                                onChange={options => this.setState({ paciente: options.map(option => option['value']).join(',') })}
+                                name={'paciente'}
+                              />
                             </div>
                           </Row>
                         </Col>
@@ -236,21 +243,28 @@ export class PacienteStatusAtual extends React.Component<IPacienteStatusAtualPro
 
                       {this.state.baseFilters !== 'status' ? (
                         <Col md="3">
-                          <Row>
-                            <div>
+                          <Row className="mr-1 mt-1">
+                            <div style={{ width: '100%' }}>
                               <Label for="paciente-status-atual-status">
                                 <Translate contentKey="generadorApp.pacienteStatusAtual.status">Status</Translate>
                               </Label>
-                              <AvInput id="paciente-status-atual-status" type="select" className="form-control" name="statusId">
-                                <option value="" key="0" />
-                                {statusAtuals
-                                  ? statusAtuals.map(otherEntity => (
-                                      <option value={otherEntity.id} key={otherEntity.id}>
-                                        {otherEntity.statusAtual}
-                                      </option>
-                                    ))
-                                  : null}
-                              </AvInput>
+                              <Select
+                                id="paciente-status-atual-status"
+                                isMulti
+                                className={'css-select-control'}
+                                value={
+                                  statusAtuals
+                                    ? statusAtuals.map(p =>
+                                        this.state.status.split(',').indexOf(p.id) !== -1 ? { value: p.id, label: p.statusAtual } : null
+                                      )
+                                    : null
+                                }
+                                options={
+                                  statusAtuals ? statusAtuals.map(option => ({ value: option.id, label: option.statusAtual })) : null
+                                }
+                                onChange={options => this.setState({ status: options.map(option => option['value']).join(',') })}
+                                name={'status'}
+                              />
                             </div>
                           </Row>
                         </Col>
@@ -261,13 +275,13 @@ export class PacienteStatusAtual extends React.Component<IPacienteStatusAtualPro
                       <Button className="btn btn-success" type="submit">
                         <i className="fa fa-filter" aria-hidden={'true'}></i>
                         &nbsp;
-                        <Translate contentKey="entity.validation.filter">Filter</Translate>
+                        <Translate contentKey="generadorApp.pacienteStatusAtual.home.btn_filter">Filter</Translate>
                       </Button>
                       &nbsp;
                       <div className="btn btn-secondary hand" onClick={this.cancelCourse}>
                         <FontAwesomeIcon icon="trash-alt" />
                         &nbsp;
-                        <Translate contentKey="entity.validation.clean">Clean</Translate>
+                        <Translate contentKey="generadorApp.pacienteStatusAtual.home.btn_filter_clean">Clean</Translate>
                       </div>
                     </div>
                   </AvForm>

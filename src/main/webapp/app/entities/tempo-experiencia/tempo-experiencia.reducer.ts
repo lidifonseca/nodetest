@@ -38,6 +38,7 @@ export interface ITempoExperienciaBaseState {
 
 export interface ITempoExperienciaUpdateState {
   fieldsBase: ITempoExperienciaBaseState;
+
   isNew: boolean;
 }
 

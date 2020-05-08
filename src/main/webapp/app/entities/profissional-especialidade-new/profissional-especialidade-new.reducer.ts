@@ -39,6 +39,7 @@ export interface IProfissionalEspecialidadeNewBaseState {
 
 export interface IProfissionalEspecialidadeNewUpdateState {
   fieldsBase: IProfissionalEspecialidadeNewBaseState;
+
   isNew: boolean;
 }
 

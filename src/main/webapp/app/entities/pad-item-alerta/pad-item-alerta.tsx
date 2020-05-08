@@ -2,6 +2,7 @@
 import React from 'react';
 import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
 import { connect } from 'react-redux';
+import Select from 'react-select';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import {
   Button,
@@ -153,32 +154,33 @@ export class PadItemAlerta extends React.Component<IPadItemAlertaProps, IPadItem
     const { padItemAlertaList, match, totalItems } = this.props;
     return (
       <div>
-        <ol className="breadcrumb float-xl-right">
+        <h2 id="page-heading">
+          <span className="page-header">Pad Item Alertas</span>
+          <Button id="togglerFilterPadItemAlerta" className="btn btn-primary float-right jh-create-entity">
+            <Translate contentKey="generadorApp.padItemAlerta.home.btn_filter_open">Filters</Translate>
+            &nbsp;
+            <FontAwesomeIcon icon="caret-down" />
+          </Button>{' '}
+          &nbsp;
+          <Link
+            to={`${match.url}/new?${this.getFiltersURL()}`}
+            className="btn btn-primary float-right jh-create-entity"
+            id="jh-create-entity"
+          >
+            <FontAwesomeIcon icon="plus" />
+            &nbsp;
+            <Translate contentKey="generadorApp.padItemAlerta.home.createLabel">Create a new Pad Item Alerta</Translate>
+          </Link>{' '}
+          &nbsp;
+        </h2>
+
+        <ol className="breadcrumb">
           <li className="breadcrumb-item">
             <Link to="/">Inicio</Link>
           </li>
           <li className="breadcrumb-item active">Pad Item Alertas</li>
         </ol>
-        <h1 className="page-header">&nbsp;&nbsp;</h1>
         <Panel>
-          <PanelHeader>
-            <h2 id="page-heading">
-              <span className="page-header ml-3">Pad Item Alertas</span>
-              <Button id="togglerFilterPadItemAlerta" className="btn btn-primary float-right jh-create-entity">
-                Filtros&nbsp;
-                <FontAwesomeIcon icon="caret-down" />
-              </Button>
-              <Link
-                to={`${match.url}/new?${this.getFiltersURL()}`}
-                className="btn btn-primary float-right jh-create-entity"
-                id="jh-create-entity"
-              >
-                <FontAwesomeIcon icon="plus" />
-                &nbsp;
-                <Translate contentKey="generadorApp.padItemAlerta.home.createLabel">Create a new Pad Item Alerta</Translate>
-              </Link>
-            </h2>
-          </PanelHeader>
           <PanelBody>
             <div className="table-responsive">
               <UncontrolledCollapse toggler="#togglerFilterPadItemAlerta">
@@ -187,7 +189,7 @@ export class PadItemAlerta extends React.Component<IPadItemAlertaProps, IPadItem
                     <div className="row mt-1 ml-3 mr-3">
                       {this.state.baseFilters !== 'padItemMetaId' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="padItemMetaIdLabel" for="pad-item-alerta-padItemMetaId">
                               <Translate contentKey="generadorApp.padItemAlerta.padItemMetaId">Pad Item Meta Id</Translate>
                             </Label>
@@ -203,7 +205,7 @@ export class PadItemAlerta extends React.Component<IPadItemAlertaProps, IPadItem
 
                       {this.state.baseFilters !== 'envioEmailEm' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="envioEmailEmLabel" for="pad-item-alerta-envioEmailEm">
                               <Translate contentKey="generadorApp.padItemAlerta.envioEmailEm">Envio Email Em</Translate>
                             </Label>
@@ -221,7 +223,7 @@ export class PadItemAlerta extends React.Component<IPadItemAlertaProps, IPadItem
 
                       {this.state.baseFilters !== 'visualizadoEm' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="visualizadoEmLabel" for="pad-item-alerta-visualizadoEm">
                               <Translate contentKey="generadorApp.padItemAlerta.visualizadoEm">Visualizado Em</Translate>
                             </Label>
@@ -239,7 +241,7 @@ export class PadItemAlerta extends React.Component<IPadItemAlertaProps, IPadItem
 
                       {this.state.baseFilters !== 'criadoEm' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="criadoEmLabel" for="pad-item-alerta-criadoEm">
                               <Translate contentKey="generadorApp.padItemAlerta.criadoEm">Criado Em</Translate>
                             </Label>
@@ -257,7 +259,7 @@ export class PadItemAlerta extends React.Component<IPadItemAlertaProps, IPadItem
 
                       {this.state.baseFilters !== 'ativo' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="ativoLabel" check>
                               <AvInput id="pad-item-alerta-ativo" type="checkbox" className="form-control" name="ativo" />
                               <Translate contentKey="generadorApp.padItemAlerta.ativo">Ativo</Translate>
@@ -268,7 +270,7 @@ export class PadItemAlerta extends React.Component<IPadItemAlertaProps, IPadItem
 
                       {this.state.baseFilters !== 'mensagem' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="mensagemLabel" for="pad-item-alerta-mensagem">
                               <Translate contentKey="generadorApp.padItemAlerta.mensagem">Mensagem</Translate>
                             </Label>
@@ -283,13 +285,13 @@ export class PadItemAlerta extends React.Component<IPadItemAlertaProps, IPadItem
                       <Button className="btn btn-success" type="submit">
                         <i className="fa fa-filter" aria-hidden={'true'}></i>
                         &nbsp;
-                        <Translate contentKey="entity.validation.filter">Filter</Translate>
+                        <Translate contentKey="generadorApp.padItemAlerta.home.btn_filter">Filter</Translate>
                       </Button>
                       &nbsp;
                       <div className="btn btn-secondary hand" onClick={this.cancelCourse}>
                         <FontAwesomeIcon icon="trash-alt" />
                         &nbsp;
-                        <Translate contentKey="entity.validation.clean">Clean</Translate>
+                        <Translate contentKey="generadorApp.padItemAlerta.home.btn_filter_clean">Clean</Translate>
                       </div>
                     </div>
                   </AvForm>

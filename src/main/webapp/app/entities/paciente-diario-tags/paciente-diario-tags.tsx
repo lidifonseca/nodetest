@@ -2,6 +2,7 @@
 import React from 'react';
 import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
 import { connect } from 'react-redux';
+import Select from 'react-select';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import {
   Button,
@@ -572,32 +573,33 @@ export class PacienteDiarioTags extends React.Component<IPacienteDiarioTagsProps
     const { pacienteDiarioTagsList, match, totalItems } = this.props;
     return (
       <div>
-        <ol className="breadcrumb float-xl-right">
+        <h2 id="page-heading">
+          <span className="page-header">Paciente Diario Tags</span>
+          <Button id="togglerFilterPacienteDiarioTags" className="btn btn-primary float-right jh-create-entity">
+            <Translate contentKey="generadorApp.pacienteDiarioTags.home.btn_filter_open">Filters</Translate>
+            &nbsp;
+            <FontAwesomeIcon icon="caret-down" />
+          </Button>{' '}
+          &nbsp;
+          <Link
+            to={`${match.url}/new?${this.getFiltersURL()}`}
+            className="btn btn-primary float-right jh-create-entity"
+            id="jh-create-entity"
+          >
+            <FontAwesomeIcon icon="plus" />
+            &nbsp;
+            <Translate contentKey="generadorApp.pacienteDiarioTags.home.createLabel">Create a new Paciente Diario Tags</Translate>
+          </Link>{' '}
+          &nbsp;
+        </h2>
+
+        <ol className="breadcrumb">
           <li className="breadcrumb-item">
             <Link to="/">Inicio</Link>
           </li>
           <li className="breadcrumb-item active">Paciente Diario Tags</li>
         </ol>
-        <h1 className="page-header">&nbsp;&nbsp;</h1>
         <Panel>
-          <PanelHeader>
-            <h2 id="page-heading">
-              <span className="page-header ml-3">Paciente Diario Tags</span>
-              <Button id="togglerFilterPacienteDiarioTags" className="btn btn-primary float-right jh-create-entity">
-                Filtros&nbsp;
-                <FontAwesomeIcon icon="caret-down" />
-              </Button>
-              <Link
-                to={`${match.url}/new?${this.getFiltersURL()}`}
-                className="btn btn-primary float-right jh-create-entity"
-                id="jh-create-entity"
-              >
-                <FontAwesomeIcon icon="plus" />
-                &nbsp;
-                <Translate contentKey="generadorApp.pacienteDiarioTags.home.createLabel">Create a new Paciente Diario Tags</Translate>
-              </Link>
-            </h2>
-          </PanelHeader>
           <PanelBody>
             <div className="table-responsive">
               <UncontrolledCollapse toggler="#togglerFilterPacienteDiarioTags">
@@ -606,7 +608,7 @@ export class PacienteDiarioTags extends React.Component<IPacienteDiarioTagsProps
                     <div className="row mt-1 ml-3 mr-3">
                       {this.state.baseFilters !== 'idPacienteDiario' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="idPacienteDiarioLabel" for="paciente-diario-tags-idPacienteDiario">
                               <Translate contentKey="generadorApp.pacienteDiarioTags.idPacienteDiario">Id Paciente Diario</Translate>
                             </Label>
@@ -622,7 +624,7 @@ export class PacienteDiarioTags extends React.Component<IPacienteDiarioTagsProps
 
                       {this.state.baseFilters !== 'idDiarioTags' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="idDiarioTagsLabel" for="paciente-diario-tags-idDiarioTags">
                               <Translate contentKey="generadorApp.pacienteDiarioTags.idDiarioTags">Id Diario Tags</Translate>
                             </Label>
@@ -638,7 +640,7 @@ export class PacienteDiarioTags extends React.Component<IPacienteDiarioTagsProps
 
                       {this.state.baseFilters !== 'escalaDePlantao' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="escalaDePlantaoLabel" for="paciente-diario-tags-escalaDePlantao">
                               <Translate contentKey="generadorApp.pacienteDiarioTags.escalaDePlantao">Escala De Plantao</Translate>
                             </Label>
@@ -654,7 +656,7 @@ export class PacienteDiarioTags extends React.Component<IPacienteDiarioTagsProps
 
                       {this.state.baseFilters !== 'captacaoEdp' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="captacaoEdpLabel" for="paciente-diario-tags-captacaoEdp">
                               <Translate contentKey="generadorApp.pacienteDiarioTags.captacaoEdp">Captacao Edp</Translate>
                             </Label>
@@ -670,7 +672,7 @@ export class PacienteDiarioTags extends React.Component<IPacienteDiarioTagsProps
 
                       {this.state.baseFilters !== 'implantacaoEdp' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="implantacaoEdpLabel" for="paciente-diario-tags-implantacaoEdp">
                               <Translate contentKey="generadorApp.pacienteDiarioTags.implantacaoEdp">Implantacao Edp</Translate>
                             </Label>
@@ -686,7 +688,7 @@ export class PacienteDiarioTags extends React.Component<IPacienteDiarioTagsProps
 
                       {this.state.baseFilters !== 'furoDeEscalaEdp' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="furoDeEscalaEdpLabel" for="paciente-diario-tags-furoDeEscalaEdp">
                               <Translate contentKey="generadorApp.pacienteDiarioTags.furoDeEscalaEdp">Furo De Escala Edp</Translate>
                             </Label>
@@ -702,7 +704,7 @@ export class PacienteDiarioTags extends React.Component<IPacienteDiarioTagsProps
 
                       {this.state.baseFilters !== 'solicitacaoDeFolgaEdp' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="solicitacaoDeFolgaEdpLabel" for="paciente-diario-tags-solicitacaoDeFolgaEdp">
                               <Translate contentKey="generadorApp.pacienteDiarioTags.solicitacaoDeFolgaEdp">
                                 Solicitacao De Folga Edp
@@ -720,7 +722,7 @@ export class PacienteDiarioTags extends React.Component<IPacienteDiarioTagsProps
 
                       {this.state.baseFilters !== 'trocaDeProfissionalEdp' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="trocaDeProfissionalEdpLabel" for="paciente-diario-tags-trocaDeProfissionalEdp">
                               <Translate contentKey="generadorApp.pacienteDiarioTags.trocaDeProfissionalEdp">
                                 Troca De Profissional Edp
@@ -738,7 +740,7 @@ export class PacienteDiarioTags extends React.Component<IPacienteDiarioTagsProps
 
                       {this.state.baseFilters !== 'reclamacaoEdp' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="reclamacaoEdpLabel" for="paciente-diario-tags-reclamacaoEdp">
                               <Translate contentKey="generadorApp.pacienteDiarioTags.reclamacaoEdp">Reclamacao Edp</Translate>
                             </Label>
@@ -754,7 +756,7 @@ export class PacienteDiarioTags extends React.Component<IPacienteDiarioTagsProps
 
                       {this.state.baseFilters !== 'elogioEdp' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="elogioEdpLabel" for="paciente-diario-tags-elogioEdp">
                               <Translate contentKey="generadorApp.pacienteDiarioTags.elogioEdp">Elogio Edp</Translate>
                             </Label>
@@ -765,7 +767,7 @@ export class PacienteDiarioTags extends React.Component<IPacienteDiarioTagsProps
 
                       {this.state.baseFilters !== 'recusaDeAtendimentoEdp' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="recusaDeAtendimentoEdpLabel" for="paciente-diario-tags-recusaDeAtendimentoEdp">
                               <Translate contentKey="generadorApp.pacienteDiarioTags.recusaDeAtendimentoEdp">
                                 Recusa De Atendimento Edp
@@ -783,7 +785,7 @@ export class PacienteDiarioTags extends React.Component<IPacienteDiarioTagsProps
 
                       {this.state.baseFilters !== 'duplicidadeEdp' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="duplicidadeEdpLabel" for="paciente-diario-tags-duplicidadeEdp">
                               <Translate contentKey="generadorApp.pacienteDiarioTags.duplicidadeEdp">Duplicidade Edp</Translate>
                             </Label>
@@ -799,7 +801,7 @@ export class PacienteDiarioTags extends React.Component<IPacienteDiarioTagsProps
 
                       {this.state.baseFilters !== 'monitorarEdp' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="monitorarEdpLabel" for="paciente-diario-tags-monitorarEdp">
                               <Translate contentKey="generadorApp.pacienteDiarioTags.monitorarEdp">Monitorar Edp</Translate>
                             </Label>
@@ -815,7 +817,7 @@ export class PacienteDiarioTags extends React.Component<IPacienteDiarioTagsProps
 
                       {this.state.baseFilters !== 'pendenteEdp' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="pendenteEdpLabel" for="paciente-diario-tags-pendenteEdp">
                               <Translate contentKey="generadorApp.pacienteDiarioTags.pendenteEdp">Pendente Edp</Translate>
                             </Label>
@@ -831,7 +833,7 @@ export class PacienteDiarioTags extends React.Component<IPacienteDiarioTagsProps
 
                       {this.state.baseFilters !== 'escalaMultiProfissional' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="escalaMultiProfissionalLabel" for="paciente-diario-tags-escalaMultiProfissional">
                               <Translate contentKey="generadorApp.pacienteDiarioTags.escalaMultiProfissional">
                                 Escala Multi Profissional
@@ -849,7 +851,7 @@ export class PacienteDiarioTags extends React.Component<IPacienteDiarioTagsProps
 
                       {this.state.baseFilters !== 'captacaoEmp' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="captacaoEmpLabel" for="paciente-diario-tags-captacaoEmp">
                               <Translate contentKey="generadorApp.pacienteDiarioTags.captacaoEmp">Captacao Emp</Translate>
                             </Label>
@@ -865,7 +867,7 @@ export class PacienteDiarioTags extends React.Component<IPacienteDiarioTagsProps
 
                       {this.state.baseFilters !== 'implantacaoEmp' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="implantacaoEmpLabel" for="paciente-diario-tags-implantacaoEmp">
                               <Translate contentKey="generadorApp.pacienteDiarioTags.implantacaoEmp">Implantacao Emp</Translate>
                             </Label>
@@ -881,7 +883,7 @@ export class PacienteDiarioTags extends React.Component<IPacienteDiarioTagsProps
 
                       {this.state.baseFilters !== 'solicitacaoDeFolgaEmp' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="solicitacaoDeFolgaEmpLabel" for="paciente-diario-tags-solicitacaoDeFolgaEmp">
                               <Translate contentKey="generadorApp.pacienteDiarioTags.solicitacaoDeFolgaEmp">
                                 Solicitacao De Folga Emp
@@ -899,7 +901,7 @@ export class PacienteDiarioTags extends React.Component<IPacienteDiarioTagsProps
 
                       {this.state.baseFilters !== 'trocaDeProfissionalEmp' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="trocaDeProfissionalEmpLabel" for="paciente-diario-tags-trocaDeProfissionalEmp">
                               <Translate contentKey="generadorApp.pacienteDiarioTags.trocaDeProfissionalEmp">
                                 Troca De Profissional Emp
@@ -917,7 +919,7 @@ export class PacienteDiarioTags extends React.Component<IPacienteDiarioTagsProps
 
                       {this.state.baseFilters !== 'reclamacaoEmp' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="reclamacaoEmpLabel" for="paciente-diario-tags-reclamacaoEmp">
                               <Translate contentKey="generadorApp.pacienteDiarioTags.reclamacaoEmp">Reclamacao Emp</Translate>
                             </Label>
@@ -933,7 +935,7 @@ export class PacienteDiarioTags extends React.Component<IPacienteDiarioTagsProps
 
                       {this.state.baseFilters !== 'elogioEmp' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="elogioEmpLabel" for="paciente-diario-tags-elogioEmp">
                               <Translate contentKey="generadorApp.pacienteDiarioTags.elogioEmp">Elogio Emp</Translate>
                             </Label>
@@ -944,7 +946,7 @@ export class PacienteDiarioTags extends React.Component<IPacienteDiarioTagsProps
 
                       {this.state.baseFilters !== 'padIncompletoEmp' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="padIncompletoEmpLabel" for="paciente-diario-tags-padIncompletoEmp">
                               <Translate contentKey="generadorApp.pacienteDiarioTags.padIncompletoEmp">Pad Incompleto Emp</Translate>
                             </Label>
@@ -960,7 +962,7 @@ export class PacienteDiarioTags extends React.Component<IPacienteDiarioTagsProps
 
                       {this.state.baseFilters !== 'visitaImprodutivaEmp' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="visitaImprodutivaEmpLabel" for="paciente-diario-tags-visitaImprodutivaEmp">
                               <Translate contentKey="generadorApp.pacienteDiarioTags.visitaImprodutivaEmp">
                                 Visita Improdutiva Emp
@@ -978,7 +980,7 @@ export class PacienteDiarioTags extends React.Component<IPacienteDiarioTagsProps
 
                       {this.state.baseFilters !== 'monitorarEmp' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="monitorarEmpLabel" for="paciente-diario-tags-monitorarEmp">
                               <Translate contentKey="generadorApp.pacienteDiarioTags.monitorarEmp">Monitorar Emp</Translate>
                             </Label>
@@ -994,7 +996,7 @@ export class PacienteDiarioTags extends React.Component<IPacienteDiarioTagsProps
 
                       {this.state.baseFilters !== 'pendenteEmp' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="pendenteEmpLabel" for="paciente-diario-tags-pendenteEmp">
                               <Translate contentKey="generadorApp.pacienteDiarioTags.pendenteEmp">Pendente Emp</Translate>
                             </Label>
@@ -1010,7 +1012,7 @@ export class PacienteDiarioTags extends React.Component<IPacienteDiarioTagsProps
 
                       {this.state.baseFilters !== 'intercorrencia' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="intercorrenciaLabel" for="paciente-diario-tags-intercorrencia">
                               <Translate contentKey="generadorApp.pacienteDiarioTags.intercorrencia">Intercorrencia</Translate>
                             </Label>
@@ -1026,7 +1028,7 @@ export class PacienteDiarioTags extends React.Component<IPacienteDiarioTagsProps
 
                       {this.state.baseFilters !== 'clinicaInter' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="clinicaInterLabel" for="paciente-diario-tags-clinicaInter">
                               <Translate contentKey="generadorApp.pacienteDiarioTags.clinicaInter">Clinica Inter</Translate>
                             </Label>
@@ -1042,7 +1044,7 @@ export class PacienteDiarioTags extends React.Component<IPacienteDiarioTagsProps
 
                       {this.state.baseFilters !== 'aphInter' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="aphInterLabel" for="paciente-diario-tags-aphInter">
                               <Translate contentKey="generadorApp.pacienteDiarioTags.aphInter">Aph Inter</Translate>
                             </Label>
@@ -1053,7 +1055,7 @@ export class PacienteDiarioTags extends React.Component<IPacienteDiarioTagsProps
 
                       {this.state.baseFilters !== 'pendenteInter' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="pendenteInterLabel" for="paciente-diario-tags-pendenteInter">
                               <Translate contentKey="generadorApp.pacienteDiarioTags.pendenteInter">Pendente Inter</Translate>
                             </Label>
@@ -1069,7 +1071,7 @@ export class PacienteDiarioTags extends React.Component<IPacienteDiarioTagsProps
 
                       {this.state.baseFilters !== 'solicitacoes' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="solicitacoesLabel" for="paciente-diario-tags-solicitacoes">
                               <Translate contentKey="generadorApp.pacienteDiarioTags.solicitacoes">Solicitacoes</Translate>
                             </Label>
@@ -1085,7 +1087,7 @@ export class PacienteDiarioTags extends React.Component<IPacienteDiarioTagsProps
 
                       {this.state.baseFilters !== 'recargaDeOxigenioSolic' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="recargaDeOxigenioSolicLabel" for="paciente-diario-tags-recargaDeOxigenioSolic">
                               <Translate contentKey="generadorApp.pacienteDiarioTags.recargaDeOxigenioSolic">
                                 Recarga De Oxigenio Solic
@@ -1103,7 +1105,7 @@ export class PacienteDiarioTags extends React.Component<IPacienteDiarioTagsProps
 
                       {this.state.baseFilters !== 'equipamentosSolic' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="equipamentosSolicLabel" for="paciente-diario-tags-equipamentosSolic">
                               <Translate contentKey="generadorApp.pacienteDiarioTags.equipamentosSolic">Equipamentos Solic</Translate>
                             </Label>
@@ -1119,7 +1121,7 @@ export class PacienteDiarioTags extends React.Component<IPacienteDiarioTagsProps
 
                       {this.state.baseFilters !== 'matmedSolic' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="matmedSolicLabel" for="paciente-diario-tags-matmedSolic">
                               <Translate contentKey="generadorApp.pacienteDiarioTags.matmedSolic">Matmed Solic</Translate>
                             </Label>
@@ -1135,7 +1137,7 @@ export class PacienteDiarioTags extends React.Component<IPacienteDiarioTagsProps
 
                       {this.state.baseFilters !== 'prontuarioSolic' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="prontuarioSolicLabel" for="paciente-diario-tags-prontuarioSolic">
                               <Translate contentKey="generadorApp.pacienteDiarioTags.prontuarioSolic">Prontuario Solic</Translate>
                             </Label>
@@ -1151,7 +1153,7 @@ export class PacienteDiarioTags extends React.Component<IPacienteDiarioTagsProps
 
                       {this.state.baseFilters !== 'prescricoesSolic' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="prescricoesSolicLabel" for="paciente-diario-tags-prescricoesSolic">
                               <Translate contentKey="generadorApp.pacienteDiarioTags.prescricoesSolic">Prescricoes Solic</Translate>
                             </Label>
@@ -1167,7 +1169,7 @@ export class PacienteDiarioTags extends React.Component<IPacienteDiarioTagsProps
 
                       {this.state.baseFilters !== 'examesSolic' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="examesSolicLabel" for="paciente-diario-tags-examesSolic">
                               <Translate contentKey="generadorApp.pacienteDiarioTags.examesSolic">Exames Solic</Translate>
                             </Label>
@@ -1183,7 +1185,7 @@ export class PacienteDiarioTags extends React.Component<IPacienteDiarioTagsProps
 
                       {this.state.baseFilters !== 'ambulanciaSolic' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="ambulanciaSolicLabel" for="paciente-diario-tags-ambulanciaSolic">
                               <Translate contentKey="generadorApp.pacienteDiarioTags.ambulanciaSolic">Ambulancia Solic</Translate>
                             </Label>
@@ -1199,7 +1201,7 @@ export class PacienteDiarioTags extends React.Component<IPacienteDiarioTagsProps
 
                       {this.state.baseFilters !== 'atendimentoDeEquipeSolic' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="atendimentoDeEquipeSolicLabel" for="paciente-diario-tags-atendimentoDeEquipeSolic">
                               <Translate contentKey="generadorApp.pacienteDiarioTags.atendimentoDeEquipeSolic">
                                 Atendimento De Equipe Solic
@@ -1217,7 +1219,7 @@ export class PacienteDiarioTags extends React.Component<IPacienteDiarioTagsProps
 
                       {this.state.baseFilters !== 'monitorarSolic' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="monitorarSolicLabel" for="paciente-diario-tags-monitorarSolic">
                               <Translate contentKey="generadorApp.pacienteDiarioTags.monitorarSolic">Monitorar Solic</Translate>
                             </Label>
@@ -1233,7 +1235,7 @@ export class PacienteDiarioTags extends React.Component<IPacienteDiarioTagsProps
 
                       {this.state.baseFilters !== 'pendenteSolic' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="pendenteSolicLabel" for="paciente-diario-tags-pendenteSolic">
                               <Translate contentKey="generadorApp.pacienteDiarioTags.pendenteSolic">Pendente Solic</Translate>
                             </Label>
@@ -1249,7 +1251,7 @@ export class PacienteDiarioTags extends React.Component<IPacienteDiarioTagsProps
 
                       {this.state.baseFilters !== 'avaliacao' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="avaliacaoLabel" for="paciente-diario-tags-avaliacao">
                               <Translate contentKey="generadorApp.pacienteDiarioTags.avaliacao">Avaliacao</Translate>
                             </Label>
@@ -1260,7 +1262,7 @@ export class PacienteDiarioTags extends React.Component<IPacienteDiarioTagsProps
 
                       {this.state.baseFilters !== 'residenciaAval' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="residenciaAvalLabel" for="paciente-diario-tags-residenciaAval">
                               <Translate contentKey="generadorApp.pacienteDiarioTags.residenciaAval">Residencia Aval</Translate>
                             </Label>
@@ -1276,7 +1278,7 @@ export class PacienteDiarioTags extends React.Component<IPacienteDiarioTagsProps
 
                       {this.state.baseFilters !== 'hospitalAval' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="hospitalAvalLabel" for="paciente-diario-tags-hospitalAval">
                               <Translate contentKey="generadorApp.pacienteDiarioTags.hospitalAval">Hospital Aval</Translate>
                             </Label>
@@ -1292,7 +1294,7 @@ export class PacienteDiarioTags extends React.Component<IPacienteDiarioTagsProps
 
                       {this.state.baseFilters !== 'monitorarAval' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="monitorarAvalLabel" for="paciente-diario-tags-monitorarAval">
                               <Translate contentKey="generadorApp.pacienteDiarioTags.monitorarAval">Monitorar Aval</Translate>
                             </Label>
@@ -1308,7 +1310,7 @@ export class PacienteDiarioTags extends React.Component<IPacienteDiarioTagsProps
 
                       {this.state.baseFilters !== 'captacaoAtivaAval' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="captacaoAtivaAvalLabel" for="paciente-diario-tags-captacaoAtivaAval">
                               <Translate contentKey="generadorApp.pacienteDiarioTags.captacaoAtivaAval">Captacao Ativa Aval</Translate>
                             </Label>
@@ -1324,7 +1326,7 @@ export class PacienteDiarioTags extends React.Component<IPacienteDiarioTagsProps
 
                       {this.state.baseFilters !== 'pendenteAval' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="pendenteAvalLabel" for="paciente-diario-tags-pendenteAval">
                               <Translate contentKey="generadorApp.pacienteDiarioTags.pendenteAval">Pendente Aval</Translate>
                             </Label>
@@ -1340,7 +1342,7 @@ export class PacienteDiarioTags extends React.Component<IPacienteDiarioTagsProps
 
                       {this.state.baseFilters !== 'implantacao' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="implantacaoLabel" for="paciente-diario-tags-implantacao">
                               <Translate contentKey="generadorApp.pacienteDiarioTags.implantacao">Implantacao</Translate>
                             </Label>
@@ -1356,7 +1358,7 @@ export class PacienteDiarioTags extends React.Component<IPacienteDiarioTagsProps
 
                       {this.state.baseFilters !== 'monitorarImpl' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="monitorarImplLabel" for="paciente-diario-tags-monitorarImpl">
                               <Translate contentKey="generadorApp.pacienteDiarioTags.monitorarImpl">Monitorar Impl</Translate>
                             </Label>
@@ -1372,7 +1374,7 @@ export class PacienteDiarioTags extends React.Component<IPacienteDiarioTagsProps
 
                       {this.state.baseFilters !== 'pendenteImpl' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="pendenteImplLabel" for="paciente-diario-tags-pendenteImpl">
                               <Translate contentKey="generadorApp.pacienteDiarioTags.pendenteImpl">Pendente Impl</Translate>
                             </Label>
@@ -1388,7 +1390,7 @@ export class PacienteDiarioTags extends React.Component<IPacienteDiarioTagsProps
 
                       {this.state.baseFilters !== 'alta' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="altaLabel" for="paciente-diario-tags-alta">
                               <Translate contentKey="generadorApp.pacienteDiarioTags.alta">Alta</Translate>
                             </Label>
@@ -1399,7 +1401,7 @@ export class PacienteDiarioTags extends React.Component<IPacienteDiarioTagsProps
 
                       {this.state.baseFilters !== 'hospitalizacaoAlt' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="hospitalizacaoAltLabel" for="paciente-diario-tags-hospitalizacaoAlt">
                               <Translate contentKey="generadorApp.pacienteDiarioTags.hospitalizacaoAlt">Hospitalizacao Alt</Translate>
                             </Label>
@@ -1415,7 +1417,7 @@ export class PacienteDiarioTags extends React.Component<IPacienteDiarioTagsProps
 
                       {this.state.baseFilters !== 'migracaoDeEmpresaAlt' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="migracaoDeEmpresaAltLabel" for="paciente-diario-tags-migracaoDeEmpresaAlt">
                               <Translate contentKey="generadorApp.pacienteDiarioTags.migracaoDeEmpresaAlt">
                                 Migracao De Empresa Alt
@@ -1433,7 +1435,7 @@ export class PacienteDiarioTags extends React.Component<IPacienteDiarioTagsProps
 
                       {this.state.baseFilters !== 'obitoEmCasaAlt' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="obitoEmCasaAltLabel" for="paciente-diario-tags-obitoEmCasaAlt">
                               <Translate contentKey="generadorApp.pacienteDiarioTags.obitoEmCasaAlt">Obito Em Casa Alt</Translate>
                             </Label>
@@ -1449,7 +1451,7 @@ export class PacienteDiarioTags extends React.Component<IPacienteDiarioTagsProps
 
                       {this.state.baseFilters !== 'terminoDeAtendimentoAlt' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="terminoDeAtendimentoAltLabel" for="paciente-diario-tags-terminoDeAtendimentoAlt">
                               <Translate contentKey="generadorApp.pacienteDiarioTags.terminoDeAtendimentoAlt">
                                 Termino De Atendimento Alt
@@ -1467,7 +1469,7 @@ export class PacienteDiarioTags extends React.Component<IPacienteDiarioTagsProps
 
                       {this.state.baseFilters !== 'atendimentoSuspensoAlt' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="atendimentoSuspensoAltLabel" for="paciente-diario-tags-atendimentoSuspensoAlt">
                               <Translate contentKey="generadorApp.pacienteDiarioTags.atendimentoSuspensoAlt">
                                 Atendimento Suspenso Alt
@@ -1485,7 +1487,7 @@ export class PacienteDiarioTags extends React.Component<IPacienteDiarioTagsProps
 
                       {this.state.baseFilters !== 'monitorarAlt' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="monitorarAltLabel" for="paciente-diario-tags-monitorarAlt">
                               <Translate contentKey="generadorApp.pacienteDiarioTags.monitorarAlt">Monitorar Alt</Translate>
                             </Label>
@@ -1501,7 +1503,7 @@ export class PacienteDiarioTags extends React.Component<IPacienteDiarioTagsProps
 
                       {this.state.baseFilters !== 'pendenteAlt' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="pendenteAltLabel" for="paciente-diario-tags-pendenteAlt">
                               <Translate contentKey="generadorApp.pacienteDiarioTags.pendenteAlt">Pendente Alt</Translate>
                             </Label>
@@ -1517,7 +1519,7 @@ export class PacienteDiarioTags extends React.Component<IPacienteDiarioTagsProps
 
                       {this.state.baseFilters !== 'eCommerceSegViagem' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="eCommerceSegViagemLabel" for="paciente-diario-tags-eCommerceSegViagem">
                               <Translate contentKey="generadorApp.pacienteDiarioTags.eCommerceSegViagem">E Commerce Seg Viagem</Translate>
                             </Label>
@@ -1533,7 +1535,7 @@ export class PacienteDiarioTags extends React.Component<IPacienteDiarioTagsProps
 
                       {this.state.baseFilters !== 'monitorarEcsv' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="monitorarEcsvLabel" for="paciente-diario-tags-monitorarEcsv">
                               <Translate contentKey="generadorApp.pacienteDiarioTags.monitorarEcsv">Monitorar Ecsv</Translate>
                             </Label>
@@ -1549,7 +1551,7 @@ export class PacienteDiarioTags extends React.Component<IPacienteDiarioTagsProps
 
                       {this.state.baseFilters !== 'pendenteEcsv' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="pendenteEcsvLabel" for="paciente-diario-tags-pendenteEcsv">
                               <Translate contentKey="generadorApp.pacienteDiarioTags.pendenteEcsv">Pendente Ecsv</Translate>
                             </Label>
@@ -1565,7 +1567,7 @@ export class PacienteDiarioTags extends React.Component<IPacienteDiarioTagsProps
 
                       {this.state.baseFilters !== 'farmacia' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="farmaciaLabel" for="paciente-diario-tags-farmacia">
                               <Translate contentKey="generadorApp.pacienteDiarioTags.farmacia">Farmacia</Translate>
                             </Label>
@@ -1576,7 +1578,7 @@ export class PacienteDiarioTags extends React.Component<IPacienteDiarioTagsProps
 
                       {this.state.baseFilters !== 'matMedFarm' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="matMedFarmLabel" for="paciente-diario-tags-matMedFarm">
                               <Translate contentKey="generadorApp.pacienteDiarioTags.matMedFarm">Mat Med Farm</Translate>
                             </Label>
@@ -1587,7 +1589,7 @@ export class PacienteDiarioTags extends React.Component<IPacienteDiarioTagsProps
 
                       {this.state.baseFilters !== 'receitaFarm' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="receitaFarmLabel" for="paciente-diario-tags-receitaFarm">
                               <Translate contentKey="generadorApp.pacienteDiarioTags.receitaFarm">Receita Farm</Translate>
                             </Label>
@@ -1603,7 +1605,7 @@ export class PacienteDiarioTags extends React.Component<IPacienteDiarioTagsProps
 
                       {this.state.baseFilters !== 'prontuarioFarm' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="prontuarioFarmLabel" for="paciente-diario-tags-prontuarioFarm">
                               <Translate contentKey="generadorApp.pacienteDiarioTags.prontuarioFarm">Prontuario Farm</Translate>
                             </Label>
@@ -1619,7 +1621,7 @@ export class PacienteDiarioTags extends React.Component<IPacienteDiarioTagsProps
 
                       {this.state.baseFilters !== 'romaneioManualFarm' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="romaneioManualFarmLabel" for="paciente-diario-tags-romaneioManualFarm">
                               <Translate contentKey="generadorApp.pacienteDiarioTags.romaneioManualFarm">Romaneio Manual Farm</Translate>
                             </Label>
@@ -1635,7 +1637,7 @@ export class PacienteDiarioTags extends React.Component<IPacienteDiarioTagsProps
 
                       {this.state.baseFilters !== 'outrosFarm' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="outrosFarmLabel" for="paciente-diario-tags-outrosFarm">
                               <Translate contentKey="generadorApp.pacienteDiarioTags.outrosFarm">Outros Farm</Translate>
                             </Label>
@@ -1646,7 +1648,7 @@ export class PacienteDiarioTags extends React.Component<IPacienteDiarioTagsProps
 
                       {this.state.baseFilters !== 'monitorarFarm' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="monitorarFarmLabel" for="paciente-diario-tags-monitorarFarm">
                               <Translate contentKey="generadorApp.pacienteDiarioTags.monitorarFarm">Monitorar Farm</Translate>
                             </Label>
@@ -1662,7 +1664,7 @@ export class PacienteDiarioTags extends React.Component<IPacienteDiarioTagsProps
 
                       {this.state.baseFilters !== 'pendenteFarm' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="pendenteFarmLabel" for="paciente-diario-tags-pendenteFarm">
                               <Translate contentKey="generadorApp.pacienteDiarioTags.pendenteFarm">Pendente Farm</Translate>
                             </Label>
@@ -1678,7 +1680,7 @@ export class PacienteDiarioTags extends React.Component<IPacienteDiarioTagsProps
 
                       {this.state.baseFilters !== 'contatoTelefonico' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="contatoTelefonicoLabel" for="paciente-diario-tags-contatoTelefonico">
                               <Translate contentKey="generadorApp.pacienteDiarioTags.contatoTelefonico">Contato Telefonico</Translate>
                             </Label>
@@ -1694,7 +1696,7 @@ export class PacienteDiarioTags extends React.Component<IPacienteDiarioTagsProps
 
                       {this.state.baseFilters !== 'ativoContTel' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="ativoContTelLabel" for="paciente-diario-tags-ativoContTel">
                               <Translate contentKey="generadorApp.pacienteDiarioTags.ativoContTel">Ativo Cont Tel</Translate>
                             </Label>
@@ -1710,7 +1712,7 @@ export class PacienteDiarioTags extends React.Component<IPacienteDiarioTagsProps
 
                       {this.state.baseFilters !== 'receptivoContTel' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="receptivoContTelLabel" for="paciente-diario-tags-receptivoContTel">
                               <Translate contentKey="generadorApp.pacienteDiarioTags.receptivoContTel">Receptivo Cont Tel</Translate>
                             </Label>
@@ -1726,7 +1728,7 @@ export class PacienteDiarioTags extends React.Component<IPacienteDiarioTagsProps
 
                       {this.state.baseFilters !== 'monitorarContTel' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="monitorarContTelLabel" for="paciente-diario-tags-monitorarContTel">
                               <Translate contentKey="generadorApp.pacienteDiarioTags.monitorarContTel">Monitorar Cont Tel</Translate>
                             </Label>
@@ -1742,7 +1744,7 @@ export class PacienteDiarioTags extends React.Component<IPacienteDiarioTagsProps
 
                       {this.state.baseFilters !== 'pendenteContTel' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="pendenteContTelLabel" for="paciente-diario-tags-pendenteContTel">
                               <Translate contentKey="generadorApp.pacienteDiarioTags.pendenteContTel">Pendente Cont Tel</Translate>
                             </Label>
@@ -1758,7 +1760,7 @@ export class PacienteDiarioTags extends React.Component<IPacienteDiarioTagsProps
 
                       {this.state.baseFilters !== 'dtPost' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="dtPostLabel" for="paciente-diario-tags-dtPost">
                               <Translate contentKey="generadorApp.pacienteDiarioTags.dtPost">Dt Post</Translate>
                             </Label>
@@ -1779,13 +1781,13 @@ export class PacienteDiarioTags extends React.Component<IPacienteDiarioTagsProps
                       <Button className="btn btn-success" type="submit">
                         <i className="fa fa-filter" aria-hidden={'true'}></i>
                         &nbsp;
-                        <Translate contentKey="entity.validation.filter">Filter</Translate>
+                        <Translate contentKey="generadorApp.pacienteDiarioTags.home.btn_filter">Filter</Translate>
                       </Button>
                       &nbsp;
                       <div className="btn btn-secondary hand" onClick={this.cancelCourse}>
                         <FontAwesomeIcon icon="trash-alt" />
                         &nbsp;
-                        <Translate contentKey="entity.validation.clean">Clean</Translate>
+                        <Translate contentKey="generadorApp.pacienteDiarioTags.home.btn_filter_clean">Clean</Translate>
                       </div>
                     </div>
                   </AvForm>

@@ -42,6 +42,7 @@ export interface IAlertasResultadosEsperadosBaseState {
 
 export interface IAlertasResultadosEsperadosUpdateState {
   fieldsBase: IAlertasResultadosEsperadosBaseState;
+
   isNew: boolean;
 }
 

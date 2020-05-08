@@ -1,8 +1,14 @@
 {
   "generadorApp": {
     "prontuarioTipoMotivo": {
+      "listButtons": {},
+      "viewButtons": {},
+      "dropdown_btn": "Ações",
       "home": {
         "title": "Prontuario Tipo Motivos",
+        "btn_filter": "Filter",
+        "btn_filter_clean": "Clean Filters",
+        "btn_filter_open": "Filters",
         "createLabel": "Create a new Prontuario Tipo Motivo",
         "createOrEditLabel": "Create or edit a Prontuario Tipo Motivo",
         "notFound": "No Prontuario Tipo Motivos found"

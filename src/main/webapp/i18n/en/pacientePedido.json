@@ -1,8 +1,14 @@
 {
   "generadorApp": {
     "pacientePedido": {
+      "listButtons": {},
+      "viewButtons": {},
+      "dropdown_btn": "Ações",
       "home": {
         "title": "Paciente Pedidos",
+        "btn_filter": "Filter",
+        "btn_filter_clean": "Clean Filters",
+        "btn_filter_open": "Filters",
         "createLabel": "Create a new Paciente Pedido",
         "createOrEditLabel": "Create or edit a Paciente Pedido",
         "notFound": "No Paciente Pedidos found"
@@ -23,6 +29,7 @@
       "valor": "Valor",
       "desconto": "Desconto",
       "tipoValor": "Tipo Valor",
+      "unidade_empty": "Without Unidade",
       "unidade": "Unidade"
     }
   }

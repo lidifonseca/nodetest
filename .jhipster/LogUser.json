@@ -8,7 +8,7 @@
         }
     ],
     "relationships": [],
-    "changelogDate": "20200507111500",
+    "changelogDate": "20200508160500",
     "entityTableName": "log_user",
     "dto": "mapstruct",
     "pagination": "pagination",

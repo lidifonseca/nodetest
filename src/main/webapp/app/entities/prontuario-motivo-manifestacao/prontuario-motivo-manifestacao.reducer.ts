@@ -46,6 +46,7 @@ export interface IProntuarioMotivoManifestacaoBaseState {
 
 export interface IProntuarioMotivoManifestacaoUpdateState {
   fieldsBase: IProntuarioMotivoManifestacaoBaseState;
+
   isNew: boolean;
 }
 

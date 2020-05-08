@@ -54,6 +54,7 @@ export interface IPacienteProntuarioBaseState {
 
 export interface IPacienteProntuarioUpdateState {
   fieldsBase: IPacienteProntuarioBaseState;
+
   isNew: boolean;
 }
 

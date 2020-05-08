@@ -2,6 +2,7 @@
 import React from 'react';
 import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
 import { connect } from 'react-redux';
+import Select from 'react-select';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import {
   Button,
@@ -171,34 +172,35 @@ export class ProntuarioMotivoManifestacao extends React.Component<IProntuarioMot
     const { prontuarioMotivoManifestacaoList, match, totalItems } = this.props;
     return (
       <div>
-        <ol className="breadcrumb float-xl-right">
+        <h2 id="page-heading">
+          <span className="page-header">Prontuario Motivo Manifestacaos</span>
+          <Button id="togglerFilterProntuarioMotivoManifestacao" className="btn btn-primary float-right jh-create-entity">
+            <Translate contentKey="generadorApp.prontuarioMotivoManifestacao.home.btn_filter_open">Filters</Translate>
+            &nbsp;
+            <FontAwesomeIcon icon="caret-down" />
+          </Button>{' '}
+          &nbsp;
+          <Link
+            to={`${match.url}/new?${this.getFiltersURL()}`}
+            className="btn btn-primary float-right jh-create-entity"
+            id="jh-create-entity"
+          >
+            <FontAwesomeIcon icon="plus" />
+            &nbsp;
+            <Translate contentKey="generadorApp.prontuarioMotivoManifestacao.home.createLabel">
+              Create a new Prontuario Motivo Manifestacao
+            </Translate>
+          </Link>{' '}
+          &nbsp;
+        </h2>
+
+        <ol className="breadcrumb">
           <li className="breadcrumb-item">
             <Link to="/">Inicio</Link>
           </li>
           <li className="breadcrumb-item active">Prontuario Motivo Manifestacaos</li>
         </ol>
-        <h1 className="page-header">&nbsp;&nbsp;</h1>
         <Panel>
-          <PanelHeader>
-            <h2 id="page-heading">
-              <span className="page-header ml-3">Prontuario Motivo Manifestacaos</span>
-              <Button id="togglerFilterProntuarioMotivoManifestacao" className="btn btn-primary float-right jh-create-entity">
-                Filtros&nbsp;
-                <FontAwesomeIcon icon="caret-down" />
-              </Button>
-              <Link
-                to={`${match.url}/new?${this.getFiltersURL()}`}
-                className="btn btn-primary float-right jh-create-entity"
-                id="jh-create-entity"
-              >
-                <FontAwesomeIcon icon="plus" />
-                &nbsp;
-                <Translate contentKey="generadorApp.prontuarioMotivoManifestacao.home.createLabel">
-                  Create a new Prontuario Motivo Manifestacao
-                </Translate>
-              </Link>
-            </h2>
-          </PanelHeader>
           <PanelBody>
             <div className="table-responsive">
               <UncontrolledCollapse toggler="#togglerFilterProntuarioMotivoManifestacao">
@@ -207,7 +209,7 @@ export class ProntuarioMotivoManifestacao extends React.Component<IProntuarioMot
                     <div className="row mt-1 ml-3 mr-3">
                       {this.state.baseFilters !== 'idProntuario' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="idProntuarioLabel" for="prontuario-motivo-manifestacao-idProntuario">
                               <Translate contentKey="generadorApp.prontuarioMotivoManifestacao.idProntuario">Id Prontuario</Translate>
                             </Label>
@@ -223,7 +225,7 @@ export class ProntuarioMotivoManifestacao extends React.Component<IProntuarioMot
 
                       {this.state.baseFilters !== 'idPaciente' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="idPacienteLabel" for="prontuario-motivo-manifestacao-idPaciente">
                               <Translate contentKey="generadorApp.prontuarioMotivoManifestacao.idPaciente">Id Paciente</Translate>
                             </Label>
@@ -239,7 +241,7 @@ export class ProntuarioMotivoManifestacao extends React.Component<IProntuarioMot
 
                       {this.state.baseFilters !== 'idMotivo' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="idMotivoLabel" for="prontuario-motivo-manifestacao-idMotivo">
                               <Translate contentKey="generadorApp.prontuarioMotivoManifestacao.idMotivo">Id Motivo</Translate>
                             </Label>
@@ -255,7 +257,7 @@ export class ProntuarioMotivoManifestacao extends React.Component<IProntuarioMot
 
                       {this.state.baseFilters !== 'idMotivoFilho' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="idMotivoFilhoLabel" for="prontuario-motivo-manifestacao-idMotivoFilho">
                               <Translate contentKey="generadorApp.prontuarioMotivoManifestacao.idMotivoFilho">Id Motivo Filho</Translate>
                             </Label>
@@ -271,7 +273,7 @@ export class ProntuarioMotivoManifestacao extends React.Component<IProntuarioMot
 
                       {this.state.baseFilters !== 'idManifestacao' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="idManifestacaoLabel" for="prontuario-motivo-manifestacao-idManifestacao">
                               <Translate contentKey="generadorApp.prontuarioMotivoManifestacao.idManifestacao">Id Manifestacao</Translate>
                             </Label>
@@ -287,7 +289,7 @@ export class ProntuarioMotivoManifestacao extends React.Component<IProntuarioMot
 
                       {this.state.baseFilters !== 'idManifestacaoFilho' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="idManifestacaoFilhoLabel" for="prontuario-motivo-manifestacao-idManifestacaoFilho">
                               <Translate contentKey="generadorApp.prontuarioMotivoManifestacao.idManifestacaoFilho">
                                 Id Manifestacao Filho
@@ -305,7 +307,7 @@ export class ProntuarioMotivoManifestacao extends React.Component<IProntuarioMot
 
                       {this.state.baseFilters !== 'sugestao' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="sugestaoLabel" for="prontuario-motivo-manifestacao-sugestao">
                               <Translate contentKey="generadorApp.prontuarioMotivoManifestacao.sugestao">Sugestao</Translate>
                             </Label>
@@ -316,7 +318,7 @@ export class ProntuarioMotivoManifestacao extends React.Component<IProntuarioMot
 
                       {this.state.baseFilters !== 'informacaoAdicional' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="informacaoAdicionalLabel" for="prontuario-motivo-manifestacao-informacaoAdicional">
                               <Translate contentKey="generadorApp.prontuarioMotivoManifestacao.informacaoAdicional">
                                 Informacao Adicional
@@ -332,13 +334,13 @@ export class ProntuarioMotivoManifestacao extends React.Component<IProntuarioMot
                       <Button className="btn btn-success" type="submit">
                         <i className="fa fa-filter" aria-hidden={'true'}></i>
                         &nbsp;
-                        <Translate contentKey="entity.validation.filter">Filter</Translate>
+                        <Translate contentKey="generadorApp.prontuarioMotivoManifestacao.home.btn_filter">Filter</Translate>
                       </Button>
                       &nbsp;
                       <div className="btn btn-secondary hand" onClick={this.cancelCourse}>
                         <FontAwesomeIcon icon="trash-alt" />
                         &nbsp;
-                        <Translate contentKey="entity.validation.clean">Clean</Translate>
+                        <Translate contentKey="generadorApp.prontuarioMotivoManifestacao.home.btn_filter_clean">Clean</Translate>
                       </div>
                     </div>
                   </AvForm>

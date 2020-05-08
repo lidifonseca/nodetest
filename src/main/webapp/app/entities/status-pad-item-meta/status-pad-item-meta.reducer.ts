@@ -41,6 +41,7 @@ export interface IStatusPadItemMetaBaseState {
 
 export interface IStatusPadItemMetaUpdateState {
   fieldsBase: IStatusPadItemMetaBaseState;
+
   isNew: boolean;
 }
 

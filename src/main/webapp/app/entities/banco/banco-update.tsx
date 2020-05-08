@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import Select from 'react-select';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 import { Button, Row, Col, Label } from 'reactstrap';
@@ -40,23 +41,18 @@ export class BancoUpdate extends React.Component<IBancoUpdateProps, IBancoUpdate
 
   getFiltersURL = (offset = null) => {
     const fieldsBase = this.state.fieldsBase;
-    return (
-      '_back=1' +
-      (fieldsBase['baseFilters'] ? '&baseFilters=' + fieldsBase['baseFilters'] : '') +
-      (fieldsBase['activePage'] ? '&page=' + fieldsBase['activePage'] : '') +
-      (fieldsBase['itemsPerPage'] ? '&size=' + fieldsBase['itemsPerPage'] : '') +
-      (fieldsBase['sort'] ? '&sort=' + (fieldsBase['sort'] + ',' + fieldsBase['order']) : '') +
-      (offset !== null ? '&offset=' + offset : '') +
-      (fieldsBase['codBanco'] ? '&codBanco=' + fieldsBase['codBanco'] : '') +
-      (fieldsBase['banco'] ? '&banco=' + fieldsBase['banco'] : '') +
-      ''
-    );
+    let url = '_back=1' + (offset !== null ? '&offset=' + offset : '');
+    Object.keys(fieldsBase).map(key => {
+      url += '&' + key + '=' + fieldsBase[key];
+    });
+    return url;
   };
   saveEntity = (event: any, errors: any, values: any) => {
     if (errors.length === 0) {
       const { bancoEntity } = this.props;
       const entity = {
         ...bancoEntity,
+
         ...values
       };
 
@@ -79,14 +75,6 @@ export class BancoUpdate extends React.Component<IBancoUpdateProps, IBancoUpdate
     const baseFilters = this.state.fieldsBase && this.state.fieldsBase['baseFilters'] ? this.state.fieldsBase['baseFilters'] : null;
     return (
       <div>
-        <ol className="breadcrumb float-xl-right">
-          <li className="breadcrumb-item">
-            <Link to="/">Inicio</Link>
-          </li>
-          <li className="breadcrumb-item active">Bancos</li>
-          <li className="breadcrumb-item active">Bancos edit</li>
-        </ol>
-        <h1 className="page-header">&nbsp;&nbsp;</h1>
         <AvForm
           model={
             isNew
@@ -97,34 +85,40 @@ export class BancoUpdate extends React.Component<IBancoUpdateProps, IBancoUpdate
           }
           onSubmit={this.saveEntity}
         >
-          <Panel>
-            <PanelHeader>
-              <h2 id="page-heading">
-                <span className="page-header ml-3">
-                  <Translate contentKey="generadorApp.banco.home.createOrEditLabel">Create or edit a Banco</Translate>
-                </span>
+          <h2 id="page-heading">
+            <span className="page-header ml-3">
+              <Translate contentKey="generadorApp.banco.home.createOrEditLabel">Create or edit a Banco</Translate>
+            </span>
 
-                <Button color="primary" id="save-entity" type="submit" disabled={updating} className="float-right jh-create-entity">
-                  <FontAwesomeIcon icon="save" />
-                  &nbsp;
-                  <Translate contentKey="entity.action.save">Save</Translate>
-                </Button>
-                <Button
-                  tag={Link}
-                  id="cancel-save"
-                  to={'/banco?' + this.getFiltersURL()}
-                  replace
-                  color="info"
-                  className="float-right jh-create-entity"
-                >
-                  <FontAwesomeIcon icon="arrow-left" />
-                  &nbsp;
-                  <span className="d-none d-md-inline">
-                    <Translate contentKey="entity.action.back">Back</Translate>
-                  </span>
-                </Button>
-              </h2>
-            </PanelHeader>
+            <Button color="primary" id="save-entity" type="submit" disabled={updating} className="float-right jh-create-entity">
+              <FontAwesomeIcon icon="save" />
+              &nbsp;
+              <Translate contentKey="entity.action.save">Save</Translate>
+            </Button>
+            <Button
+              tag={Link}
+              id="cancel-save"
+              to={'/banco?' + this.getFiltersURL()}
+              replace
+              color="info"
+              className="float-right jh-create-entity"
+            >
+              <FontAwesomeIcon icon="arrow-left" />
+              &nbsp;
+              <span className="d-none d-md-inline">
+                <Translate contentKey="entity.action.back">Back</Translate>
+              </span>
+            </Button>
+          </h2>
+          <ol className="breadcrumb">
+            <li className="breadcrumb-item">
+              <Link to="/">Inicio</Link>
+            </li>
+            <li className="breadcrumb-item active">Bancos</li>
+            <li className="breadcrumb-item active">Bancos edit</li>
+          </ol>
+
+          <Panel>
             <PanelBody>
               <Row className="justify-content-center">
                 <Col md="8">
@@ -148,43 +142,9 @@ export class BancoUpdate extends React.Component<IBancoUpdateProps, IBancoUpdate
                         </AvGroup>
                       ) : null}
                       <Row>
-                        {baseFilters !== 'codBanco' ? (
-                          <Col md="codBanco">
-                            <AvGroup>
-                              <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="codBancoLabel" for="banco-codBanco">
-                                    <Translate contentKey="generadorApp.banco.codBanco">Cod Banco</Translate>
-                                  </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField id="banco-codBanco" type="text" name="codBanco" />
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
-                        ) : (
-                          <AvInput type="hidden" name="codBanco" value={this.state.fieldsBase[baseFilters]} />
-                        )}
+                        <CodBancoComponentUpdate baseFilters />
 
-                        {baseFilters !== 'banco' ? (
-                          <Col md="banco">
-                            <AvGroup>
-                              <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="bancoLabel" for="banco-banco">
-                                    <Translate contentKey="generadorApp.banco.banco">Banco</Translate>
-                                  </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField id="banco-banco" type="text" name="banco" />
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
-                        ) : (
-                          <AvInput type="hidden" name="banco" value={this.state.fieldsBase[baseFilters]} />
-                        )}
+                        <BancoComponentUpdate baseFilters />
                       </Row>
                     </div>
                   )}
@@ -214,5 +174,47 @@ const mapDispatchToProps = {
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
+
+const CodBancoComponentUpdate = ({ baseFilters }) => {
+  return baseFilters !== 'codBanco' ? (
+    <Col md="codBanco">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" id="codBancoLabel" for="banco-codBanco">
+              <Translate contentKey="generadorApp.banco.codBanco">Cod Banco</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <AvField id="banco-codBanco" type="text" name="codBanco" />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="codBanco" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const BancoComponentUpdate = ({ baseFilters }) => {
+  return baseFilters !== 'banco' ? (
+    <Col md="banco">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" id="bancoLabel" for="banco-banco">
+              <Translate contentKey="generadorApp.banco.banco">Banco</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <AvField id="banco-banco" type="text" name="banco" />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="banco" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(BancoUpdate);

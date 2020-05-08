@@ -1,8 +1,14 @@
 {
   "generadorApp": {
     "especialidadeOperadora": {
+      "listButtons": {},
+      "viewButtons": {},
+      "dropdown_btn": "Ações",
       "home": {
         "title": "Especialidade Operadoras",
+        "btn_filter": "Filter",
+        "btn_filter_clean": "Clean Filters",
+        "btn_filter_open": "Filters",
         "createLabel": "Create a new Especialidade Operadora",
         "createOrEditLabel": "Create or edit a Especialidade Operadora",
         "notFound": "No Especialidade Operadoras found"

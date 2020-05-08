@@ -39,6 +39,7 @@ export interface IPushnotificationEnviosBaseState {
 
 export interface IPushnotificationEnviosUpdateState {
   fieldsBase: IPushnotificationEnviosBaseState;
+
   isNew: boolean;
 }
 

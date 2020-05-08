@@ -34,20 +34,18 @@ export class ProfissionalFranquiaDetail extends React.Component<IProfissionalFra
     const { profissionalFranquiaEntity } = this.props;
     return (
       <div>
-        <ol className="breadcrumb float-xl-right">
+        <h2 id="page-heading">
+          <span className="page-header ml-3">Profissional Franquias</span>
+        </h2>
+        <ol className="breadcrumb">
           <li className="breadcrumb-item">
             <Link to="/">Inicio</Link>
           </li>
           <li className="breadcrumb-item active">Profissional Franquias</li>
           <li className="breadcrumb-item active">Profissional Franquias details</li>
         </ol>
-        <h1 className="page-header">&nbsp;&nbsp;</h1>
         <Panel>
-          <PanelHeader>
-            <h2 id="page-heading">
-              <span className="page-header ml-3">Profissional Franquias</span>
-            </h2>
-          </PanelHeader>
+          <PanelHeader></PanelHeader>
           <PanelBody>
             <Row>
               <Col md="8">

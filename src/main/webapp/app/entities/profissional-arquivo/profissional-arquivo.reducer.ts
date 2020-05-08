@@ -40,6 +40,7 @@ export interface IProfissionalArquivoBaseState {
 
 export interface IProfissionalArquivoUpdateState {
   fieldsBase: IProfissionalArquivoBaseState;
+
   isNew: boolean;
 }
 

@@ -11,7 +11,7 @@
         }
     ],
     "relationships": [],
-    "changelogDate": "20200507125100",
+    "changelogDate": "20200508174100",
     "entityTableName": "tipo_unidade",
     "dto": "mapstruct",
     "pagination": "pagination",

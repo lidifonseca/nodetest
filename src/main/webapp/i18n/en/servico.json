@@ -1,8 +1,14 @@
 {
   "generadorApp": {
     "servico": {
+      "listButtons": {},
+      "viewButtons": {},
+      "dropdown_btn": "Ações",
       "home": {
         "title": "Servicos",
+        "btn_filter": "Filter",
+        "btn_filter_clean": "Clean Filters",
+        "btn_filter_open": "Filters",
         "createLabel": "Create a new Servico",
         "createOrEditLabel": "Create or edit a Servico",
         "notFound": "No Servicos found"

@@ -2,6 +2,7 @@
 import React from 'react';
 import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
 import { connect } from 'react-redux';
+import Select from 'react-select';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import {
   Button,
@@ -118,32 +119,33 @@ export class GrupoRisco extends React.Component<IGrupoRiscoProps, IGrupoRiscoSta
     const { grupoRiscoList, match, totalItems } = this.props;
     return (
       <div>
-        <ol className="breadcrumb float-xl-right">
+        <h2 id="page-heading">
+          <span className="page-header">Grupo Riscos</span>
+          <Button id="togglerFilterGrupoRisco" className="btn btn-primary float-right jh-create-entity">
+            <Translate contentKey="generadorApp.grupoRisco.home.btn_filter_open">Filters</Translate>
+            &nbsp;
+            <FontAwesomeIcon icon="caret-down" />
+          </Button>{' '}
+          &nbsp;
+          <Link
+            to={`${match.url}/new?${this.getFiltersURL()}`}
+            className="btn btn-primary float-right jh-create-entity"
+            id="jh-create-entity"
+          >
+            <FontAwesomeIcon icon="plus" />
+            &nbsp;
+            <Translate contentKey="generadorApp.grupoRisco.home.createLabel">Create a new Grupo Risco</Translate>
+          </Link>{' '}
+          &nbsp;
+        </h2>
+
+        <ol className="breadcrumb">
           <li className="breadcrumb-item">
             <Link to="/">Inicio</Link>
           </li>
           <li className="breadcrumb-item active">Grupo Riscos</li>
         </ol>
-        <h1 className="page-header">&nbsp;&nbsp;</h1>
         <Panel>
-          <PanelHeader>
-            <h2 id="page-heading">
-              <span className="page-header ml-3">Grupo Riscos</span>
-              <Button id="togglerFilterGrupoRisco" className="btn btn-primary float-right jh-create-entity">
-                Filtros&nbsp;
-                <FontAwesomeIcon icon="caret-down" />
-              </Button>
-              <Link
-                to={`${match.url}/new?${this.getFiltersURL()}`}
-                className="btn btn-primary float-right jh-create-entity"
-                id="jh-create-entity"
-              >
-                <FontAwesomeIcon icon="plus" />
-                &nbsp;
-                <Translate contentKey="generadorApp.grupoRisco.home.createLabel">Create a new Grupo Risco</Translate>
-              </Link>
-            </h2>
-          </PanelHeader>
           <PanelBody>
             <div className="table-responsive">
               <UncontrolledCollapse toggler="#togglerFilterGrupoRisco">
@@ -152,7 +154,7 @@ export class GrupoRisco extends React.Component<IGrupoRiscoProps, IGrupoRiscoSta
                     <div className="row mt-1 ml-3 mr-3">
                       {this.state.baseFilters !== 'grupoRisco' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="grupoRiscoLabel" for="grupo-risco-grupoRisco">
                               <Translate contentKey="generadorApp.grupoRisco.grupoRisco">Grupo Risco</Translate>
                             </Label>
@@ -164,7 +166,7 @@ export class GrupoRisco extends React.Component<IGrupoRiscoProps, IGrupoRiscoSta
 
                       {this.state.baseFilters !== 'styleLabel' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="styleLabelLabel" for="grupo-risco-styleLabel">
                               <Translate contentKey="generadorApp.grupoRisco.styleLabel">Style Label</Translate>
                             </Label>
@@ -179,13 +181,13 @@ export class GrupoRisco extends React.Component<IGrupoRiscoProps, IGrupoRiscoSta
                       <Button className="btn btn-success" type="submit">
                         <i className="fa fa-filter" aria-hidden={'true'}></i>
                         &nbsp;
-                        <Translate contentKey="entity.validation.filter">Filter</Translate>
+                        <Translate contentKey="generadorApp.grupoRisco.home.btn_filter">Filter</Translate>
                       </Button>
                       &nbsp;
                       <div className="btn btn-secondary hand" onClick={this.cancelCourse}>
                         <FontAwesomeIcon icon="trash-alt" />
                         &nbsp;
-                        <Translate contentKey="entity.validation.clean">Clean</Translate>
+                        <Translate contentKey="generadorApp.grupoRisco.home.btn_filter_clean">Clean</Translate>
                       </div>
                     </div>
                   </AvForm>

@@ -2,6 +2,7 @@
 import React from 'react';
 import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
 import { connect } from 'react-redux';
+import Select from 'react-select';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import {
   Button,
@@ -176,34 +177,35 @@ export class NotificacaoConfigUsuario extends React.Component<INotificacaoConfig
     const { notificacaoConfigUsuarioList, match, totalItems } = this.props;
     return (
       <div>
-        <ol className="breadcrumb float-xl-right">
+        <h2 id="page-heading">
+          <span className="page-header">Notificacao Config Usuarios</span>
+          <Button id="togglerFilterNotificacaoConfigUsuario" className="btn btn-primary float-right jh-create-entity">
+            <Translate contentKey="generadorApp.notificacaoConfigUsuario.home.btn_filter_open">Filters</Translate>
+            &nbsp;
+            <FontAwesomeIcon icon="caret-down" />
+          </Button>{' '}
+          &nbsp;
+          <Link
+            to={`${match.url}/new?${this.getFiltersURL()}`}
+            className="btn btn-primary float-right jh-create-entity"
+            id="jh-create-entity"
+          >
+            <FontAwesomeIcon icon="plus" />
+            &nbsp;
+            <Translate contentKey="generadorApp.notificacaoConfigUsuario.home.createLabel">
+              Create a new Notificacao Config Usuario
+            </Translate>
+          </Link>{' '}
+          &nbsp;
+        </h2>
+
+        <ol className="breadcrumb">
           <li className="breadcrumb-item">
             <Link to="/">Inicio</Link>
           </li>
           <li className="breadcrumb-item active">Notificacao Config Usuarios</li>
         </ol>
-        <h1 className="page-header">&nbsp;&nbsp;</h1>
         <Panel>
-          <PanelHeader>
-            <h2 id="page-heading">
-              <span className="page-header ml-3">Notificacao Config Usuarios</span>
-              <Button id="togglerFilterNotificacaoConfigUsuario" className="btn btn-primary float-right jh-create-entity">
-                Filtros&nbsp;
-                <FontAwesomeIcon icon="caret-down" />
-              </Button>
-              <Link
-                to={`${match.url}/new?${this.getFiltersURL()}`}
-                className="btn btn-primary float-right jh-create-entity"
-                id="jh-create-entity"
-              >
-                <FontAwesomeIcon icon="plus" />
-                &nbsp;
-                <Translate contentKey="generadorApp.notificacaoConfigUsuario.home.createLabel">
-                  Create a new Notificacao Config Usuario
-                </Translate>
-              </Link>
-            </h2>
-          </PanelHeader>
           <PanelBody>
             <div className="table-responsive">
               <UncontrolledCollapse toggler="#togglerFilterNotificacaoConfigUsuario">
@@ -212,7 +214,7 @@ export class NotificacaoConfigUsuario extends React.Component<INotificacaoConfig
                     <div className="row mt-1 ml-3 mr-3">
                       {this.state.baseFilters !== 'notificacaoConfigId' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="notificacaoConfigIdLabel" for="notificacao-config-usuario-notificacaoConfigId">
                               <Translate contentKey="generadorApp.notificacaoConfigUsuario.notificacaoConfigId">
                                 Notificacao Config Id
@@ -230,7 +232,7 @@ export class NotificacaoConfigUsuario extends React.Component<INotificacaoConfig
 
                       {this.state.baseFilters !== 'profissionalId' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="profissionalIdLabel" for="notificacao-config-usuario-profissionalId">
                               <Translate contentKey="generadorApp.notificacaoConfigUsuario.profissionalId">Profissional Id</Translate>
                             </Label>
@@ -246,7 +248,7 @@ export class NotificacaoConfigUsuario extends React.Component<INotificacaoConfig
 
                       {this.state.baseFilters !== 'pacienteId' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="pacienteIdLabel" for="notificacao-config-usuario-pacienteId">
                               <Translate contentKey="generadorApp.notificacaoConfigUsuario.pacienteId">Paciente Id</Translate>
                             </Label>
@@ -262,7 +264,7 @@ export class NotificacaoConfigUsuario extends React.Component<INotificacaoConfig
 
                       {this.state.baseFilters !== 'atualizadoEm' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="atualizadoEmLabel" for="notificacao-config-usuario-atualizadoEm">
                               <Translate contentKey="generadorApp.notificacaoConfigUsuario.atualizadoEm">Atualizado Em</Translate>
                             </Label>
@@ -280,7 +282,7 @@ export class NotificacaoConfigUsuario extends React.Component<INotificacaoConfig
 
                       {this.state.baseFilters !== 'atualizadoPor' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="atualizadoPorLabel" for="notificacao-config-usuario-atualizadoPor">
                               <Translate contentKey="generadorApp.notificacaoConfigUsuario.atualizadoPor">Atualizado Por</Translate>
                             </Label>
@@ -296,7 +298,7 @@ export class NotificacaoConfigUsuario extends React.Component<INotificacaoConfig
 
                       {this.state.baseFilters !== 'enviarPush' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="enviarPushLabel" check>
                               <AvInput
                                 id="notificacao-config-usuario-enviarPush"
@@ -312,7 +314,7 @@ export class NotificacaoConfigUsuario extends React.Component<INotificacaoConfig
 
                       {this.state.baseFilters !== 'enviarEmail' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="enviarEmailLabel" check>
                               <AvInput
                                 id="notificacao-config-usuario-enviarEmail"
@@ -328,7 +330,7 @@ export class NotificacaoConfigUsuario extends React.Component<INotificacaoConfig
 
                       {this.state.baseFilters !== 'observacao' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="observacaoLabel" for="notificacao-config-usuario-observacao">
                               <Translate contentKey="generadorApp.notificacaoConfigUsuario.observacao">Observacao</Translate>
                             </Label>
@@ -348,13 +350,13 @@ export class NotificacaoConfigUsuario extends React.Component<INotificacaoConfig
                       <Button className="btn btn-success" type="submit">
                         <i className="fa fa-filter" aria-hidden={'true'}></i>
                         &nbsp;
-                        <Translate contentKey="entity.validation.filter">Filter</Translate>
+                        <Translate contentKey="generadorApp.notificacaoConfigUsuario.home.btn_filter">Filter</Translate>
                       </Button>
                       &nbsp;
                       <div className="btn btn-secondary hand" onClick={this.cancelCourse}>
                         <FontAwesomeIcon icon="trash-alt" />
                         &nbsp;
-                        <Translate contentKey="entity.validation.clean">Clean</Translate>
+                        <Translate contentKey="generadorApp.notificacaoConfigUsuario.home.btn_filter_clean">Clean</Translate>
                       </div>
                     </div>
                   </AvForm>

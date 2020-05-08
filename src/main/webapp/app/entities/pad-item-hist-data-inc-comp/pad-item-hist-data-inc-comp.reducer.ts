@@ -40,6 +40,7 @@ export interface IPadItemHistDataIncCompBaseState {
 
 export interface IPadItemHistDataIncCompUpdateState {
   fieldsBase: IPadItemHistDataIncCompBaseState;
+
   isNew: boolean;
 }
 

@@ -57,6 +57,7 @@ export interface IProfissionalDispositivoAtualBaseState {
 
 export interface IProfissionalDispositivoAtualUpdateState {
   fieldsBase: IProfissionalDispositivoAtualBaseState;
+
   isNew: boolean;
 }
 

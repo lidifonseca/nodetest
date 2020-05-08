@@ -1,8 +1,14 @@
 {
   "generadorApp": {
     "profissionalEspecialidadeNew": {
+      "listButtons": {},
+      "viewButtons": {},
+      "dropdown_btn": "Ações",
       "home": {
         "title": "Profissional Especialidade News",
+        "btn_filter": "Filter",
+        "btn_filter_clean": "Clean Filters",
+        "btn_filter_open": "Filters",
         "createLabel": "Create a new Profissional Especialidade New",
         "createOrEditLabel": "Create or edit a Profissional Especialidade New",
         "notFound": "No Profissional Especialidade News found"

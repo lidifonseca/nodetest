@@ -2,6 +2,7 @@
 import React from 'react';
 import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
 import { connect } from 'react-redux';
+import Select from 'react-select';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import {
   Button,
@@ -130,32 +131,33 @@ export class ApiReturn extends React.Component<IApiReturnProps, IApiReturnState>
     const { apiReturnList, match, totalItems } = this.props;
     return (
       <div>
-        <ol className="breadcrumb float-xl-right">
+        <h2 id="page-heading">
+          <span className="page-header">Api Returns</span>
+          <Button id="togglerFilterApiReturn" className="btn btn-primary float-right jh-create-entity">
+            <Translate contentKey="generadorApp.apiReturn.home.btn_filter_open">Filters</Translate>
+            &nbsp;
+            <FontAwesomeIcon icon="caret-down" />
+          </Button>{' '}
+          &nbsp;
+          <Link
+            to={`${match.url}/new?${this.getFiltersURL()}`}
+            className="btn btn-primary float-right jh-create-entity"
+            id="jh-create-entity"
+          >
+            <FontAwesomeIcon icon="plus" />
+            &nbsp;
+            <Translate contentKey="generadorApp.apiReturn.home.createLabel">Create a new Api Return</Translate>
+          </Link>{' '}
+          &nbsp;
+        </h2>
+
+        <ol className="breadcrumb">
           <li className="breadcrumb-item">
             <Link to="/">Inicio</Link>
           </li>
           <li className="breadcrumb-item active">Api Returns</li>
         </ol>
-        <h1 className="page-header">&nbsp;&nbsp;</h1>
         <Panel>
-          <PanelHeader>
-            <h2 id="page-heading">
-              <span className="page-header ml-3">Api Returns</span>
-              <Button id="togglerFilterApiReturn" className="btn btn-primary float-right jh-create-entity">
-                Filtros&nbsp;
-                <FontAwesomeIcon icon="caret-down" />
-              </Button>
-              <Link
-                to={`${match.url}/new?${this.getFiltersURL()}`}
-                className="btn btn-primary float-right jh-create-entity"
-                id="jh-create-entity"
-              >
-                <FontAwesomeIcon icon="plus" />
-                &nbsp;
-                <Translate contentKey="generadorApp.apiReturn.home.createLabel">Create a new Api Return</Translate>
-              </Link>
-            </h2>
-          </PanelHeader>
           <PanelBody>
             <div className="table-responsive">
               <UncontrolledCollapse toggler="#togglerFilterApiReturn">
@@ -164,7 +166,7 @@ export class ApiReturn extends React.Component<IApiReturnProps, IApiReturnState>
                     <div className="row mt-1 ml-3 mr-3">
                       {this.state.baseFilters !== 'idApiName' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="idApiNameLabel" for="api-return-idApiName">
                               <Translate contentKey="generadorApp.apiReturn.idApiName">Id Api Name</Translate>
                             </Label>
@@ -175,7 +177,7 @@ export class ApiReturn extends React.Component<IApiReturnProps, IApiReturnState>
 
                       {this.state.baseFilters !== 'apiReturn' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="apiReturnLabel" for="api-return-apiReturn">
                               <Translate contentKey="generadorApp.apiReturn.apiReturn">Api Return</Translate>
                             </Label>
@@ -187,7 +189,7 @@ export class ApiReturn extends React.Component<IApiReturnProps, IApiReturnState>
 
                       {this.state.baseFilters !== 'apiType' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="apiTypeLabel" for="api-return-apiType">
                               <Translate contentKey="generadorApp.apiReturn.apiType">Api Type</Translate>
                             </Label>
@@ -199,7 +201,7 @@ export class ApiReturn extends React.Component<IApiReturnProps, IApiReturnState>
 
                       {this.state.baseFilters !== 'obs' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="obsLabel" for="api-return-obs">
                               <Translate contentKey="generadorApp.apiReturn.obs">Obs</Translate>
                             </Label>
@@ -211,7 +213,7 @@ export class ApiReturn extends React.Component<IApiReturnProps, IApiReturnState>
 
                       {this.state.baseFilters !== 'ativo' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="ativoLabel" for="api-return-ativo">
                               <Translate contentKey="generadorApp.apiReturn.ativo">Ativo</Translate>
                             </Label>
@@ -225,13 +227,13 @@ export class ApiReturn extends React.Component<IApiReturnProps, IApiReturnState>
                       <Button className="btn btn-success" type="submit">
                         <i className="fa fa-filter" aria-hidden={'true'}></i>
                         &nbsp;
-                        <Translate contentKey="entity.validation.filter">Filter</Translate>
+                        <Translate contentKey="generadorApp.apiReturn.home.btn_filter">Filter</Translate>
                       </Button>
                       &nbsp;
                       <div className="btn btn-secondary hand" onClick={this.cancelCourse}>
                         <FontAwesomeIcon icon="trash-alt" />
                         &nbsp;
-                        <Translate contentKey="entity.validation.clean">Clean</Translate>
+                        <Translate contentKey="generadorApp.apiReturn.home.btn_filter_clean">Clean</Translate>
                       </div>
                     </div>
                   </AvForm>

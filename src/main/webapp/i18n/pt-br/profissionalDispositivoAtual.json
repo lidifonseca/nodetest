@@ -1,8 +1,14 @@
 {
   "generadorApp": {
     "profissionalDispositivoAtual": {
+      "listButtons": {},
+      "viewButtons": {},
+      "dropdown_btn": "Actions",
       "home": {
         "title": "Profissional Dispositivo Atuals",
+        "btn_filter": "Filtrar",
+        "btn_filter_clean": "Limpar Filtros",
+        "btn_filter_open": "Filtros",
         "createLabel": "Criar novo Profissional Dispositivo Atual",
         "createOrEditLabel": "Criar ou editar Profissional Dispositivo Atual",
         "notFound": "Nenhum Profissional Dispositivo Atual encontrado"

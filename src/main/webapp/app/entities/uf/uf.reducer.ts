@@ -39,6 +39,7 @@ export interface IUfBaseState {
 
 export interface IUfUpdateState {
   fieldsBase: IUfBaseState;
+
   isNew: boolean;
 }
 

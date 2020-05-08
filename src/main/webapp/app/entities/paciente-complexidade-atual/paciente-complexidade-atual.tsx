@@ -2,6 +2,7 @@
 import React from 'react';
 import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
 import { connect } from 'react-redux';
+import Select from 'react-select';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import {
   Button,
@@ -161,34 +162,35 @@ export class PacienteComplexidadeAtual extends React.Component<IPacienteComplexi
     const { pacienteComplexidadeAtualList, match, totalItems } = this.props;
     return (
       <div>
-        <ol className="breadcrumb float-xl-right">
+        <h2 id="page-heading">
+          <span className="page-header">Paciente Complexidade Atuals</span>
+          <Button id="togglerFilterPacienteComplexidadeAtual" className="btn btn-primary float-right jh-create-entity">
+            <Translate contentKey="generadorApp.pacienteComplexidadeAtual.home.btn_filter_open">Filters</Translate>
+            &nbsp;
+            <FontAwesomeIcon icon="caret-down" />
+          </Button>{' '}
+          &nbsp;
+          <Link
+            to={`${match.url}/new?${this.getFiltersURL()}`}
+            className="btn btn-primary float-right jh-create-entity"
+            id="jh-create-entity"
+          >
+            <FontAwesomeIcon icon="plus" />
+            &nbsp;
+            <Translate contentKey="generadorApp.pacienteComplexidadeAtual.home.createLabel">
+              Create a new Paciente Complexidade Atual
+            </Translate>
+          </Link>{' '}
+          &nbsp;
+        </h2>
+
+        <ol className="breadcrumb">
           <li className="breadcrumb-item">
             <Link to="/">Inicio</Link>
           </li>
           <li className="breadcrumb-item active">Paciente Complexidade Atuals</li>
         </ol>
-        <h1 className="page-header">&nbsp;&nbsp;</h1>
         <Panel>
-          <PanelHeader>
-            <h2 id="page-heading">
-              <span className="page-header ml-3">Paciente Complexidade Atuals</span>
-              <Button id="togglerFilterPacienteComplexidadeAtual" className="btn btn-primary float-right jh-create-entity">
-                Filtros&nbsp;
-                <FontAwesomeIcon icon="caret-down" />
-              </Button>
-              <Link
-                to={`${match.url}/new?${this.getFiltersURL()}`}
-                className="btn btn-primary float-right jh-create-entity"
-                id="jh-create-entity"
-              >
-                <FontAwesomeIcon icon="plus" />
-                &nbsp;
-                <Translate contentKey="generadorApp.pacienteComplexidadeAtual.home.createLabel">
-                  Create a new Paciente Complexidade Atual
-                </Translate>
-              </Link>
-            </h2>
-          </PanelHeader>
           <PanelBody>
             <div className="table-responsive">
               <UncontrolledCollapse toggler="#togglerFilterPacienteComplexidadeAtual">
@@ -197,7 +199,7 @@ export class PacienteComplexidadeAtual extends React.Component<IPacienteComplexi
                     <div className="row mt-1 ml-3 mr-3">
                       {this.state.baseFilters !== 'idPaciente' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="idPacienteLabel" for="paciente-complexidade-atual-idPaciente">
                               <Translate contentKey="generadorApp.pacienteComplexidadeAtual.idPaciente">Id Paciente</Translate>
                             </Label>
@@ -213,7 +215,7 @@ export class PacienteComplexidadeAtual extends React.Component<IPacienteComplexi
 
                       {this.state.baseFilters !== 'idPacienteComplexidade' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="idPacienteComplexidadeLabel" for="paciente-complexidade-atual-idPacienteComplexidade">
                               <Translate contentKey="generadorApp.pacienteComplexidadeAtual.idPacienteComplexidade">
                                 Id Paciente Complexidade
@@ -231,7 +233,7 @@ export class PacienteComplexidadeAtual extends React.Component<IPacienteComplexi
 
                       {this.state.baseFilters !== 'baixa' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="baixaLabel" for="paciente-complexidade-atual-baixa">
                               <Translate contentKey="generadorApp.pacienteComplexidadeAtual.baixa">Baixa</Translate>
                             </Label>
@@ -242,7 +244,7 @@ export class PacienteComplexidadeAtual extends React.Component<IPacienteComplexi
 
                       {this.state.baseFilters !== 'media' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="mediaLabel" for="paciente-complexidade-atual-media">
                               <Translate contentKey="generadorApp.pacienteComplexidadeAtual.media">Media</Translate>
                             </Label>
@@ -253,7 +255,7 @@ export class PacienteComplexidadeAtual extends React.Component<IPacienteComplexi
 
                       {this.state.baseFilters !== 'alta' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="altaLabel" for="paciente-complexidade-atual-alta">
                               <Translate contentKey="generadorApp.pacienteComplexidadeAtual.alta">Alta</Translate>
                             </Label>
@@ -264,7 +266,7 @@ export class PacienteComplexidadeAtual extends React.Component<IPacienteComplexi
 
                       {this.state.baseFilters !== 'ventilacaoMecanica' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="ventilacaoMecanicaLabel" for="paciente-complexidade-atual-ventilacaoMecanica">
                               <Translate contentKey="generadorApp.pacienteComplexidadeAtual.ventilacaoMecanica">
                                 Ventilacao Mecanica
@@ -282,7 +284,7 @@ export class PacienteComplexidadeAtual extends React.Component<IPacienteComplexi
 
                       {this.state.baseFilters !== 'telemonitoramente' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="telemonitoramenteLabel" for="paciente-complexidade-atual-telemonitoramente">
                               <Translate contentKey="generadorApp.pacienteComplexidadeAtual.telemonitoramente">Telemonitoramente</Translate>
                             </Label>
@@ -301,13 +303,13 @@ export class PacienteComplexidadeAtual extends React.Component<IPacienteComplexi
                       <Button className="btn btn-success" type="submit">
                         <i className="fa fa-filter" aria-hidden={'true'}></i>
                         &nbsp;
-                        <Translate contentKey="entity.validation.filter">Filter</Translate>
+                        <Translate contentKey="generadorApp.pacienteComplexidadeAtual.home.btn_filter">Filter</Translate>
                       </Button>
                       &nbsp;
                       <div className="btn btn-secondary hand" onClick={this.cancelCourse}>
                         <FontAwesomeIcon icon="trash-alt" />
                         &nbsp;
-                        <Translate contentKey="entity.validation.clean">Clean</Translate>
+                        <Translate contentKey="generadorApp.pacienteComplexidadeAtual.home.btn_filter_clean">Clean</Translate>
                       </div>
                     </div>
                   </AvForm>

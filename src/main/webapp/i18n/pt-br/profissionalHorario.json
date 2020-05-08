@@ -1,8 +1,14 @@
 {
   "generadorApp": {
     "profissionalHorario": {
+      "listButtons": {},
+      "viewButtons": {},
+      "dropdown_btn": "Actions",
       "home": {
         "title": "Profissional Horarios",
+        "btn_filter": "Filtrar",
+        "btn_filter_clean": "Limpar Filtros",
+        "btn_filter_open": "Filtros",
         "createLabel": "Criar novo Profissional Horario",
         "createOrEditLabel": "Criar ou editar Profissional Horario",
         "notFound": "Nenhum Profissional Horario encontrado"

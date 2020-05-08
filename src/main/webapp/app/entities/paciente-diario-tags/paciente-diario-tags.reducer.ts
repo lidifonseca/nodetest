@@ -111,6 +111,7 @@ export interface IPacienteDiarioTagsBaseState {
 
 export interface IPacienteDiarioTagsUpdateState {
   fieldsBase: IPacienteDiarioTagsBaseState;
+
   isNew: boolean;
 }
 

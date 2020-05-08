@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import Select from 'react-select';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 import { Button, Row, Col, Label } from 'reactstrap';
@@ -51,23 +52,11 @@ export class NotificacaoConfigUsuarioUpdate extends React.Component<
 
   getFiltersURL = (offset = null) => {
     const fieldsBase = this.state.fieldsBase;
-    return (
-      '_back=1' +
-      (fieldsBase['baseFilters'] ? '&baseFilters=' + fieldsBase['baseFilters'] : '') +
-      (fieldsBase['activePage'] ? '&page=' + fieldsBase['activePage'] : '') +
-      (fieldsBase['itemsPerPage'] ? '&size=' + fieldsBase['itemsPerPage'] : '') +
-      (fieldsBase['sort'] ? '&sort=' + (fieldsBase['sort'] + ',' + fieldsBase['order']) : '') +
-      (offset !== null ? '&offset=' + offset : '') +
-      (fieldsBase['notificacaoConfigId'] ? '&notificacaoConfigId=' + fieldsBase['notificacaoConfigId'] : '') +
-      (fieldsBase['profissionalId'] ? '&profissionalId=' + fieldsBase['profissionalId'] : '') +
-      (fieldsBase['pacienteId'] ? '&pacienteId=' + fieldsBase['pacienteId'] : '') +
-      (fieldsBase['atualizadoEm'] ? '&atualizadoEm=' + fieldsBase['atualizadoEm'] : '') +
-      (fieldsBase['atualizadoPor'] ? '&atualizadoPor=' + fieldsBase['atualizadoPor'] : '') +
-      (fieldsBase['enviarPush'] ? '&enviarPush=' + fieldsBase['enviarPush'] : '') +
-      (fieldsBase['enviarEmail'] ? '&enviarEmail=' + fieldsBase['enviarEmail'] : '') +
-      (fieldsBase['observacao'] ? '&observacao=' + fieldsBase['observacao'] : '') +
-      ''
-    );
+    let url = '_back=1' + (offset !== null ? '&offset=' + offset : '');
+    Object.keys(fieldsBase).map(key => {
+      url += '&' + key + '=' + fieldsBase[key];
+    });
+    return url;
   };
   saveEntity = (event: any, errors: any, values: any) => {
     values.atualizadoEm = convertDateTimeToServer(values.atualizadoEm);
@@ -76,6 +65,7 @@ export class NotificacaoConfigUsuarioUpdate extends React.Component<
       const { notificacaoConfigUsuarioEntity } = this.props;
       const entity = {
         ...notificacaoConfigUsuarioEntity,
+
         ...values
       };
 
@@ -98,14 +88,6 @@ export class NotificacaoConfigUsuarioUpdate extends React.Component<
     const baseFilters = this.state.fieldsBase && this.state.fieldsBase['baseFilters'] ? this.state.fieldsBase['baseFilters'] : null;
     return (
       <div>
-        <ol className="breadcrumb float-xl-right">
-          <li className="breadcrumb-item">
-            <Link to="/">Inicio</Link>
-          </li>
-          <li className="breadcrumb-item active">Notificacao Config Usuarios</li>
-          <li className="breadcrumb-item active">Notificacao Config Usuarios edit</li>
-        </ol>
-        <h1 className="page-header">&nbsp;&nbsp;</h1>
         <AvForm
           model={
             isNew
@@ -116,36 +98,42 @@ export class NotificacaoConfigUsuarioUpdate extends React.Component<
           }
           onSubmit={this.saveEntity}
         >
-          <Panel>
-            <PanelHeader>
-              <h2 id="page-heading">
-                <span className="page-header ml-3">
-                  <Translate contentKey="generadorApp.notificacaoConfigUsuario.home.createOrEditLabel">
-                    Create or edit a NotificacaoConfigUsuario
-                  </Translate>
-                </span>
+          <h2 id="page-heading">
+            <span className="page-header ml-3">
+              <Translate contentKey="generadorApp.notificacaoConfigUsuario.home.createOrEditLabel">
+                Create or edit a NotificacaoConfigUsuario
+              </Translate>
+            </span>
 
-                <Button color="primary" id="save-entity" type="submit" disabled={updating} className="float-right jh-create-entity">
-                  <FontAwesomeIcon icon="save" />
-                  &nbsp;
-                  <Translate contentKey="entity.action.save">Save</Translate>
-                </Button>
-                <Button
-                  tag={Link}
-                  id="cancel-save"
-                  to={'/notificacao-config-usuario?' + this.getFiltersURL()}
-                  replace
-                  color="info"
-                  className="float-right jh-create-entity"
-                >
-                  <FontAwesomeIcon icon="arrow-left" />
-                  &nbsp;
-                  <span className="d-none d-md-inline">
-                    <Translate contentKey="entity.action.back">Back</Translate>
-                  </span>
-                </Button>
-              </h2>
-            </PanelHeader>
+            <Button color="primary" id="save-entity" type="submit" disabled={updating} className="float-right jh-create-entity">
+              <FontAwesomeIcon icon="save" />
+              &nbsp;
+              <Translate contentKey="entity.action.save">Save</Translate>
+            </Button>
+            <Button
+              tag={Link}
+              id="cancel-save"
+              to={'/notificacao-config-usuario?' + this.getFiltersURL()}
+              replace
+              color="info"
+              className="float-right jh-create-entity"
+            >
+              <FontAwesomeIcon icon="arrow-left" />
+              &nbsp;
+              <span className="d-none d-md-inline">
+                <Translate contentKey="entity.action.back">Back</Translate>
+              </span>
+            </Button>
+          </h2>
+          <ol className="breadcrumb">
+            <li className="breadcrumb-item">
+              <Link to="/">Inicio</Link>
+            </li>
+            <li className="breadcrumb-item active">Notificacao Config Usuarios</li>
+            <li className="breadcrumb-item active">Notificacao Config Usuarios edit</li>
+          </ol>
+
+          <Panel>
             <PanelBody>
               <Row className="justify-content-center">
                 <Col md="8">
@@ -176,199 +164,21 @@ export class NotificacaoConfigUsuarioUpdate extends React.Component<
                         </AvGroup>
                       ) : null}
                       <Row>
-                        {baseFilters !== 'notificacaoConfigId' ? (
-                          <Col md="notificacaoConfigId">
-                            <AvGroup>
-                              <Row>
-                                <Col md="3">
-                                  <Label
-                                    className="mt-2"
-                                    id="notificacaoConfigIdLabel"
-                                    for="notificacao-config-usuario-notificacaoConfigId"
-                                  >
-                                    <Translate contentKey="generadorApp.notificacaoConfigUsuario.notificacaoConfigId">
-                                      Notificacao Config Id
-                                    </Translate>
-                                  </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField
-                                    id="notificacao-config-usuario-notificacaoConfigId"
-                                    type="string"
-                                    className="form-control"
-                                    name="notificacaoConfigId"
-                                  />
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
-                        ) : (
-                          <AvInput type="hidden" name="notificacaoConfigId" value={this.state.fieldsBase[baseFilters]} />
-                        )}
+                        <NotificacaoConfigIdComponentUpdate baseFilters />
 
-                        {baseFilters !== 'profissionalId' ? (
-                          <Col md="profissionalId">
-                            <AvGroup>
-                              <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="profissionalIdLabel" for="notificacao-config-usuario-profissionalId">
-                                    <Translate contentKey="generadorApp.notificacaoConfigUsuario.profissionalId">Profissional Id</Translate>
-                                  </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField
-                                    id="notificacao-config-usuario-profissionalId"
-                                    type="string"
-                                    className="form-control"
-                                    name="profissionalId"
-                                  />
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
-                        ) : (
-                          <AvInput type="hidden" name="profissionalId" value={this.state.fieldsBase[baseFilters]} />
-                        )}
+                        <ProfissionalIdComponentUpdate baseFilters />
 
-                        {baseFilters !== 'pacienteId' ? (
-                          <Col md="pacienteId">
-                            <AvGroup>
-                              <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="pacienteIdLabel" for="notificacao-config-usuario-pacienteId">
-                                    <Translate contentKey="generadorApp.notificacaoConfigUsuario.pacienteId">Paciente Id</Translate>
-                                  </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField
-                                    id="notificacao-config-usuario-pacienteId"
-                                    type="string"
-                                    className="form-control"
-                                    name="pacienteId"
-                                  />
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
-                        ) : (
-                          <AvInput type="hidden" name="pacienteId" value={this.state.fieldsBase[baseFilters]} />
-                        )}
+                        <PacienteIdComponentUpdate baseFilters />
 
-                        {baseFilters !== 'atualizadoEm' ? (
-                          <Col md="atualizadoEm">
-                            <AvGroup>
-                              <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="atualizadoEmLabel" for="notificacao-config-usuario-atualizadoEm">
-                                    <Translate contentKey="generadorApp.notificacaoConfigUsuario.atualizadoEm">Atualizado Em</Translate>
-                                  </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvInput
-                                    id="notificacao-config-usuario-atualizadoEm"
-                                    type="datetime-local"
-                                    className="form-control"
-                                    name="atualizadoEm"
-                                    placeholder={'YYYY-MM-DD HH:mm'}
-                                    value={isNew ? null : convertDateTimeFromServer(this.props.notificacaoConfigUsuarioEntity.atualizadoEm)}
-                                    validate={{
-                                      required: { value: true, errorMessage: translate('entity.validation.required') }
-                                    }}
-                                  />
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
-                        ) : (
-                          <AvInput type="hidden" name="atualizadoEm" value={this.state.fieldsBase[baseFilters]} />
-                        )}
+                        <AtualizadoEmComponentUpdate baseFilters />
 
-                        {baseFilters !== 'atualizadoPor' ? (
-                          <Col md="atualizadoPor">
-                            <AvGroup>
-                              <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="atualizadoPorLabel" for="notificacao-config-usuario-atualizadoPor">
-                                    <Translate contentKey="generadorApp.notificacaoConfigUsuario.atualizadoPor">Atualizado Por</Translate>
-                                  </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField
-                                    id="notificacao-config-usuario-atualizadoPor"
-                                    type="string"
-                                    className="form-control"
-                                    name="atualizadoPor"
-                                  />
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
-                        ) : (
-                          <AvInput type="hidden" name="atualizadoPor" value={this.state.fieldsBase[baseFilters]} />
-                        )}
+                        <AtualizadoPorComponentUpdate baseFilters />
 
-                        {baseFilters !== 'enviarPush' ? (
-                          <Col md="enviarPush">
-                            <AvGroup>
-                              <Row>
-                                <Col md="12">
-                                  <Label className="mt-2" id="enviarPushLabel" check>
-                                    <AvInput
-                                      id="notificacao-config-usuario-enviarPush"
-                                      type="checkbox"
-                                      className="form-control"
-                                      name="enviarPush"
-                                    />
-                                    <Translate contentKey="generadorApp.notificacaoConfigUsuario.enviarPush">Enviar Push</Translate>
-                                  </Label>
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
-                        ) : (
-                          <AvInput type="hidden" name="enviarPush" value={this.state.fieldsBase[baseFilters]} />
-                        )}
+                        <EnviarPushComponentUpdate baseFilters />
 
-                        {baseFilters !== 'enviarEmail' ? (
-                          <Col md="enviarEmail">
-                            <AvGroup>
-                              <Row>
-                                <Col md="12">
-                                  <Label className="mt-2" id="enviarEmailLabel" check>
-                                    <AvInput
-                                      id="notificacao-config-usuario-enviarEmail"
-                                      type="checkbox"
-                                      className="form-control"
-                                      name="enviarEmail"
-                                    />
-                                    <Translate contentKey="generadorApp.notificacaoConfigUsuario.enviarEmail">Enviar Email</Translate>
-                                  </Label>
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
-                        ) : (
-                          <AvInput type="hidden" name="enviarEmail" value={this.state.fieldsBase[baseFilters]} />
-                        )}
+                        <EnviarEmailComponentUpdate baseFilters />
 
-                        {baseFilters !== 'observacao' ? (
-                          <Col md="observacao">
-                            <AvGroup>
-                              <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="observacaoLabel" for="notificacao-config-usuario-observacao">
-                                    <Translate contentKey="generadorApp.notificacaoConfigUsuario.observacao">Observacao</Translate>
-                                  </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField id="notificacao-config-usuario-observacao" type="text" name="observacao" />
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
-                        ) : (
-                          <AvInput type="hidden" name="observacao" value={this.state.fieldsBase[baseFilters]} />
-                        )}
+                        <ObservacaoComponentUpdate baseFilters />
                       </Row>
                     </div>
                   )}
@@ -398,5 +208,184 @@ const mapDispatchToProps = {
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
+
+const NotificacaoConfigIdComponentUpdate = ({ baseFilters }) => {
+  return baseFilters !== 'notificacaoConfigId' ? (
+    <Col md="notificacaoConfigId">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" id="notificacaoConfigIdLabel" for="notificacao-config-usuario-notificacaoConfigId">
+              <Translate contentKey="generadorApp.notificacaoConfigUsuario.notificacaoConfigId">Notificacao Config Id</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <AvField
+              id="notificacao-config-usuario-notificacaoConfigId"
+              type="string"
+              className="form-control"
+              name="notificacaoConfigId"
+            />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="notificacaoConfigId" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const ProfissionalIdComponentUpdate = ({ baseFilters }) => {
+  return baseFilters !== 'profissionalId' ? (
+    <Col md="profissionalId">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" id="profissionalIdLabel" for="notificacao-config-usuario-profissionalId">
+              <Translate contentKey="generadorApp.notificacaoConfigUsuario.profissionalId">Profissional Id</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <AvField id="notificacao-config-usuario-profissionalId" type="string" className="form-control" name="profissionalId" />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="profissionalId" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const PacienteIdComponentUpdate = ({ baseFilters }) => {
+  return baseFilters !== 'pacienteId' ? (
+    <Col md="pacienteId">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" id="pacienteIdLabel" for="notificacao-config-usuario-pacienteId">
+              <Translate contentKey="generadorApp.notificacaoConfigUsuario.pacienteId">Paciente Id</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <AvField id="notificacao-config-usuario-pacienteId" type="string" className="form-control" name="pacienteId" />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="pacienteId" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const AtualizadoEmComponentUpdate = ({ baseFilters }) => {
+  return baseFilters !== 'atualizadoEm' ? (
+    <Col md="atualizadoEm">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" id="atualizadoEmLabel" for="notificacao-config-usuario-atualizadoEm">
+              <Translate contentKey="generadorApp.notificacaoConfigUsuario.atualizadoEm">Atualizado Em</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <AvInput
+              id="notificacao-config-usuario-atualizadoEm"
+              type="datetime-local"
+              className="form-control"
+              name="atualizadoEm"
+              placeholder={'YYYY-MM-DD HH:mm'}
+              value={isNew ? null : convertDateTimeFromServer(this.props.notificacaoConfigUsuarioEntity.atualizadoEm)}
+              validate={{
+                required: { value: true, errorMessage: translate('entity.validation.required') }
+              }}
+            />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="atualizadoEm" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const AtualizadoPorComponentUpdate = ({ baseFilters }) => {
+  return baseFilters !== 'atualizadoPor' ? (
+    <Col md="atualizadoPor">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" id="atualizadoPorLabel" for="notificacao-config-usuario-atualizadoPor">
+              <Translate contentKey="generadorApp.notificacaoConfigUsuario.atualizadoPor">Atualizado Por</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <AvField id="notificacao-config-usuario-atualizadoPor" type="string" className="form-control" name="atualizadoPor" />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="atualizadoPor" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const EnviarPushComponentUpdate = ({ baseFilters }) => {
+  return baseFilters !== 'enviarPush' ? (
+    <Col md="enviarPush">
+      <AvGroup>
+        <Row>
+          <Col md="12">
+            <Label className="mt-2" id="enviarPushLabel" check>
+              <AvInput id="notificacao-config-usuario-enviarPush" type="checkbox" className="form-control" name="enviarPush" />
+              <Translate contentKey="generadorApp.notificacaoConfigUsuario.enviarPush">Enviar Push</Translate>
+            </Label>
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="enviarPush" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const EnviarEmailComponentUpdate = ({ baseFilters }) => {
+  return baseFilters !== 'enviarEmail' ? (
+    <Col md="enviarEmail">
+      <AvGroup>
+        <Row>
+          <Col md="12">
+            <Label className="mt-2" id="enviarEmailLabel" check>
+              <AvInput id="notificacao-config-usuario-enviarEmail" type="checkbox" className="form-control" name="enviarEmail" />
+              <Translate contentKey="generadorApp.notificacaoConfigUsuario.enviarEmail">Enviar Email</Translate>
+            </Label>
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="enviarEmail" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const ObservacaoComponentUpdate = ({ baseFilters }) => {
+  return baseFilters !== 'observacao' ? (
+    <Col md="observacao">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" id="observacaoLabel" for="notificacao-config-usuario-observacao">
+              <Translate contentKey="generadorApp.notificacaoConfigUsuario.observacao">Observacao</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <AvField id="notificacao-config-usuario-observacao" type="text" name="observacao" />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="observacao" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(NotificacaoConfigUsuarioUpdate);

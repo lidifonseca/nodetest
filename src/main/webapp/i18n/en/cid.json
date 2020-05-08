@@ -1,8 +1,14 @@
 {
   "generadorApp": {
     "cid": {
+      "listButtons": {},
+      "viewButtons": {},
+      "dropdown_btn": "Ações",
       "home": {
         "title": "Cids",
+        "btn_filter": "Filter",
+        "btn_filter_clean": "Clean Filters",
+        "btn_filter_open": "Filters",
         "createLabel": "Create a new Cid",
         "createOrEditLabel": "Create or edit a Cid",
         "notFound": "No Cids found"

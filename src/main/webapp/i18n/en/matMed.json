@@ -1,8 +1,14 @@
 {
   "generadorApp": {
     "matMed": {
+      "listButtons": {},
+      "viewButtons": {},
+      "dropdown_btn": "Ações",
       "home": {
         "title": "Mat Meds",
+        "btn_filter": "Filter",
+        "btn_filter_clean": "Clean Filters",
+        "btn_filter_open": "Filters",
         "createLabel": "Create a new Mat Med",
         "createOrEditLabel": "Create or edit a Mat Med",
         "notFound": "No Mat Meds found"

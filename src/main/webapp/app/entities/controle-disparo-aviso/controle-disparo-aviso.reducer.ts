@@ -40,6 +40,7 @@ export interface IControleDisparoAvisoBaseState {
 
 export interface IControleDisparoAvisoUpdateState {
   fieldsBase: IControleDisparoAvisoBaseState;
+
   isNew: boolean;
 }
 

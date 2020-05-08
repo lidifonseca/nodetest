@@ -1,8 +1,14 @@
 {
   "generadorApp": {
     "geoPanico": {
+      "listButtons": {},
+      "viewButtons": {},
+      "dropdown_btn": "Ações",
       "home": {
         "title": "Geo Panicos",
+        "btn_filter": "Filter",
+        "btn_filter_clean": "Clean Filters",
+        "btn_filter_open": "Filters",
         "createLabel": "Create a new Geo Panico",
         "createOrEditLabel": "Create or edit a Geo Panico",
         "notFound": "No Geo Panicos found"

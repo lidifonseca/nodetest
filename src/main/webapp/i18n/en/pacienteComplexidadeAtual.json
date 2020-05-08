@@ -1,8 +1,14 @@
 {
   "generadorApp": {
     "pacienteComplexidadeAtual": {
+      "listButtons": {},
+      "viewButtons": {},
+      "dropdown_btn": "Ações",
       "home": {
         "title": "Paciente Complexidade Atuals",
+        "btn_filter": "Filter",
+        "btn_filter_clean": "Clean Filters",
+        "btn_filter_open": "Filters",
         "createLabel": "Create a new Paciente Complexidade Atual",
         "createOrEditLabel": "Create or edit a Paciente Complexidade Atual",
         "notFound": "No Paciente Complexidade Atuals found"

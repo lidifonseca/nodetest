@@ -1,8 +1,14 @@
 {
   "generadorApp": {
     "statusAtualLigacao": {
+      "listButtons": {},
+      "viewButtons": {},
+      "dropdown_btn": "Ações",
       "home": {
         "title": "Status Atual Ligacaos",
+        "btn_filter": "Filter",
+        "btn_filter_clean": "Clean Filters",
+        "btn_filter_open": "Filters",
         "createLabel": "Create a new Status Atual Ligacao",
         "createOrEditLabel": "Create or edit a Status Atual Ligacao",
         "notFound": "No Status Atual Ligacaos found"

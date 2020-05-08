@@ -41,6 +41,7 @@ export interface IProfissionalStatusAtualBaseState {
 
 export interface IProfissionalStatusAtualUpdateState {
   fieldsBase: IProfissionalStatusAtualBaseState;
+
   isNew: boolean;
 }
 

@@ -1,8 +1,14 @@
 {
   "generadorApp": {
     "filesPanico": {
+      "listButtons": {},
+      "viewButtons": {},
+      "dropdown_btn": "Actions",
       "home": {
         "title": "Files Panicos",
+        "btn_filter": "Filtrar",
+        "btn_filter_clean": "Limpar Filtros",
+        "btn_filter_open": "Filtros",
         "createLabel": "Criar novo Files Panico",
         "createOrEditLabel": "Criar ou editar Files Panico",
         "notFound": "Nenhum Files Panico encontrado"

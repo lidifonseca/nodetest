@@ -55,6 +55,7 @@ export interface IFranquiaBaseState {
 
 export interface IFranquiaUpdateState {
   fieldsBase: IFranquiaBaseState;
+
   isNew: boolean;
 }
 

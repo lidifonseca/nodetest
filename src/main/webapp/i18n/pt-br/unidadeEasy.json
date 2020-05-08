@@ -1,8 +1,14 @@
 {
   "generadorApp": {
     "unidadeEasy": {
+      "listButtons": {},
+      "viewButtons": {},
+      "dropdown_btn": "Actions",
       "home": {
         "title": "Unidade Easies",
+        "btn_filter": "Filtrar",
+        "btn_filter_clean": "Limpar Filtros",
+        "btn_filter_open": "Filtros",
         "createLabel": "Criar novo Unidade Easy",
         "createOrEditLabel": "Criar ou editar Unidade Easy",
         "notFound": "Nenhum Unidade Easy encontrado"
@@ -37,6 +43,7 @@
       "tisscbo": "Tisscbo",
       "tisscoduf": "Tisscoduf",
       "ativo": "Ativo",
+      "categoria_empty": "Sem Categoria",
       "categoria": "Categoria",
       "help": {}
     }

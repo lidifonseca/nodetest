@@ -39,6 +39,7 @@ export interface ITipoPreferenciaAtendimentoBaseState {
 
 export interface ITipoPreferenciaAtendimentoUpdateState {
   fieldsBase: ITipoPreferenciaAtendimentoBaseState;
+
   isNew: boolean;
 }
 

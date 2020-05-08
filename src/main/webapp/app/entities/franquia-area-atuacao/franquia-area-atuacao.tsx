@@ -2,6 +2,7 @@
 import React from 'react';
 import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
 import { connect } from 'react-redux';
+import Select from 'react-select';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import {
   Button,
@@ -122,32 +123,33 @@ export class FranquiaAreaAtuacao extends React.Component<IFranquiaAreaAtuacaoPro
     const { franquiaAreaAtuacaoList, match, totalItems } = this.props;
     return (
       <div>
-        <ol className="breadcrumb float-xl-right">
+        <h2 id="page-heading">
+          <span className="page-header">Franquia Area Atuacaos</span>
+          <Button id="togglerFilterFranquiaAreaAtuacao" className="btn btn-primary float-right jh-create-entity">
+            <Translate contentKey="generadorApp.franquiaAreaAtuacao.home.btn_filter_open">Filters</Translate>
+            &nbsp;
+            <FontAwesomeIcon icon="caret-down" />
+          </Button>{' '}
+          &nbsp;
+          <Link
+            to={`${match.url}/new?${this.getFiltersURL()}`}
+            className="btn btn-primary float-right jh-create-entity"
+            id="jh-create-entity"
+          >
+            <FontAwesomeIcon icon="plus" />
+            &nbsp;
+            <Translate contentKey="generadorApp.franquiaAreaAtuacao.home.createLabel">Create a new Franquia Area Atuacao</Translate>
+          </Link>{' '}
+          &nbsp;
+        </h2>
+
+        <ol className="breadcrumb">
           <li className="breadcrumb-item">
             <Link to="/">Inicio</Link>
           </li>
           <li className="breadcrumb-item active">Franquia Area Atuacaos</li>
         </ol>
-        <h1 className="page-header">&nbsp;&nbsp;</h1>
         <Panel>
-          <PanelHeader>
-            <h2 id="page-heading">
-              <span className="page-header ml-3">Franquia Area Atuacaos</span>
-              <Button id="togglerFilterFranquiaAreaAtuacao" className="btn btn-primary float-right jh-create-entity">
-                Filtros&nbsp;
-                <FontAwesomeIcon icon="caret-down" />
-              </Button>
-              <Link
-                to={`${match.url}/new?${this.getFiltersURL()}`}
-                className="btn btn-primary float-right jh-create-entity"
-                id="jh-create-entity"
-              >
-                <FontAwesomeIcon icon="plus" />
-                &nbsp;
-                <Translate contentKey="generadorApp.franquiaAreaAtuacao.home.createLabel">Create a new Franquia Area Atuacao</Translate>
-              </Link>
-            </h2>
-          </PanelHeader>
           <PanelBody>
             <div className="table-responsive">
               <UncontrolledCollapse toggler="#togglerFilterFranquiaAreaAtuacao">
@@ -156,7 +158,7 @@ export class FranquiaAreaAtuacao extends React.Component<IFranquiaAreaAtuacaoPro
                     <div className="row mt-1 ml-3 mr-3">
                       {this.state.baseFilters !== 'cepIni' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="cepIniLabel" for="franquia-area-atuacao-cepIni">
                               <Translate contentKey="generadorApp.franquiaAreaAtuacao.cepIni">Cep Ini</Translate>
                             </Label>
@@ -168,7 +170,7 @@ export class FranquiaAreaAtuacao extends React.Component<IFranquiaAreaAtuacaoPro
 
                       {this.state.baseFilters !== 'cepFim' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="cepFimLabel" for="franquia-area-atuacao-cepFim">
                               <Translate contentKey="generadorApp.franquiaAreaAtuacao.cepFim">Cep Fim</Translate>
                             </Label>
@@ -180,7 +182,7 @@ export class FranquiaAreaAtuacao extends React.Component<IFranquiaAreaAtuacaoPro
 
                       {this.state.baseFilters !== 'ativo' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="ativoLabel" for="franquia-area-atuacao-ativo">
                               <Translate contentKey="generadorApp.franquiaAreaAtuacao.ativo">Ativo</Translate>
                             </Label>
@@ -194,13 +196,13 @@ export class FranquiaAreaAtuacao extends React.Component<IFranquiaAreaAtuacaoPro
                       <Button className="btn btn-success" type="submit">
                         <i className="fa fa-filter" aria-hidden={'true'}></i>
                         &nbsp;
-                        <Translate contentKey="entity.validation.filter">Filter</Translate>
+                        <Translate contentKey="generadorApp.franquiaAreaAtuacao.home.btn_filter">Filter</Translate>
                       </Button>
                       &nbsp;
                       <div className="btn btn-secondary hand" onClick={this.cancelCourse}>
                         <FontAwesomeIcon icon="trash-alt" />
                         &nbsp;
-                        <Translate contentKey="entity.validation.clean">Clean</Translate>
+                        <Translate contentKey="generadorApp.franquiaAreaAtuacao.home.btn_filter_clean">Clean</Translate>
                       </div>
                     </div>
                   </AvForm>

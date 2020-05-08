@@ -39,6 +39,7 @@ export interface IPacienteCaracteristicaAtualBaseState {
 
 export interface IPacienteCaracteristicaAtualUpdateState {
   fieldsBase: IPacienteCaracteristicaAtualBaseState;
+
   isNew: boolean;
 }
 

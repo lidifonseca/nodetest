@@ -1,8 +1,14 @@
 {
   "generadorApp": {
     "usuarioPainelGerencial": {
+      "listButtons": {},
+      "viewButtons": {},
+      "dropdown_btn": "Ações",
       "home": {
         "title": "Usuario Painel Gerencials",
+        "btn_filter": "Filter",
+        "btn_filter_clean": "Clean Filters",
+        "btn_filter_open": "Filters",
         "createLabel": "Create a new Usuario Painel Gerencial",
         "createOrEditLabel": "Create or edit a Usuario Painel Gerencial",
         "notFound": "No Usuario Painel Gerencials found"

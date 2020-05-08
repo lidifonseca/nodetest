@@ -2,6 +2,7 @@
 import React from 'react';
 import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
 import { connect } from 'react-redux';
+import Select from 'react-select';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import {
   Button,
@@ -176,32 +177,33 @@ export class LicaoCasaEvolucao extends React.Component<ILicaoCasaEvolucaoProps, 
     const { licaoCasaEvolucaoList, match, totalItems } = this.props;
     return (
       <div>
-        <ol className="breadcrumb float-xl-right">
+        <h2 id="page-heading">
+          <span className="page-header">Licao Casa Evolucaos</span>
+          <Button id="togglerFilterLicaoCasaEvolucao" className="btn btn-primary float-right jh-create-entity">
+            <Translate contentKey="generadorApp.licaoCasaEvolucao.home.btn_filter_open">Filters</Translate>
+            &nbsp;
+            <FontAwesomeIcon icon="caret-down" />
+          </Button>{' '}
+          &nbsp;
+          <Link
+            to={`${match.url}/new?${this.getFiltersURL()}`}
+            className="btn btn-primary float-right jh-create-entity"
+            id="jh-create-entity"
+          >
+            <FontAwesomeIcon icon="plus" />
+            &nbsp;
+            <Translate contentKey="generadorApp.licaoCasaEvolucao.home.createLabel">Create a new Licao Casa Evolucao</Translate>
+          </Link>{' '}
+          &nbsp;
+        </h2>
+
+        <ol className="breadcrumb">
           <li className="breadcrumb-item">
             <Link to="/">Inicio</Link>
           </li>
           <li className="breadcrumb-item active">Licao Casa Evolucaos</li>
         </ol>
-        <h1 className="page-header">&nbsp;&nbsp;</h1>
         <Panel>
-          <PanelHeader>
-            <h2 id="page-heading">
-              <span className="page-header ml-3">Licao Casa Evolucaos</span>
-              <Button id="togglerFilterLicaoCasaEvolucao" className="btn btn-primary float-right jh-create-entity">
-                Filtros&nbsp;
-                <FontAwesomeIcon icon="caret-down" />
-              </Button>
-              <Link
-                to={`${match.url}/new?${this.getFiltersURL()}`}
-                className="btn btn-primary float-right jh-create-entity"
-                id="jh-create-entity"
-              >
-                <FontAwesomeIcon icon="plus" />
-                &nbsp;
-                <Translate contentKey="generadorApp.licaoCasaEvolucao.home.createLabel">Create a new Licao Casa Evolucao</Translate>
-              </Link>
-            </h2>
-          </PanelHeader>
           <PanelBody>
             <div className="table-responsive">
               <UncontrolledCollapse toggler="#togglerFilterLicaoCasaEvolucao">
@@ -210,7 +212,7 @@ export class LicaoCasaEvolucao extends React.Component<ILicaoCasaEvolucaoProps, 
                     <div className="row mt-1 ml-3 mr-3">
                       {this.state.baseFilters !== 'licaoCasaId' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="licaoCasaIdLabel" for="licao-casa-evolucao-licaoCasaId">
                               <Translate contentKey="generadorApp.licaoCasaEvolucao.licaoCasaId">Licao Casa Id</Translate>
                             </Label>
@@ -221,7 +223,7 @@ export class LicaoCasaEvolucao extends React.Component<ILicaoCasaEvolucaoProps, 
 
                       {this.state.baseFilters !== 'atualizadoEm' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="atualizadoEmLabel" for="licao-casa-evolucao-atualizadoEm">
                               <Translate contentKey="generadorApp.licaoCasaEvolucao.atualizadoEm">Atualizado Em</Translate>
                             </Label>
@@ -239,7 +241,7 @@ export class LicaoCasaEvolucao extends React.Component<ILicaoCasaEvolucaoProps, 
 
                       {this.state.baseFilters !== 'realizada' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="realizadaLabel" check>
                               <AvInput id="licao-casa-evolucao-realizada" type="checkbox" className="form-control" name="realizada" />
                               <Translate contentKey="generadorApp.licaoCasaEvolucao.realizada">Realizada</Translate>
@@ -250,7 +252,7 @@ export class LicaoCasaEvolucao extends React.Component<ILicaoCasaEvolucaoProps, 
 
                       {this.state.baseFilters !== 'realizadaEm' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="realizadaEmLabel" for="licao-casa-evolucao-realizadaEm">
                               <Translate contentKey="generadorApp.licaoCasaEvolucao.realizadaEm">Realizada Em</Translate>
                             </Label>
@@ -268,7 +270,7 @@ export class LicaoCasaEvolucao extends React.Component<ILicaoCasaEvolucaoProps, 
 
                       {this.state.baseFilters !== 'observacoes' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="observacoesLabel" for="licao-casa-evolucao-observacoes">
                               <Translate contentKey="generadorApp.licaoCasaEvolucao.observacoes">Observacoes</Translate>
                             </Label>
@@ -280,7 +282,7 @@ export class LicaoCasaEvolucao extends React.Component<ILicaoCasaEvolucaoProps, 
 
                       {this.state.baseFilters !== 'instrucoes' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="instrucoesLabel" for="licao-casa-evolucao-instrucoes">
                               <Translate contentKey="generadorApp.licaoCasaEvolucao.instrucoes">Instrucoes</Translate>
                             </Label>
@@ -292,7 +294,7 @@ export class LicaoCasaEvolucao extends React.Component<ILicaoCasaEvolucaoProps, 
 
                       {this.state.baseFilters !== 'dataAgenda' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="dataAgendaLabel" for="licao-casa-evolucao-dataAgenda">
                               <Translate contentKey="generadorApp.licaoCasaEvolucao.dataAgenda">Data Agenda</Translate>
                             </Label>
@@ -310,7 +312,7 @@ export class LicaoCasaEvolucao extends React.Component<ILicaoCasaEvolucaoProps, 
 
                       {this.state.baseFilters !== 'qtdLembrete' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="qtdLembreteLabel" check>
                               <AvInput id="licao-casa-evolucao-qtdLembrete" type="checkbox" className="form-control" name="qtdLembrete" />
                               <Translate contentKey="generadorApp.licaoCasaEvolucao.qtdLembrete">Qtd Lembrete</Translate>
@@ -324,13 +326,13 @@ export class LicaoCasaEvolucao extends React.Component<ILicaoCasaEvolucaoProps, 
                       <Button className="btn btn-success" type="submit">
                         <i className="fa fa-filter" aria-hidden={'true'}></i>
                         &nbsp;
-                        <Translate contentKey="entity.validation.filter">Filter</Translate>
+                        <Translate contentKey="generadorApp.licaoCasaEvolucao.home.btn_filter">Filter</Translate>
                       </Button>
                       &nbsp;
                       <div className="btn btn-secondary hand" onClick={this.cancelCourse}>
                         <FontAwesomeIcon icon="trash-alt" />
                         &nbsp;
-                        <Translate contentKey="entity.validation.clean">Clean</Translate>
+                        <Translate contentKey="generadorApp.licaoCasaEvolucao.home.btn_filter_clean">Clean</Translate>
                       </div>
                     </div>
                   </AvForm>

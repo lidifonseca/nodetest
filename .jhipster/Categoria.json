@@ -51,7 +51,7 @@
             "ownerSide": true
         }
     ],
-    "changelogDate": "20200507104400",
+    "changelogDate": "20200508153400",
     "entityTableName": "categoria",
     "dto": "mapstruct",
     "pagination": "pagination",

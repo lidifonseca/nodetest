@@ -54,6 +54,9 @@ export interface IOperadoraBaseState {
 
 export interface IOperadoraUpdateState {
   fieldsBase: IOperadoraBaseState;
+
+  unidadeEasySelectValue: any;
+  tipoOperadoraSelectValue: any;
   isNew: boolean;
   unidadeId: string;
   tipoOperadoraId: string;

@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import Select from 'react-select';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 import { Button, Row, Col, Label } from 'reactstrap';
@@ -48,18 +49,11 @@ export class PadItemHistDataIncCompUpdate extends React.Component<IPadItemHistDa
 
   getFiltersURL = (offset = null) => {
     const fieldsBase = this.state.fieldsBase;
-    return (
-      '_back=1' +
-      (fieldsBase['baseFilters'] ? '&baseFilters=' + fieldsBase['baseFilters'] : '') +
-      (fieldsBase['activePage'] ? '&page=' + fieldsBase['activePage'] : '') +
-      (fieldsBase['itemsPerPage'] ? '&size=' + fieldsBase['itemsPerPage'] : '') +
-      (fieldsBase['sort'] ? '&sort=' + (fieldsBase['sort'] + ',' + fieldsBase['order']) : '') +
-      (offset !== null ? '&offset=' + offset : '') +
-      (fieldsBase['idPadItem'] ? '&idPadItem=' + fieldsBase['idPadItem'] : '') +
-      (fieldsBase['dataPadItemIncompleto'] ? '&dataPadItemIncompleto=' + fieldsBase['dataPadItemIncompleto'] : '') +
-      (fieldsBase['dataPadItemCompleto'] ? '&dataPadItemCompleto=' + fieldsBase['dataPadItemCompleto'] : '') +
-      ''
-    );
+    let url = '_back=1' + (offset !== null ? '&offset=' + offset : '');
+    Object.keys(fieldsBase).map(key => {
+      url += '&' + key + '=' + fieldsBase[key];
+    });
+    return url;
   };
   saveEntity = (event: any, errors: any, values: any) => {
     values.dataPadItemIncompleto = convertDateTimeToServer(values.dataPadItemIncompleto);
@@ -69,6 +63,7 @@ export class PadItemHistDataIncCompUpdate extends React.Component<IPadItemHistDa
       const { padItemHistDataIncCompEntity } = this.props;
       const entity = {
         ...padItemHistDataIncCompEntity,
+
         ...values
       };
 
@@ -91,14 +86,6 @@ export class PadItemHistDataIncCompUpdate extends React.Component<IPadItemHistDa
     const baseFilters = this.state.fieldsBase && this.state.fieldsBase['baseFilters'] ? this.state.fieldsBase['baseFilters'] : null;
     return (
       <div>
-        <ol className="breadcrumb float-xl-right">
-          <li className="breadcrumb-item">
-            <Link to="/">Inicio</Link>
-          </li>
-          <li className="breadcrumb-item active">Pad Item Hist Data Inc Comps</li>
-          <li className="breadcrumb-item active">Pad Item Hist Data Inc Comps edit</li>
-        </ol>
-        <h1 className="page-header">&nbsp;&nbsp;</h1>
         <AvForm
           model={
             isNew
@@ -109,36 +96,42 @@ export class PadItemHistDataIncCompUpdate extends React.Component<IPadItemHistDa
           }
           onSubmit={this.saveEntity}
         >
-          <Panel>
-            <PanelHeader>
-              <h2 id="page-heading">
-                <span className="page-header ml-3">
-                  <Translate contentKey="generadorApp.padItemHistDataIncComp.home.createOrEditLabel">
-                    Create or edit a PadItemHistDataIncComp
-                  </Translate>
-                </span>
+          <h2 id="page-heading">
+            <span className="page-header ml-3">
+              <Translate contentKey="generadorApp.padItemHistDataIncComp.home.createOrEditLabel">
+                Create or edit a PadItemHistDataIncComp
+              </Translate>
+            </span>
 
-                <Button color="primary" id="save-entity" type="submit" disabled={updating} className="float-right jh-create-entity">
-                  <FontAwesomeIcon icon="save" />
-                  &nbsp;
-                  <Translate contentKey="entity.action.save">Save</Translate>
-                </Button>
-                <Button
-                  tag={Link}
-                  id="cancel-save"
-                  to={'/pad-item-hist-data-inc-comp?' + this.getFiltersURL()}
-                  replace
-                  color="info"
-                  className="float-right jh-create-entity"
-                >
-                  <FontAwesomeIcon icon="arrow-left" />
-                  &nbsp;
-                  <span className="d-none d-md-inline">
-                    <Translate contentKey="entity.action.back">Back</Translate>
-                  </span>
-                </Button>
-              </h2>
-            </PanelHeader>
+            <Button color="primary" id="save-entity" type="submit" disabled={updating} className="float-right jh-create-entity">
+              <FontAwesomeIcon icon="save" />
+              &nbsp;
+              <Translate contentKey="entity.action.save">Save</Translate>
+            </Button>
+            <Button
+              tag={Link}
+              id="cancel-save"
+              to={'/pad-item-hist-data-inc-comp?' + this.getFiltersURL()}
+              replace
+              color="info"
+              className="float-right jh-create-entity"
+            >
+              <FontAwesomeIcon icon="arrow-left" />
+              &nbsp;
+              <span className="d-none d-md-inline">
+                <Translate contentKey="entity.action.back">Back</Translate>
+              </span>
+            </Button>
+          </h2>
+          <ol className="breadcrumb">
+            <li className="breadcrumb-item">
+              <Link to="/">Inicio</Link>
+            </li>
+            <li className="breadcrumb-item active">Pad Item Hist Data Inc Comps</li>
+            <li className="breadcrumb-item active">Pad Item Hist Data Inc Comps edit</li>
+          </ol>
+
+          <Panel>
             <PanelBody>
               <Row className="justify-content-center">
                 <Col md="8">
@@ -169,94 +162,11 @@ export class PadItemHistDataIncCompUpdate extends React.Component<IPadItemHistDa
                         </AvGroup>
                       ) : null}
                       <Row>
-                        {baseFilters !== 'idPadItem' ? (
-                          <Col md="idPadItem">
-                            <AvGroup>
-                              <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="idPadItemLabel" for="pad-item-hist-data-inc-comp-idPadItem">
-                                    <Translate contentKey="generadorApp.padItemHistDataIncComp.idPadItem">Id Pad Item</Translate>
-                                  </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField id="pad-item-hist-data-inc-comp-idPadItem" type="text" name="idPadItem" />
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
-                        ) : (
-                          <AvInput type="hidden" name="idPadItem" value={this.state.fieldsBase[baseFilters]} />
-                        )}
+                        <IdPadItemComponentUpdate baseFilters />
 
-                        {baseFilters !== 'dataPadItemIncompleto' ? (
-                          <Col md="dataPadItemIncompleto">
-                            <AvGroup>
-                              <Row>
-                                <Col md="3">
-                                  <Label
-                                    className="mt-2"
-                                    id="dataPadItemIncompletoLabel"
-                                    for="pad-item-hist-data-inc-comp-dataPadItemIncompleto"
-                                  >
-                                    <Translate contentKey="generadorApp.padItemHistDataIncComp.dataPadItemIncompleto">
-                                      Data Pad Item Incompleto
-                                    </Translate>
-                                  </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvInput
-                                    id="pad-item-hist-data-inc-comp-dataPadItemIncompleto"
-                                    type="datetime-local"
-                                    className="form-control"
-                                    name="dataPadItemIncompleto"
-                                    placeholder={'YYYY-MM-DD HH:mm'}
-                                    value={
-                                      isNew
-                                        ? null
-                                        : convertDateTimeFromServer(this.props.padItemHistDataIncCompEntity.dataPadItemIncompleto)
-                                    }
-                                  />
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
-                        ) : (
-                          <AvInput type="hidden" name="dataPadItemIncompleto" value={this.state.fieldsBase[baseFilters]} />
-                        )}
+                        <DataPadItemIncompletoComponentUpdate baseFilters />
 
-                        {baseFilters !== 'dataPadItemCompleto' ? (
-                          <Col md="dataPadItemCompleto">
-                            <AvGroup>
-                              <Row>
-                                <Col md="3">
-                                  <Label
-                                    className="mt-2"
-                                    id="dataPadItemCompletoLabel"
-                                    for="pad-item-hist-data-inc-comp-dataPadItemCompleto"
-                                  >
-                                    <Translate contentKey="generadorApp.padItemHistDataIncComp.dataPadItemCompleto">
-                                      Data Pad Item Completo
-                                    </Translate>
-                                  </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvInput
-                                    id="pad-item-hist-data-inc-comp-dataPadItemCompleto"
-                                    type="datetime-local"
-                                    className="form-control"
-                                    name="dataPadItemCompleto"
-                                    placeholder={'YYYY-MM-DD HH:mm'}
-                                    value={
-                                      isNew ? null : convertDateTimeFromServer(this.props.padItemHistDataIncCompEntity.dataPadItemCompleto)
-                                    }
-                                  />
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
-                        ) : (
-                          <AvInput type="hidden" name="dataPadItemCompleto" value={this.state.fieldsBase[baseFilters]} />
-                        )}
+                        <DataPadItemCompletoComponentUpdate baseFilters />
                       </Row>
                     </div>
                   )}
@@ -286,5 +196,82 @@ const mapDispatchToProps = {
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
+
+const IdPadItemComponentUpdate = ({ baseFilters }) => {
+  return baseFilters !== 'idPadItem' ? (
+    <Col md="idPadItem">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" id="idPadItemLabel" for="pad-item-hist-data-inc-comp-idPadItem">
+              <Translate contentKey="generadorApp.padItemHistDataIncComp.idPadItem">Id Pad Item</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <AvField id="pad-item-hist-data-inc-comp-idPadItem" type="text" name="idPadItem" />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="idPadItem" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const DataPadItemIncompletoComponentUpdate = ({ baseFilters }) => {
+  return baseFilters !== 'dataPadItemIncompleto' ? (
+    <Col md="dataPadItemIncompleto">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" id="dataPadItemIncompletoLabel" for="pad-item-hist-data-inc-comp-dataPadItemIncompleto">
+              <Translate contentKey="generadorApp.padItemHistDataIncComp.dataPadItemIncompleto">Data Pad Item Incompleto</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <AvInput
+              id="pad-item-hist-data-inc-comp-dataPadItemIncompleto"
+              type="datetime-local"
+              className="form-control"
+              name="dataPadItemIncompleto"
+              placeholder={'YYYY-MM-DD HH:mm'}
+              value={isNew ? null : convertDateTimeFromServer(this.props.padItemHistDataIncCompEntity.dataPadItemIncompleto)}
+            />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="dataPadItemIncompleto" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const DataPadItemCompletoComponentUpdate = ({ baseFilters }) => {
+  return baseFilters !== 'dataPadItemCompleto' ? (
+    <Col md="dataPadItemCompleto">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" id="dataPadItemCompletoLabel" for="pad-item-hist-data-inc-comp-dataPadItemCompleto">
+              <Translate contentKey="generadorApp.padItemHistDataIncComp.dataPadItemCompleto">Data Pad Item Completo</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <AvInput
+              id="pad-item-hist-data-inc-comp-dataPadItemCompleto"
+              type="datetime-local"
+              className="form-control"
+              name="dataPadItemCompleto"
+              placeholder={'YYYY-MM-DD HH:mm'}
+              value={isNew ? null : convertDateTimeFromServer(this.props.padItemHistDataIncCompEntity.dataPadItemCompleto)}
+            />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="dataPadItemCompleto" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(PadItemHistDataIncCompUpdate);

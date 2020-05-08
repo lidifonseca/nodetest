@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import Select from 'react-select';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 import { Button, Row, Col, Label } from 'reactstrap';
@@ -48,17 +49,11 @@ export class PushnotificationEnviosUpdate extends React.Component<IPushnotificat
 
   getFiltersURL = (offset = null) => {
     const fieldsBase = this.state.fieldsBase;
-    return (
-      '_back=1' +
-      (fieldsBase['baseFilters'] ? '&baseFilters=' + fieldsBase['baseFilters'] : '') +
-      (fieldsBase['activePage'] ? '&page=' + fieldsBase['activePage'] : '') +
-      (fieldsBase['itemsPerPage'] ? '&size=' + fieldsBase['itemsPerPage'] : '') +
-      (fieldsBase['sort'] ? '&sort=' + (fieldsBase['sort'] + ',' + fieldsBase['order']) : '') +
-      (offset !== null ? '&offset=' + offset : '') +
-      (fieldsBase['referencia'] ? '&referencia=' + fieldsBase['referencia'] : '') +
-      (fieldsBase['ultimoEnvio'] ? '&ultimoEnvio=' + fieldsBase['ultimoEnvio'] : '') +
-      ''
-    );
+    let url = '_back=1' + (offset !== null ? '&offset=' + offset : '');
+    Object.keys(fieldsBase).map(key => {
+      url += '&' + key + '=' + fieldsBase[key];
+    });
+    return url;
   };
   saveEntity = (event: any, errors: any, values: any) => {
     values.ultimoEnvio = convertDateTimeToServer(values.ultimoEnvio);
@@ -67,6 +62,7 @@ export class PushnotificationEnviosUpdate extends React.Component<IPushnotificat
       const { pushnotificationEnviosEntity } = this.props;
       const entity = {
         ...pushnotificationEnviosEntity,
+
         ...values
       };
 
@@ -89,14 +85,6 @@ export class PushnotificationEnviosUpdate extends React.Component<IPushnotificat
     const baseFilters = this.state.fieldsBase && this.state.fieldsBase['baseFilters'] ? this.state.fieldsBase['baseFilters'] : null;
     return (
       <div>
-        <ol className="breadcrumb float-xl-right">
-          <li className="breadcrumb-item">
-            <Link to="/">Inicio</Link>
-          </li>
-          <li className="breadcrumb-item active">Pushnotification Envios</li>
-          <li className="breadcrumb-item active">Pushnotification Envios edit</li>
-        </ol>
-        <h1 className="page-header">&nbsp;&nbsp;</h1>
         <AvForm
           model={
             isNew
@@ -107,36 +95,42 @@ export class PushnotificationEnviosUpdate extends React.Component<IPushnotificat
           }
           onSubmit={this.saveEntity}
         >
-          <Panel>
-            <PanelHeader>
-              <h2 id="page-heading">
-                <span className="page-header ml-3">
-                  <Translate contentKey="generadorApp.pushnotificationEnvios.home.createOrEditLabel">
-                    Create or edit a PushnotificationEnvios
-                  </Translate>
-                </span>
+          <h2 id="page-heading">
+            <span className="page-header ml-3">
+              <Translate contentKey="generadorApp.pushnotificationEnvios.home.createOrEditLabel">
+                Create or edit a PushnotificationEnvios
+              </Translate>
+            </span>
 
-                <Button color="primary" id="save-entity" type="submit" disabled={updating} className="float-right jh-create-entity">
-                  <FontAwesomeIcon icon="save" />
-                  &nbsp;
-                  <Translate contentKey="entity.action.save">Save</Translate>
-                </Button>
-                <Button
-                  tag={Link}
-                  id="cancel-save"
-                  to={'/pushnotification-envios?' + this.getFiltersURL()}
-                  replace
-                  color="info"
-                  className="float-right jh-create-entity"
-                >
-                  <FontAwesomeIcon icon="arrow-left" />
-                  &nbsp;
-                  <span className="d-none d-md-inline">
-                    <Translate contentKey="entity.action.back">Back</Translate>
-                  </span>
-                </Button>
-              </h2>
-            </PanelHeader>
+            <Button color="primary" id="save-entity" type="submit" disabled={updating} className="float-right jh-create-entity">
+              <FontAwesomeIcon icon="save" />
+              &nbsp;
+              <Translate contentKey="entity.action.save">Save</Translate>
+            </Button>
+            <Button
+              tag={Link}
+              id="cancel-save"
+              to={'/pushnotification-envios?' + this.getFiltersURL()}
+              replace
+              color="info"
+              className="float-right jh-create-entity"
+            >
+              <FontAwesomeIcon icon="arrow-left" />
+              &nbsp;
+              <span className="d-none d-md-inline">
+                <Translate contentKey="entity.action.back">Back</Translate>
+              </span>
+            </Button>
+          </h2>
+          <ol className="breadcrumb">
+            <li className="breadcrumb-item">
+              <Link to="/">Inicio</Link>
+            </li>
+            <li className="breadcrumb-item active">Pushnotification Envios</li>
+            <li className="breadcrumb-item active">Pushnotification Envios edit</li>
+          </ol>
+
+          <Panel>
             <PanelBody>
               <Row className="justify-content-center">
                 <Col md="8">
@@ -160,50 +154,9 @@ export class PushnotificationEnviosUpdate extends React.Component<IPushnotificat
                         </AvGroup>
                       ) : null}
                       <Row>
-                        {baseFilters !== 'referencia' ? (
-                          <Col md="referencia">
-                            <AvGroup>
-                              <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="referenciaLabel" for="pushnotification-envios-referencia">
-                                    <Translate contentKey="generadorApp.pushnotificationEnvios.referencia">Referencia</Translate>
-                                  </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField id="pushnotification-envios-referencia" type="text" name="referencia" />
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
-                        ) : (
-                          <AvInput type="hidden" name="referencia" value={this.state.fieldsBase[baseFilters]} />
-                        )}
+                        <ReferenciaComponentUpdate baseFilters />
 
-                        {baseFilters !== 'ultimoEnvio' ? (
-                          <Col md="ultimoEnvio">
-                            <AvGroup>
-                              <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="ultimoEnvioLabel" for="pushnotification-envios-ultimoEnvio">
-                                    <Translate contentKey="generadorApp.pushnotificationEnvios.ultimoEnvio">Ultimo Envio</Translate>
-                                  </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvInput
-                                    id="pushnotification-envios-ultimoEnvio"
-                                    type="datetime-local"
-                                    className="form-control"
-                                    name="ultimoEnvio"
-                                    placeholder={'YYYY-MM-DD HH:mm'}
-                                    value={isNew ? null : convertDateTimeFromServer(this.props.pushnotificationEnviosEntity.ultimoEnvio)}
-                                  />
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
-                        ) : (
-                          <AvInput type="hidden" name="ultimoEnvio" value={this.state.fieldsBase[baseFilters]} />
-                        )}
+                        <UltimoEnvioComponentUpdate baseFilters />
                       </Row>
                     </div>
                   )}
@@ -233,5 +186,54 @@ const mapDispatchToProps = {
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
+
+const ReferenciaComponentUpdate = ({ baseFilters }) => {
+  return baseFilters !== 'referencia' ? (
+    <Col md="referencia">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" id="referenciaLabel" for="pushnotification-envios-referencia">
+              <Translate contentKey="generadorApp.pushnotificationEnvios.referencia">Referencia</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <AvField id="pushnotification-envios-referencia" type="text" name="referencia" />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="referencia" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const UltimoEnvioComponentUpdate = ({ baseFilters }) => {
+  return baseFilters !== 'ultimoEnvio' ? (
+    <Col md="ultimoEnvio">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" id="ultimoEnvioLabel" for="pushnotification-envios-ultimoEnvio">
+              <Translate contentKey="generadorApp.pushnotificationEnvios.ultimoEnvio">Ultimo Envio</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <AvInput
+              id="pushnotification-envios-ultimoEnvio"
+              type="datetime-local"
+              className="form-control"
+              name="ultimoEnvio"
+              placeholder={'YYYY-MM-DD HH:mm'}
+              value={isNew ? null : convertDateTimeFromServer(this.props.pushnotificationEnviosEntity.ultimoEnvio)}
+            />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="ultimoEnvio" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(PushnotificationEnviosUpdate);

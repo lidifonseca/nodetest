@@ -1,8 +1,14 @@
 {
   "generadorApp": {
     "pacienteProntuario": {
+      "listButtons": {},
+      "viewButtons": {},
+      "dropdown_btn": "Actions",
       "home": {
         "title": "Paciente Prontuarios",
+        "btn_filter": "Filtrar",
+        "btn_filter_clean": "Limpar Filtros",
+        "btn_filter_open": "Filtros",
         "createLabel": "Criar novo Paciente Prontuario",
         "createOrEditLabel": "Criar ou editar Paciente Prontuario",
         "notFound": "Nenhum Paciente Prontuario encontrado"

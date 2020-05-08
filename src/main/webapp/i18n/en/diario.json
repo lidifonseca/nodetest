@@ -1,8 +1,14 @@
 {
   "generadorApp": {
     "diario": {
+      "listButtons": {},
+      "viewButtons": {},
+      "dropdown_btn": "Ações",
       "home": {
         "title": "Diarios",
+        "btn_filter": "Filter",
+        "btn_filter_clean": "Clean Filters",
+        "btn_filter_open": "Filters",
         "createLabel": "Create a new Diario",
         "createOrEditLabel": "Create or edit a Diario",
         "notFound": "No Diarios found"

@@ -38,6 +38,7 @@ export interface IPacienteEnqueteAppBaseState {
 
 export interface IPacienteEnqueteAppUpdateState {
   fieldsBase: IPacienteEnqueteAppBaseState;
+
   isNew: boolean;
 }
 

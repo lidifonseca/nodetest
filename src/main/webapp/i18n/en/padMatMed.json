@@ -1,8 +1,14 @@
 {
   "generadorApp": {
     "padMatMed": {
+      "listButtons": {},
+      "viewButtons": {},
+      "dropdown_btn": "Ações",
       "home": {
         "title": "Pad Mat Meds",
+        "btn_filter": "Filter",
+        "btn_filter_clean": "Clean Filters",
+        "btn_filter_open": "Filters",
         "createLabel": "Create a new Pad Mat Med",
         "createOrEditLabel": "Create or edit a Pad Mat Med",
         "notFound": "No Pad Mat Meds found"

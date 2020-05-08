@@ -47,6 +47,7 @@ export interface IProfissionalDispositivoComplexidadeAtualBaseState {
 
 export interface IProfissionalDispositivoComplexidadeAtualUpdateState {
   fieldsBase: IProfissionalDispositivoComplexidadeAtualBaseState;
+
   isNew: boolean;
 }
 

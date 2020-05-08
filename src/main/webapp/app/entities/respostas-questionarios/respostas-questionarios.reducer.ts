@@ -40,6 +40,7 @@ export interface IRespostasQuestionariosBaseState {
 
 export interface IRespostasQuestionariosUpdateState {
   fieldsBase: IRespostasQuestionariosBaseState;
+
   isNew: boolean;
 }
 

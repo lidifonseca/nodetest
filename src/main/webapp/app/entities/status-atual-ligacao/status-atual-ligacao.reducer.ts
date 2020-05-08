@@ -39,6 +39,7 @@ export interface IStatusAtualLigacaoBaseState {
 
 export interface IStatusAtualLigacaoUpdateState {
   fieldsBase: IStatusAtualLigacaoBaseState;
+
   isNew: boolean;
 }
 

@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import Select from 'react-select';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 import { Button, Row, Col, Label } from 'reactstrap';
@@ -48,18 +49,11 @@ export class TokenUsuarioUpdate extends React.Component<ITokenUsuarioUpdateProps
 
   getFiltersURL = (offset = null) => {
     const fieldsBase = this.state.fieldsBase;
-    return (
-      '_back=1' +
-      (fieldsBase['baseFilters'] ? '&baseFilters=' + fieldsBase['baseFilters'] : '') +
-      (fieldsBase['activePage'] ? '&page=' + fieldsBase['activePage'] : '') +
-      (fieldsBase['itemsPerPage'] ? '&size=' + fieldsBase['itemsPerPage'] : '') +
-      (fieldsBase['sort'] ? '&sort=' + (fieldsBase['sort'] + ',' + fieldsBase['order']) : '') +
-      (offset !== null ? '&offset=' + offset : '') +
-      (fieldsBase['idPaciente'] ? '&idPaciente=' + fieldsBase['idPaciente'] : '') +
-      (fieldsBase['token'] ? '&token=' + fieldsBase['token'] : '') +
-      (fieldsBase['dataValida'] ? '&dataValida=' + fieldsBase['dataValida'] : '') +
-      ''
-    );
+    let url = '_back=1' + (offset !== null ? '&offset=' + offset : '');
+    Object.keys(fieldsBase).map(key => {
+      url += '&' + key + '=' + fieldsBase[key];
+    });
+    return url;
   };
   saveEntity = (event: any, errors: any, values: any) => {
     values.dataValida = convertDateTimeToServer(values.dataValida);
@@ -68,6 +62,7 @@ export class TokenUsuarioUpdate extends React.Component<ITokenUsuarioUpdateProps
       const { tokenUsuarioEntity } = this.props;
       const entity = {
         ...tokenUsuarioEntity,
+
         ...values
       };
 
@@ -90,14 +85,6 @@ export class TokenUsuarioUpdate extends React.Component<ITokenUsuarioUpdateProps
     const baseFilters = this.state.fieldsBase && this.state.fieldsBase['baseFilters'] ? this.state.fieldsBase['baseFilters'] : null;
     return (
       <div>
-        <ol className="breadcrumb float-xl-right">
-          <li className="breadcrumb-item">
-            <Link to="/">Inicio</Link>
-          </li>
-          <li className="breadcrumb-item active">Token Usuarios</li>
-          <li className="breadcrumb-item active">Token Usuarios edit</li>
-        </ol>
-        <h1 className="page-header">&nbsp;&nbsp;</h1>
         <AvForm
           model={
             isNew
@@ -108,34 +95,40 @@ export class TokenUsuarioUpdate extends React.Component<ITokenUsuarioUpdateProps
           }
           onSubmit={this.saveEntity}
         >
-          <Panel>
-            <PanelHeader>
-              <h2 id="page-heading">
-                <span className="page-header ml-3">
-                  <Translate contentKey="generadorApp.tokenUsuario.home.createOrEditLabel">Create or edit a TokenUsuario</Translate>
-                </span>
+          <h2 id="page-heading">
+            <span className="page-header ml-3">
+              <Translate contentKey="generadorApp.tokenUsuario.home.createOrEditLabel">Create or edit a TokenUsuario</Translate>
+            </span>
 
-                <Button color="primary" id="save-entity" type="submit" disabled={updating} className="float-right jh-create-entity">
-                  <FontAwesomeIcon icon="save" />
-                  &nbsp;
-                  <Translate contentKey="entity.action.save">Save</Translate>
-                </Button>
-                <Button
-                  tag={Link}
-                  id="cancel-save"
-                  to={'/token-usuario?' + this.getFiltersURL()}
-                  replace
-                  color="info"
-                  className="float-right jh-create-entity"
-                >
-                  <FontAwesomeIcon icon="arrow-left" />
-                  &nbsp;
-                  <span className="d-none d-md-inline">
-                    <Translate contentKey="entity.action.back">Back</Translate>
-                  </span>
-                </Button>
-              </h2>
-            </PanelHeader>
+            <Button color="primary" id="save-entity" type="submit" disabled={updating} className="float-right jh-create-entity">
+              <FontAwesomeIcon icon="save" />
+              &nbsp;
+              <Translate contentKey="entity.action.save">Save</Translate>
+            </Button>
+            <Button
+              tag={Link}
+              id="cancel-save"
+              to={'/token-usuario?' + this.getFiltersURL()}
+              replace
+              color="info"
+              className="float-right jh-create-entity"
+            >
+              <FontAwesomeIcon icon="arrow-left" />
+              &nbsp;
+              <span className="d-none d-md-inline">
+                <Translate contentKey="entity.action.back">Back</Translate>
+              </span>
+            </Button>
+          </h2>
+          <ol className="breadcrumb">
+            <li className="breadcrumb-item">
+              <Link to="/">Inicio</Link>
+            </li>
+            <li className="breadcrumb-item active">Token Usuarios</li>
+            <li className="breadcrumb-item active">Token Usuarios edit</li>
+          </ol>
+
+          <Panel>
             <PanelBody>
               <Row className="justify-content-center">
                 <Col md="8">
@@ -159,69 +152,11 @@ export class TokenUsuarioUpdate extends React.Component<ITokenUsuarioUpdateProps
                         </AvGroup>
                       ) : null}
                       <Row>
-                        {baseFilters !== 'idPaciente' ? (
-                          <Col md="idPaciente">
-                            <AvGroup>
-                              <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="idPacienteLabel" for="token-usuario-idPaciente">
-                                    <Translate contentKey="generadorApp.tokenUsuario.idPaciente">Id Paciente</Translate>
-                                  </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField id="token-usuario-idPaciente" type="string" className="form-control" name="idPaciente" />
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
-                        ) : (
-                          <AvInput type="hidden" name="idPaciente" value={this.state.fieldsBase[baseFilters]} />
-                        )}
+                        <IdPacienteComponentUpdate baseFilters />
 
-                        {baseFilters !== 'token' ? (
-                          <Col md="token">
-                            <AvGroup>
-                              <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="tokenLabel" for="token-usuario-token">
-                                    <Translate contentKey="generadorApp.tokenUsuario.token">Token</Translate>
-                                  </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField id="token-usuario-token" type="text" name="token" />
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
-                        ) : (
-                          <AvInput type="hidden" name="token" value={this.state.fieldsBase[baseFilters]} />
-                        )}
+                        <TokenComponentUpdate baseFilters />
 
-                        {baseFilters !== 'dataValida' ? (
-                          <Col md="dataValida">
-                            <AvGroup>
-                              <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="dataValidaLabel" for="token-usuario-dataValida">
-                                    <Translate contentKey="generadorApp.tokenUsuario.dataValida">Data Valida</Translate>
-                                  </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvInput
-                                    id="token-usuario-dataValida"
-                                    type="datetime-local"
-                                    className="form-control"
-                                    name="dataValida"
-                                    placeholder={'YYYY-MM-DD HH:mm'}
-                                    value={isNew ? null : convertDateTimeFromServer(this.props.tokenUsuarioEntity.dataValida)}
-                                  />
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
-                        ) : (
-                          <AvInput type="hidden" name="dataValida" value={this.state.fieldsBase[baseFilters]} />
-                        )}
+                        <DataValidaComponentUpdate baseFilters />
                       </Row>
                     </div>
                   )}
@@ -251,5 +186,75 @@ const mapDispatchToProps = {
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
+
+const IdPacienteComponentUpdate = ({ baseFilters }) => {
+  return baseFilters !== 'idPaciente' ? (
+    <Col md="idPaciente">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" id="idPacienteLabel" for="token-usuario-idPaciente">
+              <Translate contentKey="generadorApp.tokenUsuario.idPaciente">Id Paciente</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <AvField id="token-usuario-idPaciente" type="string" className="form-control" name="idPaciente" />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="idPaciente" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const TokenComponentUpdate = ({ baseFilters }) => {
+  return baseFilters !== 'token' ? (
+    <Col md="token">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" id="tokenLabel" for="token-usuario-token">
+              <Translate contentKey="generadorApp.tokenUsuario.token">Token</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <AvField id="token-usuario-token" type="text" name="token" />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="token" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const DataValidaComponentUpdate = ({ baseFilters }) => {
+  return baseFilters !== 'dataValida' ? (
+    <Col md="dataValida">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" id="dataValidaLabel" for="token-usuario-dataValida">
+              <Translate contentKey="generadorApp.tokenUsuario.dataValida">Data Valida</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <AvInput
+              id="token-usuario-dataValida"
+              type="datetime-local"
+              className="form-control"
+              name="dataValida"
+              placeholder={'YYYY-MM-DD HH:mm'}
+              value={isNew ? null : convertDateTimeFromServer(this.props.tokenUsuarioEntity.dataValida)}
+            />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="dataValida" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(TokenUsuarioUpdate);

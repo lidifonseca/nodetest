@@ -1,8 +1,14 @@
 {
   "generadorApp": {
     "statusPadItemMeta": {
+      "listButtons": {},
+      "viewButtons": {},
+      "dropdown_btn": "Ações",
       "home": {
         "title": "Status Pad Item Metas",
+        "btn_filter": "Filter",
+        "btn_filter_clean": "Clean Filters",
+        "btn_filter_open": "Filters",
         "createLabel": "Create a new Status Pad Item Meta",
         "createOrEditLabel": "Create or edit a Status Pad Item Meta",
         "notFound": "No Status Pad Item Metas found"

@@ -1,8 +1,14 @@
 {
   "generadorApp": {
     "pushnotificationEnvios": {
+      "listButtons": {},
+      "viewButtons": {},
+      "dropdown_btn": "Actions",
       "home": {
         "title": "Pushnotification Envios",
+        "btn_filter": "Filtrar",
+        "btn_filter_clean": "Limpar Filtros",
+        "btn_filter_open": "Filtros",
         "createLabel": "Criar novo Pushnotification Envios",
         "createOrEditLabel": "Criar ou editar Pushnotification Envios",
         "notFound": "Nenhum Pushnotification Envios encontrado"

@@ -19,7 +19,7 @@
         }
     ],
     "relationships": [],
-    "changelogDate": "20200507125400",
+    "changelogDate": "20200508174400",
     "entityTableName": "uf",
     "dto": "mapstruct",
     "pagination": "pagination",

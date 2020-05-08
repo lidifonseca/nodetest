@@ -39,6 +39,7 @@ export interface IPacienteServicoBaseState {
 
 export interface IPacienteServicoUpdateState {
   fieldsBase: IPacienteServicoBaseState;
+
   isNew: boolean;
 }
 

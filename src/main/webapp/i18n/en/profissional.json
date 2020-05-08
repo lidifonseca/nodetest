@@ -1,8 +1,14 @@
 {
   "generadorApp": {
     "profissional": {
+      "listButtons": {},
+      "viewButtons": {},
+      "dropdown_btn": "Ações",
       "home": {
         "title": "Profissionals",
+        "btn_filter": "Filter",
+        "btn_filter_clean": "Clean Filters",
+        "btn_filter_open": "Filters",
         "createLabel": "Create a new Profissional",
         "createOrEditLabel": "Create or edit a Profissional",
         "notFound": "No Profissionals found"
@@ -53,6 +59,7 @@
       "dataSenha": "Data Senha",
       "expoToken": "Expo Token",
       "preferenciaAtendimento": "Preferencia Atendimento",
+      "unidade_empty": "Without Unidade",
       "unidade": "Unidade",
       "help": {
         "telefone1": "@dbName TELEFONE1@@",

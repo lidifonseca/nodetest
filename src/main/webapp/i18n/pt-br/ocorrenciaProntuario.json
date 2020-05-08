@@ -1,8 +1,14 @@
 {
   "generadorApp": {
     "ocorrenciaProntuario": {
+      "listButtons": {},
+      "viewButtons": {},
+      "dropdown_btn": "Actions",
       "home": {
         "title": "Ocorrencia Prontuarios",
+        "btn_filter": "Filtrar",
+        "btn_filter_clean": "Limpar Filtros",
+        "btn_filter_open": "Filtros",
         "createLabel": "Criar novo Ocorrencia Prontuario",
         "createOrEditLabel": "Criar ou editar Ocorrencia Prontuario",
         "notFound": "Nenhum Ocorrencia Prontuario encontrado"

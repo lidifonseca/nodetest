@@ -38,6 +38,7 @@ export interface IIndicadoresBaseState {
 
 export interface IIndicadoresUpdateState {
   fieldsBase: IIndicadoresBaseState;
+
   isNew: boolean;
 }
 

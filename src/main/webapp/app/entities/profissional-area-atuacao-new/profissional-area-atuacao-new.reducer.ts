@@ -42,6 +42,7 @@ export interface IProfissionalAreaAtuacaoNewBaseState {
 
 export interface IProfissionalAreaAtuacaoNewUpdateState {
   fieldsBase: IProfissionalAreaAtuacaoNewBaseState;
+
   isNew: boolean;
 }
 

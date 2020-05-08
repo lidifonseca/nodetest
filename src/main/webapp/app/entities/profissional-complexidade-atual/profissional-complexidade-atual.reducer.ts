@@ -43,6 +43,7 @@ export interface IProfissionalComplexidadeAtualBaseState {
 
 export interface IProfissionalComplexidadeAtualUpdateState {
   fieldsBase: IProfissionalComplexidadeAtualBaseState;
+
   isNew: boolean;
 }
 

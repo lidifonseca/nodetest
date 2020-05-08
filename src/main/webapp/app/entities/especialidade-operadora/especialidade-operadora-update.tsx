@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import Select from 'react-select';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 import { Button, Row, Col, Label } from 'reactstrap';
@@ -48,29 +49,18 @@ export class EspecialidadeOperadoraUpdate extends React.Component<IEspecialidade
 
   getFiltersURL = (offset = null) => {
     const fieldsBase = this.state.fieldsBase;
-    return (
-      '_back=1' +
-      (fieldsBase['baseFilters'] ? '&baseFilters=' + fieldsBase['baseFilters'] : '') +
-      (fieldsBase['activePage'] ? '&page=' + fieldsBase['activePage'] : '') +
-      (fieldsBase['itemsPerPage'] ? '&size=' + fieldsBase['itemsPerPage'] : '') +
-      (fieldsBase['sort'] ? '&sort=' + (fieldsBase['sort'] + ',' + fieldsBase['order']) : '') +
-      (offset !== null ? '&offset=' + offset : '') +
-      (fieldsBase['codTuss'] ? '&codTuss=' + fieldsBase['codTuss'] : '') +
-      (fieldsBase['codDespesa'] ? '&codDespesa=' + fieldsBase['codDespesa'] : '') +
-      (fieldsBase['codTabela'] ? '&codTabela=' + fieldsBase['codTabela'] : '') +
-      (fieldsBase['valorCusto'] ? '&valorCusto=' + fieldsBase['valorCusto'] : '') +
-      (fieldsBase['valorVenda'] ? '&valorVenda=' + fieldsBase['valorVenda'] : '') +
-      (fieldsBase['descontoCusto'] ? '&descontoCusto=' + fieldsBase['descontoCusto'] : '') +
-      (fieldsBase['descontoVenda'] ? '&descontoVenda=' + fieldsBase['descontoVenda'] : '') +
-      (fieldsBase['ativo'] ? '&ativo=' + fieldsBase['ativo'] : '') +
-      ''
-    );
+    let url = '_back=1' + (offset !== null ? '&offset=' + offset : '');
+    Object.keys(fieldsBase).map(key => {
+      url += '&' + key + '=' + fieldsBase[key];
+    });
+    return url;
   };
   saveEntity = (event: any, errors: any, values: any) => {
     if (errors.length === 0) {
       const { especialidadeOperadoraEntity } = this.props;
       const entity = {
         ...especialidadeOperadoraEntity,
+
         ...values
       };
 
@@ -93,14 +83,6 @@ export class EspecialidadeOperadoraUpdate extends React.Component<IEspecialidade
     const baseFilters = this.state.fieldsBase && this.state.fieldsBase['baseFilters'] ? this.state.fieldsBase['baseFilters'] : null;
     return (
       <div>
-        <ol className="breadcrumb float-xl-right">
-          <li className="breadcrumb-item">
-            <Link to="/">Inicio</Link>
-          </li>
-          <li className="breadcrumb-item active">Especialidade Operadoras</li>
-          <li className="breadcrumb-item active">Especialidade Operadoras edit</li>
-        </ol>
-        <h1 className="page-header">&nbsp;&nbsp;</h1>
         <AvForm
           model={
             isNew
@@ -111,36 +93,42 @@ export class EspecialidadeOperadoraUpdate extends React.Component<IEspecialidade
           }
           onSubmit={this.saveEntity}
         >
-          <Panel>
-            <PanelHeader>
-              <h2 id="page-heading">
-                <span className="page-header ml-3">
-                  <Translate contentKey="generadorApp.especialidadeOperadora.home.createOrEditLabel">
-                    Create or edit a EspecialidadeOperadora
-                  </Translate>
-                </span>
+          <h2 id="page-heading">
+            <span className="page-header ml-3">
+              <Translate contentKey="generadorApp.especialidadeOperadora.home.createOrEditLabel">
+                Create or edit a EspecialidadeOperadora
+              </Translate>
+            </span>
 
-                <Button color="primary" id="save-entity" type="submit" disabled={updating} className="float-right jh-create-entity">
-                  <FontAwesomeIcon icon="save" />
-                  &nbsp;
-                  <Translate contentKey="entity.action.save">Save</Translate>
-                </Button>
-                <Button
-                  tag={Link}
-                  id="cancel-save"
-                  to={'/especialidade-operadora?' + this.getFiltersURL()}
-                  replace
-                  color="info"
-                  className="float-right jh-create-entity"
-                >
-                  <FontAwesomeIcon icon="arrow-left" />
-                  &nbsp;
-                  <span className="d-none d-md-inline">
-                    <Translate contentKey="entity.action.back">Back</Translate>
-                  </span>
-                </Button>
-              </h2>
-            </PanelHeader>
+            <Button color="primary" id="save-entity" type="submit" disabled={updating} className="float-right jh-create-entity">
+              <FontAwesomeIcon icon="save" />
+              &nbsp;
+              <Translate contentKey="entity.action.save">Save</Translate>
+            </Button>
+            <Button
+              tag={Link}
+              id="cancel-save"
+              to={'/especialidade-operadora?' + this.getFiltersURL()}
+              replace
+              color="info"
+              className="float-right jh-create-entity"
+            >
+              <FontAwesomeIcon icon="arrow-left" />
+              &nbsp;
+              <span className="d-none d-md-inline">
+                <Translate contentKey="entity.action.back">Back</Translate>
+              </span>
+            </Button>
+          </h2>
+          <ol className="breadcrumb">
+            <li className="breadcrumb-item">
+              <Link to="/">Inicio</Link>
+            </li>
+            <li className="breadcrumb-item active">Especialidade Operadoras</li>
+            <li className="breadcrumb-item active">Especialidade Operadoras edit</li>
+          </ol>
+
+          <Panel>
             <PanelBody>
               <Row className="justify-content-center">
                 <Col md="8">
@@ -164,177 +152,21 @@ export class EspecialidadeOperadoraUpdate extends React.Component<IEspecialidade
                         </AvGroup>
                       ) : null}
                       <Row>
-                        {baseFilters !== 'codTuss' ? (
-                          <Col md="codTuss">
-                            <AvGroup>
-                              <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="codTussLabel" for="especialidade-operadora-codTuss">
-                                    <Translate contentKey="generadorApp.especialidadeOperadora.codTuss">Cod Tuss</Translate>
-                                  </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField id="especialidade-operadora-codTuss" type="text" name="codTuss" />
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
-                        ) : (
-                          <AvInput type="hidden" name="codTuss" value={this.state.fieldsBase[baseFilters]} />
-                        )}
+                        <CodTussComponentUpdate baseFilters />
 
-                        {baseFilters !== 'codDespesa' ? (
-                          <Col md="codDespesa">
-                            <AvGroup>
-                              <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="codDespesaLabel" for="especialidade-operadora-codDespesa">
-                                    <Translate contentKey="generadorApp.especialidadeOperadora.codDespesa">Cod Despesa</Translate>
-                                  </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField id="especialidade-operadora-codDespesa" type="text" name="codDespesa" />
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
-                        ) : (
-                          <AvInput type="hidden" name="codDespesa" value={this.state.fieldsBase[baseFilters]} />
-                        )}
+                        <CodDespesaComponentUpdate baseFilters />
 
-                        {baseFilters !== 'codTabela' ? (
-                          <Col md="codTabela">
-                            <AvGroup>
-                              <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="codTabelaLabel" for="especialidade-operadora-codTabela">
-                                    <Translate contentKey="generadorApp.especialidadeOperadora.codTabela">Cod Tabela</Translate>
-                                  </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField id="especialidade-operadora-codTabela" type="text" name="codTabela" />
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
-                        ) : (
-                          <AvInput type="hidden" name="codTabela" value={this.state.fieldsBase[baseFilters]} />
-                        )}
+                        <CodTabelaComponentUpdate baseFilters />
 
-                        {baseFilters !== 'valorCusto' ? (
-                          <Col md="valorCusto">
-                            <AvGroup>
-                              <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="valorCustoLabel" for="especialidade-operadora-valorCusto">
-                                    <Translate contentKey="generadorApp.especialidadeOperadora.valorCusto">Valor Custo</Translate>
-                                  </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField
-                                    id="especialidade-operadora-valorCusto"
-                                    type="string"
-                                    className="form-control"
-                                    name="valorCusto"
-                                  />
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
-                        ) : (
-                          <AvInput type="hidden" name="valorCusto" value={this.state.fieldsBase[baseFilters]} />
-                        )}
+                        <ValorCustoComponentUpdate baseFilters />
 
-                        {baseFilters !== 'valorVenda' ? (
-                          <Col md="valorVenda">
-                            <AvGroup>
-                              <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="valorVendaLabel" for="especialidade-operadora-valorVenda">
-                                    <Translate contentKey="generadorApp.especialidadeOperadora.valorVenda">Valor Venda</Translate>
-                                  </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField
-                                    id="especialidade-operadora-valorVenda"
-                                    type="string"
-                                    className="form-control"
-                                    name="valorVenda"
-                                  />
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
-                        ) : (
-                          <AvInput type="hidden" name="valorVenda" value={this.state.fieldsBase[baseFilters]} />
-                        )}
+                        <ValorVendaComponentUpdate baseFilters />
 
-                        {baseFilters !== 'descontoCusto' ? (
-                          <Col md="descontoCusto">
-                            <AvGroup>
-                              <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="descontoCustoLabel" for="especialidade-operadora-descontoCusto">
-                                    <Translate contentKey="generadorApp.especialidadeOperadora.descontoCusto">Desconto Custo</Translate>
-                                  </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField
-                                    id="especialidade-operadora-descontoCusto"
-                                    type="string"
-                                    className="form-control"
-                                    name="descontoCusto"
-                                  />
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
-                        ) : (
-                          <AvInput type="hidden" name="descontoCusto" value={this.state.fieldsBase[baseFilters]} />
-                        )}
+                        <DescontoCustoComponentUpdate baseFilters />
 
-                        {baseFilters !== 'descontoVenda' ? (
-                          <Col md="descontoVenda">
-                            <AvGroup>
-                              <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="descontoVendaLabel" for="especialidade-operadora-descontoVenda">
-                                    <Translate contentKey="generadorApp.especialidadeOperadora.descontoVenda">Desconto Venda</Translate>
-                                  </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField
-                                    id="especialidade-operadora-descontoVenda"
-                                    type="string"
-                                    className="form-control"
-                                    name="descontoVenda"
-                                  />
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
-                        ) : (
-                          <AvInput type="hidden" name="descontoVenda" value={this.state.fieldsBase[baseFilters]} />
-                        )}
+                        <DescontoVendaComponentUpdate baseFilters />
 
-                        {baseFilters !== 'ativo' ? (
-                          <Col md="ativo">
-                            <AvGroup>
-                              <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="ativoLabel" for="especialidade-operadora-ativo">
-                                    <Translate contentKey="generadorApp.especialidadeOperadora.ativo">Ativo</Translate>
-                                  </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField id="especialidade-operadora-ativo" type="string" className="form-control" name="ativo" />
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
-                        ) : (
-                          <AvInput type="hidden" name="ativo" value={this.state.fieldsBase[baseFilters]} />
-                        )}
+                        <AtivoComponentUpdate baseFilters />
                       </Row>
                     </div>
                   )}
@@ -364,5 +196,173 @@ const mapDispatchToProps = {
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
+
+const CodTussComponentUpdate = ({ baseFilters }) => {
+  return baseFilters !== 'codTuss' ? (
+    <Col md="codTuss">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" id="codTussLabel" for="especialidade-operadora-codTuss">
+              <Translate contentKey="generadorApp.especialidadeOperadora.codTuss">Cod Tuss</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <AvField id="especialidade-operadora-codTuss" type="text" name="codTuss" />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="codTuss" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const CodDespesaComponentUpdate = ({ baseFilters }) => {
+  return baseFilters !== 'codDespesa' ? (
+    <Col md="codDespesa">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" id="codDespesaLabel" for="especialidade-operadora-codDespesa">
+              <Translate contentKey="generadorApp.especialidadeOperadora.codDespesa">Cod Despesa</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <AvField id="especialidade-operadora-codDespesa" type="text" name="codDespesa" />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="codDespesa" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const CodTabelaComponentUpdate = ({ baseFilters }) => {
+  return baseFilters !== 'codTabela' ? (
+    <Col md="codTabela">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" id="codTabelaLabel" for="especialidade-operadora-codTabela">
+              <Translate contentKey="generadorApp.especialidadeOperadora.codTabela">Cod Tabela</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <AvField id="especialidade-operadora-codTabela" type="text" name="codTabela" />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="codTabela" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const ValorCustoComponentUpdate = ({ baseFilters }) => {
+  return baseFilters !== 'valorCusto' ? (
+    <Col md="valorCusto">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" id="valorCustoLabel" for="especialidade-operadora-valorCusto">
+              <Translate contentKey="generadorApp.especialidadeOperadora.valorCusto">Valor Custo</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <AvField id="especialidade-operadora-valorCusto" type="string" className="form-control" name="valorCusto" />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="valorCusto" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const ValorVendaComponentUpdate = ({ baseFilters }) => {
+  return baseFilters !== 'valorVenda' ? (
+    <Col md="valorVenda">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" id="valorVendaLabel" for="especialidade-operadora-valorVenda">
+              <Translate contentKey="generadorApp.especialidadeOperadora.valorVenda">Valor Venda</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <AvField id="especialidade-operadora-valorVenda" type="string" className="form-control" name="valorVenda" />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="valorVenda" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const DescontoCustoComponentUpdate = ({ baseFilters }) => {
+  return baseFilters !== 'descontoCusto' ? (
+    <Col md="descontoCusto">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" id="descontoCustoLabel" for="especialidade-operadora-descontoCusto">
+              <Translate contentKey="generadorApp.especialidadeOperadora.descontoCusto">Desconto Custo</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <AvField id="especialidade-operadora-descontoCusto" type="string" className="form-control" name="descontoCusto" />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="descontoCusto" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const DescontoVendaComponentUpdate = ({ baseFilters }) => {
+  return baseFilters !== 'descontoVenda' ? (
+    <Col md="descontoVenda">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" id="descontoVendaLabel" for="especialidade-operadora-descontoVenda">
+              <Translate contentKey="generadorApp.especialidadeOperadora.descontoVenda">Desconto Venda</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <AvField id="especialidade-operadora-descontoVenda" type="string" className="form-control" name="descontoVenda" />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="descontoVenda" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const AtivoComponentUpdate = ({ baseFilters }) => {
+  return baseFilters !== 'ativo' ? (
+    <Col md="ativo">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" id="ativoLabel" for="especialidade-operadora-ativo">
+              <Translate contentKey="generadorApp.especialidadeOperadora.ativo">Ativo</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <AvField id="especialidade-operadora-ativo" type="string" className="form-control" name="ativo" />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="ativo" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(EspecialidadeOperadoraUpdate);

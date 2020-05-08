@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import Select from 'react-select';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 import { Button, Row, Col, Label } from 'reactstrap';
@@ -48,27 +49,18 @@ export class IndicadoresValoresUpdate extends React.Component<IIndicadoresValore
 
   getFiltersURL = (offset = null) => {
     const fieldsBase = this.state.fieldsBase;
-    return (
-      '_back=1' +
-      (fieldsBase['baseFilters'] ? '&baseFilters=' + fieldsBase['baseFilters'] : '') +
-      (fieldsBase['activePage'] ? '&page=' + fieldsBase['activePage'] : '') +
-      (fieldsBase['itemsPerPage'] ? '&size=' + fieldsBase['itemsPerPage'] : '') +
-      (fieldsBase['sort'] ? '&sort=' + (fieldsBase['sort'] + ',' + fieldsBase['order']) : '') +
-      (offset !== null ? '&offset=' + offset : '') +
-      (fieldsBase['sexo'] ? '&sexo=' + fieldsBase['sexo'] : '') +
-      (fieldsBase['vlMinimo'] ? '&vlMinimo=' + fieldsBase['vlMinimo'] : '') +
-      (fieldsBase['vlMaximo'] ? '&vlMaximo=' + fieldsBase['vlMaximo'] : '') +
-      (fieldsBase['unidadeMedida'] ? '&unidadeMedida=' + fieldsBase['unidadeMedida'] : '') +
-      (fieldsBase['idadeMinima'] ? '&idadeMinima=' + fieldsBase['idadeMinima'] : '') +
-      (fieldsBase['idadeMaxima'] ? '&idadeMaxima=' + fieldsBase['idadeMaxima'] : '') +
-      ''
-    );
+    let url = '_back=1' + (offset !== null ? '&offset=' + offset : '');
+    Object.keys(fieldsBase).map(key => {
+      url += '&' + key + '=' + fieldsBase[key];
+    });
+    return url;
   };
   saveEntity = (event: any, errors: any, values: any) => {
     if (errors.length === 0) {
       const { indicadoresValoresEntity } = this.props;
       const entity = {
         ...indicadoresValoresEntity,
+
         ...values
       };
 
@@ -91,14 +83,6 @@ export class IndicadoresValoresUpdate extends React.Component<IIndicadoresValore
     const baseFilters = this.state.fieldsBase && this.state.fieldsBase['baseFilters'] ? this.state.fieldsBase['baseFilters'] : null;
     return (
       <div>
-        <ol className="breadcrumb float-xl-right">
-          <li className="breadcrumb-item">
-            <Link to="/">Inicio</Link>
-          </li>
-          <li className="breadcrumb-item active">Indicadores Valores</li>
-          <li className="breadcrumb-item active">Indicadores Valores edit</li>
-        </ol>
-        <h1 className="page-header">&nbsp;&nbsp;</h1>
         <AvForm
           model={
             isNew
@@ -109,36 +93,40 @@ export class IndicadoresValoresUpdate extends React.Component<IIndicadoresValore
           }
           onSubmit={this.saveEntity}
         >
-          <Panel>
-            <PanelHeader>
-              <h2 id="page-heading">
-                <span className="page-header ml-3">
-                  <Translate contentKey="generadorApp.indicadoresValores.home.createOrEditLabel">
-                    Create or edit a IndicadoresValores
-                  </Translate>
-                </span>
+          <h2 id="page-heading">
+            <span className="page-header ml-3">
+              <Translate contentKey="generadorApp.indicadoresValores.home.createOrEditLabel">Create or edit a IndicadoresValores</Translate>
+            </span>
 
-                <Button color="primary" id="save-entity" type="submit" disabled={updating} className="float-right jh-create-entity">
-                  <FontAwesomeIcon icon="save" />
-                  &nbsp;
-                  <Translate contentKey="entity.action.save">Save</Translate>
-                </Button>
-                <Button
-                  tag={Link}
-                  id="cancel-save"
-                  to={'/indicadores-valores?' + this.getFiltersURL()}
-                  replace
-                  color="info"
-                  className="float-right jh-create-entity"
-                >
-                  <FontAwesomeIcon icon="arrow-left" />
-                  &nbsp;
-                  <span className="d-none d-md-inline">
-                    <Translate contentKey="entity.action.back">Back</Translate>
-                  </span>
-                </Button>
-              </h2>
-            </PanelHeader>
+            <Button color="primary" id="save-entity" type="submit" disabled={updating} className="float-right jh-create-entity">
+              <FontAwesomeIcon icon="save" />
+              &nbsp;
+              <Translate contentKey="entity.action.save">Save</Translate>
+            </Button>
+            <Button
+              tag={Link}
+              id="cancel-save"
+              to={'/indicadores-valores?' + this.getFiltersURL()}
+              replace
+              color="info"
+              className="float-right jh-create-entity"
+            >
+              <FontAwesomeIcon icon="arrow-left" />
+              &nbsp;
+              <span className="d-none d-md-inline">
+                <Translate contentKey="entity.action.back">Back</Translate>
+              </span>
+            </Button>
+          </h2>
+          <ol className="breadcrumb">
+            <li className="breadcrumb-item">
+              <Link to="/">Inicio</Link>
+            </li>
+            <li className="breadcrumb-item active">Indicadores Valores</li>
+            <li className="breadcrumb-item active">Indicadores Valores edit</li>
+          </ol>
+
+          <Panel>
             <PanelBody>
               <Row className="justify-content-center">
                 <Col md="8">
@@ -162,119 +150,17 @@ export class IndicadoresValoresUpdate extends React.Component<IIndicadoresValore
                         </AvGroup>
                       ) : null}
                       <Row>
-                        {baseFilters !== 'sexo' ? (
-                          <Col md="sexo">
-                            <AvGroup>
-                              <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="sexoLabel" for="indicadores-valores-sexo">
-                                    <Translate contentKey="generadorApp.indicadoresValores.sexo">Sexo</Translate>
-                                  </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField id="indicadores-valores-sexo" type="text" name="sexo" />
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
-                        ) : (
-                          <AvInput type="hidden" name="sexo" value={this.state.fieldsBase[baseFilters]} />
-                        )}
+                        <SexoComponentUpdate baseFilters />
 
-                        {baseFilters !== 'vlMinimo' ? (
-                          <Col md="vlMinimo">
-                            <AvGroup>
-                              <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="vlMinimoLabel" for="indicadores-valores-vlMinimo">
-                                    <Translate contentKey="generadorApp.indicadoresValores.vlMinimo">Vl Minimo</Translate>
-                                  </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField id="indicadores-valores-vlMinimo" type="text" name="vlMinimo" />
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
-                        ) : (
-                          <AvInput type="hidden" name="vlMinimo" value={this.state.fieldsBase[baseFilters]} />
-                        )}
+                        <VlMinimoComponentUpdate baseFilters />
 
-                        {baseFilters !== 'vlMaximo' ? (
-                          <Col md="vlMaximo">
-                            <AvGroup>
-                              <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="vlMaximoLabel" for="indicadores-valores-vlMaximo">
-                                    <Translate contentKey="generadorApp.indicadoresValores.vlMaximo">Vl Maximo</Translate>
-                                  </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField id="indicadores-valores-vlMaximo" type="text" name="vlMaximo" />
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
-                        ) : (
-                          <AvInput type="hidden" name="vlMaximo" value={this.state.fieldsBase[baseFilters]} />
-                        )}
+                        <VlMaximoComponentUpdate baseFilters />
 
-                        {baseFilters !== 'unidadeMedida' ? (
-                          <Col md="unidadeMedida">
-                            <AvGroup>
-                              <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="unidadeMedidaLabel" for="indicadores-valores-unidadeMedida">
-                                    <Translate contentKey="generadorApp.indicadoresValores.unidadeMedida">Unidade Medida</Translate>
-                                  </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField id="indicadores-valores-unidadeMedida" type="text" name="unidadeMedida" />
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
-                        ) : (
-                          <AvInput type="hidden" name="unidadeMedida" value={this.state.fieldsBase[baseFilters]} />
-                        )}
+                        <UnidadeMedidaComponentUpdate baseFilters />
 
-                        {baseFilters !== 'idadeMinima' ? (
-                          <Col md="idadeMinima">
-                            <AvGroup>
-                              <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="idadeMinimaLabel" for="indicadores-valores-idadeMinima">
-                                    <Translate contentKey="generadorApp.indicadoresValores.idadeMinima">Idade Minima</Translate>
-                                  </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField id="indicadores-valores-idadeMinima" type="text" name="idadeMinima" />
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
-                        ) : (
-                          <AvInput type="hidden" name="idadeMinima" value={this.state.fieldsBase[baseFilters]} />
-                        )}
+                        <IdadeMinimaComponentUpdate baseFilters />
 
-                        {baseFilters !== 'idadeMaxima' ? (
-                          <Col md="idadeMaxima">
-                            <AvGroup>
-                              <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="idadeMaximaLabel" for="indicadores-valores-idadeMaxima">
-                                    <Translate contentKey="generadorApp.indicadoresValores.idadeMaxima">Idade Maxima</Translate>
-                                  </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField id="indicadores-valores-idadeMaxima" type="text" name="idadeMaxima" />
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
-                        ) : (
-                          <AvInput type="hidden" name="idadeMaxima" value={this.state.fieldsBase[baseFilters]} />
-                        )}
+                        <IdadeMaximaComponentUpdate baseFilters />
                       </Row>
                     </div>
                   )}
@@ -304,5 +190,131 @@ const mapDispatchToProps = {
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
+
+const SexoComponentUpdate = ({ baseFilters }) => {
+  return baseFilters !== 'sexo' ? (
+    <Col md="sexo">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" id="sexoLabel" for="indicadores-valores-sexo">
+              <Translate contentKey="generadorApp.indicadoresValores.sexo">Sexo</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <AvField id="indicadores-valores-sexo" type="text" name="sexo" />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="sexo" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const VlMinimoComponentUpdate = ({ baseFilters }) => {
+  return baseFilters !== 'vlMinimo' ? (
+    <Col md="vlMinimo">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" id="vlMinimoLabel" for="indicadores-valores-vlMinimo">
+              <Translate contentKey="generadorApp.indicadoresValores.vlMinimo">Vl Minimo</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <AvField id="indicadores-valores-vlMinimo" type="text" name="vlMinimo" />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="vlMinimo" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const VlMaximoComponentUpdate = ({ baseFilters }) => {
+  return baseFilters !== 'vlMaximo' ? (
+    <Col md="vlMaximo">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" id="vlMaximoLabel" for="indicadores-valores-vlMaximo">
+              <Translate contentKey="generadorApp.indicadoresValores.vlMaximo">Vl Maximo</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <AvField id="indicadores-valores-vlMaximo" type="text" name="vlMaximo" />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="vlMaximo" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const UnidadeMedidaComponentUpdate = ({ baseFilters }) => {
+  return baseFilters !== 'unidadeMedida' ? (
+    <Col md="unidadeMedida">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" id="unidadeMedidaLabel" for="indicadores-valores-unidadeMedida">
+              <Translate contentKey="generadorApp.indicadoresValores.unidadeMedida">Unidade Medida</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <AvField id="indicadores-valores-unidadeMedida" type="text" name="unidadeMedida" />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="unidadeMedida" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const IdadeMinimaComponentUpdate = ({ baseFilters }) => {
+  return baseFilters !== 'idadeMinima' ? (
+    <Col md="idadeMinima">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" id="idadeMinimaLabel" for="indicadores-valores-idadeMinima">
+              <Translate contentKey="generadorApp.indicadoresValores.idadeMinima">Idade Minima</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <AvField id="indicadores-valores-idadeMinima" type="text" name="idadeMinima" />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="idadeMinima" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const IdadeMaximaComponentUpdate = ({ baseFilters }) => {
+  return baseFilters !== 'idadeMaxima' ? (
+    <Col md="idadeMaxima">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" id="idadeMaximaLabel" for="indicadores-valores-idadeMaxima">
+              <Translate contentKey="generadorApp.indicadoresValores.idadeMaxima">Idade Maxima</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <AvField id="indicadores-valores-idadeMaxima" type="text" name="idadeMaxima" />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="idadeMaxima" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(IndicadoresValoresUpdate);

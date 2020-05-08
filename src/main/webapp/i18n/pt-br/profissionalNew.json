@@ -1,8 +1,14 @@
 {
   "generadorApp": {
     "profissionalNew": {
+      "listButtons": {},
+      "viewButtons": {},
+      "dropdown_btn": "Actions",
       "home": {
         "title": "Profissional News",
+        "btn_filter": "Filtrar",
+        "btn_filter_clean": "Limpar Filtros",
+        "btn_filter_open": "Filtros",
         "createLabel": "Criar novo Profissional New",
         "createOrEditLabel": "Criar ou editar Profissional New",
         "notFound": "Nenhum Profissional New encontrado"
@@ -49,6 +55,7 @@
       "obs": "Obs",
       "chavePrivada": "Chave Privada",
       "ativo": "Ativo",
+      "unidade_empty": "Sem Unidade",
       "unidade": "Unidade",
       "help": {}
     }

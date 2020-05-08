@@ -1,8 +1,14 @@
 {
   "generadorApp": {
     "usuarioStatusAtual": {
+      "listButtons": {},
+      "viewButtons": {},
+      "dropdown_btn": "Ações",
       "home": {
         "title": "Usuario Status Atuals",
+        "btn_filter": "Filter",
+        "btn_filter_clean": "Clean Filters",
+        "btn_filter_open": "Filters",
         "createLabel": "Create a new Usuario Status Atual",
         "createOrEditLabel": "Create or edit a Usuario Status Atual",
         "notFound": "No Usuario Status Atuals found"

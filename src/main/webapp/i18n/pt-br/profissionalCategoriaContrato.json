@@ -1,8 +1,14 @@
 {
   "generadorApp": {
     "profissionalCategoriaContrato": {
+      "listButtons": {},
+      "viewButtons": {},
+      "dropdown_btn": "Actions",
       "home": {
         "title": "Profissional Categoria Contratoes",
+        "btn_filter": "Filtrar",
+        "btn_filter_clean": "Limpar Filtros",
+        "btn_filter_open": "Filtros",
         "createLabel": "Criar novo Profissional Categoria Contrato",
         "createOrEditLabel": "Criar ou editar Profissional Categoria Contrato",
         "notFound": "Nenhum Profissional Categoria Contrato encontrado"

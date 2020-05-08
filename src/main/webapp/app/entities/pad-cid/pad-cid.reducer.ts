@@ -39,6 +39,7 @@ export interface IPadCidBaseState {
 
 export interface IPadCidUpdateState {
   fieldsBase: IPadCidBaseState;
+
   isNew: boolean;
 }
 

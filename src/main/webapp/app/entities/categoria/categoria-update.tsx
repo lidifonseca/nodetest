@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import Select from 'react-select';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 import { Button, Row, Col, Label } from 'reactstrap';
@@ -30,6 +31,7 @@ export class CategoriaUpdate extends React.Component<ICategoriaUpdateProps, ICat
     super(props);
 
     this.state = {
+      unidadeEasySelectValue: null,
       fieldsBase: getCategoriaState(this.props.location),
       idsunidade: [],
       isNew: !this.props.match.params || !this.props.match.params.id
@@ -38,6 +40,19 @@ export class CategoriaUpdate extends React.Component<ICategoriaUpdateProps, ICat
   componentDidUpdate(nextProps, nextState) {
     if (nextProps.updateSuccess !== this.props.updateSuccess && nextProps.updateSuccess) {
       this.handleClose();
+    }
+
+    if (
+      nextProps.unidadeEasies.length > 0 &&
+      this.state.unidadeEasySelectValue === null &&
+      nextProps.categoriaEntity.unidadeEasy &&
+      nextProps.categoriaEntity.unidadeEasy.id
+    ) {
+      this.setState({
+        unidadeEasySelectValue: nextProps.unidadeEasies.map(p =>
+          nextProps.categoriaEntity.unidadeEasy.id === p.id ? { value: p.id, label: p.razaoSocial } : null
+        )
+      });
     }
   }
 
@@ -53,28 +68,18 @@ export class CategoriaUpdate extends React.Component<ICategoriaUpdateProps, ICat
 
   getFiltersURL = (offset = null) => {
     const fieldsBase = this.state.fieldsBase;
-    return (
-      '_back=1' +
-      (fieldsBase['baseFilters'] ? '&baseFilters=' + fieldsBase['baseFilters'] : '') +
-      (fieldsBase['activePage'] ? '&page=' + fieldsBase['activePage'] : '') +
-      (fieldsBase['itemsPerPage'] ? '&size=' + fieldsBase['itemsPerPage'] : '') +
-      (fieldsBase['sort'] ? '&sort=' + (fieldsBase['sort'] + ',' + fieldsBase['order']) : '') +
-      (offset !== null ? '&offset=' + offset : '') +
-      (fieldsBase['categoria'] ? '&categoria=' + fieldsBase['categoria'] : '') +
-      (fieldsBase['styleCategoria'] ? '&styleCategoria=' + fieldsBase['styleCategoria'] : '') +
-      (fieldsBase['icon'] ? '&icon=' + fieldsBase['icon'] : '') +
-      (fieldsBase['publicar'] ? '&publicar=' + fieldsBase['publicar'] : '') +
-      (fieldsBase['ordem'] ? '&ordem=' + fieldsBase['ordem'] : '') +
-      (fieldsBase['publicarSite'] ? '&publicarSite=' + fieldsBase['publicarSite'] : '') +
-      (fieldsBase['unidade'] ? '&unidade=' + fieldsBase['unidade'] : '') +
-      ''
-    );
+    let url = '_back=1' + (offset !== null ? '&offset=' + offset : '');
+    Object.keys(fieldsBase).map(key => {
+      url += '&' + key + '=' + fieldsBase[key];
+    });
+    return url;
   };
   saveEntity = (event: any, errors: any, values: any) => {
     if (errors.length === 0) {
       const { categoriaEntity } = this.props;
       const entity = {
         ...categoriaEntity,
+        unidadeEasy: this.state.unidadeEasySelectValue ? this.state.unidadeEasySelectValue['value'] : null,
         ...values,
         unidades: mapIdList(values.unidades)
       };
@@ -98,14 +103,6 @@ export class CategoriaUpdate extends React.Component<ICategoriaUpdateProps, ICat
     const baseFilters = this.state.fieldsBase && this.state.fieldsBase['baseFilters'] ? this.state.fieldsBase['baseFilters'] : null;
     return (
       <div>
-        <ol className="breadcrumb float-xl-right">
-          <li className="breadcrumb-item">
-            <Link to="/">Inicio</Link>
-          </li>
-          <li className="breadcrumb-item active">Categorias</li>
-          <li className="breadcrumb-item active">Categorias edit</li>
-        </ol>
-        <h1 className="page-header">&nbsp;&nbsp;</h1>
         <AvForm
           model={
             isNew
@@ -116,34 +113,40 @@ export class CategoriaUpdate extends React.Component<ICategoriaUpdateProps, ICat
           }
           onSubmit={this.saveEntity}
         >
-          <Panel>
-            <PanelHeader>
-              <h2 id="page-heading">
-                <span className="page-header ml-3">
-                  <Translate contentKey="generadorApp.categoria.home.createOrEditLabel">Create or edit a Categoria</Translate>
-                </span>
+          <h2 id="page-heading">
+            <span className="page-header ml-3">
+              <Translate contentKey="generadorApp.categoria.home.createOrEditLabel">Create or edit a Categoria</Translate>
+            </span>
 
-                <Button color="primary" id="save-entity" type="submit" disabled={updating} className="float-right jh-create-entity">
-                  <FontAwesomeIcon icon="save" />
-                  &nbsp;
-                  <Translate contentKey="entity.action.save">Save</Translate>
-                </Button>
-                <Button
-                  tag={Link}
-                  id="cancel-save"
-                  to={'/categoria?' + this.getFiltersURL()}
-                  replace
-                  color="info"
-                  className="float-right jh-create-entity"
-                >
-                  <FontAwesomeIcon icon="arrow-left" />
-                  &nbsp;
-                  <span className="d-none d-md-inline">
-                    <Translate contentKey="entity.action.back">Back</Translate>
-                  </span>
-                </Button>
-              </h2>
-            </PanelHeader>
+            <Button color="primary" id="save-entity" type="submit" disabled={updating} className="float-right jh-create-entity">
+              <FontAwesomeIcon icon="save" />
+              &nbsp;
+              <Translate contentKey="entity.action.save">Save</Translate>
+            </Button>
+            <Button
+              tag={Link}
+              id="cancel-save"
+              to={'/categoria?' + this.getFiltersURL()}
+              replace
+              color="info"
+              className="float-right jh-create-entity"
+            >
+              <FontAwesomeIcon icon="arrow-left" />
+              &nbsp;
+              <span className="d-none d-md-inline">
+                <Translate contentKey="entity.action.back">Back</Translate>
+              </span>
+            </Button>
+          </h2>
+          <ol className="breadcrumb">
+            <li className="breadcrumb-item">
+              <Link to="/">Inicio</Link>
+            </li>
+            <li className="breadcrumb-item active">Categorias</li>
+            <li className="breadcrumb-item active">Categorias edit</li>
+          </ol>
+
+          <Panel>
             <PanelBody>
               <Row className="justify-content-center">
                 <Col md="8">
@@ -167,155 +170,19 @@ export class CategoriaUpdate extends React.Component<ICategoriaUpdateProps, ICat
                         </AvGroup>
                       ) : null}
                       <Row>
-                        {baseFilters !== 'categoria' ? (
-                          <Col md="categoria">
-                            <AvGroup>
-                              <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="categoriaLabel" for="categoria-categoria">
-                                    <Translate contentKey="generadorApp.categoria.categoria">Categoria</Translate>
-                                  </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField id="categoria-categoria" type="text" name="categoria" />
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
-                        ) : (
-                          <AvInput type="hidden" name="categoria" value={this.state.fieldsBase[baseFilters]} />
-                        )}
+                        <CategoriaComponentUpdate baseFilters />
 
-                        {baseFilters !== 'styleCategoria' ? (
-                          <Col md="styleCategoria">
-                            <AvGroup>
-                              <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="styleCategoriaLabel" for="categoria-styleCategoria">
-                                    <Translate contentKey="generadorApp.categoria.styleCategoria">Style Categoria</Translate>
-                                  </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField id="categoria-styleCategoria" type="text" name="styleCategoria" />
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
-                        ) : (
-                          <AvInput type="hidden" name="styleCategoria" value={this.state.fieldsBase[baseFilters]} />
-                        )}
+                        <StyleCategoriaComponentUpdate baseFilters />
 
-                        {baseFilters !== 'icon' ? (
-                          <Col md="icon">
-                            <AvGroup>
-                              <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="iconLabel" for="categoria-icon">
-                                    <Translate contentKey="generadorApp.categoria.icon">Icon</Translate>
-                                  </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField id="categoria-icon" type="text" name="icon" />
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
-                        ) : (
-                          <AvInput type="hidden" name="icon" value={this.state.fieldsBase[baseFilters]} />
-                        )}
+                        <IconComponentUpdate baseFilters />
 
-                        {baseFilters !== 'publicar' ? (
-                          <Col md="publicar">
-                            <AvGroup>
-                              <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="publicarLabel" for="categoria-publicar">
-                                    <Translate contentKey="generadorApp.categoria.publicar">Publicar</Translate>
-                                  </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField id="categoria-publicar" type="string" className="form-control" name="publicar" />
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
-                        ) : (
-                          <AvInput type="hidden" name="publicar" value={this.state.fieldsBase[baseFilters]} />
-                        )}
+                        <PublicarComponentUpdate baseFilters />
 
-                        {baseFilters !== 'ordem' ? (
-                          <Col md="ordem">
-                            <AvGroup>
-                              <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="ordemLabel" for="categoria-ordem">
-                                    <Translate contentKey="generadorApp.categoria.ordem">Ordem</Translate>
-                                  </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField id="categoria-ordem" type="string" className="form-control" name="ordem" />
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
-                        ) : (
-                          <AvInput type="hidden" name="ordem" value={this.state.fieldsBase[baseFilters]} />
-                        )}
+                        <OrdemComponentUpdate baseFilters />
 
-                        {baseFilters !== 'publicarSite' ? (
-                          <Col md="publicarSite">
-                            <AvGroup>
-                              <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="publicarSiteLabel" for="categoria-publicarSite">
-                                    <Translate contentKey="generadorApp.categoria.publicarSite">Publicar Site</Translate>
-                                  </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField id="categoria-publicarSite" type="string" className="form-control" name="publicarSite" />
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
-                        ) : (
-                          <AvInput type="hidden" name="publicarSite" value={this.state.fieldsBase[baseFilters]} />
-                        )}
-                        {baseFilters !== 'unidade' ? (
-                          <Col md="12">
-                            <AvGroup>
-                              <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" for="categoria-unidade">
-                                    <Translate contentKey="generadorApp.categoria.unidade">Unidade</Translate>
-                                  </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvInput
-                                    id="categoria-unidade"
-                                    type="select"
-                                    multiple
-                                    className="form-control"
-                                    name="unidades"
-                                    value={categoriaEntity.unidades && categoriaEntity.unidades.map(e => e.id)}
-                                  >
-                                    <option value="null" key="0">
-                                      {translate('generadorApp.categoria.unidade.empty')}
-                                    </option>
-                                    {unidadeEasies
-                                      ? unidadeEasies.map(otherEntity => (
-                                          <option value={otherEntity.id} key={otherEntity.id}>
-                                            {otherEntity.razaoSocial}
-                                          </option>
-                                        ))
-                                      : null}
-                                  </AvInput>
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
-                        ) : (
-                          <AvInput type="hidden" name="unidade" value={this.state.fieldsBase[baseFilters]} />
-                        )}
+                        <PublicarSiteComponentUpdate baseFilters />
+
+                        <UnidadeComponentUpdate baseFilter unidadeEasies />
                       </Row>
                     </div>
                   )}
@@ -347,5 +214,183 @@ const mapDispatchToProps = {
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
+
+const CategoriaComponentUpdate = ({ baseFilters }) => {
+  return baseFilters !== 'categoria' ? (
+    <Col md="categoria">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" id="categoriaLabel" for="categoria-categoria">
+              <Translate contentKey="generadorApp.categoria.categoria">Categoria</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <AvField id="categoria-categoria" type="text" name="categoria" />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="categoria" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const StyleCategoriaComponentUpdate = ({ baseFilters }) => {
+  return baseFilters !== 'styleCategoria' ? (
+    <Col md="styleCategoria">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" id="styleCategoriaLabel" for="categoria-styleCategoria">
+              <Translate contentKey="generadorApp.categoria.styleCategoria">Style Categoria</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <AvField id="categoria-styleCategoria" type="text" name="styleCategoria" />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="styleCategoria" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const IconComponentUpdate = ({ baseFilters }) => {
+  return baseFilters !== 'icon' ? (
+    <Col md="icon">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" id="iconLabel" for="categoria-icon">
+              <Translate contentKey="generadorApp.categoria.icon">Icon</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <AvField id="categoria-icon" type="text" name="icon" />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="icon" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const PublicarComponentUpdate = ({ baseFilters }) => {
+  return baseFilters !== 'publicar' ? (
+    <Col md="publicar">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" id="publicarLabel" for="categoria-publicar">
+              <Translate contentKey="generadorApp.categoria.publicar">Publicar</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <AvField id="categoria-publicar" type="string" className="form-control" name="publicar" />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="publicar" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const OrdemComponentUpdate = ({ baseFilters }) => {
+  return baseFilters !== 'ordem' ? (
+    <Col md="ordem">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" id="ordemLabel" for="categoria-ordem">
+              <Translate contentKey="generadorApp.categoria.ordem">Ordem</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <AvField id="categoria-ordem" type="string" className="form-control" name="ordem" />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="ordem" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const PublicarSiteComponentUpdate = ({ baseFilters }) => {
+  return baseFilters !== 'publicarSite' ? (
+    <Col md="publicarSite">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" id="publicarSiteLabel" for="categoria-publicarSite">
+              <Translate contentKey="generadorApp.categoria.publicarSite">Publicar Site</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <AvField id="categoria-publicarSite" type="string" className="form-control" name="publicarSite" />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="publicarSite" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const UnidadeComponentUpdate = ({ baseFilters, unidadeEasies }) => {
+  return baseFilters !== 'unidade' ? (
+    <Col md="12">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" for="categoria-unidade">
+              <Translate contentKey="generadorApp.categoria.unidade">Unidade</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <Select
+              id="categoria-unidade"
+              isMulti
+              className={'css-select-control'}
+              value={
+                unidadeEasies
+                  ? unidadeEasies.map(p => (this.state.categoriaEntity.unidade === p.id ? { value: p.id, label: p.id } : null))
+                  : null
+              }
+              options={unidadeEasies ? unidadeEasies.map(option => ({ value: option.id, label: option.razaoSocial })) : null}
+              onChange={options => this.setState({ unidade: options.map(option => option['value']).join(',') })}
+              name={'unidade'}
+            />
+            <AvInput
+              id="categoria-unidade"
+              type="select"
+              multiple
+              className="form-control"
+              name="unidades"
+              value={categoriaEntity.unidades && categoriaEntity.unidades.map(e => e.id)}
+            >
+              <option value="null" key="0">
+                {translate('generadorApp.categoria.unidade_empty')}
+              </option>
+              {unidadeEasies
+                ? unidadeEasies.map(otherEntity => (
+                    <option value={otherEntity.id} key={otherEntity.id}>
+                      {otherEntity.razaoSocial}
+                    </option>
+                  ))
+                : null}
+            </AvInput>
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="unidade" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(CategoriaUpdate);

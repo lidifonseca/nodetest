@@ -1,8 +1,14 @@
 {
   "generadorApp": {
     "motivoInternacao": {
+      "listButtons": {},
+      "viewButtons": {},
+      "dropdown_btn": "Ações",
       "home": {
         "title": "Motivo Internacaos",
+        "btn_filter": "Filter",
+        "btn_filter_clean": "Clean Filters",
+        "btn_filter_open": "Filters",
         "createLabel": "Create a new Motivo Internacao",
         "createOrEditLabel": "Create or edit a Motivo Internacao",
         "notFound": "No Motivo Internacaos found"

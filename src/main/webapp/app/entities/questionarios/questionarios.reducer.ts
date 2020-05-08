@@ -42,6 +42,8 @@ export interface IQuestionariosBaseState {
 
 export interface IQuestionariosUpdateState {
   fieldsBase: IQuestionariosBaseState;
+
+  pacienteSelectValue: any;
   isNew: boolean;
   pacienteId: string;
 }

@@ -1,8 +1,14 @@
 {
   "generadorApp": {
     "atendimentoAcompanhamentoPush": {
+      "listButtons": {},
+      "viewButtons": {},
+      "dropdown_btn": "Ações",
       "home": {
         "title": "Atendimento Acompanhamento Pushes",
+        "btn_filter": "Filter",
+        "btn_filter_clean": "Clean Filters",
+        "btn_filter_open": "Filters",
         "createLabel": "Create a new Atendimento Acompanhamento Push",
         "createOrEditLabel": "Create or edit a Atendimento Acompanhamento Push",
         "notFound": "No Atendimento Acompanhamento Pushes found"

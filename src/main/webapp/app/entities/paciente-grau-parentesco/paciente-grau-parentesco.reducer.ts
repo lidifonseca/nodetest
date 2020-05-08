@@ -39,6 +39,7 @@ export interface IPacienteGrauParentescoBaseState {
 
 export interface IPacienteGrauParentescoUpdateState {
   fieldsBase: IPacienteGrauParentescoBaseState;
+
   isNew: boolean;
 }
 

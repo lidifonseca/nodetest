@@ -41,6 +41,7 @@ export interface IApiNameBaseState {
 
 export interface IApiNameUpdateState {
   fieldsBase: IApiNameBaseState;
+
   isNew: boolean;
 }
 

@@ -43,7 +43,7 @@
         }
     ],
     "relationships": [],
-    "changelogDate": "20200507104700",
+    "changelogDate": "20200508153700",
     "entityTableName": "cid",
     "dto": "mapstruct",
     "pagination": "pagination",

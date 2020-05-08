@@ -1,8 +1,14 @@
 {
   "generadorApp": {
     "atendimentoSorteioFeito": {
+      "listButtons": {},
+      "viewButtons": {},
+      "dropdown_btn": "Ações",
       "home": {
         "title": "Atendimento Sorteio Feitos",
+        "btn_filter": "Filter",
+        "btn_filter_clean": "Clean Filters",
+        "btn_filter_open": "Filters",
         "createLabel": "Create a new Atendimento Sorteio Feito",
         "createOrEditLabel": "Create or edit a Atendimento Sorteio Feito",
         "notFound": "No Atendimento Sorteio Feitos found"

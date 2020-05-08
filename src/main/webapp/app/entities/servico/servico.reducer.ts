@@ -39,6 +39,7 @@ export interface IServicoBaseState {
 
 export interface IServicoUpdateState {
   fieldsBase: IServicoBaseState;
+
   isNew: boolean;
 }
 

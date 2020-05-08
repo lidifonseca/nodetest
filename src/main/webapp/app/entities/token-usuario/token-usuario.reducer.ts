@@ -40,6 +40,7 @@ export interface ITokenUsuarioBaseState {
 
 export interface ITokenUsuarioUpdateState {
   fieldsBase: ITokenUsuarioBaseState;
+
   isNew: boolean;
 }
 

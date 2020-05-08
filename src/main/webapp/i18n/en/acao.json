@@ -1,8 +1,14 @@
 {
   "generadorApp": {
     "acao": {
+      "listButtons": {},
+      "viewButtons": {},
+      "dropdown_btn": "Ações",
       "home": {
         "title": "Acaos",
+        "btn_filter": "Filter",
+        "btn_filter_clean": "Clean Filters",
+        "btn_filter_open": "Filters",
         "createLabel": "Create a new Acao",
         "createOrEditLabel": "Create or edit a Acao",
         "notFound": "No Acaos found"

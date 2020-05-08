@@ -1,8 +1,14 @@
 {
   "generadorApp": {
     "usuarioPanico": {
+      "listButtons": {},
+      "viewButtons": {},
+      "dropdown_btn": "Ações",
       "home": {
         "title": "Usuario Panicos",
+        "btn_filter": "Filter",
+        "btn_filter_clean": "Clean Filters",
+        "btn_filter_open": "Filters",
         "createLabel": "Create a new Usuario Panico",
         "createOrEditLabel": "Create or edit a Usuario Panico",
         "notFound": "No Usuario Panicos found"

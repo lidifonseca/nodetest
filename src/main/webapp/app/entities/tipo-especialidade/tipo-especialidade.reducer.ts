@@ -38,6 +38,7 @@ export interface ITipoEspecialidadeBaseState {
 
 export interface ITipoEspecialidadeUpdateState {
   fieldsBase: ITipoEspecialidadeBaseState;
+
   isNew: boolean;
 }
 

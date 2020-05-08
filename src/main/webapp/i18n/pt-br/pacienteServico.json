@@ -1,8 +1,14 @@
 {
   "generadorApp": {
     "pacienteServico": {
+      "listButtons": {},
+      "viewButtons": {},
+      "dropdown_btn": "Actions",
       "home": {
         "title": "Paciente Servicos",
+        "btn_filter": "Filtrar",
+        "btn_filter_clean": "Limpar Filtros",
+        "btn_filter_open": "Filtros",
         "createLabel": "Criar novo Paciente Servico",
         "createOrEditLabel": "Criar ou editar Paciente Servico",
         "notFound": "Nenhum Paciente Servico encontrado"

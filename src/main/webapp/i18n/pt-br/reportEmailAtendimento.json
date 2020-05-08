@@ -1,8 +1,14 @@
 {
   "generadorApp": {
     "reportEmailAtendimento": {
+      "listButtons": {},
+      "viewButtons": {},
+      "dropdown_btn": "Actions",
       "home": {
         "title": "Report Email Atendimentos",
+        "btn_filter": "Filtrar",
+        "btn_filter_clean": "Limpar Filtros",
+        "btn_filter_open": "Filtros",
         "createLabel": "Criar novo Report Email Atendimento",
         "createOrEditLabel": "Criar ou editar Report Email Atendimento",
         "notFound": "Nenhum Report Email Atendimento encontrado"

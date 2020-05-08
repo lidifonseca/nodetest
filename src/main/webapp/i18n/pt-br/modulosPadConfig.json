@@ -1,8 +1,14 @@
 {
   "generadorApp": {
     "modulosPadConfig": {
+      "listButtons": {},
+      "viewButtons": {},
+      "dropdown_btn": "Actions",
       "home": {
         "title": "Modulos Pad Configs",
+        "btn_filter": "Filtrar",
+        "btn_filter_clean": "Limpar Filtros",
+        "btn_filter_open": "Filtros",
         "createLabel": "Criar novo Modulos Pad Config",
         "createOrEditLabel": "Criar ou editar Modulos Pad Config",
         "notFound": "Nenhum Modulos Pad Config encontrado"

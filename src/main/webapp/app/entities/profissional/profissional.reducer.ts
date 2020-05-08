@@ -76,6 +76,8 @@ export interface IProfissionalBaseState {
 
 export interface IProfissionalUpdateState {
   fieldsBase: IProfissionalBaseState;
+
+  unidadeEasySelectValue: any;
   isNew: boolean;
   unidadeId: string;
 }

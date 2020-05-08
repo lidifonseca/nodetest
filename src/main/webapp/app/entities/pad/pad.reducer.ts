@@ -49,6 +49,8 @@ export interface IPadBaseState {
 
 export interface IPadUpdateState {
   fieldsBase: IPadBaseState;
+
+  unidadeEasySelectValue: any;
   isNew: boolean;
   unidadeId: string;
 }

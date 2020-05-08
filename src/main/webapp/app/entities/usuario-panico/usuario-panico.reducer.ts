@@ -42,6 +42,7 @@ export interface IUsuarioPanicoBaseState {
 
 export interface IUsuarioPanicoUpdateState {
   fieldsBase: IUsuarioPanicoBaseState;
+
   isNew: boolean;
 }
 

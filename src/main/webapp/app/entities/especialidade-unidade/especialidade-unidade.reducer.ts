@@ -43,6 +43,8 @@ export interface IEspecialidadeUnidadeBaseState {
 
 export interface IEspecialidadeUnidadeUpdateState {
   fieldsBase: IEspecialidadeUnidadeBaseState;
+
+  unidadeEasySelectValue: any;
   isNew: boolean;
   unidadeId: string;
 }

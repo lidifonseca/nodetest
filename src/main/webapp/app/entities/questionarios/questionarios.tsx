@@ -2,6 +2,7 @@
 import React from 'react';
 import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
 import { connect } from 'react-redux';
+import Select from 'react-select';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import {
   Button,
@@ -153,32 +154,33 @@ export class Questionarios extends React.Component<IQuestionariosProps, IQuestio
     const { pacientes, questionariosList, match, totalItems } = this.props;
     return (
       <div>
-        <ol className="breadcrumb float-xl-right">
+        <h2 id="page-heading">
+          <span className="page-header">Questionarios</span>
+          <Button id="togglerFilterQuestionarios" className="btn btn-primary float-right jh-create-entity">
+            <Translate contentKey="generadorApp.questionarios.home.btn_filter_open">Filters</Translate>
+            &nbsp;
+            <FontAwesomeIcon icon="caret-down" />
+          </Button>{' '}
+          &nbsp;
+          <Link
+            to={`${match.url}/new?${this.getFiltersURL()}`}
+            className="btn btn-primary float-right jh-create-entity"
+            id="jh-create-entity"
+          >
+            <FontAwesomeIcon icon="plus" />
+            &nbsp;
+            <Translate contentKey="generadorApp.questionarios.home.createLabel">Create a new Questionarios</Translate>
+          </Link>{' '}
+          &nbsp;
+        </h2>
+
+        <ol className="breadcrumb">
           <li className="breadcrumb-item">
             <Link to="/">Inicio</Link>
           </li>
           <li className="breadcrumb-item active">Questionarios</li>
         </ol>
-        <h1 className="page-header">&nbsp;&nbsp;</h1>
         <Panel>
-          <PanelHeader>
-            <h2 id="page-heading">
-              <span className="page-header ml-3">Questionarios</span>
-              <Button id="togglerFilterQuestionarios" className="btn btn-primary float-right jh-create-entity">
-                Filtros&nbsp;
-                <FontAwesomeIcon icon="caret-down" />
-              </Button>
-              <Link
-                to={`${match.url}/new?${this.getFiltersURL()}`}
-                className="btn btn-primary float-right jh-create-entity"
-                id="jh-create-entity"
-              >
-                <FontAwesomeIcon icon="plus" />
-                &nbsp;
-                <Translate contentKey="generadorApp.questionarios.home.createLabel">Create a new Questionarios</Translate>
-              </Link>
-            </h2>
-          </PanelHeader>
           <PanelBody>
             <div className="table-responsive">
               <UncontrolledCollapse toggler="#togglerFilterQuestionarios">
@@ -187,7 +189,7 @@ export class Questionarios extends React.Component<IQuestionariosProps, IQuestio
                     <div className="row mt-1 ml-3 mr-3">
                       {this.state.baseFilters !== 'dataCadastro' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="dataCadastroLabel" for="questionarios-dataCadastro">
                               <Translate contentKey="generadorApp.questionarios.dataCadastro">Data Cadastro</Translate>
                             </Label>
@@ -205,7 +207,7 @@ export class Questionarios extends React.Component<IQuestionariosProps, IQuestio
 
                       {this.state.baseFilters !== 'etapaAtual' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="etapaAtualLabel" for="questionarios-etapaAtual">
                               <Translate contentKey="generadorApp.questionarios.etapaAtual">Etapa Atual</Translate>
                             </Label>
@@ -217,7 +219,7 @@ export class Questionarios extends React.Component<IQuestionariosProps, IQuestio
 
                       {this.state.baseFilters !== 'finalizado' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="finalizadoLabel" check>
                               <AvInput id="questionarios-finalizado" type="checkbox" className="form-control" name="finalizado" />
                               <Translate contentKey="generadorApp.questionarios.finalizado">Finalizado</Translate>
@@ -228,7 +230,7 @@ export class Questionarios extends React.Component<IQuestionariosProps, IQuestio
 
                       {this.state.baseFilters !== 'ultimaPerguntaRespondida' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="ultimaPerguntaRespondidaLabel" for="questionarios-ultimaPerguntaRespondida">
                               <Translate contentKey="generadorApp.questionarios.ultimaPerguntaRespondida">
                                 Ultima Pergunta Respondida
@@ -246,21 +248,26 @@ export class Questionarios extends React.Component<IQuestionariosProps, IQuestio
 
                       {this.state.baseFilters !== 'paciente' ? (
                         <Col md="3">
-                          <Row>
-                            <div>
+                          <Row className="mr-1 mt-1">
+                            <div style={{ width: '100%' }}>
                               <Label for="questionarios-paciente">
                                 <Translate contentKey="generadorApp.questionarios.paciente">Paciente</Translate>
                               </Label>
-                              <AvInput id="questionarios-paciente" type="select" className="form-control" name="pacienteId">
-                                <option value="" key="0" />
-                                {pacientes
-                                  ? pacientes.map(otherEntity => (
-                                      <option value={otherEntity.id} key={otherEntity.id}>
-                                        {otherEntity.nome}
-                                      </option>
-                                    ))
-                                  : null}
-                              </AvInput>
+                              <Select
+                                id="questionarios-paciente"
+                                isMulti
+                                className={'css-select-control'}
+                                value={
+                                  pacientes
+                                    ? pacientes.map(p =>
+                                        this.state.paciente.split(',').indexOf(p.id) !== -1 ? { value: p.id, label: p.nome } : null
+                                      )
+                                    : null
+                                }
+                                options={pacientes ? pacientes.map(option => ({ value: option.id, label: option.nome })) : null}
+                                onChange={options => this.setState({ paciente: options.map(option => option['value']).join(',') })}
+                                name={'paciente'}
+                              />
                             </div>
                           </Row>
                         </Col>
@@ -271,13 +278,13 @@ export class Questionarios extends React.Component<IQuestionariosProps, IQuestio
                       <Button className="btn btn-success" type="submit">
                         <i className="fa fa-filter" aria-hidden={'true'}></i>
                         &nbsp;
-                        <Translate contentKey="entity.validation.filter">Filter</Translate>
+                        <Translate contentKey="generadorApp.questionarios.home.btn_filter">Filter</Translate>
                       </Button>
                       &nbsp;
                       <div className="btn btn-secondary hand" onClick={this.cancelCourse}>
                         <FontAwesomeIcon icon="trash-alt" />
                         &nbsp;
-                        <Translate contentKey="entity.validation.clean">Clean</Translate>
+                        <Translate contentKey="generadorApp.questionarios.home.btn_filter_clean">Clean</Translate>
                       </div>
                     </div>
                   </AvForm>

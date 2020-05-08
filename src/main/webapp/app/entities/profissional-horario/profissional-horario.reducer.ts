@@ -41,6 +41,7 @@ export interface IProfissionalHorarioBaseState {
 
 export interface IProfissionalHorarioUpdateState {
   fieldsBase: IProfissionalHorarioBaseState;
+
   isNew: boolean;
 }
 

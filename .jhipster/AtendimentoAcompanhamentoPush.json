@@ -48,7 +48,7 @@
         }
     ],
     "relationships": [],
-    "changelogDate": "20200507103400",
+    "changelogDate": "20200508152400",
     "entityTableName": "atendimento_acompanhamento_push",
     "dto": "mapstruct",
     "pagination": "pagination",

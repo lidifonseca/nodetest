@@ -45,6 +45,7 @@ export interface IEspecialidadeOperadoraBaseState {
 
 export interface IEspecialidadeOperadoraUpdateState {
   fieldsBase: IEspecialidadeOperadoraBaseState;
+
   isNew: boolean;
 }
 

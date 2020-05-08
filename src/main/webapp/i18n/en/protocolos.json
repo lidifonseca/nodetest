@@ -1,8 +1,14 @@
 {
   "generadorApp": {
     "protocolos": {
+      "listButtons": {},
+      "viewButtons": {},
+      "dropdown_btn": "Ações",
       "home": {
         "title": "Protocolos",
+        "btn_filter": "Filter",
+        "btn_filter_clean": "Clean Filters",
+        "btn_filter_open": "Filters",
         "createLabel": "Create a new Protocolos",
         "createOrEditLabel": "Create or edit a Protocolos",
         "notFound": "No Protocolos found"

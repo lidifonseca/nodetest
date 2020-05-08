@@ -19,7 +19,7 @@
         }
     ],
     "relationships": [],
-    "changelogDate": "20200507123200",
+    "changelogDate": "20200508172200",
     "entityTableName": "respostas_questionarios",
     "dto": "mapstruct",
     "pagination": "pagination",

@@ -1,8 +1,14 @@
 {
   "generadorApp": {
     "tipoMatMed": {
+      "listButtons": {},
+      "viewButtons": {},
+      "dropdown_btn": "Ações",
       "home": {
         "title": "Tipo Mat Meds",
+        "btn_filter": "Filter",
+        "btn_filter_clean": "Clean Filters",
+        "btn_filter_open": "Filters",
         "createLabel": "Create a new Tipo Mat Med",
         "createOrEditLabel": "Create or edit a Tipo Mat Med",
         "notFound": "No Tipo Mat Meds found"

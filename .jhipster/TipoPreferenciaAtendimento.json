@@ -15,7 +15,7 @@
         }
     ],
     "relationships": [],
-    "changelogDate": "20200507124900",
+    "changelogDate": "20200508173900",
     "entityTableName": "tipo_preferencia_atendimento",
     "dto": "mapstruct",
     "pagination": "pagination",

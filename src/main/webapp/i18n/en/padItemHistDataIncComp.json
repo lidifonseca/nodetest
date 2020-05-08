@@ -1,8 +1,14 @@
 {
   "generadorApp": {
     "padItemHistDataIncComp": {
+      "listButtons": {},
+      "viewButtons": {},
+      "dropdown_btn": "Ações",
       "home": {
         "title": "Pad Item Hist Data Inc Comps",
+        "btn_filter": "Filter",
+        "btn_filter_clean": "Clean Filters",
+        "btn_filter_open": "Filters",
         "createLabel": "Create a new Pad Item Hist Data Inc Comp",
         "createOrEditLabel": "Create or edit a Pad Item Hist Data Inc Comp",
         "notFound": "No Pad Item Hist Data Inc Comps found"

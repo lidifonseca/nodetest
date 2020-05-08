@@ -1,8 +1,14 @@
 {
   "generadorApp": {
     "apiInput": {
+      "listButtons": {},
+      "viewButtons": {},
+      "dropdown_btn": "Actions",
       "home": {
         "title": "Api Inputs",
+        "btn_filter": "Filtrar",
+        "btn_filter_clean": "Limpar Filtros",
+        "btn_filter_open": "Filtros",
         "createLabel": "Criar novo Api Input",
         "createOrEditLabel": "Criar ou editar Api Input",
         "notFound": "Nenhum Api Input encontrado"

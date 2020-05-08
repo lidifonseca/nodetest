@@ -1,8 +1,14 @@
 {
   "generadorApp": {
     "cidXPtaNovo": {
+      "listButtons": {},
+      "viewButtons": {},
+      "dropdown_btn": "Ações",
       "home": {
         "title": "Cid X Pta Novos",
+        "btn_filter": "Filter",
+        "btn_filter_clean": "Clean Filters",
+        "btn_filter_open": "Filters",
         "createLabel": "Create a new Cid X Pta Novo",
         "createOrEditLabel": "Create or edit a Cid X Pta Novo",
         "notFound": "No Cid X Pta Novos found"

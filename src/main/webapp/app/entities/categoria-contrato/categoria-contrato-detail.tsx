@@ -34,20 +34,18 @@ export class CategoriaContratoDetail extends React.Component<ICategoriaContratoD
     const { categoriaContratoEntity } = this.props;
     return (
       <div>
-        <ol className="breadcrumb float-xl-right">
+        <h2 id="page-heading">
+          <span className="page-header ml-3">Categoria Contratoes</span>
+        </h2>
+        <ol className="breadcrumb">
           <li className="breadcrumb-item">
             <Link to="/">Inicio</Link>
           </li>
           <li className="breadcrumb-item active">Categoria Contratoes</li>
           <li className="breadcrumb-item active">Categoria Contratoes details</li>
         </ol>
-        <h1 className="page-header">&nbsp;&nbsp;</h1>
         <Panel>
-          <PanelHeader>
-            <h2 id="page-heading">
-              <span className="page-header ml-3">Categoria Contratoes</span>
-            </h2>
-          </PanelHeader>
+          <PanelHeader></PanelHeader>
           <PanelBody>
             <Row>
               <Col md="8">
@@ -73,7 +71,7 @@ export class CategoriaContratoDetail extends React.Component<ICategoriaContratoD
                                 <Translate contentKey="entity.action.open">Open</Translate>&nbsp;
                               </a>
                               <a rel="noopener noreferrer" target={'_blank'} href={`${categoriaContratoEntity.contrato}`}>
-                                {categoriaContratoEntity.contratoContentType.indexOf('image/') !== -1 ? (
+                                {categoriaContratoEntity.contratoContentType.includes('image/') ? (
                                   <img src={`${categoriaContratoEntity.contrato}`} style={{ maxHeight: '30px' }} />
                                 ) : (
                                   <Translate contentKey="entity.action.open">Open</Translate>

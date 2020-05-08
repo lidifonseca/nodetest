@@ -1,8 +1,14 @@
 {
   "generadorApp": {
     "tempoExperiencia": {
+      "listButtons": {},
+      "viewButtons": {},
+      "dropdown_btn": "Actions",
       "home": {
         "title": "Tempo Experiencias",
+        "btn_filter": "Filtrar",
+        "btn_filter_clean": "Limpar Filtros",
+        "btn_filter_open": "Filtros",
         "createLabel": "Criar novo Tempo Experiencia",
         "createOrEditLabel": "Criar ou editar Tempo Experiencia",
         "notFound": "Nenhum Tempo Experiencia encontrado"

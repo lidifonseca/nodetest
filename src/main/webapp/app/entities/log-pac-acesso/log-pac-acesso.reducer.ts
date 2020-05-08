@@ -43,6 +43,7 @@ export interface ILogPacAcessoBaseState {
 
 export interface ILogPacAcessoUpdateState {
   fieldsBase: ILogPacAcessoBaseState;
+
   isNew: boolean;
 }
 

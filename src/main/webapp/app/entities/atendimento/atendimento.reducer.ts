@@ -73,6 +73,8 @@ export interface IAtendimentoBaseState {
 
 export interface IAtendimentoUpdateState {
   fieldsBase: IAtendimentoBaseState;
+
+  unidadeEasySelectValue: any;
   isNew: boolean;
   unidadeId: string;
 }

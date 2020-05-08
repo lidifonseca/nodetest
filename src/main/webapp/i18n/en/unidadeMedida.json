@@ -1,8 +1,14 @@
 {
   "generadorApp": {
     "unidadeMedida": {
+      "listButtons": {},
+      "viewButtons": {},
+      "dropdown_btn": "Ações",
       "home": {
         "title": "Unidade Medidas",
+        "btn_filter": "Filter",
+        "btn_filter_clean": "Clean Filters",
+        "btn_filter_open": "Filters",
         "createLabel": "Create a new Unidade Medida",
         "createOrEditLabel": "Create or edit a Unidade Medida",
         "notFound": "No Unidade Medidas found"

@@ -15,7 +15,7 @@
         }
     ],
     "relationships": [],
-    "changelogDate": "20200507115400",
+    "changelogDate": "20200508164400",
     "entityTableName": "pad_item_hist_data_inc_comp",
     "dto": "mapstruct",
     "pagination": "pagination",

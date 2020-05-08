@@ -19,7 +19,7 @@
         }
     ],
     "relationships": [],
-    "changelogDate": "20200507110400",
+    "changelogDate": "20200508155400",
     "entityTableName": "franquia_status_atual",
     "dto": "mapstruct",
     "pagination": "pagination",

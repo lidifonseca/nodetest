@@ -39,6 +39,7 @@ export interface ITipoUsuarioBaseState {
 
 export interface ITipoUsuarioUpdateState {
   fieldsBase: ITipoUsuarioBaseState;
+
   isNew: boolean;
 }
 

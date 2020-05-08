@@ -1,8 +1,14 @@
 {
   "generadorApp": {
     "alertasResultadosEsperados": {
+      "listButtons": {},
+      "viewButtons": {},
+      "dropdown_btn": "Ações",
       "home": {
         "title": "Alertas Resultados Esperados",
+        "btn_filter": "Filter",
+        "btn_filter_clean": "Clean Filters",
+        "btn_filter_open": "Filters",
         "createLabel": "Create a new Alertas Resultados Esperados",
         "createOrEditLabel": "Create or edit a Alertas Resultados Esperados",
         "notFound": "No Alertas Resultados Esperados found"

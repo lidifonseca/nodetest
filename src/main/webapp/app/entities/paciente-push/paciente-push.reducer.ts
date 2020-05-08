@@ -40,6 +40,7 @@ export interface IPacientePushBaseState {
 
 export interface IPacientePushUpdateState {
   fieldsBase: IPacientePushBaseState;
+
   isNew: boolean;
 }
 

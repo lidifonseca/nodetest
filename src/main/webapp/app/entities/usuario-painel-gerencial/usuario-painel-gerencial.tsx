@@ -2,6 +2,7 @@
 import React from 'react';
 import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
 import { connect } from 'react-redux';
+import Select from 'react-select';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import {
   Button,
@@ -353,34 +354,33 @@ export class UsuarioPainelGerencial extends React.Component<IUsuarioPainelGerenc
     const { usuarioPainelGerencialList, match, totalItems } = this.props;
     return (
       <div>
-        <ol className="breadcrumb float-xl-right">
+        <h2 id="page-heading">
+          <span className="page-header">Usuario Painel Gerencials</span>
+          <Button id="togglerFilterUsuarioPainelGerencial" className="btn btn-primary float-right jh-create-entity">
+            <Translate contentKey="generadorApp.usuarioPainelGerencial.home.btn_filter_open">Filters</Translate>
+            &nbsp;
+            <FontAwesomeIcon icon="caret-down" />
+          </Button>{' '}
+          &nbsp;
+          <Link
+            to={`${match.url}/new?${this.getFiltersURL()}`}
+            className="btn btn-primary float-right jh-create-entity"
+            id="jh-create-entity"
+          >
+            <FontAwesomeIcon icon="plus" />
+            &nbsp;
+            <Translate contentKey="generadorApp.usuarioPainelGerencial.home.createLabel">Create a new Usuario Painel Gerencial</Translate>
+          </Link>{' '}
+          &nbsp;
+        </h2>
+
+        <ol className="breadcrumb">
           <li className="breadcrumb-item">
             <Link to="/">Inicio</Link>
           </li>
           <li className="breadcrumb-item active">Usuario Painel Gerencials</li>
         </ol>
-        <h1 className="page-header">&nbsp;&nbsp;</h1>
         <Panel>
-          <PanelHeader>
-            <h2 id="page-heading">
-              <span className="page-header ml-3">Usuario Painel Gerencials</span>
-              <Button id="togglerFilterUsuarioPainelGerencial" className="btn btn-primary float-right jh-create-entity">
-                Filtros&nbsp;
-                <FontAwesomeIcon icon="caret-down" />
-              </Button>
-              <Link
-                to={`${match.url}/new?${this.getFiltersURL()}`}
-                className="btn btn-primary float-right jh-create-entity"
-                id="jh-create-entity"
-              >
-                <FontAwesomeIcon icon="plus" />
-                &nbsp;
-                <Translate contentKey="generadorApp.usuarioPainelGerencial.home.createLabel">
-                  Create a new Usuario Painel Gerencial
-                </Translate>
-              </Link>
-            </h2>
-          </PanelHeader>
           <PanelBody>
             <div className="table-responsive">
               <UncontrolledCollapse toggler="#togglerFilterUsuarioPainelGerencial">
@@ -389,7 +389,7 @@ export class UsuarioPainelGerencial extends React.Component<IUsuarioPainelGerenc
                     <div className="row mt-1 ml-3 mr-3">
                       {this.state.baseFilters !== 'verCronicos' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="verCronicosLabel" for="usuario-painel-gerencial-verCronicos">
                               <Translate contentKey="generadorApp.usuarioPainelGerencial.verCronicos">Ver Cronicos</Translate>
                             </Label>
@@ -405,7 +405,7 @@ export class UsuarioPainelGerencial extends React.Component<IUsuarioPainelGerenc
 
                       {this.state.baseFilters !== 'verPacientesAtivosCr' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="verPacientesAtivosCrLabel" for="usuario-painel-gerencial-verPacientesAtivosCr">
                               <Translate contentKey="generadorApp.usuarioPainelGerencial.verPacientesAtivosCr">
                                 Ver Pacientes Ativos Cr
@@ -423,7 +423,7 @@ export class UsuarioPainelGerencial extends React.Component<IUsuarioPainelGerenc
 
                       {this.state.baseFilters !== 'filtroPacientesAtivosCr' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="filtroPacientesAtivosCrLabel" for="usuario-painel-gerencial-filtroPacientesAtivosCr">
                               <Translate contentKey="generadorApp.usuarioPainelGerencial.filtroPacientesAtivosCr">
                                 Filtro Pacientes Ativos Cr
@@ -441,7 +441,7 @@ export class UsuarioPainelGerencial extends React.Component<IUsuarioPainelGerenc
 
                       {this.state.baseFilters !== 'verNumHospCr' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="verNumHospCrLabel" for="usuario-painel-gerencial-verNumHospCr">
                               <Translate contentKey="generadorApp.usuarioPainelGerencial.verNumHospCr">Ver Num Hosp Cr</Translate>
                             </Label>
@@ -457,7 +457,7 @@ export class UsuarioPainelGerencial extends React.Component<IUsuarioPainelGerenc
 
                       {this.state.baseFilters !== 'filtroNumHospCr' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="filtroNumHospCrLabel" for="usuario-painel-gerencial-filtroNumHospCr">
                               <Translate contentKey="generadorApp.usuarioPainelGerencial.filtroNumHospCr">Filtro Num Hosp Cr</Translate>
                             </Label>
@@ -473,7 +473,7 @@ export class UsuarioPainelGerencial extends React.Component<IUsuarioPainelGerenc
 
                       {this.state.baseFilters !== 'verNumDesospCr' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="verNumDesospCrLabel" for="usuario-painel-gerencial-verNumDesospCr">
                               <Translate contentKey="generadorApp.usuarioPainelGerencial.verNumDesospCr">Ver Num Desosp Cr</Translate>
                             </Label>
@@ -489,7 +489,7 @@ export class UsuarioPainelGerencial extends React.Component<IUsuarioPainelGerenc
 
                       {this.state.baseFilters !== 'filtroNumDesospCr' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="filtroNumDesospCrLabel" for="usuario-painel-gerencial-filtroNumDesospCr">
                               <Translate contentKey="generadorApp.usuarioPainelGerencial.filtroNumDesospCr">Filtro Num Desosp Cr</Translate>
                             </Label>
@@ -505,7 +505,7 @@ export class UsuarioPainelGerencial extends React.Component<IUsuarioPainelGerenc
 
                       {this.state.baseFilters !== 'verNumPsCr' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="verNumPsCrLabel" for="usuario-painel-gerencial-verNumPsCr">
                               <Translate contentKey="generadorApp.usuarioPainelGerencial.verNumPsCr">Ver Num Ps Cr</Translate>
                             </Label>
@@ -521,7 +521,7 @@ export class UsuarioPainelGerencial extends React.Component<IUsuarioPainelGerenc
 
                       {this.state.baseFilters !== 'filtroNumPsCr' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="filtroNumPsCrLabel" for="usuario-painel-gerencial-filtroNumPsCr">
                               <Translate contentKey="generadorApp.usuarioPainelGerencial.filtroNumPsCr">Filtro Num Ps Cr</Translate>
                             </Label>
@@ -537,7 +537,7 @@ export class UsuarioPainelGerencial extends React.Component<IUsuarioPainelGerenc
 
                       {this.state.baseFilters !== 'verNumObitoCr' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="verNumObitoCrLabel" for="usuario-painel-gerencial-verNumObitoCr">
                               <Translate contentKey="generadorApp.usuarioPainelGerencial.verNumObitoCr">Ver Num Obito Cr</Translate>
                             </Label>
@@ -553,7 +553,7 @@ export class UsuarioPainelGerencial extends React.Component<IUsuarioPainelGerenc
 
                       {this.state.baseFilters !== 'filtroNumObitoCr' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="filtroNumObitoCrLabel" for="usuario-painel-gerencial-filtroNumObitoCr">
                               <Translate contentKey="generadorApp.usuarioPainelGerencial.filtroNumObitoCr">Filtro Num Obito Cr</Translate>
                             </Label>
@@ -569,7 +569,7 @@ export class UsuarioPainelGerencial extends React.Component<IUsuarioPainelGerenc
 
                       {this.state.baseFilters !== 'verIndCliEstaveisCr' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="verIndCliEstaveisCrLabel" for="usuario-painel-gerencial-verIndCliEstaveisCr">
                               <Translate contentKey="generadorApp.usuarioPainelGerencial.verIndCliEstaveisCr">
                                 Ver Ind Cli Estaveis Cr
@@ -587,7 +587,7 @@ export class UsuarioPainelGerencial extends React.Component<IUsuarioPainelGerenc
 
                       {this.state.baseFilters !== 'filtroIndCliEstaveisCr' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="filtroIndCliEstaveisCrLabel" for="usuario-painel-gerencial-filtroIndCliEstaveisCr">
                               <Translate contentKey="generadorApp.usuarioPainelGerencial.filtroIndCliEstaveisCr">
                                 Filtro Ind Cli Estaveis Cr
@@ -605,7 +605,7 @@ export class UsuarioPainelGerencial extends React.Component<IUsuarioPainelGerenc
 
                       {this.state.baseFilters !== 'verNumConsMedInternasCr' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="verNumConsMedInternasCrLabel" for="usuario-painel-gerencial-verNumConsMedInternasCr">
                               <Translate contentKey="generadorApp.usuarioPainelGerencial.verNumConsMedInternasCr">
                                 Ver Num Cons Med Internas Cr
@@ -623,7 +623,7 @@ export class UsuarioPainelGerencial extends React.Component<IUsuarioPainelGerenc
 
                       {this.state.baseFilters !== 'filtroNumConsMedInternasCr' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="filtroNumConsMedInternasCrLabel" for="usuario-painel-gerencial-filtroNumConsMedInternasCr">
                               <Translate contentKey="generadorApp.usuarioPainelGerencial.filtroNumConsMedInternasCr">
                                 Filtro Num Cons Med Internas Cr
@@ -641,7 +641,7 @@ export class UsuarioPainelGerencial extends React.Component<IUsuarioPainelGerenc
 
                       {this.state.baseFilters !== 'verNumConsMedExternasCr' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="verNumConsMedExternasCrLabel" for="usuario-painel-gerencial-verNumConsMedExternasCr">
                               <Translate contentKey="generadorApp.usuarioPainelGerencial.verNumConsMedExternasCr">
                                 Ver Num Cons Med Externas Cr
@@ -659,7 +659,7 @@ export class UsuarioPainelGerencial extends React.Component<IUsuarioPainelGerenc
 
                       {this.state.baseFilters !== 'filtroNumConsMedExternasCr' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="filtroNumConsMedExternasCrLabel" for="usuario-painel-gerencial-filtroNumConsMedExternasCr">
                               <Translate contentKey="generadorApp.usuarioPainelGerencial.filtroNumConsMedExternasCr">
                                 Filtro Num Cons Med Externas Cr
@@ -677,7 +677,7 @@ export class UsuarioPainelGerencial extends React.Component<IUsuarioPainelGerenc
 
                       {this.state.baseFilters !== 'verNumLaboratorialCr' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="verNumLaboratorialCrLabel" for="usuario-painel-gerencial-verNumLaboratorialCr">
                               <Translate contentKey="generadorApp.usuarioPainelGerencial.verNumLaboratorialCr">
                                 Ver Num Laboratorial Cr
@@ -695,7 +695,7 @@ export class UsuarioPainelGerencial extends React.Component<IUsuarioPainelGerenc
 
                       {this.state.baseFilters !== 'filtroNumLaboratorialCr' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="filtroNumLaboratorialCrLabel" for="usuario-painel-gerencial-filtroNumLaboratorialCr">
                               <Translate contentKey="generadorApp.usuarioPainelGerencial.filtroNumLaboratorialCr">
                                 Filtro Num Laboratorial Cr
@@ -713,7 +713,7 @@ export class UsuarioPainelGerencial extends React.Component<IUsuarioPainelGerenc
 
                       {this.state.baseFilters !== 'verNumImagemCr' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="verNumImagemCrLabel" for="usuario-painel-gerencial-verNumImagemCr">
                               <Translate contentKey="generadorApp.usuarioPainelGerencial.verNumImagemCr">Ver Num Imagem Cr</Translate>
                             </Label>
@@ -729,7 +729,7 @@ export class UsuarioPainelGerencial extends React.Component<IUsuarioPainelGerenc
 
                       {this.state.baseFilters !== 'filtroNumImagemCr' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="filtroNumImagemCrLabel" for="usuario-painel-gerencial-filtroNumImagemCr">
                               <Translate contentKey="generadorApp.usuarioPainelGerencial.filtroNumImagemCr">Filtro Num Imagem Cr</Translate>
                             </Label>
@@ -745,7 +745,7 @@ export class UsuarioPainelGerencial extends React.Component<IUsuarioPainelGerenc
 
                       {this.state.baseFilters !== 'verNumOutrosCr' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="verNumOutrosCrLabel" for="usuario-painel-gerencial-verNumOutrosCr">
                               <Translate contentKey="generadorApp.usuarioPainelGerencial.verNumOutrosCr">Ver Num Outros Cr</Translate>
                             </Label>
@@ -761,7 +761,7 @@ export class UsuarioPainelGerencial extends React.Component<IUsuarioPainelGerenc
 
                       {this.state.baseFilters !== 'filtroNumOutrosCr' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="filtroNumOutrosCrLabel" for="usuario-painel-gerencial-filtroNumOutrosCr">
                               <Translate contentKey="generadorApp.usuarioPainelGerencial.filtroNumOutrosCr">Filtro Num Outros Cr</Translate>
                             </Label>
@@ -777,7 +777,7 @@ export class UsuarioPainelGerencial extends React.Component<IUsuarioPainelGerenc
 
                       {this.state.baseFilters !== 'verNumAtCatCr' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="verNumAtCatCrLabel" for="usuario-painel-gerencial-verNumAtCatCr">
                               <Translate contentKey="generadorApp.usuarioPainelGerencial.verNumAtCatCr">Ver Num At Cat Cr</Translate>
                             </Label>
@@ -793,7 +793,7 @@ export class UsuarioPainelGerencial extends React.Component<IUsuarioPainelGerenc
 
                       {this.state.baseFilters !== 'filtroNumAtCatCr' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="filtroNumAtCatCrLabel" for="usuario-painel-gerencial-filtroNumAtCatCr">
                               <Translate contentKey="generadorApp.usuarioPainelGerencial.filtroNumAtCatCr">Filtro Num At Cat Cr</Translate>
                             </Label>
@@ -809,7 +809,7 @@ export class UsuarioPainelGerencial extends React.Component<IUsuarioPainelGerenc
 
                       {this.state.baseFilters !== 'verNumCatCompCr' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="verNumCatCompCrLabel" for="usuario-painel-gerencial-verNumCatCompCr">
                               <Translate contentKey="generadorApp.usuarioPainelGerencial.verNumCatCompCr">Ver Num Cat Comp Cr</Translate>
                             </Label>
@@ -825,7 +825,7 @@ export class UsuarioPainelGerencial extends React.Component<IUsuarioPainelGerenc
 
                       {this.state.baseFilters !== 'filtroNumCatCompCr' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="filtroNumCatCompCrLabel" for="usuario-painel-gerencial-filtroNumCatCompCr">
                               <Translate contentKey="generadorApp.usuarioPainelGerencial.filtroNumCatCompCr">
                                 Filtro Num Cat Comp Cr
@@ -843,7 +843,7 @@ export class UsuarioPainelGerencial extends React.Component<IUsuarioPainelGerenc
 
                       {this.state.baseFilters !== 'verAtCmSucessoCr' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="verAtCmSucessoCrLabel" for="usuario-painel-gerencial-verAtCmSucessoCr">
                               <Translate contentKey="generadorApp.usuarioPainelGerencial.verAtCmSucessoCr">Ver At Cm Sucesso Cr</Translate>
                             </Label>
@@ -859,7 +859,7 @@ export class UsuarioPainelGerencial extends React.Component<IUsuarioPainelGerenc
 
                       {this.state.baseFilters !== 'filtroAtCmSucessoCr' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="filtroAtCmSucessoCrLabel" for="usuario-painel-gerencial-filtroAtCmSucessoCr">
                               <Translate contentKey="generadorApp.usuarioPainelGerencial.filtroAtCmSucessoCr">
                                 Filtro At Cm Sucesso Cr
@@ -877,7 +877,7 @@ export class UsuarioPainelGerencial extends React.Component<IUsuarioPainelGerenc
 
                       {this.state.baseFilters !== 'verMediaPadAbertoCr' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="verMediaPadAbertoCrLabel" for="usuario-painel-gerencial-verMediaPadAbertoCr">
                               <Translate contentKey="generadorApp.usuarioPainelGerencial.verMediaPadAbertoCr">
                                 Ver Media Pad Aberto Cr
@@ -895,7 +895,7 @@ export class UsuarioPainelGerencial extends React.Component<IUsuarioPainelGerenc
 
                       {this.state.baseFilters !== 'filtroMediaPadAbertoCr' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="filtroMediaPadAbertoCrLabel" for="usuario-painel-gerencial-filtroMediaPadAbertoCr">
                               <Translate contentKey="generadorApp.usuarioPainelGerencial.filtroMediaPadAbertoCr">
                                 Filtro Media Pad Aberto Cr
@@ -913,7 +913,7 @@ export class UsuarioPainelGerencial extends React.Component<IUsuarioPainelGerenc
 
                       {this.state.baseFilters !== 'verAtIntercorrenciaCr' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="verAtIntercorrenciaCrLabel" for="usuario-painel-gerencial-verAtIntercorrenciaCr">
                               <Translate contentKey="generadorApp.usuarioPainelGerencial.verAtIntercorrenciaCr">
                                 Ver At Intercorrencia Cr
@@ -931,7 +931,7 @@ export class UsuarioPainelGerencial extends React.Component<IUsuarioPainelGerenc
 
                       {this.state.baseFilters !== 'filtroAtIntercorrenciaCr' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="filtroAtIntercorrenciaCrLabel" for="usuario-painel-gerencial-filtroAtIntercorrenciaCr">
                               <Translate contentKey="generadorApp.usuarioPainelGerencial.filtroAtIntercorrenciaCr">
                                 Filtro At Intercorrencia Cr
@@ -949,7 +949,7 @@ export class UsuarioPainelGerencial extends React.Component<IUsuarioPainelGerenc
 
                       {this.state.baseFilters !== 'verTempoMedioAtCr' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="verTempoMedioAtCrLabel" for="usuario-painel-gerencial-verTempoMedioAtCr">
                               <Translate contentKey="generadorApp.usuarioPainelGerencial.verTempoMedioAtCr">
                                 Ver Tempo Medio At Cr
@@ -967,7 +967,7 @@ export class UsuarioPainelGerencial extends React.Component<IUsuarioPainelGerenc
 
                       {this.state.baseFilters !== 'filtroTempoMedioAtCr' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="filtroTempoMedioAtCrLabel" for="usuario-painel-gerencial-filtroTempoMedioAtCr">
                               <Translate contentKey="generadorApp.usuarioPainelGerencial.filtroTempoMedioAtCr">
                                 Filtro Tempo Medio At Cr
@@ -985,7 +985,7 @@ export class UsuarioPainelGerencial extends React.Component<IUsuarioPainelGerenc
 
                       {this.state.baseFilters !== 'verMediaPtaCr' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="verMediaPtaCrLabel" for="usuario-painel-gerencial-verMediaPtaCr">
                               <Translate contentKey="generadorApp.usuarioPainelGerencial.verMediaPtaCr">Ver Media Pta Cr</Translate>
                             </Label>
@@ -1001,7 +1001,7 @@ export class UsuarioPainelGerencial extends React.Component<IUsuarioPainelGerenc
 
                       {this.state.baseFilters !== 'filtroMediaPtaCr' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="filtroMediaPtaCrLabel" for="usuario-painel-gerencial-filtroMediaPtaCr">
                               <Translate contentKey="generadorApp.usuarioPainelGerencial.filtroMediaPtaCr">Filtro Media Pta Cr</Translate>
                             </Label>
@@ -1017,7 +1017,7 @@ export class UsuarioPainelGerencial extends React.Component<IUsuarioPainelGerenc
 
                       {this.state.baseFilters !== 'verIndicadorUsoAppCr' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="verIndicadorUsoAppCrLabel" for="usuario-painel-gerencial-verIndicadorUsoAppCr">
                               <Translate contentKey="generadorApp.usuarioPainelGerencial.verIndicadorUsoAppCr">
                                 Ver Indicador Uso App Cr
@@ -1035,7 +1035,7 @@ export class UsuarioPainelGerencial extends React.Component<IUsuarioPainelGerenc
 
                       {this.state.baseFilters !== 'filtroIndicadorUsoAppCr' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="filtroIndicadorUsoAppCrLabel" for="usuario-painel-gerencial-filtroIndicadorUsoAppCr">
                               <Translate contentKey="generadorApp.usuarioPainelGerencial.filtroIndicadorUsoAppCr">
                                 Filtro Indicador Uso App Cr
@@ -1056,13 +1056,13 @@ export class UsuarioPainelGerencial extends React.Component<IUsuarioPainelGerenc
                       <Button className="btn btn-success" type="submit">
                         <i className="fa fa-filter" aria-hidden={'true'}></i>
                         &nbsp;
-                        <Translate contentKey="entity.validation.filter">Filter</Translate>
+                        <Translate contentKey="generadorApp.usuarioPainelGerencial.home.btn_filter">Filter</Translate>
                       </Button>
                       &nbsp;
                       <div className="btn btn-secondary hand" onClick={this.cancelCourse}>
                         <FontAwesomeIcon icon="trash-alt" />
                         &nbsp;
-                        <Translate contentKey="entity.validation.clean">Clean</Translate>
+                        <Translate contentKey="generadorApp.usuarioPainelGerencial.home.btn_filter_clean">Clean</Translate>
                       </div>
                     </div>
                   </AvForm>

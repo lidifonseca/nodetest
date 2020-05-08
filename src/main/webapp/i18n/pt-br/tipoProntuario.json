@@ -1,8 +1,14 @@
 {
   "generadorApp": {
     "tipoProntuario": {
+      "listButtons": {},
+      "viewButtons": {},
+      "dropdown_btn": "Actions",
       "home": {
         "title": "Tipo Prontuarios",
+        "btn_filter": "Filtrar",
+        "btn_filter_clean": "Limpar Filtros",
+        "btn_filter_open": "Filtros",
         "createLabel": "Criar novo Tipo Prontuario",
         "createOrEditLabel": "Criar ou editar Tipo Prontuario",
         "notFound": "Nenhum Tipo Prontuario encontrado"

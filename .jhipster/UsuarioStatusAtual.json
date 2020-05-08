@@ -19,7 +19,7 @@
         }
     ],
     "relationships": [],
-    "changelogDate": "20200507130200",
+    "changelogDate": "20200508175200",
     "entityTableName": "usuario_status_atual",
     "dto": "mapstruct",
     "pagination": "pagination",

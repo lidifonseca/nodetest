@@ -15,7 +15,7 @@
         }
     ],
     "relationships": [],
-    "changelogDate": "20200507110000",
+    "changelogDate": "20200508155000",
     "entityTableName": "especialidade_valor",
     "dto": "mapstruct",
     "pagination": "pagination",

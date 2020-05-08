@@ -7,7 +7,7 @@
         }
     ],
     "relationships": [],
-    "changelogDate": "20200507103600",
+    "changelogDate": "20200508152600",
     "entityTableName": "atendimento_atividades",
     "dto": "mapstruct",
     "pagination": "pagination",

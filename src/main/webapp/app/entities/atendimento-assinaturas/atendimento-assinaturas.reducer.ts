@@ -38,6 +38,7 @@ export interface IAtendimentoAssinaturasBaseState {
 
 export interface IAtendimentoAssinaturasUpdateState {
   fieldsBase: IAtendimentoAssinaturasBaseState;
+
   isNew: boolean;
 }
 

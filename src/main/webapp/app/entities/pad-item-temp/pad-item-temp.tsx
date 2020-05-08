@@ -2,6 +2,7 @@
 import React from 'react';
 import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
 import { connect } from 'react-redux';
+import Select from 'react-select';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import {
   Button,
@@ -194,32 +195,33 @@ export class PadItemTemp extends React.Component<IPadItemTempProps, IPadItemTemp
     const { padItemTempList, match, totalItems } = this.props;
     return (
       <div>
-        <ol className="breadcrumb float-xl-right">
+        <h2 id="page-heading">
+          <span className="page-header">Pad Item Temps</span>
+          <Button id="togglerFilterPadItemTemp" className="btn btn-primary float-right jh-create-entity">
+            <Translate contentKey="generadorApp.padItemTemp.home.btn_filter_open">Filters</Translate>
+            &nbsp;
+            <FontAwesomeIcon icon="caret-down" />
+          </Button>{' '}
+          &nbsp;
+          <Link
+            to={`${match.url}/new?${this.getFiltersURL()}`}
+            className="btn btn-primary float-right jh-create-entity"
+            id="jh-create-entity"
+          >
+            <FontAwesomeIcon icon="plus" />
+            &nbsp;
+            <Translate contentKey="generadorApp.padItemTemp.home.createLabel">Create a new Pad Item Temp</Translate>
+          </Link>{' '}
+          &nbsp;
+        </h2>
+
+        <ol className="breadcrumb">
           <li className="breadcrumb-item">
             <Link to="/">Inicio</Link>
           </li>
           <li className="breadcrumb-item active">Pad Item Temps</li>
         </ol>
-        <h1 className="page-header">&nbsp;&nbsp;</h1>
         <Panel>
-          <PanelHeader>
-            <h2 id="page-heading">
-              <span className="page-header ml-3">Pad Item Temps</span>
-              <Button id="togglerFilterPadItemTemp" className="btn btn-primary float-right jh-create-entity">
-                Filtros&nbsp;
-                <FontAwesomeIcon icon="caret-down" />
-              </Button>
-              <Link
-                to={`${match.url}/new?${this.getFiltersURL()}`}
-                className="btn btn-primary float-right jh-create-entity"
-                id="jh-create-entity"
-              >
-                <FontAwesomeIcon icon="plus" />
-                &nbsp;
-                <Translate contentKey="generadorApp.padItemTemp.home.createLabel">Create a new Pad Item Temp</Translate>
-              </Link>
-            </h2>
-          </PanelHeader>
           <PanelBody>
             <div className="table-responsive">
               <UncontrolledCollapse toggler="#togglerFilterPadItemTemp">
@@ -228,7 +230,7 @@ export class PadItemTemp extends React.Component<IPadItemTempProps, IPadItemTemp
                     <div className="row mt-1 ml-3 mr-3">
                       {this.state.baseFilters !== 'sessionId' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="sessionIdLabel" for="pad-item-temp-sessionId">
                               <Translate contentKey="generadorApp.padItemTemp.sessionId">Session Id</Translate>
                             </Label>
@@ -240,7 +242,7 @@ export class PadItemTemp extends React.Component<IPadItemTempProps, IPadItemTemp
 
                       {this.state.baseFilters !== 'idEspecialidade' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="idEspecialidadeLabel" for="pad-item-temp-idEspecialidade">
                               <Translate contentKey="generadorApp.padItemTemp.idEspecialidade">Id Especialidade</Translate>
                             </Label>
@@ -256,7 +258,7 @@ export class PadItemTemp extends React.Component<IPadItemTempProps, IPadItemTemp
 
                       {this.state.baseFilters !== 'idPeriodicidade' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="idPeriodicidadeLabel" for="pad-item-temp-idPeriodicidade">
                               <Translate contentKey="generadorApp.padItemTemp.idPeriodicidade">Id Periodicidade</Translate>
                             </Label>
@@ -272,7 +274,7 @@ export class PadItemTemp extends React.Component<IPadItemTempProps, IPadItemTemp
 
                       {this.state.baseFilters !== 'idPeriodo' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="idPeriodoLabel" for="pad-item-temp-idPeriodo">
                               <Translate contentKey="generadorApp.padItemTemp.idPeriodo">Id Periodo</Translate>
                             </Label>
@@ -283,7 +285,7 @@ export class PadItemTemp extends React.Component<IPadItemTempProps, IPadItemTemp
 
                       {this.state.baseFilters !== 'dataInicio' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="dataInicioLabel" for="pad-item-temp-dataInicio">
                               <Translate contentKey="generadorApp.padItemTemp.dataInicio">Data Inicio</Translate>
                             </Label>
@@ -294,7 +296,7 @@ export class PadItemTemp extends React.Component<IPadItemTempProps, IPadItemTemp
 
                       {this.state.baseFilters !== 'dataFim' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="dataFimLabel" for="pad-item-temp-dataFim">
                               <Translate contentKey="generadorApp.padItemTemp.dataFim">Data Fim</Translate>
                             </Label>
@@ -305,7 +307,7 @@ export class PadItemTemp extends React.Component<IPadItemTempProps, IPadItemTemp
 
                       {this.state.baseFilters !== 'qtdSessoes' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="qtdSessoesLabel" for="pad-item-temp-qtdSessoes">
                               <Translate contentKey="generadorApp.padItemTemp.qtdSessoes">Qtd Sessoes</Translate>
                             </Label>
@@ -316,7 +318,7 @@ export class PadItemTemp extends React.Component<IPadItemTempProps, IPadItemTemp
 
                       {this.state.baseFilters !== 'observacao' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="observacaoLabel" for="pad-item-temp-observacao">
                               <Translate contentKey="generadorApp.padItemTemp.observacao">Observacao</Translate>
                             </Label>
@@ -328,7 +330,7 @@ export class PadItemTemp extends React.Component<IPadItemTempProps, IPadItemTemp
 
                       {this.state.baseFilters !== 'cidXPtaNovoId' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="cidXPtaNovoIdLabel" for="pad-item-temp-cidXPtaNovoId">
                               <Translate contentKey="generadorApp.padItemTemp.cidXPtaNovoId">Cid X Pta Novo Id</Translate>
                             </Label>
@@ -339,7 +341,7 @@ export class PadItemTemp extends React.Component<IPadItemTempProps, IPadItemTemp
 
                       {this.state.baseFilters !== 'categoriaId' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="categoriaIdLabel" for="pad-item-temp-categoriaId">
                               <Translate contentKey="generadorApp.padItemTemp.categoriaId">Categoria Id</Translate>
                             </Label>
@@ -350,7 +352,7 @@ export class PadItemTemp extends React.Component<IPadItemTempProps, IPadItemTemp
 
                       {this.state.baseFilters !== 'numGhc' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="numGhcLabel" for="pad-item-temp-numGhc">
                               <Translate contentKey="generadorApp.padItemTemp.numGhc">Num Ghc</Translate>
                             </Label>
@@ -365,13 +367,13 @@ export class PadItemTemp extends React.Component<IPadItemTempProps, IPadItemTemp
                       <Button className="btn btn-success" type="submit">
                         <i className="fa fa-filter" aria-hidden={'true'}></i>
                         &nbsp;
-                        <Translate contentKey="entity.validation.filter">Filter</Translate>
+                        <Translate contentKey="generadorApp.padItemTemp.home.btn_filter">Filter</Translate>
                       </Button>
                       &nbsp;
                       <div className="btn btn-secondary hand" onClick={this.cancelCourse}>
                         <FontAwesomeIcon icon="trash-alt" />
                         &nbsp;
-                        <Translate contentKey="entity.validation.clean">Clean</Translate>
+                        <Translate contentKey="generadorApp.padItemTemp.home.btn_filter_clean">Clean</Translate>
                       </div>
                     </div>
                   </AvForm>

@@ -38,6 +38,7 @@ export interface ITelaBaseState {
 
 export interface ITelaUpdateState {
   fieldsBase: ITelaBaseState;
+
   isNew: boolean;
 }
 

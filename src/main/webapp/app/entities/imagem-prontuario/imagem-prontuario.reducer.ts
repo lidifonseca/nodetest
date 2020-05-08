@@ -41,6 +41,7 @@ export interface IImagemProntuarioBaseState {
 
 export interface IImagemProntuarioUpdateState {
   fieldsBase: IImagemProntuarioBaseState;
+
   isNew: boolean;
 }
 

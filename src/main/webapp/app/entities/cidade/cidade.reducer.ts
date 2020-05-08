@@ -38,6 +38,7 @@ export interface ICidadeBaseState {
 
 export interface ICidadeUpdateState {
   fieldsBase: ICidadeBaseState;
+
   isNew: boolean;
 }
 

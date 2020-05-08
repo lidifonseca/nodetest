@@ -42,6 +42,7 @@ export interface IMotivoPsBaseState {
 
 export interface IMotivoPsUpdateState {
   fieldsBase: IMotivoPsBaseState;
+
   isNew: boolean;
 }
 

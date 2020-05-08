@@ -8,7 +8,7 @@
         }
     ],
     "relationships": [],
-    "changelogDate": "20200507111600",
+    "changelogDate": "20200508160600",
     "entityTableName": "log_user_franquia",
     "dto": "mapstruct",
     "pagination": "pagination",

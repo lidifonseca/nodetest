@@ -1,8 +1,14 @@
 {
   "generadorApp": {
     "profissionalDispositivoComplexidade": {
+      "listButtons": {},
+      "viewButtons": {},
+      "dropdown_btn": "Actions",
       "home": {
         "title": "Profissional Dispositivo Complexidades",
+        "btn_filter": "Filtrar",
+        "btn_filter_clean": "Limpar Filtros",
+        "btn_filter_open": "Filtros",
         "createLabel": "Criar novo Profissional Dispositivo Complexidade",
         "createOrEditLabel": "Criar ou editar Profissional Dispositivo Complexidade",
         "notFound": "Nenhum Profissional Dispositivo Complexidade encontrado"

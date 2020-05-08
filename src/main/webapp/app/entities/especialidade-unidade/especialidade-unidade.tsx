@@ -2,6 +2,7 @@
 import React from 'react';
 import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
 import { connect } from 'react-redux';
+import Select from 'react-select';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import {
   Button,
@@ -160,32 +161,33 @@ export class EspecialidadeUnidade extends React.Component<IEspecialidadeUnidadeP
     const { unidadeEasies, especialidadeUnidadeList, match, totalItems } = this.props;
     return (
       <div>
-        <ol className="breadcrumb float-xl-right">
+        <h2 id="page-heading">
+          <span className="page-header">Especialidade Unidades</span>
+          <Button id="togglerFilterEspecialidadeUnidade" className="btn btn-primary float-right jh-create-entity">
+            <Translate contentKey="generadorApp.especialidadeUnidade.home.btn_filter_open">Filters</Translate>
+            &nbsp;
+            <FontAwesomeIcon icon="caret-down" />
+          </Button>{' '}
+          &nbsp;
+          <Link
+            to={`${match.url}/new?${this.getFiltersURL()}`}
+            className="btn btn-primary float-right jh-create-entity"
+            id="jh-create-entity"
+          >
+            <FontAwesomeIcon icon="plus" />
+            &nbsp;
+            <Translate contentKey="generadorApp.especialidadeUnidade.home.createLabel">Create a new Especialidade Unidade</Translate>
+          </Link>{' '}
+          &nbsp;
+        </h2>
+
+        <ol className="breadcrumb">
           <li className="breadcrumb-item">
             <Link to="/">Inicio</Link>
           </li>
           <li className="breadcrumb-item active">Especialidade Unidades</li>
         </ol>
-        <h1 className="page-header">&nbsp;&nbsp;</h1>
         <Panel>
-          <PanelHeader>
-            <h2 id="page-heading">
-              <span className="page-header ml-3">Especialidade Unidades</span>
-              <Button id="togglerFilterEspecialidadeUnidade" className="btn btn-primary float-right jh-create-entity">
-                Filtros&nbsp;
-                <FontAwesomeIcon icon="caret-down" />
-              </Button>
-              <Link
-                to={`${match.url}/new?${this.getFiltersURL()}`}
-                className="btn btn-primary float-right jh-create-entity"
-                id="jh-create-entity"
-              >
-                <FontAwesomeIcon icon="plus" />
-                &nbsp;
-                <Translate contentKey="generadorApp.especialidadeUnidade.home.createLabel">Create a new Especialidade Unidade</Translate>
-              </Link>
-            </h2>
-          </PanelHeader>
           <PanelBody>
             <div className="table-responsive">
               <UncontrolledCollapse toggler="#togglerFilterEspecialidadeUnidade">
@@ -194,7 +196,7 @@ export class EspecialidadeUnidade extends React.Component<IEspecialidadeUnidadeP
                     <div className="row mt-1 ml-3 mr-3">
                       {this.state.baseFilters !== 'valorBaixaUrg' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="valorBaixaUrgLabel" for="especialidade-unidade-valorBaixaUrg">
                               <Translate contentKey="generadorApp.especialidadeUnidade.valorBaixaUrg">Valor Baixa Urg</Translate>
                             </Label>
@@ -210,7 +212,7 @@ export class EspecialidadeUnidade extends React.Component<IEspecialidadeUnidadeP
 
                       {this.state.baseFilters !== 'valorAltaUrg' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="valorAltaUrgLabel" for="especialidade-unidade-valorAltaUrg">
                               <Translate contentKey="generadorApp.especialidadeUnidade.valorAltaUrg">Valor Alta Urg</Translate>
                             </Label>
@@ -226,7 +228,7 @@ export class EspecialidadeUnidade extends React.Component<IEspecialidadeUnidadeP
 
                       {this.state.baseFilters !== 'valorPagar' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="valorPagarLabel" for="especialidade-unidade-valorPagar">
                               <Translate contentKey="generadorApp.especialidadeUnidade.valorPagar">Valor Pagar</Translate>
                             </Label>
@@ -237,7 +239,7 @@ export class EspecialidadeUnidade extends React.Component<IEspecialidadeUnidadeP
 
                       {this.state.baseFilters !== 'publicar' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="publicarLabel" for="especialidade-unidade-publicar">
                               <Translate contentKey="generadorApp.especialidadeUnidade.publicar">Publicar</Translate>
                             </Label>
@@ -248,7 +250,7 @@ export class EspecialidadeUnidade extends React.Component<IEspecialidadeUnidadeP
 
                       {this.state.baseFilters !== 'comentarioPreco' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="comentarioPrecoLabel" for="especialidade-unidade-comentarioPreco">
                               <Translate contentKey="generadorApp.especialidadeUnidade.comentarioPreco">Comentario Preco</Translate>
                             </Label>
@@ -265,21 +267,28 @@ export class EspecialidadeUnidade extends React.Component<IEspecialidadeUnidadeP
 
                       {this.state.baseFilters !== 'unidade' ? (
                         <Col md="3">
-                          <Row>
-                            <div>
+                          <Row className="mr-1 mt-1">
+                            <div style={{ width: '100%' }}>
                               <Label for="especialidade-unidade-unidade">
                                 <Translate contentKey="generadorApp.especialidadeUnidade.unidade">Unidade</Translate>
                               </Label>
-                              <AvInput id="especialidade-unidade-unidade" type="select" className="form-control" name="unidadeId">
-                                <option value="" key="0" />
-                                {unidadeEasies
-                                  ? unidadeEasies.map(otherEntity => (
-                                      <option value={otherEntity.id} key={otherEntity.id}>
-                                        {otherEntity.razaoSocial}
-                                      </option>
-                                    ))
-                                  : null}
-                              </AvInput>
+                              <Select
+                                id="especialidade-unidade-unidade"
+                                isMulti
+                                className={'css-select-control'}
+                                value={
+                                  unidadeEasies
+                                    ? unidadeEasies.map(p =>
+                                        this.state.unidade.split(',').indexOf(p.id) !== -1 ? { value: p.id, label: p.razaoSocial } : null
+                                      )
+                                    : null
+                                }
+                                options={
+                                  unidadeEasies ? unidadeEasies.map(option => ({ value: option.id, label: option.razaoSocial })) : null
+                                }
+                                onChange={options => this.setState({ unidade: options.map(option => option['value']).join(',') })}
+                                name={'unidade'}
+                              />
                             </div>
                           </Row>
                         </Col>
@@ -290,13 +299,13 @@ export class EspecialidadeUnidade extends React.Component<IEspecialidadeUnidadeP
                       <Button className="btn btn-success" type="submit">
                         <i className="fa fa-filter" aria-hidden={'true'}></i>
                         &nbsp;
-                        <Translate contentKey="entity.validation.filter">Filter</Translate>
+                        <Translate contentKey="generadorApp.especialidadeUnidade.home.btn_filter">Filter</Translate>
                       </Button>
                       &nbsp;
                       <div className="btn btn-secondary hand" onClick={this.cancelCourse}>
                         <FontAwesomeIcon icon="trash-alt" />
                         &nbsp;
-                        <Translate contentKey="entity.validation.clean">Clean</Translate>
+                        <Translate contentKey="generadorApp.especialidadeUnidade.home.btn_filter_clean">Clean</Translate>
                       </div>
                     </div>
                   </AvForm>

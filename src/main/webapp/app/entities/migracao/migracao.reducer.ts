@@ -39,6 +39,7 @@ export interface IMigracaoBaseState {
 
 export interface IMigracaoUpdateState {
   fieldsBase: IMigracaoBaseState;
+
   isNew: boolean;
 }
 

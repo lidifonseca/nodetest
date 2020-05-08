@@ -1,8 +1,14 @@
 {
   "generadorApp": {
     "pacienteDiagnostico": {
+      "listButtons": {},
+      "viewButtons": {},
+      "dropdown_btn": "Ações",
       "home": {
         "title": "Paciente Diagnosticos",
+        "btn_filter": "Filter",
+        "btn_filter_clean": "Clean Filters",
+        "btn_filter_open": "Filters",
         "createLabel": "Create a new Paciente Diagnostico",
         "createOrEditLabel": "Create or edit a Paciente Diagnostico",
         "notFound": "No Paciente Diagnosticos found"

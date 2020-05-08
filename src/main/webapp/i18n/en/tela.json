@@ -1,8 +1,14 @@
 {
   "generadorApp": {
     "tela": {
+      "listButtons": {},
+      "viewButtons": {},
+      "dropdown_btn": "Ações",
       "home": {
         "title": "Telas",
+        "btn_filter": "Filter",
+        "btn_filter_clean": "Clean Filters",
+        "btn_filter_open": "Filters",
         "createLabel": "Create a new Tela",
         "createOrEditLabel": "Create or edit a Tela",
         "notFound": "No Telas found"

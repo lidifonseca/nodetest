@@ -1,8 +1,14 @@
 {
   "generadorApp": {
     "profissionalArquivo": {
+      "listButtons": {},
+      "viewButtons": {},
+      "dropdown_btn": "Ações",
       "home": {
         "title": "Profissional Arquivos",
+        "btn_filter": "Filter",
+        "btn_filter_clean": "Clean Filters",
+        "btn_filter_open": "Filters",
         "createLabel": "Create a new Profissional Arquivo",
         "createOrEditLabel": "Create or edit a Profissional Arquivo",
         "notFound": "No Profissional Arquivos found"

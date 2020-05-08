@@ -76,6 +76,7 @@ export interface IUsuarioPainelGerencialBaseState {
 
 export interface IUsuarioPainelGerencialUpdateState {
   fieldsBase: IUsuarioPainelGerencialBaseState;
+
   isNew: boolean;
 }
 

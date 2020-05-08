@@ -1,8 +1,14 @@
 {
   "generadorApp": {
     "atendimentoAtividades": {
+      "listButtons": {},
+      "viewButtons": {},
+      "dropdown_btn": "Actions",
       "home": {
         "title": "Atendimento Atividades",
+        "btn_filter": "Filtrar",
+        "btn_filter_clean": "Limpar Filtros",
+        "btn_filter_open": "Filtros",
         "createLabel": "Criar novo Atendimento Atividades",
         "createOrEditLabel": "Criar ou editar Atendimento Atividades",
         "notFound": "Nenhum Atendimento Atividades encontrado"
