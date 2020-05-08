@@ -46,9 +46,6 @@ export const EntitiesMenu = props => (
     <MenuItem icon="asterisk" to="/pad-csv">
       <Translate contentKey="global.menu.entities.padCsv" />
     </MenuItem>
-    <MenuItem icon="asterisk" to="/phinxlog">
-      <Translate contentKey="global.menu.entities.phinxlog" />
-    </MenuItem>
     <MenuItem icon="asterisk" to="/acao">
       <Translate contentKey="global.menu.entities.acao" />
     </MenuItem>

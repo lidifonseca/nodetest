@@ -31,8 +31,9 @@
 <%_ const otherEntityField = rel.otherEntityField; _%>
 <%_ const relationshipRequired = rel.relationshipRequired; _%>
 <%_ const translationKey = `${i18nKeyPrefix}.${relationshipName}`; _%>
-{ baseFilters !== '<%= relationshipFieldName %>' ?
-    <Col md="<%= formLayoutSize %>">
+{ 
+  return ( baseFilters !== '<%= relationshipFieldName %>' ?
+    (<Col md="<%= formLayoutSize %>">
       <%_ if (relationshipType === 'many-to-one' || (relationshipType === 'one-to-one' && ownerSide === true && otherEntityName === 'user')) { _%>
         <AvGroup>
           <Row>
@@ -44,57 +45,46 @@
             <Col md="<%= formLayoutLabel == 'top' ? 12 : 9  %>">
               <%_ if (dto === 'no') { _%>
                 <%_ if (!relationshipRequired) { _%>
-                  <AvInput id="<%= entityFileName %>-<%= relationshipName %>" type="select" className="form-control"
-                      name="<%= relationshipFieldName %>">
-                      <option value="null" key="0">{translate("<%= translationKey %>.empty")}</option>
-                      {
-                      <%= otherEntityNamePlural %> ? <%= otherEntityNamePlural %>.map(otherEntity =>
-                      <option value={otherEntity.id} key={otherEntity.id}>
-                        {otherEntity.<%=otherEntityField%>}
-                      </option>
-                      ) : null
-                      }
-                  </AvInput>
+
+                  <Select 
+                    id="<%= entityFileName %>-<%= relationshipName %>" className={"css-select-control"}
+                    value={this.state.<%= otherEntityName %>SelectValue} 
+                    options={<%= otherEntityNamePlural %> ? <%= otherEntityNamePlural %>.map((option)=>({value: option.id , label: option.<%=otherEntityField%>})) : null} 
+                    onChange={options => this.setState({ <%= otherEntityName %>SelectValue: options}) }
+                    name={"<%= relationshipFieldName %>"} 
+                  />
                 <%_ } else { _%>
-                  <AvInput id="<%= entityFileName %>-<%= relationshipName %>" type="select" className="form-control"
-                    name="<%= relationshipFieldName %>" value={isNew ? <%= otherEntityNamePlural %>[0] &&
-                    <%= otherEntityNamePlural %>[0].id : <%= entityInstance %>Entity.<%= relationshipName %>.id} required>
-                    {
-                    <%= otherEntityNamePlural %> ? <%= otherEntityNamePlural %>.map(otherEntity =>
-                    <option value={otherEntity.id} key={otherEntity.id}>
-                      {otherEntity.<%=otherEntityField%>}
-                    </option>
-                    ) : null
-                    }
-                  </AvInput>
+
+                  <Select 
+                    id="<%= entityFileName %>-<%= relationshipName %>"  className={"css-select-control"}
+                    value={<%= otherEntityNamePlural %> ? <%= otherEntityNamePlural %>.map((p)=>(this.state.<%= entityInstance %>Entity.<%= relationshipName %> === p.id ? {value: p.id , label: p.id} : null)) : null} 
+                    options={<%= otherEntityNamePlural %> ? <%= otherEntityNamePlural %>.map((option)=>({value: option.id , label: option.<%=otherEntityField%>})) : null} 
+                    onChange={options => this.setState({ <%= relationshipName %>: options.map((option)=>(option['value'])).join(",") }) }
+                    name={"<%= relationshipFieldName %>"} 
+                  />
                   <AvFeedback>
                     <Translate contentKey="entity.validation.required">This field is required.</Translate>
                   </AvFeedback>
                 <%_ } _%>
               <%_ } else { _%>
                 <%_ if (!relationshipRequired) { _%>
-                  <AvInput id="<%= entityFileName %>-<%= relationshipName %>" type="select" className="form-control"
-                    name="<%= relationshipFieldName %>">
-                    <option value="null" key="0">{translate("<%= translationKey %>.empty")}</option>
-                    {
-                    <%= otherEntityNamePlural %> ? <%= otherEntityNamePlural %>.map(otherEntity =>
-                    <option value={otherEntity.id} key={otherEntity.id}>
-                      {otherEntity.<%=otherEntityField%>}
-                    </option>
-                    ) : null
-                    }
-                  </AvInput>
+
+                  <Select 
+                    id="<%= entityFileName %>-<%= relationshipName %>" className={"css-select-control"}
+                    value={this.state.<%= otherEntityName %>SelectValue} 
+                    options={<%= otherEntityNamePlural %> ? <%= otherEntityNamePlural %>.map((option)=>({value: option.id , label: option.<%=otherEntityField%>})) : null} 
+                    onChange={options => this.setState({ <%= otherEntityName %>SelectValue: options}) }
+                    name={"<%= relationshipFieldName %>"} 
+                  />
                 <%_ } else { _%>
-                  <AvInput id="<%= entityFileName %>-<%= relationshipName %>" type="select" className="form-control"
-                    name="<%= relationshipFieldName %>" required>
-                    {
-                    <%= otherEntityNamePlural %> ? <%= otherEntityNamePlural %>.map(otherEntity =>
-                    <option value={otherEntity.id} key={otherEntity.id}>
-                      {otherEntity.<%=otherEntityField%>}
-                    </option>
-                    ) : null
-                    }
-                  </AvInput>
+
+                  <Select 
+                  id="<%= entityFileName %>-<%= relationshipName %>" className={"css-select-control"}
+                  value={this.state.<%= otherEntityName %>SelectValue} 
+                  options={<%= otherEntityNamePlural %> ? <%= otherEntityNamePlural %>.map((option)=>({value: option.id , label: option.<%=otherEntityField%>})) : null} 
+                  onChange={options => this.setState({ <%= otherEntityName %>SelectValue: options}) }
+                  name={"<%= relationshipFieldName %>"} 
+                />
                   <AvFeedback>
                     <Translate contentKey="entity.validation.required">This field is required.</Translate>
                   </AvFeedback>
@@ -113,29 +103,23 @@
             </Col>
             <Col md="<%= formLayoutLabel == 'top' ? 12 : 9  %>">
             <%_ if (dto === 'no') { _%>
-            <AvInput id="<%= entityFileName %>-<%= relationshipName %>" type="select" className="form-control"
-              name="<%= relationshipFieldName %>">
-              <option value="null" key="0">{translate("<%= translationKey %>.empty")}</option>
-              {
-              <%= otherEntityNamePlural %> ? <%= otherEntityNamePlural %>.map(otherEntity =>
-              <option value={otherEntity.id} key={otherEntity.id}>
-                {otherEntity.<%=otherEntityField%>}
-              </option>
-              ) : null
-              }
-            </AvInput>
+
+              <Select 
+              id="<%= entityFileName %>-<%= relationshipName %>" className={"css-select-control"}
+              value={this.state.<%= otherEntityName %>SelectValue} 
+              options={<%= otherEntityNamePlural %> ? <%= otherEntityNamePlural %>.map((option)=>({value: option.id , label: option.<%=otherEntityField%>})) : null} 
+              onChange={options => this.setState({ <%= otherEntityName %>SelectValue: options}) }
+              name={"<%= relationshipFieldName %>"} 
+            />
             <%_ } else { _%>
-            <AvInput id="<%= entityFileName %>-<%= relationshipName %>" type="select" className="form-control"
-              name="<%= relationshipFieldName %>">
-              <option value="" key="0" />
-              {
-              <%= otherEntityNamePlural %> ? <%= otherEntityNamePlural %>.map(otherEntity =>
-              <option value={otherEntity.id} key={otherEntity.id}>
-                {otherEntity.<%=otherEntityField%>}
-              </option>
-              ) : null
-              }
-            </AvInput>
+
+              <Select 
+              id="<%= entityFileName %>-<%= relationshipName %>" className={"css-select-control"}
+              value={this.state.<%= otherEntityName %>SelectValue} 
+              options={<%= otherEntityNamePlural %> ? <%= otherEntityNamePlural %>.map((option)=>({value: option.id , label: option.<%=otherEntityField%>})) : null} 
+              onChange={options => this.setState({ <%= otherEntityName %>SelectValue: options}) }
+              name={"<%= relationshipFieldName %>"} 
+            />
             <%_ } _%>
           </Col> <br />
         </AvGroup>
@@ -148,11 +132,19 @@
             </Label>
             </Col>
             <Col md="<%= formLayoutLabel == 'top' ? 12 : 9  %>">
+
+            <Select 
+              id="<%= entityFileName %>-<%= relationshipName %>" isMulti className={"css-select-control"}
+              value={<%= otherEntityNamePlural %> ? <%= otherEntityNamePlural %>.map((p)=>(this.state.<%= entityInstance %>Entity.<%= relationshipName %> === p.id ? {value: p.id , label: p.id} : null)) : null} 
+              options={<%= otherEntityNamePlural %> ? <%= otherEntityNamePlural %>.map((option)=>({value: option.id , label: option.<%=otherEntityField%>})) : null} 
+              onChange={options => this.setState({ <%= relationshipName %>: options.map((option)=>(option['value'])).join(",") }) }
+              name={"<%= relationshipFieldName %>"} 
+            />
             <AvInput id="<%= entityFileName %>-<%= relationshipName %>" type="select" multiple className="form-control"
               name="<%= relationshipFieldNamePlural %>" value={<%= entityInstance %>Entity.<%= relationshipFieldNamePlural %>
               && <%= entityInstance %>Entity.<%= relationshipFieldNamePlural %>.map(e=> e.id)}
               >
-              <option value="null" key="0">{translate("<%= translationKey %>.empty")}</option>
+              <option value="null" key="0">{translate("<%= translationKey %>_empty")}</option>
               {
               (<%= otherEntityNamePlural %>) ? <%= otherEntityNamePlural %>.map(otherEntity =>
               <option value={otherEntity.id} key={otherEntity.id}>
@@ -165,145 +157,158 @@
           </Row>
         </AvGroup> 
       <%_ } _%> 
-    </Col> : 
-  <AvInput type="hidden" name="<%= relationshipFieldName %>" value={this.state.fieldsBase[baseFilters]} /> }
+    </Col>) : 
+    <AvInput type="hidden" name="<%= relationshipFieldName %>" value={this.state.fieldsBase[baseFilters]} /> 
+  )
+}
 <%_ } _%>
 
 <%_ function printFields(field){ _%>
-
 <%_ const formLayoutLabel =  field.formLayoutLabel ?  field.formLayoutLabel : 'left' ; _%>
 <%_ const formLayoutSize =  field.formLayoutSize ?  field.formLayoutSize : 12; _%>
 <% const fieldType =  field.fieldType; _%>
 <% const fieldName =  field.fieldName; _%>
 <% const fieldNameHumanized =  field.fieldNameHumanized; _%>
-{ baseFilters !== '<%= fieldName %>' ?
-  <Col md="<%= fieldName %>">
-    <AvGroup>
-      <Row>
-        <%_ if (fieldType === 'Boolean') { _%>
-          <Col md="12">
-            <Label className="mt-2" id="<%= fieldName %>Label" check>
-              <AvInput id="<%= entityFileName %>-<%= fieldName %>" type="checkbox" className="form-control"
-                name="<%= fieldName %>" />
-              <Translate contentKey="<%= i18nKeyPrefix %>.<%= fieldName %>">
-                <%= fieldNameHumanized %>
-              </Translate>
-            </Label>
-          </Col>
-        <%_ } else if (['Instant', 'ZonedDateTime'].includes(fieldType)) { _%>
-          <Col md="<%= formLayoutLabel == 'top' ? 12 : 3  %>">
-            <Label className="mt-2" id="<%= fieldName %>Label" for="<%= entityFileName %>-<%= fieldName %>">
-              <Translate contentKey="<%= i18nKeyPrefix %>.<%= fieldName %>">
-                <%= fieldNameHumanized %>
-              </Translate>
-            </Label>
-          </Col>
-          <Col md="<%= formLayoutLabel == 'top' ? 12 : 9  %>">
-            <AvInput id="<%= entityFileName %>-<%= fieldName %>" type="datetime-local" className="form-control"
-              name="<%= fieldName %>" placeholder={"YYYY-MM-DD HH:mm"} value={isNew ? null :
-              convertDateTimeFromServer(this.props.<%= entityInstance %>Entity.<%= fieldName %>)}
-              <%- include react_validators %> />
-          </Col>
-        <%_ } else if (fieldType === 'LocalDate') { _%>
-          <Col md="<%= formLayoutLabel == 'top' ? 12 : 3  %>">
-            <Label className="mt-2" id="<%= fieldName %>Label" for="<%= entityFileName %>-<%= fieldName %>">
-              <Translate contentKey="<%= i18nKeyPrefix %>.<%= fieldName %>">
-                <%= fieldNameHumanized %>
-              </Translate>
-            </Label>
-          </Col>
-          <Col md="<%= formLayoutLabel == 'top' ? 12 : 9  %>">
-            <AvField id="<%= entityFileName %>-<%= fieldName %>" type="date" className="form-control" name="<%= fieldName %>"
-              <%- include react_validators %> />
-          </Col>
-        <%_
-      } else if ( field.fieldIsEnum) {
-        const values =  field.fieldValues.replace(/\s/g, '').split(',');
-    _%>
-        <Col md="<%= formLayoutLabel == 'top' ? 12 : 3  %>">
-          <Label className="mt-2" id="<%= fieldName %>Label" for="<%= entityFileName %>-<%= fieldName %>">
-            <Translate contentKey="<%= i18nKeyPrefix %>.<%= fieldName %>">
-              <%= fieldNameHumanized %>
-            </Translate>
-          </Label>
-        </Col>
-        <Col md="<%= formLayoutLabel == 'top' ? 12 : 9  %>">
-        <AvInput id="<%= entityFileName %>-<%= fieldName %>" type="select" className="form-control"
-          name="<%= fieldName %>" value={(!isNew && <%= entityInstance %>Entity.<%= fieldName%>) || '<%= values[0] %>' }>
-          <%_
-          const enumPrefix = angularAppName + '.'+ fieldType;
-          for (key in values) {
-              const value = values[key];
-        _%>
-          <option value="<%= value %>">
-            <%_ if (enableTranslation) { _%>
-            {translate("<%= enumPrefix %>.<%= value %>")}
-            <%_ } else { _%>
-            <%= value %>
-            <%_ } _%>
-          </option>
-          <%_ } _%>
-        </AvInput>
-        </Col>
-        <%_ } else if (['Integer', 'Long', 'Float', 'Double'].includes(fieldType)) { _%>
-          <Col md="<%= formLayoutLabel == 'top' ? 12 : 3  %>">
-            <Label className="mt-2" id="<%= fieldName %>Label" for="<%= entityFileName %>-<%= fieldName %>">
-              <Translate contentKey="<%= i18nKeyPrefix %>.<%= fieldName %>">
-                <%= fieldNameHumanized %>
-              </Translate>
-            </Label>
-          </Col>
-          <Col md="<%= formLayoutLabel == 'top' ? 12 : 9  %>">
-              <AvField id="<%= entityFileName %>-<%= fieldName %>" type="string" className="form-control" name="<%= fieldName %>" /> 
-          </Col>
-        <%_ } else if (['byte[]', 'ByteBuffer'].includes(fieldType)) {
-
-            const fieldBlobType =  field.fieldTypeBlobContent;
-            if (fieldBlobType !== 'text') {
-              const isAnImage = fieldBlobType === 'image';
-              const capitalizedFirstLetter =  _.upperFirst(fieldName);
-
-        _%>
-            <Col md="<%= formLayoutSize %>">
-              <AvGroup>
-                <Row>
-                  <Col md="<%= formLayoutLabel == 'top' ? 12 : 3  %>">
-                    <Label className="mt-2" id="<%= fieldName %>Label" for="<%= fieldName %>">
-                      <Translate contentKey="<%= i18nKeyPrefix %>.<%= fieldName %>">
-                        <%= fieldNameHumanized %>
-                      </Translate>
-                    </Label>
-                  </Col>
-                  <Col md="<%= formLayoutLabel == 'top' ? 12 : 9  %>">
-                    <br />
-                    {(<%= fieldName %> || <%= fieldName %>Base64)  ? (
-                    <div>
-                      <Row>
-                        <Col md="11">
-                        </Col>
-                        <Col md="1">
-                        <Button color="danger" onClick={this.clearBlob('<%= fieldName %>')}>
-                          <FontAwesomeIcon icon="times-circle" /></Button>
-                        </Col>
-                      </Row>
-                      <a rel="noopener noreferrer" target={"_blank"} href={`${<%= fieldName %>}`}>
-                        <%_ if (isAnImage) { _%>
-                        <img src={`${<%= fieldName %>Base64  ? ('data:'+<%= fieldName %>ContentType+';base64,'+arquivoBase64) : <%= fieldName %>}`}
-                          style={{ maxHeight: '100px' }} />
-                        <%_ } else { _%>
-                        <Translate contentKey="entity.action.open">Open</Translate>
-                        <%_ } _%>
-                      </a>
-                      <br />
-                    </div>
-                    ) : null}
-                    <input id="file_<%= fieldName %>" type="file" ref={this.<%= fields[idx].fieldName %>FileInput} onChange={this.onBlobChange(<%= isAnImage %>, '<%= fieldName %>', this.<%= fields[idx].fieldName %>FileInput
-                      )} <% if (isAnImage) { %>accept="image/*" <% } %> />
-                    <AvInput type="hidden"  name="<%= fieldName %>" value={<%= fieldName %>} <%- include react_validators %> />
-                  </Col>
-                </Row>
-              </AvGroup>  
+{ return ( baseFilters !== '<%= fieldName %>' ?
+    (<Col md="<%= fieldName %>">
+      <AvGroup>
+        <Row>
+          <%_ if (fieldType === 'Boolean') { _%>
+            <Col md="12">
+              <Label className="mt-2" id="<%= fieldName %>Label" check>
+                <AvInput id="<%= entityFileName %>-<%= fieldName %>" type="checkbox" className="form-control"
+                  name="<%= fieldName %>" />
+                <Translate contentKey="<%= i18nKeyPrefix %>.<%= fieldName %>">
+                  <%= fieldNameHumanized %>
+                </Translate>
+              </Label>
             </Col>
+          <%_ } else if (['Instant', 'ZonedDateTime'].includes(fieldType)) { _%>
+            <Col md="<%= formLayoutLabel == 'top' ? 12 : 3  %>">
+              <Label className="mt-2" id="<%= fieldName %>Label" for="<%= entityFileName %>-<%= fieldName %>">
+                <Translate contentKey="<%= i18nKeyPrefix %>.<%= fieldName %>">
+                  <%= fieldNameHumanized %>
+                </Translate>
+              </Label>
+            </Col>
+            <Col md="<%= formLayoutLabel == 'top' ? 12 : 9  %>">
+              <AvInput id="<%= entityFileName %>-<%= fieldName %>" type="datetime-local" className="form-control"
+                name="<%= fieldName %>" placeholder={"YYYY-MM-DD HH:mm"} value={isNew ? null :
+                convertDateTimeFromServer(this.props.<%= entityInstance %>Entity.<%= fieldName %>)}
+                <%- include react_validators %> />
+            </Col>
+          <%_ } else if (fieldType === 'LocalDate') { _%>
+            <Col md="<%= formLayoutLabel == 'top' ? 12 : 3  %>">
+              <Label className="mt-2" id="<%= fieldName %>Label" for="<%= entityFileName %>-<%= fieldName %>">
+                <Translate contentKey="<%= i18nKeyPrefix %>.<%= fieldName %>">
+                  <%= fieldNameHumanized %>
+                </Translate>
+              </Label>
+            </Col>
+            <Col md="<%= formLayoutLabel == 'top' ? 12 : 9  %>">
+              <AvField id="<%= entityFileName %>-<%= fieldName %>" type="date" className="form-control" name="<%= fieldName %>"
+                <%- include react_validators %> />
+            </Col>
+          <%_
+        } else if ( field.fieldIsEnum) {
+          const values =  field.fieldValues.replace(/\s/g, '').split(',');
+      _%>
+          <Col md="<%= formLayoutLabel == 'top' ? 12 : 3  %>">
+            <Label className="mt-2" id="<%= fieldName %>Label" for="<%= entityFileName %>-<%= fieldName %>">
+              <Translate contentKey="<%= i18nKeyPrefix %>.<%= fieldName %>">
+                <%= fieldNameHumanized %>
+              </Translate>
+            </Label>
+          </Col>
+          <Col md="<%= formLayoutLabel == 'top' ? 12 : 9  %>">
+          <AvInput id="<%= entityFileName %>-<%= fieldName %>" type="select" className="form-control"
+            name="<%= fieldName %>" value={(!isNew && <%= entityInstance %>Entity.<%= fieldName%>) || '<%= values[0] %>' }>
+            <%_
+            const enumPrefix = angularAppName + '.'+ fieldType;
+            for (key in values) {
+                const value = values[key];
+          _%>
+            <option value="<%= value %>">
+              <%_ if (enableTranslation) { _%>
+              {translate("<%= enumPrefix %>.<%= value %>")}
+              <%_ } else { _%>
+              <%= value %>
+              <%_ } _%>
+            </option>
+            <%_ } _%>
+          </AvInput>
+          </Col>
+          <%_ } else if (['Integer', 'Long', 'Float', 'Double'].includes(fieldType)) { _%>
+            <Col md="<%= formLayoutLabel == 'top' ? 12 : 3  %>">
+              <Label className="mt-2" id="<%= fieldName %>Label" for="<%= entityFileName %>-<%= fieldName %>">
+                <Translate contentKey="<%= i18nKeyPrefix %>.<%= fieldName %>">
+                  <%= fieldNameHumanized %>
+                </Translate>
+              </Label>
+            </Col>
+            <Col md="<%= formLayoutLabel == 'top' ? 12 : 9  %>">
+                <AvField id="<%= entityFileName %>-<%= fieldName %>" type="string" className="form-control" name="<%= fieldName %>" /> 
+            </Col>
+          <%_ } else if (['byte[]', 'ByteBuffer'].includes(fieldType)) {
+
+              const fieldBlobType =  field.fieldTypeBlobContent;
+              if (fieldBlobType !== 'text') {
+                const isAnImage = fieldBlobType === 'image';
+                const capitalizedFirstLetter =  _.upperFirst(fieldName);
+
+          _%>
+              <Col md="<%= formLayoutSize %>">
+                <AvGroup>
+                  <Row>
+                    <Col md="<%= formLayoutLabel == 'top' ? 12 : 3  %>">
+                      <Label className="mt-2" id="<%= fieldName %>Label" for="<%= fieldName %>">
+                        <Translate contentKey="<%= i18nKeyPrefix %>.<%= fieldName %>">
+                          <%= fieldNameHumanized %>
+                        </Translate>
+                      </Label>
+                    </Col>
+                    <Col md="<%= formLayoutLabel == 'top' ? 12 : 9  %>">
+                      <br />
+                      {(<%= fieldName %> || <%= fieldName %>Base64)  ? (
+                      <div>
+                        <Row>
+                          <Col md="11">
+                          </Col>
+                          <Col md="1">
+                          <Button color="danger" onClick={this.clearBlob('<%= fieldName %>')}>
+                            <FontAwesomeIcon icon="times-circle" /></Button>
+                          </Col>
+                        </Row>
+                        <a rel="noopener noreferrer" target={"_blank"} href={`${<%= fieldName %>}`}>
+                          <%_ if (isAnImage) { _%>
+                          <img src={`${<%= fieldName %>Base64  ? ('data:'+<%= fieldName %>ContentType+';base64,'+arquivoBase64) : <%= fieldName %>}`}
+                            style={{ maxHeight: '100px' }} />
+                          <%_ } else { _%>
+                          <Translate contentKey="entity.action.open">Open</Translate>
+                          <%_ } _%>
+                        </a>
+                        <br />
+                      </div>
+                      ) : null}
+                      <input id="file_<%= fieldName %>" type="file" ref={this.<%= fields[idx].fieldName %>FileInput} onChange={this.onBlobChange(<%= isAnImage %>, '<%= fieldName %>', this.<%= fields[idx].fieldName %>FileInput
+                        )} <% if (isAnImage) { %>accept="image/*" <% } %> />
+                      <AvInput type="hidden"  name="<%= fieldName %>" value={<%= fieldName %>} <%- include react_validators %> />
+                    </Col>
+                  </Row>
+                </AvGroup>  
+              </Col>
+        <%_ } else { _%>
+          <Col md="<%= formLayoutLabel == 'top' ? 12 : 3  %>">
+            <Label className="mt-2" id="<%= fieldName %>Label" for="<%= entityFileName %>-<%= fieldName %>">
+              <Translate contentKey="<%= i18nKeyPrefix %>.<%= fieldName %>">
+                <%= fieldNameHumanized %>
+              </Translate>
+            </Label>
+          </Col>
+          <Col md="<%= formLayoutLabel == 'top' ? 12 : 9  %>">
+            <AvInput id="<%= entityFileName %>-<%= fieldName %>" type="textarea" name="<%= fieldName %>" <%- include react_validators %> />
+          </Col>
+        <%_ } _%>
       <%_ } else { _%>
         <Col md="<%= formLayoutLabel == 'top' ? 12 : 3  %>">
           <Label className="mt-2" id="<%= fieldName %>Label" for="<%= entityFileName %>-<%= fieldName %>">
@@ -313,34 +318,24 @@
           </Label>
         </Col>
         <Col md="<%= formLayoutLabel == 'top' ? 12 : 9  %>">
-          <AvInput id="<%= entityFileName %>-<%= fieldName %>" type="textarea" name="<%= fieldName %>" <%- include react_validators %> />
+          <AvField id="<%= entityFileName %>-<%= fieldName %>" type="text" name="<%= fieldName %>"  />
         </Col>
       <%_ } _%>
-    <%_ } else { _%>
-      <Col md="<%= formLayoutLabel == 'top' ? 12 : 3  %>">
-        <Label className="mt-2" id="<%= fieldName %>Label" for="<%= entityFileName %>-<%= fieldName %>">
-          <Translate contentKey="<%= i18nKeyPrefix %>.<%= fieldName %>">
-            <%= fieldNameHumanized %>
-          </Translate>
-        </Label>
-      </Col>
-      <Col md="<%= formLayoutLabel == 'top' ? 12 : 9  %>">
-        <AvField id="<%= entityFileName %>-<%= fieldName %>" type="text" name="<%= fieldName %>"  />
-      </Col>
-    <%_ } _%>
-    <%_ if ( field.javadoc) { _%>
-      <UncontrolledTooltip target="<%= fieldName %>Label">
-        <%_ if (enableTranslation) { _%>
-          <Translate contentKey="<%= i18nKeyPrefix %>.help.<%= fieldName %>" />
-        <%_ } else { _%>
-          <%=  field.javadoc %>
-        <%_ } _%>
-      </UncontrolledTooltip>
-    <%_ } _%>
-  </Row>
-    </AvGroup>
-  </Col> : 
-  <AvInput type="hidden" name="<%= fieldName %>" value={this.state.fieldsBase[baseFilters]} /> }
+      <%_ if ( field.javadoc) { _%>
+        <UncontrolledTooltip target="<%= fieldName %>Label">
+          <%_ if (enableTranslation) { _%>
+            <Translate contentKey="<%= i18nKeyPrefix %>.help.<%= fieldName %>" />
+          <%_ } else { _%>
+            <%=  field.javadoc %>
+          <%_ } _%>
+        </UncontrolledTooltip>
+      <%_ } _%>
+    </Row>
+      </AvGroup>
+    </Col>) : 
+    <AvInput type="hidden" name="<%= fieldName %>" value={this.state.fieldsBase[baseFilters]} /> 
+  )
+}
 <%_ } _%>
 
 <%_
@@ -357,6 +352,7 @@ for (const idx in fields) {
 _%>
 import React from 'react';
 import { connect } from 'react-redux';
+import Select from 'react-select';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import {Panel, PanelHeader, PanelBody, PanelFooter} from 'app/shared/layout/panel/panel.tsx';
 import {
@@ -412,7 +408,7 @@ Object.keys(differentRelationships).forEach(key => {
   }
   if (differentRelationships[key].some(rel => rel.relationshipType !== 'one-to-many')) {
     const uniqueRel = differentRelationships[key][0];
-    uniqueRealtionFields.add(uniqueRel.otherEntityNamePlural);
+    uniqueRealtionFields.add({"namePlural": uniqueRel.otherEntityNamePlural, "name": uniqueRel.otherEntityName, "otherEntityField": uniqueRel.otherEntityField });
     otherEntityActions.add({
       action: `get${upperFirstCamelCase(uniqueRel.otherEntityNamePlural)}`,
       instance: `${uniqueRel.otherEntityNamePlural}`,
@@ -475,6 +471,7 @@ export interface I<%= entityReactName %>UpdateProps extends StateProps, Dispatch
       <%_ } %>
     <%_ } _%>
       this.state = {
+      <% uniqueRealtionFields.forEach(rel => { %> <%= rel.name %>SelectValue: null, <% }) %>
       fieldsBase: get<%= entityReactName %>State(this.props.location),
       <%_ if (formTabs.length > 0) { _%>activeTab: 0,<%_ } _%>
       <%_ manyToManyOwners.forEach(val => { _%>
@@ -499,6 +496,13 @@ export interface I<%= entityReactName %>UpdateProps extends StateProps, Dispatch
       if (nextProps.updateSuccess !== this.props.updateSuccess && nextProps.updateSuccess) {
         this.handleClose();
       }
+      <% uniqueRealtionFields.forEach(rel => { %> 
+        if (nextProps.<%= rel.namePlural %>.length > 0 && this.state.<%= rel.name %>SelectValue === null && nextProps.<%= entityInstance %>Entity.<%= rel.name %> && nextProps.<%= entityInstance %>Entity.<%= rel.name %>.id) {
+          this.setState({<%= rel.name %>SelectValue: 
+            nextProps.<%= rel.namePlural %>.map((p)=>(nextProps.<%= entityInstance %>Entity.<%= rel.name %>.id === p.id ? {value: p.id , label: p.<%=rel.otherEntityField%>} : null))
+          })
+        }
+      <% }) %>
       }
 
       componentDidMount() {
@@ -530,21 +534,13 @@ export interface I<%= entityReactName %>UpdateProps extends StateProps, Dispatch
       };
       <%_ } _%>
       getFiltersURL = (offset = null) => {
-          const fieldsBase = this.state.fieldsBase ;
-          return '_back=1' +
-          (fieldsBase['baseFilters']  ? '&baseFilters=' + fieldsBase['baseFilters']  : '') + 
-          (fieldsBase['activePage']   ? '&page='        + fieldsBase['activePage']   : '') +
-          (fieldsBase['itemsPerPage'] ? '&size='         + fieldsBase['itemsPerPage'] : '')  +
-          (fieldsBase['sort']         ? '&sort='         + (fieldsBase['sort'] + ',' + fieldsBase['order']) : '')  +
-          (offset !== null         ? ('&offset=' + offset) : '') +
-            <%_ for (idx in fields) { _%>
-              (fieldsBase['<%= fields[idx].fieldName %>'] ? ('&<%= fields[idx].fieldName %>=' + fieldsBase['<%= fields[idx].fieldName %>'])  : '') +
-            <%_ } _%>
-            <%_ relationships.forEach(rel => { _%>
-              (fieldsBase['<%= rel.relationshipName %>'] ? ('&<%= rel.relationshipName %>=' + fieldsBase['<%= rel.relationshipName %>'])  : '') +
-            <%_ }) _%>
-          ''
-        }
+        const fieldsBase = this.state.fieldsBase;
+        let url = '_back=1' + (offset !== null ? '&offset=' + offset : '');
+        Object.keys(fieldsBase).map((key)=>{
+          url += '&'+key+'=' + fieldsBase[key];
+        }); 
+        return url;
+      };
       saveEntity = (event: any, errors: any, values: any) => {
       <%_ for (idx in fields) {
         const fieldType = fields[idx].fieldType;
@@ -559,6 +555,7 @@ export interface I<%= entityReactName %>UpdateProps extends StateProps, Dispatch
       const { <%= entityInstance %>Entity } = this.props;
       const entity = {
       ...<%= entityInstance %>Entity,
+      <% uniqueRealtionFields.forEach(rel => { %> <%= rel.name %>:  (this.state.<%= rel.name %>SelectValue ? this.state.<%= rel.name %>SelectValue['value'] : null), <% }) %>
       ...values
       <%_ manyToManyOwners.forEach(rel => { _%>
       , <%= rel.relationshipFieldNamePlural %>: mapIdList(values.<%= rel.relationshipFieldNamePlural %>)
@@ -580,7 +577,7 @@ export interface I<%= entityReactName %>UpdateProps extends StateProps, Dispatch
       render() {
       const { <%= entityInstance %>Entity,<%
     uniqueRealtionFields.forEach(rel => {
-    %> <%= rel %>,<% }) %> loading, updating } = this.props;
+    %> <%= rel.namePlural %>,<% }) %> loading, updating } = this.props;
       const { isNew } = this.state;
 
       <%_ for (var i = 0; i < blobFields.length; i++) { _%>
@@ -605,44 +602,42 @@ export interface I<%= entityReactName %>UpdateProps extends StateProps, Dispatch
       return (
 
       <div>
-        <ol className="breadcrumb float-xl-right">
+          <AvForm model={isNew ? {} : {
+            ...<%= entityInstance %>Entity, 
+            <%_ if (formTabs.length > 0) { _%>activeTab: 0,<%_ } _%>
+            <%_ relFieldNames.forEach(val => { _%>
+              <%= val.relationshipFieldName %>:<%= entityInstance %>Entity.<%= val.relationshipFieldName %> ? <%= entityInstance %>Entity.<%= val.relationshipFieldName %>.id: null,
+            <%_ }) _%>
+          } } onSubmit={this.saveEntity}>
+        <h2 id="page-heading">
+            <span className="page-header ml-3">
+              <Translate contentKey="<%= i18nKeyPrefix %>.home.createOrEditLabel">Create or edit a
+                <%= entityClass %></Translate>
+            </span>
+
+
+            <Button color="primary" id="save-entity" type="submit" disabled={updating}
+              className="float-right jh-create-entity">
+              <FontAwesomeIcon icon="save" />&nbsp;
+              <Translate contentKey="entity.action.save">Save</Translate>
+            </Button>
+            <Button tag={Link} id="cancel-save" to={"/<%= entityFileName %>?"+this.getFiltersURL()} replace color="info"
+              className="float-right jh-create-entity">
+              <FontAwesomeIcon icon="arrow-left" />&nbsp;
+              <span className="d-none d-md-inline">
+                <Translate contentKey="entity.action.back">Back</Translate>
+              </span>
+            </Button>
+          </h2>
+        <ol className="breadcrumb">
           <li className="breadcrumb-item">
             <Link to="/">Inicio</Link>
           </li>
           <li className="breadcrumb-item active"><%= entityClassPluralHumanized %></li>
           <li className="breadcrumb-item active"><%= entityClassPluralHumanized %> edit</li>
         </ol>
-        <h1 className="page-header">&nbsp;&nbsp;</h1>
-        <AvForm model={isNew ? {} : {
-          ...<%= entityInstance %>Entity, 
-          <%_ if (formTabs.length > 0) { _%>activeTab: 0,<%_ } _%>
-          <%_ relFieldNames.forEach(val => { _%>
-            <%= val.relationshipFieldName %>:<%= entityInstance %>Entity.<%= val.relationshipFieldName %> ? <%= entityInstance %>Entity.<%= val.relationshipFieldName %>.id: null,
-          <%_ }) _%>
-        } } onSubmit={this.saveEntity}>
+
           <Panel>
-            <PanelHeader>
-              <h2 id="page-heading">
-                <span className="page-header ml-3">
-                  <Translate contentKey="<%= i18nKeyPrefix %>.home.createOrEditLabel">Create or edit a
-                    <%= entityClass %></Translate>
-                </span>
-
-
-                <Button color="primary" id="save-entity" type="submit" disabled={updating}
-                  className="float-right jh-create-entity">
-                  <FontAwesomeIcon icon="save" />&nbsp;
-                  <Translate contentKey="entity.action.save">Save</Translate>
-                </Button>
-                <Button tag={Link} id="cancel-save" to={"/<%= entityFileName %>?"+this.getFiltersURL()} replace color="info"
-                  className="float-right jh-create-entity">
-                  <FontAwesomeIcon icon="arrow-left" />&nbsp;
-                  <span className="d-none d-md-inline">
-                    <Translate contentKey="entity.action.back">Back</Translate>
-                  </span>
-                </Button>
-              </h2>
-            </PanelHeader>
             <PanelBody>
               <Row className="justify-content-center">
                 <Col md="8">
@@ -668,19 +663,19 @@ export interface I<%= entityReactName %>UpdateProps extends StateProps, Dispatch
                     <Row>
                         <%_ if (formLayout.length > 0) {  _%>
                             <%_ for (idx in formLayout) { 
-                                if(formLayout[idx].type == 'field'){
-                                  printFields(formLayout[idx].entity);
-                                } else {
-                                  printRelationships(formLayout[idx].entity);
-                                }
-                            } _%>
+                                if(formLayout[idx].type == 'field'){ %>
+                                  <<%= upperFirstCamelCase(formLayout[idx].name) %>ComponentUpdate baseFilters />
+                                <%_ } else { %>
+                                  <<%= upperFirstCamelCase(formLayout[idx].name) %>ComponentUpdate baseFilters <%= formLayout[idx].entity.otherEntityNamePlural %> />
+                                <%_ } %>
+                            <%_ } _%>
                         <%_ } else { _%>
-                            <%_ for (idx in fields) { 
-                                  printFields(fields[idx]);
-                              } _%>
-                            <%_ relationships.forEach(rel => { 
-                                  printRelationships(rel);
-                            }) _%>
+                            <%_ for (idx in fields) {  %>
+                              <<%= upperFirstCamelCase(fields[idx].fieldName) %>ComponentUpdate baseFilters />
+                            <%_ } _%>
+                            <%_ relationships.forEach(rel => { %>
+                              <<%= upperFirstCamelCase(rel.relationshipFieldName) %>ComponentUpdate baseFilter <%= rel.otherEntityNamePlural %> />
+                            <%_ }) _%>
                         <%_ } _%>
                     </Row>
                   <%_ } else { _%>
@@ -722,24 +717,24 @@ export interface I<%= entityReactName %>UpdateProps extends StateProps, Dispatch
                         <%_ if (formLayout.length > 0) {  _%>
                               <%_ for (idx in formLayout) { 
                                 if(formTabs[iTabs] === formLayout[idx].entity['formTab']) { 
-                                  if(formLayout[idx].type == 'field'){
-                                    printFields(formLayout[idx].entity);
-                                  } else {
-                                    printRelationships(formLayout[idx].entity);
-                                  }
-                                } 
-                              } _%>
+                                  if(formLayout[idx].type == 'field'){ %>
+                                    <<%= upperFirstCamelCase(formLayout[idx].name) %>ComponentUpdate baseFilters />
+                                  <%_ } else { %>
+                                    <<%= upperFirstCamelCase(formLayout[idx].name) %>ComponentUpdate baseFilters <%= formLayout[idx].entity.otherEntityNamePlural %> />
+                                  <%_ } %>
+                              <%_ } _%> 
+                          <%_ } _%>
                         <%_ } else { _%>
                               <%_ for (idx in fields) {
-                                    if(formTabs[iTabs] === fields[idx]['formTab']) { 
-                                      printFields(fields[idx]);
-                                    } 
-                                  } _%>
-                              <%_ relationships.forEach(rel => { 
-                                  if(formTabs[iTabs] === rel['formTab']) { 
-                                    printRelationships(rel);
-                                  }
-                                }) _%>
+                                if(formTabs[iTabs] === fields[idx]['formTab']) { %>
+                                  <<%= upperFirstCamelCase(fields[idx].fieldName) %>ComponentUpdate baseFilters />
+                                <%_ } %>
+                              <%_ } _%>
+                              <%_ relationships.forEach(rel => { %>
+                                <%_ if(formTabs[iTabs] === rel['formTab']) { %>
+                                  <<%= upperFirstCamelCase(rel.relationshipFieldName) %>ComponentUpdate baseFilter <%= rel.otherEntityNamePlural %> />
+                                <%_ } %>
+                              <%_ }) _%>
                         <%_ } _%>
                       </Row> 
 
@@ -796,26 +791,26 @@ export interface I<%= entityReactName %>UpdateProps extends StateProps, Dispatch
                       </Row> : null }
 
                       <%_ if (formLayout.length > 0) {  _%>
-                              <%_ for (idx in formLayout) { 
-                                if(!formLayout[idx].entity['formTab'] || formLayout[idx].entity['formTab'] === "default") { 
-                                  if(formLayout[idx].type == 'field'){
-                                    printFields(formLayout[idx].entity);
-                                  } else {
-                                    printRelationships(formLayout[idx].entity);
-                                  }
-                                } 
-                              } _%>
+                              <%_ for (idx in formLayout) { %>
+                                <%_ if(!formLayout[idx].entity['formTab'] || formLayout[idx].entity['formTab'] === "default") { %>
+                                  <%_ if(formLayout[idx].type == 'field'){%>
+                                    <<%= upperFirstCamelCase(formLayout[idx].name) %>ComponentUpdate baseFilters />
+                                  <%_ } else {%>
+                                    <<%= upperFirstCamelCase(formLayout[idx].name) %>ComponentUpdate baseFilters <%= formLayout[idx].entity.otherEntityNamePlural %> />
+                                  <%_ } %>
+                                <%_ } %>
+                              <%_ } _%>
                       <%_ } else { _%>
-                              <%_ for (idx in fields) { 
-                                if(!fields[idx]['formTab'] || fields[idx]['formTab'] === "default") { 
-                                  printFields(fields[idx]);
-                                } 
-                              } _%>
-                              <%_ relationships.forEach(rel => { 
-                                if(!rel['formTab'] || rel['formTab'] === "default") { 
-                                  printRelationships(rel);
-                                }
-                              }) _%>
+                              <%_ for (idx in fields) { %>
+                                <%_ if(!fields[idx]['formTab'] || fields[idx]['formTab'] === "default") { %>
+                                  <<%= upperFirstCamelCase(fields[idx].fieldName) %>ComponentUpdate baseFilters />
+                                <%_ } %>
+                              <%_ } _%>
+                              <%_ relationships.forEach(rel => { %>
+                                <%_ if(!rel['formTab'] || rel['formTab'] === "default") { %>
+                                  <<%= upperFirstCamelCase(rel.relationshipFieldName) %>ComponentUpdate baseFilter <%= rel.otherEntityNamePlural %> />
+                                <%_ }%>
+                              <%_ }) _%>
                       <%_ } _%>
 
 
@@ -889,5 +884,27 @@ export interface I<%= entityReactName %>UpdateProps extends StateProps, Dispatch
 
       type StateProps = ReturnType<typeof mapStateToProps>;
         type DispatchProps = typeof mapDispatchToProps;
+
+
+
+<%_ if (formLayout.length > 0) {  _%>
+  <%_ for (idx in formLayout) { 
+      if(formLayout[idx].type == 'field'){ %>
+        const <%= upperFirstCamelCase(formLayout[idx].name) %>ComponentUpdate = ({baseFilters}) => <%_ printFields(formLayout[idx].entity);
+      } else { %>
+        const <%= upperFirstCamelCase(formLayout[idx].name) %>ComponentUpdate = ({baseFilters, <%= formLayout[idx].entity.otherEntityNamePlural %>}) => <%_ printRelationships(formLayout[idx].entity);
+      }
+  } _%>
+<%_ } else { _%>
+  <%_ for (idx in fields) { %>
+    const <%= upperFirstCamelCase(fields[idx].fieldName) %>ComponentUpdate = ({baseFilters}) => <%_ printFields(fields[idx]);
+    } _%>
+  <%_ relationships.forEach(rel => { %>
+    const <%= upperFirstCamelCase(rel.relationshipFieldName) %>ComponentUpdate = ({baseFilters, <%= rel.otherEntityNamePlural %>}) => <%_ printRelationships(rel);
+  }) _%>
+<%_ } _%>
+  
+  
+
 
         export default connect(mapStateToProps, mapDispatchToProps)(<%= entityReactName %>Update);

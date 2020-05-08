@@ -48,50 +48,36 @@ export class PacienteDetail extends React.Component<IPacienteDetailProps, IPacie
     const { pacienteEntity } = this.props;
     return (
       <div>
-        <ol className="breadcrumb float-xl-right">
+        <h2 id="page-heading">
+          <span className="page-header ml-3">Pacientes</span>
+          <Button className="float-right jh-create-entity" tag={Link} to={`/paciente/${pacienteEntity.id}`} color="info" size="sm">
+            <FontAwesomeIcon icon="eye" />{' '}
+            <span className="d-none d-md-inline">
+              <Translate contentKey="generadorApp.paciente.viewButtons.view">View</Translate>
+            </span>
+          </Button>
+          <Button className="float-right jh-create-entity" tag={Link} to={`/paciente/${pacienteEntity.id}/edit`} color="primary" size="sm">
+            <FontAwesomeIcon icon="pencil-alt" />{' '}
+            <span className="d-none d-md-inline">
+              <Translate contentKey="generadorApp.paciente.viewButtons.edit">Edit</Translate>
+            </span>
+          </Button>
+          <Button className="float-right jh-create-entity" tag={Link} to={`/paciente/${pacienteEntity.id}/delete`} color="danger" size="sm">
+            <FontAwesomeIcon icon="trash" />{' '}
+            <span className="d-none d-md-inline">
+              <Translate contentKey="generadorApp.paciente.viewButtons.delete">Delete</Translate>
+            </span>
+          </Button>
+        </h2>
+        <ol className="breadcrumb">
           <li className="breadcrumb-item">
             <Link to="/">Inicio</Link>
           </li>
           <li className="breadcrumb-item active">Pacientes</li>
           <li className="breadcrumb-item active">Pacientes details</li>
         </ol>
-        <h1 className="page-header">&nbsp;&nbsp;</h1>
         <Panel>
-          <PanelHeader>
-            <h2 id="page-heading">
-              <span className="page-header ml-3">Pacientes</span>
-              <Button className="float-right jh-create-entity" tag={Link} to={`/paciente/${pacienteEntity.id}`} color="info" size="sm">
-                <FontAwesomeIcon icon="eye" />{' '}
-                <span className="d-none d-md-inline">
-                  <Translate contentKey="entity.action.view">View</Translate>
-                </span>
-              </Button>
-              <Button
-                className="float-right jh-create-entity"
-                tag={Link}
-                to={`/paciente/${pacienteEntity.id}/edit`}
-                color="primary"
-                size="sm"
-              >
-                <FontAwesomeIcon icon="pencil-alt" />{' '}
-                <span className="d-none d-md-inline">
-                  <Translate contentKey="entity.action.edit">Edit</Translate>
-                </span>
-              </Button>
-              <Button
-                className="float-right jh-create-entity"
-                tag={Link}
-                to={`/paciente/${pacienteEntity.id}/delete`}
-                color="danger"
-                size="sm"
-              >
-                <FontAwesomeIcon icon="trash" />{' '}
-                <span className="d-none d-md-inline">
-                  <Translate contentKey="entity.action.delete">Delete</Translate>
-                </span>
-              </Button>
-            </h2>
-          </PanelHeader>
+          <PanelHeader></PanelHeader>
           <PanelBody>
             <Row>
               <Col md="8">

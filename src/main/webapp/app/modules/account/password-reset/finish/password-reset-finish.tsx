@@ -30,14 +30,14 @@ export const PasswordResetFinishPage = (props: IPasswordResetFinishProps) => {
           <AvForm onValidSubmit={handleValidSubmit}>
             <div className="login-cover">
               <div className="login-cover-image"
-                   style={{backgroundImage: 'url(../../content/images/confiancaprime-login-background.webp)'}}></div>
+                   style={{backgroundImage: 'url(../../content/images/login-background.jpg)'}}></div>
               <div className="login-cover-bg"></div>
             </div>
             <div className="login login-v2">
               <div className="login-header">
                 <div className="brand">
                   { /* <span className="logo"></span> */}
-                  <h1>Confiança Prime</h1>
+                  <h1>Saúde Concierge</h1>
                   <h4>
                     <Translate contentKey="reset.finish.title">Reset password</Translate>
                   </h4>

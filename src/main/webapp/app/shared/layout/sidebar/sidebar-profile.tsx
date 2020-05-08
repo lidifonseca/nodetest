@@ -31,11 +31,11 @@ class SidebarProfile extends React.Component<ISidebarNavProfileProps, ISidebarNa
 		const pageSidebarMinify = true;
 		return (
 			<ul className="nav">
-				<li className={"nav-profile p-t-30 p-b-30" + (this.state.profileActive ? "expand " : "")}>
+				<li className={"nav-profile p-t-10 p-b-30" + (this.state.profileActive ? "expand " : "")}>
 					<Link to="/" onClick={this.handleProfileExpand}>
-						{/* <div className="image"> */}
-						{/*	<img src="/assets/img/user/user-13.jpg" alt="" /> */}
-						{/* </div> */}
+						<div className="image">
+							<img src="/content/images/jhipster_family_member_3_head-192.png" alt="" />
+						</div>
 						<div className="info">
 							{/* <b className="caret pull-right"></b> */}
 							Olá {this.props.userAccount.login}

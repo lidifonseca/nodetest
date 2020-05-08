@@ -41,6 +41,8 @@ export interface IPacienteArquivoBaseState {
 
 export interface IPacienteArquivoUpdateState {
   fieldsBase: IPacienteArquivoBaseState;
+
+  pacienteSelectValue: any;
   isNew: boolean;
   pacienteId: string;
 }

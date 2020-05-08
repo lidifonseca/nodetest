@@ -69,7 +69,7 @@
                 <%_ } _%>
                 </a>
                 <a rel="noopener noreferrer" target={"_blank"} href={`${<%= entityInstance %>Entity.<%= fieldName %>}`}>
-                  { (<%= entityInstance %>Entity.<%= fieldName %>ContentType.indexOf("image/") !== -1) ? 
+                  { (<%= entityInstance %>Entity.<%= fieldName %>ContentType.includes("image/")) ? 
                     <img src={`${<%= entityInstance %>Entity.<%= fieldName %>}`} style={{ maxHeight: '30px' }} />
                     :
                     <Translate contentKey="entity.action.open">Open</Translate>
@@ -227,24 +227,24 @@ export class <%= entityReactName %>Detail extends React.Component<I<%= entityRea
     const { <%= entityInstance %>Entity } = this.props;
     return (
       <div>
-        <ol className="breadcrumb float-xl-right">
+        <h2 id="page-heading">
+          <span className="page-header ml-3"><%= entityClassPluralHumanized %></span>
+          <%_ console.info(viewButtons) _%>
+          <%_ for (idx in viewButtons) { _%>
+            <%_ const attrib = viewButtons[idx].attributes; _%>
+              <Button className="float-right jh-create-entity" tag={<%=attrib['tag'] %>} to={<%=attrib['to'] %>} color="<%=attrib['color'] %>" size="<%=attrib['size'] %>">
+                <FontAwesomeIcon icon="<%=attrib['icon'] %>" /> <span className="d-none d-md-inline">
+                  <Translate contentKey="<%= i18nKeyPrefix %>.viewButtons.<%=viewButtons[idx].name %>"><%=attrib['text'] %></Translate></span>
+              </Button>
+          <%_ } _%>
+        </h2>
+        <ol className="breadcrumb">
           <li className="breadcrumb-item"><Link to="/">Inicio</Link></li>
           <li className="breadcrumb-item active"><%= entityClassPluralHumanized %></li>
           <li className="breadcrumb-item active"><%= entityClassPluralHumanized %> details</li>
         </ol>
-        <h1 className="page-header">&nbsp;&nbsp;</h1>
         <Panel>
           <PanelHeader>
-            <h2 id="page-heading">
-              <span className="page-header ml-3"><%= entityClassPluralHumanized %></span>
-              <%_ console.info(viewButtons) _%>
-              <%_ for (idx in viewButtons) { _%>
-                <%_ const attrib = viewButtons[idx].attributes; _%>
-                  <Button className="float-right jh-create-entity" tag={<%=attrib['tag'] %>} to={<%=attrib['to'] %>} color="<%=attrib['color'] %>" size="<%=attrib['size'] %>">
-                    <FontAwesomeIcon icon="<%=attrib['icon'] %>" /> <span className="d-none d-md-inline"><Translate contentKey="entity.action.<%=viewButtons[idx].name %>"><%=attrib['text'] %></Translate></span>
-                  </Button>
-              <%_ } _%>
-            </h2>
           </PanelHeader>
           <PanelBody>
             <Row>

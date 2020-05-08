@@ -28,7 +28,7 @@ export class PasswordResetInit extends React.Component<IPasswordResetInitProps> 
         <React.Fragment>
           <div className="login-cover">
             <div className="login-cover-image"
-                 style={{backgroundImage: 'url(../../content/images/confiancaprime-login-background.webp)'}}></div>
+                 style={{backgroundImage: 'url(../../content/images/login-background.jpg)'}}></div>
             <div className="login-cover-bg"></div>
           </div>
 
@@ -36,7 +36,7 @@ export class PasswordResetInit extends React.Component<IPasswordResetInitProps> 
             <div className="login-header">
               <div className="brand">
                 { /* <span className="logo"></span> */}
-                <h1>Confiança Prime</h1>
+                <h1>Saúde Concierge</h1>
                 <h4>
                   <Translate contentKey="reset.finish.title">Reset password</Translate>
                 </h4>

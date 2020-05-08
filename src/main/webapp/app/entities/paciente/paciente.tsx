@@ -2,6 +2,7 @@
 import React from 'react';
 import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
 import { connect } from 'react-redux';
+import Select from 'react-select';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import {
   Button,
@@ -543,32 +544,33 @@ export class Paciente extends React.Component<IPacienteProps, IPacienteState> {
     } = this.props;
     return (
       <div>
-        <ol className="breadcrumb float-xl-right">
+        <h2 id="page-heading">
+          <span className="page-header">Pacientes</span>
+          <Button id="togglerFilterPaciente" className="btn btn-primary float-right jh-create-entity">
+            <Translate contentKey="generadorApp.paciente.home.btn_filter_open">Filters</Translate>
+            &nbsp;
+            <FontAwesomeIcon icon="caret-down" />
+          </Button>{' '}
+          &nbsp;
+          <Link
+            to={`${match.url}/new?${this.getFiltersURL()}`}
+            className="btn btn-primary float-right jh-create-entity"
+            id="jh-create-entity"
+          >
+            <FontAwesomeIcon icon="plus" />
+            &nbsp;
+            <Translate contentKey="generadorApp.paciente.home.createLabel">Create a new Paciente</Translate>
+          </Link>{' '}
+          &nbsp;
+        </h2>
+
+        <ol className="breadcrumb">
           <li className="breadcrumb-item">
             <Link to="/">Inicio</Link>
           </li>
           <li className="breadcrumb-item active">Pacientes</li>
         </ol>
-        <h1 className="page-header">&nbsp;&nbsp;</h1>
         <Panel>
-          <PanelHeader>
-            <h2 id="page-heading">
-              <span className="page-header ml-3">Pacientes</span>
-              <Button id="togglerFilterPaciente" className="btn btn-primary float-right jh-create-entity">
-                Filtros&nbsp;
-                <FontAwesomeIcon icon="caret-down" />
-              </Button>
-              <Link
-                to={`${match.url}/new?${this.getFiltersURL()}`}
-                className="btn btn-primary float-right jh-create-entity"
-                id="jh-create-entity"
-              >
-                <FontAwesomeIcon icon="plus" />
-                &nbsp;
-                <Translate contentKey="generadorApp.paciente.home.createLabel">Create a new Paciente</Translate>
-              </Link>
-            </h2>
-          </PanelHeader>
           <PanelBody>
             <div className="table-responsive">
               <UncontrolledCollapse toggler="#togglerFilterPaciente">
@@ -577,7 +579,7 @@ export class Paciente extends React.Component<IPacienteProps, IPacienteState> {
                     <div className="row mt-1 ml-3 mr-3">
                       {this.state.baseFilters !== 'nome' ? (
                         <Col md="6">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="nomeLabel" for="paciente-nome">
                               <Translate contentKey="generadorApp.paciente.nome">Nome</Translate>
                             </Label>
@@ -589,7 +591,7 @@ export class Paciente extends React.Component<IPacienteProps, IPacienteState> {
 
                       {this.state.baseFilters !== 'email' ? (
                         <Col md="6">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="emailLabel" for="paciente-email">
                               <Translate contentKey="generadorApp.paciente.email">Email</Translate>
                             </Label>
@@ -601,7 +603,7 @@ export class Paciente extends React.Component<IPacienteProps, IPacienteState> {
 
                       {this.state.baseFilters !== 'cpf' ? (
                         <Col md="6">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="cpfLabel" for="paciente-cpf">
                               <Translate contentKey="generadorApp.paciente.cpf">Cpf</Translate>
                             </Label>
@@ -613,7 +615,7 @@ export class Paciente extends React.Component<IPacienteProps, IPacienteState> {
 
                       {this.state.baseFilters !== 'rg' ? (
                         <Col md="6">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="rgLabel" for="paciente-rg">
                               <Translate contentKey="generadorApp.paciente.rg">Rg</Translate>
                             </Label>
@@ -625,7 +627,7 @@ export class Paciente extends React.Component<IPacienteProps, IPacienteState> {
 
                       {this.state.baseFilters !== 'registro' ? (
                         <Col md="6">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="registroLabel" for="paciente-registro">
                               <Translate contentKey="generadorApp.paciente.registro">Registro</Translate>
                             </Label>
@@ -640,13 +642,13 @@ export class Paciente extends React.Component<IPacienteProps, IPacienteState> {
                       <Button className="btn btn-success" type="submit">
                         <i className="fa fa-filter" aria-hidden={'true'}></i>
                         &nbsp;
-                        <Translate contentKey="entity.validation.filter">Filter</Translate>
+                        <Translate contentKey="generadorApp.paciente.home.btn_filter">Filter</Translate>
                       </Button>
                       &nbsp;
                       <div className="btn btn-secondary hand" onClick={this.cancelCourse}>
                         <FontAwesomeIcon icon="trash-alt" />
                         &nbsp;
-                        <Translate contentKey="entity.validation.clean">Clean</Translate>
+                        <Translate contentKey="generadorApp.paciente.home.btn_filter_clean">Clean</Translate>
                       </div>
                     </div>
                   </AvForm>
@@ -706,50 +708,57 @@ export class Paciente extends React.Component<IPacienteProps, IPacienteState> {
                         {this.state.baseFilters !== 'registro' ? <td>{paciente.registro}</td> : null}
 
                         <td className="text-right">
-                          <div className="btn-group flex-btn-group-container"></div>
                           <Dropdown isOpen={this.state.dropdownButtons[i]} toggle={() => this.toggle(i)}>
-                            <DropdownToggle caret />
+                            <DropdownToggle caret>
+                              <Translate contentKey="generadorApp.paciente.dropdown_btn">Actions</Translate>
+                            </DropdownToggle>
                             <DropdownMenu right>
                               <DropdownItem tag={Link} to={`${match.url}/${paciente.id}`} color="info" size="sm">
                                 <FontAwesomeIcon icon="eye" />{' '}
                                 <span className="d-none d-md-inline">
-                                  <Translate contentKey="entity.action.view">View</Translate>
+                                  <Translate contentKey="generadorApp.paciente.listButtons.view">View</Translate>
                                 </span>
                               </DropdownItem>
                               <DropdownItem tag={Link} to={`${match.url}/${paciente.id}/edit`} color="info" size="sm">
                                 <FontAwesomeIcon icon="pencil-alt" />{' '}
                                 <span className="d-none d-md-inline">
-                                  <Translate contentKey="entity.action.edit">Edit</Translate>
+                                  <Translate contentKey="generadorApp.paciente.listButtons.edit">Edit</Translate>
                                 </span>
                               </DropdownItem>
                               <DropdownItem tag={Link} to={`${match.url}/${paciente.id}/delete`} color="info" size="sm">
                                 <FontAwesomeIcon icon="trash" />{' '}
                                 <span className="d-none d-md-inline">
-                                  <Translate contentKey="entity.action.delete">Delete</Translate>
+                                  <Translate contentKey="generadorApp.paciente.listButtons.delete">Delete</Translate>
                                 </span>
                               </DropdownItem>
                               <DropdownItem tag={Link} to={`${match.url}/${paciente.id}/delete`} color="info" size="sm">
                                 <FontAwesomeIcon icon="file-text-o" />{' '}
                                 <span className="d-none d-md-inline">
-                                  <Translate contentKey="entity.action.RelatoriodeInformacoes">RelatoriodeInformacoes</Translate>
+                                  <Translate contentKey="generadorApp.paciente.listButtons.RelatoriodeInformacoes">
+                                    RelatoriodeInformacoes
+                                  </Translate>
                                 </span>
                               </DropdownItem>
                               <DropdownItem tag={Link} to={`${match.url}/${paciente.id}/delete`} color="info" size="sm">
                                 <FontAwesomeIcon icon="list" />{' '}
                                 <span className="d-none d-md-inline">
-                                  <Translate contentKey="entity.action.IndicadoresClinicos">IndicadoresClinicos</Translate>
+                                  <Translate contentKey="generadorApp.paciente.listButtons.IndicadoresClinicos">
+                                    IndicadoresClinicos
+                                  </Translate>
                                 </span>
                               </DropdownItem>
                               <DropdownItem tag={Link} to={`${match.url}/${paciente.id}/delete`} color="info" size="sm">
                                 <FontAwesomeIcon icon="list" />{' '}
                                 <span className="d-none d-md-inline">
-                                  <Translate contentKey="entity.action.Monitoramento">Monitoramento</Translate>
+                                  <Translate contentKey="generadorApp.paciente.listButtons.Monitoramento">Monitoramento</Translate>
                                 </span>
                               </DropdownItem>
                               <DropdownItem tag={Link} to={`${match.url}/${paciente.id}/delete`} color="info" size="sm">
                                 <FontAwesomeIcon icon="search" />{' '}
                                 <span className="d-none d-md-inline">
-                                  <Translate contentKey="entity.action.VisualizarProntuario">VisualizarProntuario</Translate>
+                                  <Translate contentKey="generadorApp.paciente.listButtons.VisualizarProntuario">
+                                    VisualizarProntuario
+                                  </Translate>
                                 </span>
                               </DropdownItem>
                               <DropdownItem
@@ -760,7 +769,7 @@ export class Paciente extends React.Component<IPacienteProps, IPacienteState> {
                               >
                                 <FontAwesomeIcon icon="pencil" />{' '}
                                 <span className="d-none d-md-inline">
-                                  <Translate contentKey="entity.action.Status">Status</Translate>
+                                  <Translate contentKey="generadorApp.paciente.listButtons.Status">Status</Translate>
                                 </span>
                               </DropdownItem>
                               <DropdownItem
@@ -771,7 +780,7 @@ export class Paciente extends React.Component<IPacienteProps, IPacienteState> {
                               >
                                 <FontAwesomeIcon icon="upload" />{' '}
                                 <span className="d-none d-md-inline">
-                                  <Translate contentKey="entity.action.Arquivos">Arquivos</Translate>
+                                  <Translate contentKey="generadorApp.paciente.listButtons.Arquivos">Arquivos</Translate>
                                 </span>
                               </DropdownItem>
                               <DropdownItem
@@ -782,7 +791,7 @@ export class Paciente extends React.Component<IPacienteProps, IPacienteState> {
                               >
                                 <FontAwesomeIcon icon="stethoscope" />{' '}
                                 <span className="d-none d-md-inline">
-                                  <Translate contentKey="entity.action.Diagnostico">Diagnostico</Translate>
+                                  <Translate contentKey="generadorApp.paciente.listButtons.Diagnostico">Diagnostico</Translate>
                                 </span>
                               </DropdownItem>
                               <DropdownItem
@@ -793,7 +802,7 @@ export class Paciente extends React.Component<IPacienteProps, IPacienteState> {
                               >
                                 <FontAwesomeIcon icon="medkit" />{' '}
                                 <span className="d-none d-md-inline">
-                                  <Translate contentKey="entity.action.Operadora">Operadora</Translate>
+                                  <Translate contentKey="generadorApp.paciente.listButtons.Operadora">Operadora</Translate>
                                 </span>
                               </DropdownItem>
                               <DropdownItem
@@ -804,7 +813,7 @@ export class Paciente extends React.Component<IPacienteProps, IPacienteState> {
                               >
                                 <FontAwesomeIcon icon="refresh" />{' '}
                                 <span className="d-none d-md-inline">
-                                  <Translate contentKey="entity.action.ResetSenha">ResetSenha</Translate>
+                                  <Translate contentKey="generadorApp.paciente.listButtons.ResetSenha">ResetSenha</Translate>
                                 </span>
                               </DropdownItem>
                               <DropdownItem
@@ -815,7 +824,9 @@ export class Paciente extends React.Component<IPacienteProps, IPacienteState> {
                               >
                                 <FontAwesomeIcon icon="stethoscope" />{' '}
                                 <span className="d-none d-md-inline">
-                                  <Translate contentKey="entity.action.ProntuarioEletronico">ProntuarioEletronico</Translate>
+                                  <Translate contentKey="generadorApp.paciente.listButtons.ProntuarioEletronico">
+                                    ProntuarioEletronico
+                                  </Translate>
                                 </span>
                               </DropdownItem>
                               <DropdownItem
@@ -826,7 +837,7 @@ export class Paciente extends React.Component<IPacienteProps, IPacienteState> {
                               >
                                 <FontAwesomeIcon icon="key" />{' '}
                                 <span className="d-none d-md-inline">
-                                  <Translate contentKey="entity.action.Token">Token</Translate>
+                                  <Translate contentKey="generadorApp.paciente.listButtons.Token">Token</Translate>
                                 </span>
                               </DropdownItem>
                               <DropdownItem
@@ -837,7 +848,7 @@ export class Paciente extends React.Component<IPacienteProps, IPacienteState> {
                               >
                                 <FontAwesomeIcon icon="question" />{' '}
                                 <span className="d-none d-md-inline">
-                                  <Translate contentKey="entity.action.Questionario">Questionario</Translate>
+                                  <Translate contentKey="generadorApp.paciente.listButtons.Questionario">Questionario</Translate>
                                 </span>
                               </DropdownItem>
                               <DropdownItem
@@ -848,7 +859,9 @@ export class Paciente extends React.Component<IPacienteProps, IPacienteState> {
                               >
                                 <FontAwesomeIcon icon="fa-list-ol" />{' '}
                                 <span className="d-none d-md-inline">
-                                  <Translate contentKey="entity.action.TratamentoIndicado">TratamentoIndicado</Translate>
+                                  <Translate contentKey="generadorApp.paciente.listButtons.TratamentoIndicado">
+                                    TratamentoIndicado
+                                  </Translate>
                                 </span>
                               </DropdownItem>
                             </DropdownMenu>

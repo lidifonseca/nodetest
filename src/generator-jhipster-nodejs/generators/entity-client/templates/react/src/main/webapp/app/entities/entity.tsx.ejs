@@ -38,154 +38,83 @@
         
     { this.state.baseFilters !== '<%= relationshipFieldName %>' ? 
       <Col md="<%= listFilterLayoutSize %>">
-        <Row>
+        <Row className="mr-1 mt-1">
           <%_ if (relationshipType === 'many-to-one' || (relationshipType === 'one-to-one' && ownerSide === true && otherEntityName === 'user')) { _%>
-        <div>
+        <div style={{width: '100%'}}>
         <Label for="<%= entityFileName %>-<%= relationshipName %>">
           <Translate contentKey="<%= translationKey %>"><%= relationshipNameHumanized %></Translate>
         </Label>
         <%_ if (dto === 'no') { _%>
             <%_ if (!relationshipRequired) { _%>
-        <AvInput
-          id="<%= entityFileName %>-<%= relationshipName %>"
-          type="select"
-          className="form-control"
-          name="<%= relationshipFieldName %>.id"
-        >
-          <option value="" key="0" />
-          {
-            <%= otherEntityNamePlural %> ? <%= otherEntityNamePlural %>.map(otherEntity =>
-              <option
-                value={otherEntity.id}
-                key={otherEntity.id}>
-                {otherEntity.<%=otherEntityField%>}
-              </option>
-            ) : null
-          }
-        </AvInput>
-          <%_ } else { _%>
-        <AvInput
-          id="<%= entityFileName %>-<%= relationshipName %>"
-          type="select"
-          className="form-control"
-          name="<%= relationshipFieldName %>.id"
-          value={isNew ? <%= otherEntityNamePlural %>[0] && <%= otherEntityNamePlural %>[0].id : <%= entityInstance %>Entity.<%= relationshipName %>.id}
-        >
-          {
-            <%= otherEntityNamePlural %> ? <%= otherEntityNamePlural %>.map(otherEntity =>
-              <option
-                value={otherEntity.id}
-                key={otherEntity.id}>
-                {otherEntity.<%=otherEntityField%>}
-              </option>
-            ) : null
-          }
-        </AvInput>
+          <Select 
+            id="<%= entityFileName %>-<%= relationshipName %>" isMulti className={"css-select-control"}
+            value={<%= otherEntityNamePlural %> ? <%= otherEntityNamePlural %>.map((p)=>(this.state.<%= relationshipName %>.split(",").indexOf(p.id) !== -1 ? {value: p.id , label: p.<%=otherEntityField%>} : null)) : null} 
+            options={<%= otherEntityNamePlural %> ? <%= otherEntityNamePlural %>.map((option)=>({value: option.id , label: option.<%=otherEntityField%>})) : null} 
+            onChange={options => this.setState({ <%= relationshipName %>: options.map((option)=>(option['value'])).join(",") }) }
+            name={"<%= relationshipFieldName %>"} 
+          />
+        <%_ } else { _%>
+          <Select 
+            id="<%= entityFileName %>-<%= relationshipName %>" isMulti className={"css-select-control"}
+            value={<%= otherEntityNamePlural %> ? <%= otherEntityNamePlural %>.map((p)=>(this.state.<%= relationshipName %>.split(",").indexOf(p.id) !== -1 ? {value: p.id , label: p.<%=otherEntityField%>} : null)) : null} 
+            options={<%= otherEntityNamePlural %> ? <%= otherEntityNamePlural %>.map((option)=>({value: option.id , label: option.<%=otherEntityField%>})) : null} 
+            onChange={options => this.setState({ <%= relationshipName %>: options.map((option)=>(option['value'])).join(",") }) }
+            name={"<%= relationshipFieldName %>"} 
+          />
         <%_ } _%>
         <%_ } else { _%>
           <%_ if (!relationshipRequired) { _%>
-            <AvInput
-              id="<%= entityFileName %>-<%= relationshipName %>"
-              type="select"
-              className="form-control"
-              name="<%= relationshipFieldName %>Id"
-            >
-              <option value="" key="0" />
-              {
-                <%= otherEntityNamePlural %> ? <%= otherEntityNamePlural %>.map(otherEntity =>
-                  <option
-                    value={otherEntity.id}
-                    key={otherEntity.id}>
-                    {otherEntity.<%=otherEntityField%>}
-                  </option>
-                ) : null
-              }
-            </AvInput>
+            <Select 
+              id="<%= entityFileName %>-<%= relationshipName %>" isMulti className={"css-select-control"}
+              value={<%= otherEntityNamePlural %> ? <%= otherEntityNamePlural %>.map((p)=>(this.state.<%= relationshipName %>.split(",").indexOf(p.id) !== -1 ? {value: p.id , label: p.<%=otherEntityField%>} : null)) : null} 
+              options={<%= otherEntityNamePlural %> ? <%= otherEntityNamePlural %>.map((option)=>({value: option.id , label: option.<%=otherEntityField%>})) : null} 
+              onChange={options => this.setState({ <%= relationshipName %>: options.map((option)=>(option['value'])).join(",") }) }
+              name={"<%= relationshipFieldName %>"} 
+            />
           <%_ } else { _%>
-            <AvInput
-              id="<%= entityFileName %>-<%= relationshipName %>"
-              type="select"
-              className="form-control"
-              name="<%= relationshipFieldName %>Id"
-            >
-              {
-                <%= otherEntityNamePlural %> ? <%= otherEntityNamePlural %>.map(otherEntity =>
-                  <option
-                    value={otherEntity.id}
-                    key={otherEntity.id}>
-                    {otherEntity.<%=otherEntityField%>}
-                  </option>
-                ) : null
-              }
-            </AvInput>
+            <Select 
+              id="<%= entityFileName %>-<%= relationshipName %>" isMulti className={"css-select-control"}
+              value={<%= otherEntityNamePlural %> ? <%= otherEntityNamePlural %>.map((p)=>(this.state.<%= relationshipName %>.split(",").indexOf(p.id) !== -1 ? {value: p.id , label: p.<%=otherEntityField%>} : null)) : null} 
+              options={<%= otherEntityNamePlural %> ? <%= otherEntityNamePlural %>.map((option)=>({value: option.id , label: option.<%=otherEntityField%>})) : null} 
+              onChange={options => this.setState({ <%= relationshipName %>: options.map((option)=>(option['value'])).join(",") }) }
+              name={"<%= relationshipFieldName %>"} 
+            />
           <%_ } _%>
         <%_ } _%>
         </div>
           <%_ } else if (relationshipType === 'one-to-one' && ownerSide === true) { _%>
-        <div>
+        <div style={{width: '100%'}}>
         <Label for="<%= entityFileName %>-<%= relationshipName %>">
           <Translate contentKey="<%= translationKey %>"><%= relationshipNameHumanized %></Translate>
         </Label>
           <%_ if (dto === 'no') { _%>
-            <AvInput
-              id="<%= entityFileName %>-<%= relationshipName %>"
-              type="select"
-              className="form-control"
-              name="<%= relationshipFieldName %>.id"
-            >
-              <option value="" key="0" />
-              {
-                <%= otherEntityNamePlural %> ? <%= otherEntityNamePlural %>.map(otherEntity =>
-                  <option
-                    value={otherEntity.id}
-                    key={otherEntity.id}>
-                    {otherEntity.<%=otherEntityField%>}
-                  </option>
-                ) : null
-              }
-            </AvInput>
+            <Select 
+              id="<%= entityFileName %>-<%= relationshipName %>" isMulti className={"css-select-control"}
+              value={<%= otherEntityNamePlural %> ? <%= otherEntityNamePlural %>.map((p)=>(this.state.<%= relationshipName %>.split(",").indexOf(p.id) !== -1 ? {value: p.id , label: p.<%=otherEntityField%>} : null)) : null} 
+              options={<%= otherEntityNamePlural %> ? <%= otherEntityNamePlural %>.map((option)=>({value: option.id , label: option.<%=otherEntityField%>})) : null} 
+              onChange={options => this.setState({ <%= relationshipName %>: options.map((option)=>(option['value'])).join(",") }) }
+              name={"<%= relationshipFieldName %>"} 
+            />
           <%_ } else { _%>
-            <AvInput
-              id="<%= entityFileName %>-<%= relationshipName %>"
-              type="select"
-              className="form-control"
-              name="<%= relationshipFieldName %>Id"
-            >
-              <option value="" key="0" />
-              {
-                <%= otherEntityNamePlural %> ? <%= otherEntityNamePlural %>.map(otherEntity =>
-                  <option
-                    value={otherEntity.id}
-                    key={otherEntity.id}>
-                    {otherEntity.<%=otherEntityField%>}
-                  </option>
-                ) : null
-              }
-            </AvInput>
+            <Select 
+              id="<%= entityFileName %>-<%= relationshipName %>" isMulti className={"css-select-control"}
+              value={<%= otherEntityNamePlural %> ? <%= otherEntityNamePlural %>.map((p)=>(this.state.<%= relationshipName %>.split(",").indexOf(p.id) !== -1 ? {value: p.id , label: p.<%=otherEntityField%>} : null)) : null} 
+              options={<%= otherEntityNamePlural %> ? <%= otherEntityNamePlural %>.map((option)=>({value: option.id , label: option.<%=otherEntityField%>})) : null} 
+              onChange={options => this.setState({ <%= relationshipName %>: options.map((option)=>(option['value'])).join(",") }) }
+              name={"<%= relationshipFieldName %>"} 
+            />
           <%_ } _%>
         </div>
           <%_ } else if (relationshipType === 'many-to-many' && rel.ownerSide === true) { _%>
-        <div>
+        <div style={{width: '100%'}}>
         <Label for="<%= entityFileName %>-<%= relationshipName %>"><Translate contentKey="<%= translationKey %>"><%= relationshipNameHumanized %></Translate></Label>
-        <AvInput
-          id="<%= entityFileName %>-<%= relationshipName %>"
-          type="select"
-          multiple
-          className="form-control"
-          name="<%= relationshipFieldNamePlural %>"
-          value={<%= entityInstance %>Entity.<%= relationshipFieldNamePlural %> && <%= entityInstance %>Entity.<%= relationshipFieldNamePlural %>.map(e => e.id)}
-        >
-          <option value="" key="0" />
-          {
-            (<%= otherEntityNamePlural %>) ? <%= otherEntityNamePlural %>.map(otherEntity =>
-            <option
-                value={otherEntity.id}
-                key={otherEntity.id}>
-                {otherEntity.<%=otherEntityField%>}
-            </option>
-            ) : null
-          }
-        </AvInput>
+        <Select 
+          id="<%= entityFileName %>-<%= relationshipName %>" isMulti  className={"css-select-control"}
+          value={<%= otherEntityNamePlural %> ? <%= otherEntityNamePlural %>.map((p)=>(this.state.<%= relationshipName %>.split(",").indexOf(p.id) !== -1 ? {value: p.id , label: p.<%=otherEntityField%>} : null)) : null} 
+          options={<%= otherEntityNamePlural %> ? <%= otherEntityNamePlural %>.map((option)=>({value: option.id , label: option.<%=otherEntityField%>})) : null} 
+          onChange={options => this.setState({ <%= relationshipName %>: options.map((option)=>(option['value'])).join(",") }) }
+          name={"<%= relationshipFieldName %>"} 
+        />
         </div>
         <%_ } _%>
         </Row>
@@ -204,7 +133,7 @@ _%>
         
     { this.state.baseFilters !== '<%= fieldName %>' ? 
       <Col md="<%= listFilterLayoutSize %>">
-        <Row>
+        <Row className="mr-1 mt-1">
           <%_ if (fieldType === 'Boolean') { _%>
           <Label id="<%= fieldName %>Label" check>
             <AvInput id="<%= entityFileName %>-<%= fieldName %>" type="checkbox" className="form-control" name="<%= fieldName %>" />
@@ -332,7 +261,7 @@ _%>
           {<%= entityInstance %>.<%= fieldName %> ? (
             <div>
               <a rel="noopener noreferrer" target={"_blank"} href={`${<%= entityInstance %>.<%= fieldName %>}`}>
-                { (<%= entityInstance %>.<%= fieldName %>ContentType.indexOf("image/") !== -1) ? 
+                { (<%= entityInstance %>.<%= fieldName %>ContentType && <%= entityInstance %>.<%= fieldName %>ContentType.includes("image/")) ? 
                   <img src={`${<%= entityInstance %>.<%= fieldName %>}`} style={{ maxHeight: '30px' }} />
                   :
                   <Translate contentKey="entity.action.open">Open</Translate>
@@ -417,6 +346,7 @@ import InfiniteScroll from 'react-infinite-scroller';
 <%_ } _%>
 import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
 import { connect } from 'react-redux';
+import Select from 'react-select';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { Button, <% if (searchEngine === 'elasticsearch') { %>InputGroup, <% } %>Col, Row, Table, Label, UncontrolledTooltip, UncontrolledCollapse, CardHeader, CardBody,
 <%_  if (listButtonsInDropdown === true) { _%> Dropdown, DropdownToggle,  DropdownMenu,  DropdownItem, <%_ } _%> UncontrolledAlert } from 'reactstrap';
@@ -706,30 +636,30 @@ export class <%= entityReactName %> extends React.Component<I<%= entityReactName
     const { <% uniqueRealtionFields.forEach(rel => {%> <%= rel %>,<% }) %> <%=entityInstance %>List, match<% if (pagination === 'pagination' || pagination === 'pager') { %>, totalItems<% } %>} = this.props;
     return (
       <div>
-        <ol className="breadcrumb float-xl-right">
+          <h2 id="page-heading">
+            <span className="page-header"><%= entityClassPluralHumanized %></span>
+            <Button id="togglerFilter<%= entityReactName %>" className="btn btn-primary float-right jh-create-entity">
+                <Translate contentKey="<%= i18nKeyPrefix %>.home.btn_filter_open">
+                  Filters
+                </Translate>
+                &nbsp;
+              <FontAwesomeIcon icon="caret-down" />
+            </Button>  &nbsp;
+            <%_ if (!readOnly) { _%>
+            <Link to={`${match.url}/new?${this.getFiltersURL()}`} className="btn btn-primary float-right jh-create-entity" id="jh-create-entity">
+              <FontAwesomeIcon icon="plus" />&nbsp;
+              <Translate contentKey="<%= i18nKeyPrefix %>.home.createLabel">
+                Create a new <%= entityClassHumanized %>
+              </Translate>
+            </Link>  &nbsp;
+            <%_ } _%>
+          </h2>
+
+        <ol className="breadcrumb">
           <li className="breadcrumb-item"><Link to="/">Inicio</Link></li>
           <li className="breadcrumb-item active"><%= entityClassPluralHumanized %></li>
         </ol>
-        <h1 className="page-header">&nbsp;&nbsp;</h1>
         <Panel>
-          <PanelHeader>
-            
-            <h2 id="page-heading">
-              <span className="page-header ml-3"><%= entityClassPluralHumanized %></span>
-              <Button id="togglerFilter<%= entityReactName %>" className="btn btn-primary float-right jh-create-entity">
-                  Filtros&nbsp;
-                <FontAwesomeIcon icon="caret-down" />
-              </Button>
-              <%_ if (!readOnly) { _%>
-              <Link to={`${match.url}/new?${this.getFiltersURL()}`} className="btn btn-primary float-right jh-create-entity" id="jh-create-entity">
-                <FontAwesomeIcon icon="plus" />&nbsp;
-                <Translate contentKey="<%= i18nKeyPrefix %>.home.createLabel">
-                  Create a new <%= entityClassHumanized %>
-                </Translate>
-              </Link>
-              <%_ } _%>
-            </h2>
-          </PanelHeader>
           <PanelBody>
             <%_ if (searchEngine === 'elasticsearch') { _%>
             <Row>
@@ -783,14 +713,13 @@ export class <%= entityReactName %> extends React.Component<I<%= entityReactName
                           <Button className="btn btn-success" type="submit">
                             <i className="fa fa-filter" aria-hidden={"true"}></i>
                             &nbsp;
-                            <Translate contentKey="entity.validation.filter">Filter</Translate>
-                            
+                            <Translate contentKey="<%= i18nKeyPrefix %>.home.btn_filter">Filter</Translate>
                           </Button>
                           &nbsp;
                           <div className="btn btn-secondary hand" onClick={this.cancelCourse}>
                             <FontAwesomeIcon icon="trash-alt" />
                             &nbsp;
-                            <Translate contentKey="entity.validation.clean">Clean</Translate>
+                            <Translate contentKey="<%= i18nKeyPrefix %>.home.btn_filter_clean">Clean</Translate>
                           </div>
                         </div>
                 
@@ -879,39 +808,46 @@ export class <%= entityReactName %> extends React.Component<I<%= entityReactName
 
                          
                           <td className="text-right">
-                            <div className="btn-group flex-btn-group-container">
-                            <%_ if (listButtons.length === 0) { _%>
-                                <Button tag={Link} to={`${match.url}/${<%=entityInstance %>.id}?${this.getFiltersURL()}`} color="info" size="sm">
-                                  <FontAwesomeIcon icon="eye" /> <span className="d-none d-md-inline" ><Translate contentKey="entity.action.view">View</Translate></span>
-                                </Button>
-                                <%_ if (!readOnly) { _%>
-                                  <Button tag={Link} to={`${match.url}/${<%=entityInstance %>.id}/edit?${this.getFiltersURL()}`} color="primary" size="sm">
-                                    <FontAwesomeIcon icon="pencil-alt" /> <span className="d-none d-md-inline"><Translate contentKey="entity.action.edit">Edit</Translate></span>
+                            <%_  if (listButtonsInDropdown !== true) { _%>
+                              <div className="btn-group flex-btn-group-container">
+                              <%_ if (listButtons.length === 0) { _%>
+                                  <Button tag={Link} to={`${match.url}/${<%=entityInstance %>.id}?${this.getFiltersURL()}`} color="info" size="sm">
+                                    <FontAwesomeIcon icon="eye" /> <span className="d-none d-md-inline" ><Translate contentKey="entity.action.view">View</Translate></span>
                                   </Button>
-                                  <Button tag={Link} to={`${match.url}/${<%=entityInstance %>.id}/delete?${this.getFiltersURL()}`} color="danger" size="sm">
-                                    <FontAwesomeIcon icon="trash" /> <span className="d-none d-md-inline"><Translate contentKey="entity.action.delete">Delete</Translate></span>
-                                  </Button>
-                                <%_ } _%>
-                              <%_ } else { _%>
-                                <%_ for (idx in listButtons) { _%>
-                                  <%_ const attrib = listButtons[idx].attributes; _%>
-                                  <%_  if (attrib.inDropdown !== 'true') { _%>
-                                    <Button tag={<%=attrib['tag'] %>} to={<%- attrib['to'] %>} color="<%=attrib['color'] %>" size="<%=attrib['size'] %>">
-                                      <FontAwesomeIcon icon="<%=attrib['icon'] %>" /> <span className="d-none d-md-inline"><Translate contentKey="entity.action.<%=listButtons[idx].name %>"><%=attrib['text'] %></Translate></span>
+                                  <%_ if (!readOnly) { _%>
+                                    <Button tag={Link} to={`${match.url}/${<%=entityInstance %>.id}/edit?${this.getFiltersURL()}`} color="primary" size="sm">
+                                      <FontAwesomeIcon icon="pencil-alt" /> <span className="d-none d-md-inline"><Translate contentKey="entity.action.edit">Edit</Translate></span>
+                                    </Button>
+                                    <Button tag={Link} to={`${match.url}/${<%=entityInstance %>.id}/delete?${this.getFiltersURL()}`} color="danger" size="sm">
+                                      <FontAwesomeIcon icon="trash" /> <span className="d-none d-md-inline"><Translate contentKey="entity.action.delete">Delete</Translate></span>
                                     </Button>
                                   <%_ } _%>
+                                <%_ } else { _%>
+                                  <%_ for (idx in listButtons) { _%>
+                                    <%_ const attrib = listButtons[idx].attributes; _%>
+                                    <%_  if (attrib.inDropdown !== 'true') { _%>
+                                      <Button tag={<%=attrib['tag'] %>} to={<%- attrib['to'] %>} color="<%=attrib['color'] %>" size="<%=attrib['size'] %>">
+                                        <FontAwesomeIcon icon="<%=attrib['icon'] %>" /> <span className="d-none d-md-inline">
+                                          <Translate contentKey="<%= i18nKeyPrefix %>.listButtons.<%=listButtons[idx].name %>"><%=attrib['text'] %></Translate>
+                                        </span>
+                                      </Button>
+                                    <%_ } _%>
+                                  <%_ } _%>
                                 <%_ } _%>
-                              <%_ } _%>
-                            </div>
+                              </div>
+                            <%_ } _%>
                             <%_  if (listButtonsInDropdown === true) { _%>
                               <Dropdown isOpen={this.state.dropdownButtons[i]} toggle={()=>this.toggle(i)}>
-                                <DropdownToggle caret />
+                                <DropdownToggle caret> 
+                                    <Translate contentKey="<%= i18nKeyPrefix %>.dropdown_btn">Actions</Translate>
+                                </DropdownToggle>
                                 <DropdownMenu right>
                                   <%_ for (idx in listButtons) { _%>
                                     <%_ const attrib = listButtons[idx].attributes; _%>
                                     <%_  if (attrib.inDropdown === 'true') { _%>
                                       <DropdownItem tag={<%=attrib['tag'] %>} to={<%- attrib['to'] %>} color="<%=attrib['color'] %>" size="<%=attrib['size'] %>" >
-                                        <FontAwesomeIcon icon="<%=attrib['icon'] %>" /> <span className="d-none d-md-inline"><Translate contentKey="entity.action.<%=listButtons[idx].name %>"><%=attrib['text'] %></Translate></span>
+                                        <FontAwesomeIcon icon="<%=attrib['icon'] %>" /> <span className="d-none d-md-inline">
+                                          <Translate contentKey="<%= i18nKeyPrefix %>.listButtons.<%=listButtons[idx].name %>"><%=attrib['text'] %></Translate></span>
                                       </DropdownItem>
                                     <%_ } _%>
                                   <%_ } _%>

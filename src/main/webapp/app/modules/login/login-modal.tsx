@@ -26,7 +26,7 @@ class LoginModal extends React.Component<ILoginModalProps> {
           <AvForm onSubmit={this.handleSubmit}>
             <div className="login-cover">
               <div className="login-cover-image"
-                   style={{backgroundImage: 'url(../../content/images/confiancaprime-login-background.webp)'}}></div>
+                   style={{backgroundImage: 'url(../../content/images/login-background.jpg)'}}></div>
               <div className="login-cover-bg"></div>
             </div>
 
@@ -34,10 +34,7 @@ class LoginModal extends React.Component<ILoginModalProps> {
               <div className="login-header">
                 <div className="brand">
                   { /* <span className="logo"></span> */}
-                  <b>Confiança Prime</b>
-                </div>
-                <div className="icon">
-                  <i className="fa fa-lock"></i>
+                  <b>Saúde Concierge</b>
                 </div>
               </div>
               <div className="login-content">

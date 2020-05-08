@@ -1,8 +1,14 @@
 {
   "generadorApp": {
     "operadora": {
+      "listButtons": {},
+      "viewButtons": {},
+      "dropdown_btn": "Actions",
       "home": {
         "title": "Operadoras",
+        "btn_filter": "Filtrar",
+        "btn_filter_clean": "Limpar Filtros",
+        "btn_filter_open": "Filtros",
         "createLabel": "Criar novo Operadora",
         "createOrEditLabel": "Criar ou editar Operadora",
         "notFound": "Nenhum Operadora encontrado"
@@ -31,7 +37,9 @@
       "nomeContatoFinanceiro": "Nome Contato Financeiro",
       "contatoFinanceiro": "Contato Financeiro",
       "emailFinanceiro": "Email Financeiro",
+      "unidade_empty": "Sem Unidade",
       "unidade": "Unidade",
+      "tipoOperadora_empty": "Sem Tipo Operadora",
       "tipoOperadora": "Tipo Operadora"
     }
   }

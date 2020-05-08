@@ -34,20 +34,18 @@ export class PacienteArquivoDetail extends React.Component<IPacienteArquivoDetai
     const { pacienteArquivoEntity } = this.props;
     return (
       <div>
-        <ol className="breadcrumb float-xl-right">
+        <h2 id="page-heading">
+          <span className="page-header ml-3">Paciente Arquivos</span>
+        </h2>
+        <ol className="breadcrumb">
           <li className="breadcrumb-item">
             <Link to="/">Inicio</Link>
           </li>
           <li className="breadcrumb-item active">Paciente Arquivos</li>
           <li className="breadcrumb-item active">Paciente Arquivos details</li>
         </ol>
-        <h1 className="page-header">&nbsp;&nbsp;</h1>
         <Panel>
-          <PanelHeader>
-            <h2 id="page-heading">
-              <span className="page-header ml-3">Paciente Arquivos</span>
-            </h2>
-          </PanelHeader>
+          <PanelHeader></PanelHeader>
           <PanelBody>
             <Row>
               <Col md="8">
@@ -73,7 +71,7 @@ export class PacienteArquivoDetail extends React.Component<IPacienteArquivoDetai
                                 <img src={`${pacienteArquivoEntity.arquivo}`} style={{ maxHeight: '30px' }} />
                               </a>
                               <a rel="noopener noreferrer" target={'_blank'} href={`${pacienteArquivoEntity.arquivo}`}>
-                                {pacienteArquivoEntity.arquivoContentType.indexOf('image/') !== -1 ? (
+                                {pacienteArquivoEntity.arquivoContentType.includes('image/') ? (
                                   <img src={`${pacienteArquivoEntity.arquivo}`} style={{ maxHeight: '30px' }} />
                                 ) : (
                                   <Translate contentKey="entity.action.open">Open</Translate>

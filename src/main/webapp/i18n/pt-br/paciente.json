@@ -1,8 +1,35 @@
 {
   "generadorApp": {
     "paciente": {
+      "listButtons": {
+        "view": "View",
+        "edit": "Edit",
+        "delete": "Delete",
+        "RelatoriodeInformacoes": "RelatoriodeInformacoes",
+        "IndicadoresClinicos": "IndicadoresClinicos",
+        "Monitoramento": "Monitoramento",
+        "VisualizarProntuario": "VisualizarProntuario",
+        "Status": "Status",
+        "Arquivos": "Arquivos",
+        "Diagnostico": "Diagnostico",
+        "Operadora": "Operadora",
+        "ResetSenha": "ResetSenha",
+        "ProntuarioEletronico": "ProntuarioEletronico",
+        "Token": "Token",
+        "Questionario": "Questionario",
+        "TratamentoIndicado": "TratamentoIndicado"
+      },
+      "viewButtons": {
+        "view": "View",
+        "edit": "Edit",
+        "delete": "Delete"
+      },
+      "dropdown_btn": "Actions",
       "home": {
         "title": "Pacientes",
+        "btn_filter": "Filtrar",
+        "btn_filter_clean": "Limpar Filtros",
+        "btn_filter_open": "Filtros",
         "createLabel": "Criar novo Paciente",
         "createOrEditLabel": "Criar ou editar Paciente",
         "notFound": "Nenhum Paciente encontrado"
@@ -71,12 +98,19 @@
       "detalhes": "Detalhes",
       "liminar": "Liminar",
       "expoToken": "Expo Token",
+      "unidade_empty": "Sem Unidade",
       "unidade": "Unidade",
+      "franquia_empty": "Sem Franquia",
       "franquia": "Franquia",
+      "cidade_empty": "Sem Cidade",
       "cidade": "Cidade",
+      "cidadeFamiliar_empty": "Sem Cidade Familiar",
       "cidadeFamiliar": "Cidade Familiar",
+      "grauParentesco_empty": "Sem Grau Parentesco",
       "grauParentesco": "Grau Parentesco",
+      "profissionalPref_empty": "Sem Profissional Pref",
       "profissionalPref": "Profissional Pref",
+      "tipohospital_empty": "Sem Tipohospital",
       "tipohospital": "Tipohospital",
       "help": {}
     }

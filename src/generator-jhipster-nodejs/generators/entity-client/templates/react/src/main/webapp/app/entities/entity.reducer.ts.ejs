@@ -44,7 +44,7 @@ Object.keys(differentRelationships).forEach(key => {
   }
   if (differentRelationships[key].some(rel => rel.relationshipType !== 'one-to-many')) {
     const uniqueRel = differentRelationships[key][0];
-    uniqueRealtionFields.add(uniqueRel.otherEntityNamePlural);
+    uniqueRealtionFields.add({"namePlural": uniqueRel.otherEntityNamePlural, "name": uniqueRel.otherEntityName });
     otherEntityActions.add({
       action: `get${upperFirstCamelCase(uniqueRel.otherEntityNamePlural)}`,
       instance: `${uniqueRel.otherEntityNamePlural}`,
@@ -132,6 +132,8 @@ export interface I<%= entityReactName %>BaseState {
 
 export interface I<%= entityReactName %>UpdateState {
   fieldsBase: I<%= entityReactName %>BaseState;
+
+  <% uniqueRealtionFields.forEach(rel => { %> <%= rel.name %>SelectValue: any; <% }) %>
   <%_ if (formTabs.length > 0) { _%>activeTab: number;<%_ } _%>
   isNew: boolean;
   <%_ manyToManyOwners.forEach(val => { _%>

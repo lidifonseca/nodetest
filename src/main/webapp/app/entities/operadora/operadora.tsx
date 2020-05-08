@@ -229,32 +229,33 @@ export class Operadora extends React.Component<IOperadoraProps, IOperadoraState>
     const { unidadeEasies, tipoOperadoras, operadoraList, match, totalItems } = this.props;
     return (
       <div>
-        <ol className="breadcrumb float-xl-right">
+        <h2 id="page-heading">
+          <span className="page-header">Operadoras</span>
+          <Button id="togglerFilterOperadora" className="btn btn-primary float-right jh-create-entity">
+            <Translate contentKey="generadorApp.operadora.home.btn_filter_open">Filters</Translate>
+            &nbsp;
+            <FontAwesomeIcon icon="caret-down" />
+          </Button>{' '}
+          &nbsp;
+          <Link
+            to={`${match.url}/new?${this.getFiltersURL()}`}
+            className="btn btn-primary float-right jh-create-entity"
+            id="jh-create-entity"
+          >
+            <FontAwesomeIcon icon="plus" />
+            &nbsp;
+            <Translate contentKey="generadorApp.operadora.home.createLabel">Create a new Operadora</Translate>
+          </Link>{' '}
+          &nbsp;
+        </h2>
+
+        <ol className="breadcrumb">
           <li className="breadcrumb-item">
             <Link to="/">Inicio</Link>
           </li>
           <li className="breadcrumb-item active">Operadoras</li>
         </ol>
-        <h1 className="page-header">&nbsp;&nbsp;</h1>
         <Panel>
-          <PanelHeader>
-            <h2 id="page-heading">
-              <span className="page-header ml-3">Operadoras</span>
-              <Button id="togglerFilterOperadora" className="btn btn-primary float-right jh-create-entity">
-                Filtros&nbsp;
-                <FontAwesomeIcon icon="caret-down" />
-              </Button>
-              <Link
-                to={`${match.url}/new?${this.getFiltersURL()}`}
-                className="btn btn-primary float-right jh-create-entity"
-                id="jh-create-entity"
-              >
-                <FontAwesomeIcon icon="plus" />
-                &nbsp;
-                <Translate contentKey="generadorApp.operadora.home.createLabel">Create a new Operadora</Translate>
-              </Link>
-            </h2>
-          </PanelHeader>
           <PanelBody>
             <div className="table-responsive">
               <UncontrolledCollapse toggler="#togglerFilterOperadora">
@@ -263,7 +264,7 @@ export class Operadora extends React.Component<IOperadoraProps, IOperadoraState>
                     <div className="row mt-1 ml-3 mr-3">
                       {this.state.baseFilters !== 'nomeFantasia' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="nomeFantasiaLabel" for="operadora-nomeFantasia">
                               <Translate contentKey="generadorApp.operadora.nomeFantasia">Nome Fantasia</Translate>
                             </Label>
@@ -278,13 +279,13 @@ export class Operadora extends React.Component<IOperadoraProps, IOperadoraState>
                       <Button className="btn btn-success" type="submit">
                         <i className="fa fa-filter" aria-hidden={'true'}></i>
                         &nbsp;
-                        <Translate contentKey="entity.validation.filter">Filter</Translate>
+                        <Translate contentKey="generadorApp.operadora.home.btn_filter">Filter</Translate>
                       </Button>
                       &nbsp;
                       <div className="btn btn-secondary hand" onClick={this.cancelCourse}>
                         <FontAwesomeIcon icon="trash-alt" />
                         &nbsp;
-                        <Translate contentKey="entity.validation.clean">Clean</Translate>
+                        <Translate contentKey="generadorApp.operadora.home.btn_filter_clean">Clean</Translate>
                       </div>
                     </div>
                   </AvForm>

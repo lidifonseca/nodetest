@@ -1,8 +1,14 @@
 {
   "generadorApp": {
     "pacienteArquivo": {
+      "listButtons": {},
+      "viewButtons": {},
+      "dropdown_btn": "Actions",
       "home": {
         "title": "Paciente Arquivos",
+        "btn_filter": "Filtrar",
+        "btn_filter_clean": "Limpar Filtros",
+        "btn_filter_open": "Filtros",
         "createLabel": "Criar novo Paciente Arquivo",
         "createOrEditLabel": "Criar ou editar Paciente Arquivo",
         "notFound": "Nenhum Paciente Arquivo encontrado"
@@ -18,6 +24,7 @@
       },
       "arquivo": "Arquivo",
       "ativo": "Ativo",
+      "paciente_empty": "Sem Paciente",
       "paciente": "Paciente"
     }
   }

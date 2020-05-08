@@ -9882,7 +9882,7 @@ mark {
   padding: 0.25rem;
   background-color: #e8ebef;
   border: 1px solid #dee2e6;
-  border-radius: 6px;
+  border-radius: 3px;
 }
 .figure {
   display: inline-block;
@@ -9901,8 +9901,8 @@ code {
   padding: 2px 4px;
   color: #c3005a;
   background-color: #ffb4bb;
-  -webkit-border-radius: 6px;
-  border-radius: 6px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
 }
 a > code,
 pre code {
@@ -11232,8 +11232,8 @@ pre code {
 }
 .table td,
 .table th {
-  padding: 8px;
-  vertical-align: top;
+  padding: 3px;
+  vertical-align: middle;
   border-top: 1px solid #d6dadd;
 }
 .table thead th {
@@ -11646,7 +11646,7 @@ pre code {
   background-color: #fff;
   background-clip: padding-box;
   border: 1px solid #dfe1e4;
-  border-radius: 6px;
+  border-radius: 3px;
   transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 }
 @media (prefers-reduced-motion: reduce) {
@@ -11731,7 +11731,7 @@ select.form-control:focus::-ms-value {
   padding: 0.5rem 1rem;
   font-size: 0.875rem;
   line-height: 1.8;
-  border-radius: 8px;
+  border-radius: 3px;
 }
 select.form-control[multiple],
 select.form-control[size],
@@ -11803,7 +11803,7 @@ textarea.form-control {
   line-height: 1.5;
   color: #fff;
   background-color: rgba(15, 158, 62, 0.9);
-  border-radius: 6px;
+  border-radius: 3px;
 }
 .form-control.is-valid,
 .was-validated .form-control:valid {
@@ -11925,7 +11925,7 @@ textarea.form-control.is-valid {
   line-height: 1.5;
   color: #fff;
   background-color: rgba(255, 27, 48, 0.9);
-  border-radius: 6px;
+  border-radius: 3px;
 }
 .form-control.is-invalid,
 .was-validated .form-control:invalid {
@@ -12090,6 +12090,7 @@ input[type='submit'].btn-block {
 .btn {
   display: inline-block;
   color: #1f2225;
+  margin-left: 4px;
   text-align: center;
   vertical-align: middle;
   user-select: none;
@@ -12098,7 +12099,7 @@ input[type='submit'].btn-block {
   padding: 7px 0.75rem;
   font-size: 0.75rem;
   line-height: 1.5;
-  border-radius: 6px;
+  border-radius: 2px;
   transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 }
 @media (prefers-reduced-motion: reduce) {
@@ -12618,7 +12619,7 @@ fieldset:disabled a.btn {
   padding: 0.5rem 1rem;
   font-size: 0.875rem;
   line-height: 1.8;
-  border-radius: 8px;
+  border-radius: 3px;
 }
 .btn-group-sm > .btn,
 .btn-sm {
@@ -12685,7 +12686,7 @@ fieldset:disabled a.btn {
   background-color: #fff;
   background-clip: padding-box;
   border: 0 solid rgba(0, 0, 0, 0.15);
-  border-radius: 6px;
+  border-radius: 3px;
 }
 .dropdown-menu-left {
   right: auto;
@@ -13041,7 +13042,7 @@ fieldset:disabled a.btn {
   white-space: nowrap;
   background-color: #dfe1e4;
   border: 1px solid #dfe1e4;
-  border-radius: 6px;
+  border-radius: 3px;
 }
 .input-group-text input[type='checkbox'],
 .input-group-text input[type='radio'] {
@@ -13060,7 +13061,7 @@ fieldset:disabled a.btn {
   padding: 0.5rem 1rem;
   font-size: 0.875rem;
   line-height: 1.8;
-  border-radius: 8px;
+  border-radius: 3px;
 }
 .input-group-sm > .custom-select,
 .input-group-sm > .form-control:not(textarea) {
@@ -13160,7 +13161,7 @@ fieldset:disabled a.btn {
   background: no-repeat 50%/50% 50%;
 }
 .custom-checkbox .custom-control-label::before {
-  border-radius: 6px;
+  border-radius: 3px;
 }
 .custom-checkbox .custom-control-input:checked ~ .custom-control-label::after {
   background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3e%3cpath fill='%23FFFFFF' d='M6.564.75l-3.59 3.612-1.538-1.55L0 4.26 2.974 7.25 8 2.193z'/%3e%3c/svg%3e");
@@ -13229,7 +13230,7 @@ fieldset:disabled a.btn {
     no-repeat right 0.75rem center/8px 10px;
   background-color: #fff;
   border: 1px solid #dfe1e4;
-  border-radius: 6px;
+  border-radius: 3px;
   appearance: none;
 }
 .custom-select:focus {
@@ -13312,7 +13313,7 @@ fieldset:disabled a.btn {
   z-index: 1;
   height: calc(1.5em + 14px + 2px);
   background-color: #fff;
-  border-radius: 6px;
+  border-radius: 3px;
 }
 .custom-file-label::after {
   bottom: 0;
@@ -13516,7 +13517,7 @@ fieldset:disabled a.btn {
   border-top-right-radius: 0;
 }
 .nav-pills .nav-link {
-  border-radius: 6px;
+  border-radius: 3px;
 }
 .nav-pills .nav-link.active,
 .nav-pills .show > .nav-link {
@@ -13594,7 +13595,7 @@ fieldset:disabled a.btn {
   line-height: 1;
   background-color: transparent;
   border: 1px solid transparent;
-  border-radius: 6px;
+  border-radius: 3px;
 }
 .navbar-toggler:focus,
 .navbar-toggler:hover {
@@ -13958,7 +13959,7 @@ fieldset:disabled a.btn {
   background-color: #fff;
   background-clip: border-box;
   border: 1px solid rgba(31, 34, 37, 0.15);
-  border-radius: 6px;
+  border-radius: 3px;
 }
 .card > .list-group:first-child .list-group-item:first-child {
   border-top-left-radius: 6px;
@@ -14148,7 +14149,7 @@ body .datetimepicker.dropdown-menu > ul > li.picker-switch table tbody tr td a {
 .pagination {
   display: flex;
   list-style: none;
-  border-radius: 6px;
+  border-radius: 3px;
 }
 .breadcrumb {
   flex-wrap: wrap;
@@ -14490,7 +14491,7 @@ a.badge-aqua:focus {
   padding: 2rem 1rem;
   margin-bottom: 2rem;
   background-color: #e9ecef;
-  border-radius: 8px;
+  border-radius: 3px;
 }
 @media (min-width: 576px) {
   .jumbotron {
@@ -14507,7 +14508,7 @@ a.badge-aqua:focus {
   padding: 0.9375rem;
   margin-bottom: 1.25rem;
   border: 0 solid transparent;
-  border-radius: 6px;
+  border-radius: 3px;
 }
 .alert-heading {
   color: inherit;
@@ -14682,7 +14683,7 @@ b {
   overflow: hidden;
   font-size: 0.5625rem;
   background-color: #d1d5d8;
-  border-radius: 6px;
+  border-radius: 3px;
 }
 .progress-bar {
   display: flex;
@@ -15308,7 +15309,7 @@ a.close.disabled {
   background-color: #fff;
   background-clip: padding-box;
   border: 1px solid rgba(0, 0, 0, 0.2);
-  border-radius: 8px;
+  border-radius: 3px;
   outline: 0;
 }
 .modal-backdrop {
@@ -15507,7 +15508,7 @@ a.close.disabled {
   color: #fff;
   text-align: center;
   background-color: #000;
-  border-radius: 6px;
+  border-radius: 3px;
 }
 .popover,
 .popover .arrow {
@@ -15538,7 +15539,7 @@ a.close.disabled {
   background-color: #fff;
   background-clip: padding-box;
   border: 1px solid rgba(0, 0, 0, 0.2);
-  border-radius: 8px;
+  border-radius: 3px;
 }
 .popover .arrow {
   width: 1rem;
@@ -16049,7 +16050,7 @@ button.bg-aqua:hover {
   border-radius: 4px !important;
 }
 .rounded {
-  border-radius: 6px !important;
+  border-radius: 3px !important;
 }
 .rounded-right,
 .rounded-top {
@@ -20455,7 +20456,7 @@ a:focus {
 .header {
   position: relative;
   top: 0;
-  left: 0;
+  left: 230px;
   right: 0;
   z-index: 1020;
   margin-bottom: 0;
@@ -20502,8 +20503,8 @@ a:focus {
   background-image: none;
   border: 0;
   outline: 0;
-  -webkit-border-radius: 6px;
-  border-radius: 6px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
 }
 @media (min-width: 768px) {
   .header .navbar-toggle {
@@ -20514,8 +20515,8 @@ a:focus {
   display: block;
   width: 22px;
   height: 2px;
-  -webkit-border-radius: 6px;
-  border-radius: 6px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
 }
 .header .navbar-toggle .icon-bar + .icon-bar {
   margin-top: 4px;
@@ -20532,6 +20533,7 @@ a:focus {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
+  margin-left: calc(50% - 107px);
   -ms-flex-align: center;
   align-items: center;
 }
@@ -20864,7 +20866,7 @@ a:focus {
   box-shadow: none;
 }
 .header.navbar-inverse {
-  background: #0078ff;
+  background: #4f5467;
 }
 .header.navbar-inverse .navbar-toggle .icon-bar {
   background: #fff;
@@ -20923,13 +20925,19 @@ a:focus {
   -webkit-box-shadow: 0 0 16px rgba(0, 0, 0, 0.15);
   box-shadow: 0 0 16px rgba(0, 0, 0, 0.15);
 }
+
+.sidebar * {
+  color: #fff;
+}
 .sidebar {
   width: 230px;
+  background-color: #1f2225 !important;
+  color: #fff !important;
   position: absolute;
   left: 0;
   top: 0;
   bottom: 0;
-  padding-top: 50px;
+  padding-top: 0px;
   background: 0 0;
   z-index: 1010;
   -webkit-transform: translateZ(0);
@@ -20937,6 +20945,12 @@ a:focus {
   -ms-transform: translateZ(0);
   -o-transform: translateZ(0);
   transform: translateZ(0);
+}
+.sidebar .image {
+  text-align: center;
+}
+.sidebar .image img {
+  width: 80px;
 }
 @media (max-width: 767.98px) {
   .sidebar {
@@ -20957,8 +20971,8 @@ a:focus {
   display: block;
   text-decoration: none;
   font-weight: 600;
-  -webkit-border-radius: 6px;
-  border-radius: 6px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
 }
 .sidebar .nav > li > a i {
   float: left;
@@ -20984,8 +20998,8 @@ a:focus {
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  -webkit-border-radius: 6px;
-  border-radius: 6px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -21035,6 +21049,11 @@ a:focus {
   background: #fff;
   color: #1f2225;
 }
+
+.sidebar .nav > li > a:focus *,
+.sidebar .nav > li > a:hover * {
+  color: #1f2225;
+}
 @media (max-width: 767.98px) {
   .sidebar .nav > li > a:focus,
   .sidebar .nav > li > a:hover {
@@ -21044,6 +21063,12 @@ a:focus {
 .sidebar .nav > li.expand > a,
 .sidebar .nav > li.expanding > a {
   background: #fff;
+  color: #1f2225;
+}
+
+.sidebar .nav > li.expand > a *,
+.sidebar .nav > li.expanding > a * {
+  color: #1f2225;
 }
 @media (max-width: 767.98px) {
   .sidebar .nav > li.expand > a,
@@ -21090,6 +21115,7 @@ a:focus {
   margin: 0;
 }
 .sidebar .nav > li.nav-profile {
+  text-align: center;
   padding: 20px;
   color: #1f2225;
   background: 0 0;
@@ -21114,8 +21140,9 @@ a:focus {
   opacity: 0.75;
 }
 .sidebar .nav > li.nav-profile .image {
-  width: 34px;
-  height: 34px;
+  width: 80px;
+  height: 80px;
+  margin-left: calc(50% - 40px);
   margin-bottom: 10px;
   overflow: hidden;
   position: relative;
@@ -21142,12 +21169,15 @@ a:focus {
   font-size: 14px;
   position: relative;
 }
+.sidebar .nav > li.nav-profile .info:hover {
+  color: #fff;
+}
 .sidebar .nav > li.nav-profile .info .caret {
   margin-top: 2px;
 }
 .sidebar .nav > li.nav-profile .info small {
   display: block;
-  color: rgba(31, 34, 37, 0.75);
+  color: #ccc;
   font-weight: 600;
   font-size: 12px;
   margin-bottom: -5px;
@@ -21189,7 +21219,7 @@ a:focus {
   text-align: center;
   font-size: 11px;
   border: 0;
-  font-family: Font Awesome\5 Free, Font Awesome\5 Pro, FontAwesome !important;
+  font-family: Font awesome\5 Free, Font awesome\5 Pro, FontAwesome !important;
   font-weight: 900;
   font-style: normal;
   font-variant: normal;
@@ -21371,8 +21401,8 @@ a:focus {
   width: 20px;
   height: 20px;
   overflow: hidden;
-  -webkit-border-radius: 6px;
-  border-radius: 6px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -21427,6 +21457,18 @@ a:focus {
   color: #fff;
   width: auto;
 }
+.css-select-control > div[class$='-control'] {
+  border-color: #dfe1e4;
+  border-radius: 3px;
+  min-height: 34px;
+  width: 100%;
+}
+.css-select-control > div[class$='-control'] div[class$='-indicatorContainer'] {
+  padding: 5px;
+}
+.css-select-control > div[class$='-control'] div[class$='-menu'] {
+  margin-top: -50px;
+}
 .top-menu .nav > li.menu-control > a:focus,
 .top-menu .nav > li.menu-control > a:hover {
   background: #16181a;
@@ -21480,7 +21522,7 @@ a:focus {
   font-size: 11px;
   border: 0;
   margin-left: 5px;
-  font-family: Font Awesome\5 Free, Font Awesome\5 Pro, FontAwesome !important;
+  font-family: Font awesome\5 Free, Font awesome\5 Pro, FontAwesome !important;
   font-weight: 900;
   font-style: normal;
   font-variant: normal;
@@ -21672,7 +21714,7 @@ a:focus {
   font-size: 11px;
   margin-top: -1px;
   border: 0;
-  font-family: Font Awesome\5 Free, Font Awesome\5 Pro, FontAwesome !important;
+  font-family: Font awesome\5 Free, Font awesome\5 Pro, FontAwesome !important;
   font-weight: 900;
   font-style: normal;
   font-variant: normal;
@@ -21722,8 +21764,8 @@ a:focus {
   margin-top: -2px;
   z-index: 10;
   background: #e1e1e1;
-  -webkit-border-radius: 6px;
-  border-radius: 6px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
   left: 0;
 }
 .float-sub-menu-container .float-sub-menu li:first-child:before {
@@ -22867,9 +22909,12 @@ a:focus {
   background: #d1d5d8;
   color: #1f2225;
 }
+#page-heading {
+  margin: -19px 0px 5px 0px;
+}
 .breadcrumb {
   padding: 0;
-  margin: 0;
+  margin: 5px 3px 3px 30px;
   background: 0 0;
 }
 .breadcrumb .breadcrumb-item {
@@ -22921,8 +22966,8 @@ a:focus {
 .btn.btn-theme {
   padding: 12px 30px;
   font-weight: 700;
-  -webkit-border-radius: 8px;
-  border-radius: 8px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
 }
 .btn.btn-xs {
   font-size: 12px;
@@ -24193,8 +24238,8 @@ a:focus {
   width: 60px;
   height: 60px;
   overflow: hidden;
-  -webkit-border-radius: 6px;
-  border-radius: 6px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
 }
 .chats .image img,
 .inbox .attached-document > li img {
@@ -24692,8 +24737,8 @@ code.inverse-mode {
 .gallery .image img {
   width: 100%;
   height: 200px;
-  -webkit-border-radius: 6px 6px 0 0;
-  border-radius: 6px 6px 0 0;
+  -webkit-border-radius: 3px 6px 0 0;
+  border-radius: 3px 6px 0 0;
 }
 .gallery .image .img {
   background-size: cover;
@@ -24703,8 +24748,8 @@ code.inverse-mode {
 .gallery .image .image-inner {
   position: relative;
   background: #fff;
-  -webkit-border-radius: 6px 6px 0 0;
-  border-radius: 6px 6px 0 0;
+  -webkit-border-radius: 3px 6px 0 0;
+  border-radius: 3px 6px 0 0;
 }
 .gallery .image .image-caption {
   position: absolute;
@@ -24746,7 +24791,7 @@ code.inverse-mode {
 .gallery .image .image-info .rating span.star:before {
   content: '\f005';
   color: #c3c8cd;
-  font-family: Font Awesome\5 Free, Font Awesome\5 Pro, FontAwesome !important;
+  font-family: Font awesome\5 Free, Font awesome\5 Pro, FontAwesome !important;
   font-weight: 900;
   font-style: normal;
   font-variant: normal;
@@ -24906,7 +24951,7 @@ code.inverse-mode {
   height: 20px;
   line-height: 20px;
   text-align: center;
-  font-family: Font Awesome\5 Free, Font Awesome\5 Pro, FontAwesome !important;
+  font-family: Font awesome\5 Free, Font awesome\5 Pro, FontAwesome !important;
   font-weight: 900;
   font-style: normal;
   font-variant: normal;
@@ -25060,8 +25105,8 @@ code.inverse-mode {
     width: 4px;
     height: 4px;
     background: #8b959e;
-    -webkit-border-radius: 8px;
-    border-radius: 8px;
+    -webkit-border-radius: 3px;
+    border-radius: 3px;
   }
 }
 .inbox .list-email > li.list-group-item .email-desc {
@@ -25145,8 +25190,8 @@ code.inverse-mode {
   color: #1f2225;
   text-align: center;
   background: #dfe1e4;
-  -webkit-border-radius: 6px;
-  border-radius: 6px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
 }
 .input-group-addon:focus,
 body table.dataTable thead tr th:focus {
@@ -25510,8 +25555,8 @@ body table.dataTable thead tr th:focus {
   font-size: 0;
   margin-right: 10px;
   top: -11px;
-  -webkit-border-radius: 8px;
-  border-radius: 8px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
 }
 @media (max-width: 575.98px) {
   .login.login-v1 .login-container .login-header .brand .logo {
@@ -25601,8 +25646,8 @@ body table.dataTable thead tr th:focus {
   -webkit-box-pack: center;
   -ms-flex-pack: center;
   justify-content: center;
-  -webkit-border-radius: 6px;
-  border-radius: 6px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
 }
 @media (max-width: 575.98px) {
   .login.login-v2 {
@@ -25646,8 +25691,8 @@ body table.dataTable thead tr th:focus {
   font-size: 0;
   margin-right: 10px;
   top: -11px;
-  -webkit-border-radius: 8px;
-  border-radius: 8px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
 }
 @media (max-width: 575.98px) {
   .login.login-v2 .login-header .brand .logo {
@@ -25915,8 +25960,8 @@ body table.dataTable thead tr th:focus {
   height: 66px;
   overflow: hidden;
   border: 3px solid transparent;
-  -webkit-border-radius: 66px;
-  border-radius: 66px;
+  -webkit-border-radius: 36px;
+  border-radius: 36px;
 }
 @media (max-width: 575.98px) {
   .login-bg-list > li {
@@ -25999,8 +26044,8 @@ body table.dataTable thead tr th:focus {
   font-size: 18px;
   color: #fff;
   text-align: center;
-  -webkit-border-radius: 8px;
-  border-radius: 8px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
 }
 .dropdown-menu.media-list .media .media-object-icon {
   position: absolute;
@@ -26014,8 +26059,8 @@ body table.dataTable thead tr th:focus {
   text-align: center;
   font-size: 18px;
   line-height: 18px;
-  -webkit-border-radius: 60px;
-  border-radius: 60px;
+  -webkit-border-radius: 30px;
+  border-radius: 30px;
 }
 .dropdown-menu.media-list .media .media-left {
   padding-right: 12px;
@@ -26146,8 +26191,8 @@ body div.dt-autofill-list ul > li {
 }
 .nav.nav-tabs.nav-tabs-inverse {
   background: #000;
-  -webkit-border-radius: 6px 6px 0 0;
-  border-radius: 6px 6px 0 0;
+  -webkit-border-radius: 3px 6px 0 0;
+  border-radius: 3px 6px 0 0;
 }
 .nav.nav-tabs.nav-tabs-inverse .nav-item .nav-link {
   color: #b5bbc1;
@@ -26219,8 +26264,8 @@ body .datepicker .datepicker-years table thead tr th.prev:hover:before {
   margin-bottom: 20px;
   border-left: 3px solid;
   position: relative;
-  -webkit-border-radius: 6px;
-  border-radius: 6px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
 }
 .note .note-icon {
   width: 80px;
@@ -26439,8 +26484,8 @@ body .datepicker .datepicker-years table thead tr th.prev:hover:before {
   text-decoration: none;
   font-weight: 600;
   color: #1f2225;
-  -webkit-border-radius: 60px;
-  border-radius: 60px;
+  -webkit-border-radius: 30px;
+  border-radius: 30px;
 }
 .pager > li.previous {
   margin-right: auto;
@@ -26459,12 +26504,12 @@ body .datepicker .datepicker-years table thead tr th.prev:hover:before {
 }
 .pagination .page-item .page-link {
   font-weight: 600;
-  -webkit-border-radius: 6px;
-  border-radius: 6px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
 }
 .pagination.pagination-lg .page-item .page-link {
-  -webkit-border-radius: 8px;
-  border-radius: 8px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
 }
 .pagination.pagination-sm .page-item .page-link,
 .panel {
@@ -26785,8 +26830,8 @@ body .datepicker .datepicker-years table thead tr th.prev:hover:before {
 }
 .panel-group .panel {
   margin-bottom: 0;
-  -webkit-border-radius: 6px;
-  border-radius: 6px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
 }
 .panel-group .panel + .panel {
   margin-top: 5px;
@@ -26862,8 +26907,8 @@ body .datepicker .datepicker-years table thead tr th.prev:hover:before {
   margin: -10px 0 -20px;
   padding: 3px;
   background: #fff;
-  -webkit-border-radius: 6px;
-  border-radius: 6px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
 }
 @media (max-width: 991.98px) {
   .profile-header .profile-header-img {
@@ -27065,8 +27110,8 @@ body .datepicker .datepicker-years table thead tr th.prev:hover:before {
   width: 6px;
   height: 6px;
   background: #fff;
-  -webkit-border-radius: 6px;
-  border-radius: 6px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
 }
 .radio.radio-css.radio-inline {
   padding-left: 0;
@@ -27284,8 +27329,8 @@ body .datepicker .datepicker-years table thead tr th.prev:hover:before {
 }
 .registered-users-list > li img {
   max-width: 100%;
-  -webkit-border-radius: 6px;
-  border-radius: 6px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
 }
 .registered-users-list > li .username {
   font-size: 12px;
@@ -27315,8 +27360,8 @@ body .datepicker .datepicker-years table thead tr th.prev:hover:before {
   -webkit-flex-wrap: wrap;
   -ms-flex-wrap: wrap;
   flex-wrap: wrap;
-  -webkit-border-radius: 8px;
-  border-radius: 8px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
 }
 .result-list > li .result-info .btn-row:after,
 .result-list > li .result-info .btn-row:before,
@@ -27427,8 +27472,8 @@ body .datetimepicker.dropdown-menu > ul > li.picker-switch {
   font-size: 14px;
   line-height: 18px;
   padding: 8px 10px;
-  -webkit-border-radius: 6px;
-  border-radius: 6px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
 }
 .result-list > li .result-info .btn-row a:focus,
 .result-list > li .result-info .btn-row a:hover {
@@ -27565,8 +27610,8 @@ body .datetimepicker.dropdown-menu > ul > li.picker-switch {
   white-space: nowrap;
   display: table;
   margin: 0;
-  -webkit-border-radius: 6px 6px 0 0;
-  border-radius: 6px 6px 0 0;
+  -webkit-border-radius: 3px 6px 0 0;
+  border-radius: 3px 6px 0 0;
 }
 .tab-overflow .nav.nav-tabs > li {
   display: table-cell;
@@ -27596,8 +27641,8 @@ body .datetimepicker.dropdown-menu > ul > li.picker-switch {
 .tab-overflow .nav.nav-tabs .prev-button a {
   margin: 0;
   background: #f2f3f4;
-  -webkit-border-radius: 6px 0 0;
-  border-radius: 6px 0 0;
+  -webkit-border-radius: 3px 0 0;
+  border-radius: 3px 0 0;
 }
 .tab-overflow .nav.nav-tabs .next-button {
   right: 0;
@@ -27725,6 +27770,8 @@ body .datetimepicker.dropdown-menu > ul > li.picker-switch {
 }
 .table:not(.table-bordered) thead tr th {
   border-top: none;
+  height: 40px;
+  vertical-align: middle;
 }
 .theme-panel {
   position: fixed;
@@ -27739,8 +27786,8 @@ body .datetimepicker.dropdown-menu > ul > li.picker-switch {
   -ms-transition: right 0.2s linear;
   -o-transition: right 0.2s linear;
   transition: right 0.2s linear;
-  -webkit-border-radius: 6px 0 0 6px;
-  border-radius: 6px 0 0 6px;
+  -webkit-border-radius: 3px 0 0 6px;
+  border-radius: 3px 0 0 6px;
 }
 .theme-panel .theme-list {
   list-style-type: none;
@@ -27761,8 +27808,8 @@ body .datetimepicker.dropdown-menu > ul > li.picker-switch {
   height: 20px;
   display: block;
   text-decoration: none;
-  -webkit-border-radius: 6px;
-  border-radius: 6px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
   -webkit-transition: all 0.2s linear;
   -moz-transition: all 0.2s linear;
   -ms-transition: all 0.2s linear;
@@ -27792,7 +27839,7 @@ body .datetimepicker.dropdown-menu > ul > li.picker-switch {
   content: '\f00c';
   color: #fff;
   opacity: 0.4;
-  font-family: Font Awesome\5 Free, Font Awesome\5 Pro, FontAwesome !important;
+  font-family: Font awesome\5 Free, Font awesome\5 Pro, FontAwesome !important;
   font-style: normal;
   font-variant: normal;
   text-rendering: auto;
@@ -27810,8 +27857,8 @@ body .datetimepicker.dropdown-menu > ul > li.picker-switch {
   color: #1f2225;
   background: #fff;
   text-align: center;
-  -webkit-border-radius: 6px 0 0 6px;
-  border-radius: 6px 0 0 6px;
+  -webkit-border-radius: 3px 0 0 6px;
+  border-radius: 3px 0 0 6px;
   -webkit-box-shadow: 0 0 15px 0 rgba(0, 0, 0, 0.15);
   box-shadow: 0 0 15px 0 rgba(0, 0, 0, 0.15);
 }
@@ -27826,8 +27873,8 @@ body .datetimepicker.dropdown-menu > ul > li.picker-switch {
   background: #fff;
   position: relative;
   z-index: 10;
-  -webkit-border-radius: 6px 0 0 6px;
-  border-radius: 6px 0 0 6px;
+  -webkit-border-radius: 3px 0 0 6px;
+  border-radius: 3px 0 0 6px;
 }
 .theme-panel .theme-version {
   margin: 0 0 5px;
@@ -27880,7 +27927,7 @@ body .datetimepicker.dropdown-menu > ul > li.picker-switch {
   line-height: 16px;
   font-size: 10px;
   text-align: center;
-  font-family: Font Awesome\5 Free, Font Awesome\5 Pro, FontAwesome !important;
+  font-family: Font awesome\5 Free, Font awesome\5 Pro, FontAwesome !important;
   font-weight: 900;
   font-style: normal;
   font-variant: normal;
@@ -27934,8 +27981,8 @@ body .datetimepicker.dropdown-menu > ul > li.picker-switch {
 .theme-panel.theme-panel-lg .theme-list > li > a {
   width: 28px;
   height: 28px;
-  -webkit-border-radius: 60px;
-  border-radius: 60px;
+  -webkit-border-radius: 30px;
+  border-radius: 30px;
 }
 .theme-panel.theme-panel-lg .theme-list > li > a:before {
   line-height: 28px;
@@ -28094,8 +28141,8 @@ body .datetimepicker.dropdown-menu > ul > li.picker-switch {
   background: #fff;
   position: relative;
   padding: 20px 25px;
-  -webkit-border-radius: 8px;
-  border-radius: 8px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
 }
 @media (max-width: 1199.98px) {
   .timeline .timeline-body {
@@ -28264,7 +28311,7 @@ body .datetimepicker.dropdown-menu > ul > li.picker-switch {
 .todolist > li > a:hover .todolist-input i:before {
   content: '\f14a';
   color: rgba(31, 34, 37, 0.4);
-  font-family: Font Awesome\5 Free, Font Awesome\5 Pro, FontAwesome !important;
+  font-family: Font awesome\5 Free, Font awesome\5 Pro, FontAwesome !important;
   font-weight: 900;
   font-style: normal;
   font-variant: normal;
@@ -28394,8 +28441,8 @@ body .datetimepicker.dropdown-menu > ul > li.picker-switch {
 .widget-card.widget-card-rounded .widget-card-content,
 .widget-card.widget-card-rounded .widget-card-cover,
 .widget-chart {
-  -webkit-border-radius: 6px;
-  border-radius: 6px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
 }
 .widget-card.square {
   padding-top: 100%;
@@ -28601,8 +28648,8 @@ body .datetimepicker.dropdown-menu > ul > li.picker-switch {
   overflow: hidden;
   text-align: center;
   line-height: 38px;
-  -webkit-border-radius: 60px;
-  border-radius: 60px;
+  -webkit-border-radius: 30px;
+  border-radius: 30px;
 }
 .widget-chat .widget-chat-media img {
   max-width: 100%;
@@ -28690,12 +28737,12 @@ body .datetimepicker.dropdown-menu > ul > li.picker-switch {
   border-left-color: #fff;
 }
 .widget-chat.widget-chat-rounded {
-  -webkit-border-radius: 6px;
-  border-radius: 6px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
 }
 .widget-chat.widget-chat-rounded.widget-chat-input {
-  -webkit-border-radius: 6px 6px 0 0;
-  border-radius: 6px 6px 0 0;
+  -webkit-border-radius: 3px 6px 0 0;
+  border-radius: 3px 6px 0 0;
 }
 .inverse-mode.widget-chat {
   background: #1f2225;
@@ -28808,8 +28855,8 @@ div + .widget-input.widget-input-rounded {
   background: #fff;
 }
 .widget-input.widget-input-rounded {
-  -webkit-border-radius: 6px;
-  border-radius: 6px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
 }
 .widget-input-container {
   display: table;
@@ -28834,8 +28881,8 @@ div + .widget-input.widget-input-rounded {
 .widget-input-container .widget-input-box .form-control {
   border-color: #edeef0;
   background: #edeef0;
-  -webkit-border-radius: 60px;
-  border-radius: 60px;
+  -webkit-border-radius: 30px;
+  border-radius: 30px;
 }
 .widget-input-container .widget-input-box .form-control:focus {
   -webkit-box-shadow: none;
@@ -28977,8 +29024,8 @@ div + .widget-input.inverse-mode {
   background: #fff;
 }
 .widget-map.widget-map-rounded {
-  -webkit-border-radius: 6px;
-  border-radius: 6px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
 }
 .widget-map.inverse-mode {
   background: #1f2225;
@@ -28988,8 +29035,8 @@ div + .widget-input.inverse-mode {
   position: relative;
   color: #1f2225;
   padding: 20px;
-  -webkit-border-radius: 6px;
-  border-radius: 6px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
 }
 .widget-stats .stats-info h4,
 .widget.widget-stats .stats-info h4 {
@@ -29102,8 +29149,8 @@ div + .widget-input.inverse-mode {
   background: #e8ebef;
   height: 4px;
   margin: 0 0 15px;
-  -webkit-border-radius: 6px;
-  border-radius: 6px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
 }
 .widget-stats .stats-progress .progress-bar,
 .widget.widget-stats .stats-progress .progress-bar {
@@ -29141,8 +29188,8 @@ div + .widget-input.inverse-mode {
 }
 .widget-table.table {
   background: #fff;
-  -webkit-border-radius: 6px;
-  border-radius: 6px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
 }
 .widget-table.table .widget-table-img {
   width: 100px;
@@ -29150,8 +29197,8 @@ div + .widget-input.inverse-mode {
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
-  -webkit-border-radius: 6px;
-  border-radius: 6px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
 }
 .widget-table.table .widget-table-title {
   font-size: 14px;
@@ -29289,8 +29336,8 @@ div + .widget-input.inverse-mode {
   border-top: none;
 }
 .widget-todolist.widget-todolist-rounded {
-  -webkit-border-radius: 6px;
-  border-radius: 6px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
 }
 .inverse-mode.widget-todolist {
   background: #1f2225;
@@ -29343,8 +29390,8 @@ div + .widget-input.inverse-mode {
   padding: 15px;
 }
 .widget.widget-rounded {
-  -webkit-border-radius: 6px;
-  border-radius: 6px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
 }
 .widget.inverse-mode {
   background: #1f2225;
@@ -29397,8 +29444,8 @@ div + .widget-input.inverse-mode {
   font-size: inherit;
   -webkit-box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.175);
   box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.175);
-  -webkit-border-radius: 6px;
-  border-radius: 6px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
 }
 .apexcharts-canvas .apexcharts-xaxistooltip:after,
 .apexcharts-canvas .apexcharts-yaxistooltip:after,
@@ -29522,7 +29569,7 @@ body .datetimepicker .prev:before {
   cursor: pointer;
   font-size: 14px;
   color: #b5bbc1;
-  font-family: Font Awesome\5 Free, Font Awesome\5 Pro, FontAwesome !important;
+  font-family: Font awesome\5 Free, Font awesome\5 Pro, FontAwesome !important;
   font-weight: 900;
   font-style: normal;
   font-variant: normal;
@@ -29566,8 +29613,8 @@ body .datetimepicker .prev:before {
 body .bootstrap-colorpalette .btn-color {
   width: 19px;
   height: 19px;
-  -webkit-border-radius: 6px;
-  border-radius: 6px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
 }
 body .bootstrap-colorpalette .btn-color:focus,
 body .bootstrap-colorpalette .btn-color:hover {
@@ -29581,7 +29628,7 @@ body .datetimepicker .datetimepicker-minutes table {
 body .datetimepicker .glyphicon {
   font-size: 14px;
   color: #1f2225;
-  font-family: Font Awesome\5 Free, Font Awesome\5 Pro, FontAwesome !important;
+  font-family: Font awesome\5 Free, Font awesome\5 Pro, FontAwesome !important;
   font-weight: 900;
   font-style: normal;
   font-variant: normal;
@@ -29612,8 +29659,8 @@ body .datetimepicker.dropdown-menu {
   padding: 5px;
   color: #1f2225;
   overflow: hidden;
-  -webkit-border-radius: 8px;
-  border-radius: 8px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
 }
 @media (max-width: 575.98px) {
   body .datetimepicker.dropdown-menu {
@@ -29664,8 +29711,8 @@ body .datetimepicker.dropdown-menu .datetimepicker-years table thead tr th.prev,
 body .datetimepicker.dropdown-menu .datetimepicker-years table thead tr th.switch,
 body .datetimepicker.dropdown-menu .datetimepicker-years table thead tr th.today {
   padding: 5px;
-  -webkit-border-radius: 6px;
-  border-radius: 6px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
 }
 body .datetimepicker.dropdown-menu .datetimepicker-days table tbody tr td .decade:focus,
 body .datetimepicker.dropdown-menu .datetimepicker-days table tbody tr td .decade:hover,
@@ -29865,8 +29912,8 @@ body .datetimepicker.dropdown-menu .datetimepicker-years table tbody tr td.day {
   line-height: 16px !important;
   color: #656f78;
   font-weight: 600;
-  -webkit-border-radius: 8px;
-  border-radius: 8px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
 }
 body .datetimepicker.dropdown-menu .datetimepicker-days table tbody tr td .decade.active,
 body .datetimepicker.dropdown-menu .datetimepicker-days table tbody tr td .hour.active,
@@ -30061,8 +30108,8 @@ body .datetimepicker.dropdown-menu .datetimepicker-years table tbody tr td.day.t
   line-height: 22px;
   height: auto;
   padding: 6px 15px;
-  -webkit-border-radius: 8px;
-  border-radius: 8px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
 }
 body .datetimepicker.dropdown-menu .datetimepicker-days table tbody tr td.day.today,
 body .datetimepicker.dropdown-menu .datetimepicker-hours table tbody tr td.day.today,
@@ -30124,8 +30171,8 @@ body .datetimepicker.dropdown-menu > ul > li .timepicker table tr td.minute {
   line-height: 16px !important;
   color: #656f78;
   font-weight: 600;
-  -webkit-border-radius: 8px;
-  border-radius: 8px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
 }
 body .bootstrap-datetimepicker-widget.dropdown-menu > ul > li .datepicker table tbody tr td .decade:focus,
 body .bootstrap-datetimepicker-widget.dropdown-menu > ul > li .datepicker table tbody tr td .decade:hover,
@@ -30192,8 +30239,8 @@ body .datetimepicker.dropdown-menu > ul > li .timepicker table tr td.minute.time
   line-height: 22px;
   height: auto;
   padding: 6px 15px;
-  -webkit-border-radius: 8px;
-  border-radius: 8px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
 }
 body .datetimepicker.dropdown-menu > ul > li .timepicker table tr td.separator {
   width: 1%;
@@ -30227,8 +30274,8 @@ body .datetimepicker.dropdown-menu > ul > li .timepicker table tr td .btn span.t
   line-height: 22px;
   height: auto;
   padding: 6px 15px;
-  -webkit-border-radius: 8px;
-  border-radius: 8px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
 }
 body .datetimepicker.dropdown-menu > ul > li .timepicker table tr td .btn.btn-primary {
   padding: 5px 15px;
@@ -30323,7 +30370,7 @@ div .bootstrap-select .dropdown-menu .bs-searchbox {
 }
 .icon-eye-close,
 .icon-eye-open {
-  font-family: Font Awesome\5 Free, Font Awesome\5 Pro, FontAwesome !important;
+  font-family: Font awesome\5 Free, Font awesome\5 Pro, FontAwesome !important;
   font-weight: 900;
   font-style: normal;
   font-variant: normal;
@@ -30351,8 +30398,8 @@ div .bootstrap-select .dropdown-menu .bs-searchbox {
   -ms-transition: all 0.2s linear;
   -o-transition: all 0.2s linear;
   transition: all 0.2s linear;
-  -webkit-border-radius: 6px;
-  border-radius: 6px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
 }
 .bootstrap-timepicker-widget table tbody tr td .bootstrap-timepicker-hour:focus,
 .bootstrap-timepicker-widget table tbody tr td .bootstrap-timepicker-meridian:focus,
@@ -30363,7 +30410,7 @@ div .bootstrap-select .dropdown-menu .bs-searchbox {
   box-shadow: 0 0 0 0.125rem rgba(93, 176, 255, 0.3);
 }
 .bootstrap-timepicker-widget table tbody tr td .glyphicon {
-  font-family: Font Awesome\5 Free, Font Awesome\5 Pro, FontAwesome !important;
+  font-family: Font awesome\5 Free, Font awesome\5 Pro, FontAwesome !important;
   font-weight: 900;
   font-style: normal;
   font-variant: normal;
@@ -30379,8 +30426,8 @@ div .bootstrap-select .dropdown-menu .bs-searchbox {
   border: 0;
   color: #656f78;
   padding: 5px;
-  -webkit-border-radius: 6px !important;
-  border-radius: 6px !important;
+  -webkit-border-radius: 3px !important;
+  border-radius: 3px !important;
 }
 .bootstrap-timepicker-widget table tbody tr td a:focus,
 .bootstrap-timepicker-widget table tbody tr td a:hover {
@@ -30430,15 +30477,15 @@ body .DTFC_ScrollWrapper .dataTables_scrollBody .dataTable thead tr th {
 .cke .cke_top .cke_combo_button:hover {
   border-color: #dfe1e4;
   background: #dfe1e4;
-  -webkit-border-radius: 6px;
-  border-radius: 6px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
 }
 .cke .cke_top .cke_button_on,
 .cke .cke_top .cke_combo_on {
   background: #fff;
   border-color: #dfe1e4;
-  -webkit-border-radius: 6px;
-  border-radius: 6px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
 }
 .cke .cke_bottom .cke_resizer {
   border-right-color: #8b959e;
@@ -30447,14 +30494,14 @@ body .colorpicker {
   border: 0;
   padding: 5px;
   z-index: 1010;
-  -webkit-border-radius: 6px;
-  border-radius: 6px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
 }
 body .colorpicker .colorpicker-hue {
   margin-bottom: 5px;
   margin-left: 5px;
-  -webkit-border-radius: 6px;
-  border-radius: 6px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
   -webkit-box-shadow: none;
   box-shadow: none;
 }
@@ -30475,8 +30522,8 @@ body .colorpicker .colorpicker-bar div,
 body .colorpicker .colorpicker-color,
 body .colorpicker .colorpicker-color div,
 body .colorpicker .colorpicker-saturation {
-  -webkit-border-radius: 6px;
-  border-radius: 6px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
   -webkit-box-shadow: none;
   box-shadow: none;
 }
@@ -30531,8 +30578,8 @@ body .colorpicker-bs-popover .popover-body .colorpicker-popup.colorpicker-bs-pop
   -webkit-box-flex: 1;
   -ms-flex: 1;
   flex: 1;
-  -webkit-border-radius: 6px 0 0 6px;
-  border-radius: 6px 0 0 6px;
+  -webkit-border-radius: 3px 0 0 6px;
+  border-radius: 3px 0 0 6px;
   -webkit-transition: all 0.2s linear;
   -moz-transition: all 0.2s linear;
   -ms-transition: all 0.2s linear;
@@ -30554,7 +30601,7 @@ body .colorpicker-bs-popover .popover-body .colorpicker-popup.colorpicker-bs-pop
 .combobox-container .input-group .input-group-addon .glyphicon,
 .fc .fc-toolbar.fc-header-toolbar .fc-button-group .fc-button .fc-icon .fc-icon-left-single-arrow,
 .fc .fc-toolbar.fc-header-toolbar .fc-button-group .fc-button .fc-icon .fc-icon-right-single-arrow {
-  font-family: Font Awesome\5 Free, Font Awesome\5 Pro, FontAwesome !important;
+  font-family: Font awesome\5 Free, Font awesome\5 Pro, FontAwesome !important;
   font-weight: 900;
   font-style: normal;
   font-variant: normal;
@@ -30607,8 +30654,8 @@ body div.dt-autofill-list {
   padding: 0;
   -webkit-box-shadow: none;
   box-shadow: none;
-  -webkit-border-radius: 6px;
-  border-radius: 6px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
 }
 body div.dt-autofill-list ul > li .dt-autofill-question {
   padding: 15px;
@@ -30650,8 +30697,8 @@ body div.dt-autofill-list ul > li .dt-autofill-button .btn:before {
   right: 0;
 }
 body div.dt-autofill-list ul > li:first-child {
-  -webkit-border-radius: 6px 6px 0 0;
-  border-radius: 6px 6px 0 0;
+  -webkit-border-radius: 3px 6px 0 0;
+  border-radius: 3px 6px 0 0;
 }
 body div.dt-autofill-list ul > li:last-child {
   -webkit-border-radius: 0 0 6px 6px;
@@ -32132,7 +32179,7 @@ body table.dataTable thead tr th.sorting_asc:after,
 body table.dataTable thead tr th.sorting_desc:after {
   opacity: 1;
   bottom: 8px;
-  font-family: Font Awesome\5 Free, Font Awesome\5 Pro, FontAwesome !important;
+  font-family: Font awesome\5 Free, Font awesome\5 Pro, FontAwesome !important;
   font-weight: 900;
   font-style: normal;
   font-variant: normal;
@@ -32334,8 +32381,8 @@ body .DTFC_ScrollWrapper .dataTables_scroll {
   font-weight: 600;
   text-decoration: none;
   outline: 0;
-  -webkit-border-radius: 6px;
-  border-radius: 6px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
 }
 .dataTables_wrapper.dt-bootstrap .dataTables_paginate .pagination .paginate_button.active a,
 .dataTables_wrapper.dt-bootstrap4 .dataTables_paginate .pagination .paginate_button.active a {
@@ -32637,8 +32684,8 @@ body .datepicker .datepicker-years table thead tr th.next,
 body .datepicker .datepicker-years table thead tr th.prev {
   line-height: 20px;
   padding: 5px;
-  -webkit-border-radius: 6px;
-  border-radius: 6px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
 }
 body .datepicker .datepicker-centuries table thead tr th.next,
 body .datepicker .datepicker-centuries table thead tr th.prev,
@@ -32653,7 +32700,7 @@ body .datepicker .datepicker-years table thead tr th.prev {
   color: transparent;
   width: 14.28%;
   position: relative;
-  font-family: Font Awesome\5 Free, Font Awesome\5 Pro, FontAwesome !important;
+  font-family: Font awesome\5 Free, Font awesome\5 Pro, FontAwesome !important;
   font-weight: 900;
   font-style: normal;
   font-variant: normal;
@@ -33201,8 +33248,8 @@ body .datepicker .datepicker-years table tbody tr td span.year {
   font-weight: 600;
   color: #656f78;
   text-shadow: none;
-  -webkit-border-radius: 6px;
-  border-radius: 6px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
 }
 body .datepicker .datepicker-centuries table tbody tr td span.century.focused,
 body .datepicker .datepicker-centuries table tbody tr td span.decade.focused,
@@ -33330,8 +33377,8 @@ body .datepicker .datepicker-years table tbody tr td.day {
   font-weight: 600;
   color: #42484f;
   padding: 5px;
-  -webkit-border-radius: 6px;
-  border-radius: 6px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
 }
 body .datepicker .datepicker-centuries table tbody tr td.day.highlighted,
 body .datepicker .datepicker-centuries table tbody tr td.day.range,
@@ -33535,8 +33582,8 @@ body .datepicker .datepicker-days table tbody tr td.day.range-start,
 body .datepicker .datepicker-decades table tbody tr td.day.range-start,
 body .datepicker .datepicker-months table tbody tr td.day.range-start,
 body .datepicker .datepicker-years table tbody tr td.day.range-start {
-  -webkit-border-radius: 6px 0 0 6px;
-  border-radius: 6px 0 0 6px;
+  -webkit-border-radius: 3px 0 0 6px;
+  border-radius: 3px 0 0 6px;
 }
 .datepicker .input-daterange .input-group-addon + .form-control,
 body .datepicker .datepicker-centuries table tbody tr td.day.range-end,
@@ -33711,8 +33758,8 @@ body .daterangepicker {
   z-index: 1020;
   border: 0;
   font-family: inherit;
-  -webkit-border-radius: 8px;
-  border-radius: 8px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
   -webkit-box-shadow: 0 6px 30px rgba(0, 0, 0, 0.2);
   box-shadow: 0 6px 30px rgba(0, 0, 0, 0.2);
 }
@@ -33743,8 +33790,8 @@ body .daterangepicker .drp-calendar .calendar-table table thead tr th.month .mon
 body .daterangepicker .drp-calendar .calendar-table table thead tr th.month .yearselect {
   border-color: #dfe1e4;
   background: #fff;
-  -webkit-border-radius: 6px;
-  border-radius: 6px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
   -webkit-transition: all 0.2s linear;
   -moz-transition: all 0.2s linear;
   -ms-transition: all 0.2s linear;
@@ -33772,8 +33819,8 @@ body .daterangepicker .drp-calendar .calendar-table table tbody tr td {
   border: 0;
 }
 body .daterangepicker .drp-calendar .calendar-table table tbody tr td.available {
-  -webkit-border-radius: 6px;
-  border-radius: 6px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
 }
 body .daterangepicker .drp-calendar .calendar-table table tbody tr td.available:focus,
 body .daterangepicker .drp-calendar .calendar-table table tbody tr td.available:hover {
@@ -33790,8 +33837,8 @@ body .daterangepicker .drp-calendar .calendar-table table tbody tr td.available.
   color: #fff;
 }
 body .daterangepicker .drp-calendar .calendar-table table tbody tr td.available.start-date {
-  -webkit-border-radius: 6px 0 0 6px;
-  border-radius: 6px 0 0 6px;
+  -webkit-border-radius: 3px 0 0 6px;
+  border-radius: 3px 0 0 6px;
 }
 body .daterangepicker .drp-calendar .calendar-table table tbody tr td.available.end-date {
   -webkit-border-radius: 0 6px 6px 0;
@@ -33859,8 +33906,8 @@ body .daterangepicker.show-ranges .ranges {
 @media (max-width: 991.98px) {
   body .daterangepicker.show-ranges .ranges ul li {
     margin-right: 10px !important;
-    -webkit-border-radius: 6px;
-    border-radius: 6px;
+    -webkit-border-radius: 3px;
+    border-radius: 3px;
   }
 }
 body .daterangepicker.show-ranges .ranges ul li.active {
@@ -33926,9 +33973,9 @@ body .daterangepicker.show-ranges .drp-calendar.left {
   -webkit-box-pack: center;
   -ms-flex-pack: center;
   justify-content: center;
-  -webkit-border-radius: 60px;
-  border-radius: 60px;
-  font-family: Font Awesome\5 Free, Font Awesome\5 Pro, FontAwesome !important;
+  -webkit-border-radius: 30px;
+  border-radius: 30px;
+  font-family: Font awesome\5 Free, Font awesome\5 Pro, FontAwesome !important;
   font-weight: 900;
   font-style: normal;
   font-variant: normal;
@@ -33941,8 +33988,8 @@ body .daterangepicker.show-ranges .drp-calendar.left {
 }
 .dropzone .dz-preview.dz-file-preview .dz-image {
   background: #f2f3f4 !important;
-  -webkit-border-radius: 6px !important;
-  border-radius: 6px !important;
+  -webkit-border-radius: 3px !important;
+  border-radius: 3px !important;
 }
 .dropzone .dz-preview.dz-image-preview {
   background: 0 0 !important;
@@ -33975,7 +34022,7 @@ body .daterangepicker.show-ranges .drp-calendar.left {
 body .bootstrap-datetimepicker-widget .glyphicon {
   font-size: 14px;
   color: #1f2225;
-  font-family: Font Awesome\5 Free, Font Awesome\5 Pro, FontAwesome !important;
+  font-family: Font awesome\5 Free, Font awesome\5 Pro, FontAwesome !important;
   font-weight: 900;
   font-style: normal;
   font-variant: normal;
@@ -34007,8 +34054,8 @@ body .bootstrap-datetimepicker-widget.dropdown-menu {
   padding: 0;
   color: #1f2225;
   overflow: hidden;
-  -webkit-border-radius: 8px;
-  border-radius: 8px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
 }
 @media (max-width: 575.98px) {
   body .bootstrap-datetimepicker-widget.dropdown-menu {
@@ -34055,8 +34102,8 @@ body .bootstrap-datetimepicker-widget.dropdown-menu > ul > li .datepicker table 
   line-height: 22px;
   height: auto;
   padding: 6px 15px;
-  -webkit-border-radius: 8px;
-  border-radius: 8px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
 }
 .editable-container
   .editableform
@@ -34475,8 +34522,8 @@ body .bootstrap-datetimepicker-widget.dropdown-menu > ul > li .timepicker table 
   line-height: 16px !important;
   color: #656f78;
   font-weight: 600;
-  -webkit-border-radius: 8px;
-  border-radius: 8px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
 }
 body .bootstrap-datetimepicker-widget.dropdown-menu > ul > li .timepicker table tr td.hour:focus,
 body .bootstrap-datetimepicker-widget.dropdown-menu > ul > li .timepicker table tr td.hour:hover,
@@ -34503,8 +34550,8 @@ body .bootstrap-datetimepicker-widget.dropdown-menu > ul > li .timepicker table 
   line-height: 22px;
   height: auto;
   padding: 6px 15px;
-  -webkit-border-radius: 8px;
-  border-radius: 8px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
 }
 body .bootstrap-datetimepicker-widget.dropdown-menu > ul > li .timepicker table tr td.separator {
   width: 1%;
@@ -34532,8 +34579,8 @@ body .bootstrap-datetimepicker-widget.dropdown-menu > ul > li .timepicker table 
   line-height: 22px;
   height: auto;
   padding: 6px 15px;
-  -webkit-border-radius: 8px;
-  border-radius: 8px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
 }
 body .bootstrap-datetimepicker-widget.dropdown-menu > ul > li .timepicker table tr td .btn.btn-primary {
   padding: 5px 15px;
@@ -34605,8 +34652,8 @@ body .bootstrap-datetimepicker-widget + .input-group-addon {
 }
 .flot-tooltip,
 .legend > div {
-  -webkit-border-radius: 6px;
-  border-radius: 6px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
 }
 .legend > div {
   background: #000 !important;
@@ -35306,8 +35353,8 @@ body #gritter-notice-wrapper .gritter-item-wrapper.gritter-light .gritter-close:
   position: relative;
   background: #fff;
   margin-bottom: 5px;
-  -webkit-border-radius: 6px;
-  border-radius: 6px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
 }
 .fc-event-list .fc-event + .fc-event {
   margin-top: 0;
@@ -35336,13 +35383,13 @@ body #gritter-notice-wrapper .gritter-item-wrapper.gritter-light .gritter-close:
   background: #dfe1e4;
   color: #b5bbc1;
   font-size: 14px;
-  font-family: Font Awesome\5 Free, Font Awesome\5 Pro, FontAwesome !important;
+  font-family: Font awesome\5 Free, Font awesome\5 Pro, FontAwesome !important;
   font-weight: 900;
   font-style: normal;
   font-variant: normal;
   text-rendering: auto;
-  -webkit-border-radius: 6px 0 0 6px;
-  border-radius: 6px 0 0 6px;
+  -webkit-border-radius: 3px 0 0 6px;
+  border-radius: 3px 0 0 6px;
 }
 .fc-event-list .fc-event:focus,
 .fc-event-list .fc-event:hover {
@@ -35371,8 +35418,8 @@ body #gritter-notice-wrapper {
 body #gritter-notice-wrapper .gritter-item-wrapper {
   background: 0 0;
   background: rgba(0, 0, 0, 0.9);
-  -webkit-border-radius: 8px;
-  border-radius: 8px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
 }
 body #gritter-notice-wrapper .gritter-item-wrapper .gritter-bottom,
 body #gritter-notice-wrapper .gritter-item-wrapper .gritter-top {
@@ -35512,8 +35559,8 @@ body #gritter-notice-wrapper .gritter-item-wrapper.without-rounded-img .gritter-
 .hljs-wrapper {
   background: #f2f3f4;
   position: relative;
-  -webkit-border-radius: 6px;
-  border-radius: 6px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
 }
 .hljs-wrapper pre,
 .hljs-wrapper pre .hljs,
@@ -35636,14 +35683,14 @@ body .introjs-helperNumberLayer {
 }
 body .introjs-helperLayer {
   border: 0;
-  -webkit-border-radius: 6px;
-  border-radius: 6px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
   -webkit-box-shadow: none;
   box-shadow: none;
 }
 body .introjs-tooltip {
-  -webkit-border-radius: 6px;
-  border-radius: 6px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
   -webkit-box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
 }
@@ -35696,8 +35743,8 @@ body ul.wysihtml5-toolbar {
 }
 .irs .irs .irs-line .irs-line-left,
 .irs .irs-bar-edge {
-  -webkit-border-radius: 6px 0 0 6px;
-  border-radius: 6px 0 0 6px;
+  -webkit-border-radius: 3px 0 0 6px;
+  border-radius: 3px 0 0 6px;
 }
 .irs .irs .irs-line .irs-line-right {
   -webkit-border-radius: 0 6px 6px 0;
@@ -35731,8 +35778,8 @@ body ul.wysihtml5-toolbar {
   cursor: pointer;
   -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
-  -webkit-border-radius: 60px;
-  border-radius: 60px;
+  -webkit-border-radius: 30px;
+  border-radius: 30px;
 }
 .irs.irs--flat .irs-bar {
   height: 4px;
@@ -36006,8 +36053,8 @@ body ul.wysihtml5-toolbar {
   -webkit-flex-wrap: nowrap;
   -ms-flex-wrap: nowrap;
   flex-wrap: nowrap;
-  -webkit-border-radius: 6px 6px 0 0;
-  border-radius: 6px 6px 0 0;
+  -webkit-border-radius: 3px 6px 0 0;
+  border-radius: 3px 6px 0 0;
 }
 @media (max-width: 1199.98px) {
   .sw-main.sw-theme-default .step-anchor {
@@ -36059,8 +36106,8 @@ body ul.wysihtml5-toolbar {
   color: #1f2225;
   font-weight: 700;
   position: relative;
-  -webkit-border-radius: 60px;
-  border-radius: 60px;
+  -webkit-border-radius: 30px;
+  border-radius: 30px;
 }
 .sw-main.sw-theme-default .step-anchor > li > a small {
   display: block;
@@ -36094,13 +36141,13 @@ body ul.wysihtml5-toolbar {
   right: 0;
   bottom: 0;
   color: #fff;
-  font-family: Font Awesome\5 Free, Font Awesome\5 Pro, FontAwesome !important;
+  font-family: Font awesome\5 Free, Font awesome\5 Pro, FontAwesome !important;
   font-weight: 900;
   font-style: normal;
   font-variant: normal;
   text-rendering: auto;
-  -webkit-border-radius: 60px;
-  border-radius: 60px;
+  -webkit-border-radius: 30px;
+  border-radius: 30px;
 }
 .sw-main.sw-theme-default .sw-container {
   margin: 0 !important;
@@ -36133,8 +36180,8 @@ body ul.wysihtml5-toolbar {
 }
 .sw-main.sw-theme-default .sw-toolbar .sw-btn-group .btn {
   min-width: 100px;
-  -webkit-border-radius: 6px !important;
-  border-radius: 6px !important;
+  -webkit-border-radius: 3px !important;
+  border-radius: 3px !important;
 }
 .sw-main.sw-theme-default .sw-toolbar .sw-btn-group .btn + .btn {
   margin-left: 10px;
@@ -36226,7 +36273,7 @@ body ul.wysihtml5-toolbar {
   right: 7px;
   bottom: 7px;
   display: block;
-  font-family: Font Awesome\5 Free, Font Awesome\5 Pro, FontAwesome !important;
+  font-family: Font awesome\5 Free, Font awesome\5 Pro, FontAwesome !important;
   font-weight: 900;
   font-style: normal;
   font-variant: normal;
@@ -36458,8 +36505,8 @@ html .nvtooltip table thead tr th strong {
 }
 html .nvtooltip table tbody td.legend-color-guide div {
   border: 0;
-  -webkit-border-radius: 6px;
-  border-radius: 6px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
 }
 html .nvd3-inverse-mode .nvd3 line.nv-guideline {
   stroke: rgba(255, 255, 255, 0.5);
@@ -36546,8 +36593,8 @@ html .nvd3-inverse-mode .nvd3.nv-pie path {
   -ms-animation: pace-spinner 400ms linear infinite;
   -o-animation: pace-spinner 400ms linear infinite;
   animation: pace-spinner 400ms linear infinite;
-  -webkit-border-radius: 60px;
-  border-radius: 60px;
+  -webkit-border-radius: 30px;
+  border-radius: 30px;
 }
 @media (max-width: 767.98px) {
   .pace .pace-activity {
@@ -36666,7 +36713,7 @@ body .select2-container .select2-choice .select2-search-choice-close {
   color: #8b959e;
   top: 1px;
   right: 20px;
-  font-family: Font Awesome\5 Free, Font Awesome\5 Pro, FontAwesome !important;
+  font-family: Font awesome\5 Free, Font awesome\5 Pro, FontAwesome !important;
   font-weight: 900;
   font-style: normal;
   font-variant: normal;
@@ -36694,7 +36741,7 @@ body .select2-container .select2-choice .select2-arrow {
 body .select2-container .select2-choice .select2-arrow b,
 body .select2-container.select2-container-multi .select2-choices .select2-search-choice .select2-search-choice-close {
   background: 0 0 !important;
-  font-family: Font Awesome\5 Free, Font Awesome\5 Pro, FontAwesome !important;
+  font-family: Font awesome\5 Free, Font awesome\5 Pro, FontAwesome !important;
   font-weight: 900;
   font-style: normal;
   font-variant: normal;
@@ -36770,8 +36817,8 @@ body .select2-drop .select2-search {
 body .select2-drop .select2-search input {
   border: 1px solid #dfe1e4;
   background: 0 0 !important;
-  -webkit-border-radius: 6px;
-  border-radius: 6px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
   -webkit-transition: all 0.2s linear;
   -moz-transition: all 0.2s linear;
   -ms-transition: all 0.2s linear;
@@ -36792,7 +36839,7 @@ body .select2-drop .select2-search:before {
   font-size: 12px;
   line-height: 14px;
   color: #b5bbc1;
-  font-family: Font Awesome\5 Free, Font Awesome\5 Pro, FontAwesome !important;
+  font-family: Font awesome\5 Free, Font awesome\5 Pro, FontAwesome !important;
   font-weight: 900;
   font-style: normal;
   font-variant: normal;
@@ -36865,7 +36912,7 @@ body .select2-drop.select2-drop-above {
   color: #1f2225;
   width: auto;
   height: auto;
-  font-family: Font Awesome\5 Free, Font Awesome\5 Pro, FontAwesome !important;
+  font-family: Font awesome\5 Free, Font awesome\5 Pro, FontAwesome !important;
   font-weight: 900;
   font-style: normal;
   font-variant: normal;
@@ -36933,8 +36980,8 @@ body .select2-drop.select2-drop-above {
   padding: 4px 8px;
   color: #42484f;
   float: none;
-  -webkit-border-radius: 6px;
-  border-radius: 6px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
 }
 .select2.select2-container
   .selection
@@ -36969,8 +37016,8 @@ body .select2-drop.select2-drop-above {
   padding: 6px 12px;
   outline: 0;
   color: #1f2225;
-  -webkit-border-radius: 6px;
-  border-radius: 6px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
   -webkit-transition: all 0.2s linear;
   -moz-transition: all 0.2s linear;
   -ms-transition: all 0.2s linear;
@@ -37024,8 +37071,8 @@ body .select2-drop.select2-drop-above {
 .simplecolorpicker.icon {
   width: 20px;
   height: 20px;
-  -webkit-border-radius: 6px;
-  border-radius: 6px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
 }
 .simplecolorpicker .color:focus,
 .simplecolorpicker .icon:focus,
@@ -37036,7 +37083,7 @@ body .select2-drop.select2-drop-above {
 .simplecolorpicker.glyphicons .color[data-selected]:after {
   display: block;
   text-align: center;
-  font-family: Font Awesome\5 Free, Font Awesome\5 Pro, FontAwesome !important;
+  font-family: Font awesome\5 Free, Font awesome\5 Pro, FontAwesome !important;
   font-weight: 900;
   font-style: normal;
   font-variant: normal;
@@ -37094,8 +37141,8 @@ body .jqstooltip {
   width: auto !important;
   height: auto !important;
   background: rgba(31, 34, 37, 0.9);
-  -webkit-border-radius: 6px;
-  border-radius: 6px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
 }
 .note-editor .note-toolbar {
   background: #1f2225;
@@ -37248,8 +37295,8 @@ body ul.wysihtml5-toolbar .glyphicon.glyphicon-quote:before {
   padding: 3px 6px;
   margin-bottom: 0;
   font-family: inherit;
-  -webkit-border-radius: 6px;
-  border-radius: 6px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -37282,7 +37329,7 @@ body ul.wysihtml5-toolbar > li {
   height: 24px;
   width: 16px;
   text-indent: 0;
-  font-family: Font Awesome\5 Free, Font Awesome\5 Pro, FontAwesome !important;
+  font-family: Font awesome\5 Free, Font awesome\5 Pro, FontAwesome !important;
   font-weight: 900;
   font-style: normal;
   font-variant: normal;
@@ -37336,7 +37383,7 @@ body ul.wysihtml5-toolbar > li {
 }
 .editable-container .editableform .form-group > div .editable-input .input-append.date .add-on i,
 body ul.wysihtml5-toolbar .glyphicon {
-  font-family: Font Awesome\5 Free, Font Awesome\5 Pro, FontAwesome !important;
+  font-family: Font awesome\5 Free, Font awesome\5 Pro, FontAwesome !important;
   font-weight: 900;
   font-style: normal;
   font-variant: normal;
@@ -37408,8 +37455,8 @@ body ul.wysihtml5-toolbar .glyphicon.glyphicon-picture:before {
   display: -webkit-inline-box;
   display: -ms-inline-flexbox;
   display: inline-flex;
-  -webkit-border-radius: 6px 0 0 6px;
-  border-radius: 6px 0 0 6px;
+  -webkit-border-radius: 3px 0 0 6px;
+  border-radius: 3px 0 0 6px;
 }
 .editable-container .editableform .form-group > div .editable-input .input-append.date .add-on {
   background: #dfe1e4;
@@ -37580,7 +37627,7 @@ body ul.wysihtml5-toolbar .glyphicon.glyphicon-picture:before {
   th.prev {
   color: transparent;
   width: 14.28%;
-  font-family: Font Awesome\5 Free, Font Awesome\5 Pro, FontAwesome !important;
+  font-family: Font awesome\5 Free, Font awesome\5 Pro, FontAwesome !important;
   font-weight: 900;
   font-style: normal;
   font-variant: normal;
@@ -38429,8 +38476,8 @@ body ul.wysihtml5-toolbar .glyphicon.glyphicon-picture:before {
 .editable-container .editableform .form-group > div .editable-input .editable-address input {
   border: 1px solid #dfe1e4;
   padding: 6px 10px;
-  -webkit-border-radius: 6px;
-  border-radius: 6px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
 }
 .editable-container .editableform .form-group > div .editable-input .editable-address input:focus {
   outline: 0;
@@ -38480,7 +38527,7 @@ body ul.wysihtml5-toolbar .glyphicon.glyphicon-picture:before {
 }
 .editable-container .editableform .form-group > div .editable-buttons .btn .glyphicon-ok,
 .editable-container .editableform .form-group > div .editable-buttons .btn .glyphicon-remove {
-  font-family: Font Awesome\5 Free, Font Awesome\5 Pro, FontAwesome !important;
+  font-family: Font awesome\5 Free, Font awesome\5 Pro, FontAwesome !important;
   font-weight: 900;
   font-style: normal;
   font-variant: normal;

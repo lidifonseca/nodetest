@@ -2,6 +2,7 @@
 import React from 'react';
 import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
 import { connect } from 'react-redux';
+import Select from 'react-select';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import {
   Button,
@@ -136,32 +137,33 @@ export class PacienteArquivo extends React.Component<IPacienteArquivoProps, IPac
     const { pacientes, pacienteArquivoList, match, totalItems } = this.props;
     return (
       <div>
-        <ol className="breadcrumb float-xl-right">
+        <h2 id="page-heading">
+          <span className="page-header">Paciente Arquivos</span>
+          <Button id="togglerFilterPacienteArquivo" className="btn btn-primary float-right jh-create-entity">
+            <Translate contentKey="generadorApp.pacienteArquivo.home.btn_filter_open">Filters</Translate>
+            &nbsp;
+            <FontAwesomeIcon icon="caret-down" />
+          </Button>{' '}
+          &nbsp;
+          <Link
+            to={`${match.url}/new?${this.getFiltersURL()}`}
+            className="btn btn-primary float-right jh-create-entity"
+            id="jh-create-entity"
+          >
+            <FontAwesomeIcon icon="plus" />
+            &nbsp;
+            <Translate contentKey="generadorApp.pacienteArquivo.home.createLabel">Create a new Paciente Arquivo</Translate>
+          </Link>{' '}
+          &nbsp;
+        </h2>
+
+        <ol className="breadcrumb">
           <li className="breadcrumb-item">
             <Link to="/">Inicio</Link>
           </li>
           <li className="breadcrumb-item active">Paciente Arquivos</li>
         </ol>
-        <h1 className="page-header">&nbsp;&nbsp;</h1>
         <Panel>
-          <PanelHeader>
-            <h2 id="page-heading">
-              <span className="page-header ml-3">Paciente Arquivos</span>
-              <Button id="togglerFilterPacienteArquivo" className="btn btn-primary float-right jh-create-entity">
-                Filtros&nbsp;
-                <FontAwesomeIcon icon="caret-down" />
-              </Button>
-              <Link
-                to={`${match.url}/new?${this.getFiltersURL()}`}
-                className="btn btn-primary float-right jh-create-entity"
-                id="jh-create-entity"
-              >
-                <FontAwesomeIcon icon="plus" />
-                &nbsp;
-                <Translate contentKey="generadorApp.pacienteArquivo.home.createLabel">Create a new Paciente Arquivo</Translate>
-              </Link>
-            </h2>
-          </PanelHeader>
           <PanelBody>
             <div className="table-responsive">
               <UncontrolledCollapse toggler="#togglerFilterPacienteArquivo">
@@ -170,13 +172,13 @@ export class PacienteArquivo extends React.Component<IPacienteArquivoProps, IPac
                     <div className="row mt-1 ml-3 mr-3">
                       {this.state.baseFilters !== 'arquivo' ? (
                         <Col md="3">
-                          <Row></Row>
+                          <Row className="mr-1 mt-1"></Row>
                         </Col>
                       ) : null}
 
                       {this.state.baseFilters !== 'ativo' ? (
                         <Col md="3">
-                          <Row>
+                          <Row className="mr-1 mt-1">
                             <Label id="ativoLabel" for="paciente-arquivo-ativo">
                               <Translate contentKey="generadorApp.pacienteArquivo.ativo">Ativo</Translate>
                             </Label>
@@ -187,21 +189,26 @@ export class PacienteArquivo extends React.Component<IPacienteArquivoProps, IPac
 
                       {this.state.baseFilters !== 'paciente' ? (
                         <Col md="3">
-                          <Row>
-                            <div>
+                          <Row className="mr-1 mt-1">
+                            <div style={{ width: '100%' }}>
                               <Label for="paciente-arquivo-paciente">
                                 <Translate contentKey="generadorApp.pacienteArquivo.paciente">Paciente</Translate>
                               </Label>
-                              <AvInput id="paciente-arquivo-paciente" type="select" className="form-control" name="pacienteId">
-                                <option value="" key="0" />
-                                {pacientes
-                                  ? pacientes.map(otherEntity => (
-                                      <option value={otherEntity.id} key={otherEntity.id}>
-                                        {otherEntity.nome}
-                                      </option>
-                                    ))
-                                  : null}
-                              </AvInput>
+                              <Select
+                                id="paciente-arquivo-paciente"
+                                isMulti
+                                className={'css-select-control'}
+                                value={
+                                  pacientes
+                                    ? pacientes.map(p =>
+                                        this.state.paciente.split(',').indexOf(p.id) !== -1 ? { value: p.id, label: p.nome } : null
+                                      )
+                                    : null
+                                }
+                                options={pacientes ? pacientes.map(option => ({ value: option.id, label: option.nome })) : null}
+                                onChange={options => this.setState({ paciente: options.map(option => option['value']).join(',') })}
+                                name={'paciente'}
+                              />
                             </div>
                           </Row>
                         </Col>
@@ -212,13 +219,13 @@ export class PacienteArquivo extends React.Component<IPacienteArquivoProps, IPac
                       <Button className="btn btn-success" type="submit">
                         <i className="fa fa-filter" aria-hidden={'true'}></i>
                         &nbsp;
-                        <Translate contentKey="entity.validation.filter">Filter</Translate>
+                        <Translate contentKey="generadorApp.pacienteArquivo.home.btn_filter">Filter</Translate>
                       </Button>
                       &nbsp;
                       <div className="btn btn-secondary hand" onClick={this.cancelCourse}>
                         <FontAwesomeIcon icon="trash-alt" />
                         &nbsp;
-                        <Translate contentKey="entity.validation.clean">Clean</Translate>
+                        <Translate contentKey="generadorApp.pacienteArquivo.home.btn_filter_clean">Clean</Translate>
                       </div>
                     </div>
                   </AvForm>
@@ -271,7 +278,7 @@ export class PacienteArquivo extends React.Component<IPacienteArquivoProps, IPac
                             {pacienteArquivo.arquivo ? (
                               <div>
                                 <a rel="noopener noreferrer" target={'_blank'} href={`${pacienteArquivo.arquivo}`}>
-                                  {pacienteArquivo.arquivoContentType.indexOf('image/') !== -1 ? (
+                                  {pacienteArquivo.arquivoContentType && pacienteArquivo.arquivoContentType.includes('image/') ? (
                                     <img src={`${pacienteArquivo.arquivo}`} style={{ maxHeight: '30px' }} />
                                   ) : (
                                     <Translate contentKey="entity.action.open">Open</Translate>

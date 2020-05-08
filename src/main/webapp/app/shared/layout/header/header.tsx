@@ -2,7 +2,7 @@ import './header.scss';
 
 import React, { useState } from 'react';
 import { Translate, Storage } from 'react-jhipster';
-import { Navbar, Nav, NavbarToggler, NavbarBrand, Collapse } from 'reactstrap';
+import { Navbar, Nav, Collapse } from 'reactstrap';
 
 import LoadingBar from 'react-redux-loading-bar';
 
@@ -47,9 +47,9 @@ const Header = (props: IHeaderProps) => {
 
   return (
     <div id="app-header">
-      {renderDevRibbon()}
+  {/* renderDevRibbon() */}
       <LoadingBar className="loading-bar" />
-      <div id="header" className="header navbar-default" style={{ boxShadow: "0 0 16px rgba(0,0,0,.15)" }}>
+      <div id="header" className="header navbar-inverse" style={{ boxShadow: "0 0 16px rgba(0,0,0,.15)" }}>
         <div className={"navbar-header"}>
           <Brand />
           <div className={"navbar-nav navbar-right d-block d-md-none"}>

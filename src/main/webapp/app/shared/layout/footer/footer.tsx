@@ -32,7 +32,7 @@ const Footer = props => (
           </Col>
           <Col md="4" className="copyright ">
             <div>
-              ©2019  Confiança Prime Assessoria Ltda.
+              ©2020  Saúde Concierge.
             </div>
             <FontAwesomeIcon icon={['fab', 'facebook']} />
             &nbsp;&nbsp;&nbsp;

@@ -100,6 +100,13 @@ export interface IPacienteBaseState {
 
 export interface IPacienteUpdateState {
   fieldsBase: IPacienteBaseState;
+
+  unidadeEasySelectValue: any;
+  franquiaSelectValue: any;
+  cidadeSelectValue: any;
+  grauParentescoSelectValue: any;
+  profissionalSelectValue: any;
+  pacienteHospitalSelectValue: any;
   activeTab: number;
   isNew: boolean;
   unidadeId: string;
