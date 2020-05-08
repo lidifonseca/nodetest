@@ -34,12 +34,15 @@ export type PacienteEnqueteAppState = Readonly<typeof initialState>;
 export interface IPacienteEnqueteAppBaseState {
   baseFilters: any;
   votacao: any;
+  paciente: any;
 }
 
 export interface IPacienteEnqueteAppUpdateState {
   fieldsBase: IPacienteEnqueteAppBaseState;
 
+  pacienteSelectValue: any;
   isNew: boolean;
+  pacienteId: string;
 }
 
 // Reducer
@@ -121,18 +124,20 @@ const apiUrl = 'api/paciente-enquete-apps';
 // Actions
 export type ICrudGetAllActionPacienteEnqueteApp<T> = (
   votacao?: any,
+  paciente?: any,
   page?: number,
   size?: number,
   sort?: string
 ) => IPayload<T> | ((dispatch: any) => IPayload<T>);
 
-export const getEntities: ICrudGetAllActionPacienteEnqueteApp<IPacienteEnqueteApp> = (votacao, page, size, sort) => {
+export const getEntities: ICrudGetAllActionPacienteEnqueteApp<IPacienteEnqueteApp> = (votacao, paciente, page, size, sort) => {
   const votacaoRequest = votacao ? `votacao.contains=${votacao}&` : '';
+  const pacienteRequest = paciente ? `paciente.equals=${paciente}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_PACIENTEENQUETEAPP_LIST,
-    payload: axios.get<IPacienteEnqueteApp>(`${requestUrl}${votacaoRequest}cacheBuster=${new Date().getTime()}`)
+    payload: axios.get<IPacienteEnqueteApp>(`${requestUrl}${votacaoRequest}${pacienteRequest}cacheBuster=${new Date().getTime()}`)
   };
 };
 export const getEntity: ICrudGetAction<IPacienteEnqueteApp> = id => {
@@ -143,19 +148,21 @@ export const getEntity: ICrudGetAction<IPacienteEnqueteApp> = id => {
   };
 };
 
-export const getEntitiesExport: ICrudGetAllActionPacienteEnqueteApp<IPacienteEnqueteApp> = (votacao, page, size, sort) => {
+export const getEntitiesExport: ICrudGetAllActionPacienteEnqueteApp<IPacienteEnqueteApp> = (votacao, paciente, page, size, sort) => {
   const votacaoRequest = votacao ? `votacao.contains=${votacao}&` : '';
+  const pacienteRequest = paciente ? `paciente.equals=${paciente}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_PACIENTEENQUETEAPP_LIST,
-    payload: axios.get<IPacienteEnqueteApp>(`${requestUrl}${votacaoRequest}cacheBuster=${new Date().getTime()}`)
+    payload: axios.get<IPacienteEnqueteApp>(`${requestUrl}${votacaoRequest}${pacienteRequest}cacheBuster=${new Date().getTime()}`)
   };
 };
 
 export const createEntity: ICrudPutAction<IPacienteEnqueteApp> = entity => async dispatch => {
   entity = {
-    ...entity
+    ...entity,
+    paciente: entity.paciente === 'null' ? null : entity.paciente
   };
   const result = await dispatch({
     type: ACTION_TYPES.CREATE_PACIENTEENQUETEAPP,
@@ -166,7 +173,7 @@ export const createEntity: ICrudPutAction<IPacienteEnqueteApp> = entity => async
 };
 
 export const updateEntity: ICrudPutAction<IPacienteEnqueteApp> = entity => async dispatch => {
-  entity = { ...entity };
+  entity = { ...entity, paciente: entity.paciente === 'null' ? null : entity.paciente };
   const result = await dispatch({
     type: ACTION_TYPES.UPDATE_PACIENTEENQUETEAPP,
     payload: axios.put(apiUrl, cleanEntity(entity))
@@ -194,8 +201,11 @@ export const getPacienteEnqueteAppState = (location): IPacienteEnqueteAppBaseSta
   const baseFilters = url.searchParams.get('baseFilters') || '';
   const votacao = url.searchParams.get('votacao') || '';
 
+  const paciente = url.searchParams.get('paciente') || '';
+
   return {
     baseFilters,
-    votacao
+    votacao,
+    paciente
   };
 };

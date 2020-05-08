@@ -27,7 +27,15 @@
       "minimo": "Minimo",
       "unidadeMedidaExtra": "Unidade Medida Extra",
       "unidadeMedidaId": "Unidade Medida Id",
-      "score": "Score"
+      "score": "Score",
+      "alertasIndicadores_empty": "Sem Alertas Indicadores",
+      "alertasIndicadores": "Alertas Indicadores",
+      "padItemIndicadores_empty": "Sem Pad Item Indicadores",
+      "padItemIndicadores": "Pad Item Indicadores",
+      "categorias_empty": "Sem Categorias",
+      "categorias": "Categorias",
+      "cidXPtaNovo_empty": "Sem Cid X Pta Novo",
+      "cidXPtaNovo": "Cid X Pta Novo"
     }
   }
 }

@@ -9,6 +9,8 @@ import { Translate, translate, ICrudGetAction, ICrudGetAllAction, setFileData, o
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
+import { ICategoria } from 'app/shared/model/categoria.model';
+import { getEntities as getCategorias } from 'app/entities/categoria/categoria.reducer';
 import {
   ICategoriaContratoUpdateState,
   getEntity,
@@ -34,13 +36,28 @@ export class CategoriaContratoUpdate extends React.Component<ICategoriaContratoU
     this.contratoFileInput = React.createRef();
 
     this.state = {
+      categoriaSelectValue: null,
       fieldsBase: getCategoriaContratoState(this.props.location),
+      categoriaId: '0',
       isNew: !this.props.match.params || !this.props.match.params.id
     };
   }
   componentDidUpdate(nextProps, nextState) {
     if (nextProps.updateSuccess !== this.props.updateSuccess && nextProps.updateSuccess) {
       this.handleClose();
+    }
+
+    if (
+      nextProps.categorias.length > 0 &&
+      this.state.categoriaSelectValue === null &&
+      nextProps.categoriaContratoEntity.categoria &&
+      nextProps.categoriaContratoEntity.categoria.id
+    ) {
+      this.setState({
+        categoriaSelectValue: nextProps.categorias.map(p =>
+          nextProps.categoriaContratoEntity.categoria.id === p.id ? { value: p.id, label: p.id } : null
+        )
+      });
     }
   }
 
@@ -50,6 +67,8 @@ export class CategoriaContratoUpdate extends React.Component<ICategoriaContratoU
     } else {
       this.props.getEntity(this.props.match.params.id);
     }
+
+    this.props.getCategorias();
   }
 
   onBlobChange = (isAnImage, name, fileInput) => event => {
@@ -73,7 +92,7 @@ export class CategoriaContratoUpdate extends React.Component<ICategoriaContratoU
       const { categoriaContratoEntity } = this.props;
       const entity = {
         ...categoriaContratoEntity,
-
+        categoria: this.state.categoriaSelectValue ? this.state.categoriaSelectValue['value'] : null,
         ...values
       };
 
@@ -90,7 +109,7 @@ export class CategoriaContratoUpdate extends React.Component<ICategoriaContratoU
   };
 
   render() {
-    const { categoriaContratoEntity, loading, updating } = this.props;
+    const { categoriaContratoEntity, categorias, loading, updating } = this.props;
     const { isNew } = this.state;
 
     const { contrato, contratoContentType, contratoBase64 } = categoriaContratoEntity;
@@ -102,7 +121,8 @@ export class CategoriaContratoUpdate extends React.Component<ICategoriaContratoU
             isNew
               ? {}
               : {
-                  ...categoriaContratoEntity
+                  ...categoriaContratoEntity,
+                  categoria: categoriaContratoEntity.categoria ? categoriaContratoEntity.categoria.id : null
                 }
           }
           onSubmit={this.saveEntity}
@@ -167,6 +187,8 @@ export class CategoriaContratoUpdate extends React.Component<ICategoriaContratoU
                         <ContratoComponentUpdate baseFilters />
 
                         <AtivoComponentUpdate baseFilters />
+
+                        <CategoriaComponentUpdate baseFilter categorias />
                       </Row>
                     </div>
                   )}
@@ -181,6 +203,7 @@ export class CategoriaContratoUpdate extends React.Component<ICategoriaContratoU
 }
 
 const mapStateToProps = (storeState: IRootState) => ({
+  categorias: storeState.categoria.entities,
   categoriaContratoEntity: storeState.categoriaContrato.entity,
   loading: storeState.categoriaContrato.loading,
   updating: storeState.categoriaContrato.updating,
@@ -188,6 +211,7 @@ const mapStateToProps = (storeState: IRootState) => ({
 });
 
 const mapDispatchToProps = {
+  getCategorias,
   getEntity,
   updateEntity,
   setBlob,
@@ -266,6 +290,34 @@ const AtivoComponentUpdate = ({ baseFilters }) => {
     </Col>
   ) : (
     <AvInput type="hidden" name="ativo" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const CategoriaComponentUpdate = ({ baseFilters, categorias }) => {
+  return baseFilters !== 'categoria' ? (
+    <Col md="12">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" for="categoria-contrato-categoria">
+              <Translate contentKey="generadorApp.categoriaContrato.categoria">Categoria</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <Select
+              id="categoria-contrato-categoria"
+              className={'css-select-control'}
+              value={this.state.categoriaSelectValue}
+              options={categorias ? categorias.map(option => ({ value: option.id, label: option.id })) : null}
+              onChange={options => this.setState({ categoriaSelectValue: options })}
+              name={'categoria'}
+            />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="categoria" value={this.state.fieldsBase[baseFilters]} />
   );
 };
 

@@ -28,6 +28,11 @@ import { IAcoesRespostas } from 'app/shared/model/acoes-respostas.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
+import { IRespostas } from 'app/shared/model/respostas.model';
+import { getEntities as getRespostas } from 'app/entities/respostas/respostas.reducer';
+import { IPerguntasQuestionario } from 'app/shared/model/perguntas-questionario.model';
+import { getEntities as getPerguntasQuestionarios } from 'app/entities/perguntas-questionario/perguntas-questionario.reducer';
+
 export interface IAcoesRespostasProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
 export interface IAcoesRespostasState extends IAcoesRespostasBaseState, IPaginationBaseState {}
@@ -45,6 +50,9 @@ export class AcoesRespostas extends React.Component<IAcoesRespostasProps, IAcoes
 
   componentDidMount() {
     this.getEntities();
+
+    this.props.getRespostas();
+    this.props.getPerguntasQuestionarios();
   }
 
   cancelCourse = () => {
@@ -54,7 +62,9 @@ export class AcoesRespostas extends React.Component<IAcoesRespostasProps, IAcoes
         condicaoSexo: '',
         observacoes: '',
         tipoCampo1: '',
-        tipoCampo2: ''
+        tipoCampo2: '',
+        respostas: '',
+        perguntasQuestionario: ''
       },
       () => this.sortEntities()
     );
@@ -116,6 +126,12 @@ export class AcoesRespostas extends React.Component<IAcoesRespostasProps, IAcoes
       'tipoCampo2=' +
       this.state.tipoCampo2 +
       '&' +
+      'respostas=' +
+      this.state.respostas +
+      '&' +
+      'perguntasQuestionario=' +
+      this.state.perguntasQuestionario +
+      '&' +
       ''
     );
   };
@@ -129,6 +145,8 @@ export class AcoesRespostas extends React.Component<IAcoesRespostasProps, IAcoes
       observacoes,
       tipoCampo1,
       tipoCampo2,
+      respostas,
+      perguntasQuestionario,
       activePage,
       itemsPerPage,
       sort,
@@ -140,6 +158,8 @@ export class AcoesRespostas extends React.Component<IAcoesRespostasProps, IAcoes
       observacoes,
       tipoCampo1,
       tipoCampo2,
+      respostas,
+      perguntasQuestionario,
       activePage - 1,
       itemsPerPage,
       `${sort},${order}`
@@ -147,7 +167,7 @@ export class AcoesRespostas extends React.Component<IAcoesRespostasProps, IAcoes
   };
 
   render() {
-    const { acoesRespostasList, match, totalItems } = this.props;
+    const { respostas, perguntasQuestionarios, acoesRespostasList, match, totalItems } = this.props;
     return (
       <div>
         <h2 id="page-heading">
@@ -248,6 +268,68 @@ export class AcoesRespostas extends React.Component<IAcoesRespostasProps, IAcoes
                           </Row>
                         </Col>
                       ) : null}
+
+                      {this.state.baseFilters !== 'respostas' ? (
+                        <Col md="3">
+                          <Row className="mr-1 mt-1">
+                            <div style={{ width: '100%' }}>
+                              <Label for="acoes-respostas-respostas">
+                                <Translate contentKey="generadorApp.acoesRespostas.respostas">Respostas</Translate>
+                              </Label>
+                              <Select
+                                id="acoes-respostas-respostas"
+                                isMulti
+                                className={'css-select-control'}
+                                value={
+                                  respostas
+                                    ? respostas.map(p =>
+                                        this.state.respostas.split(',').indexOf(p.id) !== -1 ? { value: p.id, label: p.id } : null
+                                      )
+                                    : null
+                                }
+                                options={respostas ? respostas.map(option => ({ value: option.id, label: option.id })) : null}
+                                onChange={options => this.setState({ respostas: options.map(option => option['value']).join(',') })}
+                                name={'respostas'}
+                              />
+                            </div>
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'perguntasQuestionario' ? (
+                        <Col md="3">
+                          <Row className="mr-1 mt-1">
+                            <div style={{ width: '100%' }}>
+                              <Label for="acoes-respostas-perguntasQuestionario">
+                                <Translate contentKey="generadorApp.acoesRespostas.perguntasQuestionario">Perguntas Questionario</Translate>
+                              </Label>
+                              <Select
+                                id="acoes-respostas-perguntasQuestionario"
+                                isMulti
+                                className={'css-select-control'}
+                                value={
+                                  perguntasQuestionarios
+                                    ? perguntasQuestionarios.map(p =>
+                                        this.state.perguntasQuestionario.split(',').indexOf(p.id) !== -1
+                                          ? { value: p.id, label: p.id }
+                                          : null
+                                      )
+                                    : null
+                                }
+                                options={
+                                  perguntasQuestionarios
+                                    ? perguntasQuestionarios.map(option => ({ value: option.id, label: option.id }))
+                                    : null
+                                }
+                                onChange={options =>
+                                  this.setState({ perguntasQuestionario: options.map(option => option['value']).join(',') })
+                                }
+                                name={'perguntasQuestionario'}
+                              />
+                            </div>
+                          </Row>
+                        </Col>
+                      ) : null}
                     </div>
 
                     <div className="row mb-2 mr-4 justify-content-end">
@@ -306,6 +388,20 @@ export class AcoesRespostas extends React.Component<IAcoesRespostasProps, IAcoes
                         </th>
                       ) : null}
 
+                      {this.state.baseFilters !== 'respostas' ? (
+                        <th>
+                          <Translate contentKey="generadorApp.acoesRespostas.respostas">Respostas</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'perguntasQuestionario' ? (
+                        <th>
+                          <Translate contentKey="generadorApp.acoesRespostas.perguntasQuestionario">Perguntas Questionario</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+
                       <th />
                     </tr>
                   </thead>
@@ -330,6 +426,28 @@ export class AcoesRespostas extends React.Component<IAcoesRespostasProps, IAcoes
                         {this.state.baseFilters !== 'tipoCampo1' ? <td>{acoesRespostas.tipoCampo1}</td> : null}
 
                         {this.state.baseFilters !== 'tipoCampo2' ? <td>{acoesRespostas.tipoCampo2}</td> : null}
+
+                        {this.state.baseFilters !== 'respostas' ? (
+                          <td>
+                            {acoesRespostas.respostas ? (
+                              <Link to={`respostas/${acoesRespostas.respostas.id}`}>{acoesRespostas.respostas.id}</Link>
+                            ) : (
+                              ''
+                            )}
+                          </td>
+                        ) : null}
+
+                        {this.state.baseFilters !== 'perguntasQuestionario' ? (
+                          <td>
+                            {acoesRespostas.perguntasQuestionario ? (
+                              <Link to={`perguntas-questionario/${acoesRespostas.perguntasQuestionario.id}`}>
+                                {acoesRespostas.perguntasQuestionario.id}
+                              </Link>
+                            ) : (
+                              ''
+                            )}
+                          </td>
+                        ) : null}
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">
@@ -397,11 +515,15 @@ export class AcoesRespostas extends React.Component<IAcoesRespostasProps, IAcoes
 }
 
 const mapStateToProps = ({ acoesRespostas, ...storeState }: IRootState) => ({
+  respostas: storeState.respostas.entities,
+  perguntasQuestionarios: storeState.perguntasQuestionario.entities,
   acoesRespostasList: acoesRespostas.entities,
   totalItems: acoesRespostas.totalItems
 });
 
 const mapDispatchToProps = {
+  getRespostas,
+  getPerguntasQuestionarios,
   getEntities
 };
 

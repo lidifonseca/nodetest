@@ -4,6 +4,10 @@ import { BaseEntity } from './base/base.entity';
 
 import { validate, Contains, IsInt, Length, IsEmail, IsFQDN, IsDate, Min, Max } from 'class-validator';
 
+import CidXPtaNovo from './cid-x-pta-novo.entity';
+import PacienteDiagnostico from './paciente-diagnostico.entity';
+import PadCid from './pad-cid.entity';
+
 /**
  * A Cid.
  */
@@ -23,6 +27,24 @@ export default class Cid extends BaseEntity {
 
   @Column({ name: 'APELIDO', length: 30 })
   apelido: string;
+
+  @OneToMany(
+    type => CidXPtaNovo,
+    other => other.cid
+  )
+  cidXPtaNovos: CidXPtaNovo[];
+
+  @OneToMany(
+    type => PacienteDiagnostico,
+    other => other.c
+  )
+  pacienteDiagnosticos: PacienteDiagnostico[];
+
+  @OneToMany(
+    type => PadCid,
+    other => other.cid
+  )
+  padCids: PadCid[];
 
   // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
 }

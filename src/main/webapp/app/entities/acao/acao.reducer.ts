@@ -34,6 +34,9 @@ export type AcaoState = Readonly<typeof initialState>;
 export interface IAcaoBaseState {
   baseFilters: any;
   acao: any;
+  logUser: any;
+  logUserFranquia: any;
+  usuarioAcao: any;
 }
 
 export interface IAcaoUpdateState {
@@ -121,18 +124,26 @@ const apiUrl = 'api/acaos';
 // Actions
 export type ICrudGetAllActionAcao<T> = (
   acao?: any,
+  logUser?: any,
+  logUserFranquia?: any,
+  usuarioAcao?: any,
   page?: number,
   size?: number,
   sort?: string
 ) => IPayload<T> | ((dispatch: any) => IPayload<T>);
 
-export const getEntities: ICrudGetAllActionAcao<IAcao> = (acao, page, size, sort) => {
+export const getEntities: ICrudGetAllActionAcao<IAcao> = (acao, logUser, logUserFranquia, usuarioAcao, page, size, sort) => {
   const acaoRequest = acao ? `acao.contains=${acao}&` : '';
+  const logUserRequest = logUser ? `logUser.equals=${logUser}&` : '';
+  const logUserFranquiaRequest = logUserFranquia ? `logUserFranquia.equals=${logUserFranquia}&` : '';
+  const usuarioAcaoRequest = usuarioAcao ? `usuarioAcao.equals=${usuarioAcao}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_ACAO_LIST,
-    payload: axios.get<IAcao>(`${requestUrl}${acaoRequest}cacheBuster=${new Date().getTime()}`)
+    payload: axios.get<IAcao>(
+      `${requestUrl}${acaoRequest}${logUserRequest}${logUserFranquiaRequest}${usuarioAcaoRequest}cacheBuster=${new Date().getTime()}`
+    )
   };
 };
 export const getEntity: ICrudGetAction<IAcao> = id => {
@@ -143,13 +154,18 @@ export const getEntity: ICrudGetAction<IAcao> = id => {
   };
 };
 
-export const getEntitiesExport: ICrudGetAllActionAcao<IAcao> = (acao, page, size, sort) => {
+export const getEntitiesExport: ICrudGetAllActionAcao<IAcao> = (acao, logUser, logUserFranquia, usuarioAcao, page, size, sort) => {
   const acaoRequest = acao ? `acao.contains=${acao}&` : '';
+  const logUserRequest = logUser ? `logUser.equals=${logUser}&` : '';
+  const logUserFranquiaRequest = logUserFranquia ? `logUserFranquia.equals=${logUserFranquia}&` : '';
+  const usuarioAcaoRequest = usuarioAcao ? `usuarioAcao.equals=${usuarioAcao}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_ACAO_LIST,
-    payload: axios.get<IAcao>(`${requestUrl}${acaoRequest}cacheBuster=${new Date().getTime()}`)
+    payload: axios.get<IAcao>(
+      `${requestUrl}${acaoRequest}${logUserRequest}${logUserFranquiaRequest}${usuarioAcaoRequest}cacheBuster=${new Date().getTime()}`
+    )
   };
 };
 
@@ -194,8 +210,15 @@ export const getAcaoState = (location): IAcaoBaseState => {
   const baseFilters = url.searchParams.get('baseFilters') || '';
   const acao = url.searchParams.get('acao') || '';
 
+  const logUser = url.searchParams.get('logUser') || '';
+  const logUserFranquia = url.searchParams.get('logUserFranquia') || '';
+  const usuarioAcao = url.searchParams.get('usuarioAcao') || '';
+
   return {
     baseFilters,
-    acao
+    acao,
+    logUser,
+    logUserFranquia,
+    usuarioAcao
   };
 };

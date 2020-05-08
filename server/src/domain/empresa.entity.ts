@@ -4,6 +4,8 @@ import { BaseEntity } from './base/base.entity';
 
 import { validate, Contains, IsInt, Length, IsEmail, IsFQDN, IsDate, Min, Max } from 'class-validator';
 
+import Cidade from './cidade.entity';
+
 /**
  * A Empresa.
  */
@@ -77,6 +79,10 @@ export default class Empresa extends BaseEntity {
 
   @Column({ type: 'integer', name: 'TIPO', nullable: false })
   tipo: number;
+
+  @ManyToOne(type => Cidade)
+  @JoinColumn({ name: 'ID_CIDADE', referencedColumnName: 'id' })
+  cidade: Cidade;
 
   // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
 }

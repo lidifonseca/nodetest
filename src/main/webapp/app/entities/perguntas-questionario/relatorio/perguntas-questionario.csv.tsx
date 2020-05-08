@@ -34,6 +34,9 @@ import { IPerguntasQuestionario } from 'app/shared/model/perguntas-questionario.
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
+import { ISegmentosPerguntas } from 'app/shared/model/segmentos-perguntas.model';
+import { getEntities as getSegmentosPerguntas } from 'app/entities/segmentos-perguntas/segmentos-perguntas.reducer';
+
 export interface IPerguntasQuestionarioProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
 export interface IPerguntasQuestionarioState extends IPerguntasQuestionarioBaseState, IPaginationBaseState {
@@ -54,6 +57,8 @@ export class PerguntasQuestionario extends React.Component<IPerguntasQuestionari
 
   componentDidMount() {
     this.getEntities();
+
+    this.props.getSegmentosPerguntas();
   }
 
   cancelCourse = () => {
@@ -62,7 +67,10 @@ export class PerguntasQuestionario extends React.Component<IPerguntasQuestionari
         pergunta: '',
         tipoResposta: '',
         obrigatorio: '',
-        tipoCampo: ''
+        tipoCampo: '',
+        acoesRespostas: '',
+        respostas: '',
+        segmentosPerguntas: ''
       },
       () => this.sortEntities()
     );
@@ -119,6 +127,15 @@ export class PerguntasQuestionario extends React.Component<IPerguntasQuestionari
       'tipoCampo=' +
       this.state.tipoCampo +
       '&' +
+      'acoesRespostas=' +
+      this.state.acoesRespostas +
+      '&' +
+      'respostas=' +
+      this.state.respostas +
+      '&' +
+      'segmentosPerguntas=' +
+      this.state.segmentosPerguntas +
+      '&' +
       ''
     );
   };
@@ -126,8 +143,31 @@ export class PerguntasQuestionario extends React.Component<IPerguntasQuestionari
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { pergunta, tipoResposta, obrigatorio, tipoCampo, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntitiesExport(pergunta, tipoResposta, obrigatorio, tipoCampo, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const {
+      pergunta,
+      tipoResposta,
+      obrigatorio,
+      tipoCampo,
+      acoesRespostas,
+      respostas,
+      segmentosPerguntas,
+      activePage,
+      itemsPerPage,
+      sort,
+      order
+    } = this.state;
+    this.props.getEntitiesExport(
+      pergunta,
+      tipoResposta,
+      obrigatorio,
+      tipoCampo,
+      acoesRespostas,
+      respostas,
+      segmentosPerguntas,
+      activePage - 1,
+      itemsPerPage,
+      `${sort},${order}`
+    );
   };
 
   confirmExport() {}
@@ -176,11 +216,13 @@ export class PerguntasQuestionario extends React.Component<IPerguntasQuestionari
 }
 
 const mapStateToProps = ({ perguntasQuestionario, ...storeState }: IRootState) => ({
+  segmentosPerguntas: storeState.segmentosPerguntas.entities,
   perguntasQuestionarioList: perguntasQuestionario.entities,
   totalItems: perguntasQuestionario.totalItems
 });
 
 const mapDispatchToProps = {
+  getSegmentosPerguntas,
   getEntitiesExport
 };
 

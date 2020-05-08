@@ -5,6 +5,7 @@ import PacientePush from '../domain/paciente-push.entity';
 import { PacientePushRepository } from '../repository/paciente-push.repository';
 
 const relationshipNames = [];
+relationshipNames.push('paciente');
 
 @Injectable()
 export class PacientePushService {

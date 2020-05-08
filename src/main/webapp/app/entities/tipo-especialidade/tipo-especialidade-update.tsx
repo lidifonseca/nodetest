@@ -151,6 +151,8 @@ export class TipoEspecialidadeUpdate extends React.Component<ITipoEspecialidadeU
                       ) : null}
                       <Row>
                         <TipoEspecialidadeComponentUpdate baseFilters />
+
+                        <EspecialidadeComponentUpdate baseFilter especialidades />
                       </Row>
                     </div>
                   )}
@@ -199,6 +201,14 @@ const TipoEspecialidadeComponentUpdate = ({ baseFilters }) => {
     </Col>
   ) : (
     <AvInput type="hidden" name="tipoEspecialidade" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const EspecialidadeComponentUpdate = ({ baseFilters, especialidades }) => {
+  return baseFilters !== 'especialidade' ? (
+    <Col md="12"></Col>
+  ) : (
+    <AvInput type="hidden" name="especialidade" value={this.state.fieldsBase[baseFilters]} />
   );
 };
 

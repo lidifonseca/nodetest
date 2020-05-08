@@ -9,6 +9,10 @@ import { Translate, translate, ICrudGetAction, ICrudGetAllAction, setFileData, I
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
+import { ITela } from 'app/shared/model/tela.model';
+import { getEntities as getTelas } from 'app/entities/tela/tela.reducer';
+import { IAcao } from 'app/shared/model/acao.model';
+import { getEntities as getAcaos } from 'app/entities/acao/acao.reducer';
 import {
   IUsuarioAcaoUpdateState,
   getEntity,
@@ -34,13 +38,39 @@ export class UsuarioAcaoUpdate extends React.Component<IUsuarioAcaoUpdateProps, 
     this.descricaoFileInput = React.createRef();
 
     this.state = {
+      telaSelectValue: null,
+      acaoSelectValue: null,
       fieldsBase: getUsuarioAcaoState(this.props.location),
+      telaId: '0',
+      acaoId: '0',
       isNew: !this.props.match.params || !this.props.match.params.id
     };
   }
   componentDidUpdate(nextProps, nextState) {
     if (nextProps.updateSuccess !== this.props.updateSuccess && nextProps.updateSuccess) {
       this.handleClose();
+    }
+
+    if (
+      nextProps.telas.length > 0 &&
+      this.state.telaSelectValue === null &&
+      nextProps.usuarioAcaoEntity.tela &&
+      nextProps.usuarioAcaoEntity.tela.id
+    ) {
+      this.setState({
+        telaSelectValue: nextProps.telas.map(p => (nextProps.usuarioAcaoEntity.tela.id === p.id ? { value: p.id, label: p.id } : null))
+      });
+    }
+
+    if (
+      nextProps.acaos.length > 0 &&
+      this.state.acaoSelectValue === null &&
+      nextProps.usuarioAcaoEntity.acao &&
+      nextProps.usuarioAcaoEntity.acao.id
+    ) {
+      this.setState({
+        acaoSelectValue: nextProps.acaos.map(p => (nextProps.usuarioAcaoEntity.acao.id === p.id ? { value: p.id, label: p.id } : null))
+      });
     }
   }
 
@@ -50,6 +80,9 @@ export class UsuarioAcaoUpdate extends React.Component<IUsuarioAcaoUpdateProps, 
     } else {
       this.props.getEntity(this.props.match.params.id);
     }
+
+    this.props.getTelas();
+    this.props.getAcaos();
   }
 
   onBlobChange = (isAnImage, name, fileInput) => event => {
@@ -73,7 +106,8 @@ export class UsuarioAcaoUpdate extends React.Component<IUsuarioAcaoUpdateProps, 
       const { usuarioAcaoEntity } = this.props;
       const entity = {
         ...usuarioAcaoEntity,
-
+        tela: this.state.telaSelectValue ? this.state.telaSelectValue['value'] : null,
+        acao: this.state.acaoSelectValue ? this.state.acaoSelectValue['value'] : null,
         ...values
       };
 
@@ -90,7 +124,7 @@ export class UsuarioAcaoUpdate extends React.Component<IUsuarioAcaoUpdateProps, 
   };
 
   render() {
-    const { usuarioAcaoEntity, loading, updating } = this.props;
+    const { usuarioAcaoEntity, telas, acaos, loading, updating } = this.props;
     const { isNew } = this.state;
 
     const { descricao } = usuarioAcaoEntity;
@@ -102,7 +136,9 @@ export class UsuarioAcaoUpdate extends React.Component<IUsuarioAcaoUpdateProps, 
             isNew
               ? {}
               : {
-                  ...usuarioAcaoEntity
+                  ...usuarioAcaoEntity,
+                  tela: usuarioAcaoEntity.tela ? usuarioAcaoEntity.tela.id : null,
+                  acao: usuarioAcaoEntity.acao ? usuarioAcaoEntity.acao.id : null
                 }
           }
           onSubmit={this.saveEntity}
@@ -167,6 +203,10 @@ export class UsuarioAcaoUpdate extends React.Component<IUsuarioAcaoUpdateProps, 
                         <IdAtendimentoComponentUpdate baseFilters />
 
                         <DescricaoComponentUpdate baseFilters />
+
+                        <TelaComponentUpdate baseFilter telas />
+
+                        <AcaoComponentUpdate baseFilter acaos />
                       </Row>
                     </div>
                   )}
@@ -181,6 +221,8 @@ export class UsuarioAcaoUpdate extends React.Component<IUsuarioAcaoUpdateProps, 
 }
 
 const mapStateToProps = (storeState: IRootState) => ({
+  telas: storeState.tela.entities,
+  acaos: storeState.acao.entities,
   usuarioAcaoEntity: storeState.usuarioAcao.entity,
   loading: storeState.usuarioAcao.loading,
   updating: storeState.usuarioAcao.updating,
@@ -188,6 +230,8 @@ const mapStateToProps = (storeState: IRootState) => ({
 });
 
 const mapDispatchToProps = {
+  getTelas,
+  getAcaos,
   getEntity,
   updateEntity,
   setBlob,
@@ -237,6 +281,62 @@ const DescricaoComponentUpdate = ({ baseFilters }) => {
     </Col>
   ) : (
     <AvInput type="hidden" name="descricao" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const TelaComponentUpdate = ({ baseFilters, telas }) => {
+  return baseFilters !== 'tela' ? (
+    <Col md="12">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" for="usuario-acao-tela">
+              <Translate contentKey="generadorApp.usuarioAcao.tela">Tela</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <Select
+              id="usuario-acao-tela"
+              className={'css-select-control'}
+              value={this.state.telaSelectValue}
+              options={telas ? telas.map(option => ({ value: option.id, label: option.id })) : null}
+              onChange={options => this.setState({ telaSelectValue: options })}
+              name={'tela'}
+            />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="tela" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const AcaoComponentUpdate = ({ baseFilters, acaos }) => {
+  return baseFilters !== 'acao' ? (
+    <Col md="12">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" for="usuario-acao-acao">
+              <Translate contentKey="generadorApp.usuarioAcao.acao">Acao</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <Select
+              id="usuario-acao-acao"
+              className={'css-select-control'}
+              value={this.state.acaoSelectValue}
+              options={acaos ? acaos.map(option => ({ value: option.id, label: option.id })) : null}
+              onChange={options => this.setState({ acaoSelectValue: options })}
+              name={'acao'}
+            />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="acao" value={this.state.fieldsBase[baseFilters]} />
   );
 };
 

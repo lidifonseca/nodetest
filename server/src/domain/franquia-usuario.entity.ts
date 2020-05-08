@@ -4,6 +4,9 @@ import { BaseEntity } from './base/base.entity';
 
 import { validate, Contains, IsInt, Length, IsEmail, IsFQDN, IsDate, Min, Max } from 'class-validator';
 
+import LogUserFranquia from './log-user-franquia.entity';
+import Franquia from './franquia.entity';
+
 /**
  * A FranquiaUsuario.
  */
@@ -119,6 +122,16 @@ export default class FranquiaUsuario extends BaseEntity {
 
   @Column({ type: 'integer', name: 'ATIVO' })
   ativo: number;
+
+  @OneToMany(
+    type => LogUserFranquia,
+    other => other.usuario
+  )
+  logUserFranquias: LogUserFranquia[];
+
+  @ManyToOne(type => Franquia)
+  @JoinColumn({ name: 'ID_FRANQUIA', referencedColumnName: 'id' })
+  franquia: Franquia;
 
   // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
 }

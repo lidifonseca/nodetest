@@ -1,3 +1,7 @@
+import { IFranquiaAreaAtuacao } from 'app/shared/model/franquia-area-atuacao.model';
+import { IFranquiaStatusAtual } from 'app/shared/model/franquia-status-atual.model';
+import { IFranquiaUsuario } from 'app/shared/model/franquia-usuario.model';
+
 export interface IFranquia {
   id?: string;
   idCidade?: string;
@@ -18,6 +22,9 @@ export interface IFranquia {
   uf?: string;
   observacao?: string;
   ativo?: number;
+  franquiaAreaAtuacaos?: IFranquiaAreaAtuacao[];
+  franquiaStatusAtuals?: IFranquiaStatusAtual[];
+  franquiaUsuarios?: IFranquiaUsuario[];
 }
 
 export const defaultValue: Readonly<IFranquia> = {};

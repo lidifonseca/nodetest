@@ -68,6 +68,19 @@ export class AtendimentoCepRecusadoDetail extends React.Component<IAtendimentoCe
                       </Col>
                     </Row>
                   </Col>
+
+                  <Col md="12">
+                    <Row>
+                      <Col md="3">
+                        <dt>
+                          <Translate contentKey="generadorApp.atendimentoCepRecusado.padItem">Pad Item</Translate>
+                        </dt>
+                      </Col>
+                      <Col md="9">
+                        <dd>{atendimentoCepRecusadoEntity.padItem ? atendimentoCepRecusadoEntity.padItem.id : ''}</dd>
+                      </Col>
+                    </Row>
+                  </Col>
                 </Row>
                 <Button tag={Link} to="/atendimento-cep-recusado" replace color="info">
                   <FontAwesomeIcon icon="arrow-left" />{' '}

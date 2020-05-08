@@ -9,6 +9,8 @@ import { Translate, translate, ICrudGetAction, ICrudGetAllAction, ICrudPutAction
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
+import { IIndicadores } from 'app/shared/model/indicadores.model';
+import { getEntities as getIndicadores } from 'app/entities/indicadores/indicadores.reducer';
 import {
   IIndicadoresValoresUpdateState,
   getEntity,
@@ -29,13 +31,28 @@ export class IndicadoresValoresUpdate extends React.Component<IIndicadoresValore
     super(props);
 
     this.state = {
+      indicadoresSelectValue: null,
       fieldsBase: getIndicadoresValoresState(this.props.location),
+      indicadoresId: '0',
       isNew: !this.props.match.params || !this.props.match.params.id
     };
   }
   componentDidUpdate(nextProps, nextState) {
     if (nextProps.updateSuccess !== this.props.updateSuccess && nextProps.updateSuccess) {
       this.handleClose();
+    }
+
+    if (
+      nextProps.indicadores.length > 0 &&
+      this.state.indicadoresSelectValue === null &&
+      nextProps.indicadoresValoresEntity.indicadores &&
+      nextProps.indicadoresValoresEntity.indicadores.id
+    ) {
+      this.setState({
+        indicadoresSelectValue: nextProps.indicadores.map(p =>
+          nextProps.indicadoresValoresEntity.indicadores.id === p.id ? { value: p.id, label: p.id } : null
+        )
+      });
     }
   }
 
@@ -45,6 +62,8 @@ export class IndicadoresValoresUpdate extends React.Component<IIndicadoresValore
     } else {
       this.props.getEntity(this.props.match.params.id);
     }
+
+    this.props.getIndicadores();
   }
 
   getFiltersURL = (offset = null) => {
@@ -60,7 +79,7 @@ export class IndicadoresValoresUpdate extends React.Component<IIndicadoresValore
       const { indicadoresValoresEntity } = this.props;
       const entity = {
         ...indicadoresValoresEntity,
-
+        indicadores: this.state.indicadoresSelectValue ? this.state.indicadoresSelectValue['value'] : null,
         ...values
       };
 
@@ -77,7 +96,7 @@ export class IndicadoresValoresUpdate extends React.Component<IIndicadoresValore
   };
 
   render() {
-    const { indicadoresValoresEntity, loading, updating } = this.props;
+    const { indicadoresValoresEntity, indicadores, loading, updating } = this.props;
     const { isNew } = this.state;
 
     const baseFilters = this.state.fieldsBase && this.state.fieldsBase['baseFilters'] ? this.state.fieldsBase['baseFilters'] : null;
@@ -88,7 +107,8 @@ export class IndicadoresValoresUpdate extends React.Component<IIndicadoresValore
             isNew
               ? {}
               : {
-                  ...indicadoresValoresEntity
+                  ...indicadoresValoresEntity,
+                  indicadores: indicadoresValoresEntity.indicadores ? indicadoresValoresEntity.indicadores.id : null
                 }
           }
           onSubmit={this.saveEntity}
@@ -161,6 +181,8 @@ export class IndicadoresValoresUpdate extends React.Component<IIndicadoresValore
                         <IdadeMinimaComponentUpdate baseFilters />
 
                         <IdadeMaximaComponentUpdate baseFilters />
+
+                        <IndicadoresComponentUpdate baseFilter indicadores />
                       </Row>
                     </div>
                   )}
@@ -175,6 +197,7 @@ export class IndicadoresValoresUpdate extends React.Component<IIndicadoresValore
 }
 
 const mapStateToProps = (storeState: IRootState) => ({
+  indicadores: storeState.indicadores.entities,
   indicadoresValoresEntity: storeState.indicadoresValores.entity,
   loading: storeState.indicadoresValores.loading,
   updating: storeState.indicadoresValores.updating,
@@ -182,6 +205,7 @@ const mapStateToProps = (storeState: IRootState) => ({
 });
 
 const mapDispatchToProps = {
+  getIndicadores,
   getEntity,
   updateEntity,
   createEntity,
@@ -314,6 +338,34 @@ const IdadeMaximaComponentUpdate = ({ baseFilters }) => {
     </Col>
   ) : (
     <AvInput type="hidden" name="idadeMaxima" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const IndicadoresComponentUpdate = ({ baseFilters, indicadores }) => {
+  return baseFilters !== 'indicadores' ? (
+    <Col md="12">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" for="indicadores-valores-indicadores">
+              <Translate contentKey="generadorApp.indicadoresValores.indicadores">Indicadores</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <Select
+              id="indicadores-valores-indicadores"
+              className={'css-select-control'}
+              value={this.state.indicadoresSelectValue}
+              options={indicadores ? indicadores.map(option => ({ value: option.id, label: option.id })) : null}
+              onChange={options => this.setState({ indicadoresSelectValue: options })}
+              name={'indicadores'}
+            />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="indicadores" value={this.state.fieldsBase[baseFilters]} />
   );
 };
 

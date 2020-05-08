@@ -100,6 +100,19 @@ export class RespostasQuestionariosDetail extends React.Component<IRespostasQues
                       </Col>
                     </Row>
                   </Col>
+
+                  <Col md="12">
+                    <Row>
+                      <Col md="3">
+                        <dt>
+                          <Translate contentKey="generadorApp.respostasQuestionarios.questionarios">Questionarios</Translate>
+                        </dt>
+                      </Col>
+                      <Col md="9">
+                        <dd>{respostasQuestionariosEntity.questionarios ? respostasQuestionariosEntity.questionarios.id : ''}</dd>
+                      </Col>
+                    </Row>
+                  </Col>
                 </Row>
                 <Button tag={Link} to="/respostas-questionarios" replace color="info">
                   <FontAwesomeIcon icon="arrow-left" />{' '}

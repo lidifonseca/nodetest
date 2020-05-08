@@ -43,6 +43,11 @@ import { IPacienteDiario } from 'app/shared/model/paciente-diario.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
+import { IPaciente } from 'app/shared/model/paciente.model';
+import { getEntities as getPacientes } from 'app/entities/paciente/paciente.reducer';
+import { IUsuario } from 'app/shared/model/usuario.model';
+import { getEntities as getUsuarios } from 'app/entities/usuario/usuario.reducer';
+
 export interface IPacienteDiarioProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
 export interface IPacienteDiarioState extends IPacienteDiarioBaseState, IPaginationBaseState {
@@ -63,6 +68,9 @@ export class PacienteDiario extends React.Component<IPacienteDiarioProps, IPacie
 
   componentDidMount() {
     this.getEntities();
+
+    this.props.getPacientes();
+    this.props.getUsuarios();
   }
 
   cancelCourse = () => {
@@ -70,7 +78,9 @@ export class PacienteDiario extends React.Component<IPacienteDiarioProps, IPacie
       {
         idOperadora: '',
         historico: '',
-        ativo: ''
+        ativo: '',
+        paciente: '',
+        usuario: ''
       },
       () => this.sortEntities()
     );
@@ -124,6 +134,12 @@ export class PacienteDiario extends React.Component<IPacienteDiarioProps, IPacie
       'ativo=' +
       this.state.ativo +
       '&' +
+      'paciente=' +
+      this.state.paciente +
+      '&' +
+      'usuario=' +
+      this.state.usuario +
+      '&' +
       ''
     );
   };
@@ -131,8 +147,8 @@ export class PacienteDiario extends React.Component<IPacienteDiarioProps, IPacie
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { idOperadora, historico, ativo, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntitiesExport(idOperadora, historico, ativo, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const { idOperadora, historico, ativo, paciente, usuario, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntitiesExport(idOperadora, historico, ativo, paciente, usuario, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   confirmExport() {}
@@ -181,11 +197,15 @@ export class PacienteDiario extends React.Component<IPacienteDiarioProps, IPacie
 }
 
 const mapStateToProps = ({ pacienteDiario, ...storeState }: IRootState) => ({
+  pacientes: storeState.paciente.entities,
+  usuarios: storeState.usuario.entities,
   pacienteDiarioList: pacienteDiario.entities,
   totalItems: pacienteDiario.totalItems
 });
 
 const mapDispatchToProps = {
+  getPacientes,
+  getUsuarios,
   getEntitiesExport
 };
 

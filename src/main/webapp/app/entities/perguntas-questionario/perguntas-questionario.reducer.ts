@@ -37,12 +37,17 @@ export interface IPerguntasQuestionarioBaseState {
   tipoResposta: any;
   obrigatorio: any;
   tipoCampo: any;
+  acoesRespostas: any;
+  respostas: any;
+  segmentosPerguntas: any;
 }
 
 export interface IPerguntasQuestionarioUpdateState {
   fieldsBase: IPerguntasQuestionarioBaseState;
 
+  segmentosPerguntasSelectValue: any;
   isNew: boolean;
+  segmentosPerguntasId: string;
 }
 
 // Reducer
@@ -127,6 +132,9 @@ export type ICrudGetAllActionPerguntasQuestionario<T> = (
   tipoResposta?: any,
   obrigatorio?: any,
   tipoCampo?: any,
+  acoesRespostas?: any,
+  respostas?: any,
+  segmentosPerguntas?: any,
   page?: number,
   size?: number,
   sort?: string
@@ -137,6 +145,9 @@ export const getEntities: ICrudGetAllActionPerguntasQuestionario<IPerguntasQuest
   tipoResposta,
   obrigatorio,
   tipoCampo,
+  acoesRespostas,
+  respostas,
+  segmentosPerguntas,
   page,
   size,
   sort
@@ -145,12 +156,15 @@ export const getEntities: ICrudGetAllActionPerguntasQuestionario<IPerguntasQuest
   const tipoRespostaRequest = tipoResposta ? `tipoResposta.contains=${tipoResposta}&` : '';
   const obrigatorioRequest = obrigatorio ? `obrigatorio.contains=${obrigatorio}&` : '';
   const tipoCampoRequest = tipoCampo ? `tipoCampo.contains=${tipoCampo}&` : '';
+  const acoesRespostasRequest = acoesRespostas ? `acoesRespostas.equals=${acoesRespostas}&` : '';
+  const respostasRequest = respostas ? `respostas.equals=${respostas}&` : '';
+  const segmentosPerguntasRequest = segmentosPerguntas ? `segmentosPerguntas.equals=${segmentosPerguntas}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_PERGUNTASQUESTIONARIO_LIST,
     payload: axios.get<IPerguntasQuestionario>(
-      `${requestUrl}${perguntaRequest}${tipoRespostaRequest}${obrigatorioRequest}${tipoCampoRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${perguntaRequest}${tipoRespostaRequest}${obrigatorioRequest}${tipoCampoRequest}${acoesRespostasRequest}${respostasRequest}${segmentosPerguntasRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };
@@ -167,6 +181,9 @@ export const getEntitiesExport: ICrudGetAllActionPerguntasQuestionario<IPergunta
   tipoResposta,
   obrigatorio,
   tipoCampo,
+  acoesRespostas,
+  respostas,
+  segmentosPerguntas,
   page,
   size,
   sort
@@ -175,19 +192,23 @@ export const getEntitiesExport: ICrudGetAllActionPerguntasQuestionario<IPergunta
   const tipoRespostaRequest = tipoResposta ? `tipoResposta.contains=${tipoResposta}&` : '';
   const obrigatorioRequest = obrigatorio ? `obrigatorio.contains=${obrigatorio}&` : '';
   const tipoCampoRequest = tipoCampo ? `tipoCampo.contains=${tipoCampo}&` : '';
+  const acoesRespostasRequest = acoesRespostas ? `acoesRespostas.equals=${acoesRespostas}&` : '';
+  const respostasRequest = respostas ? `respostas.equals=${respostas}&` : '';
+  const segmentosPerguntasRequest = segmentosPerguntas ? `segmentosPerguntas.equals=${segmentosPerguntas}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_PERGUNTASQUESTIONARIO_LIST,
     payload: axios.get<IPerguntasQuestionario>(
-      `${requestUrl}${perguntaRequest}${tipoRespostaRequest}${obrigatorioRequest}${tipoCampoRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${perguntaRequest}${tipoRespostaRequest}${obrigatorioRequest}${tipoCampoRequest}${acoesRespostasRequest}${respostasRequest}${segmentosPerguntasRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };
 
 export const createEntity: ICrudPutAction<IPerguntasQuestionario> = entity => async dispatch => {
   entity = {
-    ...entity
+    ...entity,
+    segmentosPerguntas: entity.segmentosPerguntas === 'null' ? null : entity.segmentosPerguntas
   };
   const result = await dispatch({
     type: ACTION_TYPES.CREATE_PERGUNTASQUESTIONARIO,
@@ -198,7 +219,7 @@ export const createEntity: ICrudPutAction<IPerguntasQuestionario> = entity => as
 };
 
 export const updateEntity: ICrudPutAction<IPerguntasQuestionario> = entity => async dispatch => {
-  entity = { ...entity };
+  entity = { ...entity, segmentosPerguntas: entity.segmentosPerguntas === 'null' ? null : entity.segmentosPerguntas };
   const result = await dispatch({
     type: ACTION_TYPES.UPDATE_PERGUNTASQUESTIONARIO,
     payload: axios.put(apiUrl, cleanEntity(entity))
@@ -229,11 +250,18 @@ export const getPerguntasQuestionarioState = (location): IPerguntasQuestionarioB
   const obrigatorio = url.searchParams.get('obrigatorio') || '';
   const tipoCampo = url.searchParams.get('tipoCampo') || '';
 
+  const acoesRespostas = url.searchParams.get('acoesRespostas') || '';
+  const respostas = url.searchParams.get('respostas') || '';
+  const segmentosPerguntas = url.searchParams.get('segmentosPerguntas') || '';
+
   return {
     baseFilters,
     pergunta,
     tipoResposta,
     obrigatorio,
-    tipoCampo
+    tipoCampo,
+    acoesRespostas,
+    respostas,
+    segmentosPerguntas
   };
 };

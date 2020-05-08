@@ -5,6 +5,8 @@ import PadCid from '../domain/pad-cid.entity';
 import { PadCidRepository } from '../repository/pad-cid.repository';
 
 const relationshipNames = [];
+relationshipNames.push('pad');
+relationshipNames.push('cid');
 
 @Injectable()
 export class PadCidService {

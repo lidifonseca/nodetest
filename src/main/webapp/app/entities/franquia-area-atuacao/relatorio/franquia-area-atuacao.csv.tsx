@@ -34,6 +34,9 @@ import { IFranquiaAreaAtuacao } from 'app/shared/model/franquia-area-atuacao.mod
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
+import { IFranquia } from 'app/shared/model/franquia.model';
+import { getEntities as getFranquias } from 'app/entities/franquia/franquia.reducer';
+
 export interface IFranquiaAreaAtuacaoProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
 export interface IFranquiaAreaAtuacaoState extends IFranquiaAreaAtuacaoBaseState, IPaginationBaseState {
@@ -54,6 +57,8 @@ export class FranquiaAreaAtuacao extends React.Component<IFranquiaAreaAtuacaoPro
 
   componentDidMount() {
     this.getEntities();
+
+    this.props.getFranquias();
   }
 
   cancelCourse = () => {
@@ -61,7 +66,8 @@ export class FranquiaAreaAtuacao extends React.Component<IFranquiaAreaAtuacaoPro
       {
         cepIni: '',
         cepFim: '',
-        ativo: ''
+        ativo: '',
+        franquia: ''
       },
       () => this.sortEntities()
     );
@@ -115,6 +121,9 @@ export class FranquiaAreaAtuacao extends React.Component<IFranquiaAreaAtuacaoPro
       'ativo=' +
       this.state.ativo +
       '&' +
+      'franquia=' +
+      this.state.franquia +
+      '&' +
       ''
     );
   };
@@ -122,8 +131,8 @@ export class FranquiaAreaAtuacao extends React.Component<IFranquiaAreaAtuacaoPro
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { cepIni, cepFim, ativo, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntitiesExport(cepIni, cepFim, ativo, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const { cepIni, cepFim, ativo, franquia, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntitiesExport(cepIni, cepFim, ativo, franquia, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   confirmExport() {}
@@ -172,11 +181,13 @@ export class FranquiaAreaAtuacao extends React.Component<IFranquiaAreaAtuacaoPro
 }
 
 const mapStateToProps = ({ franquiaAreaAtuacao, ...storeState }: IRootState) => ({
+  franquias: storeState.franquia.entities,
   franquiaAreaAtuacaoList: franquiaAreaAtuacao.entities,
   totalItems: franquiaAreaAtuacao.totalItems
 });
 
 const mapDispatchToProps = {
+  getFranquias,
   getEntitiesExport
 };
 

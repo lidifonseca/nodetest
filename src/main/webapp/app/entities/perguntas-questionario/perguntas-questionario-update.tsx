@@ -9,6 +9,8 @@ import { Translate, translate, ICrudGetAction, ICrudGetAllAction, ICrudPutAction
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
+import { ISegmentosPerguntas } from 'app/shared/model/segmentos-perguntas.model';
+import { getEntities as getSegmentosPerguntas } from 'app/entities/segmentos-perguntas/segmentos-perguntas.reducer';
 import {
   IPerguntasQuestionarioUpdateState,
   getEntity,
@@ -29,13 +31,28 @@ export class PerguntasQuestionarioUpdate extends React.Component<IPerguntasQuest
     super(props);
 
     this.state = {
+      segmentosPerguntasSelectValue: null,
       fieldsBase: getPerguntasQuestionarioState(this.props.location),
+      segmentosPerguntasId: '0',
       isNew: !this.props.match.params || !this.props.match.params.id
     };
   }
   componentDidUpdate(nextProps, nextState) {
     if (nextProps.updateSuccess !== this.props.updateSuccess && nextProps.updateSuccess) {
       this.handleClose();
+    }
+
+    if (
+      nextProps.segmentosPerguntas.length > 0 &&
+      this.state.segmentosPerguntasSelectValue === null &&
+      nextProps.perguntasQuestionarioEntity.segmentosPerguntas &&
+      nextProps.perguntasQuestionarioEntity.segmentosPerguntas.id
+    ) {
+      this.setState({
+        segmentosPerguntasSelectValue: nextProps.segmentosPerguntas.map(p =>
+          nextProps.perguntasQuestionarioEntity.segmentosPerguntas.id === p.id ? { value: p.id, label: p.id } : null
+        )
+      });
     }
   }
 
@@ -45,6 +62,8 @@ export class PerguntasQuestionarioUpdate extends React.Component<IPerguntasQuest
     } else {
       this.props.getEntity(this.props.match.params.id);
     }
+
+    this.props.getSegmentosPerguntas();
   }
 
   getFiltersURL = (offset = null) => {
@@ -60,7 +79,7 @@ export class PerguntasQuestionarioUpdate extends React.Component<IPerguntasQuest
       const { perguntasQuestionarioEntity } = this.props;
       const entity = {
         ...perguntasQuestionarioEntity,
-
+        segmentosPerguntas: this.state.segmentosPerguntasSelectValue ? this.state.segmentosPerguntasSelectValue['value'] : null,
         ...values
       };
 
@@ -77,7 +96,7 @@ export class PerguntasQuestionarioUpdate extends React.Component<IPerguntasQuest
   };
 
   render() {
-    const { perguntasQuestionarioEntity, loading, updating } = this.props;
+    const { perguntasQuestionarioEntity, segmentosPerguntas, loading, updating } = this.props;
     const { isNew } = this.state;
 
     const baseFilters = this.state.fieldsBase && this.state.fieldsBase['baseFilters'] ? this.state.fieldsBase['baseFilters'] : null;
@@ -88,7 +107,10 @@ export class PerguntasQuestionarioUpdate extends React.Component<IPerguntasQuest
             isNew
               ? {}
               : {
-                  ...perguntasQuestionarioEntity
+                  ...perguntasQuestionarioEntity,
+                  segmentosPerguntas: perguntasQuestionarioEntity.segmentosPerguntas
+                    ? perguntasQuestionarioEntity.segmentosPerguntas.id
+                    : null
                 }
           }
           onSubmit={this.saveEntity}
@@ -159,6 +181,12 @@ export class PerguntasQuestionarioUpdate extends React.Component<IPerguntasQuest
                         <ObrigatorioComponentUpdate baseFilters />
 
                         <TipoCampoComponentUpdate baseFilters />
+
+                        <AcoesRespostasComponentUpdate baseFilter acoesRespostas />
+
+                        <RespostasComponentUpdate baseFilter respostas />
+
+                        <SegmentosPerguntasComponentUpdate baseFilter segmentosPerguntas />
                       </Row>
                     </div>
                   )}
@@ -173,6 +201,7 @@ export class PerguntasQuestionarioUpdate extends React.Component<IPerguntasQuest
 }
 
 const mapStateToProps = (storeState: IRootState) => ({
+  segmentosPerguntas: storeState.segmentosPerguntas.entities,
   perguntasQuestionarioEntity: storeState.perguntasQuestionario.entity,
   loading: storeState.perguntasQuestionario.loading,
   updating: storeState.perguntasQuestionario.updating,
@@ -180,6 +209,7 @@ const mapStateToProps = (storeState: IRootState) => ({
 });
 
 const mapDispatchToProps = {
+  getSegmentosPerguntas,
   getEntity,
   updateEntity,
   createEntity,
@@ -268,6 +298,50 @@ const TipoCampoComponentUpdate = ({ baseFilters }) => {
     </Col>
   ) : (
     <AvInput type="hidden" name="tipoCampo" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const AcoesRespostasComponentUpdate = ({ baseFilters, acoesRespostas }) => {
+  return baseFilters !== 'acoesRespostas' ? (
+    <Col md="12"></Col>
+  ) : (
+    <AvInput type="hidden" name="acoesRespostas" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const RespostasComponentUpdate = ({ baseFilters, respostas }) => {
+  return baseFilters !== 'respostas' ? (
+    <Col md="12"></Col>
+  ) : (
+    <AvInput type="hidden" name="respostas" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const SegmentosPerguntasComponentUpdate = ({ baseFilters, segmentosPerguntas }) => {
+  return baseFilters !== 'segmentosPerguntas' ? (
+    <Col md="12">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" for="perguntas-questionario-segmentosPerguntas">
+              <Translate contentKey="generadorApp.perguntasQuestionario.segmentosPerguntas">Segmentos Perguntas</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <Select
+              id="perguntas-questionario-segmentosPerguntas"
+              className={'css-select-control'}
+              value={this.state.segmentosPerguntasSelectValue}
+              options={segmentosPerguntas ? segmentosPerguntas.map(option => ({ value: option.id, label: option.id })) : null}
+              onChange={options => this.setState({ segmentosPerguntasSelectValue: options })}
+              name={'segmentosPerguntas'}
+            />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="segmentosPerguntas" value={this.state.fieldsBase[baseFilters]} />
   );
 };
 

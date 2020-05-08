@@ -157,6 +157,8 @@ export class StatusAtendimentoUpdate extends React.Component<IStatusAtendimentoU
                         <OrdenacaoComponentUpdate baseFilters />
 
                         <AtivoComponentUpdate baseFilters />
+
+                        <AtendimentoComponentUpdate baseFilter atendimentos />
                       </Row>
                     </div>
                   )}
@@ -268,6 +270,14 @@ const AtivoComponentUpdate = ({ baseFilters }) => {
     </Col>
   ) : (
     <AvInput type="hidden" name="ativo" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const AtendimentoComponentUpdate = ({ baseFilters, atendimentos }) => {
+  return baseFilters !== 'atendimento' ? (
+    <Col md="12"></Col>
+  ) : (
+    <AvInput type="hidden" name="atendimento" value={this.state.fieldsBase[baseFilters]} />
   );
 };
 

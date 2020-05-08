@@ -34,6 +34,9 @@ import { IPadItemSorteioFeito } from 'app/shared/model/pad-item-sorteio-feito.mo
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
+import { IPadItem } from 'app/shared/model/pad-item.model';
+import { getEntities as getPadItems } from 'app/entities/pad-item/pad-item.reducer';
+
 export interface IPadItemSorteioFeitoProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
 export interface IPadItemSorteioFeitoState extends IPadItemSorteioFeitoBaseState, IPaginationBaseState {
@@ -54,12 +57,15 @@ export class PadItemSorteioFeito extends React.Component<IPadItemSorteioFeitoPro
 
   componentDidMount() {
     this.getEntities();
+
+    this.props.getPadItems();
   }
 
   cancelCourse = () => {
     this.setState(
       {
-        sorteioFeito: ''
+        sorteioFeito: '',
+        padItem: ''
       },
       () => this.sortEntities()
     );
@@ -107,6 +113,9 @@ export class PadItemSorteioFeito extends React.Component<IPadItemSorteioFeitoPro
       'sorteioFeito=' +
       this.state.sorteioFeito +
       '&' +
+      'padItem=' +
+      this.state.padItem +
+      '&' +
       ''
     );
   };
@@ -114,8 +123,8 @@ export class PadItemSorteioFeito extends React.Component<IPadItemSorteioFeitoPro
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { sorteioFeito, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntitiesExport(sorteioFeito, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const { sorteioFeito, padItem, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntitiesExport(sorteioFeito, padItem, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   confirmExport() {}
@@ -164,11 +173,13 @@ export class PadItemSorteioFeito extends React.Component<IPadItemSorteioFeitoPro
 }
 
 const mapStateToProps = ({ padItemSorteioFeito, ...storeState }: IRootState) => ({
+  padItems: storeState.padItem.entities,
   padItemSorteioFeitoList: padItemSorteioFeito.entities,
   totalItems: padItemSorteioFeito.totalItems
 });
 
 const mapDispatchToProps = {
+  getPadItems,
   getEntitiesExport
 };
 

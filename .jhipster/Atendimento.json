@@ -228,14 +228,81 @@
     ],
     "relationships": [
         {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "atendimentoAceite",
+            "otherEntityRelationshipName": "atendimento",
+            "relationshipName": "atendimentoAceite"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "atendimentoAssinaturas",
+            "otherEntityRelationshipName": "atendimento",
+            "relationshipName": "atendimentoAssinaturas"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "atendimentoAtividades",
+            "otherEntityRelationshipName": "atendimento",
+            "relationshipName": "atendimentoAtividades"
+        },
+        {
             "relationshipType": "many-to-one",
             "otherEntityName": "unidadeEasy",
             "otherEntityRelationshipName": "atendimento",
             "relationshipName": "unidade",
             "otherEntityField": "razaoSocial"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "paciente",
+            "otherEntityRelationshipName": "atendimento",
+            "relationshipName": "paciente",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "operadora",
+            "otherEntityRelationshipName": "atendimento",
+            "relationshipName": "operadora",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "especialidade",
+            "otherEntityRelationshipName": "atendimento",
+            "relationshipName": "especialidade",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "padItem",
+            "otherEntityRelationshipName": "atendimento",
+            "relationshipName": "padItem",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "statusAtendimento",
+            "otherEntityRelationshipName": "atendimento",
+            "relationshipName": "statusAtendimento",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "periodo",
+            "otherEntityRelationshipName": "atendimento",
+            "relationshipName": "periodo",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "cidade",
+            "otherEntityRelationshipName": "atendimento",
+            "relationshipName": "cidade",
+            "otherEntityField": "id"
         }
     ],
-    "changelogDate": "20200508152200",
+    "changelogDate": "20200508161800",
     "entityTableName": "atendimento",
     "dto": "mapstruct",
     "pagination": "pagination",

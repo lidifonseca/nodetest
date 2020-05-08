@@ -4,6 +4,8 @@ import { BaseEntity } from './base/base.entity';
 
 import { validate, Contains, IsInt, Length, IsEmail, IsFQDN, IsDate, Min, Max } from 'class-validator';
 
+import Franquia from './franquia.entity';
+
 /**
  * A FranquiaStatusAtual.
  */
@@ -17,6 +19,10 @@ export default class FranquiaStatusAtual extends BaseEntity {
 
   @Column({ type: 'integer', name: 'ATIVO' })
   ativo: number;
+
+  @ManyToOne(type => Franquia)
+  @JoinColumn({ name: 'ID_FRANQUIA', referencedColumnName: 'id' })
+  franquia: Franquia;
 
   // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
 }

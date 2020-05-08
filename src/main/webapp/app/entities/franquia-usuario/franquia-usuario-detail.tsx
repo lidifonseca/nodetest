@@ -608,6 +608,19 @@ export class FranquiaUsuarioDetail extends React.Component<IFranquiaUsuarioDetai
                       </Col>
                     </Row>
                   </Col>
+
+                  <Col md="12">
+                    <Row>
+                      <Col md="3">
+                        <dt>
+                          <Translate contentKey="generadorApp.franquiaUsuario.franquia">Franquia</Translate>
+                        </dt>
+                      </Col>
+                      <Col md="9">
+                        <dd>{franquiaUsuarioEntity.franquia ? franquiaUsuarioEntity.franquia.id : ''}</dd>
+                      </Col>
+                    </Row>
+                  </Col>
                 </Row>
                 <Button tag={Link} to="/franquia-usuario" replace color="info">
                   <FontAwesomeIcon icon="arrow-left" />{' '}

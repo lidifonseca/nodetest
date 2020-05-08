@@ -140,8 +140,27 @@
             "fieldType": "Integer"
         }
     ],
-    "relationships": [],
-    "changelogDate": "20200508155200",
+    "relationships": [
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "franquiaAreaAtuacao",
+            "otherEntityRelationshipName": "franquia",
+            "relationshipName": "franquiaAreaAtuacao"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "franquiaStatusAtual",
+            "otherEntityRelationshipName": "franquia",
+            "relationshipName": "franquiaStatusAtual"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "franquiaUsuario",
+            "otherEntityRelationshipName": "franquia",
+            "relationshipName": "franquiaUsuario"
+        }
+    ],
+    "changelogDate": "20200508164800",
     "entityTableName": "franquia",
     "dto": "mapstruct",
     "pagination": "pagination",

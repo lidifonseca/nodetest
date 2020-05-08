@@ -35,12 +35,18 @@ export interface IPadCidBaseState {
   baseFilters: any;
   observacao: any;
   ativo: any;
+  pad: any;
+  cid: any;
 }
 
 export interface IPadCidUpdateState {
   fieldsBase: IPadCidBaseState;
 
+  padSelectValue: any;
+  cidSelectValue: any;
   isNew: boolean;
+  padId: string;
+  cidId: string;
 }
 
 // Reducer
@@ -123,19 +129,25 @@ const apiUrl = 'api/pad-cids';
 export type ICrudGetAllActionPadCid<T> = (
   observacao?: any,
   ativo?: any,
+  pad?: any,
+  cid?: any,
   page?: number,
   size?: number,
   sort?: string
 ) => IPayload<T> | ((dispatch: any) => IPayload<T>);
 
-export const getEntities: ICrudGetAllActionPadCid<IPadCid> = (observacao, ativo, page, size, sort) => {
+export const getEntities: ICrudGetAllActionPadCid<IPadCid> = (observacao, ativo, pad, cid, page, size, sort) => {
   const observacaoRequest = observacao ? `observacao.contains=${observacao}&` : '';
   const ativoRequest = ativo ? `ativo.contains=${ativo}&` : '';
+  const padRequest = pad ? `pad.equals=${pad}&` : '';
+  const cidRequest = cid ? `cid.equals=${cid}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_PADCID_LIST,
-    payload: axios.get<IPadCid>(`${requestUrl}${observacaoRequest}${ativoRequest}cacheBuster=${new Date().getTime()}`)
+    payload: axios.get<IPadCid>(
+      `${requestUrl}${observacaoRequest}${ativoRequest}${padRequest}${cidRequest}cacheBuster=${new Date().getTime()}`
+    )
   };
 };
 export const getEntity: ICrudGetAction<IPadCid> = id => {
@@ -146,20 +158,26 @@ export const getEntity: ICrudGetAction<IPadCid> = id => {
   };
 };
 
-export const getEntitiesExport: ICrudGetAllActionPadCid<IPadCid> = (observacao, ativo, page, size, sort) => {
+export const getEntitiesExport: ICrudGetAllActionPadCid<IPadCid> = (observacao, ativo, pad, cid, page, size, sort) => {
   const observacaoRequest = observacao ? `observacao.contains=${observacao}&` : '';
   const ativoRequest = ativo ? `ativo.contains=${ativo}&` : '';
+  const padRequest = pad ? `pad.equals=${pad}&` : '';
+  const cidRequest = cid ? `cid.equals=${cid}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_PADCID_LIST,
-    payload: axios.get<IPadCid>(`${requestUrl}${observacaoRequest}${ativoRequest}cacheBuster=${new Date().getTime()}`)
+    payload: axios.get<IPadCid>(
+      `${requestUrl}${observacaoRequest}${ativoRequest}${padRequest}${cidRequest}cacheBuster=${new Date().getTime()}`
+    )
   };
 };
 
 export const createEntity: ICrudPutAction<IPadCid> = entity => async dispatch => {
   entity = {
-    ...entity
+    ...entity,
+    pad: entity.pad === 'null' ? null : entity.pad,
+    cid: entity.cid === 'null' ? null : entity.cid
   };
   const result = await dispatch({
     type: ACTION_TYPES.CREATE_PADCID,
@@ -170,7 +188,7 @@ export const createEntity: ICrudPutAction<IPadCid> = entity => async dispatch =>
 };
 
 export const updateEntity: ICrudPutAction<IPadCid> = entity => async dispatch => {
-  entity = { ...entity };
+  entity = { ...entity, pad: entity.pad === 'null' ? null : entity.pad, cid: entity.cid === 'null' ? null : entity.cid };
   const result = await dispatch({
     type: ACTION_TYPES.UPDATE_PADCID,
     payload: axios.put(apiUrl, cleanEntity(entity))
@@ -199,9 +217,14 @@ export const getPadCidState = (location): IPadCidBaseState => {
   const observacao = url.searchParams.get('observacao') || '';
   const ativo = url.searchParams.get('ativo') || '';
 
+  const pad = url.searchParams.get('pad') || '';
+  const cid = url.searchParams.get('cid') || '';
+
   return {
     baseFilters,
     observacao,
-    ativo
+    ativo,
+    pad,
+    cid
   };
 };

@@ -18,8 +18,15 @@
             "fieldValidateRulesMaxlength": "255"
         }
     ],
-    "relationships": [],
-    "changelogDate": "20200508174400",
+    "relationships": [
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "cidade",
+            "otherEntityRelationshipName": "uf",
+            "relationshipName": "cidade"
+        }
+    ],
+    "changelogDate": "20200508184000",
     "entityTableName": "uf",
     "dto": "mapstruct",
     "pagination": "pagination",

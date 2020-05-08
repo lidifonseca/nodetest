@@ -37,6 +37,11 @@ import { IPadItemAtividade } from 'app/shared/model/pad-item-atividade.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
+import { ICategoriaAtividade } from 'app/shared/model/categoria-atividade.model';
+import { getEntities as getCategoriaAtividades } from 'app/entities/categoria-atividade/categoria-atividade.reducer';
+import { IPadItem } from 'app/shared/model/pad-item.model';
+import { getEntities as getPadItems } from 'app/entities/pad-item/pad-item.reducer';
+
 export interface IPadItemAtividadeProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
 export interface IPadItemAtividadeState extends IPadItemAtividadeBaseState, IPaginationBaseState {}
@@ -54,13 +59,18 @@ export class PadItemAtividade extends React.Component<IPadItemAtividadeProps, IP
 
   componentDidMount() {
     this.getEntities();
+
+    this.props.getCategoriaAtividades();
+    this.props.getPadItems();
   }
 
   cancelCourse = () => {
     this.setState(
       {
         dataInicio: '',
-        dataFim: ''
+        dataFim: '',
+        atividade: '',
+        padItem: ''
       },
       () => this.sortEntities()
     );
@@ -113,6 +123,12 @@ export class PadItemAtividade extends React.Component<IPadItemAtividadeProps, IP
       'dataFim=' +
       this.state.dataFim +
       '&' +
+      'atividade=' +
+      this.state.atividade +
+      '&' +
+      'padItem=' +
+      this.state.padItem +
+      '&' +
       ''
     );
   };
@@ -120,12 +136,12 @@ export class PadItemAtividade extends React.Component<IPadItemAtividadeProps, IP
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { dataInicio, dataFim, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntities(dataInicio, dataFim, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const { dataInicio, dataFim, atividade, padItem, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntities(dataInicio, dataFim, atividade, padItem, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   render() {
-    const { padItemAtividadeList, match, totalItems } = this.props;
+    const { categoriaAtividades, padItems, padItemAtividadeList, match, totalItems } = this.props;
     return (
       <div>
         <h2 id="page-heading">
@@ -182,6 +198,62 @@ export class PadItemAtividade extends React.Component<IPadItemAtividadeProps, IP
                           </Row>
                         </Col>
                       ) : null}
+
+                      {this.state.baseFilters !== 'atividade' ? (
+                        <Col md="3">
+                          <Row className="mr-1 mt-1">
+                            <div style={{ width: '100%' }}>
+                              <Label for="pad-item-atividade-atividade">
+                                <Translate contentKey="generadorApp.padItemAtividade.atividade">Atividade</Translate>
+                              </Label>
+                              <Select
+                                id="pad-item-atividade-atividade"
+                                isMulti
+                                className={'css-select-control'}
+                                value={
+                                  categoriaAtividades
+                                    ? categoriaAtividades.map(p =>
+                                        this.state.atividade.split(',').indexOf(p.id) !== -1 ? { value: p.id, label: p.id } : null
+                                      )
+                                    : null
+                                }
+                                options={
+                                  categoriaAtividades ? categoriaAtividades.map(option => ({ value: option.id, label: option.id })) : null
+                                }
+                                onChange={options => this.setState({ atividade: options.map(option => option['value']).join(',') })}
+                                name={'atividade'}
+                              />
+                            </div>
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'padItem' ? (
+                        <Col md="3">
+                          <Row className="mr-1 mt-1">
+                            <div style={{ width: '100%' }}>
+                              <Label for="pad-item-atividade-padItem">
+                                <Translate contentKey="generadorApp.padItemAtividade.padItem">Pad Item</Translate>
+                              </Label>
+                              <Select
+                                id="pad-item-atividade-padItem"
+                                isMulti
+                                className={'css-select-control'}
+                                value={
+                                  padItems
+                                    ? padItems.map(p =>
+                                        this.state.padItem.split(',').indexOf(p.id) !== -1 ? { value: p.id, label: p.id } : null
+                                      )
+                                    : null
+                                }
+                                options={padItems ? padItems.map(option => ({ value: option.id, label: option.id })) : null}
+                                onChange={options => this.setState({ padItem: options.map(option => option['value']).join(',') })}
+                                name={'padItem'}
+                              />
+                            </div>
+                          </Row>
+                        </Col>
+                      ) : null}
                     </div>
 
                     <div className="row mb-2 mr-4 justify-content-end">
@@ -222,6 +294,20 @@ export class PadItemAtividade extends React.Component<IPadItemAtividadeProps, IP
                         </th>
                       ) : null}
 
+                      {this.state.baseFilters !== 'atividade' ? (
+                        <th>
+                          <Translate contentKey="generadorApp.padItemAtividade.atividade">Atividade</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'padItem' ? (
+                        <th>
+                          <Translate contentKey="generadorApp.padItemAtividade.padItem">Pad Item</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+
                       <th />
                     </tr>
                   </thead>
@@ -244,6 +330,26 @@ export class PadItemAtividade extends React.Component<IPadItemAtividadeProps, IP
                         {this.state.baseFilters !== 'dataFim' ? (
                           <td>
                             <TextFormat type="date" value={padItemAtividade.dataFim} format={APP_LOCAL_DATE_FORMAT} />
+                          </td>
+                        ) : null}
+
+                        {this.state.baseFilters !== 'atividade' ? (
+                          <td>
+                            {padItemAtividade.atividade ? (
+                              <Link to={`categoria-atividade/${padItemAtividade.atividade.id}`}>{padItemAtividade.atividade.id}</Link>
+                            ) : (
+                              ''
+                            )}
+                          </td>
+                        ) : null}
+
+                        {this.state.baseFilters !== 'padItem' ? (
+                          <td>
+                            {padItemAtividade.padItem ? (
+                              <Link to={`pad-item/${padItemAtividade.padItem.id}`}>{padItemAtividade.padItem.id}</Link>
+                            ) : (
+                              ''
+                            )}
                           </td>
                         ) : null}
 
@@ -313,11 +419,15 @@ export class PadItemAtividade extends React.Component<IPadItemAtividadeProps, IP
 }
 
 const mapStateToProps = ({ padItemAtividade, ...storeState }: IRootState) => ({
+  categoriaAtividades: storeState.categoriaAtividade.entities,
+  padItems: storeState.padItem.entities,
   padItemAtividadeList: padItemAtividade.entities,
   totalItems: padItemAtividade.totalItems
 });
 
 const mapDispatchToProps = {
+  getCategoriaAtividades,
+  getPadItems,
   getEntities
 };
 

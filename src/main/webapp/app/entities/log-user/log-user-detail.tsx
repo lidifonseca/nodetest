@@ -67,6 +67,32 @@ export class LogUserDetail extends React.Component<ILogUserDetailProps, ILogUser
                       </Col>
                     </Row>
                   </Col>
+
+                  <Col md="12">
+                    <Row>
+                      <Col md="3">
+                        <dt>
+                          <Translate contentKey="generadorApp.logUser.acao">Acao</Translate>
+                        </dt>
+                      </Col>
+                      <Col md="9">
+                        <dd>{logUserEntity.acao ? logUserEntity.acao.id : ''}</dd>
+                      </Col>
+                    </Row>
+                  </Col>
+
+                  <Col md="12">
+                    <Row>
+                      <Col md="3">
+                        <dt>
+                          <Translate contentKey="generadorApp.logUser.tela">Tela</Translate>
+                        </dt>
+                      </Col>
+                      <Col md="9">
+                        <dd>{logUserEntity.tela ? logUserEntity.tela.id : ''}</dd>
+                      </Col>
+                    </Row>
+                  </Col>
                 </Row>
                 <Button tag={Link} to="/log-user" replace color="info">
                   <FontAwesomeIcon icon="arrow-left" />{' '}

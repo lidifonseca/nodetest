@@ -17,7 +17,7 @@
         }
     ],
     "relationships": [],
-    "changelogDate": "20200508170500",
+    "changelogDate": "20200508180100",
     "entityTableName": "profissional_especialidade",
     "dto": "mapstruct",
     "pagination": "pagination",

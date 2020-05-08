@@ -59,7 +59,7 @@
         }
     ],
     "relationships": [],
-    "changelogDate": "20200508164900",
+    "changelogDate": "20200508174500",
     "entityTableName": "pad_item_temp",
     "dto": "mapstruct",
     "pagination": "pagination",

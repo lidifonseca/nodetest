@@ -27,7 +27,9 @@
       "prazo": "Prazo",
       "complemento": "Complemento",
       "dataCadastro": "Data Cadastro",
-      "dataVencimentoPrazo": "Data Vencimento Prazo"
+      "dataVencimentoPrazo": "Data Vencimento Prazo",
+      "alertasResultadosEsperados_empty": "Without Alertas Resultados Esperados",
+      "alertasResultadosEsperados": "Alertas Resultados Esperados"
     }
   }
 }

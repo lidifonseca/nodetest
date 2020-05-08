@@ -22,7 +22,9 @@
       "detail": {
         "title": "Indicadores"
       },
-      "titulo": "Titulo"
+      "titulo": "Titulo",
+      "indicadoresValores_empty": "Sem Indicadores Valores",
+      "indicadoresValores": "Indicadores Valores"
     }
   }
 }

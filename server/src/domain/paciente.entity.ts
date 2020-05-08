@@ -4,6 +4,17 @@ import { BaseEntity } from './base/base.entity';
 
 import { validate, Contains, IsInt, Length, IsEmail, IsFQDN, IsDate, Min, Max } from 'class-validator';
 
+import Atendimento from './atendimento.entity';
+import AtendimentoAssinaturas from './atendimento-assinaturas.entity';
+import Diario from './diario.entity';
+import PacienteDadosCartao from './paciente-dados-cartao.entity';
+import PacienteDiagnostico from './paciente-diagnostico.entity';
+import PacienteDiario from './paciente-diario.entity';
+import PacienteEnqueteApp from './paciente-enquete-app.entity';
+import PacienteOperadora from './paciente-operadora.entity';
+import PacientePedido from './paciente-pedido.entity';
+import PacientePush from './paciente-push.entity';
+import Pad from './pad.entity';
 import UnidadeEasy from './unidade-easy.entity';
 import Franquia from './franquia.entity';
 import Cidade from './cidade.entity';
@@ -192,6 +203,72 @@ export default class Paciente extends BaseEntity {
 
   @Column({ name: 'EXPO_TOKEN', length: 255 })
   expoToken: string;
+
+  @OneToMany(
+    type => Atendimento,
+    other => other.paciente
+  )
+  atendimentos: Atendimento[];
+
+  @OneToMany(
+    type => AtendimentoAssinaturas,
+    other => other.paciente
+  )
+  atendimentoAssinaturas: AtendimentoAssinaturas[];
+
+  @OneToMany(
+    type => Diario,
+    other => other.paciente
+  )
+  diarios: Diario[];
+
+  @OneToMany(
+    type => PacienteDadosCartao,
+    other => other.paciente
+  )
+  pacienteDadosCartaos: PacienteDadosCartao[];
+
+  @OneToMany(
+    type => PacienteDiagnostico,
+    other => other.paciente
+  )
+  pacienteDiagnosticos: PacienteDiagnostico[];
+
+  @OneToMany(
+    type => PacienteDiario,
+    other => other.paciente
+  )
+  pacienteDiarios: PacienteDiario[];
+
+  @OneToMany(
+    type => PacienteEnqueteApp,
+    other => other.paciente
+  )
+  pacienteEnqueteApps: PacienteEnqueteApp[];
+
+  @OneToMany(
+    type => PacienteOperadora,
+    other => other.paciente
+  )
+  pacienteOperadoras: PacienteOperadora[];
+
+  @OneToMany(
+    type => PacientePedido,
+    other => other.paciente
+  )
+  pacientePedidos: PacientePedido[];
+
+  @OneToMany(
+    type => PacientePush,
+    other => other.paciente
+  )
+  pacientePushes: PacientePush[];
+
+  @OneToMany(
+    type => Pad,
+    other => other.paciente
+  )
+  pads: Pad[];
 
   @ManyToOne(type => UnidadeEasy)
   @JoinColumn({ name: 'ID_UNIDADE', referencedColumnName: 'id' })

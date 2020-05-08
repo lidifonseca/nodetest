@@ -70,6 +70,10 @@ export class Categoria extends React.Component<ICategoriaProps, ICategoriaState>
         publicar: '',
         ordem: '',
         publicarSite: '',
+        categoriaAtividade: '',
+        categoriaContrato: '',
+        cidXPtaNovoPadItemIndi: '',
+        especialidade: '',
         unidade: ''
       },
       () => this.sortEntities()
@@ -133,6 +137,18 @@ export class Categoria extends React.Component<ICategoriaProps, ICategoriaState>
       'publicarSite=' +
       this.state.publicarSite +
       '&' +
+      'categoriaAtividade=' +
+      this.state.categoriaAtividade +
+      '&' +
+      'categoriaContrato=' +
+      this.state.categoriaContrato +
+      '&' +
+      'cidXPtaNovoPadItemIndi=' +
+      this.state.cidXPtaNovoPadItemIndi +
+      '&' +
+      'especialidade=' +
+      this.state.especialidade +
+      '&' +
       'unidade=' +
       this.state.unidade +
       '&' +
@@ -143,7 +159,23 @@ export class Categoria extends React.Component<ICategoriaProps, ICategoriaState>
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { categoria, styleCategoria, icon, publicar, ordem, publicarSite, unidade, activePage, itemsPerPage, sort, order } = this.state;
+    const {
+      categoria,
+      styleCategoria,
+      icon,
+      publicar,
+      ordem,
+      publicarSite,
+      categoriaAtividade,
+      categoriaContrato,
+      cidXPtaNovoPadItemIndi,
+      especialidade,
+      unidade,
+      activePage,
+      itemsPerPage,
+      sort,
+      order
+    } = this.state;
     this.props.getEntitiesExport(
       categoria,
       styleCategoria,
@@ -151,6 +183,10 @@ export class Categoria extends React.Component<ICategoriaProps, ICategoriaState>
       publicar,
       ordem,
       publicarSite,
+      categoriaAtividade,
+      categoriaContrato,
+      cidXPtaNovoPadItemIndi,
+      especialidade,
       unidade,
       activePage - 1,
       itemsPerPage,

@@ -39,6 +39,7 @@ export interface IResultadosBaseState {
   complemento: any;
   dataCadastro: any;
   dataVencimentoPrazo: any;
+  alertasResultadosEsperados: any;
 }
 
 export interface IResultadosUpdateState {
@@ -131,6 +132,7 @@ export type ICrudGetAllActionResultados<T> = (
   complemento?: any,
   dataCadastro?: any,
   dataVencimentoPrazo?: any,
+  alertasResultadosEsperados?: any,
   page?: number,
   size?: number,
   sort?: string
@@ -143,6 +145,7 @@ export const getEntities: ICrudGetAllActionResultados<IResultados> = (
   complemento,
   dataCadastro,
   dataVencimentoPrazo,
+  alertasResultadosEsperados,
   page,
   size,
   sort
@@ -153,12 +156,15 @@ export const getEntities: ICrudGetAllActionResultados<IResultados> = (
   const complementoRequest = complemento ? `complemento.contains=${complemento}&` : '';
   const dataCadastroRequest = dataCadastro ? `dataCadastro.contains=${dataCadastro}&` : '';
   const dataVencimentoPrazoRequest = dataVencimentoPrazo ? `dataVencimentoPrazo.equals=${dataVencimentoPrazo}&` : '';
+  const alertasResultadosEsperadosRequest = alertasResultadosEsperados
+    ? `alertasResultadosEsperados.equals=${alertasResultadosEsperados}&`
+    : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_RESULTADOS_LIST,
     payload: axios.get<IResultados>(
-      `${requestUrl}${objetivoRequest}${valorRequest}${prazoRequest}${complementoRequest}${dataCadastroRequest}${dataVencimentoPrazoRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${objetivoRequest}${valorRequest}${prazoRequest}${complementoRequest}${dataCadastroRequest}${dataVencimentoPrazoRequest}${alertasResultadosEsperadosRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };
@@ -177,6 +183,7 @@ export const getEntitiesExport: ICrudGetAllActionResultados<IResultados> = (
   complemento,
   dataCadastro,
   dataVencimentoPrazo,
+  alertasResultadosEsperados,
   page,
   size,
   sort
@@ -187,12 +194,15 @@ export const getEntitiesExport: ICrudGetAllActionResultados<IResultados> = (
   const complementoRequest = complemento ? `complemento.contains=${complemento}&` : '';
   const dataCadastroRequest = dataCadastro ? `dataCadastro.contains=${dataCadastro}&` : '';
   const dataVencimentoPrazoRequest = dataVencimentoPrazo ? `dataVencimentoPrazo.equals=${dataVencimentoPrazo}&` : '';
+  const alertasResultadosEsperadosRequest = alertasResultadosEsperados
+    ? `alertasResultadosEsperados.equals=${alertasResultadosEsperados}&`
+    : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_RESULTADOS_LIST,
     payload: axios.get<IResultados>(
-      `${requestUrl}${objetivoRequest}${valorRequest}${prazoRequest}${complementoRequest}${dataCadastroRequest}${dataVencimentoPrazoRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${objetivoRequest}${valorRequest}${prazoRequest}${complementoRequest}${dataCadastroRequest}${dataVencimentoPrazoRequest}${alertasResultadosEsperadosRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };
@@ -243,6 +253,8 @@ export const getResultadosState = (location): IResultadosBaseState => {
   const dataCadastro = url.searchParams.get('dataCadastro') || '';
   const dataVencimentoPrazo = url.searchParams.get('dataVencimentoPrazo') || '';
 
+  const alertasResultadosEsperados = url.searchParams.get('alertasResultadosEsperados') || '';
+
   return {
     baseFilters,
     objetivo,
@@ -250,6 +262,7 @@ export const getResultadosState = (location): IResultadosBaseState => {
     prazo,
     complemento,
     dataCadastro,
-    dataVencimentoPrazo
+    dataVencimentoPrazo,
+    alertasResultadosEsperados
   };
 };

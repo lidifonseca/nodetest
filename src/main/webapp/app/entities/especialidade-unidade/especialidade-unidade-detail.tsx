@@ -141,6 +141,19 @@ export class EspecialidadeUnidadeDetail extends React.Component<IEspecialidadeUn
                       </Col>
                     </Row>
                   </Col>
+
+                  <Col md="12">
+                    <Row>
+                      <Col md="3">
+                        <dt>
+                          <Translate contentKey="generadorApp.especialidadeUnidade.especialidade">Especialidade</Translate>
+                        </dt>
+                      </Col>
+                      <Col md="9">
+                        <dd>{especialidadeUnidadeEntity.especialidade ? especialidadeUnidadeEntity.especialidade.id : ''}</dd>
+                      </Col>
+                    </Row>
+                  </Col>
                 </Row>
                 <Button tag={Link} to="/especialidade-unidade" replace color="info">
                   <FontAwesomeIcon icon="arrow-left" />{' '}

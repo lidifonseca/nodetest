@@ -153,6 +153,8 @@ export class PeriodicidadeUpdate extends React.Component<IPeriodicidadeUpdatePro
                         <PeriodicidadeComponentUpdate baseFilters />
 
                         <AtivoComponentUpdate baseFilters />
+
+                        <PadItemComponentUpdate baseFilter padItems />
                       </Row>
                     </div>
                   )}
@@ -222,6 +224,14 @@ const AtivoComponentUpdate = ({ baseFilters }) => {
     </Col>
   ) : (
     <AvInput type="hidden" name="ativo" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const PadItemComponentUpdate = ({ baseFilters, padItems }) => {
+  return baseFilters !== 'padItem' ? (
+    <Col md="12"></Col>
+  ) : (
+    <AvInput type="hidden" name="padItem" value={this.state.fieldsBase[baseFilters]} />
   );
 };
 

@@ -23,7 +23,11 @@
         "title": "Periodo"
       },
       "periodo": "Periodo",
-      "ativo": "Ativo"
+      "ativo": "Ativo",
+      "atendimento_empty": "Without Atendimento",
+      "atendimento": "Atendimento",
+      "padItem_empty": "Without Pad Item",
+      "padItem": "Pad Item"
     }
   }
 }

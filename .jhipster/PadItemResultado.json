@@ -19,8 +19,16 @@
             "fieldType": "Integer"
         }
     ],
-    "relationships": [],
-    "changelogDate": "20200508164700",
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "padItem",
+            "otherEntityRelationshipName": "padItemResultado",
+            "relationshipName": "padItem",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20200508174300",
     "entityTableName": "pad_item_resultado",
     "dto": "mapstruct",
     "pagination": "pagination",

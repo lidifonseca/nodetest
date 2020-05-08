@@ -133,7 +133,7 @@
         }
     ],
     "relationships": [],
-    "changelogDate": "20200508164600",
+    "changelogDate": "20200508174200",
     "entityTableName": "pad_item_meta",
     "dto": "mapstruct",
     "pagination": "pagination",

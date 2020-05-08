@@ -43,6 +43,9 @@ import { IEmpresa } from 'app/shared/model/empresa.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
+import { ICidade } from 'app/shared/model/cidade.model';
+import { getEntities as getCidades } from 'app/entities/cidade/cidade.reducer';
+
 export interface IEmpresaProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
 export interface IEmpresaState extends IEmpresaBaseState, IPaginationBaseState {
@@ -63,6 +66,8 @@ export class Empresa extends React.Component<IEmpresaProps, IEmpresaState> {
 
   componentDidMount() {
     this.getEntities();
+
+    this.props.getCidades();
   }
 
   cancelCourse = () => {
@@ -86,7 +91,8 @@ export class Empresa extends React.Component<IEmpresaProps, IEmpresaState> {
         bairro: '',
         cidade: '',
         uf: '',
-        tipo: ''
+        tipo: '',
+        cidade: ''
       },
       () => this.sortEntities()
     );
@@ -188,6 +194,9 @@ export class Empresa extends React.Component<IEmpresaProps, IEmpresaState> {
       'tipo=' +
       this.state.tipo +
       '&' +
+      'cidade=' +
+      this.state.cidade +
+      '&' +
       ''
     );
   };
@@ -215,6 +224,7 @@ export class Empresa extends React.Component<IEmpresaProps, IEmpresaState> {
       cidade,
       uf,
       tipo,
+      cidade,
       activePage,
       itemsPerPage,
       sort,
@@ -240,6 +250,7 @@ export class Empresa extends React.Component<IEmpresaProps, IEmpresaState> {
       cidade,
       uf,
       tipo,
+      cidade,
       activePage - 1,
       itemsPerPage,
       `${sort},${order}`
@@ -292,11 +303,13 @@ export class Empresa extends React.Component<IEmpresaProps, IEmpresaState> {
 }
 
 const mapStateToProps = ({ empresa, ...storeState }: IRootState) => ({
+  cidades: storeState.cidade.entities,
   empresaList: empresa.entities,
   totalItems: empresa.totalItems
 });
 
 const mapDispatchToProps = {
+  getCidades,
   getEntitiesExport
 };
 

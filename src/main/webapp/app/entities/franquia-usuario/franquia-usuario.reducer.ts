@@ -70,12 +70,16 @@ export interface IFranquiaUsuarioBaseState {
   envioIntercorrencia: any;
   envioCancelamento: any;
   ativo: any;
+  logUserFranquia: any;
+  franquia: any;
 }
 
 export interface IFranquiaUsuarioUpdateState {
   fieldsBase: IFranquiaUsuarioBaseState;
 
+  franquiaSelectValue: any;
   isNew: boolean;
+  franquiaId: string;
 }
 
 // Reducer
@@ -193,6 +197,8 @@ export type ICrudGetAllActionFranquiaUsuario<T> = (
   envioIntercorrencia?: any,
   envioCancelamento?: any,
   ativo?: any,
+  logUserFranquia?: any,
+  franquia?: any,
   page?: number,
   size?: number,
   sort?: string
@@ -236,6 +242,8 @@ export const getEntities: ICrudGetAllActionFranquiaUsuario<IFranquiaUsuario> = (
   envioIntercorrencia,
   envioCancelamento,
   ativo,
+  logUserFranquia,
+  franquia,
   page,
   size,
   sort
@@ -277,12 +285,14 @@ export const getEntities: ICrudGetAllActionFranquiaUsuario<IFranquiaUsuario> = (
   const envioIntercorrenciaRequest = envioIntercorrencia ? `envioIntercorrencia.contains=${envioIntercorrencia}&` : '';
   const envioCancelamentoRequest = envioCancelamento ? `envioCancelamento.contains=${envioCancelamento}&` : '';
   const ativoRequest = ativo ? `ativo.contains=${ativo}&` : '';
+  const logUserFranquiaRequest = logUserFranquia ? `logUserFranquia.equals=${logUserFranquia}&` : '';
+  const franquiaRequest = franquia ? `franquia.equals=${franquia}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_FRANQUIAUSUARIO_LIST,
     payload: axios.get<IFranquiaUsuario>(
-      `${requestUrl}${senhaRequest}${nomeRequest}${emailRequest}${verProfissionalRequest}${cadProfissionalRequest}${ediProfissionalRequest}${delProfissionalRequest}${relProfissionalRequest}${verPacienteRequest}${cadPacienteRequest}${ediPacienteRequest}${delPacienteRequest}${relPacienteRequest}${verPadRequest}${cadPadRequest}${ediPadRequest}${delPadRequest}${relPadRequest}${verAtendimentoRequest}${cadAtendimentoRequest}${ediAtendimentoRequest}${delAtendimentoRequest}${relAtendimentoRequest}${verPushRequest}${cadPushRequest}${verEspecialidadeValorRequest}${cadEspecialidadeValorRequest}${ediEspecialidadeValorRequest}${delEspecialidadeValorRequest}${verUsuarioRequest}${cadUsuarioRequest}${ediUsuarioRequest}${delUsuarioRequest}${envioRecusaRequest}${envioIntercorrenciaRequest}${envioCancelamentoRequest}${ativoRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${senhaRequest}${nomeRequest}${emailRequest}${verProfissionalRequest}${cadProfissionalRequest}${ediProfissionalRequest}${delProfissionalRequest}${relProfissionalRequest}${verPacienteRequest}${cadPacienteRequest}${ediPacienteRequest}${delPacienteRequest}${relPacienteRequest}${verPadRequest}${cadPadRequest}${ediPadRequest}${delPadRequest}${relPadRequest}${verAtendimentoRequest}${cadAtendimentoRequest}${ediAtendimentoRequest}${delAtendimentoRequest}${relAtendimentoRequest}${verPushRequest}${cadPushRequest}${verEspecialidadeValorRequest}${cadEspecialidadeValorRequest}${ediEspecialidadeValorRequest}${delEspecialidadeValorRequest}${verUsuarioRequest}${cadUsuarioRequest}${ediUsuarioRequest}${delUsuarioRequest}${envioRecusaRequest}${envioIntercorrenciaRequest}${envioCancelamentoRequest}${ativoRequest}${logUserFranquiaRequest}${franquiaRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };
@@ -332,6 +342,8 @@ export const getEntitiesExport: ICrudGetAllActionFranquiaUsuario<IFranquiaUsuari
   envioIntercorrencia,
   envioCancelamento,
   ativo,
+  logUserFranquia,
+  franquia,
   page,
   size,
   sort
@@ -373,19 +385,22 @@ export const getEntitiesExport: ICrudGetAllActionFranquiaUsuario<IFranquiaUsuari
   const envioIntercorrenciaRequest = envioIntercorrencia ? `envioIntercorrencia.contains=${envioIntercorrencia}&` : '';
   const envioCancelamentoRequest = envioCancelamento ? `envioCancelamento.contains=${envioCancelamento}&` : '';
   const ativoRequest = ativo ? `ativo.contains=${ativo}&` : '';
+  const logUserFranquiaRequest = logUserFranquia ? `logUserFranquia.equals=${logUserFranquia}&` : '';
+  const franquiaRequest = franquia ? `franquia.equals=${franquia}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_FRANQUIAUSUARIO_LIST,
     payload: axios.get<IFranquiaUsuario>(
-      `${requestUrl}${senhaRequest}${nomeRequest}${emailRequest}${verProfissionalRequest}${cadProfissionalRequest}${ediProfissionalRequest}${delProfissionalRequest}${relProfissionalRequest}${verPacienteRequest}${cadPacienteRequest}${ediPacienteRequest}${delPacienteRequest}${relPacienteRequest}${verPadRequest}${cadPadRequest}${ediPadRequest}${delPadRequest}${relPadRequest}${verAtendimentoRequest}${cadAtendimentoRequest}${ediAtendimentoRequest}${delAtendimentoRequest}${relAtendimentoRequest}${verPushRequest}${cadPushRequest}${verEspecialidadeValorRequest}${cadEspecialidadeValorRequest}${ediEspecialidadeValorRequest}${delEspecialidadeValorRequest}${verUsuarioRequest}${cadUsuarioRequest}${ediUsuarioRequest}${delUsuarioRequest}${envioRecusaRequest}${envioIntercorrenciaRequest}${envioCancelamentoRequest}${ativoRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${senhaRequest}${nomeRequest}${emailRequest}${verProfissionalRequest}${cadProfissionalRequest}${ediProfissionalRequest}${delProfissionalRequest}${relProfissionalRequest}${verPacienteRequest}${cadPacienteRequest}${ediPacienteRequest}${delPacienteRequest}${relPacienteRequest}${verPadRequest}${cadPadRequest}${ediPadRequest}${delPadRequest}${relPadRequest}${verAtendimentoRequest}${cadAtendimentoRequest}${ediAtendimentoRequest}${delAtendimentoRequest}${relAtendimentoRequest}${verPushRequest}${cadPushRequest}${verEspecialidadeValorRequest}${cadEspecialidadeValorRequest}${ediEspecialidadeValorRequest}${delEspecialidadeValorRequest}${verUsuarioRequest}${cadUsuarioRequest}${ediUsuarioRequest}${delUsuarioRequest}${envioRecusaRequest}${envioIntercorrenciaRequest}${envioCancelamentoRequest}${ativoRequest}${logUserFranquiaRequest}${franquiaRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };
 
 export const createEntity: ICrudPutAction<IFranquiaUsuario> = entity => async dispatch => {
   entity = {
-    ...entity
+    ...entity,
+    franquia: entity.franquia === 'null' ? null : entity.franquia
   };
   const result = await dispatch({
     type: ACTION_TYPES.CREATE_FRANQUIAUSUARIO,
@@ -396,7 +411,7 @@ export const createEntity: ICrudPutAction<IFranquiaUsuario> = entity => async di
 };
 
 export const updateEntity: ICrudPutAction<IFranquiaUsuario> = entity => async dispatch => {
-  entity = { ...entity };
+  entity = { ...entity, franquia: entity.franquia === 'null' ? null : entity.franquia };
   const result = await dispatch({
     type: ACTION_TYPES.UPDATE_FRANQUIAUSUARIO,
     payload: axios.put(apiUrl, cleanEntity(entity))
@@ -460,6 +475,9 @@ export const getFranquiaUsuarioState = (location): IFranquiaUsuarioBaseState => 
   const envioCancelamento = url.searchParams.get('envioCancelamento') || '';
   const ativo = url.searchParams.get('ativo') || '';
 
+  const logUserFranquia = url.searchParams.get('logUserFranquia') || '';
+  const franquia = url.searchParams.get('franquia') || '';
+
   return {
     baseFilters,
     senha,
@@ -498,6 +516,8 @@ export const getFranquiaUsuarioState = (location): IFranquiaUsuarioBaseState => 
     envioRecusa,
     envioIntercorrencia,
     envioCancelamento,
-    ativo
+    ativo,
+    logUserFranquia,
+    franquia
   };
 };

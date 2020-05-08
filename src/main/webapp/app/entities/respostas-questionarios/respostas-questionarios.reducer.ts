@@ -36,12 +36,15 @@ export interface IRespostasQuestionariosBaseState {
   dataResposta: any;
   informacaoAdicional: any;
   questionarioId: any;
+  questionarios: any;
 }
 
 export interface IRespostasQuestionariosUpdateState {
   fieldsBase: IRespostasQuestionariosBaseState;
 
+  questionariosSelectValue: any;
   isNew: boolean;
+  questionariosId: string;
 }
 
 // Reducer
@@ -125,6 +128,7 @@ export type ICrudGetAllActionRespostasQuestionarios<T> = (
   dataResposta?: any,
   informacaoAdicional?: any,
   questionarioId?: any,
+  questionarios?: any,
   page?: number,
   size?: number,
   sort?: string
@@ -134,6 +138,7 @@ export const getEntities: ICrudGetAllActionRespostasQuestionarios<IRespostasQues
   dataResposta,
   informacaoAdicional,
   questionarioId,
+  questionarios,
   page,
   size,
   sort
@@ -141,12 +146,13 @@ export const getEntities: ICrudGetAllActionRespostasQuestionarios<IRespostasQues
   const dataRespostaRequest = dataResposta ? `dataResposta.contains=${dataResposta}&` : '';
   const informacaoAdicionalRequest = informacaoAdicional ? `informacaoAdicional.contains=${informacaoAdicional}&` : '';
   const questionarioIdRequest = questionarioId ? `questionarioId.contains=${questionarioId}&` : '';
+  const questionariosRequest = questionarios ? `questionarios.equals=${questionarios}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_RESPOSTASQUESTIONARIOS_LIST,
     payload: axios.get<IRespostasQuestionarios>(
-      `${requestUrl}${dataRespostaRequest}${informacaoAdicionalRequest}${questionarioIdRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${dataRespostaRequest}${informacaoAdicionalRequest}${questionarioIdRequest}${questionariosRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };
@@ -162,6 +168,7 @@ export const getEntitiesExport: ICrudGetAllActionRespostasQuestionarios<IRespost
   dataResposta,
   informacaoAdicional,
   questionarioId,
+  questionarios,
   page,
   size,
   sort
@@ -169,19 +176,21 @@ export const getEntitiesExport: ICrudGetAllActionRespostasQuestionarios<IRespost
   const dataRespostaRequest = dataResposta ? `dataResposta.contains=${dataResposta}&` : '';
   const informacaoAdicionalRequest = informacaoAdicional ? `informacaoAdicional.contains=${informacaoAdicional}&` : '';
   const questionarioIdRequest = questionarioId ? `questionarioId.contains=${questionarioId}&` : '';
+  const questionariosRequest = questionarios ? `questionarios.equals=${questionarios}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_RESPOSTASQUESTIONARIOS_LIST,
     payload: axios.get<IRespostasQuestionarios>(
-      `${requestUrl}${dataRespostaRequest}${informacaoAdicionalRequest}${questionarioIdRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${dataRespostaRequest}${informacaoAdicionalRequest}${questionarioIdRequest}${questionariosRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };
 
 export const createEntity: ICrudPutAction<IRespostasQuestionarios> = entity => async dispatch => {
   entity = {
-    ...entity
+    ...entity,
+    questionarios: entity.questionarios === 'null' ? null : entity.questionarios
   };
   const result = await dispatch({
     type: ACTION_TYPES.CREATE_RESPOSTASQUESTIONARIOS,
@@ -192,7 +201,7 @@ export const createEntity: ICrudPutAction<IRespostasQuestionarios> = entity => a
 };
 
 export const updateEntity: ICrudPutAction<IRespostasQuestionarios> = entity => async dispatch => {
-  entity = { ...entity };
+  entity = { ...entity, questionarios: entity.questionarios === 'null' ? null : entity.questionarios };
   const result = await dispatch({
     type: ACTION_TYPES.UPDATE_RESPOSTASQUESTIONARIOS,
     payload: axios.put(apiUrl, cleanEntity(entity))
@@ -222,10 +231,13 @@ export const getRespostasQuestionariosState = (location): IRespostasQuestionario
   const informacaoAdicional = url.searchParams.get('informacaoAdicional') || '';
   const questionarioId = url.searchParams.get('questionarioId') || '';
 
+  const questionarios = url.searchParams.get('questionarios') || '';
+
   return {
     baseFilters,
     dataResposta,
     informacaoAdicional,
-    questionarioId
+    questionarioId,
+    questionarios
   };
 };

@@ -45,6 +45,8 @@ import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
 import { IUnidadeEasy } from 'app/shared/model/unidade-easy.model';
 import { getEntities as getUnidadeEasies } from 'app/entities/unidade-easy/unidade-easy.reducer';
+import { IPaciente } from 'app/shared/model/paciente.model';
+import { getEntities as getPacientes } from 'app/entities/paciente/paciente.reducer';
 
 export interface IPadProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
@@ -68,6 +70,7 @@ export class Pad extends React.Component<IPadProps, IPadState> {
     this.getEntities();
 
     this.props.getUnidadeEasies();
+    this.props.getPacientes();
   }
 
   cancelCourse = () => {
@@ -81,10 +84,12 @@ export class Pad extends React.Component<IPadProps, IPadState> {
         dataConferido: '',
         ativo: '',
         statusPad: '',
-        novoModelo: '',
         imagePath: '',
         score: '',
-        unidade: ''
+        padCid: '',
+        padItem: '',
+        unidade: '',
+        paciente: ''
       },
       () => this.sortEntities()
     );
@@ -153,17 +158,23 @@ export class Pad extends React.Component<IPadProps, IPadState> {
       'statusPad=' +
       this.state.statusPad +
       '&' +
-      'novoModelo=' +
-      this.state.novoModelo +
-      '&' +
       'imagePath=' +
       this.state.imagePath +
       '&' +
       'score=' +
       this.state.score +
       '&' +
+      'padCid=' +
+      this.state.padCid +
+      '&' +
+      'padItem=' +
+      this.state.padItem +
+      '&' +
       'unidade=' +
       this.state.unidade +
+      '&' +
+      'paciente=' +
+      this.state.paciente +
       '&' +
       ''
     );
@@ -181,10 +192,12 @@ export class Pad extends React.Component<IPadProps, IPadState> {
       dataConferido,
       ativo,
       statusPad,
-      novoModelo,
       imagePath,
       score,
+      padCid,
+      padItem,
       unidade,
+      paciente,
       activePage,
       itemsPerPage,
       sort,
@@ -199,10 +212,12 @@ export class Pad extends React.Component<IPadProps, IPadState> {
       dataConferido,
       ativo,
       statusPad,
-      novoModelo,
       imagePath,
       score,
+      padCid,
+      padItem,
       unidade,
+      paciente,
       activePage - 1,
       itemsPerPage,
       `${sort},${order}`
@@ -256,12 +271,14 @@ export class Pad extends React.Component<IPadProps, IPadState> {
 
 const mapStateToProps = ({ pad, ...storeState }: IRootState) => ({
   unidadeEasies: storeState.unidadeEasy.entities,
+  pacientes: storeState.paciente.entities,
   padList: pad.entities,
   totalItems: pad.totalItems
 });
 
 const mapDispatchToProps = {
   getUnidadeEasies,
+  getPacientes,
   getEntitiesExport
 };
 

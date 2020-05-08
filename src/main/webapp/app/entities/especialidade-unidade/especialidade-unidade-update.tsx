@@ -11,6 +11,8 @@ import { IRootState } from 'app/shared/reducers';
 
 import { IUnidadeEasy } from 'app/shared/model/unidade-easy.model';
 import { getEntities as getUnidadeEasies } from 'app/entities/unidade-easy/unidade-easy.reducer';
+import { IEspecialidade } from 'app/shared/model/especialidade.model';
+import { getEntities as getEspecialidades } from 'app/entities/especialidade/especialidade.reducer';
 import {
   IEspecialidadeUnidadeUpdateState,
   getEntity,
@@ -32,8 +34,10 @@ export class EspecialidadeUnidadeUpdate extends React.Component<IEspecialidadeUn
 
     this.state = {
       unidadeEasySelectValue: null,
+      especialidadeSelectValue: null,
       fieldsBase: getEspecialidadeUnidadeState(this.props.location),
       unidadeId: '0',
+      especialidadeId: '0',
       isNew: !this.props.match.params || !this.props.match.params.id
     };
   }
@@ -54,6 +58,19 @@ export class EspecialidadeUnidadeUpdate extends React.Component<IEspecialidadeUn
         )
       });
     }
+
+    if (
+      nextProps.especialidades.length > 0 &&
+      this.state.especialidadeSelectValue === null &&
+      nextProps.especialidadeUnidadeEntity.especialidade &&
+      nextProps.especialidadeUnidadeEntity.especialidade.id
+    ) {
+      this.setState({
+        especialidadeSelectValue: nextProps.especialidades.map(p =>
+          nextProps.especialidadeUnidadeEntity.especialidade.id === p.id ? { value: p.id, label: p.id } : null
+        )
+      });
+    }
   }
 
   componentDidMount() {
@@ -64,6 +81,7 @@ export class EspecialidadeUnidadeUpdate extends React.Component<IEspecialidadeUn
     }
 
     this.props.getUnidadeEasies();
+    this.props.getEspecialidades();
   }
 
   getFiltersURL = (offset = null) => {
@@ -80,6 +98,7 @@ export class EspecialidadeUnidadeUpdate extends React.Component<IEspecialidadeUn
       const entity = {
         ...especialidadeUnidadeEntity,
         unidadeEasy: this.state.unidadeEasySelectValue ? this.state.unidadeEasySelectValue['value'] : null,
+        especialidade: this.state.especialidadeSelectValue ? this.state.especialidadeSelectValue['value'] : null,
         ...values
       };
 
@@ -96,7 +115,7 @@ export class EspecialidadeUnidadeUpdate extends React.Component<IEspecialidadeUn
   };
 
   render() {
-    const { especialidadeUnidadeEntity, unidadeEasies, loading, updating } = this.props;
+    const { especialidadeUnidadeEntity, unidadeEasies, especialidades, loading, updating } = this.props;
     const { isNew } = this.state;
 
     const baseFilters = this.state.fieldsBase && this.state.fieldsBase['baseFilters'] ? this.state.fieldsBase['baseFilters'] : null;
@@ -108,7 +127,8 @@ export class EspecialidadeUnidadeUpdate extends React.Component<IEspecialidadeUn
               ? {}
               : {
                   ...especialidadeUnidadeEntity,
-                  unidade: especialidadeUnidadeEntity.unidade ? especialidadeUnidadeEntity.unidade.id : null
+                  unidade: especialidadeUnidadeEntity.unidade ? especialidadeUnidadeEntity.unidade.id : null,
+                  especialidade: especialidadeUnidadeEntity.especialidade ? especialidadeUnidadeEntity.especialidade.id : null
                 }
           }
           onSubmit={this.saveEntity}
@@ -183,6 +203,8 @@ export class EspecialidadeUnidadeUpdate extends React.Component<IEspecialidadeUn
                         <ComentarioPrecoComponentUpdate baseFilters />
 
                         <UnidadeComponentUpdate baseFilter unidadeEasies />
+
+                        <EspecialidadeComponentUpdate baseFilter especialidades />
                       </Row>
                     </div>
                   )}
@@ -198,6 +220,7 @@ export class EspecialidadeUnidadeUpdate extends React.Component<IEspecialidadeUn
 
 const mapStateToProps = (storeState: IRootState) => ({
   unidadeEasies: storeState.unidadeEasy.entities,
+  especialidades: storeState.especialidade.entities,
   especialidadeUnidadeEntity: storeState.especialidadeUnidade.entity,
   loading: storeState.especialidadeUnidade.loading,
   updating: storeState.especialidadeUnidade.updating,
@@ -206,6 +229,7 @@ const mapStateToProps = (storeState: IRootState) => ({
 
 const mapDispatchToProps = {
   getUnidadeEasies,
+  getEspecialidades,
   getEntity,
   updateEntity,
   createEntity,
@@ -345,6 +369,34 @@ const UnidadeComponentUpdate = ({ baseFilters, unidadeEasies }) => {
     </Col>
   ) : (
     <AvInput type="hidden" name="unidade" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const EspecialidadeComponentUpdate = ({ baseFilters, especialidades }) => {
+  return baseFilters !== 'especialidade' ? (
+    <Col md="12">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" for="especialidade-unidade-especialidade">
+              <Translate contentKey="generadorApp.especialidadeUnidade.especialidade">Especialidade</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <Select
+              id="especialidade-unidade-especialidade"
+              className={'css-select-control'}
+              value={this.state.especialidadeSelectValue}
+              options={especialidades ? especialidades.map(option => ({ value: option.id, label: option.id })) : null}
+              onChange={options => this.setState({ especialidadeSelectValue: options })}
+              name={'especialidade'}
+            />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="especialidade" value={this.state.fieldsBase[baseFilters]} />
   );
 };
 

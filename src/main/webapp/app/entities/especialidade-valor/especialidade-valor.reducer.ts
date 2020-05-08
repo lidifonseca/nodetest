@@ -36,12 +36,15 @@ export interface IEspecialidadeValorBaseState {
   idFranquia: any;
   valor: any;
   ativo: any;
+  especialidade: any;
 }
 
 export interface IEspecialidadeValorUpdateState {
   fieldsBase: IEspecialidadeValorBaseState;
 
+  especialidadeSelectValue: any;
   isNew: boolean;
+  especialidadeId: string;
 }
 
 // Reducer
@@ -125,21 +128,31 @@ export type ICrudGetAllActionEspecialidadeValor<T> = (
   idFranquia?: any,
   valor?: any,
   ativo?: any,
+  especialidade?: any,
   page?: number,
   size?: number,
   sort?: string
 ) => IPayload<T> | ((dispatch: any) => IPayload<T>);
 
-export const getEntities: ICrudGetAllActionEspecialidadeValor<IEspecialidadeValor> = (idFranquia, valor, ativo, page, size, sort) => {
+export const getEntities: ICrudGetAllActionEspecialidadeValor<IEspecialidadeValor> = (
+  idFranquia,
+  valor,
+  ativo,
+  especialidade,
+  page,
+  size,
+  sort
+) => {
   const idFranquiaRequest = idFranquia ? `idFranquia.contains=${idFranquia}&` : '';
   const valorRequest = valor ? `valor.contains=${valor}&` : '';
   const ativoRequest = ativo ? `ativo.contains=${ativo}&` : '';
+  const especialidadeRequest = especialidade ? `especialidade.equals=${especialidade}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_ESPECIALIDADEVALOR_LIST,
     payload: axios.get<IEspecialidadeValor>(
-      `${requestUrl}${idFranquiaRequest}${valorRequest}${ativoRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${idFranquiaRequest}${valorRequest}${ativoRequest}${especialidadeRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };
@@ -151,23 +164,33 @@ export const getEntity: ICrudGetAction<IEspecialidadeValor> = id => {
   };
 };
 
-export const getEntitiesExport: ICrudGetAllActionEspecialidadeValor<IEspecialidadeValor> = (idFranquia, valor, ativo, page, size, sort) => {
+export const getEntitiesExport: ICrudGetAllActionEspecialidadeValor<IEspecialidadeValor> = (
+  idFranquia,
+  valor,
+  ativo,
+  especialidade,
+  page,
+  size,
+  sort
+) => {
   const idFranquiaRequest = idFranquia ? `idFranquia.contains=${idFranquia}&` : '';
   const valorRequest = valor ? `valor.contains=${valor}&` : '';
   const ativoRequest = ativo ? `ativo.contains=${ativo}&` : '';
+  const especialidadeRequest = especialidade ? `especialidade.equals=${especialidade}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_ESPECIALIDADEVALOR_LIST,
     payload: axios.get<IEspecialidadeValor>(
-      `${requestUrl}${idFranquiaRequest}${valorRequest}${ativoRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${idFranquiaRequest}${valorRequest}${ativoRequest}${especialidadeRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };
 
 export const createEntity: ICrudPutAction<IEspecialidadeValor> = entity => async dispatch => {
   entity = {
-    ...entity
+    ...entity,
+    especialidade: entity.especialidade === 'null' ? null : entity.especialidade
   };
   const result = await dispatch({
     type: ACTION_TYPES.CREATE_ESPECIALIDADEVALOR,
@@ -178,7 +201,7 @@ export const createEntity: ICrudPutAction<IEspecialidadeValor> = entity => async
 };
 
 export const updateEntity: ICrudPutAction<IEspecialidadeValor> = entity => async dispatch => {
-  entity = { ...entity };
+  entity = { ...entity, especialidade: entity.especialidade === 'null' ? null : entity.especialidade };
   const result = await dispatch({
     type: ACTION_TYPES.UPDATE_ESPECIALIDADEVALOR,
     payload: axios.put(apiUrl, cleanEntity(entity))
@@ -208,10 +231,13 @@ export const getEspecialidadeValorState = (location): IEspecialidadeValorBaseSta
   const valor = url.searchParams.get('valor') || '';
   const ativo = url.searchParams.get('ativo') || '';
 
+  const especialidade = url.searchParams.get('especialidade') || '';
+
   return {
     baseFilters,
     idFranquia,
     valor,
-    ativo
+    ativo,
+    especialidade
   };
 };

@@ -35,6 +35,7 @@ export interface IPeriodicidadeBaseState {
   baseFilters: any;
   periodicidade: any;
   ativo: any;
+  padItem: any;
 }
 
 export interface IPeriodicidadeUpdateState {
@@ -123,19 +124,23 @@ const apiUrl = 'api/periodicidades';
 export type ICrudGetAllActionPeriodicidade<T> = (
   periodicidade?: any,
   ativo?: any,
+  padItem?: any,
   page?: number,
   size?: number,
   sort?: string
 ) => IPayload<T> | ((dispatch: any) => IPayload<T>);
 
-export const getEntities: ICrudGetAllActionPeriodicidade<IPeriodicidade> = (periodicidade, ativo, page, size, sort) => {
+export const getEntities: ICrudGetAllActionPeriodicidade<IPeriodicidade> = (periodicidade, ativo, padItem, page, size, sort) => {
   const periodicidadeRequest = periodicidade ? `periodicidade.contains=${periodicidade}&` : '';
   const ativoRequest = ativo ? `ativo.contains=${ativo}&` : '';
+  const padItemRequest = padItem ? `padItem.equals=${padItem}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_PERIODICIDADE_LIST,
-    payload: axios.get<IPeriodicidade>(`${requestUrl}${periodicidadeRequest}${ativoRequest}cacheBuster=${new Date().getTime()}`)
+    payload: axios.get<IPeriodicidade>(
+      `${requestUrl}${periodicidadeRequest}${ativoRequest}${padItemRequest}cacheBuster=${new Date().getTime()}`
+    )
   };
 };
 export const getEntity: ICrudGetAction<IPeriodicidade> = id => {
@@ -146,14 +151,17 @@ export const getEntity: ICrudGetAction<IPeriodicidade> = id => {
   };
 };
 
-export const getEntitiesExport: ICrudGetAllActionPeriodicidade<IPeriodicidade> = (periodicidade, ativo, page, size, sort) => {
+export const getEntitiesExport: ICrudGetAllActionPeriodicidade<IPeriodicidade> = (periodicidade, ativo, padItem, page, size, sort) => {
   const periodicidadeRequest = periodicidade ? `periodicidade.contains=${periodicidade}&` : '';
   const ativoRequest = ativo ? `ativo.contains=${ativo}&` : '';
+  const padItemRequest = padItem ? `padItem.equals=${padItem}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_PERIODICIDADE_LIST,
-    payload: axios.get<IPeriodicidade>(`${requestUrl}${periodicidadeRequest}${ativoRequest}cacheBuster=${new Date().getTime()}`)
+    payload: axios.get<IPeriodicidade>(
+      `${requestUrl}${periodicidadeRequest}${ativoRequest}${padItemRequest}cacheBuster=${new Date().getTime()}`
+    )
   };
 };
 
@@ -199,9 +207,12 @@ export const getPeriodicidadeState = (location): IPeriodicidadeBaseState => {
   const periodicidade = url.searchParams.get('periodicidade') || '';
   const ativo = url.searchParams.get('ativo') || '';
 
+  const padItem = url.searchParams.get('padItem') || '';
+
   return {
     baseFilters,
     periodicidade,
-    ativo
+    ativo,
+    padItem
   };
 };

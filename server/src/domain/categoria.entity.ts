@@ -4,6 +4,10 @@ import { BaseEntity } from './base/base.entity';
 
 import { validate, Contains, IsInt, Length, IsEmail, IsFQDN, IsDate, Min, Max } from 'class-validator';
 
+import CategoriaAtividade from './categoria-atividade.entity';
+import CategoriaContrato from './categoria-contrato.entity';
+import CidXPtaNovoPadItemIndi from './cid-x-pta-novo-pad-item-indi.entity';
+import Especialidade from './especialidade.entity';
 import UnidadeEasy from './unidade-easy.entity';
 
 /**
@@ -28,6 +32,30 @@ export default class Categoria extends BaseEntity {
 
   @Column({ type: 'integer', name: 'PUBLICAR_SITE', nullable: false })
   publicarSite: number;
+
+  @OneToMany(
+    type => CategoriaAtividade,
+    other => other.categoria
+  )
+  categoriaAtividades: CategoriaAtividade[];
+
+  @OneToMany(
+    type => CategoriaContrato,
+    other => other.categoria
+  )
+  categoriaContratoes: CategoriaContrato[];
+
+  @OneToMany(
+    type => CidXPtaNovoPadItemIndi,
+    other => other.categorias
+  )
+  cidXPtaNovoPadItemIndis: CidXPtaNovoPadItemIndi[];
+
+  @OneToMany(
+    type => Especialidade,
+    other => other.categoria
+  )
+  especialidades: Especialidade[];
 
   @ManyToMany(type => UnidadeEasy)
   @JoinTable({

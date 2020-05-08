@@ -5,6 +5,9 @@ import AtendimentoAssinaturas from '../domain/atendimento-assinaturas.entity';
 import { AtendimentoAssinaturasRepository } from '../repository/atendimento-assinaturas.repository';
 
 const relationshipNames = [];
+relationshipNames.push('atendimento');
+relationshipNames.push('profissional');
+relationshipNames.push('paciente');
 
 @Injectable()
 export class AtendimentoAssinaturasService {

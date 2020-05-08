@@ -128,6 +128,32 @@ export class PacienteDiagnosticoDetail extends React.Component<IPacienteDiagnost
                       </Col>
                     </Row>
                   </Col>
+
+                  <Col md="12">
+                    <Row>
+                      <Col md="3">
+                        <dt>
+                          <Translate contentKey="generadorApp.pacienteDiagnostico.paciente">Paciente</Translate>
+                        </dt>
+                      </Col>
+                      <Col md="9">
+                        <dd>{pacienteDiagnosticoEntity.paciente ? pacienteDiagnosticoEntity.paciente.id : ''}</dd>
+                      </Col>
+                    </Row>
+                  </Col>
+
+                  <Col md="12">
+                    <Row>
+                      <Col md="3">
+                        <dt>
+                          <Translate contentKey="generadorApp.pacienteDiagnostico.c">C</Translate>
+                        </dt>
+                      </Col>
+                      <Col md="9">
+                        <dd>{pacienteDiagnosticoEntity.c ? pacienteDiagnosticoEntity.c.id : ''}</dd>
+                      </Col>
+                    </Row>
+                  </Col>
                 </Row>
                 <Button tag={Link} to="/paciente-diagnostico" replace color="info">
                   <FontAwesomeIcon icon="arrow-left" />{' '}

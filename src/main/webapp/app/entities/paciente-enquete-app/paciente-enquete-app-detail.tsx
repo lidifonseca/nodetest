@@ -68,6 +68,19 @@ export class PacienteEnqueteAppDetail extends React.Component<IPacienteEnqueteAp
                       </Col>
                     </Row>
                   </Col>
+
+                  <Col md="12">
+                    <Row>
+                      <Col md="3">
+                        <dt>
+                          <Translate contentKey="generadorApp.pacienteEnqueteApp.paciente">Paciente</Translate>
+                        </dt>
+                      </Col>
+                      <Col md="9">
+                        <dd>{pacienteEnqueteAppEntity.paciente ? pacienteEnqueteAppEntity.paciente.id : ''}</dd>
+                      </Col>
+                    </Row>
+                  </Col>
                 </Row>
                 <Button tag={Link} to="/paciente-enquete-app" replace color="info">
                   <FontAwesomeIcon icon="arrow-left" />{' '}

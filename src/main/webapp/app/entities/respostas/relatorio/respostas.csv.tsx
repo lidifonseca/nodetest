@@ -34,6 +34,9 @@ import { IRespostas } from 'app/shared/model/respostas.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
+import { IPerguntasQuestionario } from 'app/shared/model/perguntas-questionario.model';
+import { getEntities as getPerguntasQuestionarios } from 'app/entities/perguntas-questionario/perguntas-questionario.reducer';
+
 export interface IRespostasProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
 export interface IRespostasState extends IRespostasBaseState, IPaginationBaseState {
@@ -54,6 +57,8 @@ export class Respostas extends React.Component<IRespostasProps, IRespostasState>
 
   componentDidMount() {
     this.getEntities();
+
+    this.props.getPerguntasQuestionarios();
   }
 
   cancelCourse = () => {
@@ -61,7 +66,9 @@ export class Respostas extends React.Component<IRespostasProps, IRespostasState>
       {
         resposta: '',
         pontuacao: '',
-        respostaAtiva: ''
+        respostaAtiva: '',
+        acoesRespostas: '',
+        perguntasQuestionario: ''
       },
       () => this.sortEntities()
     );
@@ -115,6 +122,12 @@ export class Respostas extends React.Component<IRespostasProps, IRespostasState>
       'respostaAtiva=' +
       this.state.respostaAtiva +
       '&' +
+      'acoesRespostas=' +
+      this.state.acoesRespostas +
+      '&' +
+      'perguntasQuestionario=' +
+      this.state.perguntasQuestionario +
+      '&' +
       ''
     );
   };
@@ -122,8 +135,17 @@ export class Respostas extends React.Component<IRespostasProps, IRespostasState>
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { resposta, pontuacao, respostaAtiva, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntitiesExport(resposta, pontuacao, respostaAtiva, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const { resposta, pontuacao, respostaAtiva, acoesRespostas, perguntasQuestionario, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntitiesExport(
+      resposta,
+      pontuacao,
+      respostaAtiva,
+      acoesRespostas,
+      perguntasQuestionario,
+      activePage - 1,
+      itemsPerPage,
+      `${sort},${order}`
+    );
   };
 
   confirmExport() {}
@@ -172,11 +194,13 @@ export class Respostas extends React.Component<IRespostasProps, IRespostasState>
 }
 
 const mapStateToProps = ({ respostas, ...storeState }: IRootState) => ({
+  perguntasQuestionarios: storeState.perguntasQuestionario.entities,
   respostasList: respostas.entities,
   totalItems: respostas.totalItems
 });
 
 const mapDispatchToProps = {
+  getPerguntasQuestionarios,
   getEntitiesExport
 };
 

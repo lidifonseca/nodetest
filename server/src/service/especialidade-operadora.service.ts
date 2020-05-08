@@ -5,6 +5,8 @@ import EspecialidadeOperadora from '../domain/especialidade-operadora.entity';
 import { EspecialidadeOperadoraRepository } from '../repository/especialidade-operadora.repository';
 
 const relationshipNames = [];
+relationshipNames.push('operadora');
+relationshipNames.push('especialidade');
 
 @Injectable()
 export class EspecialidadeOperadoraService {

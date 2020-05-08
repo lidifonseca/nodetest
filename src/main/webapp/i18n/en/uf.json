@@ -23,7 +23,9 @@
         "title": "Uf"
       },
       "siglaUf": "Sigla Uf",
-      "descrUf": "Descr Uf"
+      "descrUf": "Descr Uf",
+      "cidade_empty": "Without Cidade",
+      "cidade": "Cidade"
     }
   }
 }

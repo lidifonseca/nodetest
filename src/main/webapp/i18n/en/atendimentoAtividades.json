@@ -22,7 +22,11 @@
       "detail": {
         "title": "Atendimento Atividades"
       },
-      "feito": "Feito"
+      "feito": "Feito",
+      "atividade_empty": "Without Atividade",
+      "atividade": "Atividade",
+      "atendimento_empty": "Without Atendimento",
+      "atendimento": "Atendimento"
     }
   }
 }

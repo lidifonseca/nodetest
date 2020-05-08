@@ -47,12 +47,31 @@ export interface IPadItemBaseState {
   cidXPtaNovo: any;
   categoriaId: any;
   score: any;
+  atendimento: any;
+  atendimentoCepRecusado: any;
+  atendimentoSorteioFeito: any;
+  padItemAtividade: any;
+  padItemCepRecusado: any;
+  padItemResultado: any;
+  padItemSorteioFeito: any;
+  pad: any;
+  especialidade: any;
+  periodicidade: any;
+  periodo: any;
 }
 
 export interface IPadItemUpdateState {
   fieldsBase: IPadItemBaseState;
 
+  padSelectValue: any;
+  especialidadeSelectValue: any;
+  periodicidadeSelectValue: any;
+  periodoSelectValue: any;
   isNew: boolean;
+  padId: string;
+  especialidadeId: string;
+  periodicidadeId: string;
+  periodoId: string;
 }
 
 // Reducer
@@ -161,6 +180,17 @@ export type ICrudGetAllActionPadItem<T> = (
   cidXPtaNovo?: any,
   categoriaId?: any,
   score?: any,
+  atendimento?: any,
+  atendimentoCepRecusado?: any,
+  atendimentoSorteioFeito?: any,
+  padItemAtividade?: any,
+  padItemCepRecusado?: any,
+  padItemResultado?: any,
+  padItemSorteioFeito?: any,
+  pad?: any,
+  especialidade?: any,
+  periodicidade?: any,
+  periodo?: any,
   page?: number,
   size?: number,
   sort?: string
@@ -180,6 +210,17 @@ export const getEntities: ICrudGetAllActionPadItem<IPadItem> = (
   cidXPtaNovo,
   categoriaId,
   score,
+  atendimento,
+  atendimentoCepRecusado,
+  atendimentoSorteioFeito,
+  padItemAtividade,
+  padItemCepRecusado,
+  padItemResultado,
+  padItemSorteioFeito,
+  pad,
+  especialidade,
+  periodicidade,
+  periodo,
   page,
   size,
   sort
@@ -197,12 +238,23 @@ export const getEntities: ICrudGetAllActionPadItem<IPadItem> = (
   const cidXPtaNovoRequest = cidXPtaNovo ? `cidXPtaNovo.contains=${cidXPtaNovo}&` : '';
   const categoriaIdRequest = categoriaId ? `categoriaId.contains=${categoriaId}&` : '';
   const scoreRequest = score ? `score.contains=${score}&` : '';
+  const atendimentoRequest = atendimento ? `atendimento.equals=${atendimento}&` : '';
+  const atendimentoCepRecusadoRequest = atendimentoCepRecusado ? `atendimentoCepRecusado.equals=${atendimentoCepRecusado}&` : '';
+  const atendimentoSorteioFeitoRequest = atendimentoSorteioFeito ? `atendimentoSorteioFeito.equals=${atendimentoSorteioFeito}&` : '';
+  const padItemAtividadeRequest = padItemAtividade ? `padItemAtividade.equals=${padItemAtividade}&` : '';
+  const padItemCepRecusadoRequest = padItemCepRecusado ? `padItemCepRecusado.equals=${padItemCepRecusado}&` : '';
+  const padItemResultadoRequest = padItemResultado ? `padItemResultado.equals=${padItemResultado}&` : '';
+  const padItemSorteioFeitoRequest = padItemSorteioFeito ? `padItemSorteioFeito.equals=${padItemSorteioFeito}&` : '';
+  const padRequest = pad ? `pad.equals=${pad}&` : '';
+  const especialidadeRequest = especialidade ? `especialidade.equals=${especialidade}&` : '';
+  const periodicidadeRequest = periodicidade ? `periodicidade.equals=${periodicidade}&` : '';
+  const periodoRequest = periodo ? `periodo.equals=${periodo}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_PADITEM_LIST,
     payload: axios.get<IPadItem>(
-      `${requestUrl}${idPedidoRequest}${dataInicioRequest}${dataFimRequest}${qtdSessoesRequest}${observacaoRequest}${subRequest}${ativoRequest}${dataPadItemIncompletoRequest}${dataPadItemCompletoRequest}${numGhcRequest}${cidXPtaNovoRequest}${categoriaIdRequest}${scoreRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${idPedidoRequest}${dataInicioRequest}${dataFimRequest}${qtdSessoesRequest}${observacaoRequest}${subRequest}${ativoRequest}${dataPadItemIncompletoRequest}${dataPadItemCompletoRequest}${numGhcRequest}${cidXPtaNovoRequest}${categoriaIdRequest}${scoreRequest}${atendimentoRequest}${atendimentoCepRecusadoRequest}${atendimentoSorteioFeitoRequest}${padItemAtividadeRequest}${padItemCepRecusadoRequest}${padItemResultadoRequest}${padItemSorteioFeitoRequest}${padRequest}${especialidadeRequest}${periodicidadeRequest}${periodoRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };
@@ -228,6 +280,17 @@ export const getEntitiesExport: ICrudGetAllActionPadItem<IPadItem> = (
   cidXPtaNovo,
   categoriaId,
   score,
+  atendimento,
+  atendimentoCepRecusado,
+  atendimentoSorteioFeito,
+  padItemAtividade,
+  padItemCepRecusado,
+  padItemResultado,
+  padItemSorteioFeito,
+  pad,
+  especialidade,
+  periodicidade,
+  periodo,
   page,
   size,
   sort
@@ -245,19 +308,34 @@ export const getEntitiesExport: ICrudGetAllActionPadItem<IPadItem> = (
   const cidXPtaNovoRequest = cidXPtaNovo ? `cidXPtaNovo.contains=${cidXPtaNovo}&` : '';
   const categoriaIdRequest = categoriaId ? `categoriaId.contains=${categoriaId}&` : '';
   const scoreRequest = score ? `score.contains=${score}&` : '';
+  const atendimentoRequest = atendimento ? `atendimento.equals=${atendimento}&` : '';
+  const atendimentoCepRecusadoRequest = atendimentoCepRecusado ? `atendimentoCepRecusado.equals=${atendimentoCepRecusado}&` : '';
+  const atendimentoSorteioFeitoRequest = atendimentoSorteioFeito ? `atendimentoSorteioFeito.equals=${atendimentoSorteioFeito}&` : '';
+  const padItemAtividadeRequest = padItemAtividade ? `padItemAtividade.equals=${padItemAtividade}&` : '';
+  const padItemCepRecusadoRequest = padItemCepRecusado ? `padItemCepRecusado.equals=${padItemCepRecusado}&` : '';
+  const padItemResultadoRequest = padItemResultado ? `padItemResultado.equals=${padItemResultado}&` : '';
+  const padItemSorteioFeitoRequest = padItemSorteioFeito ? `padItemSorteioFeito.equals=${padItemSorteioFeito}&` : '';
+  const padRequest = pad ? `pad.equals=${pad}&` : '';
+  const especialidadeRequest = especialidade ? `especialidade.equals=${especialidade}&` : '';
+  const periodicidadeRequest = periodicidade ? `periodicidade.equals=${periodicidade}&` : '';
+  const periodoRequest = periodo ? `periodo.equals=${periodo}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_PADITEM_LIST,
     payload: axios.get<IPadItem>(
-      `${requestUrl}${idPedidoRequest}${dataInicioRequest}${dataFimRequest}${qtdSessoesRequest}${observacaoRequest}${subRequest}${ativoRequest}${dataPadItemIncompletoRequest}${dataPadItemCompletoRequest}${numGhcRequest}${cidXPtaNovoRequest}${categoriaIdRequest}${scoreRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${idPedidoRequest}${dataInicioRequest}${dataFimRequest}${qtdSessoesRequest}${observacaoRequest}${subRequest}${ativoRequest}${dataPadItemIncompletoRequest}${dataPadItemCompletoRequest}${numGhcRequest}${cidXPtaNovoRequest}${categoriaIdRequest}${scoreRequest}${atendimentoRequest}${atendimentoCepRecusadoRequest}${atendimentoSorteioFeitoRequest}${padItemAtividadeRequest}${padItemCepRecusadoRequest}${padItemResultadoRequest}${padItemSorteioFeitoRequest}${padRequest}${especialidadeRequest}${periodicidadeRequest}${periodoRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };
 
 export const createEntity: ICrudPutAction<IPadItem> = entity => async dispatch => {
   entity = {
-    ...entity
+    ...entity,
+    pad: entity.pad === 'null' ? null : entity.pad,
+    especialidade: entity.especialidade === 'null' ? null : entity.especialidade,
+    periodicidade: entity.periodicidade === 'null' ? null : entity.periodicidade,
+    periodo: entity.periodo === 'null' ? null : entity.periodo
   };
   const result = await dispatch({
     type: ACTION_TYPES.CREATE_PADITEM,
@@ -268,7 +346,13 @@ export const createEntity: ICrudPutAction<IPadItem> = entity => async dispatch =
 };
 
 export const updateEntity: ICrudPutAction<IPadItem> = entity => async dispatch => {
-  entity = { ...entity };
+  entity = {
+    ...entity,
+    pad: entity.pad === 'null' ? null : entity.pad,
+    especialidade: entity.especialidade === 'null' ? null : entity.especialidade,
+    periodicidade: entity.periodicidade === 'null' ? null : entity.periodicidade,
+    periodo: entity.periodo === 'null' ? null : entity.periodo
+  };
   const result = await dispatch({
     type: ACTION_TYPES.UPDATE_PADITEM,
     payload: axios.put(apiUrl, cleanEntity(entity))
@@ -318,6 +402,18 @@ export const getPadItemState = (location): IPadItemBaseState => {
   const categoriaId = url.searchParams.get('categoriaId') || '';
   const score = url.searchParams.get('score') || '';
 
+  const atendimento = url.searchParams.get('atendimento') || '';
+  const atendimentoCepRecusado = url.searchParams.get('atendimentoCepRecusado') || '';
+  const atendimentoSorteioFeito = url.searchParams.get('atendimentoSorteioFeito') || '';
+  const padItemAtividade = url.searchParams.get('padItemAtividade') || '';
+  const padItemCepRecusado = url.searchParams.get('padItemCepRecusado') || '';
+  const padItemResultado = url.searchParams.get('padItemResultado') || '';
+  const padItemSorteioFeito = url.searchParams.get('padItemSorteioFeito') || '';
+  const pad = url.searchParams.get('pad') || '';
+  const especialidade = url.searchParams.get('especialidade') || '';
+  const periodicidade = url.searchParams.get('periodicidade') || '';
+  const periodo = url.searchParams.get('periodo') || '';
+
   return {
     baseFilters,
     idPedido,
@@ -332,6 +428,17 @@ export const getPadItemState = (location): IPadItemBaseState => {
     numGhc,
     cidXPtaNovo,
     categoriaId,
-    score
+    score,
+    atendimento,
+    atendimentoCepRecusado,
+    atendimentoSorteioFeito,
+    padItemAtividade,
+    padItemCepRecusado,
+    padItemResultado,
+    padItemSorteioFeito,
+    pad,
+    especialidade,
+    periodicidade,
+    periodo
   };
 };

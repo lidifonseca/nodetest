@@ -11,6 +11,8 @@ import { IRootState } from 'app/shared/reducers';
 
 import { IUnidadeEasy } from 'app/shared/model/unidade-easy.model';
 import { getEntities as getUnidadeEasies } from 'app/entities/unidade-easy/unidade-easy.reducer';
+import { IPaciente } from 'app/shared/model/paciente.model';
+import { getEntities as getPacientes } from 'app/entities/paciente/paciente.reducer';
 import { IPadUpdateState, getEntity, getPadState, IPadBaseState, updateEntity, createEntity, reset } from './pad.reducer';
 import { IPad } from 'app/shared/model/pad.model';
 import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
@@ -24,8 +26,10 @@ export class PadUpdate extends React.Component<IPadUpdateProps, IPadUpdateState>
 
     this.state = {
       unidadeEasySelectValue: null,
+      pacienteSelectValue: null,
       fieldsBase: getPadState(this.props.location),
       unidadeId: '0',
+      pacienteId: '0',
       isNew: !this.props.match.params || !this.props.match.params.id
     };
   }
@@ -46,6 +50,17 @@ export class PadUpdate extends React.Component<IPadUpdateProps, IPadUpdateState>
         )
       });
     }
+
+    if (
+      nextProps.pacientes.length > 0 &&
+      this.state.pacienteSelectValue === null &&
+      nextProps.padEntity.paciente &&
+      nextProps.padEntity.paciente.id
+    ) {
+      this.setState({
+        pacienteSelectValue: nextProps.pacientes.map(p => (nextProps.padEntity.paciente.id === p.id ? { value: p.id, label: p.id } : null))
+      });
+    }
   }
 
   componentDidMount() {
@@ -56,6 +71,7 @@ export class PadUpdate extends React.Component<IPadUpdateProps, IPadUpdateState>
     }
 
     this.props.getUnidadeEasies();
+    this.props.getPacientes();
   }
 
   getFiltersURL = (offset = null) => {
@@ -72,6 +88,7 @@ export class PadUpdate extends React.Component<IPadUpdateProps, IPadUpdateState>
       const entity = {
         ...padEntity,
         unidadeEasy: this.state.unidadeEasySelectValue ? this.state.unidadeEasySelectValue['value'] : null,
+        paciente: this.state.pacienteSelectValue ? this.state.pacienteSelectValue['value'] : null,
         ...values
       };
 
@@ -88,7 +105,7 @@ export class PadUpdate extends React.Component<IPadUpdateProps, IPadUpdateState>
   };
 
   render() {
-    const { padEntity, unidadeEasies, loading, updating } = this.props;
+    const { padEntity, unidadeEasies, pacientes, loading, updating } = this.props;
     const { isNew } = this.state;
 
     const baseFilters = this.state.fieldsBase && this.state.fieldsBase['baseFilters'] ? this.state.fieldsBase['baseFilters'] : null;
@@ -100,7 +117,8 @@ export class PadUpdate extends React.Component<IPadUpdateProps, IPadUpdateState>
               ? {}
               : {
                   ...padEntity,
-                  unidade: padEntity.unidade ? padEntity.unidade.id : null
+                  unidade: padEntity.unidade ? padEntity.unidade.id : null,
+                  paciente: padEntity.paciente ? padEntity.paciente.id : null
                 }
           }
           onSubmit={this.saveEntity}
@@ -178,13 +196,17 @@ export class PadUpdate extends React.Component<IPadUpdateProps, IPadUpdateState>
 
                         <StatusPadComponentUpdate baseFilters />
 
-                        <NovoModeloComponentUpdate baseFilters />
-
                         <ImagePathComponentUpdate baseFilters />
 
                         <ScoreComponentUpdate baseFilters />
 
+                        <PadCidComponentUpdate baseFilter padCids />
+
+                        <PadItemComponentUpdate baseFilter padItems />
+
                         <UnidadeComponentUpdate baseFilter unidadeEasies />
+
+                        <PacienteComponentUpdate baseFilter pacientes />
                       </Row>
                     </div>
                   )}
@@ -200,6 +222,7 @@ export class PadUpdate extends React.Component<IPadUpdateProps, IPadUpdateState>
 
 const mapStateToProps = (storeState: IRootState) => ({
   unidadeEasies: storeState.unidadeEasy.entities,
+  pacientes: storeState.paciente.entities,
   padEntity: storeState.pad.entity,
   loading: storeState.pad.loading,
   updating: storeState.pad.updating,
@@ -208,6 +231,7 @@ const mapStateToProps = (storeState: IRootState) => ({
 
 const mapDispatchToProps = {
   getUnidadeEasies,
+  getPacientes,
   getEntity,
   updateEntity,
   createEntity,
@@ -385,25 +409,6 @@ const StatusPadComponentUpdate = ({ baseFilters }) => {
   );
 };
 
-const NovoModeloComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'novoModelo' ? (
-    <Col md="novoModelo">
-      <AvGroup>
-        <Row>
-          <Col md="12">
-            <Label className="mt-2" id="novoModeloLabel" check>
-              <AvInput id="pad-novoModelo" type="checkbox" className="form-control" name="novoModelo" />
-              <Translate contentKey="generadorApp.pad.novoModelo">Novo Modelo</Translate>
-            </Label>
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="novoModelo" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
 const ImagePathComponentUpdate = ({ baseFilters }) => {
   return baseFilters !== 'imagePath' ? (
     <Col md="imagePath">
@@ -446,6 +451,22 @@ const ScoreComponentUpdate = ({ baseFilters }) => {
   );
 };
 
+const PadCidComponentUpdate = ({ baseFilters, padCids }) => {
+  return baseFilters !== 'padCid' ? (
+    <Col md="12"></Col>
+  ) : (
+    <AvInput type="hidden" name="padCid" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const PadItemComponentUpdate = ({ baseFilters, padItems }) => {
+  return baseFilters !== 'padItem' ? (
+    <Col md="12"></Col>
+  ) : (
+    <AvInput type="hidden" name="padItem" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
 const UnidadeComponentUpdate = ({ baseFilters, unidadeEasies }) => {
   return baseFilters !== 'unidade' ? (
     <Col md="12">
@@ -471,6 +492,34 @@ const UnidadeComponentUpdate = ({ baseFilters, unidadeEasies }) => {
     </Col>
   ) : (
     <AvInput type="hidden" name="unidade" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const PacienteComponentUpdate = ({ baseFilters, pacientes }) => {
+  return baseFilters !== 'paciente' ? (
+    <Col md="12">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" for="pad-paciente">
+              <Translate contentKey="generadorApp.pad.paciente">Paciente</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <Select
+              id="pad-paciente"
+              className={'css-select-control'}
+              value={this.state.pacienteSelectValue}
+              options={pacientes ? pacientes.map(option => ({ value: option.id, label: option.id })) : null}
+              onChange={options => this.setState({ pacienteSelectValue: options })}
+              name={'paciente'}
+            />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="paciente" value={this.state.fieldsBase[baseFilters]} />
   );
 };
 

@@ -4,6 +4,9 @@ import { BaseEntity } from './base/base.entity';
 
 import { validate, Contains, IsInt, Length, IsEmail, IsFQDN, IsDate, Min, Max } from 'class-validator';
 
+import Atendimento from './atendimento.entity';
+import EspecialidadeOperadora from './especialidade-operadora.entity';
+import PacienteOperadora from './paciente-operadora.entity';
 import UnidadeEasy from './unidade-easy.entity';
 import TipoOperadora from './tipo-operadora.entity';
 
@@ -56,6 +59,24 @@ export default class Operadora extends BaseEntity {
 
   @Column({ name: 'EMAIL_FINANCEIRO', length: 50 })
   emailFinanceiro: string;
+
+  @OneToMany(
+    type => Atendimento,
+    other => other.operadora
+  )
+  atendimentos: Atendimento[];
+
+  @OneToMany(
+    type => EspecialidadeOperadora,
+    other => other.operadora
+  )
+  especialidadeOperadoras: EspecialidadeOperadora[];
+
+  @OneToMany(
+    type => PacienteOperadora,
+    other => other.operadora
+  )
+  pacienteOperadoras: PacienteOperadora[];
 
   @ManyToOne(type => UnidadeEasy)
   @JoinColumn({ name: 'ID_UNIDADE', referencedColumnName: 'id' })

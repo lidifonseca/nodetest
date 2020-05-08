@@ -9,6 +9,8 @@ import { Translate, translate, ICrudGetAction, ICrudGetAllAction, ICrudPutAction
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
+import { ICid } from 'app/shared/model/cid.model';
+import { getEntities as getCids } from 'app/entities/cid/cid.reducer';
 import {
   ICidXPtaNovoUpdateState,
   getEntity,
@@ -29,13 +31,26 @@ export class CidXPtaNovoUpdate extends React.Component<ICidXPtaNovoUpdateProps, 
     super(props);
 
     this.state = {
+      cidSelectValue: null,
       fieldsBase: getCidXPtaNovoState(this.props.location),
+      cidId: '0',
       isNew: !this.props.match.params || !this.props.match.params.id
     };
   }
   componentDidUpdate(nextProps, nextState) {
     if (nextProps.updateSuccess !== this.props.updateSuccess && nextProps.updateSuccess) {
       this.handleClose();
+    }
+
+    if (
+      nextProps.cids.length > 0 &&
+      this.state.cidSelectValue === null &&
+      nextProps.cidXPtaNovoEntity.cid &&
+      nextProps.cidXPtaNovoEntity.cid.id
+    ) {
+      this.setState({
+        cidSelectValue: nextProps.cids.map(p => (nextProps.cidXPtaNovoEntity.cid.id === p.id ? { value: p.id, label: p.id } : null))
+      });
     }
   }
 
@@ -45,6 +60,8 @@ export class CidXPtaNovoUpdate extends React.Component<ICidXPtaNovoUpdateProps, 
     } else {
       this.props.getEntity(this.props.match.params.id);
     }
+
+    this.props.getCids();
   }
 
   getFiltersURL = (offset = null) => {
@@ -60,7 +77,7 @@ export class CidXPtaNovoUpdate extends React.Component<ICidXPtaNovoUpdateProps, 
       const { cidXPtaNovoEntity } = this.props;
       const entity = {
         ...cidXPtaNovoEntity,
-
+        cid: this.state.cidSelectValue ? this.state.cidSelectValue['value'] : null,
         ...values
       };
 
@@ -77,7 +94,7 @@ export class CidXPtaNovoUpdate extends React.Component<ICidXPtaNovoUpdateProps, 
   };
 
   render() {
-    const { cidXPtaNovoEntity, loading, updating } = this.props;
+    const { cidXPtaNovoEntity, cids, loading, updating } = this.props;
     const { isNew } = this.state;
 
     const baseFilters = this.state.fieldsBase && this.state.fieldsBase['baseFilters'] ? this.state.fieldsBase['baseFilters'] : null;
@@ -88,7 +105,8 @@ export class CidXPtaNovoUpdate extends React.Component<ICidXPtaNovoUpdateProps, 
             isNew
               ? {}
               : {
-                  ...cidXPtaNovoEntity
+                  ...cidXPtaNovoEntity,
+                  cid: cidXPtaNovoEntity.cid ? cidXPtaNovoEntity.cid.id : null
                 }
           }
           onSubmit={this.saveEntity}
@@ -157,6 +175,10 @@ export class CidXPtaNovoUpdate extends React.Component<ICidXPtaNovoUpdateProps, 
                         <ScoreComponentUpdate baseFilters />
 
                         <TituloComponentUpdate baseFilters />
+
+                        <CidXPtaNovoPadItemIndiComponentUpdate baseFilter cidXPtaNovoPadItemIndis />
+
+                        <CidComponentUpdate baseFilter cids />
                       </Row>
                     </div>
                   )}
@@ -171,6 +193,7 @@ export class CidXPtaNovoUpdate extends React.Component<ICidXPtaNovoUpdateProps, 
 }
 
 const mapStateToProps = (storeState: IRootState) => ({
+  cids: storeState.cid.entities,
   cidXPtaNovoEntity: storeState.cidXPtaNovo.entity,
   loading: storeState.cidXPtaNovo.loading,
   updating: storeState.cidXPtaNovo.updating,
@@ -178,6 +201,7 @@ const mapStateToProps = (storeState: IRootState) => ({
 });
 
 const mapDispatchToProps = {
+  getCids,
   getEntity,
   updateEntity,
   createEntity,
@@ -268,6 +292,42 @@ const TituloComponentUpdate = ({ baseFilters }) => {
     </Col>
   ) : (
     <AvInput type="hidden" name="titulo" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const CidXPtaNovoPadItemIndiComponentUpdate = ({ baseFilters, cidXPtaNovoPadItemIndis }) => {
+  return baseFilters !== 'cidXPtaNovoPadItemIndi' ? (
+    <Col md="12"></Col>
+  ) : (
+    <AvInput type="hidden" name="cidXPtaNovoPadItemIndi" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const CidComponentUpdate = ({ baseFilters, cids }) => {
+  return baseFilters !== 'cid' ? (
+    <Col md="12">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" for="cid-x-pta-novo-cid">
+              <Translate contentKey="generadorApp.cidXPtaNovo.cid">Cid</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <Select
+              id="cid-x-pta-novo-cid"
+              className={'css-select-control'}
+              value={this.state.cidSelectValue}
+              options={cids ? cids.map(option => ({ value: option.id, label: option.id })) : null}
+              onChange={options => this.setState({ cidSelectValue: options })}
+              name={'cid'}
+            />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="cid" value={this.state.fieldsBase[baseFilters]} />
   );
 };
 

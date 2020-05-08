@@ -34,6 +34,9 @@ import { IFranquiaUsuario } from 'app/shared/model/franquia-usuario.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
+import { IFranquia } from 'app/shared/model/franquia.model';
+import { getEntities as getFranquias } from 'app/entities/franquia/franquia.reducer';
+
 export interface IFranquiaUsuarioProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
 export interface IFranquiaUsuarioState extends IFranquiaUsuarioBaseState, IPaginationBaseState {
@@ -54,6 +57,8 @@ export class FranquiaUsuario extends React.Component<IFranquiaUsuarioProps, IFra
 
   componentDidMount() {
     this.getEntities();
+
+    this.props.getFranquias();
   }
 
   cancelCourse = () => {
@@ -95,7 +100,9 @@ export class FranquiaUsuario extends React.Component<IFranquiaUsuarioProps, IFra
         envioRecusa: '',
         envioIntercorrencia: '',
         envioCancelamento: '',
-        ativo: ''
+        ativo: '',
+        logUserFranquia: '',
+        franquia: ''
       },
       () => this.sortEntities()
     );
@@ -251,6 +258,12 @@ export class FranquiaUsuario extends React.Component<IFranquiaUsuarioProps, IFra
       'ativo=' +
       this.state.ativo +
       '&' +
+      'logUserFranquia=' +
+      this.state.logUserFranquia +
+      '&' +
+      'franquia=' +
+      this.state.franquia +
+      '&' +
       ''
     );
   };
@@ -296,6 +309,8 @@ export class FranquiaUsuario extends React.Component<IFranquiaUsuarioProps, IFra
       envioIntercorrencia,
       envioCancelamento,
       ativo,
+      logUserFranquia,
+      franquia,
       activePage,
       itemsPerPage,
       sort,
@@ -339,6 +354,8 @@ export class FranquiaUsuario extends React.Component<IFranquiaUsuarioProps, IFra
       envioIntercorrencia,
       envioCancelamento,
       ativo,
+      logUserFranquia,
+      franquia,
       activePage - 1,
       itemsPerPage,
       `${sort},${order}`
@@ -391,11 +408,13 @@ export class FranquiaUsuario extends React.Component<IFranquiaUsuarioProps, IFra
 }
 
 const mapStateToProps = ({ franquiaUsuario, ...storeState }: IRootState) => ({
+  franquias: storeState.franquia.entities,
   franquiaUsuarioList: franquiaUsuario.entities,
   totalItems: franquiaUsuario.totalItems
 });
 
 const mapDispatchToProps = {
+  getFranquias,
   getEntitiesExport
 };
 

@@ -28,6 +28,9 @@ import { ICidade } from 'app/shared/model/cidade.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
+import { IUf } from 'app/shared/model/uf.model';
+import { getEntities as getUfs } from 'app/entities/uf/uf.reducer';
+
 export interface ICidadeProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
 export interface ICidadeState extends ICidadeBaseState, IPaginationBaseState {}
@@ -45,12 +48,17 @@ export class Cidade extends React.Component<ICidadeProps, ICidadeState> {
 
   componentDidMount() {
     this.getEntities();
+
+    this.props.getUfs();
   }
 
   cancelCourse = () => {
     this.setState(
       {
-        descrCidade: ''
+        descrCidade: '',
+        atendimento: '',
+        empresa: '',
+        uf: ''
       },
       () => this.sortEntities()
     );
@@ -100,6 +108,15 @@ export class Cidade extends React.Component<ICidadeProps, ICidadeState> {
       'descrCidade=' +
       this.state.descrCidade +
       '&' +
+      'atendimento=' +
+      this.state.atendimento +
+      '&' +
+      'empresa=' +
+      this.state.empresa +
+      '&' +
+      'uf=' +
+      this.state.uf +
+      '&' +
       ''
     );
   };
@@ -107,12 +124,12 @@ export class Cidade extends React.Component<ICidadeProps, ICidadeState> {
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { descrCidade, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntities(descrCidade, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const { descrCidade, atendimento, empresa, uf, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntities(descrCidade, atendimento, empresa, uf, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   render() {
-    const { cidadeList, match, totalItems } = this.props;
+    const { ufs, cidadeList, match, totalItems } = this.props;
     return (
       <div>
         <h2 id="page-heading">
@@ -159,6 +176,43 @@ export class Cidade extends React.Component<ICidadeProps, ICidadeState> {
                           </Row>
                         </Col>
                       ) : null}
+
+                      {this.state.baseFilters !== 'atendimento' ? (
+                        <Col md="3">
+                          <Row className="mr-1 mt-1"></Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'empresa' ? (
+                        <Col md="3">
+                          <Row className="mr-1 mt-1"></Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'uf' ? (
+                        <Col md="3">
+                          <Row className="mr-1 mt-1">
+                            <div style={{ width: '100%' }}>
+                              <Label for="cidade-uf">
+                                <Translate contentKey="generadorApp.cidade.uf">Uf</Translate>
+                              </Label>
+                              <Select
+                                id="cidade-uf"
+                                isMulti
+                                className={'css-select-control'}
+                                value={
+                                  ufs
+                                    ? ufs.map(p => (this.state.uf.split(',').indexOf(p.id) !== -1 ? { value: p.id, label: p.id } : null))
+                                    : null
+                                }
+                                options={ufs ? ufs.map(option => ({ value: option.id, label: option.id })) : null}
+                                onChange={options => this.setState({ uf: options.map(option => option['value']).join(',') })}
+                                name={'uf'}
+                              />
+                            </div>
+                          </Row>
+                        </Col>
+                      ) : null}
                     </div>
 
                     <div className="row mb-2 mr-4 justify-content-end">
@@ -193,6 +247,13 @@ export class Cidade extends React.Component<ICidadeProps, ICidadeState> {
                         </th>
                       ) : null}
 
+                      {this.state.baseFilters !== 'uf' ? (
+                        <th>
+                          <Translate contentKey="generadorApp.cidade.uf">Uf</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+
                       <th />
                     </tr>
                   </thead>
@@ -207,6 +268,10 @@ export class Cidade extends React.Component<ICidadeProps, ICidadeState> {
                         </td>
 
                         {this.state.baseFilters !== 'descrCidade' ? <td>{cidade.descrCidade}</td> : null}
+
+                        {this.state.baseFilters !== 'uf' ? (
+                          <td>{cidade.uf ? <Link to={`uf/${cidade.uf.id}`}>{cidade.uf.id}</Link> : ''}</td>
+                        ) : null}
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">
@@ -264,11 +329,13 @@ export class Cidade extends React.Component<ICidadeProps, ICidadeState> {
 }
 
 const mapStateToProps = ({ cidade, ...storeState }: IRootState) => ({
+  ufs: storeState.uf.entities,
   cidadeList: cidade.entities,
   totalItems: cidade.totalItems
 });
 
 const mapDispatchToProps = {
+  getUfs,
   getEntities
 };
 

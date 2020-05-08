@@ -25,7 +25,13 @@
       "pergunta": "Pergunta",
       "tipoResposta": "Tipo Resposta",
       "obrigatorio": "Obrigatorio",
-      "tipoCampo": "Tipo Campo"
+      "tipoCampo": "Tipo Campo",
+      "acoesRespostas_empty": "Without Acoes Respostas",
+      "acoesRespostas": "Acoes Respostas",
+      "respostas_empty": "Without Respostas",
+      "respostas": "Respostas",
+      "segmentosPerguntas_empty": "Without Segmentos Perguntas",
+      "segmentosPerguntas": "Segmentos Perguntas"
     }
   }
 }

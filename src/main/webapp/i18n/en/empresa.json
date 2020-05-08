@@ -41,6 +41,8 @@
       "cidade": "Cidade",
       "uf": "Uf",
       "tipo": "Tipo",
+      "cidade_empty": "Without Cidade",
+      "cidade": "Cidade",
       "help": {
         "telefone1": "@dbName TELEFONE1@@",
         "telefone2": "@dbName TELEFONE2@@",

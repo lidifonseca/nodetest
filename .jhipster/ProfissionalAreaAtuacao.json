@@ -35,7 +35,7 @@
         }
     ],
     "relationships": [],
-    "changelogDate": "20200508165700",
+    "changelogDate": "20200508175300",
     "entityTableName": "profissional_area_atuacao",
     "dto": "mapstruct",
     "pagination": "pagination",

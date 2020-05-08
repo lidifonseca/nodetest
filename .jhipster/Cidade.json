@@ -10,8 +10,28 @@
             "fieldValidateRulesMaxlength": "255"
         }
     ],
-    "relationships": [],
-    "changelogDate": "20200508154100",
+    "relationships": [
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "atendimento",
+            "otherEntityRelationshipName": "cidade",
+            "relationshipName": "atendimento"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "empresa",
+            "otherEntityRelationshipName": "cidade",
+            "relationshipName": "empresa"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "uf",
+            "otherEntityRelationshipName": "cidade",
+            "relationshipName": "uf",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20200508163700",
     "entityTableName": "cidade",
     "dto": "mapstruct",
     "pagination": "pagination",

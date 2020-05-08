@@ -38,12 +38,18 @@ export interface IAcoesRespostasBaseState {
   observacoes: any;
   tipoCampo1: any;
   tipoCampo2: any;
+  respostas: any;
+  perguntasQuestionario: any;
 }
 
 export interface IAcoesRespostasUpdateState {
   fieldsBase: IAcoesRespostasBaseState;
 
+  respostasSelectValue: any;
+  perguntasQuestionarioSelectValue: any;
   isNew: boolean;
+  respostasId: string;
+  perguntasQuestionarioId: string;
 }
 
 // Reducer
@@ -129,6 +135,8 @@ export type ICrudGetAllActionAcoesRespostas<T> = (
   observacoes?: any,
   tipoCampo1?: any,
   tipoCampo2?: any,
+  respostas?: any,
+  perguntasQuestionario?: any,
   page?: number,
   size?: number,
   sort?: string
@@ -140,6 +148,8 @@ export const getEntities: ICrudGetAllActionAcoesRespostas<IAcoesRespostas> = (
   observacoes,
   tipoCampo1,
   tipoCampo2,
+  respostas,
+  perguntasQuestionario,
   page,
   size,
   sort
@@ -149,12 +159,14 @@ export const getEntities: ICrudGetAllActionAcoesRespostas<IAcoesRespostas> = (
   const observacoesRequest = observacoes ? `observacoes.contains=${observacoes}&` : '';
   const tipoCampo1Request = tipoCampo1 ? `tipoCampo1.contains=${tipoCampo1}&` : '';
   const tipoCampo2Request = tipoCampo2 ? `tipoCampo2.contains=${tipoCampo2}&` : '';
+  const respostasRequest = respostas ? `respostas.equals=${respostas}&` : '';
+  const perguntasQuestionarioRequest = perguntasQuestionario ? `perguntasQuestionario.equals=${perguntasQuestionario}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_ACOESRESPOSTAS_LIST,
     payload: axios.get<IAcoesRespostas>(
-      `${requestUrl}${abrirCampoPersonalizadoRequest}${condicaoSexoRequest}${observacoesRequest}${tipoCampo1Request}${tipoCampo2Request}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${abrirCampoPersonalizadoRequest}${condicaoSexoRequest}${observacoesRequest}${tipoCampo1Request}${tipoCampo2Request}${respostasRequest}${perguntasQuestionarioRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };
@@ -172,6 +184,8 @@ export const getEntitiesExport: ICrudGetAllActionAcoesRespostas<IAcoesRespostas>
   observacoes,
   tipoCampo1,
   tipoCampo2,
+  respostas,
+  perguntasQuestionario,
   page,
   size,
   sort
@@ -181,19 +195,23 @@ export const getEntitiesExport: ICrudGetAllActionAcoesRespostas<IAcoesRespostas>
   const observacoesRequest = observacoes ? `observacoes.contains=${observacoes}&` : '';
   const tipoCampo1Request = tipoCampo1 ? `tipoCampo1.contains=${tipoCampo1}&` : '';
   const tipoCampo2Request = tipoCampo2 ? `tipoCampo2.contains=${tipoCampo2}&` : '';
+  const respostasRequest = respostas ? `respostas.equals=${respostas}&` : '';
+  const perguntasQuestionarioRequest = perguntasQuestionario ? `perguntasQuestionario.equals=${perguntasQuestionario}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_ACOESRESPOSTAS_LIST,
     payload: axios.get<IAcoesRespostas>(
-      `${requestUrl}${abrirCampoPersonalizadoRequest}${condicaoSexoRequest}${observacoesRequest}${tipoCampo1Request}${tipoCampo2Request}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${abrirCampoPersonalizadoRequest}${condicaoSexoRequest}${observacoesRequest}${tipoCampo1Request}${tipoCampo2Request}${respostasRequest}${perguntasQuestionarioRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };
 
 export const createEntity: ICrudPutAction<IAcoesRespostas> = entity => async dispatch => {
   entity = {
-    ...entity
+    ...entity,
+    respostas: entity.respostas === 'null' ? null : entity.respostas,
+    perguntasQuestionario: entity.perguntasQuestionario === 'null' ? null : entity.perguntasQuestionario
   };
   const result = await dispatch({
     type: ACTION_TYPES.CREATE_ACOESRESPOSTAS,
@@ -204,7 +222,11 @@ export const createEntity: ICrudPutAction<IAcoesRespostas> = entity => async dis
 };
 
 export const updateEntity: ICrudPutAction<IAcoesRespostas> = entity => async dispatch => {
-  entity = { ...entity };
+  entity = {
+    ...entity,
+    respostas: entity.respostas === 'null' ? null : entity.respostas,
+    perguntasQuestionario: entity.perguntasQuestionario === 'null' ? null : entity.perguntasQuestionario
+  };
   const result = await dispatch({
     type: ACTION_TYPES.UPDATE_ACOESRESPOSTAS,
     payload: axios.put(apiUrl, cleanEntity(entity))
@@ -236,12 +258,17 @@ export const getAcoesRespostasState = (location): IAcoesRespostasBaseState => {
   const tipoCampo1 = url.searchParams.get('tipoCampo1') || '';
   const tipoCampo2 = url.searchParams.get('tipoCampo2') || '';
 
+  const respostas = url.searchParams.get('respostas') || '';
+  const perguntasQuestionario = url.searchParams.get('perguntasQuestionario') || '';
+
   return {
     baseFilters,
     abrirCampoPersonalizado,
     condicaoSexo,
     observacoes,
     tipoCampo1,
-    tipoCampo2
+    tipoCampo2,
+    respostas,
+    perguntasQuestionario
   };
 };

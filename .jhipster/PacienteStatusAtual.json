@@ -31,7 +31,7 @@
             "otherEntityField": "statusAtual"
         }
     ],
-    "changelogDate": "20200508163700",
+    "changelogDate": "20200508173300",
     "entityTableName": "paciente_status_atual",
     "dto": "mapstruct",
     "pagination": "pagination",

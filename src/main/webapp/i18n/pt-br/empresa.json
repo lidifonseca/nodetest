@@ -41,6 +41,8 @@
       "cidade": "Cidade",
       "uf": "Uf",
       "tipo": "Tipo",
+      "cidade_empty": "Sem Cidade",
+      "cidade": "Cidade",
       "help": {}
     }
   }

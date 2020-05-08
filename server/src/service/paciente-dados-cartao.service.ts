@@ -5,6 +5,7 @@ import PacienteDadosCartao from '../domain/paciente-dados-cartao.entity';
 import { PacienteDadosCartaoRepository } from '../repository/paciente-dados-cartao.repository';
 
 const relationshipNames = [];
+relationshipNames.push('paciente');
 
 @Injectable()
 export class PacienteDadosCartaoService {

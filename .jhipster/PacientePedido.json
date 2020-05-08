@@ -37,9 +37,30 @@
             "otherEntityRelationshipName": "pacientePedido",
             "relationshipName": "unidade",
             "otherEntityField": "razaoSocial"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "paciente",
+            "otherEntityRelationshipName": "pacientePedido",
+            "relationshipName": "paciente",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "pacienteDadosCartao",
+            "otherEntityRelationshipName": "pacientePedido",
+            "relationshipName": "cartao",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "especialidade",
+            "otherEntityRelationshipName": "pacientePedido",
+            "relationshipName": "especialidade",
+            "otherEntityField": "id"
         }
     ],
-    "changelogDate": "20200508163300",
+    "changelogDate": "20200508172900",
     "entityTableName": "paciente_pedido",
     "dto": "mapstruct",
     "pagination": "pagination",

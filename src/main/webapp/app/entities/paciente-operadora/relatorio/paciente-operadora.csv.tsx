@@ -34,6 +34,11 @@ import { IPacienteOperadora } from 'app/shared/model/paciente-operadora.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
+import { IPaciente } from 'app/shared/model/paciente.model';
+import { getEntities as getPacientes } from 'app/entities/paciente/paciente.reducer';
+import { IOperadora } from 'app/shared/model/operadora.model';
+import { getEntities as getOperadoras } from 'app/entities/operadora/operadora.reducer';
+
 export interface IPacienteOperadoraProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
 export interface IPacienteOperadoraState extends IPacienteOperadoraBaseState, IPaginationBaseState {
@@ -54,13 +59,18 @@ export class PacienteOperadora extends React.Component<IPacienteOperadoraProps, 
 
   componentDidMount() {
     this.getEntities();
+
+    this.props.getPacientes();
+    this.props.getOperadoras();
   }
 
   cancelCourse = () => {
     this.setState(
       {
         registro: '',
-        ativo: ''
+        ativo: '',
+        paciente: '',
+        operadora: ''
       },
       () => this.sortEntities()
     );
@@ -111,6 +121,12 @@ export class PacienteOperadora extends React.Component<IPacienteOperadoraProps, 
       'ativo=' +
       this.state.ativo +
       '&' +
+      'paciente=' +
+      this.state.paciente +
+      '&' +
+      'operadora=' +
+      this.state.operadora +
+      '&' +
       ''
     );
   };
@@ -118,8 +134,8 @@ export class PacienteOperadora extends React.Component<IPacienteOperadoraProps, 
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { registro, ativo, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntitiesExport(registro, ativo, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const { registro, ativo, paciente, operadora, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntitiesExport(registro, ativo, paciente, operadora, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   confirmExport() {}
@@ -168,11 +184,15 @@ export class PacienteOperadora extends React.Component<IPacienteOperadoraProps, 
 }
 
 const mapStateToProps = ({ pacienteOperadora, ...storeState }: IRootState) => ({
+  pacientes: storeState.paciente.entities,
+  operadoras: storeState.operadora.entities,
   pacienteOperadoraList: pacienteOperadora.entities,
   totalItems: pacienteOperadora.totalItems
 });
 
 const mapDispatchToProps = {
+  getPacientes,
+  getOperadoras,
   getEntitiesExport
 };
 

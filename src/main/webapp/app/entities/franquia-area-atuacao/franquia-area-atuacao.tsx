@@ -28,6 +28,9 @@ import { IFranquiaAreaAtuacao } from 'app/shared/model/franquia-area-atuacao.mod
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
+import { IFranquia } from 'app/shared/model/franquia.model';
+import { getEntities as getFranquias } from 'app/entities/franquia/franquia.reducer';
+
 export interface IFranquiaAreaAtuacaoProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
 export interface IFranquiaAreaAtuacaoState extends IFranquiaAreaAtuacaoBaseState, IPaginationBaseState {}
@@ -45,6 +48,8 @@ export class FranquiaAreaAtuacao extends React.Component<IFranquiaAreaAtuacaoPro
 
   componentDidMount() {
     this.getEntities();
+
+    this.props.getFranquias();
   }
 
   cancelCourse = () => {
@@ -52,7 +57,8 @@ export class FranquiaAreaAtuacao extends React.Component<IFranquiaAreaAtuacaoPro
       {
         cepIni: '',
         cepFim: '',
-        ativo: ''
+        ativo: '',
+        franquia: ''
       },
       () => this.sortEntities()
     );
@@ -108,6 +114,9 @@ export class FranquiaAreaAtuacao extends React.Component<IFranquiaAreaAtuacaoPro
       'ativo=' +
       this.state.ativo +
       '&' +
+      'franquia=' +
+      this.state.franquia +
+      '&' +
       ''
     );
   };
@@ -115,12 +124,12 @@ export class FranquiaAreaAtuacao extends React.Component<IFranquiaAreaAtuacaoPro
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { cepIni, cepFim, ativo, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntities(cepIni, cepFim, ativo, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const { cepIni, cepFim, ativo, franquia, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntities(cepIni, cepFim, ativo, franquia, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   render() {
-    const { franquiaAreaAtuacaoList, match, totalItems } = this.props;
+    const { franquias, franquiaAreaAtuacaoList, match, totalItems } = this.props;
     return (
       <div>
         <h2 id="page-heading">
@@ -190,6 +199,33 @@ export class FranquiaAreaAtuacao extends React.Component<IFranquiaAreaAtuacaoPro
                           </Row>
                         </Col>
                       ) : null}
+
+                      {this.state.baseFilters !== 'franquia' ? (
+                        <Col md="3">
+                          <Row className="mr-1 mt-1">
+                            <div style={{ width: '100%' }}>
+                              <Label for="franquia-area-atuacao-franquia">
+                                <Translate contentKey="generadorApp.franquiaAreaAtuacao.franquia">Franquia</Translate>
+                              </Label>
+                              <Select
+                                id="franquia-area-atuacao-franquia"
+                                isMulti
+                                className={'css-select-control'}
+                                value={
+                                  franquias
+                                    ? franquias.map(p =>
+                                        this.state.franquia.split(',').indexOf(p.id) !== -1 ? { value: p.id, label: p.id } : null
+                                      )
+                                    : null
+                                }
+                                options={franquias ? franquias.map(option => ({ value: option.id, label: option.id })) : null}
+                                onChange={options => this.setState({ franquia: options.map(option => option['value']).join(',') })}
+                                name={'franquia'}
+                              />
+                            </div>
+                          </Row>
+                        </Col>
+                      ) : null}
                     </div>
 
                     <div className="row mb-2 mr-4 justify-content-end">
@@ -236,6 +272,13 @@ export class FranquiaAreaAtuacao extends React.Component<IFranquiaAreaAtuacaoPro
                         </th>
                       ) : null}
 
+                      {this.state.baseFilters !== 'franquia' ? (
+                        <th>
+                          <Translate contentKey="generadorApp.franquiaAreaAtuacao.franquia">Franquia</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+
                       <th />
                     </tr>
                   </thead>
@@ -254,6 +297,16 @@ export class FranquiaAreaAtuacao extends React.Component<IFranquiaAreaAtuacaoPro
                         {this.state.baseFilters !== 'cepFim' ? <td>{franquiaAreaAtuacao.cepFim}</td> : null}
 
                         {this.state.baseFilters !== 'ativo' ? <td>{franquiaAreaAtuacao.ativo}</td> : null}
+
+                        {this.state.baseFilters !== 'franquia' ? (
+                          <td>
+                            {franquiaAreaAtuacao.franquia ? (
+                              <Link to={`franquia/${franquiaAreaAtuacao.franquia.id}`}>{franquiaAreaAtuacao.franquia.id}</Link>
+                            ) : (
+                              ''
+                            )}
+                          </td>
+                        ) : null}
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">
@@ -321,11 +374,13 @@ export class FranquiaAreaAtuacao extends React.Component<IFranquiaAreaAtuacaoPro
 }
 
 const mapStateToProps = ({ franquiaAreaAtuacao, ...storeState }: IRootState) => ({
+  franquias: storeState.franquia.entities,
   franquiaAreaAtuacaoList: franquiaAreaAtuacao.entities,
   totalItems: franquiaAreaAtuacao.totalItems
 });
 
 const mapDispatchToProps = {
+  getFranquias,
   getEntities
 };
 

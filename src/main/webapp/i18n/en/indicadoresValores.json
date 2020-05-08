@@ -27,7 +27,9 @@
       "vlMaximo": "Vl Maximo",
       "unidadeMedida": "Unidade Medida",
       "idadeMinima": "Idade Minima",
-      "idadeMaxima": "Idade Maxima"
+      "idadeMaxima": "Idade Maxima",
+      "indicadores_empty": "Without Indicadores",
+      "indicadores": "Indicadores"
     }
   }
 }

@@ -7,8 +7,23 @@
             "fieldTypeBlobContent": "text"
         }
     ],
-    "relationships": [],
-    "changelogDate": "20200508160500",
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "acao",
+            "otherEntityRelationshipName": "logUser",
+            "relationshipName": "acao",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "tela",
+            "otherEntityRelationshipName": "logUser",
+            "relationshipName": "tela",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20200508170100",
     "entityTableName": "log_user",
     "dto": "mapstruct",
     "pagination": "pagination",

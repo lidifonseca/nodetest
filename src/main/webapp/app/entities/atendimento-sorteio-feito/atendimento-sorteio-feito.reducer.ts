@@ -34,12 +34,15 @@ export type AtendimentoSorteioFeitoState = Readonly<typeof initialState>;
 export interface IAtendimentoSorteioFeitoBaseState {
   baseFilters: any;
   sorteioFeito: any;
+  padItem: any;
 }
 
 export interface IAtendimentoSorteioFeitoUpdateState {
   fieldsBase: IAtendimentoSorteioFeitoBaseState;
 
+  padItemSelectValue: any;
   isNew: boolean;
+  padItemId: string;
 }
 
 // Reducer
@@ -121,18 +124,26 @@ const apiUrl = 'api/atendimento-sorteio-feitos';
 // Actions
 export type ICrudGetAllActionAtendimentoSorteioFeito<T> = (
   sorteioFeito?: any,
+  padItem?: any,
   page?: number,
   size?: number,
   sort?: string
 ) => IPayload<T> | ((dispatch: any) => IPayload<T>);
 
-export const getEntities: ICrudGetAllActionAtendimentoSorteioFeito<IAtendimentoSorteioFeito> = (sorteioFeito, page, size, sort) => {
+export const getEntities: ICrudGetAllActionAtendimentoSorteioFeito<IAtendimentoSorteioFeito> = (
+  sorteioFeito,
+  padItem,
+  page,
+  size,
+  sort
+) => {
   const sorteioFeitoRequest = sorteioFeito ? `sorteioFeito.contains=${sorteioFeito}&` : '';
+  const padItemRequest = padItem ? `padItem.equals=${padItem}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_ATENDIMENTOSORTEIOFEITO_LIST,
-    payload: axios.get<IAtendimentoSorteioFeito>(`${requestUrl}${sorteioFeitoRequest}cacheBuster=${new Date().getTime()}`)
+    payload: axios.get<IAtendimentoSorteioFeito>(`${requestUrl}${sorteioFeitoRequest}${padItemRequest}cacheBuster=${new Date().getTime()}`)
   };
 };
 export const getEntity: ICrudGetAction<IAtendimentoSorteioFeito> = id => {
@@ -143,19 +154,27 @@ export const getEntity: ICrudGetAction<IAtendimentoSorteioFeito> = id => {
   };
 };
 
-export const getEntitiesExport: ICrudGetAllActionAtendimentoSorteioFeito<IAtendimentoSorteioFeito> = (sorteioFeito, page, size, sort) => {
+export const getEntitiesExport: ICrudGetAllActionAtendimentoSorteioFeito<IAtendimentoSorteioFeito> = (
+  sorteioFeito,
+  padItem,
+  page,
+  size,
+  sort
+) => {
   const sorteioFeitoRequest = sorteioFeito ? `sorteioFeito.contains=${sorteioFeito}&` : '';
+  const padItemRequest = padItem ? `padItem.equals=${padItem}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_ATENDIMENTOSORTEIOFEITO_LIST,
-    payload: axios.get<IAtendimentoSorteioFeito>(`${requestUrl}${sorteioFeitoRequest}cacheBuster=${new Date().getTime()}`)
+    payload: axios.get<IAtendimentoSorteioFeito>(`${requestUrl}${sorteioFeitoRequest}${padItemRequest}cacheBuster=${new Date().getTime()}`)
   };
 };
 
 export const createEntity: ICrudPutAction<IAtendimentoSorteioFeito> = entity => async dispatch => {
   entity = {
-    ...entity
+    ...entity,
+    padItem: entity.padItem === 'null' ? null : entity.padItem
   };
   const result = await dispatch({
     type: ACTION_TYPES.CREATE_ATENDIMENTOSORTEIOFEITO,
@@ -166,7 +185,7 @@ export const createEntity: ICrudPutAction<IAtendimentoSorteioFeito> = entity => 
 };
 
 export const updateEntity: ICrudPutAction<IAtendimentoSorteioFeito> = entity => async dispatch => {
-  entity = { ...entity };
+  entity = { ...entity, padItem: entity.padItem === 'null' ? null : entity.padItem };
   const result = await dispatch({
     type: ACTION_TYPES.UPDATE_ATENDIMENTOSORTEIOFEITO,
     payload: axios.put(apiUrl, cleanEntity(entity))
@@ -194,8 +213,11 @@ export const getAtendimentoSorteioFeitoState = (location): IAtendimentoSorteioFe
   const baseFilters = url.searchParams.get('baseFilters') || '';
   const sorteioFeito = url.searchParams.get('sorteioFeito') || '';
 
+  const padItem = url.searchParams.get('padItem') || '';
+
   return {
     baseFilters,
-    sorteioFeito
+    sorteioFeito,
+    padItem
   };
 };

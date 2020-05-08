@@ -28,6 +28,11 @@ import { IDiario } from 'app/shared/model/diario.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
+import { IUsuario } from 'app/shared/model/usuario.model';
+import { getEntities as getUsuarios } from 'app/entities/usuario/usuario.reducer';
+import { IPaciente } from 'app/shared/model/paciente.model';
+import { getEntities as getPacientes } from 'app/entities/paciente/paciente.reducer';
+
 export interface IDiarioProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
 export interface IDiarioState extends IDiarioBaseState, IPaginationBaseState {}
@@ -45,13 +50,18 @@ export class Diario extends React.Component<IDiarioProps, IDiarioState> {
 
   componentDidMount() {
     this.getEntities();
+
+    this.props.getUsuarios();
+    this.props.getPacientes();
   }
 
   cancelCourse = () => {
     this.setState(
       {
         historico: '',
-        gerarPdf: ''
+        gerarPdf: '',
+        usuario: '',
+        paciente: ''
       },
       () => this.sortEntities()
     );
@@ -104,6 +114,12 @@ export class Diario extends React.Component<IDiarioProps, IDiarioState> {
       'gerarPdf=' +
       this.state.gerarPdf +
       '&' +
+      'usuario=' +
+      this.state.usuario +
+      '&' +
+      'paciente=' +
+      this.state.paciente +
+      '&' +
       ''
     );
   };
@@ -111,12 +127,12 @@ export class Diario extends React.Component<IDiarioProps, IDiarioState> {
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { historico, gerarPdf, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntities(historico, gerarPdf, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const { historico, gerarPdf, usuario, paciente, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntities(historico, gerarPdf, usuario, paciente, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   render() {
-    const { diarioList, match, totalItems } = this.props;
+    const { usuarios, pacientes, diarioList, match, totalItems } = this.props;
     return (
       <div>
         <h2 id="page-heading">
@@ -174,6 +190,60 @@ export class Diario extends React.Component<IDiarioProps, IDiarioState> {
                           </Row>
                         </Col>
                       ) : null}
+
+                      {this.state.baseFilters !== 'usuario' ? (
+                        <Col md="3">
+                          <Row className="mr-1 mt-1">
+                            <div style={{ width: '100%' }}>
+                              <Label for="diario-usuario">
+                                <Translate contentKey="generadorApp.diario.usuario">Usuario</Translate>
+                              </Label>
+                              <Select
+                                id="diario-usuario"
+                                isMulti
+                                className={'css-select-control'}
+                                value={
+                                  usuarios
+                                    ? usuarios.map(p =>
+                                        this.state.usuario.split(',').indexOf(p.id) !== -1 ? { value: p.id, label: p.id } : null
+                                      )
+                                    : null
+                                }
+                                options={usuarios ? usuarios.map(option => ({ value: option.id, label: option.id })) : null}
+                                onChange={options => this.setState({ usuario: options.map(option => option['value']).join(',') })}
+                                name={'usuario'}
+                              />
+                            </div>
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'paciente' ? (
+                        <Col md="3">
+                          <Row className="mr-1 mt-1">
+                            <div style={{ width: '100%' }}>
+                              <Label for="diario-paciente">
+                                <Translate contentKey="generadorApp.diario.paciente">Paciente</Translate>
+                              </Label>
+                              <Select
+                                id="diario-paciente"
+                                isMulti
+                                className={'css-select-control'}
+                                value={
+                                  pacientes
+                                    ? pacientes.map(p =>
+                                        this.state.paciente.split(',').indexOf(p.id) !== -1 ? { value: p.id, label: p.id } : null
+                                      )
+                                    : null
+                                }
+                                options={pacientes ? pacientes.map(option => ({ value: option.id, label: option.id })) : null}
+                                onChange={options => this.setState({ paciente: options.map(option => option['value']).join(',') })}
+                                name={'paciente'}
+                              />
+                            </div>
+                          </Row>
+                        </Col>
+                      ) : null}
                     </div>
 
                     <div className="row mb-2 mr-4 justify-content-end">
@@ -214,6 +284,20 @@ export class Diario extends React.Component<IDiarioProps, IDiarioState> {
                         </th>
                       ) : null}
 
+                      {this.state.baseFilters !== 'usuario' ? (
+                        <th>
+                          <Translate contentKey="generadorApp.diario.usuario">Usuario</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'paciente' ? (
+                        <th>
+                          <Translate contentKey="generadorApp.diario.paciente">Paciente</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+
                       <th />
                     </tr>
                   </thead>
@@ -230,6 +314,14 @@ export class Diario extends React.Component<IDiarioProps, IDiarioState> {
                         {this.state.baseFilters !== 'historico' ? <td>{diario.historico}</td> : null}
 
                         {this.state.baseFilters !== 'gerarPdf' ? <td>{diario.gerarPdf}</td> : null}
+
+                        {this.state.baseFilters !== 'usuario' ? (
+                          <td>{diario.usuario ? <Link to={`usuario/${diario.usuario.id}`}>{diario.usuario.id}</Link> : ''}</td>
+                        ) : null}
+
+                        {this.state.baseFilters !== 'paciente' ? (
+                          <td>{diario.paciente ? <Link to={`paciente/${diario.paciente.id}`}>{diario.paciente.id}</Link> : ''}</td>
+                        ) : null}
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">
@@ -287,11 +379,15 @@ export class Diario extends React.Component<IDiarioProps, IDiarioState> {
 }
 
 const mapStateToProps = ({ diario, ...storeState }: IRootState) => ({
+  usuarios: storeState.usuario.entities,
+  pacientes: storeState.paciente.entities,
   diarioList: diario.entities,
   totalItems: diario.totalItems
 });
 
 const mapDispatchToProps = {
+  getUsuarios,
+  getPacientes,
   getEntities
 };
 

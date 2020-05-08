@@ -153,6 +153,8 @@ export class StatusAtualProfUpdate extends React.Component<IStatusAtualProfUpdat
                         <StatusAtualProfComponentUpdate baseFilters />
 
                         <StyleLabelComponentUpdate baseFilters />
+
+                        <ProfissionalStatusAtualComponentUpdate baseFilter profissionalStatusAtuals />
                       </Row>
                     </div>
                   )}
@@ -222,6 +224,14 @@ const StyleLabelComponentUpdate = ({ baseFilters }) => {
     </Col>
   ) : (
     <AvInput type="hidden" name="styleLabel" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const ProfissionalStatusAtualComponentUpdate = ({ baseFilters, profissionalStatusAtuals }) => {
+  return baseFilters !== 'profissionalStatusAtual' ? (
+    <Col md="12"></Col>
+  ) : (
+    <AvInput type="hidden" name="profissionalStatusAtual" value={this.state.fieldsBase[baseFilters]} />
   );
 };
 

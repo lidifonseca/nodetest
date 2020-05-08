@@ -34,6 +34,7 @@ export type TipoUnidadeState = Readonly<typeof initialState>;
 export interface ITipoUnidadeBaseState {
   baseFilters: any;
   tipoUnidade: any;
+  especialidade: any;
 }
 
 export interface ITipoUnidadeUpdateState {
@@ -121,18 +122,20 @@ const apiUrl = 'api/tipo-unidades';
 // Actions
 export type ICrudGetAllActionTipoUnidade<T> = (
   tipoUnidade?: any,
+  especialidade?: any,
   page?: number,
   size?: number,
   sort?: string
 ) => IPayload<T> | ((dispatch: any) => IPayload<T>);
 
-export const getEntities: ICrudGetAllActionTipoUnidade<ITipoUnidade> = (tipoUnidade, page, size, sort) => {
+export const getEntities: ICrudGetAllActionTipoUnidade<ITipoUnidade> = (tipoUnidade, especialidade, page, size, sort) => {
   const tipoUnidadeRequest = tipoUnidade ? `tipoUnidade.contains=${tipoUnidade}&` : '';
+  const especialidadeRequest = especialidade ? `especialidade.equals=${especialidade}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_TIPOUNIDADE_LIST,
-    payload: axios.get<ITipoUnidade>(`${requestUrl}${tipoUnidadeRequest}cacheBuster=${new Date().getTime()}`)
+    payload: axios.get<ITipoUnidade>(`${requestUrl}${tipoUnidadeRequest}${especialidadeRequest}cacheBuster=${new Date().getTime()}`)
   };
 };
 export const getEntity: ICrudGetAction<ITipoUnidade> = id => {
@@ -143,13 +146,14 @@ export const getEntity: ICrudGetAction<ITipoUnidade> = id => {
   };
 };
 
-export const getEntitiesExport: ICrudGetAllActionTipoUnidade<ITipoUnidade> = (tipoUnidade, page, size, sort) => {
+export const getEntitiesExport: ICrudGetAllActionTipoUnidade<ITipoUnidade> = (tipoUnidade, especialidade, page, size, sort) => {
   const tipoUnidadeRequest = tipoUnidade ? `tipoUnidade.contains=${tipoUnidade}&` : '';
+  const especialidadeRequest = especialidade ? `especialidade.equals=${especialidade}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_TIPOUNIDADE_LIST,
-    payload: axios.get<ITipoUnidade>(`${requestUrl}${tipoUnidadeRequest}cacheBuster=${new Date().getTime()}`)
+    payload: axios.get<ITipoUnidade>(`${requestUrl}${tipoUnidadeRequest}${especialidadeRequest}cacheBuster=${new Date().getTime()}`)
   };
 };
 
@@ -194,8 +198,11 @@ export const getTipoUnidadeState = (location): ITipoUnidadeBaseState => {
   const baseFilters = url.searchParams.get('baseFilters') || '';
   const tipoUnidade = url.searchParams.get('tipoUnidade') || '';
 
+  const especialidade = url.searchParams.get('especialidade') || '';
+
   return {
     baseFilters,
-    tipoUnidade
+    tipoUnidade,
+    especialidade
   };
 };

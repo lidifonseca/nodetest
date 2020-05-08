@@ -36,12 +36,15 @@ export interface IFranquiaStatusAtualBaseState {
   statusAtual: any;
   obs: any;
   ativo: any;
+  franquia: any;
 }
 
 export interface IFranquiaStatusAtualUpdateState {
   fieldsBase: IFranquiaStatusAtualBaseState;
 
+  franquiaSelectValue: any;
   isNew: boolean;
+  franquiaId: string;
 }
 
 // Reducer
@@ -125,21 +128,31 @@ export type ICrudGetAllActionFranquiaStatusAtual<T> = (
   statusAtual?: any,
   obs?: any,
   ativo?: any,
+  franquia?: any,
   page?: number,
   size?: number,
   sort?: string
 ) => IPayload<T> | ((dispatch: any) => IPayload<T>);
 
-export const getEntities: ICrudGetAllActionFranquiaStatusAtual<IFranquiaStatusAtual> = (statusAtual, obs, ativo, page, size, sort) => {
+export const getEntities: ICrudGetAllActionFranquiaStatusAtual<IFranquiaStatusAtual> = (
+  statusAtual,
+  obs,
+  ativo,
+  franquia,
+  page,
+  size,
+  sort
+) => {
   const statusAtualRequest = statusAtual ? `statusAtual.contains=${statusAtual}&` : '';
   const obsRequest = obs ? `obs.contains=${obs}&` : '';
   const ativoRequest = ativo ? `ativo.contains=${ativo}&` : '';
+  const franquiaRequest = franquia ? `franquia.equals=${franquia}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_FRANQUIASTATUSATUAL_LIST,
     payload: axios.get<IFranquiaStatusAtual>(
-      `${requestUrl}${statusAtualRequest}${obsRequest}${ativoRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${statusAtualRequest}${obsRequest}${ativoRequest}${franquiaRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };
@@ -155,6 +168,7 @@ export const getEntitiesExport: ICrudGetAllActionFranquiaStatusAtual<IFranquiaSt
   statusAtual,
   obs,
   ativo,
+  franquia,
   page,
   size,
   sort
@@ -162,19 +176,21 @@ export const getEntitiesExport: ICrudGetAllActionFranquiaStatusAtual<IFranquiaSt
   const statusAtualRequest = statusAtual ? `statusAtual.contains=${statusAtual}&` : '';
   const obsRequest = obs ? `obs.contains=${obs}&` : '';
   const ativoRequest = ativo ? `ativo.contains=${ativo}&` : '';
+  const franquiaRequest = franquia ? `franquia.equals=${franquia}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_FRANQUIASTATUSATUAL_LIST,
     payload: axios.get<IFranquiaStatusAtual>(
-      `${requestUrl}${statusAtualRequest}${obsRequest}${ativoRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${statusAtualRequest}${obsRequest}${ativoRequest}${franquiaRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };
 
 export const createEntity: ICrudPutAction<IFranquiaStatusAtual> = entity => async dispatch => {
   entity = {
-    ...entity
+    ...entity,
+    franquia: entity.franquia === 'null' ? null : entity.franquia
   };
   const result = await dispatch({
     type: ACTION_TYPES.CREATE_FRANQUIASTATUSATUAL,
@@ -185,7 +201,7 @@ export const createEntity: ICrudPutAction<IFranquiaStatusAtual> = entity => asyn
 };
 
 export const updateEntity: ICrudPutAction<IFranquiaStatusAtual> = entity => async dispatch => {
-  entity = { ...entity };
+  entity = { ...entity, franquia: entity.franquia === 'null' ? null : entity.franquia };
   const result = await dispatch({
     type: ACTION_TYPES.UPDATE_FRANQUIASTATUSATUAL,
     payload: axios.put(apiUrl, cleanEntity(entity))
@@ -215,10 +231,13 @@ export const getFranquiaStatusAtualState = (location): IFranquiaStatusAtualBaseS
   const obs = url.searchParams.get('obs') || '';
   const ativo = url.searchParams.get('ativo') || '';
 
+  const franquia = url.searchParams.get('franquia') || '';
+
   return {
     baseFilters,
     statusAtual,
     obs,
-    ativo
+    ativo,
+    franquia
   };
 };

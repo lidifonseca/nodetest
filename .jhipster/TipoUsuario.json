@@ -14,8 +14,15 @@
             "fieldType": "Integer"
         }
     ],
-    "relationships": [],
-    "changelogDate": "20200508174200",
+    "relationships": [
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "usuario",
+            "otherEntityRelationshipName": "tipoUsuario",
+            "relationshipName": "usuario"
+        }
+    ],
+    "changelogDate": "20200508183800",
     "entityTableName": "tipo_usuario",
     "dto": "mapstruct",
     "pagination": "pagination",

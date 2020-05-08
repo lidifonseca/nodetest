@@ -23,7 +23,11 @@
         "title": "Usuario Acao"
       },
       "idAtendimento": "Id Atendimento",
-      "descricao": "Descricao"
+      "descricao": "Descricao",
+      "tela_empty": "Sem Tela",
+      "tela": "Tela",
+      "acao_empty": "Sem Acao",
+      "acao": "Acao"
     }
   }
 }

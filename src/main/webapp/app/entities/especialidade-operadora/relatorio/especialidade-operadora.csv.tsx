@@ -34,6 +34,11 @@ import { IEspecialidadeOperadora } from 'app/shared/model/especialidade-operador
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
+import { IOperadora } from 'app/shared/model/operadora.model';
+import { getEntities as getOperadoras } from 'app/entities/operadora/operadora.reducer';
+import { IEspecialidade } from 'app/shared/model/especialidade.model';
+import { getEntities as getEspecialidades } from 'app/entities/especialidade/especialidade.reducer';
+
 export interface IEspecialidadeOperadoraProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
 export interface IEspecialidadeOperadoraState extends IEspecialidadeOperadoraBaseState, IPaginationBaseState {
@@ -54,6 +59,9 @@ export class EspecialidadeOperadora extends React.Component<IEspecialidadeOperad
 
   componentDidMount() {
     this.getEntities();
+
+    this.props.getOperadoras();
+    this.props.getEspecialidades();
   }
 
   cancelCourse = () => {
@@ -66,7 +74,9 @@ export class EspecialidadeOperadora extends React.Component<IEspecialidadeOperad
         valorVenda: '',
         descontoCusto: '',
         descontoVenda: '',
-        ativo: ''
+        ativo: '',
+        operadora: '',
+        especialidade: ''
       },
       () => this.sortEntities()
     );
@@ -135,6 +145,12 @@ export class EspecialidadeOperadora extends React.Component<IEspecialidadeOperad
       'ativo=' +
       this.state.ativo +
       '&' +
+      'operadora=' +
+      this.state.operadora +
+      '&' +
+      'especialidade=' +
+      this.state.especialidade +
+      '&' +
       ''
     );
   };
@@ -151,6 +167,8 @@ export class EspecialidadeOperadora extends React.Component<IEspecialidadeOperad
       descontoCusto,
       descontoVenda,
       ativo,
+      operadora,
+      especialidade,
       activePage,
       itemsPerPage,
       sort,
@@ -165,6 +183,8 @@ export class EspecialidadeOperadora extends React.Component<IEspecialidadeOperad
       descontoCusto,
       descontoVenda,
       ativo,
+      operadora,
+      especialidade,
       activePage - 1,
       itemsPerPage,
       `${sort},${order}`
@@ -217,11 +237,15 @@ export class EspecialidadeOperadora extends React.Component<IEspecialidadeOperad
 }
 
 const mapStateToProps = ({ especialidadeOperadora, ...storeState }: IRootState) => ({
+  operadoras: storeState.operadora.entities,
+  especialidades: storeState.especialidade.entities,
   especialidadeOperadoraList: especialidadeOperadora.entities,
   totalItems: especialidadeOperadora.totalItems
 });
 
 const mapDispatchToProps = {
+  getOperadoras,
+  getEspecialidades,
   getEntitiesExport
 };
 

@@ -71,6 +71,8 @@ export interface IProfissionalBaseState {
   dataSenha: any;
   expoToken: any;
   preferenciaAtendimento: any;
+  atendimentoAceite: any;
+  atendimentoAssinaturas: any;
   unidade: any;
 }
 
@@ -210,6 +212,8 @@ export type ICrudGetAllActionProfissional<T> = (
   dataSenha?: any,
   expoToken?: any,
   preferenciaAtendimento?: any,
+  atendimentoAceite?: any,
+  atendimentoAssinaturas?: any,
   unidade?: any,
   page?: number,
   size?: number,
@@ -254,6 +258,8 @@ export const getEntities: ICrudGetAllActionProfissional<IProfissional> = (
   dataSenha,
   expoToken,
   preferenciaAtendimento,
+  atendimentoAceite,
+  atendimentoAssinaturas,
   unidade,
   page,
   size,
@@ -296,13 +302,15 @@ export const getEntities: ICrudGetAllActionProfissional<IProfissional> = (
   const dataSenhaRequest = dataSenha ? `dataSenha.contains=${dataSenha}&` : '';
   const expoTokenRequest = expoToken ? `expoToken.contains=${expoToken}&` : '';
   const preferenciaAtendimentoRequest = preferenciaAtendimento ? `preferenciaAtendimento.contains=${preferenciaAtendimento}&` : '';
+  const atendimentoAceiteRequest = atendimentoAceite ? `atendimentoAceite.equals=${atendimentoAceite}&` : '';
+  const atendimentoAssinaturasRequest = atendimentoAssinaturas ? `atendimentoAssinaturas.equals=${atendimentoAssinaturas}&` : '';
   const unidadeRequest = unidade ? `unidade.equals=${unidade}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_PROFISSIONAL_LIST,
     payload: axios.get<IProfissional>(
-      `${requestUrl}${idCidadeRequest}${idTempoExperienciaRequest}${idBancoRequest}${senhaRequest}${nomeRequest}${emailRequest}${cpfRequest}${rgRequest}${nomeEmpresaRequest}${cnpjRequest}${registroRequest}${nascimentoRequest}${sexoRequest}${telefone1Request}${telefone2Request}${celular1Request}${celular2Request}${cepRequest}${enderecoRequest}${numeroRequest}${complementoRequest}${bairroRequest}${cidadeRequest}${ufRequest}${atendeCriancaRequest}${atendeIdosoRequest}${agRequest}${contaRequest}${tipoContaRequest}${origemCadastroRequest}${obsRequest}${chavePrivadaRequest}${ativoRequest}${senhaOriginalRequest}${dataSenhaRequest}${expoTokenRequest}${preferenciaAtendimentoRequest}${unidadeRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${idCidadeRequest}${idTempoExperienciaRequest}${idBancoRequest}${senhaRequest}${nomeRequest}${emailRequest}${cpfRequest}${rgRequest}${nomeEmpresaRequest}${cnpjRequest}${registroRequest}${nascimentoRequest}${sexoRequest}${telefone1Request}${telefone2Request}${celular1Request}${celular2Request}${cepRequest}${enderecoRequest}${numeroRequest}${complementoRequest}${bairroRequest}${cidadeRequest}${ufRequest}${atendeCriancaRequest}${atendeIdosoRequest}${agRequest}${contaRequest}${tipoContaRequest}${origemCadastroRequest}${obsRequest}${chavePrivadaRequest}${ativoRequest}${senhaOriginalRequest}${dataSenhaRequest}${expoTokenRequest}${preferenciaAtendimentoRequest}${atendimentoAceiteRequest}${atendimentoAssinaturasRequest}${unidadeRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };
@@ -352,6 +360,8 @@ export const getEntitiesExport: ICrudGetAllActionProfissional<IProfissional> = (
   dataSenha,
   expoToken,
   preferenciaAtendimento,
+  atendimentoAceite,
+  atendimentoAssinaturas,
   unidade,
   page,
   size,
@@ -394,13 +404,15 @@ export const getEntitiesExport: ICrudGetAllActionProfissional<IProfissional> = (
   const dataSenhaRequest = dataSenha ? `dataSenha.contains=${dataSenha}&` : '';
   const expoTokenRequest = expoToken ? `expoToken.contains=${expoToken}&` : '';
   const preferenciaAtendimentoRequest = preferenciaAtendimento ? `preferenciaAtendimento.contains=${preferenciaAtendimento}&` : '';
+  const atendimentoAceiteRequest = atendimentoAceite ? `atendimentoAceite.equals=${atendimentoAceite}&` : '';
+  const atendimentoAssinaturasRequest = atendimentoAssinaturas ? `atendimentoAssinaturas.equals=${atendimentoAssinaturas}&` : '';
   const unidadeRequest = unidade ? `unidade.equals=${unidade}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_PROFISSIONAL_LIST,
     payload: axios.get<IProfissional>(
-      `${requestUrl}${idCidadeRequest}${idTempoExperienciaRequest}${idBancoRequest}${senhaRequest}${nomeRequest}${emailRequest}${cpfRequest}${rgRequest}${nomeEmpresaRequest}${cnpjRequest}${registroRequest}${nascimentoRequest}${sexoRequest}${telefone1Request}${telefone2Request}${celular1Request}${celular2Request}${cepRequest}${enderecoRequest}${numeroRequest}${complementoRequest}${bairroRequest}${cidadeRequest}${ufRequest}${atendeCriancaRequest}${atendeIdosoRequest}${agRequest}${contaRequest}${tipoContaRequest}${origemCadastroRequest}${obsRequest}${chavePrivadaRequest}${ativoRequest}${senhaOriginalRequest}${dataSenhaRequest}${expoTokenRequest}${preferenciaAtendimentoRequest}${unidadeRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${idCidadeRequest}${idTempoExperienciaRequest}${idBancoRequest}${senhaRequest}${nomeRequest}${emailRequest}${cpfRequest}${rgRequest}${nomeEmpresaRequest}${cnpjRequest}${registroRequest}${nascimentoRequest}${sexoRequest}${telefone1Request}${telefone2Request}${celular1Request}${celular2Request}${cepRequest}${enderecoRequest}${numeroRequest}${complementoRequest}${bairroRequest}${cidadeRequest}${ufRequest}${atendeCriancaRequest}${atendeIdosoRequest}${agRequest}${contaRequest}${tipoContaRequest}${origemCadastroRequest}${obsRequest}${chavePrivadaRequest}${ativoRequest}${senhaOriginalRequest}${dataSenhaRequest}${expoTokenRequest}${preferenciaAtendimentoRequest}${atendimentoAceiteRequest}${atendimentoAssinaturasRequest}${unidadeRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };
@@ -493,6 +505,8 @@ export const getProfissionalState = (location): IProfissionalBaseState => {
   const expoToken = url.searchParams.get('expoToken') || '';
   const preferenciaAtendimento = url.searchParams.get('preferenciaAtendimento') || '';
 
+  const atendimentoAceite = url.searchParams.get('atendimentoAceite') || '';
+  const atendimentoAssinaturas = url.searchParams.get('atendimentoAssinaturas') || '';
   const unidade = url.searchParams.get('unidade') || '';
 
   return {
@@ -534,6 +548,8 @@ export const getProfissionalState = (location): IProfissionalBaseState => {
     dataSenha,
     expoToken,
     preferenciaAtendimento,
+    atendimentoAceite,
+    atendimentoAssinaturas,
     unidade
   };
 };

@@ -22,7 +22,13 @@
       "detail": {
         "title": "Tela"
       },
-      "tela": "Tela"
+      "tela": "Tela",
+      "logUser_empty": "Sem Log User",
+      "logUser": "Log User",
+      "logUserFranquia_empty": "Sem Log User Franquia",
+      "logUserFranquia": "Log User Franquia",
+      "usuarioAcao_empty": "Sem Usuario Acao",
+      "usuarioAcao": "Usuario Acao"
     }
   }
 }

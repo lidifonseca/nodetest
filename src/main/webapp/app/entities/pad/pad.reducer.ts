@@ -41,18 +41,22 @@ export interface IPadBaseState {
   dataConferido: any;
   ativo: any;
   statusPad: any;
-  novoModelo: any;
   imagePath: any;
   score: any;
+  padCid: any;
+  padItem: any;
   unidade: any;
+  paciente: any;
 }
 
 export interface IPadUpdateState {
   fieldsBase: IPadBaseState;
 
   unidadeEasySelectValue: any;
+  pacienteSelectValue: any;
   isNew: boolean;
   unidadeId: string;
+  pacienteId: string;
 }
 
 // Reducer
@@ -141,10 +145,12 @@ export type ICrudGetAllActionPad<T> = (
   dataConferido?: any,
   ativo?: any,
   statusPad?: any,
-  novoModelo?: any,
   imagePath?: any,
   score?: any,
+  padCid?: any,
+  padItem?: any,
   unidade?: any,
+  paciente?: any,
   page?: number,
   size?: number,
   sort?: string
@@ -159,10 +165,12 @@ export const getEntities: ICrudGetAllActionPad<IPad> = (
   dataConferido,
   ativo,
   statusPad,
-  novoModelo,
   imagePath,
   score,
+  padCid,
+  padItem,
   unidade,
+  paciente,
   page,
   size,
   sort
@@ -175,16 +183,18 @@ export const getEntities: ICrudGetAllActionPad<IPad> = (
   const dataConferidoRequest = dataConferido ? `dataConferido.equals=${dataConferido}&` : '';
   const ativoRequest = ativo ? `ativo.contains=${ativo}&` : '';
   const statusPadRequest = statusPad ? `statusPad.contains=${statusPad}&` : '';
-  const novoModeloRequest = novoModelo ? `novoModelo.contains=${novoModelo}&` : '';
   const imagePathRequest = imagePath ? `imagePath.contains=${imagePath}&` : '';
   const scoreRequest = score ? `score.contains=${score}&` : '';
+  const padCidRequest = padCid ? `padCid.equals=${padCid}&` : '';
+  const padItemRequest = padItem ? `padItem.equals=${padItem}&` : '';
   const unidadeRequest = unidade ? `unidade.equals=${unidade}&` : '';
+  const pacienteRequest = paciente ? `paciente.equals=${paciente}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_PAD_LIST,
     payload: axios.get<IPad>(
-      `${requestUrl}${idOperadoraRequest}${idFranquiaRequest}${nroPadRequest}${dataInicioRequest}${dataFimRequest}${dataConferidoRequest}${ativoRequest}${statusPadRequest}${novoModeloRequest}${imagePathRequest}${scoreRequest}${unidadeRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${idOperadoraRequest}${idFranquiaRequest}${nroPadRequest}${dataInicioRequest}${dataFimRequest}${dataConferidoRequest}${ativoRequest}${statusPadRequest}${imagePathRequest}${scoreRequest}${padCidRequest}${padItemRequest}${unidadeRequest}${pacienteRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };
@@ -205,10 +215,12 @@ export const getEntitiesExport: ICrudGetAllActionPad<IPad> = (
   dataConferido,
   ativo,
   statusPad,
-  novoModelo,
   imagePath,
   score,
+  padCid,
+  padItem,
   unidade,
+  paciente,
   page,
   size,
   sort
@@ -221,16 +233,18 @@ export const getEntitiesExport: ICrudGetAllActionPad<IPad> = (
   const dataConferidoRequest = dataConferido ? `dataConferido.equals=${dataConferido}&` : '';
   const ativoRequest = ativo ? `ativo.contains=${ativo}&` : '';
   const statusPadRequest = statusPad ? `statusPad.contains=${statusPad}&` : '';
-  const novoModeloRequest = novoModelo ? `novoModelo.contains=${novoModelo}&` : '';
   const imagePathRequest = imagePath ? `imagePath.contains=${imagePath}&` : '';
   const scoreRequest = score ? `score.contains=${score}&` : '';
+  const padCidRequest = padCid ? `padCid.equals=${padCid}&` : '';
+  const padItemRequest = padItem ? `padItem.equals=${padItem}&` : '';
   const unidadeRequest = unidade ? `unidade.equals=${unidade}&` : '';
+  const pacienteRequest = paciente ? `paciente.equals=${paciente}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_PAD_LIST,
     payload: axios.get<IPad>(
-      `${requestUrl}${idOperadoraRequest}${idFranquiaRequest}${nroPadRequest}${dataInicioRequest}${dataFimRequest}${dataConferidoRequest}${ativoRequest}${statusPadRequest}${novoModeloRequest}${imagePathRequest}${scoreRequest}${unidadeRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${idOperadoraRequest}${idFranquiaRequest}${nroPadRequest}${dataInicioRequest}${dataFimRequest}${dataConferidoRequest}${ativoRequest}${statusPadRequest}${imagePathRequest}${scoreRequest}${padCidRequest}${padItemRequest}${unidadeRequest}${pacienteRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };
@@ -238,7 +252,8 @@ export const getEntitiesExport: ICrudGetAllActionPad<IPad> = (
 export const createEntity: ICrudPutAction<IPad> = entity => async dispatch => {
   entity = {
     ...entity,
-    unidade: entity.unidade === 'null' ? null : entity.unidade
+    unidade: entity.unidade === 'null' ? null : entity.unidade,
+    paciente: entity.paciente === 'null' ? null : entity.paciente
   };
   const result = await dispatch({
     type: ACTION_TYPES.CREATE_PAD,
@@ -249,7 +264,11 @@ export const createEntity: ICrudPutAction<IPad> = entity => async dispatch => {
 };
 
 export const updateEntity: ICrudPutAction<IPad> = entity => async dispatch => {
-  entity = { ...entity, unidade: entity.unidade === 'null' ? null : entity.unidade };
+  entity = {
+    ...entity,
+    unidade: entity.unidade === 'null' ? null : entity.unidade,
+    paciente: entity.paciente === 'null' ? null : entity.paciente
+  };
   const result = await dispatch({
     type: ACTION_TYPES.UPDATE_PAD,
     payload: axios.put(apiUrl, cleanEntity(entity))
@@ -283,11 +302,13 @@ export const getPadState = (location): IPadBaseState => {
   const dataConferido = url.searchParams.get('dataConferido') || '';
   const ativo = url.searchParams.get('ativo') || '';
   const statusPad = url.searchParams.get('statusPad') || '';
-  const novoModelo = url.searchParams.get('novoModelo') || '';
   const imagePath = url.searchParams.get('imagePath') || '';
   const score = url.searchParams.get('score') || '';
 
+  const padCid = url.searchParams.get('padCid') || '';
+  const padItem = url.searchParams.get('padItem') || '';
   const unidade = url.searchParams.get('unidade') || '';
+  const paciente = url.searchParams.get('paciente') || '';
 
   return {
     baseFilters,
@@ -299,9 +320,11 @@ export const getPadState = (location): IPadBaseState => {
     dataConferido,
     ativo,
     statusPad,
-    novoModelo,
     imagePath,
     score,
-    unidade
+    padCid,
+    padItem,
+    unidade,
+    paciente
   };
 };

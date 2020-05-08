@@ -36,12 +36,18 @@ export interface IUsuarioAcaoBaseState {
   baseFilters: any;
   idAtendimento: any;
   descricao: any;
+  tela: any;
+  acao: any;
 }
 
 export interface IUsuarioAcaoUpdateState {
   fieldsBase: IUsuarioAcaoBaseState;
 
+  telaSelectValue: any;
+  acaoSelectValue: any;
   isNew: boolean;
+  telaId: string;
+  acaoId: string;
 }
 
 // Reducer
@@ -139,19 +145,25 @@ const apiUrl = 'api/usuario-acaos';
 export type ICrudGetAllActionUsuarioAcao<T> = (
   idAtendimento?: any,
   descricao?: any,
+  tela?: any,
+  acao?: any,
   page?: number,
   size?: number,
   sort?: string
 ) => IPayload<T> | ((dispatch: any) => IPayload<T>);
 
-export const getEntities: ICrudGetAllActionUsuarioAcao<IUsuarioAcao> = (idAtendimento, descricao, page, size, sort) => {
+export const getEntities: ICrudGetAllActionUsuarioAcao<IUsuarioAcao> = (idAtendimento, descricao, tela, acao, page, size, sort) => {
   const idAtendimentoRequest = idAtendimento ? `idAtendimento.contains=${idAtendimento}&` : '';
   const descricaoRequest = descricao ? `descricao.contains=${descricao}&` : '';
+  const telaRequest = tela ? `tela.equals=${tela}&` : '';
+  const acaoRequest = acao ? `acao.equals=${acao}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_USUARIOACAO_LIST,
-    payload: axios.get<IUsuarioAcao>(`${requestUrl}${idAtendimentoRequest}${descricaoRequest}cacheBuster=${new Date().getTime()}`)
+    payload: axios.get<IUsuarioAcao>(
+      `${requestUrl}${idAtendimentoRequest}${descricaoRequest}${telaRequest}${acaoRequest}cacheBuster=${new Date().getTime()}`
+    )
   };
 };
 export const getEntity: ICrudGetAction<IUsuarioAcao> = id => {
@@ -162,20 +174,26 @@ export const getEntity: ICrudGetAction<IUsuarioAcao> = id => {
   };
 };
 
-export const getEntitiesExport: ICrudGetAllActionUsuarioAcao<IUsuarioAcao> = (idAtendimento, descricao, page, size, sort) => {
+export const getEntitiesExport: ICrudGetAllActionUsuarioAcao<IUsuarioAcao> = (idAtendimento, descricao, tela, acao, page, size, sort) => {
   const idAtendimentoRequest = idAtendimento ? `idAtendimento.contains=${idAtendimento}&` : '';
   const descricaoRequest = descricao ? `descricao.contains=${descricao}&` : '';
+  const telaRequest = tela ? `tela.equals=${tela}&` : '';
+  const acaoRequest = acao ? `acao.equals=${acao}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_USUARIOACAO_LIST,
-    payload: axios.get<IUsuarioAcao>(`${requestUrl}${idAtendimentoRequest}${descricaoRequest}cacheBuster=${new Date().getTime()}`)
+    payload: axios.get<IUsuarioAcao>(
+      `${requestUrl}${idAtendimentoRequest}${descricaoRequest}${telaRequest}${acaoRequest}cacheBuster=${new Date().getTime()}`
+    )
   };
 };
 
 export const createEntity: ICrudPutAction<IUsuarioAcao> = entity => async dispatch => {
   entity = {
-    ...entity
+    ...entity,
+    tela: entity.tela === 'null' ? null : entity.tela,
+    acao: entity.acao === 'null' ? null : entity.acao
   };
   const result = await dispatch({
     type: ACTION_TYPES.CREATE_USUARIOACAO,
@@ -186,7 +204,7 @@ export const createEntity: ICrudPutAction<IUsuarioAcao> = entity => async dispat
 };
 
 export const updateEntity: ICrudPutAction<IUsuarioAcao> = entity => async dispatch => {
-  entity = { ...entity };
+  entity = { ...entity, tela: entity.tela === 'null' ? null : entity.tela, acao: entity.acao === 'null' ? null : entity.acao };
   const result = await dispatch({
     type: ACTION_TYPES.UPDATE_USUARIOACAO,
     payload: axios.put(apiUrl, cleanEntity(entity))
@@ -225,9 +243,14 @@ export const getUsuarioAcaoState = (location): IUsuarioAcaoBaseState => {
   const idAtendimento = url.searchParams.get('idAtendimento') || '';
   const descricao = url.searchParams.get('descricao') || '';
 
+  const tela = url.searchParams.get('tela') || '';
+  const acao = url.searchParams.get('acao') || '';
+
   return {
     baseFilters,
     idAtendimento,
-    descricao
+    descricao,
+    tela,
+    acao
   };
 };

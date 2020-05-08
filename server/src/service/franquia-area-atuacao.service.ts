@@ -5,6 +5,7 @@ import FranquiaAreaAtuacao from '../domain/franquia-area-atuacao.entity';
 import { FranquiaAreaAtuacaoRepository } from '../repository/franquia-area-atuacao.repository';
 
 const relationshipNames = [];
+relationshipNames.push('franquia');
 
 @Injectable()
 export class FranquiaAreaAtuacaoService {

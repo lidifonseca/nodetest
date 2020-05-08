@@ -5,6 +5,7 @@ import PadItemCepRecusado from '../domain/pad-item-cep-recusado.entity';
 import { PadItemCepRecusadoRepository } from '../repository/pad-item-cep-recusado.repository';
 
 const relationshipNames = [];
+relationshipNames.push('padItem');
 
 @Injectable()
 export class PadItemCepRecusadoService {

@@ -44,6 +44,9 @@ import { ICategoriaContrato } from 'app/shared/model/categoria-contrato.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
+import { ICategoria } from 'app/shared/model/categoria.model';
+import { getEntities as getCategorias } from 'app/entities/categoria/categoria.reducer';
+
 export interface ICategoriaContratoProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
 export interface ICategoriaContratoState extends ICategoriaContratoBaseState, IPaginationBaseState {
@@ -64,13 +67,16 @@ export class CategoriaContrato extends React.Component<ICategoriaContratoProps, 
 
   componentDidMount() {
     this.getEntities();
+
+    this.props.getCategorias();
   }
 
   cancelCourse = () => {
     this.setState(
       {
         contrato: '',
-        ativo: ''
+        ativo: '',
+        categoria: ''
       },
       () => this.sortEntities()
     );
@@ -121,6 +127,9 @@ export class CategoriaContrato extends React.Component<ICategoriaContratoProps, 
       'ativo=' +
       this.state.ativo +
       '&' +
+      'categoria=' +
+      this.state.categoria +
+      '&' +
       ''
     );
   };
@@ -128,8 +137,8 @@ export class CategoriaContrato extends React.Component<ICategoriaContratoProps, 
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { contrato, ativo, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntitiesExport(contrato, ativo, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const { contrato, ativo, categoria, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntitiesExport(contrato, ativo, categoria, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   confirmExport() {}
@@ -178,11 +187,13 @@ export class CategoriaContrato extends React.Component<ICategoriaContratoProps, 
 }
 
 const mapStateToProps = ({ categoriaContrato, ...storeState }: IRootState) => ({
+  categorias: storeState.categoria.entities,
   categoriaContratoList: categoriaContrato.entities,
   totalItems: categoriaContrato.totalItems
 });
 
 const mapDispatchToProps = {
+  getCategorias,
   getEntitiesExport
 };
 

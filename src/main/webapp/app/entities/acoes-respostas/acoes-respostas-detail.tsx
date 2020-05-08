@@ -130,6 +130,32 @@ export class AcoesRespostasDetail extends React.Component<IAcoesRespostasDetailP
                       </Col>
                     </Row>
                   </Col>
+
+                  <Col md="12">
+                    <Row>
+                      <Col md="3">
+                        <dt>
+                          <Translate contentKey="generadorApp.acoesRespostas.respostas">Respostas</Translate>
+                        </dt>
+                      </Col>
+                      <Col md="9">
+                        <dd>{acoesRespostasEntity.respostas ? acoesRespostasEntity.respostas.id : ''}</dd>
+                      </Col>
+                    </Row>
+                  </Col>
+
+                  <Col md="12">
+                    <Row>
+                      <Col md="3">
+                        <dt>
+                          <Translate contentKey="generadorApp.acoesRespostas.perguntasQuestionario">Perguntas Questionario</Translate>
+                        </dt>
+                      </Col>
+                      <Col md="9">
+                        <dd>{acoesRespostasEntity.perguntasQuestionario ? acoesRespostasEntity.perguntasQuestionario.id : ''}</dd>
+                      </Col>
+                    </Row>
+                  </Col>
                 </Row>
                 <Button tag={Link} to="/acoes-respostas" replace color="info">
                   <FontAwesomeIcon icon="arrow-left" />{' '}

@@ -11,8 +11,16 @@
             "fieldType": "Integer"
         }
     ],
-    "relationships": [],
-    "changelogDate": "20200508153600",
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "categoria",
+            "otherEntityRelationshipName": "categoriaContrato",
+            "relationshipName": "categoria",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20200508163200",
     "entityTableName": "categoria_contrato",
     "dto": "mapstruct",
     "pagination": "pagination",

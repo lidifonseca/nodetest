@@ -50,7 +50,8 @@ export class TipoEspecialidade extends React.Component<ITipoEspecialidadeProps, 
   cancelCourse = () => {
     this.setState(
       {
-        tipoEspecialidade: ''
+        tipoEspecialidade: '',
+        especialidade: ''
       },
       () => this.sortEntities()
     );
@@ -100,6 +101,9 @@ export class TipoEspecialidade extends React.Component<ITipoEspecialidadeProps, 
       'tipoEspecialidade=' +
       this.state.tipoEspecialidade +
       '&' +
+      'especialidade=' +
+      this.state.especialidade +
+      '&' +
       ''
     );
   };
@@ -107,8 +111,8 @@ export class TipoEspecialidade extends React.Component<ITipoEspecialidadeProps, 
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { tipoEspecialidade, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntities(tipoEspecialidade, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const { tipoEspecialidade, especialidade, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntities(tipoEspecialidade, especialidade, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   render() {
@@ -162,6 +166,12 @@ export class TipoEspecialidade extends React.Component<ITipoEspecialidadeProps, 
                               value={this.state.tipoEspecialidade}
                             />
                           </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'especialidade' ? (
+                        <Col md="3">
+                          <Row className="mr-1 mt-1"></Row>
                         </Col>
                       ) : null}
                     </div>

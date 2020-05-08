@@ -37,6 +37,15 @@ import { IPadItem } from 'app/shared/model/pad-item.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
+import { IPad } from 'app/shared/model/pad.model';
+import { getEntities as getPads } from 'app/entities/pad/pad.reducer';
+import { IEspecialidade } from 'app/shared/model/especialidade.model';
+import { getEntities as getEspecialidades } from 'app/entities/especialidade/especialidade.reducer';
+import { IPeriodicidade } from 'app/shared/model/periodicidade.model';
+import { getEntities as getPeriodicidades } from 'app/entities/periodicidade/periodicidade.reducer';
+import { IPeriodo } from 'app/shared/model/periodo.model';
+import { getEntities as getPeriodos } from 'app/entities/periodo/periodo.reducer';
+
 export interface IPadItemProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
 export interface IPadItemState extends IPadItemBaseState, IPaginationBaseState {}
@@ -54,6 +63,11 @@ export class PadItem extends React.Component<IPadItemProps, IPadItemState> {
 
   componentDidMount() {
     this.getEntities();
+
+    this.props.getPads();
+    this.props.getEspecialidades();
+    this.props.getPeriodicidades();
+    this.props.getPeriodos();
   }
 
   cancelCourse = () => {
@@ -71,7 +85,18 @@ export class PadItem extends React.Component<IPadItemProps, IPadItemState> {
         numGhc: '',
         cidXPtaNovo: '',
         categoriaId: '',
-        score: ''
+        score: '',
+        atendimento: '',
+        atendimentoCepRecusado: '',
+        atendimentoSorteioFeito: '',
+        padItemAtividade: '',
+        padItemCepRecusado: '',
+        padItemResultado: '',
+        padItemSorteioFeito: '',
+        pad: '',
+        especialidade: '',
+        periodicidade: '',
+        periodo: ''
       },
       () => this.sortEntities()
     );
@@ -157,6 +182,39 @@ export class PadItem extends React.Component<IPadItemProps, IPadItemState> {
       'score=' +
       this.state.score +
       '&' +
+      'atendimento=' +
+      this.state.atendimento +
+      '&' +
+      'atendimentoCepRecusado=' +
+      this.state.atendimentoCepRecusado +
+      '&' +
+      'atendimentoSorteioFeito=' +
+      this.state.atendimentoSorteioFeito +
+      '&' +
+      'padItemAtividade=' +
+      this.state.padItemAtividade +
+      '&' +
+      'padItemCepRecusado=' +
+      this.state.padItemCepRecusado +
+      '&' +
+      'padItemResultado=' +
+      this.state.padItemResultado +
+      '&' +
+      'padItemSorteioFeito=' +
+      this.state.padItemSorteioFeito +
+      '&' +
+      'pad=' +
+      this.state.pad +
+      '&' +
+      'especialidade=' +
+      this.state.especialidade +
+      '&' +
+      'periodicidade=' +
+      this.state.periodicidade +
+      '&' +
+      'periodo=' +
+      this.state.periodo +
+      '&' +
       ''
     );
   };
@@ -178,6 +236,17 @@ export class PadItem extends React.Component<IPadItemProps, IPadItemState> {
       cidXPtaNovo,
       categoriaId,
       score,
+      atendimento,
+      atendimentoCepRecusado,
+      atendimentoSorteioFeito,
+      padItemAtividade,
+      padItemCepRecusado,
+      padItemResultado,
+      padItemSorteioFeito,
+      pad,
+      especialidade,
+      periodicidade,
+      periodo,
       activePage,
       itemsPerPage,
       sort,
@@ -197,6 +266,17 @@ export class PadItem extends React.Component<IPadItemProps, IPadItemState> {
       cidXPtaNovo,
       categoriaId,
       score,
+      atendimento,
+      atendimentoCepRecusado,
+      atendimentoSorteioFeito,
+      padItemAtividade,
+      padItemCepRecusado,
+      padItemResultado,
+      padItemSorteioFeito,
+      pad,
+      especialidade,
+      periodicidade,
+      periodo,
       activePage - 1,
       itemsPerPage,
       `${sort},${order}`
@@ -204,7 +284,7 @@ export class PadItem extends React.Component<IPadItemProps, IPadItemState> {
   };
 
   render() {
-    const { padItemList, match, totalItems } = this.props;
+    const { pads, especialidades, periodicidades, periodos, padItemList, match, totalItems } = this.props;
     return (
       <div>
         <h2 id="page-heading">
@@ -398,6 +478,154 @@ export class PadItem extends React.Component<IPadItemProps, IPadItemState> {
                           </Row>
                         </Col>
                       ) : null}
+
+                      {this.state.baseFilters !== 'atendimento' ? (
+                        <Col md="3">
+                          <Row className="mr-1 mt-1"></Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'atendimentoCepRecusado' ? (
+                        <Col md="3">
+                          <Row className="mr-1 mt-1"></Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'atendimentoSorteioFeito' ? (
+                        <Col md="3">
+                          <Row className="mr-1 mt-1"></Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'padItemAtividade' ? (
+                        <Col md="3">
+                          <Row className="mr-1 mt-1"></Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'padItemCepRecusado' ? (
+                        <Col md="3">
+                          <Row className="mr-1 mt-1"></Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'padItemResultado' ? (
+                        <Col md="3">
+                          <Row className="mr-1 mt-1"></Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'padItemSorteioFeito' ? (
+                        <Col md="3">
+                          <Row className="mr-1 mt-1"></Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'pad' ? (
+                        <Col md="3">
+                          <Row className="mr-1 mt-1">
+                            <div style={{ width: '100%' }}>
+                              <Label for="pad-item-pad">
+                                <Translate contentKey="generadorApp.padItem.pad">Pad</Translate>
+                              </Label>
+                              <Select
+                                id="pad-item-pad"
+                                isMulti
+                                className={'css-select-control'}
+                                value={
+                                  pads
+                                    ? pads.map(p => (this.state.pad.split(',').indexOf(p.id) !== -1 ? { value: p.id, label: p.id } : null))
+                                    : null
+                                }
+                                options={pads ? pads.map(option => ({ value: option.id, label: option.id })) : null}
+                                onChange={options => this.setState({ pad: options.map(option => option['value']).join(',') })}
+                                name={'pad'}
+                              />
+                            </div>
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'especialidade' ? (
+                        <Col md="3">
+                          <Row className="mr-1 mt-1">
+                            <div style={{ width: '100%' }}>
+                              <Label for="pad-item-especialidade">
+                                <Translate contentKey="generadorApp.padItem.especialidade">Especialidade</Translate>
+                              </Label>
+                              <Select
+                                id="pad-item-especialidade"
+                                isMulti
+                                className={'css-select-control'}
+                                value={
+                                  especialidades
+                                    ? especialidades.map(p =>
+                                        this.state.especialidade.split(',').indexOf(p.id) !== -1 ? { value: p.id, label: p.id } : null
+                                      )
+                                    : null
+                                }
+                                options={especialidades ? especialidades.map(option => ({ value: option.id, label: option.id })) : null}
+                                onChange={options => this.setState({ especialidade: options.map(option => option['value']).join(',') })}
+                                name={'especialidade'}
+                              />
+                            </div>
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'periodicidade' ? (
+                        <Col md="3">
+                          <Row className="mr-1 mt-1">
+                            <div style={{ width: '100%' }}>
+                              <Label for="pad-item-periodicidade">
+                                <Translate contentKey="generadorApp.padItem.periodicidade">Periodicidade</Translate>
+                              </Label>
+                              <Select
+                                id="pad-item-periodicidade"
+                                isMulti
+                                className={'css-select-control'}
+                                value={
+                                  periodicidades
+                                    ? periodicidades.map(p =>
+                                        this.state.periodicidade.split(',').indexOf(p.id) !== -1 ? { value: p.id, label: p.id } : null
+                                      )
+                                    : null
+                                }
+                                options={periodicidades ? periodicidades.map(option => ({ value: option.id, label: option.id })) : null}
+                                onChange={options => this.setState({ periodicidade: options.map(option => option['value']).join(',') })}
+                                name={'periodicidade'}
+                              />
+                            </div>
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'periodo' ? (
+                        <Col md="3">
+                          <Row className="mr-1 mt-1">
+                            <div style={{ width: '100%' }}>
+                              <Label for="pad-item-periodo">
+                                <Translate contentKey="generadorApp.padItem.periodo">Periodo</Translate>
+                              </Label>
+                              <Select
+                                id="pad-item-periodo"
+                                isMulti
+                                className={'css-select-control'}
+                                value={
+                                  periodos
+                                    ? periodos.map(p =>
+                                        this.state.periodo.split(',').indexOf(p.id) !== -1 ? { value: p.id, label: p.id } : null
+                                      )
+                                    : null
+                                }
+                                options={periodos ? periodos.map(option => ({ value: option.id, label: option.id })) : null}
+                                onChange={options => this.setState({ periodo: options.map(option => option['value']).join(',') })}
+                                name={'periodo'}
+                              />
+                            </div>
+                          </Row>
+                        </Col>
+                      ) : null}
                     </div>
 
                     <div className="row mb-2 mr-4 justify-content-end">
@@ -504,6 +732,34 @@ export class PadItem extends React.Component<IPadItemProps, IPadItemState> {
                         </th>
                       ) : null}
 
+                      {this.state.baseFilters !== 'pad' ? (
+                        <th>
+                          <Translate contentKey="generadorApp.padItem.pad">Pad</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'especialidade' ? (
+                        <th>
+                          <Translate contentKey="generadorApp.padItem.especialidade">Especialidade</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'periodicidade' ? (
+                        <th>
+                          <Translate contentKey="generadorApp.padItem.periodicidade">Periodicidade</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'periodo' ? (
+                        <th>
+                          <Translate contentKey="generadorApp.padItem.periodo">Periodo</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+
                       <th />
                     </tr>
                   </thead>
@@ -561,6 +817,34 @@ export class PadItem extends React.Component<IPadItemProps, IPadItemState> {
 
                         {this.state.baseFilters !== 'score' ? <td>{padItem.score}</td> : null}
 
+                        {this.state.baseFilters !== 'pad' ? (
+                          <td>{padItem.pad ? <Link to={`pad/${padItem.pad.id}`}>{padItem.pad.id}</Link> : ''}</td>
+                        ) : null}
+
+                        {this.state.baseFilters !== 'especialidade' ? (
+                          <td>
+                            {padItem.especialidade ? (
+                              <Link to={`especialidade/${padItem.especialidade.id}`}>{padItem.especialidade.id}</Link>
+                            ) : (
+                              ''
+                            )}
+                          </td>
+                        ) : null}
+
+                        {this.state.baseFilters !== 'periodicidade' ? (
+                          <td>
+                            {padItem.periodicidade ? (
+                              <Link to={`periodicidade/${padItem.periodicidade.id}`}>{padItem.periodicidade.id}</Link>
+                            ) : (
+                              ''
+                            )}
+                          </td>
+                        ) : null}
+
+                        {this.state.baseFilters !== 'periodo' ? (
+                          <td>{padItem.periodo ? <Link to={`periodo/${padItem.periodo.id}`}>{padItem.periodo.id}</Link> : ''}</td>
+                        ) : null}
+
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">
                             <Button tag={Link} to={`${match.url}/${padItem.id}?${this.getFiltersURL()}`} color="info" size="sm">
@@ -617,11 +901,19 @@ export class PadItem extends React.Component<IPadItemProps, IPadItemState> {
 }
 
 const mapStateToProps = ({ padItem, ...storeState }: IRootState) => ({
+  pads: storeState.pad.entities,
+  especialidades: storeState.especialidade.entities,
+  periodicidades: storeState.periodicidade.entities,
+  periodos: storeState.periodo.entities,
   padItemList: padItem.entities,
   totalItems: padItem.totalItems
 });
 
 const mapDispatchToProps = {
+  getPads,
+  getEspecialidades,
+  getPeriodicidades,
+  getPeriodos,
   getEntities
 };
 

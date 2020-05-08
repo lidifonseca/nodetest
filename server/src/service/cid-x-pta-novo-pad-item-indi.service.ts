@@ -5,6 +5,9 @@ import CidXPtaNovoPadItemIndi from '../domain/cid-x-pta-novo-pad-item-indi.entit
 import { CidXPtaNovoPadItemIndiRepository } from '../repository/cid-x-pta-novo-pad-item-indi.repository';
 
 const relationshipNames = [];
+relationshipNames.push('padItemIndicadores');
+relationshipNames.push('categorias');
+relationshipNames.push('cidXPtaNovo');
 
 @Injectable()
 export class CidXPtaNovoPadItemIndiService {

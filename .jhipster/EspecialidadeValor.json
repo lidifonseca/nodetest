@@ -14,8 +14,16 @@
             "fieldType": "Integer"
         }
     ],
-    "relationships": [],
-    "changelogDate": "20200508155000",
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "especialidade",
+            "otherEntityRelationshipName": "especialidadeValor",
+            "relationshipName": "especialidade",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20200508164600",
     "entityTableName": "especialidade_valor",
     "dto": "mapstruct",
     "pagination": "pagination",

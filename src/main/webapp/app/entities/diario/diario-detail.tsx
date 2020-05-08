@@ -82,6 +82,32 @@ export class DiarioDetail extends React.Component<IDiarioDetailProps, IDiarioSta
                       </Col>
                     </Row>
                   </Col>
+
+                  <Col md="12">
+                    <Row>
+                      <Col md="3">
+                        <dt>
+                          <Translate contentKey="generadorApp.diario.usuario">Usuario</Translate>
+                        </dt>
+                      </Col>
+                      <Col md="9">
+                        <dd>{diarioEntity.usuario ? diarioEntity.usuario.id : ''}</dd>
+                      </Col>
+                    </Row>
+                  </Col>
+
+                  <Col md="12">
+                    <Row>
+                      <Col md="3">
+                        <dt>
+                          <Translate contentKey="generadorApp.diario.paciente">Paciente</Translate>
+                        </dt>
+                      </Col>
+                      <Col md="9">
+                        <dd>{diarioEntity.paciente ? diarioEntity.paciente.id : ''}</dd>
+                      </Col>
+                    </Row>
+                  </Col>
                 </Row>
                 <Button tag={Link} to="/diario" replace color="info">
                   <FontAwesomeIcon icon="arrow-left" />{' '}

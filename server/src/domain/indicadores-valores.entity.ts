@@ -4,6 +4,8 @@ import { BaseEntity } from './base/base.entity';
 
 import { validate, Contains, IsInt, Length, IsEmail, IsFQDN, IsDate, Min, Max } from 'class-validator';
 
+import Indicadores from './indicadores.entity';
+
 /**
  * A IndicadoresValores.
  */
@@ -26,6 +28,10 @@ export default class IndicadoresValores extends BaseEntity {
 
   @Column({ name: 'IDADE_MAXIMA', length: 45 })
   idadeMaxima: string;
+
+  @ManyToOne(type => Indicadores)
+  @JoinColumn({ name: 'ID_INDICADORES', referencedColumnName: 'id' })
+  indicadores: Indicadores;
 
   // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
 }

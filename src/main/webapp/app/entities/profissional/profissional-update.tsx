@@ -260,6 +260,10 @@ export class ProfissionalUpdate extends React.Component<IProfissionalUpdateProps
 
                         <PreferenciaAtendimentoComponentUpdate baseFilters />
 
+                        <AtendimentoAceiteComponentUpdate baseFilter atendimentoAceites />
+
+                        <AtendimentoAssinaturasComponentUpdate baseFilter atendimentoAssinaturas />
+
                         <UnidadeComponentUpdate baseFilter unidadeEasies />
                       </Row>
                     </div>
@@ -1087,6 +1091,22 @@ const PreferenciaAtendimentoComponentUpdate = ({ baseFilters }) => {
     </Col>
   ) : (
     <AvInput type="hidden" name="preferenciaAtendimento" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const AtendimentoAceiteComponentUpdate = ({ baseFilters, atendimentoAceites }) => {
+  return baseFilters !== 'atendimentoAceite' ? (
+    <Col md="12"></Col>
+  ) : (
+    <AvInput type="hidden" name="atendimentoAceite" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const AtendimentoAssinaturasComponentUpdate = ({ baseFilters, atendimentoAssinaturas }) => {
+  return baseFilters !== 'atendimentoAssinaturas' ? (
+    <Col md="12"></Col>
+  ) : (
+    <AvInput type="hidden" name="atendimentoAssinaturas" value={this.state.fieldsBase[baseFilters]} />
   );
 };
 

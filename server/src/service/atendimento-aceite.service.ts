@@ -5,6 +5,8 @@ import AtendimentoAceite from '../domain/atendimento-aceite.entity';
 import { AtendimentoAceiteRepository } from '../repository/atendimento-aceite.repository';
 
 const relationshipNames = [];
+relationshipNames.push('profissional');
+relationshipNames.push('atendimento');
 
 @Injectable()
 export class AtendimentoAceiteService {

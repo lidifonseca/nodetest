@@ -51,7 +51,8 @@ export class Periodicidade extends React.Component<IPeriodicidadeProps, IPeriodi
     this.setState(
       {
         periodicidade: '',
-        ativo: ''
+        ativo: '',
+        padItem: ''
       },
       () => this.sortEntities()
     );
@@ -104,6 +105,9 @@ export class Periodicidade extends React.Component<IPeriodicidadeProps, IPeriodi
       'ativo=' +
       this.state.ativo +
       '&' +
+      'padItem=' +
+      this.state.padItem +
+      '&' +
       ''
     );
   };
@@ -111,8 +115,8 @@ export class Periodicidade extends React.Component<IPeriodicidadeProps, IPeriodi
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { periodicidade, ativo, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntities(periodicidade, ativo, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const { periodicidade, ativo, padItem, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntities(periodicidade, ativo, padItem, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   render() {
@@ -172,6 +176,12 @@ export class Periodicidade extends React.Component<IPeriodicidadeProps, IPeriodi
                             </Label>
                             <AvInput type="string" name="ativo" id="periodicidade-ativo" value={this.state.ativo} />
                           </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'padItem' ? (
+                        <Col md="3">
+                          <Row className="mr-1 mt-1"></Row>
                         </Col>
                       ) : null}
                     </div>

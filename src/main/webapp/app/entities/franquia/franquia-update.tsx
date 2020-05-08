@@ -185,6 +185,12 @@ export class FranquiaUpdate extends React.Component<IFranquiaUpdateProps, IFranq
                         <ObservacaoComponentUpdate baseFilters />
 
                         <AtivoComponentUpdate baseFilters />
+
+                        <FranquiaAreaAtuacaoComponentUpdate baseFilter franquiaAreaAtuacaos />
+
+                        <FranquiaStatusAtualComponentUpdate baseFilter franquiaStatusAtuals />
+
+                        <FranquiaUsuarioComponentUpdate baseFilter franquiaUsuarios />
                       </Row>
                     </div>
                   )}
@@ -596,6 +602,30 @@ const AtivoComponentUpdate = ({ baseFilters }) => {
     </Col>
   ) : (
     <AvInput type="hidden" name="ativo" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const FranquiaAreaAtuacaoComponentUpdate = ({ baseFilters, franquiaAreaAtuacaos }) => {
+  return baseFilters !== 'franquiaAreaAtuacao' ? (
+    <Col md="12"></Col>
+  ) : (
+    <AvInput type="hidden" name="franquiaAreaAtuacao" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const FranquiaStatusAtualComponentUpdate = ({ baseFilters, franquiaStatusAtuals }) => {
+  return baseFilters !== 'franquiaStatusAtual' ? (
+    <Col md="12"></Col>
+  ) : (
+    <AvInput type="hidden" name="franquiaStatusAtual" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const FranquiaUsuarioComponentUpdate = ({ baseFilters, franquiaUsuarios }) => {
+  return baseFilters !== 'franquiaUsuario' ? (
+    <Col md="12"></Col>
+  ) : (
+    <AvInput type="hidden" name="franquiaUsuario" value={this.state.fieldsBase[baseFilters]} />
   );
 };
 

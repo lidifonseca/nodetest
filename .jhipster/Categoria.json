@@ -43,6 +43,30 @@
     ],
     "relationships": [
         {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "categoriaAtividade",
+            "otherEntityRelationshipName": "categoria",
+            "relationshipName": "categoriaAtividade"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "categoriaContrato",
+            "otherEntityRelationshipName": "categoria",
+            "relationshipName": "categoriaContrato"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "cidXPtaNovoPadItemIndi",
+            "otherEntityRelationshipName": "categorias",
+            "relationshipName": "cidXPtaNovoPadItemIndi"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "especialidade",
+            "otherEntityRelationshipName": "categoria",
+            "relationshipName": "especialidade"
+        },
+        {
             "relationshipType": "many-to-many",
             "otherEntityName": "unidadeEasy",
             "otherEntityRelationshipName": "categoria",
@@ -51,7 +75,7 @@
             "ownerSide": true
         }
     ],
-    "changelogDate": "20200508153400",
+    "changelogDate": "20200508163000",
     "entityTableName": "categoria",
     "dto": "mapstruct",
     "pagination": "pagination",

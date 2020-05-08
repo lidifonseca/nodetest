@@ -25,7 +25,9 @@
       "statusAtendimento": "Status Atendimento",
       "styleLabel": "Style Label",
       "ordenacao": "Ordenacao",
-      "ativo": "Ativo"
+      "ativo": "Ativo",
+      "atendimento_empty": "Sem Atendimento",
+      "atendimento": "Atendimento"
     }
   }
 }

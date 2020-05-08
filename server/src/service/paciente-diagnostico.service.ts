@@ -5,6 +5,8 @@ import PacienteDiagnostico from '../domain/paciente-diagnostico.entity';
 import { PacienteDiagnosticoRepository } from '../repository/paciente-diagnostico.repository';
 
 const relationshipNames = [];
+relationshipNames.push('paciente');
+relationshipNames.push('c');
 
 @Injectable()
 export class PacienteDiagnosticoService {

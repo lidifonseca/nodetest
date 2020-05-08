@@ -39,6 +39,8 @@ import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
 import { IUnidadeEasy } from 'app/shared/model/unidade-easy.model';
 import { getEntities as getUnidadeEasies } from 'app/entities/unidade-easy/unidade-easy.reducer';
+import { IPaciente } from 'app/shared/model/paciente.model';
+import { getEntities as getPacientes } from 'app/entities/paciente/paciente.reducer';
 
 export interface IPadProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
@@ -59,6 +61,7 @@ export class Pad extends React.Component<IPadProps, IPadState> {
     this.getEntities();
 
     this.props.getUnidadeEasies();
+    this.props.getPacientes();
   }
 
   cancelCourse = () => {
@@ -72,10 +75,12 @@ export class Pad extends React.Component<IPadProps, IPadState> {
         dataConferido: '',
         ativo: '',
         statusPad: '',
-        novoModelo: '',
         imagePath: '',
         score: '',
-        unidade: ''
+        padCid: '',
+        padItem: '',
+        unidade: '',
+        paciente: ''
       },
       () => this.sortEntities()
     );
@@ -146,17 +151,23 @@ export class Pad extends React.Component<IPadProps, IPadState> {
       'statusPad=' +
       this.state.statusPad +
       '&' +
-      'novoModelo=' +
-      this.state.novoModelo +
-      '&' +
       'imagePath=' +
       this.state.imagePath +
       '&' +
       'score=' +
       this.state.score +
       '&' +
+      'padCid=' +
+      this.state.padCid +
+      '&' +
+      'padItem=' +
+      this.state.padItem +
+      '&' +
       'unidade=' +
       this.state.unidade +
+      '&' +
+      'paciente=' +
+      this.state.paciente +
       '&' +
       ''
     );
@@ -174,10 +185,12 @@ export class Pad extends React.Component<IPadProps, IPadState> {
       dataConferido,
       ativo,
       statusPad,
-      novoModelo,
       imagePath,
       score,
+      padCid,
+      padItem,
       unidade,
+      paciente,
       activePage,
       itemsPerPage,
       sort,
@@ -192,10 +205,12 @@ export class Pad extends React.Component<IPadProps, IPadState> {
       dataConferido,
       ativo,
       statusPad,
-      novoModelo,
       imagePath,
       score,
+      padCid,
+      padItem,
       unidade,
+      paciente,
       activePage - 1,
       itemsPerPage,
       `${sort},${order}`
@@ -203,7 +218,7 @@ export class Pad extends React.Component<IPadProps, IPadState> {
   };
 
   render() {
-    const { unidadeEasies, padList, match, totalItems } = this.props;
+    const { unidadeEasies, pacientes, padList, match, totalItems } = this.props;
     return (
       <div>
         <h2 id="page-heading">
@@ -329,17 +344,6 @@ export class Pad extends React.Component<IPadProps, IPadState> {
                         </Col>
                       ) : null}
 
-                      {this.state.baseFilters !== 'novoModelo' ? (
-                        <Col md="3">
-                          <Row className="mr-1 mt-1">
-                            <Label id="novoModeloLabel" check>
-                              <AvInput id="pad-novoModelo" type="checkbox" className="form-control" name="novoModelo" />
-                              <Translate contentKey="generadorApp.pad.novoModelo">Novo Modelo</Translate>
-                            </Label>
-                          </Row>
-                        </Col>
-                      ) : null}
-
                       {this.state.baseFilters !== 'imagePath' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
@@ -360,6 +364,18 @@ export class Pad extends React.Component<IPadProps, IPadState> {
                             </Label>
                             <AvInput type="string" name="score" id="pad-score" value={this.state.score} />
                           </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'padCid' ? (
+                        <Col md="3">
+                          <Row className="mr-1 mt-1"></Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'padItem' ? (
+                        <Col md="3">
+                          <Row className="mr-1 mt-1"></Row>
                         </Col>
                       ) : null}
 
@@ -386,6 +402,33 @@ export class Pad extends React.Component<IPadProps, IPadState> {
                                 }
                                 onChange={options => this.setState({ unidade: options.map(option => option['value']).join(',') })}
                                 name={'unidade'}
+                              />
+                            </div>
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'paciente' ? (
+                        <Col md="3">
+                          <Row className="mr-1 mt-1">
+                            <div style={{ width: '100%' }}>
+                              <Label for="pad-paciente">
+                                <Translate contentKey="generadorApp.pad.paciente">Paciente</Translate>
+                              </Label>
+                              <Select
+                                id="pad-paciente"
+                                isMulti
+                                className={'css-select-control'}
+                                value={
+                                  pacientes
+                                    ? pacientes.map(p =>
+                                        this.state.paciente.split(',').indexOf(p.id) !== -1 ? { value: p.id, label: p.id } : null
+                                      )
+                                    : null
+                                }
+                                options={pacientes ? pacientes.map(option => ({ value: option.id, label: option.id })) : null}
+                                onChange={options => this.setState({ paciente: options.map(option => option['value']).join(',') })}
+                                name={'paciente'}
                               />
                             </div>
                           </Row>
@@ -466,12 +509,6 @@ export class Pad extends React.Component<IPadProps, IPadState> {
                           <FontAwesomeIcon icon="sort" />
                         </th>
                       ) : null}
-                      {this.state.baseFilters !== 'novoModelo' ? (
-                        <th className="hand" onClick={this.sort('novoModelo')}>
-                          <Translate contentKey="generadorApp.pad.novoModelo">Novo Modelo</Translate>
-                          <FontAwesomeIcon icon="sort" />
-                        </th>
-                      ) : null}
                       {this.state.baseFilters !== 'imagePath' ? (
                         <th className="hand" onClick={this.sort('imagePath')}>
                           <Translate contentKey="generadorApp.pad.imagePath">Image Path</Translate>
@@ -488,6 +525,13 @@ export class Pad extends React.Component<IPadProps, IPadState> {
                       {this.state.baseFilters !== 'unidade' ? (
                         <th>
                           <Translate contentKey="generadorApp.pad.unidade">Unidade</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'paciente' ? (
+                        <th>
+                          <Translate contentKey="generadorApp.pad.paciente">Paciente</Translate>
                           <FontAwesomeIcon icon="sort" />
                         </th>
                       ) : null}
@@ -533,14 +577,16 @@ export class Pad extends React.Component<IPadProps, IPadState> {
 
                         {this.state.baseFilters !== 'statusPad' ? <td>{pad.statusPad}</td> : null}
 
-                        {this.state.baseFilters !== 'novoModelo' ? <td>{pad.novoModelo ? 'true' : 'false'}</td> : null}
-
                         {this.state.baseFilters !== 'imagePath' ? <td>{pad.imagePath}</td> : null}
 
                         {this.state.baseFilters !== 'score' ? <td>{pad.score}</td> : null}
 
                         {this.state.baseFilters !== 'unidade' ? (
                           <td>{pad.unidade ? <Link to={`unidade-easy/${pad.unidade.id}`}>{pad.unidade.id}</Link> : ''}</td>
+                        ) : null}
+
+                        {this.state.baseFilters !== 'paciente' ? (
+                          <td>{pad.paciente ? <Link to={`paciente/${pad.paciente.id}`}>{pad.paciente.id}</Link> : ''}</td>
                         ) : null}
 
                         <td className="text-right">
@@ -600,12 +646,14 @@ export class Pad extends React.Component<IPadProps, IPadState> {
 
 const mapStateToProps = ({ pad, ...storeState }: IRootState) => ({
   unidadeEasies: storeState.unidadeEasy.entities,
+  pacientes: storeState.paciente.entities,
   padList: pad.entities,
   totalItems: pad.totalItems
 });
 
 const mapDispatchToProps = {
   getUnidadeEasies,
+  getPacientes,
   getEntities
 };
 

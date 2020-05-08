@@ -7,8 +7,30 @@
             "fieldTypeBlobContent": "text"
         }
     ],
-    "relationships": [],
-    "changelogDate": "20200508160600",
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "acao",
+            "otherEntityRelationshipName": "logUserFranquia",
+            "relationshipName": "acao",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "tela",
+            "otherEntityRelationshipName": "logUserFranquia",
+            "relationshipName": "tela",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "franquiaUsuario",
+            "otherEntityRelationshipName": "logUserFranquia",
+            "relationshipName": "usuario",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20200508170200",
     "entityTableName": "log_user_franquia",
     "dto": "mapstruct",
     "pagination": "pagination",

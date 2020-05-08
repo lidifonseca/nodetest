@@ -163,6 +163,8 @@ export class ResultadosUpdate extends React.Component<IResultadosUpdateProps, IR
                         <DataCadastroComponentUpdate baseFilters />
 
                         <DataVencimentoPrazoComponentUpdate baseFilters />
+
+                        <AlertasResultadosEsperadosComponentUpdate baseFilter alertasResultadosEsperados />
                       </Row>
                     </div>
                   )}
@@ -323,6 +325,14 @@ const DataVencimentoPrazoComponentUpdate = ({ baseFilters }) => {
     </Col>
   ) : (
     <AvInput type="hidden" name="dataVencimentoPrazo" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const AlertasResultadosEsperadosComponentUpdate = ({ baseFilters, alertasResultadosEsperados }) => {
+  return baseFilters !== 'alertasResultadosEsperados' ? (
+    <Col md="12"></Col>
+  ) : (
+    <AvInput type="hidden" name="alertasResultadosEsperados" value={this.state.fieldsBase[baseFilters]} />
   );
 };
 

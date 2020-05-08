@@ -59,7 +59,10 @@ export class Acao extends React.Component<IAcaoProps, IAcaoState> {
   cancelCourse = () => {
     this.setState(
       {
-        acao: ''
+        acao: '',
+        logUser: '',
+        logUserFranquia: '',
+        usuarioAcao: ''
       },
       () => this.sortEntities()
     );
@@ -107,6 +110,15 @@ export class Acao extends React.Component<IAcaoProps, IAcaoState> {
       'acao=' +
       this.state.acao +
       '&' +
+      'logUser=' +
+      this.state.logUser +
+      '&' +
+      'logUserFranquia=' +
+      this.state.logUserFranquia +
+      '&' +
+      'usuarioAcao=' +
+      this.state.usuarioAcao +
+      '&' +
       ''
     );
   };
@@ -114,8 +126,8 @@ export class Acao extends React.Component<IAcaoProps, IAcaoState> {
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { acao, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntitiesExport(acao, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const { acao, logUser, logUserFranquia, usuarioAcao, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntitiesExport(acao, logUser, logUserFranquia, usuarioAcao, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   confirmExport() {}

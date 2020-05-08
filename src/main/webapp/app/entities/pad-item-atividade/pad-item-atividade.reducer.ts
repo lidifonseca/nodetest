@@ -35,12 +35,18 @@ export interface IPadItemAtividadeBaseState {
   baseFilters: any;
   dataInicio: any;
   dataFim: any;
+  atividade: any;
+  padItem: any;
 }
 
 export interface IPadItemAtividadeUpdateState {
   fieldsBase: IPadItemAtividadeBaseState;
 
+  categoriaAtividadeSelectValue: any;
+  padItemSelectValue: any;
   isNew: boolean;
+  atividadeId: string;
+  padItemId: string;
 }
 
 // Reducer
@@ -123,19 +129,33 @@ const apiUrl = 'api/pad-item-atividades';
 export type ICrudGetAllActionPadItemAtividade<T> = (
   dataInicio?: any,
   dataFim?: any,
+  atividade?: any,
+  padItem?: any,
   page?: number,
   size?: number,
   sort?: string
 ) => IPayload<T> | ((dispatch: any) => IPayload<T>);
 
-export const getEntities: ICrudGetAllActionPadItemAtividade<IPadItemAtividade> = (dataInicio, dataFim, page, size, sort) => {
+export const getEntities: ICrudGetAllActionPadItemAtividade<IPadItemAtividade> = (
+  dataInicio,
+  dataFim,
+  atividade,
+  padItem,
+  page,
+  size,
+  sort
+) => {
   const dataInicioRequest = dataInicio ? `dataInicio.equals=${dataInicio}&` : '';
   const dataFimRequest = dataFim ? `dataFim.equals=${dataFim}&` : '';
+  const atividadeRequest = atividade ? `atividade.equals=${atividade}&` : '';
+  const padItemRequest = padItem ? `padItem.equals=${padItem}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_PADITEMATIVIDADE_LIST,
-    payload: axios.get<IPadItemAtividade>(`${requestUrl}${dataInicioRequest}${dataFimRequest}cacheBuster=${new Date().getTime()}`)
+    payload: axios.get<IPadItemAtividade>(
+      `${requestUrl}${dataInicioRequest}${dataFimRequest}${atividadeRequest}${padItemRequest}cacheBuster=${new Date().getTime()}`
+    )
   };
 };
 export const getEntity: ICrudGetAction<IPadItemAtividade> = id => {
@@ -146,20 +166,34 @@ export const getEntity: ICrudGetAction<IPadItemAtividade> = id => {
   };
 };
 
-export const getEntitiesExport: ICrudGetAllActionPadItemAtividade<IPadItemAtividade> = (dataInicio, dataFim, page, size, sort) => {
+export const getEntitiesExport: ICrudGetAllActionPadItemAtividade<IPadItemAtividade> = (
+  dataInicio,
+  dataFim,
+  atividade,
+  padItem,
+  page,
+  size,
+  sort
+) => {
   const dataInicioRequest = dataInicio ? `dataInicio.equals=${dataInicio}&` : '';
   const dataFimRequest = dataFim ? `dataFim.equals=${dataFim}&` : '';
+  const atividadeRequest = atividade ? `atividade.equals=${atividade}&` : '';
+  const padItemRequest = padItem ? `padItem.equals=${padItem}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_PADITEMATIVIDADE_LIST,
-    payload: axios.get<IPadItemAtividade>(`${requestUrl}${dataInicioRequest}${dataFimRequest}cacheBuster=${new Date().getTime()}`)
+    payload: axios.get<IPadItemAtividade>(
+      `${requestUrl}${dataInicioRequest}${dataFimRequest}${atividadeRequest}${padItemRequest}cacheBuster=${new Date().getTime()}`
+    )
   };
 };
 
 export const createEntity: ICrudPutAction<IPadItemAtividade> = entity => async dispatch => {
   entity = {
-    ...entity
+    ...entity,
+    atividade: entity.atividade === 'null' ? null : entity.atividade,
+    padItem: entity.padItem === 'null' ? null : entity.padItem
   };
   const result = await dispatch({
     type: ACTION_TYPES.CREATE_PADITEMATIVIDADE,
@@ -170,7 +204,11 @@ export const createEntity: ICrudPutAction<IPadItemAtividade> = entity => async d
 };
 
 export const updateEntity: ICrudPutAction<IPadItemAtividade> = entity => async dispatch => {
-  entity = { ...entity };
+  entity = {
+    ...entity,
+    atividade: entity.atividade === 'null' ? null : entity.atividade,
+    padItem: entity.padItem === 'null' ? null : entity.padItem
+  };
   const result = await dispatch({
     type: ACTION_TYPES.UPDATE_PADITEMATIVIDADE,
     payload: axios.put(apiUrl, cleanEntity(entity))
@@ -199,9 +237,14 @@ export const getPadItemAtividadeState = (location): IPadItemAtividadeBaseState =
   const dataInicio = url.searchParams.get('dataInicio') || '';
   const dataFim = url.searchParams.get('dataFim') || '';
 
+  const atividade = url.searchParams.get('atividade') || '';
+  const padItem = url.searchParams.get('padItem') || '';
+
   return {
     baseFilters,
     dataInicio,
-    dataFim
+    dataFim,
+    atividade,
+    padItem
   };
 };

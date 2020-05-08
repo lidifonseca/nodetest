@@ -23,7 +23,11 @@
         "title": "Diario"
       },
       "historico": "Historico",
-      "gerarPdf": "Gerar Pdf"
+      "gerarPdf": "Gerar Pdf",
+      "usuario_empty": "Without Usuario",
+      "usuario": "Usuario",
+      "paciente_empty": "Without Paciente",
+      "paciente": "Paciente"
     }
   }
 }

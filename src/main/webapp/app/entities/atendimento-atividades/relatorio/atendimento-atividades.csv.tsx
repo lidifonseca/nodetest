@@ -34,6 +34,11 @@ import { IAtendimentoAtividades } from 'app/shared/model/atendimento-atividades.
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
+import { ICategoriaAtividade } from 'app/shared/model/categoria-atividade.model';
+import { getEntities as getCategoriaAtividades } from 'app/entities/categoria-atividade/categoria-atividade.reducer';
+import { IAtendimento } from 'app/shared/model/atendimento.model';
+import { getEntities as getAtendimentos } from 'app/entities/atendimento/atendimento.reducer';
+
 export interface IAtendimentoAtividadesProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
 export interface IAtendimentoAtividadesState extends IAtendimentoAtividadesBaseState, IPaginationBaseState {
@@ -54,12 +59,17 @@ export class AtendimentoAtividades extends React.Component<IAtendimentoAtividade
 
   componentDidMount() {
     this.getEntities();
+
+    this.props.getCategoriaAtividades();
+    this.props.getAtendimentos();
   }
 
   cancelCourse = () => {
     this.setState(
       {
-        feito: ''
+        feito: '',
+        atividade: '',
+        atendimento: ''
       },
       () => this.sortEntities()
     );
@@ -107,6 +117,12 @@ export class AtendimentoAtividades extends React.Component<IAtendimentoAtividade
       'feito=' +
       this.state.feito +
       '&' +
+      'atividade=' +
+      this.state.atividade +
+      '&' +
+      'atendimento=' +
+      this.state.atendimento +
+      '&' +
       ''
     );
   };
@@ -114,8 +130,8 @@ export class AtendimentoAtividades extends React.Component<IAtendimentoAtividade
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { feito, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntitiesExport(feito, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const { feito, atividade, atendimento, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntitiesExport(feito, atividade, atendimento, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   confirmExport() {}
@@ -164,11 +180,15 @@ export class AtendimentoAtividades extends React.Component<IAtendimentoAtividade
 }
 
 const mapStateToProps = ({ atendimentoAtividades, ...storeState }: IRootState) => ({
+  categoriaAtividades: storeState.categoriaAtividade.entities,
+  atendimentos: storeState.atendimento.entities,
   atendimentoAtividadesList: atendimentoAtividades.entities,
   totalItems: atendimentoAtividades.totalItems
 });
 
 const mapDispatchToProps = {
+  getCategoriaAtividades,
+  getAtendimentos,
   getEntitiesExport
 };
 

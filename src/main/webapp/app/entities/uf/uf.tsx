@@ -51,7 +51,8 @@ export class Uf extends React.Component<IUfProps, IUfState> {
     this.setState(
       {
         siglaUf: '',
-        descrUf: ''
+        descrUf: '',
+        cidade: ''
       },
       () => this.sortEntities()
     );
@@ -104,6 +105,9 @@ export class Uf extends React.Component<IUfProps, IUfState> {
       'descrUf=' +
       this.state.descrUf +
       '&' +
+      'cidade=' +
+      this.state.cidade +
+      '&' +
       ''
     );
   };
@@ -111,8 +115,8 @@ export class Uf extends React.Component<IUfProps, IUfState> {
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { siglaUf, descrUf, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntities(siglaUf, descrUf, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const { siglaUf, descrUf, cidade, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntities(siglaUf, descrUf, cidade, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   render() {
@@ -173,6 +177,12 @@ export class Uf extends React.Component<IUfProps, IUfState> {
 
                             <AvInput type="text" name="descrUf" id="uf-descrUf" value={this.state.descrUf} />
                           </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'cidade' ? (
+                        <Col md="3">
+                          <Row className="mr-1 mt-1"></Row>
                         </Col>
                       ) : null}
                     </div>

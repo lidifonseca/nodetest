@@ -83,6 +83,32 @@ export class PacienteOperadoraDetail extends React.Component<IPacienteOperadoraD
                       </Col>
                     </Row>
                   </Col>
+
+                  <Col md="12">
+                    <Row>
+                      <Col md="3">
+                        <dt>
+                          <Translate contentKey="generadorApp.pacienteOperadora.paciente">Paciente</Translate>
+                        </dt>
+                      </Col>
+                      <Col md="9">
+                        <dd>{pacienteOperadoraEntity.paciente ? pacienteOperadoraEntity.paciente.id : ''}</dd>
+                      </Col>
+                    </Row>
+                  </Col>
+
+                  <Col md="12">
+                    <Row>
+                      <Col md="3">
+                        <dt>
+                          <Translate contentKey="generadorApp.pacienteOperadora.operadora">Operadora</Translate>
+                        </dt>
+                      </Col>
+                      <Col md="9">
+                        <dd>{pacienteOperadoraEntity.operadora ? pacienteOperadoraEntity.operadora.id : ''}</dd>
+                      </Col>
+                    </Row>
+                  </Col>
                 </Row>
                 <Button tag={Link} to="/paciente-operadora" replace color="info">
                   <FontAwesomeIcon icon="arrow-left" />{' '}

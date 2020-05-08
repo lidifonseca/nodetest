@@ -38,12 +38,15 @@ export interface IAlertasResultadosEsperadosBaseState {
   observacoes: any;
   usuarioId: any;
   valor: any;
+  resultados: any;
 }
 
 export interface IAlertasResultadosEsperadosUpdateState {
   fieldsBase: IAlertasResultadosEsperadosBaseState;
 
+  resultadosSelectValue: any;
   isNew: boolean;
+  resultadosId: string;
 }
 
 // Reducer
@@ -129,6 +132,7 @@ export type ICrudGetAllActionAlertasResultadosEsperados<T> = (
   observacoes?: any,
   usuarioId?: any,
   valor?: any,
+  resultados?: any,
   page?: number,
   size?: number,
   sort?: string
@@ -140,6 +144,7 @@ export const getEntities: ICrudGetAllActionAlertasResultadosEsperados<IAlertasRe
   observacoes,
   usuarioId,
   valor,
+  resultados,
   page,
   size,
   sort
@@ -149,12 +154,13 @@ export const getEntities: ICrudGetAllActionAlertasResultadosEsperados<IAlertasRe
   const observacoesRequest = observacoes ? `observacoes.contains=${observacoes}&` : '';
   const usuarioIdRequest = usuarioId ? `usuarioId.contains=${usuarioId}&` : '';
   const valorRequest = valor ? `valor.contains=${valor}&` : '';
+  const resultadosRequest = resultados ? `resultados.equals=${resultados}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_ALERTASRESULTADOSESPERADOS_LIST,
     payload: axios.get<IAlertasResultadosEsperados>(
-      `${requestUrl}${pontuacaoRequest}${alteracaoEsperadaRequest}${observacoesRequest}${usuarioIdRequest}${valorRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${pontuacaoRequest}${alteracaoEsperadaRequest}${observacoesRequest}${usuarioIdRequest}${valorRequest}${resultadosRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };
@@ -172,6 +178,7 @@ export const getEntitiesExport: ICrudGetAllActionAlertasResultadosEsperados<IAle
   observacoes,
   usuarioId,
   valor,
+  resultados,
   page,
   size,
   sort
@@ -181,19 +188,21 @@ export const getEntitiesExport: ICrudGetAllActionAlertasResultadosEsperados<IAle
   const observacoesRequest = observacoes ? `observacoes.contains=${observacoes}&` : '';
   const usuarioIdRequest = usuarioId ? `usuarioId.contains=${usuarioId}&` : '';
   const valorRequest = valor ? `valor.contains=${valor}&` : '';
+  const resultadosRequest = resultados ? `resultados.equals=${resultados}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_ALERTASRESULTADOSESPERADOS_LIST,
     payload: axios.get<IAlertasResultadosEsperados>(
-      `${requestUrl}${pontuacaoRequest}${alteracaoEsperadaRequest}${observacoesRequest}${usuarioIdRequest}${valorRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${pontuacaoRequest}${alteracaoEsperadaRequest}${observacoesRequest}${usuarioIdRequest}${valorRequest}${resultadosRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };
 
 export const createEntity: ICrudPutAction<IAlertasResultadosEsperados> = entity => async dispatch => {
   entity = {
-    ...entity
+    ...entity,
+    resultados: entity.resultados === 'null' ? null : entity.resultados
   };
   const result = await dispatch({
     type: ACTION_TYPES.CREATE_ALERTASRESULTADOSESPERADOS,
@@ -204,7 +213,7 @@ export const createEntity: ICrudPutAction<IAlertasResultadosEsperados> = entity 
 };
 
 export const updateEntity: ICrudPutAction<IAlertasResultadosEsperados> = entity => async dispatch => {
-  entity = { ...entity };
+  entity = { ...entity, resultados: entity.resultados === 'null' ? null : entity.resultados };
   const result = await dispatch({
     type: ACTION_TYPES.UPDATE_ALERTASRESULTADOSESPERADOS,
     payload: axios.put(apiUrl, cleanEntity(entity))
@@ -236,12 +245,15 @@ export const getAlertasResultadosEsperadosState = (location): IAlertasResultados
   const usuarioId = url.searchParams.get('usuarioId') || '';
   const valor = url.searchParams.get('valor') || '';
 
+  const resultados = url.searchParams.get('resultados') || '';
+
   return {
     baseFilters,
     pontuacao,
     alteracaoEsperada,
     observacoes,
     usuarioId,
-    valor
+    valor,
+    resultados
   };
 };

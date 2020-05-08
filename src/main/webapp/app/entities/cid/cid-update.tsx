@@ -151,6 +151,12 @@ export class CidUpdate extends React.Component<ICidUpdateProps, ICidUpdateState>
                         <TempComponentUpdate baseFilters />
 
                         <ApelidoComponentUpdate baseFilters />
+
+                        <CidXPtaNovoComponentUpdate baseFilter cidXPtaNovos />
+
+                        <PacienteDiagnosticoComponentUpdate baseFilter pacienteDiagnosticos />
+
+                        <PadCidComponentUpdate baseFilter padCids />
                       </Row>
                     </div>
                   )}
@@ -283,6 +289,30 @@ const ApelidoComponentUpdate = ({ baseFilters }) => {
     </Col>
   ) : (
     <AvInput type="hidden" name="apelido" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const CidXPtaNovoComponentUpdate = ({ baseFilters, cidXPtaNovos }) => {
+  return baseFilters !== 'cidXPtaNovo' ? (
+    <Col md="12"></Col>
+  ) : (
+    <AvInput type="hidden" name="cidXPtaNovo" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const PacienteDiagnosticoComponentUpdate = ({ baseFilters, pacienteDiagnosticos }) => {
+  return baseFilters !== 'pacienteDiagnostico' ? (
+    <Col md="12"></Col>
+  ) : (
+    <AvInput type="hidden" name="pacienteDiagnostico" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const PadCidComponentUpdate = ({ baseFilters, padCids }) => {
+  return baseFilters !== 'padCid' ? (
+    <Col md="12"></Col>
+  ) : (
+    <AvInput type="hidden" name="padCid" value={this.state.fieldsBase[baseFilters]} />
   );
 };
 

@@ -4,6 +4,7 @@ import { BaseEntity } from './base/base.entity';
 
 import { validate, Contains, IsInt, Length, IsEmail, IsFQDN, IsDate, Min, Max } from 'class-validator';
 
+import RespostasQuestionarios from './respostas-questionarios.entity';
 import Paciente from './paciente.entity';
 
 /**
@@ -22,6 +23,12 @@ export default class Questionarios extends BaseEntity {
 
   @Column({ type: 'integer', name: 'ULTIMA_PERGUNTA_RESPONDIDA' })
   ultimaPerguntaRespondida: number;
+
+  @OneToMany(
+    type => RespostasQuestionarios,
+    other => other.questionarios
+  )
+  respostasQuestionarios: RespostasQuestionarios[];
 
   @ManyToOne(type => Paciente)
   @JoinColumn({ name: 'ID_PACIENTE', referencedColumnName: 'id' })

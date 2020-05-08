@@ -18,8 +18,22 @@
             "fieldType": "Boolean"
         }
     ],
-    "relationships": [],
-    "changelogDate": "20200508172100",
+    "relationships": [
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "acoesRespostas",
+            "otherEntityRelationshipName": "respostas",
+            "relationshipName": "acoesRespostas"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "perguntasQuestionario",
+            "otherEntityRelationshipName": "respostas",
+            "relationshipName": "perguntasQuestionario",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20200508181700",
     "entityTableName": "respostas",
     "dto": "mapstruct",
     "pagination": "pagination",

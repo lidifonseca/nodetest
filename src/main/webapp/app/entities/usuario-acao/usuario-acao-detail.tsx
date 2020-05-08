@@ -82,6 +82,32 @@ export class UsuarioAcaoDetail extends React.Component<IUsuarioAcaoDetailProps, 
                       </Col>
                     </Row>
                   </Col>
+
+                  <Col md="12">
+                    <Row>
+                      <Col md="3">
+                        <dt>
+                          <Translate contentKey="generadorApp.usuarioAcao.tela">Tela</Translate>
+                        </dt>
+                      </Col>
+                      <Col md="9">
+                        <dd>{usuarioAcaoEntity.tela ? usuarioAcaoEntity.tela.id : ''}</dd>
+                      </Col>
+                    </Row>
+                  </Col>
+
+                  <Col md="12">
+                    <Row>
+                      <Col md="3">
+                        <dt>
+                          <Translate contentKey="generadorApp.usuarioAcao.acao">Acao</Translate>
+                        </dt>
+                      </Col>
+                      <Col md="9">
+                        <dd>{usuarioAcaoEntity.acao ? usuarioAcaoEntity.acao.id : ''}</dd>
+                      </Col>
+                    </Row>
+                  </Col>
                 </Row>
                 <Button tag={Link} to="/usuario-acao" replace color="info">
                   <FontAwesomeIcon icon="arrow-left" />{' '}

@@ -28,6 +28,9 @@ import { IEspecialidadeValor } from 'app/shared/model/especialidade-valor.model'
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
+import { IEspecialidade } from 'app/shared/model/especialidade.model';
+import { getEntities as getEspecialidades } from 'app/entities/especialidade/especialidade.reducer';
+
 export interface IEspecialidadeValorProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
 export interface IEspecialidadeValorState extends IEspecialidadeValorBaseState, IPaginationBaseState {}
@@ -45,6 +48,8 @@ export class EspecialidadeValor extends React.Component<IEspecialidadeValorProps
 
   componentDidMount() {
     this.getEntities();
+
+    this.props.getEspecialidades();
   }
 
   cancelCourse = () => {
@@ -52,7 +57,8 @@ export class EspecialidadeValor extends React.Component<IEspecialidadeValorProps
       {
         idFranquia: '',
         valor: '',
-        ativo: ''
+        ativo: '',
+        especialidade: ''
       },
       () => this.sortEntities()
     );
@@ -108,6 +114,9 @@ export class EspecialidadeValor extends React.Component<IEspecialidadeValorProps
       'ativo=' +
       this.state.ativo +
       '&' +
+      'especialidade=' +
+      this.state.especialidade +
+      '&' +
       ''
     );
   };
@@ -115,12 +124,12 @@ export class EspecialidadeValor extends React.Component<IEspecialidadeValorProps
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { idFranquia, valor, ativo, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntities(idFranquia, valor, ativo, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const { idFranquia, valor, ativo, especialidade, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntities(idFranquia, valor, ativo, especialidade, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   render() {
-    const { especialidadeValorList, match, totalItems } = this.props;
+    const { especialidades, especialidadeValorList, match, totalItems } = this.props;
     return (
       <div>
         <h2 id="page-heading">
@@ -189,6 +198,33 @@ export class EspecialidadeValor extends React.Component<IEspecialidadeValorProps
                           </Row>
                         </Col>
                       ) : null}
+
+                      {this.state.baseFilters !== 'especialidade' ? (
+                        <Col md="3">
+                          <Row className="mr-1 mt-1">
+                            <div style={{ width: '100%' }}>
+                              <Label for="especialidade-valor-especialidade">
+                                <Translate contentKey="generadorApp.especialidadeValor.especialidade">Especialidade</Translate>
+                              </Label>
+                              <Select
+                                id="especialidade-valor-especialidade"
+                                isMulti
+                                className={'css-select-control'}
+                                value={
+                                  especialidades
+                                    ? especialidades.map(p =>
+                                        this.state.especialidade.split(',').indexOf(p.id) !== -1 ? { value: p.id, label: p.id } : null
+                                      )
+                                    : null
+                                }
+                                options={especialidades ? especialidades.map(option => ({ value: option.id, label: option.id })) : null}
+                                onChange={options => this.setState({ especialidade: options.map(option => option['value']).join(',') })}
+                                name={'especialidade'}
+                              />
+                            </div>
+                          </Row>
+                        </Col>
+                      ) : null}
                     </div>
 
                     <div className="row mb-2 mr-4 justify-content-end">
@@ -235,6 +271,13 @@ export class EspecialidadeValor extends React.Component<IEspecialidadeValorProps
                         </th>
                       ) : null}
 
+                      {this.state.baseFilters !== 'especialidade' ? (
+                        <th>
+                          <Translate contentKey="generadorApp.especialidadeValor.especialidade">Especialidade</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+
                       <th />
                     </tr>
                   </thead>
@@ -253,6 +296,16 @@ export class EspecialidadeValor extends React.Component<IEspecialidadeValorProps
                         {this.state.baseFilters !== 'valor' ? <td>{especialidadeValor.valor}</td> : null}
 
                         {this.state.baseFilters !== 'ativo' ? <td>{especialidadeValor.ativo}</td> : null}
+
+                        {this.state.baseFilters !== 'especialidade' ? (
+                          <td>
+                            {especialidadeValor.especialidade ? (
+                              <Link to={`especialidade/${especialidadeValor.especialidade.id}`}>{especialidadeValor.especialidade.id}</Link>
+                            ) : (
+                              ''
+                            )}
+                          </td>
+                        ) : null}
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">
@@ -320,11 +373,13 @@ export class EspecialidadeValor extends React.Component<IEspecialidadeValorProps
 }
 
 const mapStateToProps = ({ especialidadeValor, ...storeState }: IRootState) => ({
+  especialidades: storeState.especialidade.entities,
   especialidadeValorList: especialidadeValor.entities,
   totalItems: especialidadeValor.totalItems
 });
 
 const mapDispatchToProps = {
+  getEspecialidades,
   getEntities
 };
 

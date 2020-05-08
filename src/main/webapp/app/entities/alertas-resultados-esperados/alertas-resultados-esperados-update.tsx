@@ -9,6 +9,8 @@ import { Translate, translate, ICrudGetAction, ICrudGetAllAction, ICrudPutAction
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
+import { IResultados } from 'app/shared/model/resultados.model';
+import { getEntities as getResultados } from 'app/entities/resultados/resultados.reducer';
 import {
   IAlertasResultadosEsperadosUpdateState,
   getEntity,
@@ -32,13 +34,28 @@ export class AlertasResultadosEsperadosUpdate extends React.Component<
     super(props);
 
     this.state = {
+      resultadosSelectValue: null,
       fieldsBase: getAlertasResultadosEsperadosState(this.props.location),
+      resultadosId: '0',
       isNew: !this.props.match.params || !this.props.match.params.id
     };
   }
   componentDidUpdate(nextProps, nextState) {
     if (nextProps.updateSuccess !== this.props.updateSuccess && nextProps.updateSuccess) {
       this.handleClose();
+    }
+
+    if (
+      nextProps.resultados.length > 0 &&
+      this.state.resultadosSelectValue === null &&
+      nextProps.alertasResultadosEsperadosEntity.resultados &&
+      nextProps.alertasResultadosEsperadosEntity.resultados.id
+    ) {
+      this.setState({
+        resultadosSelectValue: nextProps.resultados.map(p =>
+          nextProps.alertasResultadosEsperadosEntity.resultados.id === p.id ? { value: p.id, label: p.id } : null
+        )
+      });
     }
   }
 
@@ -48,6 +65,8 @@ export class AlertasResultadosEsperadosUpdate extends React.Component<
     } else {
       this.props.getEntity(this.props.match.params.id);
     }
+
+    this.props.getResultados();
   }
 
   getFiltersURL = (offset = null) => {
@@ -63,7 +82,7 @@ export class AlertasResultadosEsperadosUpdate extends React.Component<
       const { alertasResultadosEsperadosEntity } = this.props;
       const entity = {
         ...alertasResultadosEsperadosEntity,
-
+        resultados: this.state.resultadosSelectValue ? this.state.resultadosSelectValue['value'] : null,
         ...values
       };
 
@@ -80,7 +99,7 @@ export class AlertasResultadosEsperadosUpdate extends React.Component<
   };
 
   render() {
-    const { alertasResultadosEsperadosEntity, loading, updating } = this.props;
+    const { alertasResultadosEsperadosEntity, resultados, loading, updating } = this.props;
     const { isNew } = this.state;
 
     const baseFilters = this.state.fieldsBase && this.state.fieldsBase['baseFilters'] ? this.state.fieldsBase['baseFilters'] : null;
@@ -91,7 +110,8 @@ export class AlertasResultadosEsperadosUpdate extends React.Component<
             isNew
               ? {}
               : {
-                  ...alertasResultadosEsperadosEntity
+                  ...alertasResultadosEsperadosEntity,
+                  resultados: alertasResultadosEsperadosEntity.resultados ? alertasResultadosEsperadosEntity.resultados.id : null
                 }
           }
           onSubmit={this.saveEntity}
@@ -171,6 +191,8 @@ export class AlertasResultadosEsperadosUpdate extends React.Component<
                         <UsuarioIdComponentUpdate baseFilters />
 
                         <ValorComponentUpdate baseFilters />
+
+                        <ResultadosComponentUpdate baseFilter resultados />
                       </Row>
                     </div>
                   )}
@@ -185,6 +207,7 @@ export class AlertasResultadosEsperadosUpdate extends React.Component<
 }
 
 const mapStateToProps = (storeState: IRootState) => ({
+  resultados: storeState.resultados.entities,
   alertasResultadosEsperadosEntity: storeState.alertasResultadosEsperados.entity,
   loading: storeState.alertasResultadosEsperados.loading,
   updating: storeState.alertasResultadosEsperados.updating,
@@ -192,6 +215,7 @@ const mapStateToProps = (storeState: IRootState) => ({
 });
 
 const mapDispatchToProps = {
+  getResultados,
   getEntity,
   updateEntity,
   createEntity,
@@ -306,6 +330,34 @@ const ValorComponentUpdate = ({ baseFilters }) => {
     </Col>
   ) : (
     <AvInput type="hidden" name="valor" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const ResultadosComponentUpdate = ({ baseFilters, resultados }) => {
+  return baseFilters !== 'resultados' ? (
+    <Col md="12">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" for="alertas-resultados-esperados-resultados">
+              <Translate contentKey="generadorApp.alertasResultadosEsperados.resultados">Resultados</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <Select
+              id="alertas-resultados-esperados-resultados"
+              className={'css-select-control'}
+              value={this.state.resultadosSelectValue}
+              options={resultados ? resultados.map(option => ({ value: option.id, label: option.id })) : null}
+              onChange={options => this.setState({ resultadosSelectValue: options })}
+              name={'resultados'}
+            />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="resultados" value={this.state.fieldsBase[baseFilters]} />
   );
 };
 

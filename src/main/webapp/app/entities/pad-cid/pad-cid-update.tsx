@@ -9,6 +9,10 @@ import { Translate, translate, ICrudGetAction, ICrudGetAllAction, ICrudPutAction
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
+import { IPad } from 'app/shared/model/pad.model';
+import { getEntities as getPads } from 'app/entities/pad/pad.reducer';
+import { ICid } from 'app/shared/model/cid.model';
+import { getEntities as getCids } from 'app/entities/cid/cid.reducer';
 import { IPadCidUpdateState, getEntity, getPadCidState, IPadCidBaseState, updateEntity, createEntity, reset } from './pad-cid.reducer';
 import { IPadCid } from 'app/shared/model/pad-cid.model';
 import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
@@ -21,13 +25,29 @@ export class PadCidUpdate extends React.Component<IPadCidUpdateProps, IPadCidUpd
     super(props);
 
     this.state = {
+      padSelectValue: null,
+      cidSelectValue: null,
       fieldsBase: getPadCidState(this.props.location),
+      padId: '0',
+      cidId: '0',
       isNew: !this.props.match.params || !this.props.match.params.id
     };
   }
   componentDidUpdate(nextProps, nextState) {
     if (nextProps.updateSuccess !== this.props.updateSuccess && nextProps.updateSuccess) {
       this.handleClose();
+    }
+
+    if (nextProps.pads.length > 0 && this.state.padSelectValue === null && nextProps.padCidEntity.pad && nextProps.padCidEntity.pad.id) {
+      this.setState({
+        padSelectValue: nextProps.pads.map(p => (nextProps.padCidEntity.pad.id === p.id ? { value: p.id, label: p.id } : null))
+      });
+    }
+
+    if (nextProps.cids.length > 0 && this.state.cidSelectValue === null && nextProps.padCidEntity.cid && nextProps.padCidEntity.cid.id) {
+      this.setState({
+        cidSelectValue: nextProps.cids.map(p => (nextProps.padCidEntity.cid.id === p.id ? { value: p.id, label: p.id } : null))
+      });
     }
   }
 
@@ -37,6 +57,9 @@ export class PadCidUpdate extends React.Component<IPadCidUpdateProps, IPadCidUpd
     } else {
       this.props.getEntity(this.props.match.params.id);
     }
+
+    this.props.getPads();
+    this.props.getCids();
   }
 
   getFiltersURL = (offset = null) => {
@@ -52,7 +75,8 @@ export class PadCidUpdate extends React.Component<IPadCidUpdateProps, IPadCidUpd
       const { padCidEntity } = this.props;
       const entity = {
         ...padCidEntity,
-
+        pad: this.state.padSelectValue ? this.state.padSelectValue['value'] : null,
+        cid: this.state.cidSelectValue ? this.state.cidSelectValue['value'] : null,
         ...values
       };
 
@@ -69,7 +93,7 @@ export class PadCidUpdate extends React.Component<IPadCidUpdateProps, IPadCidUpd
   };
 
   render() {
-    const { padCidEntity, loading, updating } = this.props;
+    const { padCidEntity, pads, cids, loading, updating } = this.props;
     const { isNew } = this.state;
 
     const baseFilters = this.state.fieldsBase && this.state.fieldsBase['baseFilters'] ? this.state.fieldsBase['baseFilters'] : null;
@@ -80,7 +104,9 @@ export class PadCidUpdate extends React.Component<IPadCidUpdateProps, IPadCidUpd
             isNew
               ? {}
               : {
-                  ...padCidEntity
+                  ...padCidEntity,
+                  pad: padCidEntity.pad ? padCidEntity.pad.id : null,
+                  cid: padCidEntity.cid ? padCidEntity.cid.id : null
                 }
           }
           onSubmit={this.saveEntity}
@@ -145,6 +171,10 @@ export class PadCidUpdate extends React.Component<IPadCidUpdateProps, IPadCidUpd
                         <ObservacaoComponentUpdate baseFilters />
 
                         <AtivoComponentUpdate baseFilters />
+
+                        <PadComponentUpdate baseFilter pads />
+
+                        <CidComponentUpdate baseFilter cids />
                       </Row>
                     </div>
                   )}
@@ -159,6 +189,8 @@ export class PadCidUpdate extends React.Component<IPadCidUpdateProps, IPadCidUpd
 }
 
 const mapStateToProps = (storeState: IRootState) => ({
+  pads: storeState.pad.entities,
+  cids: storeState.cid.entities,
   padCidEntity: storeState.padCid.entity,
   loading: storeState.padCid.loading,
   updating: storeState.padCid.updating,
@@ -166,6 +198,8 @@ const mapStateToProps = (storeState: IRootState) => ({
 });
 
 const mapDispatchToProps = {
+  getPads,
+  getCids,
   getEntity,
   updateEntity,
   createEntity,
@@ -214,6 +248,62 @@ const AtivoComponentUpdate = ({ baseFilters }) => {
     </Col>
   ) : (
     <AvInput type="hidden" name="ativo" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const PadComponentUpdate = ({ baseFilters, pads }) => {
+  return baseFilters !== 'pad' ? (
+    <Col md="12">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" for="pad-cid-pad">
+              <Translate contentKey="generadorApp.padCid.pad">Pad</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <Select
+              id="pad-cid-pad"
+              className={'css-select-control'}
+              value={this.state.padSelectValue}
+              options={pads ? pads.map(option => ({ value: option.id, label: option.id })) : null}
+              onChange={options => this.setState({ padSelectValue: options })}
+              name={'pad'}
+            />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="pad" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const CidComponentUpdate = ({ baseFilters, cids }) => {
+  return baseFilters !== 'cid' ? (
+    <Col md="12">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" for="pad-cid-cid">
+              <Translate contentKey="generadorApp.padCid.cid">Cid</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <Select
+              id="pad-cid-cid"
+              className={'css-select-control'}
+              value={this.state.cidSelectValue}
+              options={cids ? cids.map(option => ({ value: option.id, label: option.id })) : null}
+              onChange={options => this.setState({ cidSelectValue: options })}
+              name={'cid'}
+            />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="cid" value={this.state.fieldsBase[baseFilters]} />
   );
 };
 

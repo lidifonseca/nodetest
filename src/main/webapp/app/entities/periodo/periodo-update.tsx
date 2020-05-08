@@ -145,6 +145,10 @@ export class PeriodoUpdate extends React.Component<IPeriodoUpdateProps, IPeriodo
                         <PeriodoComponentUpdate baseFilters />
 
                         <AtivoComponentUpdate baseFilters />
+
+                        <AtendimentoComponentUpdate baseFilter atendimentos />
+
+                        <PadItemComponentUpdate baseFilter padItems />
                       </Row>
                     </div>
                   )}
@@ -214,6 +218,22 @@ const AtivoComponentUpdate = ({ baseFilters }) => {
     </Col>
   ) : (
     <AvInput type="hidden" name="ativo" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const AtendimentoComponentUpdate = ({ baseFilters, atendimentos }) => {
+  return baseFilters !== 'atendimento' ? (
+    <Col md="12"></Col>
+  ) : (
+    <AvInput type="hidden" name="atendimento" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const PadItemComponentUpdate = ({ baseFilters, padItems }) => {
+  return baseFilters !== 'padItem' ? (
+    <Col md="12"></Col>
+  ) : (
+    <AvInput type="hidden" name="padItem" value={this.state.fieldsBase[baseFilters]} />
   );
 };
 

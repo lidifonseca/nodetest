@@ -9,6 +9,10 @@ import { Translate, translate, ICrudGetAction, ICrudGetAllAction, ICrudPutAction
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
+import { IPaciente } from 'app/shared/model/paciente.model';
+import { getEntities as getPacientes } from 'app/entities/paciente/paciente.reducer';
+import { ICid } from 'app/shared/model/cid.model';
+import { getEntities as getCids } from 'app/entities/cid/cid.reducer';
 import {
   IPacienteDiagnosticoUpdateState,
   getEntity,
@@ -29,13 +33,41 @@ export class PacienteDiagnosticoUpdate extends React.Component<IPacienteDiagnost
     super(props);
 
     this.state = {
+      pacienteSelectValue: null,
+      cidSelectValue: null,
       fieldsBase: getPacienteDiagnosticoState(this.props.location),
+      pacienteId: '0',
+      cId: '0',
       isNew: !this.props.match.params || !this.props.match.params.id
     };
   }
   componentDidUpdate(nextProps, nextState) {
     if (nextProps.updateSuccess !== this.props.updateSuccess && nextProps.updateSuccess) {
       this.handleClose();
+    }
+
+    if (
+      nextProps.pacientes.length > 0 &&
+      this.state.pacienteSelectValue === null &&
+      nextProps.pacienteDiagnosticoEntity.paciente &&
+      nextProps.pacienteDiagnosticoEntity.paciente.id
+    ) {
+      this.setState({
+        pacienteSelectValue: nextProps.pacientes.map(p =>
+          nextProps.pacienteDiagnosticoEntity.paciente.id === p.id ? { value: p.id, label: p.id } : null
+        )
+      });
+    }
+
+    if (
+      nextProps.cids.length > 0 &&
+      this.state.cidSelectValue === null &&
+      nextProps.pacienteDiagnosticoEntity.cid &&
+      nextProps.pacienteDiagnosticoEntity.cid.id
+    ) {
+      this.setState({
+        cidSelectValue: nextProps.cids.map(p => (nextProps.pacienteDiagnosticoEntity.cid.id === p.id ? { value: p.id, label: p.id } : null))
+      });
     }
   }
 
@@ -45,6 +77,9 @@ export class PacienteDiagnosticoUpdate extends React.Component<IPacienteDiagnost
     } else {
       this.props.getEntity(this.props.match.params.id);
     }
+
+    this.props.getPacientes();
+    this.props.getCids();
   }
 
   getFiltersURL = (offset = null) => {
@@ -60,7 +95,8 @@ export class PacienteDiagnosticoUpdate extends React.Component<IPacienteDiagnost
       const { pacienteDiagnosticoEntity } = this.props;
       const entity = {
         ...pacienteDiagnosticoEntity,
-
+        paciente: this.state.pacienteSelectValue ? this.state.pacienteSelectValue['value'] : null,
+        cid: this.state.cidSelectValue ? this.state.cidSelectValue['value'] : null,
         ...values
       };
 
@@ -77,7 +113,7 @@ export class PacienteDiagnosticoUpdate extends React.Component<IPacienteDiagnost
   };
 
   render() {
-    const { pacienteDiagnosticoEntity, loading, updating } = this.props;
+    const { pacienteDiagnosticoEntity, pacientes, cids, loading, updating } = this.props;
     const { isNew } = this.state;
 
     const baseFilters = this.state.fieldsBase && this.state.fieldsBase['baseFilters'] ? this.state.fieldsBase['baseFilters'] : null;
@@ -88,7 +124,9 @@ export class PacienteDiagnosticoUpdate extends React.Component<IPacienteDiagnost
             isNew
               ? {}
               : {
-                  ...pacienteDiagnosticoEntity
+                  ...pacienteDiagnosticoEntity,
+                  paciente: pacienteDiagnosticoEntity.paciente ? pacienteDiagnosticoEntity.paciente.id : null,
+                  c: pacienteDiagnosticoEntity.c ? pacienteDiagnosticoEntity.c.id : null
                 }
           }
           onSubmit={this.saveEntity}
@@ -161,6 +199,10 @@ export class PacienteDiagnosticoUpdate extends React.Component<IPacienteDiagnost
                         <ComplexidadeComponentUpdate baseFilters />
 
                         <CidComAltaComponentUpdate baseFilters />
+
+                        <PacienteComponentUpdate baseFilter pacientes />
+
+                        <CComponentUpdate baseFilter cids />
                       </Row>
                     </div>
                   )}
@@ -175,6 +217,8 @@ export class PacienteDiagnosticoUpdate extends React.Component<IPacienteDiagnost
 }
 
 const mapStateToProps = (storeState: IRootState) => ({
+  pacientes: storeState.paciente.entities,
+  cids: storeState.cid.entities,
   pacienteDiagnosticoEntity: storeState.pacienteDiagnostico.entity,
   loading: storeState.pacienteDiagnostico.loading,
   updating: storeState.pacienteDiagnostico.updating,
@@ -182,6 +226,8 @@ const mapStateToProps = (storeState: IRootState) => ({
 });
 
 const mapDispatchToProps = {
+  getPacientes,
+  getCids,
   getEntity,
   updateEntity,
   createEntity,
@@ -289,6 +335,62 @@ const CidComAltaComponentUpdate = ({ baseFilters }) => {
     </Col>
   ) : (
     <AvInput type="hidden" name="cidComAlta" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const PacienteComponentUpdate = ({ baseFilters, pacientes }) => {
+  return baseFilters !== 'paciente' ? (
+    <Col md="12">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" for="paciente-diagnostico-paciente">
+              <Translate contentKey="generadorApp.pacienteDiagnostico.paciente">Paciente</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <Select
+              id="paciente-diagnostico-paciente"
+              className={'css-select-control'}
+              value={this.state.pacienteSelectValue}
+              options={pacientes ? pacientes.map(option => ({ value: option.id, label: option.id })) : null}
+              onChange={options => this.setState({ pacienteSelectValue: options })}
+              name={'paciente'}
+            />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="paciente" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const CComponentUpdate = ({ baseFilters, cids }) => {
+  return baseFilters !== 'c' ? (
+    <Col md="12">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" for="paciente-diagnostico-c">
+              <Translate contentKey="generadorApp.pacienteDiagnostico.c">C</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <Select
+              id="paciente-diagnostico-c"
+              className={'css-select-control'}
+              value={this.state.cidSelectValue}
+              options={cids ? cids.map(option => ({ value: option.id, label: option.id })) : null}
+              onChange={options => this.setState({ cidSelectValue: options })}
+              name={'c'}
+            />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="c" value={this.state.fieldsBase[baseFilters]} />
   );
 };
 

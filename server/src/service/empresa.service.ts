@@ -5,6 +5,7 @@ import Empresa from '../domain/empresa.entity';
 import { EmpresaRepository } from '../repository/empresa.repository';
 
 const relationshipNames = [];
+relationshipNames.push('cidade');
 
 @Injectable()
 export class EmpresaService {

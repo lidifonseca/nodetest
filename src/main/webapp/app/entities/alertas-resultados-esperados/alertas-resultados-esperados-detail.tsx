@@ -135,6 +135,19 @@ export class AlertasResultadosEsperadosDetail extends React.Component<
                       </Col>
                     </Row>
                   </Col>
+
+                  <Col md="12">
+                    <Row>
+                      <Col md="3">
+                        <dt>
+                          <Translate contentKey="generadorApp.alertasResultadosEsperados.resultados">Resultados</Translate>
+                        </dt>
+                      </Col>
+                      <Col md="9">
+                        <dd>{alertasResultadosEsperadosEntity.resultados ? alertasResultadosEsperadosEntity.resultados.id : ''}</dd>
+                      </Col>
+                    </Row>
+                  </Col>
                 </Row>
                 <Button tag={Link} to="/alertas-resultados-esperados" replace color="info">
                   <FontAwesomeIcon icon="arrow-left" />{' '}

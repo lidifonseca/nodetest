@@ -23,8 +23,14 @@
         "title": "Categoria Atividade"
       },
       "atividade": "Atividade",
+      "atendimentoAtividades_empty": "Sem Atendimento Atividades",
+      "atendimentoAtividades": "Atendimento Atividades",
+      "padItemAtividade_empty": "Sem Pad Item Atividade",
+      "padItemAtividade": "Pad Item Atividade",
       "unidade_empty": "Sem Unidade",
-      "unidade": "Unidade"
+      "unidade": "Unidade",
+      "categoria_empty": "Sem Categoria",
+      "categoria": "Categoria"
     }
   }
 }

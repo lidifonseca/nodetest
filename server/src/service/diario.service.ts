@@ -5,6 +5,8 @@ import Diario from '../domain/diario.entity';
 import { DiarioRepository } from '../repository/diario.repository';
 
 const relationshipNames = [];
+relationshipNames.push('usuario');
+relationshipNames.push('paciente');
 
 @Injectable()
 export class DiarioService {

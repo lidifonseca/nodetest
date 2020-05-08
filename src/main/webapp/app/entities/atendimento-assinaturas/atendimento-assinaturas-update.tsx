@@ -9,6 +9,12 @@ import { Translate, translate, ICrudGetAction, ICrudGetAllAction, ICrudPutAction
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
+import { IAtendimento } from 'app/shared/model/atendimento.model';
+import { getEntities as getAtendimentos } from 'app/entities/atendimento/atendimento.reducer';
+import { IProfissional } from 'app/shared/model/profissional.model';
+import { getEntities as getProfissionals } from 'app/entities/profissional/profissional.reducer';
+import { IPaciente } from 'app/shared/model/paciente.model';
+import { getEntities as getPacientes } from 'app/entities/paciente/paciente.reducer';
 import {
   IAtendimentoAssinaturasUpdateState,
   getEntity,
@@ -29,13 +35,58 @@ export class AtendimentoAssinaturasUpdate extends React.Component<IAtendimentoAs
     super(props);
 
     this.state = {
+      atendimentoSelectValue: null,
+      profissionalSelectValue: null,
+      pacienteSelectValue: null,
       fieldsBase: getAtendimentoAssinaturasState(this.props.location),
+      atendimentoId: '0',
+      profissionalId: '0',
+      pacienteId: '0',
       isNew: !this.props.match.params || !this.props.match.params.id
     };
   }
   componentDidUpdate(nextProps, nextState) {
     if (nextProps.updateSuccess !== this.props.updateSuccess && nextProps.updateSuccess) {
       this.handleClose();
+    }
+
+    if (
+      nextProps.atendimentos.length > 0 &&
+      this.state.atendimentoSelectValue === null &&
+      nextProps.atendimentoAssinaturasEntity.atendimento &&
+      nextProps.atendimentoAssinaturasEntity.atendimento.id
+    ) {
+      this.setState({
+        atendimentoSelectValue: nextProps.atendimentos.map(p =>
+          nextProps.atendimentoAssinaturasEntity.atendimento.id === p.id ? { value: p.id, label: p.id } : null
+        )
+      });
+    }
+
+    if (
+      nextProps.profissionals.length > 0 &&
+      this.state.profissionalSelectValue === null &&
+      nextProps.atendimentoAssinaturasEntity.profissional &&
+      nextProps.atendimentoAssinaturasEntity.profissional.id
+    ) {
+      this.setState({
+        profissionalSelectValue: nextProps.profissionals.map(p =>
+          nextProps.atendimentoAssinaturasEntity.profissional.id === p.id ? { value: p.id, label: p.id } : null
+        )
+      });
+    }
+
+    if (
+      nextProps.pacientes.length > 0 &&
+      this.state.pacienteSelectValue === null &&
+      nextProps.atendimentoAssinaturasEntity.paciente &&
+      nextProps.atendimentoAssinaturasEntity.paciente.id
+    ) {
+      this.setState({
+        pacienteSelectValue: nextProps.pacientes.map(p =>
+          nextProps.atendimentoAssinaturasEntity.paciente.id === p.id ? { value: p.id, label: p.id } : null
+        )
+      });
     }
   }
 
@@ -45,6 +96,10 @@ export class AtendimentoAssinaturasUpdate extends React.Component<IAtendimentoAs
     } else {
       this.props.getEntity(this.props.match.params.id);
     }
+
+    this.props.getAtendimentos();
+    this.props.getProfissionals();
+    this.props.getPacientes();
   }
 
   getFiltersURL = (offset = null) => {
@@ -60,7 +115,9 @@ export class AtendimentoAssinaturasUpdate extends React.Component<IAtendimentoAs
       const { atendimentoAssinaturasEntity } = this.props;
       const entity = {
         ...atendimentoAssinaturasEntity,
-
+        atendimento: this.state.atendimentoSelectValue ? this.state.atendimentoSelectValue['value'] : null,
+        profissional: this.state.profissionalSelectValue ? this.state.profissionalSelectValue['value'] : null,
+        paciente: this.state.pacienteSelectValue ? this.state.pacienteSelectValue['value'] : null,
         ...values
       };
 
@@ -77,7 +134,7 @@ export class AtendimentoAssinaturasUpdate extends React.Component<IAtendimentoAs
   };
 
   render() {
-    const { atendimentoAssinaturasEntity, loading, updating } = this.props;
+    const { atendimentoAssinaturasEntity, atendimentos, profissionals, pacientes, loading, updating } = this.props;
     const { isNew } = this.state;
 
     const baseFilters = this.state.fieldsBase && this.state.fieldsBase['baseFilters'] ? this.state.fieldsBase['baseFilters'] : null;
@@ -88,7 +145,10 @@ export class AtendimentoAssinaturasUpdate extends React.Component<IAtendimentoAs
             isNew
               ? {}
               : {
-                  ...atendimentoAssinaturasEntity
+                  ...atendimentoAssinaturasEntity,
+                  atendimento: atendimentoAssinaturasEntity.atendimento ? atendimentoAssinaturasEntity.atendimento.id : null,
+                  profissional: atendimentoAssinaturasEntity.profissional ? atendimentoAssinaturasEntity.profissional.id : null,
+                  paciente: atendimentoAssinaturasEntity.paciente ? atendimentoAssinaturasEntity.paciente.id : null
                 }
           }
           onSubmit={this.saveEntity}
@@ -153,6 +213,12 @@ export class AtendimentoAssinaturasUpdate extends React.Component<IAtendimentoAs
                       ) : null}
                       <Row>
                         <ArquivoAssinaturaComponentUpdate baseFilters />
+
+                        <AtendimentoComponentUpdate baseFilter atendimentos />
+
+                        <ProfissionalComponentUpdate baseFilter profissionals />
+
+                        <PacienteComponentUpdate baseFilter pacientes />
                       </Row>
                     </div>
                   )}
@@ -167,6 +233,9 @@ export class AtendimentoAssinaturasUpdate extends React.Component<IAtendimentoAs
 }
 
 const mapStateToProps = (storeState: IRootState) => ({
+  atendimentos: storeState.atendimento.entities,
+  profissionals: storeState.profissional.entities,
+  pacientes: storeState.paciente.entities,
   atendimentoAssinaturasEntity: storeState.atendimentoAssinaturas.entity,
   loading: storeState.atendimentoAssinaturas.loading,
   updating: storeState.atendimentoAssinaturas.updating,
@@ -174,6 +243,9 @@ const mapStateToProps = (storeState: IRootState) => ({
 });
 
 const mapDispatchToProps = {
+  getAtendimentos,
+  getProfissionals,
+  getPacientes,
   getEntity,
   updateEntity,
   createEntity,
@@ -201,6 +273,90 @@ const ArquivoAssinaturaComponentUpdate = ({ baseFilters }) => {
     </Col>
   ) : (
     <AvInput type="hidden" name="arquivoAssinatura" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const AtendimentoComponentUpdate = ({ baseFilters, atendimentos }) => {
+  return baseFilters !== 'atendimento' ? (
+    <Col md="12">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" for="atendimento-assinaturas-atendimento">
+              <Translate contentKey="generadorApp.atendimentoAssinaturas.atendimento">Atendimento</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <Select
+              id="atendimento-assinaturas-atendimento"
+              className={'css-select-control'}
+              value={this.state.atendimentoSelectValue}
+              options={atendimentos ? atendimentos.map(option => ({ value: option.id, label: option.id })) : null}
+              onChange={options => this.setState({ atendimentoSelectValue: options })}
+              name={'atendimento'}
+            />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="atendimento" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const ProfissionalComponentUpdate = ({ baseFilters, profissionals }) => {
+  return baseFilters !== 'profissional' ? (
+    <Col md="12">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" for="atendimento-assinaturas-profissional">
+              <Translate contentKey="generadorApp.atendimentoAssinaturas.profissional">Profissional</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <Select
+              id="atendimento-assinaturas-profissional"
+              className={'css-select-control'}
+              value={this.state.profissionalSelectValue}
+              options={profissionals ? profissionals.map(option => ({ value: option.id, label: option.id })) : null}
+              onChange={options => this.setState({ profissionalSelectValue: options })}
+              name={'profissional'}
+            />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="profissional" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const PacienteComponentUpdate = ({ baseFilters, pacientes }) => {
+  return baseFilters !== 'paciente' ? (
+    <Col md="12">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" for="atendimento-assinaturas-paciente">
+              <Translate contentKey="generadorApp.atendimentoAssinaturas.paciente">Paciente</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <Select
+              id="atendimento-assinaturas-paciente"
+              className={'css-select-control'}
+              value={this.state.pacienteSelectValue}
+              options={pacientes ? pacientes.map(option => ({ value: option.id, label: option.id })) : null}
+              onChange={options => this.setState({ pacienteSelectValue: options })}
+              name={'paciente'}
+            />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="paciente" value={this.state.fieldsBase[baseFilters]} />
   );
 };
 

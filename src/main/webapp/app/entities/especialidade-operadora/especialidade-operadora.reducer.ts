@@ -41,12 +41,18 @@ export interface IEspecialidadeOperadoraBaseState {
   descontoCusto: any;
   descontoVenda: any;
   ativo: any;
+  operadora: any;
+  especialidade: any;
 }
 
 export interface IEspecialidadeOperadoraUpdateState {
   fieldsBase: IEspecialidadeOperadoraBaseState;
 
+  operadoraSelectValue: any;
+  especialidadeSelectValue: any;
   isNew: boolean;
+  operadoraId: string;
+  especialidadeId: string;
 }
 
 // Reducer
@@ -135,6 +141,8 @@ export type ICrudGetAllActionEspecialidadeOperadora<T> = (
   descontoCusto?: any,
   descontoVenda?: any,
   ativo?: any,
+  operadora?: any,
+  especialidade?: any,
   page?: number,
   size?: number,
   sort?: string
@@ -149,6 +157,8 @@ export const getEntities: ICrudGetAllActionEspecialidadeOperadora<IEspecialidade
   descontoCusto,
   descontoVenda,
   ativo,
+  operadora,
+  especialidade,
   page,
   size,
   sort
@@ -161,12 +171,14 @@ export const getEntities: ICrudGetAllActionEspecialidadeOperadora<IEspecialidade
   const descontoCustoRequest = descontoCusto ? `descontoCusto.contains=${descontoCusto}&` : '';
   const descontoVendaRequest = descontoVenda ? `descontoVenda.contains=${descontoVenda}&` : '';
   const ativoRequest = ativo ? `ativo.contains=${ativo}&` : '';
+  const operadoraRequest = operadora ? `operadora.equals=${operadora}&` : '';
+  const especialidadeRequest = especialidade ? `especialidade.equals=${especialidade}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_ESPECIALIDADEOPERADORA_LIST,
     payload: axios.get<IEspecialidadeOperadora>(
-      `${requestUrl}${codTussRequest}${codDespesaRequest}${codTabelaRequest}${valorCustoRequest}${valorVendaRequest}${descontoCustoRequest}${descontoVendaRequest}${ativoRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${codTussRequest}${codDespesaRequest}${codTabelaRequest}${valorCustoRequest}${valorVendaRequest}${descontoCustoRequest}${descontoVendaRequest}${ativoRequest}${operadoraRequest}${especialidadeRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };
@@ -187,6 +199,8 @@ export const getEntitiesExport: ICrudGetAllActionEspecialidadeOperadora<IEspecia
   descontoCusto,
   descontoVenda,
   ativo,
+  operadora,
+  especialidade,
   page,
   size,
   sort
@@ -199,19 +213,23 @@ export const getEntitiesExport: ICrudGetAllActionEspecialidadeOperadora<IEspecia
   const descontoCustoRequest = descontoCusto ? `descontoCusto.contains=${descontoCusto}&` : '';
   const descontoVendaRequest = descontoVenda ? `descontoVenda.contains=${descontoVenda}&` : '';
   const ativoRequest = ativo ? `ativo.contains=${ativo}&` : '';
+  const operadoraRequest = operadora ? `operadora.equals=${operadora}&` : '';
+  const especialidadeRequest = especialidade ? `especialidade.equals=${especialidade}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_ESPECIALIDADEOPERADORA_LIST,
     payload: axios.get<IEspecialidadeOperadora>(
-      `${requestUrl}${codTussRequest}${codDespesaRequest}${codTabelaRequest}${valorCustoRequest}${valorVendaRequest}${descontoCustoRequest}${descontoVendaRequest}${ativoRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${codTussRequest}${codDespesaRequest}${codTabelaRequest}${valorCustoRequest}${valorVendaRequest}${descontoCustoRequest}${descontoVendaRequest}${ativoRequest}${operadoraRequest}${especialidadeRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };
 
 export const createEntity: ICrudPutAction<IEspecialidadeOperadora> = entity => async dispatch => {
   entity = {
-    ...entity
+    ...entity,
+    operadora: entity.operadora === 'null' ? null : entity.operadora,
+    especialidade: entity.especialidade === 'null' ? null : entity.especialidade
   };
   const result = await dispatch({
     type: ACTION_TYPES.CREATE_ESPECIALIDADEOPERADORA,
@@ -222,7 +240,11 @@ export const createEntity: ICrudPutAction<IEspecialidadeOperadora> = entity => a
 };
 
 export const updateEntity: ICrudPutAction<IEspecialidadeOperadora> = entity => async dispatch => {
-  entity = { ...entity };
+  entity = {
+    ...entity,
+    operadora: entity.operadora === 'null' ? null : entity.operadora,
+    especialidade: entity.especialidade === 'null' ? null : entity.especialidade
+  };
   const result = await dispatch({
     type: ACTION_TYPES.UPDATE_ESPECIALIDADEOPERADORA,
     payload: axios.put(apiUrl, cleanEntity(entity))
@@ -257,6 +279,9 @@ export const getEspecialidadeOperadoraState = (location): IEspecialidadeOperador
   const descontoVenda = url.searchParams.get('descontoVenda') || '';
   const ativo = url.searchParams.get('ativo') || '';
 
+  const operadora = url.searchParams.get('operadora') || '';
+  const especialidade = url.searchParams.get('especialidade') || '';
+
   return {
     baseFilters,
     codTuss,
@@ -266,6 +291,8 @@ export const getEspecialidadeOperadoraState = (location): IEspecialidadeOperador
     valorVenda,
     descontoCusto,
     descontoVenda,
-    ativo
+    ativo,
+    operadora,
+    especialidade
   };
 };

@@ -1,3 +1,6 @@
+import { ILogUserFranquia } from 'app/shared/model/log-user-franquia.model';
+import { IFranquia } from 'app/shared/model/franquia.model';
+
 export interface IFranquiaUsuario {
   id?: string;
   senha?: string;
@@ -37,6 +40,8 @@ export interface IFranquiaUsuario {
   envioIntercorrencia?: number;
   envioCancelamento?: number;
   ativo?: number;
+  logUserFranquias?: ILogUserFranquia[];
+  franquia?: string | any;
 }
 
 export const defaultValue: Readonly<IFranquiaUsuario> = {};

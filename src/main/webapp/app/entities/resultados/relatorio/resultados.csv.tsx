@@ -73,7 +73,8 @@ export class Resultados extends React.Component<IResultadosProps, IResultadosSta
         prazo: '',
         complemento: '',
         dataCadastro: '',
-        dataVencimentoPrazo: ''
+        dataVencimentoPrazo: '',
+        alertasResultadosEsperados: ''
       },
       () => this.sortEntities()
     );
@@ -136,6 +137,9 @@ export class Resultados extends React.Component<IResultadosProps, IResultadosSta
       'dataVencimentoPrazo=' +
       this.state.dataVencimentoPrazo +
       '&' +
+      'alertasResultadosEsperados=' +
+      this.state.alertasResultadosEsperados +
+      '&' +
       ''
     );
   };
@@ -143,7 +147,19 @@ export class Resultados extends React.Component<IResultadosProps, IResultadosSta
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { objetivo, valor, prazo, complemento, dataCadastro, dataVencimentoPrazo, activePage, itemsPerPage, sort, order } = this.state;
+    const {
+      objetivo,
+      valor,
+      prazo,
+      complemento,
+      dataCadastro,
+      dataVencimentoPrazo,
+      alertasResultadosEsperados,
+      activePage,
+      itemsPerPage,
+      sort,
+      order
+    } = this.state;
     this.props.getEntitiesExport(
       objetivo,
       valor,
@@ -151,6 +167,7 @@ export class Resultados extends React.Component<IResultadosProps, IResultadosSta
       complemento,
       dataCadastro,
       dataVencimentoPrazo,
+      alertasResultadosEsperados,
       activePage - 1,
       itemsPerPage,
       `${sort},${order}`

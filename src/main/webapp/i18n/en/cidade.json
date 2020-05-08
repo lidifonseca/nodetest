@@ -22,7 +22,13 @@
       "detail": {
         "title": "Cidade"
       },
-      "descrCidade": "Descr Cidade"
+      "descrCidade": "Descr Cidade",
+      "atendimento_empty": "Without Atendimento",
+      "atendimento": "Atendimento",
+      "empresa_empty": "Without Empresa",
+      "empresa": "Empresa",
+      "uf_empty": "Without Uf",
+      "uf": "Uf"
     }
   }
 }

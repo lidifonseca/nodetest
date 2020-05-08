@@ -5,6 +5,7 @@ import CidXPtaNovo from '../domain/cid-x-pta-novo.entity';
 import { CidXPtaNovoRepository } from '../repository/cid-x-pta-novo.repository';
 
 const relationshipNames = [];
+relationshipNames.push('cid');
 
 @Injectable()
 export class CidXPtaNovoService {

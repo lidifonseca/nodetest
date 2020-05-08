@@ -45,6 +45,8 @@ import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
 import { IUnidadeEasy } from 'app/shared/model/unidade-easy.model';
 import { getEntities as getUnidadeEasies } from 'app/entities/unidade-easy/unidade-easy.reducer';
+import { ITipoUsuario } from 'app/shared/model/tipo-usuario.model';
+import { getEntities as getTipoUsuarios } from 'app/entities/tipo-usuario/tipo-usuario.reducer';
 
 export interface IUsuarioProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
@@ -68,6 +70,7 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
     this.getEntities();
 
     this.props.getUnidadeEasies();
+    this.props.getTipoUsuarios();
   }
 
   cancelCourse = () => {
@@ -196,7 +199,10 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
         envioAnaliseResultadoEsperado: '',
         envioDescumprimento: '',
         envioMelhoraTempo: '',
-        unidade: ''
+        diario: '',
+        pacienteDiario: '',
+        unidade: '',
+        tipoUsuario: ''
       },
       () => this.sortEntities()
     );
@@ -610,8 +616,17 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
       'envioMelhoraTempo=' +
       this.state.envioMelhoraTempo +
       '&' +
+      'diario=' +
+      this.state.diario +
+      '&' +
+      'pacienteDiario=' +
+      this.state.pacienteDiario +
+      '&' +
       'unidade=' +
       this.state.unidade +
+      '&' +
+      'tipoUsuario=' +
+      this.state.tipoUsuario +
       '&' +
       ''
     );
@@ -744,7 +759,10 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
       envioAnaliseResultadoEsperado,
       envioDescumprimento,
       envioMelhoraTempo,
+      diario,
+      pacienteDiario,
       unidade,
+      tipoUsuario,
       activePage,
       itemsPerPage,
       sort,
@@ -874,7 +892,10 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
       envioAnaliseResultadoEsperado,
       envioDescumprimento,
       envioMelhoraTempo,
+      diario,
+      pacienteDiario,
       unidade,
+      tipoUsuario,
       activePage - 1,
       itemsPerPage,
       `${sort},${order}`
@@ -928,12 +949,14 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
 
 const mapStateToProps = ({ usuario, ...storeState }: IRootState) => ({
   unidadeEasies: storeState.unidadeEasy.entities,
+  tipoUsuarios: storeState.tipoUsuario.entities,
   usuarioList: usuario.entities,
   totalItems: usuario.totalItems
 });
 
 const mapDispatchToProps = {
   getUnidadeEasies,
+  getTipoUsuarios,
   getEntitiesExport
 };
 

@@ -11,6 +11,8 @@ import { IRootState } from 'app/shared/reducers';
 
 import { IUnidadeEasy } from 'app/shared/model/unidade-easy.model';
 import { getEntities as getUnidadeEasies } from 'app/entities/unidade-easy/unidade-easy.reducer';
+import { ICategoria } from 'app/shared/model/categoria.model';
+import { getEntities as getCategorias } from 'app/entities/categoria/categoria.reducer';
 import {
   ICategoriaAtividadeUpdateState,
   getEntity,
@@ -32,8 +34,10 @@ export class CategoriaAtividadeUpdate extends React.Component<ICategoriaAtividad
 
     this.state = {
       unidadeEasySelectValue: null,
+      categoriaSelectValue: null,
       fieldsBase: getCategoriaAtividadeState(this.props.location),
       unidadeId: '0',
+      categoriaId: '0',
       isNew: !this.props.match.params || !this.props.match.params.id
     };
   }
@@ -54,6 +58,19 @@ export class CategoriaAtividadeUpdate extends React.Component<ICategoriaAtividad
         )
       });
     }
+
+    if (
+      nextProps.categorias.length > 0 &&
+      this.state.categoriaSelectValue === null &&
+      nextProps.categoriaAtividadeEntity.categoria &&
+      nextProps.categoriaAtividadeEntity.categoria.id
+    ) {
+      this.setState({
+        categoriaSelectValue: nextProps.categorias.map(p =>
+          nextProps.categoriaAtividadeEntity.categoria.id === p.id ? { value: p.id, label: p.id } : null
+        )
+      });
+    }
   }
 
   componentDidMount() {
@@ -64,6 +81,7 @@ export class CategoriaAtividadeUpdate extends React.Component<ICategoriaAtividad
     }
 
     this.props.getUnidadeEasies();
+    this.props.getCategorias();
   }
 
   getFiltersURL = (offset = null) => {
@@ -80,6 +98,7 @@ export class CategoriaAtividadeUpdate extends React.Component<ICategoriaAtividad
       const entity = {
         ...categoriaAtividadeEntity,
         unidadeEasy: this.state.unidadeEasySelectValue ? this.state.unidadeEasySelectValue['value'] : null,
+        categoria: this.state.categoriaSelectValue ? this.state.categoriaSelectValue['value'] : null,
         ...values
       };
 
@@ -96,7 +115,7 @@ export class CategoriaAtividadeUpdate extends React.Component<ICategoriaAtividad
   };
 
   render() {
-    const { categoriaAtividadeEntity, unidadeEasies, loading, updating } = this.props;
+    const { categoriaAtividadeEntity, unidadeEasies, categorias, loading, updating } = this.props;
     const { isNew } = this.state;
 
     const baseFilters = this.state.fieldsBase && this.state.fieldsBase['baseFilters'] ? this.state.fieldsBase['baseFilters'] : null;
@@ -108,7 +127,8 @@ export class CategoriaAtividadeUpdate extends React.Component<ICategoriaAtividad
               ? {}
               : {
                   ...categoriaAtividadeEntity,
-                  unidade: categoriaAtividadeEntity.unidade ? categoriaAtividadeEntity.unidade.id : null
+                  unidade: categoriaAtividadeEntity.unidade ? categoriaAtividadeEntity.unidade.id : null,
+                  categoria: categoriaAtividadeEntity.categoria ? categoriaAtividadeEntity.categoria.id : null
                 }
           }
           onSubmit={this.saveEntity}
@@ -172,7 +192,13 @@ export class CategoriaAtividadeUpdate extends React.Component<ICategoriaAtividad
                       <Row>
                         <AtividadeComponentUpdate baseFilters />
 
+                        <AtendimentoAtividadesComponentUpdate baseFilter atendimentoAtividades />
+
+                        <PadItemAtividadeComponentUpdate baseFilter padItemAtividades />
+
                         <UnidadeComponentUpdate baseFilter unidadeEasies />
+
+                        <CategoriaComponentUpdate baseFilter categorias />
                       </Row>
                     </div>
                   )}
@@ -188,6 +214,7 @@ export class CategoriaAtividadeUpdate extends React.Component<ICategoriaAtividad
 
 const mapStateToProps = (storeState: IRootState) => ({
   unidadeEasies: storeState.unidadeEasy.entities,
+  categorias: storeState.categoria.entities,
   categoriaAtividadeEntity: storeState.categoriaAtividade.entity,
   loading: storeState.categoriaAtividade.loading,
   updating: storeState.categoriaAtividade.updating,
@@ -196,6 +223,7 @@ const mapStateToProps = (storeState: IRootState) => ({
 
 const mapDispatchToProps = {
   getUnidadeEasies,
+  getCategorias,
   getEntity,
   updateEntity,
   createEntity,
@@ -226,6 +254,22 @@ const AtividadeComponentUpdate = ({ baseFilters }) => {
   );
 };
 
+const AtendimentoAtividadesComponentUpdate = ({ baseFilters, atendimentoAtividades }) => {
+  return baseFilters !== 'atendimentoAtividades' ? (
+    <Col md="12"></Col>
+  ) : (
+    <AvInput type="hidden" name="atendimentoAtividades" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const PadItemAtividadeComponentUpdate = ({ baseFilters, padItemAtividades }) => {
+  return baseFilters !== 'padItemAtividade' ? (
+    <Col md="12"></Col>
+  ) : (
+    <AvInput type="hidden" name="padItemAtividade" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
 const UnidadeComponentUpdate = ({ baseFilters, unidadeEasies }) => {
   return baseFilters !== 'unidade' ? (
     <Col md="12">
@@ -251,6 +295,34 @@ const UnidadeComponentUpdate = ({ baseFilters, unidadeEasies }) => {
     </Col>
   ) : (
     <AvInput type="hidden" name="unidade" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const CategoriaComponentUpdate = ({ baseFilters, categorias }) => {
+  return baseFilters !== 'categoria' ? (
+    <Col md="12">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" for="categoria-atividade-categoria">
+              <Translate contentKey="generadorApp.categoriaAtividade.categoria">Categoria</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <Select
+              id="categoria-atividade-categoria"
+              className={'css-select-control'}
+              value={this.state.categoriaSelectValue}
+              options={categorias ? categorias.map(option => ({ value: option.id, label: option.id })) : null}
+              onChange={options => this.setState({ categoriaSelectValue: options })}
+              name={'categoria'}
+            />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="categoria" value={this.state.fieldsBase[baseFilters]} />
   );
 };
 

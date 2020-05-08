@@ -34,6 +34,9 @@ import { ICidade } from 'app/shared/model/cidade.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
+import { IUf } from 'app/shared/model/uf.model';
+import { getEntities as getUfs } from 'app/entities/uf/uf.reducer';
+
 export interface ICidadeProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
 export interface ICidadeState extends ICidadeBaseState, IPaginationBaseState {
@@ -54,12 +57,17 @@ export class Cidade extends React.Component<ICidadeProps, ICidadeState> {
 
   componentDidMount() {
     this.getEntities();
+
+    this.props.getUfs();
   }
 
   cancelCourse = () => {
     this.setState(
       {
-        descrCidade: ''
+        descrCidade: '',
+        atendimento: '',
+        empresa: '',
+        uf: ''
       },
       () => this.sortEntities()
     );
@@ -107,6 +115,15 @@ export class Cidade extends React.Component<ICidadeProps, ICidadeState> {
       'descrCidade=' +
       this.state.descrCidade +
       '&' +
+      'atendimento=' +
+      this.state.atendimento +
+      '&' +
+      'empresa=' +
+      this.state.empresa +
+      '&' +
+      'uf=' +
+      this.state.uf +
+      '&' +
       ''
     );
   };
@@ -114,8 +131,8 @@ export class Cidade extends React.Component<ICidadeProps, ICidadeState> {
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { descrCidade, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntitiesExport(descrCidade, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const { descrCidade, atendimento, empresa, uf, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntitiesExport(descrCidade, atendimento, empresa, uf, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   confirmExport() {}
@@ -164,11 +181,13 @@ export class Cidade extends React.Component<ICidadeProps, ICidadeState> {
 }
 
 const mapStateToProps = ({ cidade, ...storeState }: IRootState) => ({
+  ufs: storeState.uf.entities,
   cidadeList: cidade.entities,
   totalItems: cidade.totalItems
 });
 
 const mapDispatchToProps = {
+  getUfs,
   getEntitiesExport
 };
 

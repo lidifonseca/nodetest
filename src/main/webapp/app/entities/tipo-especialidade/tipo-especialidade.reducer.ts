@@ -34,6 +34,7 @@ export type TipoEspecialidadeState = Readonly<typeof initialState>;
 export interface ITipoEspecialidadeBaseState {
   baseFilters: any;
   tipoEspecialidade: any;
+  especialidade: any;
 }
 
 export interface ITipoEspecialidadeUpdateState {
@@ -121,18 +122,22 @@ const apiUrl = 'api/tipo-especialidades';
 // Actions
 export type ICrudGetAllActionTipoEspecialidade<T> = (
   tipoEspecialidade?: any,
+  especialidade?: any,
   page?: number,
   size?: number,
   sort?: string
 ) => IPayload<T> | ((dispatch: any) => IPayload<T>);
 
-export const getEntities: ICrudGetAllActionTipoEspecialidade<ITipoEspecialidade> = (tipoEspecialidade, page, size, sort) => {
+export const getEntities: ICrudGetAllActionTipoEspecialidade<ITipoEspecialidade> = (tipoEspecialidade, especialidade, page, size, sort) => {
   const tipoEspecialidadeRequest = tipoEspecialidade ? `tipoEspecialidade.contains=${tipoEspecialidade}&` : '';
+  const especialidadeRequest = especialidade ? `especialidade.equals=${especialidade}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_TIPOESPECIALIDADE_LIST,
-    payload: axios.get<ITipoEspecialidade>(`${requestUrl}${tipoEspecialidadeRequest}cacheBuster=${new Date().getTime()}`)
+    payload: axios.get<ITipoEspecialidade>(
+      `${requestUrl}${tipoEspecialidadeRequest}${especialidadeRequest}cacheBuster=${new Date().getTime()}`
+    )
   };
 };
 export const getEntity: ICrudGetAction<ITipoEspecialidade> = id => {
@@ -143,13 +148,22 @@ export const getEntity: ICrudGetAction<ITipoEspecialidade> = id => {
   };
 };
 
-export const getEntitiesExport: ICrudGetAllActionTipoEspecialidade<ITipoEspecialidade> = (tipoEspecialidade, page, size, sort) => {
+export const getEntitiesExport: ICrudGetAllActionTipoEspecialidade<ITipoEspecialidade> = (
+  tipoEspecialidade,
+  especialidade,
+  page,
+  size,
+  sort
+) => {
   const tipoEspecialidadeRequest = tipoEspecialidade ? `tipoEspecialidade.contains=${tipoEspecialidade}&` : '';
+  const especialidadeRequest = especialidade ? `especialidade.equals=${especialidade}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_TIPOESPECIALIDADE_LIST,
-    payload: axios.get<ITipoEspecialidade>(`${requestUrl}${tipoEspecialidadeRequest}cacheBuster=${new Date().getTime()}`)
+    payload: axios.get<ITipoEspecialidade>(
+      `${requestUrl}${tipoEspecialidadeRequest}${especialidadeRequest}cacheBuster=${new Date().getTime()}`
+    )
   };
 };
 
@@ -194,8 +208,11 @@ export const getTipoEspecialidadeState = (location): ITipoEspecialidadeBaseState
   const baseFilters = url.searchParams.get('baseFilters') || '';
   const tipoEspecialidade = url.searchParams.get('tipoEspecialidade') || '';
 
+  const especialidade = url.searchParams.get('especialidade') || '';
+
   return {
     baseFilters,
-    tipoEspecialidade
+    tipoEspecialidade,
+    especialidade
   };
 };

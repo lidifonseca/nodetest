@@ -5,6 +5,9 @@ import LogUserFranquia from '../domain/log-user-franquia.entity';
 import { LogUserFranquiaRepository } from '../repository/log-user-franquia.repository';
 
 const relationshipNames = [];
+relationshipNames.push('acao');
+relationshipNames.push('tela');
+relationshipNames.push('usuario');
 
 @Injectable()
 export class LogUserFranquiaService {

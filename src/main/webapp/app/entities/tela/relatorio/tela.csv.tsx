@@ -59,7 +59,10 @@ export class Tela extends React.Component<ITelaProps, ITelaState> {
   cancelCourse = () => {
     this.setState(
       {
-        tela: ''
+        tela: '',
+        logUser: '',
+        logUserFranquia: '',
+        usuarioAcao: ''
       },
       () => this.sortEntities()
     );
@@ -107,6 +110,15 @@ export class Tela extends React.Component<ITelaProps, ITelaState> {
       'tela=' +
       this.state.tela +
       '&' +
+      'logUser=' +
+      this.state.logUser +
+      '&' +
+      'logUserFranquia=' +
+      this.state.logUserFranquia +
+      '&' +
+      'usuarioAcao=' +
+      this.state.usuarioAcao +
+      '&' +
       ''
     );
   };
@@ -114,8 +126,8 @@ export class Tela extends React.Component<ITelaProps, ITelaState> {
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { tela, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntitiesExport(tela, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const { tela, logUser, logUserFranquia, usuarioAcao, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntitiesExport(tela, logUser, logUserFranquia, usuarioAcao, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   confirmExport() {}

@@ -4,6 +4,8 @@ import { BaseEntity } from './base/base.entity';
 
 import { validate, Contains, IsInt, Length, IsEmail, IsFQDN, IsDate, Min, Max } from 'class-validator';
 
+import AtendimentoAceite from './atendimento-aceite.entity';
+import AtendimentoAssinaturas from './atendimento-assinaturas.entity';
 import UnidadeEasy from './unidade-easy.entity';
 
 /**
@@ -133,6 +135,18 @@ export default class Profissional extends BaseEntity {
 
   @Column({ type: 'integer', name: 'PREFERENCIA_ATENDIMENTO' })
   preferenciaAtendimento: number;
+
+  @OneToMany(
+    type => AtendimentoAceite,
+    other => other.profissional
+  )
+  atendimentoAceites: AtendimentoAceite[];
+
+  @OneToMany(
+    type => AtendimentoAssinaturas,
+    other => other.profissional
+  )
+  atendimentoAssinaturas: AtendimentoAssinaturas[];
 
   @ManyToOne(type => UnidadeEasy)
   @JoinColumn({ name: 'ID_UNIDADE', referencedColumnName: 'id' })

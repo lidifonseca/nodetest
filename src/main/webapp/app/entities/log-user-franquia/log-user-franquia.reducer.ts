@@ -35,12 +35,21 @@ export type LogUserFranquiaState = Readonly<typeof initialState>;
 export interface ILogUserFranquiaBaseState {
   baseFilters: any;
   descricao: any;
+  acao: any;
+  tela: any;
+  usuario: any;
 }
 
 export interface ILogUserFranquiaUpdateState {
   fieldsBase: ILogUserFranquiaBaseState;
 
+  acaoSelectValue: any;
+  telaSelectValue: any;
+  franquiaUsuarioSelectValue: any;
   isNew: boolean;
+  acaoId: string;
+  telaId: string;
+  usuarioId: string;
 }
 
 // Reducer
@@ -137,18 +146,26 @@ const apiUrl = 'api/log-user-franquias';
 // Actions
 export type ICrudGetAllActionLogUserFranquia<T> = (
   descricao?: any,
+  acao?: any,
+  tela?: any,
+  usuario?: any,
   page?: number,
   size?: number,
   sort?: string
 ) => IPayload<T> | ((dispatch: any) => IPayload<T>);
 
-export const getEntities: ICrudGetAllActionLogUserFranquia<ILogUserFranquia> = (descricao, page, size, sort) => {
+export const getEntities: ICrudGetAllActionLogUserFranquia<ILogUserFranquia> = (descricao, acao, tela, usuario, page, size, sort) => {
   const descricaoRequest = descricao ? `descricao.contains=${descricao}&` : '';
+  const acaoRequest = acao ? `acao.equals=${acao}&` : '';
+  const telaRequest = tela ? `tela.equals=${tela}&` : '';
+  const usuarioRequest = usuario ? `usuario.equals=${usuario}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_LOGUSERFRANQUIA_LIST,
-    payload: axios.get<ILogUserFranquia>(`${requestUrl}${descricaoRequest}cacheBuster=${new Date().getTime()}`)
+    payload: axios.get<ILogUserFranquia>(
+      `${requestUrl}${descricaoRequest}${acaoRequest}${telaRequest}${usuarioRequest}cacheBuster=${new Date().getTime()}`
+    )
   };
 };
 export const getEntity: ICrudGetAction<ILogUserFranquia> = id => {
@@ -159,19 +176,27 @@ export const getEntity: ICrudGetAction<ILogUserFranquia> = id => {
   };
 };
 
-export const getEntitiesExport: ICrudGetAllActionLogUserFranquia<ILogUserFranquia> = (descricao, page, size, sort) => {
+export const getEntitiesExport: ICrudGetAllActionLogUserFranquia<ILogUserFranquia> = (descricao, acao, tela, usuario, page, size, sort) => {
   const descricaoRequest = descricao ? `descricao.contains=${descricao}&` : '';
+  const acaoRequest = acao ? `acao.equals=${acao}&` : '';
+  const telaRequest = tela ? `tela.equals=${tela}&` : '';
+  const usuarioRequest = usuario ? `usuario.equals=${usuario}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_LOGUSERFRANQUIA_LIST,
-    payload: axios.get<ILogUserFranquia>(`${requestUrl}${descricaoRequest}cacheBuster=${new Date().getTime()}`)
+    payload: axios.get<ILogUserFranquia>(
+      `${requestUrl}${descricaoRequest}${acaoRequest}${telaRequest}${usuarioRequest}cacheBuster=${new Date().getTime()}`
+    )
   };
 };
 
 export const createEntity: ICrudPutAction<ILogUserFranquia> = entity => async dispatch => {
   entity = {
-    ...entity
+    ...entity,
+    acao: entity.acao === 'null' ? null : entity.acao,
+    tela: entity.tela === 'null' ? null : entity.tela,
+    usuario: entity.usuario === 'null' ? null : entity.usuario
   };
   const result = await dispatch({
     type: ACTION_TYPES.CREATE_LOGUSERFRANQUIA,
@@ -182,7 +207,12 @@ export const createEntity: ICrudPutAction<ILogUserFranquia> = entity => async di
 };
 
 export const updateEntity: ICrudPutAction<ILogUserFranquia> = entity => async dispatch => {
-  entity = { ...entity };
+  entity = {
+    ...entity,
+    acao: entity.acao === 'null' ? null : entity.acao,
+    tela: entity.tela === 'null' ? null : entity.tela,
+    usuario: entity.usuario === 'null' ? null : entity.usuario
+  };
   const result = await dispatch({
     type: ACTION_TYPES.UPDATE_LOGUSERFRANQUIA,
     payload: axios.put(apiUrl, cleanEntity(entity))
@@ -220,8 +250,15 @@ export const getLogUserFranquiaState = (location): ILogUserFranquiaBaseState => 
   const baseFilters = url.searchParams.get('baseFilters') || '';
   const descricao = url.searchParams.get('descricao') || '';
 
+  const acao = url.searchParams.get('acao') || '';
+  const tela = url.searchParams.get('tela') || '';
+  const usuario = url.searchParams.get('usuario') || '';
+
   return {
     baseFilters,
-    descricao
+    descricao,
+    acao,
+    tela,
+    usuario
   };
 };

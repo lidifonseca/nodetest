@@ -59,6 +59,10 @@
       "dataSenha": "Data Senha",
       "expoToken": "Expo Token",
       "preferenciaAtendimento": "Preferencia Atendimento",
+      "atendimentoAceite_empty": "Sem Atendimento Aceite",
+      "atendimentoAceite": "Atendimento Aceite",
+      "atendimentoAssinaturas_empty": "Sem Atendimento Assinaturas",
+      "atendimentoAssinaturas": "Atendimento Assinaturas",
       "unidade_empty": "Sem Unidade",
       "unidade": "Unidade",
       "help": {}

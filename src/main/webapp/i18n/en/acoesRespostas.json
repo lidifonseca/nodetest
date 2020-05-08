@@ -26,7 +26,11 @@
       "condicaoSexo": "Condicao Sexo",
       "observacoes": "Observacoes",
       "tipoCampo1": "Tipo Campo 1",
-      "tipoCampo2": "Tipo Campo 2"
+      "tipoCampo2": "Tipo Campo 2",
+      "respostas_empty": "Without Respostas",
+      "respostas": "Respostas",
+      "perguntasQuestionario_empty": "Without Perguntas Questionario",
+      "perguntasQuestionario": "Perguntas Questionario"
     }
   }
 }

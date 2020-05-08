@@ -60,7 +60,9 @@ export class Periodo extends React.Component<IPeriodoProps, IPeriodoState> {
     this.setState(
       {
         periodo: '',
-        ativo: ''
+        ativo: '',
+        atendimento: '',
+        padItem: ''
       },
       () => this.sortEntities()
     );
@@ -111,6 +113,12 @@ export class Periodo extends React.Component<IPeriodoProps, IPeriodoState> {
       'ativo=' +
       this.state.ativo +
       '&' +
+      'atendimento=' +
+      this.state.atendimento +
+      '&' +
+      'padItem=' +
+      this.state.padItem +
+      '&' +
       ''
     );
   };
@@ -118,8 +126,8 @@ export class Periodo extends React.Component<IPeriodoProps, IPeriodoState> {
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { periodo, ativo, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntitiesExport(periodo, ativo, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const { periodo, ativo, atendimento, padItem, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntitiesExport(periodo, ativo, atendimento, padItem, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   confirmExport() {}

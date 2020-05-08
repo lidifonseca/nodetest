@@ -9,6 +9,8 @@ import { Translate, translate, ICrudGetAction, ICrudGetAllAction, setFileData, I
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
+import { IPadItem } from 'app/shared/model/pad-item.model';
+import { getEntities as getPadItems } from 'app/entities/pad-item/pad-item.reducer';
 import {
   IPadItemResultadoUpdateState,
   getEntity,
@@ -34,13 +36,28 @@ export class PadItemResultadoUpdate extends React.Component<IPadItemResultadoUpd
     this.resultadoFileInput = React.createRef();
 
     this.state = {
+      padItemSelectValue: null,
       fieldsBase: getPadItemResultadoState(this.props.location),
+      padItemId: '0',
       isNew: !this.props.match.params || !this.props.match.params.id
     };
   }
   componentDidUpdate(nextProps, nextState) {
     if (nextProps.updateSuccess !== this.props.updateSuccess && nextProps.updateSuccess) {
       this.handleClose();
+    }
+
+    if (
+      nextProps.padItems.length > 0 &&
+      this.state.padItemSelectValue === null &&
+      nextProps.padItemResultadoEntity.padItem &&
+      nextProps.padItemResultadoEntity.padItem.id
+    ) {
+      this.setState({
+        padItemSelectValue: nextProps.padItems.map(p =>
+          nextProps.padItemResultadoEntity.padItem.id === p.id ? { value: p.id, label: p.id } : null
+        )
+      });
     }
   }
 
@@ -50,6 +67,8 @@ export class PadItemResultadoUpdate extends React.Component<IPadItemResultadoUpd
     } else {
       this.props.getEntity(this.props.match.params.id);
     }
+
+    this.props.getPadItems();
   }
 
   onBlobChange = (isAnImage, name, fileInput) => event => {
@@ -73,7 +92,7 @@ export class PadItemResultadoUpdate extends React.Component<IPadItemResultadoUpd
       const { padItemResultadoEntity } = this.props;
       const entity = {
         ...padItemResultadoEntity,
-
+        padItem: this.state.padItemSelectValue ? this.state.padItemSelectValue['value'] : null,
         ...values
       };
 
@@ -90,7 +109,7 @@ export class PadItemResultadoUpdate extends React.Component<IPadItemResultadoUpd
   };
 
   render() {
-    const { padItemResultadoEntity, loading, updating } = this.props;
+    const { padItemResultadoEntity, padItems, loading, updating } = this.props;
     const { isNew } = this.state;
 
     const { resultado } = padItemResultadoEntity;
@@ -102,7 +121,8 @@ export class PadItemResultadoUpdate extends React.Component<IPadItemResultadoUpd
             isNew
               ? {}
               : {
-                  ...padItemResultadoEntity
+                  ...padItemResultadoEntity,
+                  padItem: padItemResultadoEntity.padItem ? padItemResultadoEntity.padItem.id : null
                 }
           }
           onSubmit={this.saveEntity}
@@ -171,6 +191,8 @@ export class PadItemResultadoUpdate extends React.Component<IPadItemResultadoUpd
                         <ResultadoAnalisadoComponentUpdate baseFilters />
 
                         <UsuarioIdComponentUpdate baseFilters />
+
+                        <PadItemComponentUpdate baseFilter padItems />
                       </Row>
                     </div>
                   )}
@@ -185,6 +207,7 @@ export class PadItemResultadoUpdate extends React.Component<IPadItemResultadoUpd
 }
 
 const mapStateToProps = (storeState: IRootState) => ({
+  padItems: storeState.padItem.entities,
   padItemResultadoEntity: storeState.padItemResultado.entity,
   loading: storeState.padItemResultado.loading,
   updating: storeState.padItemResultado.updating,
@@ -192,6 +215,7 @@ const mapStateToProps = (storeState: IRootState) => ({
 });
 
 const mapDispatchToProps = {
+  getPadItems,
   getEntity,
   updateEntity,
   setBlob,
@@ -281,6 +305,34 @@ const UsuarioIdComponentUpdate = ({ baseFilters }) => {
     </Col>
   ) : (
     <AvInput type="hidden" name="usuarioId" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const PadItemComponentUpdate = ({ baseFilters, padItems }) => {
+  return baseFilters !== 'padItem' ? (
+    <Col md="12">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" for="pad-item-resultado-padItem">
+              <Translate contentKey="generadorApp.padItemResultado.padItem">Pad Item</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <Select
+              id="pad-item-resultado-padItem"
+              className={'css-select-control'}
+              value={this.state.padItemSelectValue}
+              options={padItems ? padItems.map(option => ({ value: option.id, label: option.id })) : null}
+              onChange={options => this.setState({ padItemSelectValue: options })}
+              name={'padItem'}
+            />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="padItem" value={this.state.fieldsBase[baseFilters]} />
   );
 };
 

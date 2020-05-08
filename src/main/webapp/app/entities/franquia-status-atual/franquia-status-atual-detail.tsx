@@ -98,6 +98,19 @@ export class FranquiaStatusAtualDetail extends React.Component<IFranquiaStatusAt
                       </Col>
                     </Row>
                   </Col>
+
+                  <Col md="12">
+                    <Row>
+                      <Col md="3">
+                        <dt>
+                          <Translate contentKey="generadorApp.franquiaStatusAtual.franquia">Franquia</Translate>
+                        </dt>
+                      </Col>
+                      <Col md="9">
+                        <dd>{franquiaStatusAtualEntity.franquia ? franquiaStatusAtualEntity.franquia.id : ''}</dd>
+                      </Col>
+                    </Row>
+                  </Col>
                 </Row>
                 <Button tag={Link} to="/franquia-status-atual" replace color="info">
                   <FontAwesomeIcon icon="arrow-left" />{' '}

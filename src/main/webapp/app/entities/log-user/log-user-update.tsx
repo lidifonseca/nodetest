@@ -9,6 +9,10 @@ import { Translate, translate, ICrudGetAction, ICrudGetAllAction, setFileData, I
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
+import { IAcao } from 'app/shared/model/acao.model';
+import { getEntities as getAcaos } from 'app/entities/acao/acao.reducer';
+import { ITela } from 'app/shared/model/tela.model';
+import { getEntities as getTelas } from 'app/entities/tela/tela.reducer';
 import {
   ILogUserUpdateState,
   getEntity,
@@ -34,13 +38,39 @@ export class LogUserUpdate extends React.Component<ILogUserUpdateProps, ILogUser
     this.descricaoFileInput = React.createRef();
 
     this.state = {
+      acaoSelectValue: null,
+      telaSelectValue: null,
       fieldsBase: getLogUserState(this.props.location),
+      acaoId: '0',
+      telaId: '0',
       isNew: !this.props.match.params || !this.props.match.params.id
     };
   }
   componentDidUpdate(nextProps, nextState) {
     if (nextProps.updateSuccess !== this.props.updateSuccess && nextProps.updateSuccess) {
       this.handleClose();
+    }
+
+    if (
+      nextProps.acaos.length > 0 &&
+      this.state.acaoSelectValue === null &&
+      nextProps.logUserEntity.acao &&
+      nextProps.logUserEntity.acao.id
+    ) {
+      this.setState({
+        acaoSelectValue: nextProps.acaos.map(p => (nextProps.logUserEntity.acao.id === p.id ? { value: p.id, label: p.id } : null))
+      });
+    }
+
+    if (
+      nextProps.telas.length > 0 &&
+      this.state.telaSelectValue === null &&
+      nextProps.logUserEntity.tela &&
+      nextProps.logUserEntity.tela.id
+    ) {
+      this.setState({
+        telaSelectValue: nextProps.telas.map(p => (nextProps.logUserEntity.tela.id === p.id ? { value: p.id, label: p.id } : null))
+      });
     }
   }
 
@@ -50,6 +80,9 @@ export class LogUserUpdate extends React.Component<ILogUserUpdateProps, ILogUser
     } else {
       this.props.getEntity(this.props.match.params.id);
     }
+
+    this.props.getAcaos();
+    this.props.getTelas();
   }
 
   onBlobChange = (isAnImage, name, fileInput) => event => {
@@ -73,7 +106,8 @@ export class LogUserUpdate extends React.Component<ILogUserUpdateProps, ILogUser
       const { logUserEntity } = this.props;
       const entity = {
         ...logUserEntity,
-
+        acao: this.state.acaoSelectValue ? this.state.acaoSelectValue['value'] : null,
+        tela: this.state.telaSelectValue ? this.state.telaSelectValue['value'] : null,
         ...values
       };
 
@@ -90,7 +124,7 @@ export class LogUserUpdate extends React.Component<ILogUserUpdateProps, ILogUser
   };
 
   render() {
-    const { logUserEntity, loading, updating } = this.props;
+    const { logUserEntity, acaos, telas, loading, updating } = this.props;
     const { isNew } = this.state;
 
     const { descricao } = logUserEntity;
@@ -102,7 +136,9 @@ export class LogUserUpdate extends React.Component<ILogUserUpdateProps, ILogUser
             isNew
               ? {}
               : {
-                  ...logUserEntity
+                  ...logUserEntity,
+                  acao: logUserEntity.acao ? logUserEntity.acao.id : null,
+                  tela: logUserEntity.tela ? logUserEntity.tela.id : null
                 }
           }
           onSubmit={this.saveEntity}
@@ -165,6 +201,10 @@ export class LogUserUpdate extends React.Component<ILogUserUpdateProps, ILogUser
                       ) : null}
                       <Row>
                         <DescricaoComponentUpdate baseFilters />
+
+                        <AcaoComponentUpdate baseFilter acaos />
+
+                        <TelaComponentUpdate baseFilter telas />
                       </Row>
                     </div>
                   )}
@@ -179,6 +219,8 @@ export class LogUserUpdate extends React.Component<ILogUserUpdateProps, ILogUser
 }
 
 const mapStateToProps = (storeState: IRootState) => ({
+  acaos: storeState.acao.entities,
+  telas: storeState.tela.entities,
   logUserEntity: storeState.logUser.entity,
   loading: storeState.logUser.loading,
   updating: storeState.logUser.updating,
@@ -186,6 +228,8 @@ const mapStateToProps = (storeState: IRootState) => ({
 });
 
 const mapDispatchToProps = {
+  getAcaos,
+  getTelas,
   getEntity,
   updateEntity,
   setBlob,
@@ -214,6 +258,62 @@ const DescricaoComponentUpdate = ({ baseFilters }) => {
     </Col>
   ) : (
     <AvInput type="hidden" name="descricao" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const AcaoComponentUpdate = ({ baseFilters, acaos }) => {
+  return baseFilters !== 'acao' ? (
+    <Col md="12">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" for="log-user-acao">
+              <Translate contentKey="generadorApp.logUser.acao">Acao</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <Select
+              id="log-user-acao"
+              className={'css-select-control'}
+              value={this.state.acaoSelectValue}
+              options={acaos ? acaos.map(option => ({ value: option.id, label: option.id })) : null}
+              onChange={options => this.setState({ acaoSelectValue: options })}
+              name={'acao'}
+            />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="acao" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const TelaComponentUpdate = ({ baseFilters, telas }) => {
+  return baseFilters !== 'tela' ? (
+    <Col md="12">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" for="log-user-tela">
+              <Translate contentKey="generadorApp.logUser.tela">Tela</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <Select
+              id="log-user-tela"
+              className={'css-select-control'}
+              value={this.state.telaSelectValue}
+              options={telas ? telas.map(option => ({ value: option.id, label: option.id })) : null}
+              onChange={options => this.setState({ telaSelectValue: options })}
+              name={'tela'}
+            />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="tela" value={this.state.fieldsBase[baseFilters]} />
   );
 };
 

@@ -63,7 +63,10 @@ export class Cid extends React.Component<ICidProps, ICidState> {
         diagnostico: '',
         gr: '',
         temp: '',
-        apelido: ''
+        apelido: '',
+        cidXPtaNovo: '',
+        pacienteDiagnostico: '',
+        padCid: ''
       },
       () => this.sortEntities()
     );
@@ -123,6 +126,15 @@ export class Cid extends React.Component<ICidProps, ICidState> {
       'apelido=' +
       this.state.apelido +
       '&' +
+      'cidXPtaNovo=' +
+      this.state.cidXPtaNovo +
+      '&' +
+      'pacienteDiagnostico=' +
+      this.state.pacienteDiagnostico +
+      '&' +
+      'padCid=' +
+      this.state.padCid +
+      '&' +
       ''
     );
   };
@@ -130,8 +142,33 @@ export class Cid extends React.Component<ICidProps, ICidState> {
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { codigo, diagnostico, gr, temp, apelido, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntitiesExport(codigo, diagnostico, gr, temp, apelido, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const {
+      codigo,
+      diagnostico,
+      gr,
+      temp,
+      apelido,
+      cidXPtaNovo,
+      pacienteDiagnostico,
+      padCid,
+      activePage,
+      itemsPerPage,
+      sort,
+      order
+    } = this.state;
+    this.props.getEntitiesExport(
+      codigo,
+      diagnostico,
+      gr,
+      temp,
+      apelido,
+      cidXPtaNovo,
+      pacienteDiagnostico,
+      padCid,
+      activePage - 1,
+      itemsPerPage,
+      `${sort},${order}`
+    );
   };
 
   confirmExport() {}

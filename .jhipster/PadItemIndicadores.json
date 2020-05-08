@@ -32,8 +32,15 @@
             "fieldType": "Integer"
         }
     ],
-    "relationships": [],
-    "changelogDate": "20200508164500",
+    "relationships": [
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "cidXPtaNovoPadItemIndi",
+            "otherEntityRelationshipName": "padItemIndicadores",
+            "relationshipName": "cidXPtaNovoPadItemIndi"
+        }
+    ],
+    "changelogDate": "20200508174100",
     "entityTableName": "pad_item_indicadores",
     "dto": "mapstruct",
     "pagination": "pagination",

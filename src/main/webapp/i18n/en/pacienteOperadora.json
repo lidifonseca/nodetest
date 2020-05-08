@@ -23,7 +23,11 @@
         "title": "Paciente Operadora"
       },
       "registro": "Registro",
-      "ativo": "Ativo"
+      "ativo": "Ativo",
+      "paciente_empty": "Without Paciente",
+      "paciente": "Paciente",
+      "operadora_empty": "Without Operadora",
+      "operadora": "Operadora"
     }
   }
 }

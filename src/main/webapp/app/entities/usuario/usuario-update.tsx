@@ -11,6 +11,8 @@ import { IRootState } from 'app/shared/reducers';
 
 import { IUnidadeEasy } from 'app/shared/model/unidade-easy.model';
 import { getEntities as getUnidadeEasies } from 'app/entities/unidade-easy/unidade-easy.reducer';
+import { ITipoUsuario } from 'app/shared/model/tipo-usuario.model';
+import { getEntities as getTipoUsuarios } from 'app/entities/tipo-usuario/tipo-usuario.reducer';
 import { IUsuarioUpdateState, getEntity, getUsuarioState, IUsuarioBaseState, updateEntity, createEntity, reset } from './usuario.reducer';
 import { IUsuario } from 'app/shared/model/usuario.model';
 import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
@@ -24,8 +26,10 @@ export class UsuarioUpdate extends React.Component<IUsuarioUpdateProps, IUsuario
 
     this.state = {
       unidadeEasySelectValue: null,
+      tipoUsuarioSelectValue: null,
       fieldsBase: getUsuarioState(this.props.location),
       unidadeId: '0',
+      tipoUsuarioId: '0',
       isNew: !this.props.match.params || !this.props.match.params.id
     };
   }
@@ -46,6 +50,19 @@ export class UsuarioUpdate extends React.Component<IUsuarioUpdateProps, IUsuario
         )
       });
     }
+
+    if (
+      nextProps.tipoUsuarios.length > 0 &&
+      this.state.tipoUsuarioSelectValue === null &&
+      nextProps.usuarioEntity.tipoUsuario &&
+      nextProps.usuarioEntity.tipoUsuario.id
+    ) {
+      this.setState({
+        tipoUsuarioSelectValue: nextProps.tipoUsuarios.map(p =>
+          nextProps.usuarioEntity.tipoUsuario.id === p.id ? { value: p.id, label: p.id } : null
+        )
+      });
+    }
   }
 
   componentDidMount() {
@@ -56,6 +73,7 @@ export class UsuarioUpdate extends React.Component<IUsuarioUpdateProps, IUsuario
     }
 
     this.props.getUnidadeEasies();
+    this.props.getTipoUsuarios();
   }
 
   getFiltersURL = (offset = null) => {
@@ -72,6 +90,7 @@ export class UsuarioUpdate extends React.Component<IUsuarioUpdateProps, IUsuario
       const entity = {
         ...usuarioEntity,
         unidadeEasy: this.state.unidadeEasySelectValue ? this.state.unidadeEasySelectValue['value'] : null,
+        tipoUsuario: this.state.tipoUsuarioSelectValue ? this.state.tipoUsuarioSelectValue['value'] : null,
         ...values
       };
 
@@ -88,7 +107,7 @@ export class UsuarioUpdate extends React.Component<IUsuarioUpdateProps, IUsuario
   };
 
   render() {
-    const { usuarioEntity, unidadeEasies, loading, updating } = this.props;
+    const { usuarioEntity, unidadeEasies, tipoUsuarios, loading, updating } = this.props;
     const { isNew } = this.state;
 
     const baseFilters = this.state.fieldsBase && this.state.fieldsBase['baseFilters'] ? this.state.fieldsBase['baseFilters'] : null;
@@ -100,7 +119,8 @@ export class UsuarioUpdate extends React.Component<IUsuarioUpdateProps, IUsuario
               ? {}
               : {
                   ...usuarioEntity,
-                  unidade: usuarioEntity.unidade ? usuarioEntity.unidade.id : null
+                  unidade: usuarioEntity.unidade ? usuarioEntity.unidade.id : null,
+                  tipoUsuario: usuarioEntity.tipoUsuario ? usuarioEntity.tipoUsuario.id : null
                 }
           }
           onSubmit={this.saveEntity}
@@ -408,7 +428,13 @@ export class UsuarioUpdate extends React.Component<IUsuarioUpdateProps, IUsuario
 
                         <EnvioMelhoraTempoComponentUpdate baseFilters />
 
+                        <DiarioComponentUpdate baseFilter diarios />
+
+                        <PacienteDiarioComponentUpdate baseFilter pacienteDiarios />
+
                         <UnidadeComponentUpdate baseFilter unidadeEasies />
+
+                        <TipoUsuarioComponentUpdate baseFilter tipoUsuarios />
                       </Row>
                     </div>
                   )}
@@ -424,6 +450,7 @@ export class UsuarioUpdate extends React.Component<IUsuarioUpdateProps, IUsuario
 
 const mapStateToProps = (storeState: IRootState) => ({
   unidadeEasies: storeState.unidadeEasy.entities,
+  tipoUsuarios: storeState.tipoUsuario.entities,
   usuarioEntity: storeState.usuario.entity,
   loading: storeState.usuario.loading,
   updating: storeState.usuario.updating,
@@ -432,6 +459,7 @@ const mapStateToProps = (storeState: IRootState) => ({
 
 const mapDispatchToProps = {
   getUnidadeEasies,
+  getTipoUsuarios,
   getEntity,
   updateEntity,
   createEntity,
@@ -3027,6 +3055,22 @@ const EnvioMelhoraTempoComponentUpdate = ({ baseFilters }) => {
   );
 };
 
+const DiarioComponentUpdate = ({ baseFilters, diarios }) => {
+  return baseFilters !== 'diario' ? (
+    <Col md="12"></Col>
+  ) : (
+    <AvInput type="hidden" name="diario" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const PacienteDiarioComponentUpdate = ({ baseFilters, pacienteDiarios }) => {
+  return baseFilters !== 'pacienteDiario' ? (
+    <Col md="12"></Col>
+  ) : (
+    <AvInput type="hidden" name="pacienteDiario" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
 const UnidadeComponentUpdate = ({ baseFilters, unidadeEasies }) => {
   return baseFilters !== 'unidade' ? (
     <Col md="12">
@@ -3052,6 +3096,34 @@ const UnidadeComponentUpdate = ({ baseFilters, unidadeEasies }) => {
     </Col>
   ) : (
     <AvInput type="hidden" name="unidade" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const TipoUsuarioComponentUpdate = ({ baseFilters, tipoUsuarios }) => {
+  return baseFilters !== 'tipoUsuario' ? (
+    <Col md="12">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" for="usuario-tipoUsuario">
+              <Translate contentKey="generadorApp.usuario.tipoUsuario">Tipo Usuario</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <Select
+              id="usuario-tipoUsuario"
+              className={'css-select-control'}
+              value={this.state.tipoUsuarioSelectValue}
+              options={tipoUsuarios ? tipoUsuarios.map(option => ({ value: option.id, label: option.id })) : null}
+              onChange={options => this.setState({ tipoUsuarioSelectValue: options })}
+              name={'tipoUsuario'}
+            />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="tipoUsuario" value={this.state.fieldsBase[baseFilters]} />
   );
 };
 

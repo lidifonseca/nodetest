@@ -32,6 +32,9 @@ import { IAlertasResultadosEsperados } from 'app/shared/model/alertas-resultados
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
+import { IResultados } from 'app/shared/model/resultados.model';
+import { getEntities as getResultados } from 'app/entities/resultados/resultados.reducer';
+
 export interface IAlertasResultadosEsperadosProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
 export interface IAlertasResultadosEsperadosState extends IAlertasResultadosEsperadosBaseState, IPaginationBaseState {}
@@ -49,6 +52,8 @@ export class AlertasResultadosEsperados extends React.Component<IAlertasResultad
 
   componentDidMount() {
     this.getEntities();
+
+    this.props.getResultados();
   }
 
   cancelCourse = () => {
@@ -58,7 +63,8 @@ export class AlertasResultadosEsperados extends React.Component<IAlertasResultad
         alteracaoEsperada: '',
         observacoes: '',
         usuarioId: '',
-        valor: ''
+        valor: '',
+        resultados: ''
       },
       () => this.sortEntities()
     );
@@ -120,6 +126,9 @@ export class AlertasResultadosEsperados extends React.Component<IAlertasResultad
       'valor=' +
       this.state.valor +
       '&' +
+      'resultados=' +
+      this.state.resultados +
+      '&' +
       ''
     );
   };
@@ -127,12 +136,22 @@ export class AlertasResultadosEsperados extends React.Component<IAlertasResultad
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { pontuacao, alteracaoEsperada, observacoes, usuarioId, valor, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntities(pontuacao, alteracaoEsperada, observacoes, usuarioId, valor, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const { pontuacao, alteracaoEsperada, observacoes, usuarioId, valor, resultados, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntities(
+      pontuacao,
+      alteracaoEsperada,
+      observacoes,
+      usuarioId,
+      valor,
+      resultados,
+      activePage - 1,
+      itemsPerPage,
+      `${sort},${order}`
+    );
   };
 
   render() {
-    const { alertasResultadosEsperadosList, match, totalItems } = this.props;
+    const { resultados, alertasResultadosEsperadosList, match, totalItems } = this.props;
     return (
       <div>
         <h2 id="page-heading">
@@ -247,6 +266,33 @@ export class AlertasResultadosEsperados extends React.Component<IAlertasResultad
                           </Row>
                         </Col>
                       ) : null}
+
+                      {this.state.baseFilters !== 'resultados' ? (
+                        <Col md="3">
+                          <Row className="mr-1 mt-1">
+                            <div style={{ width: '100%' }}>
+                              <Label for="alertas-resultados-esperados-resultados">
+                                <Translate contentKey="generadorApp.alertasResultadosEsperados.resultados">Resultados</Translate>
+                              </Label>
+                              <Select
+                                id="alertas-resultados-esperados-resultados"
+                                isMulti
+                                className={'css-select-control'}
+                                value={
+                                  resultados
+                                    ? resultados.map(p =>
+                                        this.state.resultados.split(',').indexOf(p.id) !== -1 ? { value: p.id, label: p.id } : null
+                                      )
+                                    : null
+                                }
+                                options={resultados ? resultados.map(option => ({ value: option.id, label: option.id })) : null}
+                                onChange={options => this.setState({ resultados: options.map(option => option['value']).join(',') })}
+                                name={'resultados'}
+                              />
+                            </div>
+                          </Row>
+                        </Col>
+                      ) : null}
                     </div>
 
                     <div className="row mb-2 mr-4 justify-content-end">
@@ -305,6 +351,13 @@ export class AlertasResultadosEsperados extends React.Component<IAlertasResultad
                         </th>
                       ) : null}
 
+                      {this.state.baseFilters !== 'resultados' ? (
+                        <th>
+                          <Translate contentKey="generadorApp.alertasResultadosEsperados.resultados">Resultados</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+
                       <th />
                     </tr>
                   </thead>
@@ -329,6 +382,18 @@ export class AlertasResultadosEsperados extends React.Component<IAlertasResultad
                         {this.state.baseFilters !== 'usuarioId' ? <td>{alertasResultadosEsperados.usuarioId}</td> : null}
 
                         {this.state.baseFilters !== 'valor' ? <td>{alertasResultadosEsperados.valor}</td> : null}
+
+                        {this.state.baseFilters !== 'resultados' ? (
+                          <td>
+                            {alertasResultadosEsperados.resultados ? (
+                              <Link to={`resultados/${alertasResultadosEsperados.resultados.id}`}>
+                                {alertasResultadosEsperados.resultados.id}
+                              </Link>
+                            ) : (
+                              ''
+                            )}
+                          </td>
+                        ) : null}
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">
@@ -403,11 +468,13 @@ export class AlertasResultadosEsperados extends React.Component<IAlertasResultad
 }
 
 const mapStateToProps = ({ alertasResultadosEsperados, ...storeState }: IRootState) => ({
+  resultados: storeState.resultados.entities,
   alertasResultadosEsperadosList: alertasResultadosEsperados.entities,
   totalItems: alertasResultadosEsperados.totalItems
 });
 
 const mapDispatchToProps = {
+  getResultados,
   getEntities
 };
 

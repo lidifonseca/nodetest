@@ -1,3 +1,5 @@
+import { IIndicadores } from 'app/shared/model/indicadores.model';
+
 export interface IIndicadoresValores {
   id?: string;
   sexo?: string;
@@ -6,6 +8,7 @@ export interface IIndicadoresValores {
   unidadeMedida?: string;
   idadeMinima?: string;
   idadeMaxima?: string;
+  indicadores?: string | any;
 }
 
 export const defaultValue: Readonly<IIndicadoresValores> = {};

@@ -48,7 +48,7 @@
             <%_ if (!relationshipRequired) { _%>
           <Select 
             id="<%= entityFileName %>-<%= relationshipName %>" isMulti className={"css-select-control"}
-            value={<%= otherEntityNamePlural %> ? <%= otherEntityNamePlural %>.map((p)=>(this.state.<%= relationshipName %>.split(",").indexOf(p.id) !== -1 ? {value: p.id , label: p.<%=otherEntityField%>} : null)) : null} 
+            value={<%= otherEntityNamePlural %> ? <%= otherEntityNamePlural %>.map((p)=>(this.state.<%= relationshipName %>.split(",").indexOf(p.id) !== -1 ? {value: p.id , label: p.<%=otherEntityField ? otherEntityField : 'id' %>} : null)) : null} 
             options={<%= otherEntityNamePlural %> ? <%= otherEntityNamePlural %>.map((option)=>({value: option.id , label: option.<%=otherEntityField%>})) : null} 
             onChange={options => this.setState({ <%= relationshipName %>: options.map((option)=>(option['value'])).join(",") }) }
             name={"<%= relationshipFieldName %>"} 
@@ -56,7 +56,7 @@
         <%_ } else { _%>
           <Select 
             id="<%= entityFileName %>-<%= relationshipName %>" isMulti className={"css-select-control"}
-            value={<%= otherEntityNamePlural %> ? <%= otherEntityNamePlural %>.map((p)=>(this.state.<%= relationshipName %>.split(",").indexOf(p.id) !== -1 ? {value: p.id , label: p.<%=otherEntityField%>} : null)) : null} 
+            value={<%= otherEntityNamePlural %> ? <%= otherEntityNamePlural %>.map((p)=>(this.state.<%= relationshipName %>.split(",").indexOf(p.id) !== -1 ? {value: p.id , label: p.<%= otherEntityField ? otherEntityField : 'id' %>} : null)) : null} 
             options={<%= otherEntityNamePlural %> ? <%= otherEntityNamePlural %>.map((option)=>({value: option.id , label: option.<%=otherEntityField%>})) : null} 
             onChange={options => this.setState({ <%= relationshipName %>: options.map((option)=>(option['value'])).join(",") }) }
             name={"<%= relationshipFieldName %>"} 
@@ -66,7 +66,7 @@
           <%_ if (!relationshipRequired) { _%>
             <Select 
               id="<%= entityFileName %>-<%= relationshipName %>" isMulti className={"css-select-control"}
-              value={<%= otherEntityNamePlural %> ? <%= otherEntityNamePlural %>.map((p)=>(this.state.<%= relationshipName %>.split(",").indexOf(p.id) !== -1 ? {value: p.id , label: p.<%=otherEntityField%>} : null)) : null} 
+              value={<%= otherEntityNamePlural %> ? <%= otherEntityNamePlural %>.map((p)=>(this.state.<%= relationshipName %>.split(",").indexOf(p.id) !== -1 ? {value: p.id , label: p.<%=otherEntityField ? otherEntityField : 'id' %>} : null)) : null} 
               options={<%= otherEntityNamePlural %> ? <%= otherEntityNamePlural %>.map((option)=>({value: option.id , label: option.<%=otherEntityField%>})) : null} 
               onChange={options => this.setState({ <%= relationshipName %>: options.map((option)=>(option['value'])).join(",") }) }
               name={"<%= relationshipFieldName %>"} 
@@ -74,7 +74,7 @@
           <%_ } else { _%>
             <Select 
               id="<%= entityFileName %>-<%= relationshipName %>" isMulti className={"css-select-control"}
-              value={<%= otherEntityNamePlural %> ? <%= otherEntityNamePlural %>.map((p)=>(this.state.<%= relationshipName %>.split(",").indexOf(p.id) !== -1 ? {value: p.id , label: p.<%=otherEntityField%>} : null)) : null} 
+              value={<%= otherEntityNamePlural %> ? <%= otherEntityNamePlural %>.map((p)=>(this.state.<%= relationshipName %>.split(",").indexOf(p.id) !== -1 ? {value: p.id , label: p.<%=otherEntityField ? otherEntityField : 'id' %>} : null)) : null} 
               options={<%= otherEntityNamePlural %> ? <%= otherEntityNamePlural %>.map((option)=>({value: option.id , label: option.<%=otherEntityField%>})) : null} 
               onChange={options => this.setState({ <%= relationshipName %>: options.map((option)=>(option['value'])).join(",") }) }
               name={"<%= relationshipFieldName %>"} 
@@ -98,7 +98,7 @@
           <%_ } else { _%>
             <Select 
               id="<%= entityFileName %>-<%= relationshipName %>" isMulti className={"css-select-control"}
-              value={<%= otherEntityNamePlural %> ? <%= otherEntityNamePlural %>.map((p)=>(this.state.<%= relationshipName %>.split(",").indexOf(p.id) !== -1 ? {value: p.id , label: p.<%=otherEntityField%>} : null)) : null} 
+              value={<%= otherEntityNamePlural %> ? <%= otherEntityNamePlural %>.map((p)=>(this.state.<%= relationshipName %>.split(",").indexOf(p.id) !== -1 ? {value: p.id , label: p.<%=otherEntityField ? otherEntityField : 'id' %>} : null)) : null} 
               options={<%= otherEntityNamePlural %> ? <%= otherEntityNamePlural %>.map((option)=>({value: option.id , label: option.<%=otherEntityField%>})) : null} 
               onChange={options => this.setState({ <%= relationshipName %>: options.map((option)=>(option['value'])).join(",") }) }
               name={"<%= relationshipFieldName %>"} 
@@ -110,7 +110,7 @@
         <Label for="<%= entityFileName %>-<%= relationshipName %>"><Translate contentKey="<%= translationKey %>"><%= relationshipNameHumanized %></Translate></Label>
         <Select 
           id="<%= entityFileName %>-<%= relationshipName %>" isMulti  className={"css-select-control"}
-          value={<%= otherEntityNamePlural %> ? <%= otherEntityNamePlural %>.map((p)=>(this.state.<%= relationshipName %>.split(",").indexOf(p.id) !== -1 ? {value: p.id , label: p.<%=otherEntityField%>} : null)) : null} 
+          value={<%= otherEntityNamePlural %> ? <%= otherEntityNamePlural %>.map((p)=>(this.state.<%= relationshipName %>.split(",").indexOf(p.id) !== -1 ? {value: p.id , label: p.<%=otherEntityField ? otherEntityField : 'id' %>} : null)) : null} 
           options={<%= otherEntityNamePlural %> ? <%= otherEntityNamePlural %>.map((option)=>({value: option.id , label: option.<%=otherEntityField%>})) : null} 
           onChange={options => this.setState({ <%= relationshipName %>: options.map((option)=>(option['value'])).join(",") }) }
           name={"<%= relationshipFieldName %>"} 

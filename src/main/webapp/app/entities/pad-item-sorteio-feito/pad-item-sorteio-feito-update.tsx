@@ -9,6 +9,8 @@ import { Translate, translate, ICrudGetAction, ICrudGetAllAction, ICrudPutAction
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
+import { IPadItem } from 'app/shared/model/pad-item.model';
+import { getEntities as getPadItems } from 'app/entities/pad-item/pad-item.reducer';
 import {
   IPadItemSorteioFeitoUpdateState,
   getEntity,
@@ -29,13 +31,28 @@ export class PadItemSorteioFeitoUpdate extends React.Component<IPadItemSorteioFe
     super(props);
 
     this.state = {
+      padItemSelectValue: null,
       fieldsBase: getPadItemSorteioFeitoState(this.props.location),
+      padItemId: '0',
       isNew: !this.props.match.params || !this.props.match.params.id
     };
   }
   componentDidUpdate(nextProps, nextState) {
     if (nextProps.updateSuccess !== this.props.updateSuccess && nextProps.updateSuccess) {
       this.handleClose();
+    }
+
+    if (
+      nextProps.padItems.length > 0 &&
+      this.state.padItemSelectValue === null &&
+      nextProps.padItemSorteioFeitoEntity.padItem &&
+      nextProps.padItemSorteioFeitoEntity.padItem.id
+    ) {
+      this.setState({
+        padItemSelectValue: nextProps.padItems.map(p =>
+          nextProps.padItemSorteioFeitoEntity.padItem.id === p.id ? { value: p.id, label: p.id } : null
+        )
+      });
     }
   }
 
@@ -45,6 +62,8 @@ export class PadItemSorteioFeitoUpdate extends React.Component<IPadItemSorteioFe
     } else {
       this.props.getEntity(this.props.match.params.id);
     }
+
+    this.props.getPadItems();
   }
 
   getFiltersURL = (offset = null) => {
@@ -60,7 +79,7 @@ export class PadItemSorteioFeitoUpdate extends React.Component<IPadItemSorteioFe
       const { padItemSorteioFeitoEntity } = this.props;
       const entity = {
         ...padItemSorteioFeitoEntity,
-
+        padItem: this.state.padItemSelectValue ? this.state.padItemSelectValue['value'] : null,
         ...values
       };
 
@@ -77,7 +96,7 @@ export class PadItemSorteioFeitoUpdate extends React.Component<IPadItemSorteioFe
   };
 
   render() {
-    const { padItemSorteioFeitoEntity, loading, updating } = this.props;
+    const { padItemSorteioFeitoEntity, padItems, loading, updating } = this.props;
     const { isNew } = this.state;
 
     const baseFilters = this.state.fieldsBase && this.state.fieldsBase['baseFilters'] ? this.state.fieldsBase['baseFilters'] : null;
@@ -88,7 +107,8 @@ export class PadItemSorteioFeitoUpdate extends React.Component<IPadItemSorteioFe
             isNew
               ? {}
               : {
-                  ...padItemSorteioFeitoEntity
+                  ...padItemSorteioFeitoEntity,
+                  padItem: padItemSorteioFeitoEntity.padItem ? padItemSorteioFeitoEntity.padItem.id : null
                 }
           }
           onSubmit={this.saveEntity}
@@ -153,6 +173,8 @@ export class PadItemSorteioFeitoUpdate extends React.Component<IPadItemSorteioFe
                       ) : null}
                       <Row>
                         <SorteioFeitoComponentUpdate baseFilters />
+
+                        <PadItemComponentUpdate baseFilter padItems />
                       </Row>
                     </div>
                   )}
@@ -167,6 +189,7 @@ export class PadItemSorteioFeitoUpdate extends React.Component<IPadItemSorteioFe
 }
 
 const mapStateToProps = (storeState: IRootState) => ({
+  padItems: storeState.padItem.entities,
   padItemSorteioFeitoEntity: storeState.padItemSorteioFeito.entity,
   loading: storeState.padItemSorteioFeito.loading,
   updating: storeState.padItemSorteioFeito.updating,
@@ -174,6 +197,7 @@ const mapStateToProps = (storeState: IRootState) => ({
 });
 
 const mapDispatchToProps = {
+  getPadItems,
   getEntity,
   updateEntity,
   createEntity,
@@ -201,6 +225,34 @@ const SorteioFeitoComponentUpdate = ({ baseFilters }) => {
     </Col>
   ) : (
     <AvInput type="hidden" name="sorteioFeito" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const PadItemComponentUpdate = ({ baseFilters, padItems }) => {
+  return baseFilters !== 'padItem' ? (
+    <Col md="12">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" for="pad-item-sorteio-feito-padItem">
+              <Translate contentKey="generadorApp.padItemSorteioFeito.padItem">Pad Item</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <Select
+              id="pad-item-sorteio-feito-padItem"
+              className={'css-select-control'}
+              value={this.state.padItemSelectValue}
+              options={padItems ? padItems.map(option => ({ value: option.id, label: option.id })) : null}
+              onChange={options => this.setState({ padItemSelectValue: options })}
+              name={'padItem'}
+            />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="padItem" value={this.state.fieldsBase[baseFilters]} />
   );
 };
 

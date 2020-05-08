@@ -34,7 +34,29 @@
       "numGhc": "Num Ghc",
       "cidXPtaNovo": "Cid X Pta Novo",
       "categoriaId": "Categoria Id",
-      "score": "Score"
+      "score": "Score",
+      "atendimento_empty": "Without Atendimento",
+      "atendimento": "Atendimento",
+      "atendimentoCepRecusado_empty": "Without Atendimento Cep Recusado",
+      "atendimentoCepRecusado": "Atendimento Cep Recusado",
+      "atendimentoSorteioFeito_empty": "Without Atendimento Sorteio Feito",
+      "atendimentoSorteioFeito": "Atendimento Sorteio Feito",
+      "padItemAtividade_empty": "Without Pad Item Atividade",
+      "padItemAtividade": "Pad Item Atividade",
+      "padItemCepRecusado_empty": "Without Pad Item Cep Recusado",
+      "padItemCepRecusado": "Pad Item Cep Recusado",
+      "padItemResultado_empty": "Without Pad Item Resultado",
+      "padItemResultado": "Pad Item Resultado",
+      "padItemSorteioFeito_empty": "Without Pad Item Sorteio Feito",
+      "padItemSorteioFeito": "Pad Item Sorteio Feito",
+      "pad_empty": "Without Pad",
+      "pad": "Pad",
+      "especialidade_empty": "Without Especialidade",
+      "especialidade": "Especialidade",
+      "periodicidade_empty": "Without Periodicidade",
+      "periodicidade": "Periodicidade",
+      "periodo_empty": "Without Periodo",
+      "periodo": "Periodo"
     }
   }
 }

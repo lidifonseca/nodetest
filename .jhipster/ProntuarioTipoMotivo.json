@@ -39,7 +39,7 @@
         }
     ],
     "relationships": [],
-    "changelogDate": "20200508171600",
+    "changelogDate": "20200508181200",
     "entityTableName": "prontuario_tipo_motivo",
     "dto": "mapstruct",
     "pagination": "pagination",

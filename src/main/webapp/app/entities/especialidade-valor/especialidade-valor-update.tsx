@@ -9,6 +9,8 @@ import { Translate, translate, ICrudGetAction, ICrudGetAllAction, ICrudPutAction
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
+import { IEspecialidade } from 'app/shared/model/especialidade.model';
+import { getEntities as getEspecialidades } from 'app/entities/especialidade/especialidade.reducer';
 import {
   IEspecialidadeValorUpdateState,
   getEntity,
@@ -29,13 +31,28 @@ export class EspecialidadeValorUpdate extends React.Component<IEspecialidadeValo
     super(props);
 
     this.state = {
+      especialidadeSelectValue: null,
       fieldsBase: getEspecialidadeValorState(this.props.location),
+      especialidadeId: '0',
       isNew: !this.props.match.params || !this.props.match.params.id
     };
   }
   componentDidUpdate(nextProps, nextState) {
     if (nextProps.updateSuccess !== this.props.updateSuccess && nextProps.updateSuccess) {
       this.handleClose();
+    }
+
+    if (
+      nextProps.especialidades.length > 0 &&
+      this.state.especialidadeSelectValue === null &&
+      nextProps.especialidadeValorEntity.especialidade &&
+      nextProps.especialidadeValorEntity.especialidade.id
+    ) {
+      this.setState({
+        especialidadeSelectValue: nextProps.especialidades.map(p =>
+          nextProps.especialidadeValorEntity.especialidade.id === p.id ? { value: p.id, label: p.id } : null
+        )
+      });
     }
   }
 
@@ -45,6 +62,8 @@ export class EspecialidadeValorUpdate extends React.Component<IEspecialidadeValo
     } else {
       this.props.getEntity(this.props.match.params.id);
     }
+
+    this.props.getEspecialidades();
   }
 
   getFiltersURL = (offset = null) => {
@@ -60,7 +79,7 @@ export class EspecialidadeValorUpdate extends React.Component<IEspecialidadeValo
       const { especialidadeValorEntity } = this.props;
       const entity = {
         ...especialidadeValorEntity,
-
+        especialidade: this.state.especialidadeSelectValue ? this.state.especialidadeSelectValue['value'] : null,
         ...values
       };
 
@@ -77,7 +96,7 @@ export class EspecialidadeValorUpdate extends React.Component<IEspecialidadeValo
   };
 
   render() {
-    const { especialidadeValorEntity, loading, updating } = this.props;
+    const { especialidadeValorEntity, especialidades, loading, updating } = this.props;
     const { isNew } = this.state;
 
     const baseFilters = this.state.fieldsBase && this.state.fieldsBase['baseFilters'] ? this.state.fieldsBase['baseFilters'] : null;
@@ -88,7 +107,8 @@ export class EspecialidadeValorUpdate extends React.Component<IEspecialidadeValo
             isNew
               ? {}
               : {
-                  ...especialidadeValorEntity
+                  ...especialidadeValorEntity,
+                  especialidade: especialidadeValorEntity.especialidade ? especialidadeValorEntity.especialidade.id : null
                 }
           }
           onSubmit={this.saveEntity}
@@ -155,6 +175,8 @@ export class EspecialidadeValorUpdate extends React.Component<IEspecialidadeValo
                         <ValorComponentUpdate baseFilters />
 
                         <AtivoComponentUpdate baseFilters />
+
+                        <EspecialidadeComponentUpdate baseFilter especialidades />
                       </Row>
                     </div>
                   )}
@@ -169,6 +191,7 @@ export class EspecialidadeValorUpdate extends React.Component<IEspecialidadeValo
 }
 
 const mapStateToProps = (storeState: IRootState) => ({
+  especialidades: storeState.especialidade.entities,
   especialidadeValorEntity: storeState.especialidadeValor.entity,
   loading: storeState.especialidadeValor.loading,
   updating: storeState.especialidadeValor.updating,
@@ -176,6 +199,7 @@ const mapStateToProps = (storeState: IRootState) => ({
 });
 
 const mapDispatchToProps = {
+  getEspecialidades,
   getEntity,
   updateEntity,
   createEntity,
@@ -245,6 +269,34 @@ const AtivoComponentUpdate = ({ baseFilters }) => {
     </Col>
   ) : (
     <AvInput type="hidden" name="ativo" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const EspecialidadeComponentUpdate = ({ baseFilters, especialidades }) => {
+  return baseFilters !== 'especialidade' ? (
+    <Col md="12">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" for="especialidade-valor-especialidade">
+              <Translate contentKey="generadorApp.especialidadeValor.especialidade">Especialidade</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <Select
+              id="especialidade-valor-especialidade"
+              className={'css-select-control'}
+              value={this.state.especialidadeSelectValue}
+              options={especialidades ? especialidades.map(option => ({ value: option.id, label: option.id })) : null}
+              onChange={options => this.setState({ especialidadeSelectValue: options })}
+              name={'especialidade'}
+            />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="especialidade" value={this.state.fieldsBase[baseFilters]} />
   );
 };
 

@@ -28,6 +28,11 @@ import { IEspecialidadeOperadora } from 'app/shared/model/especialidade-operador
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
+import { IOperadora } from 'app/shared/model/operadora.model';
+import { getEntities as getOperadoras } from 'app/entities/operadora/operadora.reducer';
+import { IEspecialidade } from 'app/shared/model/especialidade.model';
+import { getEntities as getEspecialidades } from 'app/entities/especialidade/especialidade.reducer';
+
 export interface IEspecialidadeOperadoraProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
 export interface IEspecialidadeOperadoraState extends IEspecialidadeOperadoraBaseState, IPaginationBaseState {}
@@ -45,6 +50,9 @@ export class EspecialidadeOperadora extends React.Component<IEspecialidadeOperad
 
   componentDidMount() {
     this.getEntities();
+
+    this.props.getOperadoras();
+    this.props.getEspecialidades();
   }
 
   cancelCourse = () => {
@@ -57,7 +65,9 @@ export class EspecialidadeOperadora extends React.Component<IEspecialidadeOperad
         valorVenda: '',
         descontoCusto: '',
         descontoVenda: '',
-        ativo: ''
+        ativo: '',
+        operadora: '',
+        especialidade: ''
       },
       () => this.sortEntities()
     );
@@ -128,6 +138,12 @@ export class EspecialidadeOperadora extends React.Component<IEspecialidadeOperad
       'ativo=' +
       this.state.ativo +
       '&' +
+      'operadora=' +
+      this.state.operadora +
+      '&' +
+      'especialidade=' +
+      this.state.especialidade +
+      '&' +
       ''
     );
   };
@@ -144,6 +160,8 @@ export class EspecialidadeOperadora extends React.Component<IEspecialidadeOperad
       descontoCusto,
       descontoVenda,
       ativo,
+      operadora,
+      especialidade,
       activePage,
       itemsPerPage,
       sort,
@@ -158,6 +176,8 @@ export class EspecialidadeOperadora extends React.Component<IEspecialidadeOperad
       descontoCusto,
       descontoVenda,
       ativo,
+      operadora,
+      especialidade,
       activePage - 1,
       itemsPerPage,
       `${sort},${order}`
@@ -165,7 +185,7 @@ export class EspecialidadeOperadora extends React.Component<IEspecialidadeOperad
   };
 
   render() {
-    const { especialidadeOperadoraList, match, totalItems } = this.props;
+    const { operadoras, especialidades, especialidadeOperadoraList, match, totalItems } = this.props;
     return (
       <div>
         <h2 id="page-heading">
@@ -311,6 +331,60 @@ export class EspecialidadeOperadora extends React.Component<IEspecialidadeOperad
                           </Row>
                         </Col>
                       ) : null}
+
+                      {this.state.baseFilters !== 'operadora' ? (
+                        <Col md="3">
+                          <Row className="mr-1 mt-1">
+                            <div style={{ width: '100%' }}>
+                              <Label for="especialidade-operadora-operadora">
+                                <Translate contentKey="generadorApp.especialidadeOperadora.operadora">Operadora</Translate>
+                              </Label>
+                              <Select
+                                id="especialidade-operadora-operadora"
+                                isMulti
+                                className={'css-select-control'}
+                                value={
+                                  operadoras
+                                    ? operadoras.map(p =>
+                                        this.state.operadora.split(',').indexOf(p.id) !== -1 ? { value: p.id, label: p.id } : null
+                                      )
+                                    : null
+                                }
+                                options={operadoras ? operadoras.map(option => ({ value: option.id, label: option.id })) : null}
+                                onChange={options => this.setState({ operadora: options.map(option => option['value']).join(',') })}
+                                name={'operadora'}
+                              />
+                            </div>
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'especialidade' ? (
+                        <Col md="3">
+                          <Row className="mr-1 mt-1">
+                            <div style={{ width: '100%' }}>
+                              <Label for="especialidade-operadora-especialidade">
+                                <Translate contentKey="generadorApp.especialidadeOperadora.especialidade">Especialidade</Translate>
+                              </Label>
+                              <Select
+                                id="especialidade-operadora-especialidade"
+                                isMulti
+                                className={'css-select-control'}
+                                value={
+                                  especialidades
+                                    ? especialidades.map(p =>
+                                        this.state.especialidade.split(',').indexOf(p.id) !== -1 ? { value: p.id, label: p.id } : null
+                                      )
+                                    : null
+                                }
+                                options={especialidades ? especialidades.map(option => ({ value: option.id, label: option.id })) : null}
+                                onChange={options => this.setState({ especialidade: options.map(option => option['value']).join(',') })}
+                                name={'especialidade'}
+                              />
+                            </div>
+                          </Row>
+                        </Col>
+                      ) : null}
                     </div>
 
                     <div className="row mb-2 mr-4 justify-content-end">
@@ -387,6 +461,20 @@ export class EspecialidadeOperadora extends React.Component<IEspecialidadeOperad
                         </th>
                       ) : null}
 
+                      {this.state.baseFilters !== 'operadora' ? (
+                        <th>
+                          <Translate contentKey="generadorApp.especialidadeOperadora.operadora">Operadora</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'especialidade' ? (
+                        <th>
+                          <Translate contentKey="generadorApp.especialidadeOperadora.especialidade">Especialidade</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+
                       <th />
                     </tr>
                   </thead>
@@ -415,6 +503,28 @@ export class EspecialidadeOperadora extends React.Component<IEspecialidadeOperad
                         {this.state.baseFilters !== 'descontoVenda' ? <td>{especialidadeOperadora.descontoVenda}</td> : null}
 
                         {this.state.baseFilters !== 'ativo' ? <td>{especialidadeOperadora.ativo}</td> : null}
+
+                        {this.state.baseFilters !== 'operadora' ? (
+                          <td>
+                            {especialidadeOperadora.operadora ? (
+                              <Link to={`operadora/${especialidadeOperadora.operadora.id}`}>{especialidadeOperadora.operadora.id}</Link>
+                            ) : (
+                              ''
+                            )}
+                          </td>
+                        ) : null}
+
+                        {this.state.baseFilters !== 'especialidade' ? (
+                          <td>
+                            {especialidadeOperadora.especialidade ? (
+                              <Link to={`especialidade/${especialidadeOperadora.especialidade.id}`}>
+                                {especialidadeOperadora.especialidade.id}
+                              </Link>
+                            ) : (
+                              ''
+                            )}
+                          </td>
+                        ) : null}
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">
@@ -487,11 +597,15 @@ export class EspecialidadeOperadora extends React.Component<IEspecialidadeOperad
 }
 
 const mapStateToProps = ({ especialidadeOperadora, ...storeState }: IRootState) => ({
+  operadoras: storeState.operadora.entities,
+  especialidades: storeState.especialidade.entities,
   especialidadeOperadoraList: especialidadeOperadora.entities,
   totalItems: especialidadeOperadora.totalItems
 });
 
 const mapDispatchToProps = {
+  getOperadoras,
+  getEspecialidades,
   getEntities
 };
 

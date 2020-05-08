@@ -28,6 +28,14 @@
       "publicar": "Publicar",
       "ordem": "Ordem",
       "publicarSite": "Publicar Site",
+      "categoriaAtividade_empty": "Without Categoria Atividade",
+      "categoriaAtividade": "Categoria Atividade",
+      "categoriaContrato_empty": "Without Categoria Contrato",
+      "categoriaContrato": "Categoria Contrato",
+      "cidXPtaNovoPadItemIndi_empty": "Without Cid X Pta Novo Pad Item Indi",
+      "cidXPtaNovoPadItemIndi": "Cid X Pta Novo Pad Item Indi",
+      "especialidade_empty": "Without Especialidade",
+      "especialidade": "Especialidade",
       "unidade_empty": "Without Unidade",
       "unidade": "Unidade"
     }

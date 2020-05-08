@@ -5,6 +5,7 @@ import PadItemSorteioFeito from '../domain/pad-item-sorteio-feito.entity';
 import { PadItemSorteioFeitoRepository } from '../repository/pad-item-sorteio-feito.repository';
 
 const relationshipNames = [];
+relationshipNames.push('padItem');
 
 @Injectable()
 export class PadItemSorteioFeitoService {

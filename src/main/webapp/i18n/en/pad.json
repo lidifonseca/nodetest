@@ -30,11 +30,16 @@
       "dataConferido": "Data Conferido",
       "ativo": "Ativo",
       "statusPad": "Status Pad",
-      "novoModelo": "Novo Modelo",
       "imagePath": "Image Path",
       "score": "Score",
+      "padCid_empty": "Without Pad Cid",
+      "padCid": "Pad Cid",
+      "padItem_empty": "Without Pad Item",
+      "padItem": "Pad Item",
       "unidade_empty": "Without Unidade",
-      "unidade": "Unidade"
+      "unidade": "Unidade",
+      "paciente_empty": "Without Paciente",
+      "paciente": "Paciente"
     }
   }
 }

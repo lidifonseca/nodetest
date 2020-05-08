@@ -28,6 +28,11 @@ import { ILogUser } from 'app/shared/model/log-user.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
+import { IAcao } from 'app/shared/model/acao.model';
+import { getEntities as getAcaos } from 'app/entities/acao/acao.reducer';
+import { ITela } from 'app/shared/model/tela.model';
+import { getEntities as getTelas } from 'app/entities/tela/tela.reducer';
+
 export interface ILogUserProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
 export interface ILogUserState extends ILogUserBaseState, IPaginationBaseState {}
@@ -45,12 +50,17 @@ export class LogUser extends React.Component<ILogUserProps, ILogUserState> {
 
   componentDidMount() {
     this.getEntities();
+
+    this.props.getAcaos();
+    this.props.getTelas();
   }
 
   cancelCourse = () => {
     this.setState(
       {
-        descricao: ''
+        descricao: '',
+        acao: '',
+        tela: ''
       },
       () => this.sortEntities()
     );
@@ -100,6 +110,12 @@ export class LogUser extends React.Component<ILogUserProps, ILogUserState> {
       'descricao=' +
       this.state.descricao +
       '&' +
+      'acao=' +
+      this.state.acao +
+      '&' +
+      'tela=' +
+      this.state.tela +
+      '&' +
       ''
     );
   };
@@ -107,12 +123,12 @@ export class LogUser extends React.Component<ILogUserProps, ILogUserState> {
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { descricao, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntities(descricao, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const { descricao, acao, tela, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntities(descricao, acao, tela, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   render() {
-    const { logUserList, match, totalItems } = this.props;
+    const { acaos, telas, logUserList, match, totalItems } = this.props;
     return (
       <div>
         <h2 id="page-heading">
@@ -158,6 +174,60 @@ export class LogUser extends React.Component<ILogUserProps, ILogUserState> {
                           </Row>
                         </Col>
                       ) : null}
+
+                      {this.state.baseFilters !== 'acao' ? (
+                        <Col md="3">
+                          <Row className="mr-1 mt-1">
+                            <div style={{ width: '100%' }}>
+                              <Label for="log-user-acao">
+                                <Translate contentKey="generadorApp.logUser.acao">Acao</Translate>
+                              </Label>
+                              <Select
+                                id="log-user-acao"
+                                isMulti
+                                className={'css-select-control'}
+                                value={
+                                  acaos
+                                    ? acaos.map(p =>
+                                        this.state.acao.split(',').indexOf(p.id) !== -1 ? { value: p.id, label: p.id } : null
+                                      )
+                                    : null
+                                }
+                                options={acaos ? acaos.map(option => ({ value: option.id, label: option.id })) : null}
+                                onChange={options => this.setState({ acao: options.map(option => option['value']).join(',') })}
+                                name={'acao'}
+                              />
+                            </div>
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'tela' ? (
+                        <Col md="3">
+                          <Row className="mr-1 mt-1">
+                            <div style={{ width: '100%' }}>
+                              <Label for="log-user-tela">
+                                <Translate contentKey="generadorApp.logUser.tela">Tela</Translate>
+                              </Label>
+                              <Select
+                                id="log-user-tela"
+                                isMulti
+                                className={'css-select-control'}
+                                value={
+                                  telas
+                                    ? telas.map(p =>
+                                        this.state.tela.split(',').indexOf(p.id) !== -1 ? { value: p.id, label: p.id } : null
+                                      )
+                                    : null
+                                }
+                                options={telas ? telas.map(option => ({ value: option.id, label: option.id })) : null}
+                                onChange={options => this.setState({ tela: options.map(option => option['value']).join(',') })}
+                                name={'tela'}
+                              />
+                            </div>
+                          </Row>
+                        </Col>
+                      ) : null}
                     </div>
 
                     <div className="row mb-2 mr-4 justify-content-end">
@@ -192,6 +262,20 @@ export class LogUser extends React.Component<ILogUserProps, ILogUserState> {
                         </th>
                       ) : null}
 
+                      {this.state.baseFilters !== 'acao' ? (
+                        <th>
+                          <Translate contentKey="generadorApp.logUser.acao">Acao</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'tela' ? (
+                        <th>
+                          <Translate contentKey="generadorApp.logUser.tela">Tela</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+
                       <th />
                     </tr>
                   </thead>
@@ -207,6 +291,14 @@ export class LogUser extends React.Component<ILogUserProps, ILogUserState> {
 
                         {this.state.baseFilters !== 'descricao' ? (
                           <td>{logUser.descricao ? Buffer.from(logUser.descricao).toString() : null}</td>
+                        ) : null}
+
+                        {this.state.baseFilters !== 'acao' ? (
+                          <td>{logUser.acao ? <Link to={`acao/${logUser.acao.id}`}>{logUser.acao.id}</Link> : ''}</td>
+                        ) : null}
+
+                        {this.state.baseFilters !== 'tela' ? (
+                          <td>{logUser.tela ? <Link to={`tela/${logUser.tela.id}`}>{logUser.tela.id}</Link> : ''}</td>
                         ) : null}
 
                         <td className="text-right">
@@ -265,11 +357,15 @@ export class LogUser extends React.Component<ILogUserProps, ILogUserState> {
 }
 
 const mapStateToProps = ({ logUser, ...storeState }: IRootState) => ({
+  acaos: storeState.acao.entities,
+  telas: storeState.tela.entities,
   logUserList: logUser.entities,
   totalItems: logUser.totalItems
 });
 
 const mapDispatchToProps = {
+  getAcaos,
+  getTelas,
   getEntities
 };
 

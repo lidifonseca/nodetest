@@ -28,6 +28,11 @@ import { IPadCid } from 'app/shared/model/pad-cid.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
+import { IPad } from 'app/shared/model/pad.model';
+import { getEntities as getPads } from 'app/entities/pad/pad.reducer';
+import { ICid } from 'app/shared/model/cid.model';
+import { getEntities as getCids } from 'app/entities/cid/cid.reducer';
+
 export interface IPadCidProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
 export interface IPadCidState extends IPadCidBaseState, IPaginationBaseState {}
@@ -45,13 +50,18 @@ export class PadCid extends React.Component<IPadCidProps, IPadCidState> {
 
   componentDidMount() {
     this.getEntities();
+
+    this.props.getPads();
+    this.props.getCids();
   }
 
   cancelCourse = () => {
     this.setState(
       {
         observacao: '',
-        ativo: ''
+        ativo: '',
+        pad: '',
+        cid: ''
       },
       () => this.sortEntities()
     );
@@ -104,6 +114,12 @@ export class PadCid extends React.Component<IPadCidProps, IPadCidState> {
       'ativo=' +
       this.state.ativo +
       '&' +
+      'pad=' +
+      this.state.pad +
+      '&' +
+      'cid=' +
+      this.state.cid +
+      '&' +
       ''
     );
   };
@@ -111,12 +127,12 @@ export class PadCid extends React.Component<IPadCidProps, IPadCidState> {
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { observacao, ativo, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntities(observacao, ativo, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const { observacao, ativo, pad, cid, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntities(observacao, ativo, pad, cid, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   render() {
-    const { padCidList, match, totalItems } = this.props;
+    const { pads, cids, padCidList, match, totalItems } = this.props;
     return (
       <div>
         <h2 id="page-heading">
@@ -174,6 +190,56 @@ export class PadCid extends React.Component<IPadCidProps, IPadCidState> {
                           </Row>
                         </Col>
                       ) : null}
+
+                      {this.state.baseFilters !== 'pad' ? (
+                        <Col md="3">
+                          <Row className="mr-1 mt-1">
+                            <div style={{ width: '100%' }}>
+                              <Label for="pad-cid-pad">
+                                <Translate contentKey="generadorApp.padCid.pad">Pad</Translate>
+                              </Label>
+                              <Select
+                                id="pad-cid-pad"
+                                isMulti
+                                className={'css-select-control'}
+                                value={
+                                  pads
+                                    ? pads.map(p => (this.state.pad.split(',').indexOf(p.id) !== -1 ? { value: p.id, label: p.id } : null))
+                                    : null
+                                }
+                                options={pads ? pads.map(option => ({ value: option.id, label: option.id })) : null}
+                                onChange={options => this.setState({ pad: options.map(option => option['value']).join(',') })}
+                                name={'pad'}
+                              />
+                            </div>
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'cid' ? (
+                        <Col md="3">
+                          <Row className="mr-1 mt-1">
+                            <div style={{ width: '100%' }}>
+                              <Label for="pad-cid-cid">
+                                <Translate contentKey="generadorApp.padCid.cid">Cid</Translate>
+                              </Label>
+                              <Select
+                                id="pad-cid-cid"
+                                isMulti
+                                className={'css-select-control'}
+                                value={
+                                  cids
+                                    ? cids.map(p => (this.state.cid.split(',').indexOf(p.id) !== -1 ? { value: p.id, label: p.id } : null))
+                                    : null
+                                }
+                                options={cids ? cids.map(option => ({ value: option.id, label: option.id })) : null}
+                                onChange={options => this.setState({ cid: options.map(option => option['value']).join(',') })}
+                                name={'cid'}
+                              />
+                            </div>
+                          </Row>
+                        </Col>
+                      ) : null}
                     </div>
 
                     <div className="row mb-2 mr-4 justify-content-end">
@@ -214,6 +280,20 @@ export class PadCid extends React.Component<IPadCidProps, IPadCidState> {
                         </th>
                       ) : null}
 
+                      {this.state.baseFilters !== 'pad' ? (
+                        <th>
+                          <Translate contentKey="generadorApp.padCid.pad">Pad</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'cid' ? (
+                        <th>
+                          <Translate contentKey="generadorApp.padCid.cid">Cid</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+
                       <th />
                     </tr>
                   </thead>
@@ -230,6 +310,14 @@ export class PadCid extends React.Component<IPadCidProps, IPadCidState> {
                         {this.state.baseFilters !== 'observacao' ? <td>{padCid.observacao}</td> : null}
 
                         {this.state.baseFilters !== 'ativo' ? <td>{padCid.ativo}</td> : null}
+
+                        {this.state.baseFilters !== 'pad' ? (
+                          <td>{padCid.pad ? <Link to={`pad/${padCid.pad.id}`}>{padCid.pad.id}</Link> : ''}</td>
+                        ) : null}
+
+                        {this.state.baseFilters !== 'cid' ? (
+                          <td>{padCid.cid ? <Link to={`cid/${padCid.cid.id}`}>{padCid.cid.id}</Link> : ''}</td>
+                        ) : null}
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">
@@ -287,11 +375,15 @@ export class PadCid extends React.Component<IPadCidProps, IPadCidState> {
 }
 
 const mapStateToProps = ({ padCid, ...storeState }: IRootState) => ({
+  pads: storeState.pad.entities,
+  cids: storeState.cid.entities,
   padCidList: padCid.entities,
   totalItems: padCid.totalItems
 });
 
 const mapDispatchToProps = {
+  getPads,
+  getCids,
   getEntities
 };
 

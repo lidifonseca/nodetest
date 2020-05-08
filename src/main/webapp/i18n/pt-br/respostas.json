@@ -24,7 +24,11 @@
       },
       "resposta": "Resposta",
       "pontuacao": "Pontuacao",
-      "respostaAtiva": "Resposta Ativa"
+      "respostaAtiva": "Resposta Ativa",
+      "acoesRespostas_empty": "Sem Acoes Respostas",
+      "acoesRespostas": "Acoes Respostas",
+      "perguntasQuestionario_empty": "Sem Perguntas Questionario",
+      "perguntasQuestionario": "Perguntas Questionario"
     }
   }
 }

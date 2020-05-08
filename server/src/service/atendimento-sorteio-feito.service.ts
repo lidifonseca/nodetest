@@ -5,6 +5,7 @@ import AtendimentoSorteioFeito from '../domain/atendimento-sorteio-feito.entity'
 import { AtendimentoSorteioFeitoRepository } from '../repository/atendimento-sorteio-feito.repository';
 
 const relationshipNames = [];
+relationshipNames.push('padItem');
 
 @Injectable()
 export class AtendimentoSorteioFeitoService {

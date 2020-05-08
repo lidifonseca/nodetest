@@ -98,6 +98,19 @@ export class CategoriaContratoDetail extends React.Component<ICategoriaContratoD
                       </Col>
                     </Row>
                   </Col>
+
+                  <Col md="12">
+                    <Row>
+                      <Col md="3">
+                        <dt>
+                          <Translate contentKey="generadorApp.categoriaContrato.categoria">Categoria</Translate>
+                        </dt>
+                      </Col>
+                      <Col md="9">
+                        <dd>{categoriaContratoEntity.categoria ? categoriaContratoEntity.categoria.id : ''}</dd>
+                      </Col>
+                    </Row>
+                  </Col>
                 </Row>
                 <Button tag={Link} to="/categoria-contrato" replace color="info">
                   <FontAwesomeIcon icon="arrow-left" />{' '}

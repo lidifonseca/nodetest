@@ -58,7 +58,11 @@
       "envioRecusa": "Envio Recusa",
       "envioIntercorrencia": "Envio Intercorrencia",
       "envioCancelamento": "Envio Cancelamento",
-      "ativo": "Ativo"
+      "ativo": "Ativo",
+      "logUserFranquia_empty": "Sem Log User Franquia",
+      "logUserFranquia": "Log User Franquia",
+      "franquia_empty": "Sem Franquia",
+      "franquia": "Franquia"
     }
   }
 }

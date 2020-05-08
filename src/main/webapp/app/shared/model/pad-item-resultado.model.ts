@@ -1,4 +1,5 @@
 import { Moment } from 'moment';
+import { IPadItem } from 'app/shared/model/pad-item.model';
 
 export interface IPadItemResultado {
   id?: string;
@@ -6,6 +7,7 @@ export interface IPadItemResultado {
   dataFim?: Moment;
   resultadoAnalisado?: boolean;
   usuarioId?: number;
+  padItem?: string | any;
 }
 
 export const defaultValue: Readonly<IPadItemResultado> = {

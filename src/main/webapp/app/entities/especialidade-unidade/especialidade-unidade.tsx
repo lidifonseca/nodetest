@@ -30,6 +30,8 @@ import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
 import { IUnidadeEasy } from 'app/shared/model/unidade-easy.model';
 import { getEntities as getUnidadeEasies } from 'app/entities/unidade-easy/unidade-easy.reducer';
+import { IEspecialidade } from 'app/shared/model/especialidade.model';
+import { getEntities as getEspecialidades } from 'app/entities/especialidade/especialidade.reducer';
 
 export interface IEspecialidadeUnidadeProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
@@ -50,6 +52,7 @@ export class EspecialidadeUnidade extends React.Component<IEspecialidadeUnidadeP
     this.getEntities();
 
     this.props.getUnidadeEasies();
+    this.props.getEspecialidades();
   }
 
   cancelCourse = () => {
@@ -60,7 +63,8 @@ export class EspecialidadeUnidade extends React.Component<IEspecialidadeUnidadeP
         valorPagar: '',
         publicar: '',
         comentarioPreco: '',
-        unidade: ''
+        unidade: '',
+        especialidade: ''
       },
       () => this.sortEntities()
     );
@@ -125,6 +129,9 @@ export class EspecialidadeUnidade extends React.Component<IEspecialidadeUnidadeP
       'unidade=' +
       this.state.unidade +
       '&' +
+      'especialidade=' +
+      this.state.especialidade +
+      '&' +
       ''
     );
   };
@@ -139,6 +146,7 @@ export class EspecialidadeUnidade extends React.Component<IEspecialidadeUnidadeP
       publicar,
       comentarioPreco,
       unidade,
+      especialidade,
       activePage,
       itemsPerPage,
       sort,
@@ -151,6 +159,7 @@ export class EspecialidadeUnidade extends React.Component<IEspecialidadeUnidadeP
       publicar,
       comentarioPreco,
       unidade,
+      especialidade,
       activePage - 1,
       itemsPerPage,
       `${sort},${order}`
@@ -158,7 +167,7 @@ export class EspecialidadeUnidade extends React.Component<IEspecialidadeUnidadeP
   };
 
   render() {
-    const { unidadeEasies, especialidadeUnidadeList, match, totalItems } = this.props;
+    const { unidadeEasies, especialidades, especialidadeUnidadeList, match, totalItems } = this.props;
     return (
       <div>
         <h2 id="page-heading">
@@ -293,6 +302,33 @@ export class EspecialidadeUnidade extends React.Component<IEspecialidadeUnidadeP
                           </Row>
                         </Col>
                       ) : null}
+
+                      {this.state.baseFilters !== 'especialidade' ? (
+                        <Col md="3">
+                          <Row className="mr-1 mt-1">
+                            <div style={{ width: '100%' }}>
+                              <Label for="especialidade-unidade-especialidade">
+                                <Translate contentKey="generadorApp.especialidadeUnidade.especialidade">Especialidade</Translate>
+                              </Label>
+                              <Select
+                                id="especialidade-unidade-especialidade"
+                                isMulti
+                                className={'css-select-control'}
+                                value={
+                                  especialidades
+                                    ? especialidades.map(p =>
+                                        this.state.especialidade.split(',').indexOf(p.id) !== -1 ? { value: p.id, label: p.id } : null
+                                      )
+                                    : null
+                                }
+                                options={especialidades ? especialidades.map(option => ({ value: option.id, label: option.id })) : null}
+                                onChange={options => this.setState({ especialidade: options.map(option => option['value']).join(',') })}
+                                name={'especialidade'}
+                              />
+                            </div>
+                          </Row>
+                        </Col>
+                      ) : null}
                     </div>
 
                     <div className="row mb-2 mr-4 justify-content-end">
@@ -358,6 +394,13 @@ export class EspecialidadeUnidade extends React.Component<IEspecialidadeUnidadeP
                         </th>
                       ) : null}
 
+                      {this.state.baseFilters !== 'especialidade' ? (
+                        <th>
+                          <Translate contentKey="generadorApp.especialidadeUnidade.especialidade">Especialidade</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+
                       <th />
                     </tr>
                   </thead>
@@ -385,6 +428,18 @@ export class EspecialidadeUnidade extends React.Component<IEspecialidadeUnidadeP
                           <td>
                             {especialidadeUnidade.unidade ? (
                               <Link to={`unidade-easy/${especialidadeUnidade.unidade.id}`}>{especialidadeUnidade.unidade.id}</Link>
+                            ) : (
+                              ''
+                            )}
+                          </td>
+                        ) : null}
+
+                        {this.state.baseFilters !== 'especialidade' ? (
+                          <td>
+                            {especialidadeUnidade.especialidade ? (
+                              <Link to={`especialidade/${especialidadeUnidade.especialidade.id}`}>
+                                {especialidadeUnidade.especialidade.id}
+                              </Link>
                             ) : (
                               ''
                             )}
@@ -463,12 +518,14 @@ export class EspecialidadeUnidade extends React.Component<IEspecialidadeUnidadeP
 
 const mapStateToProps = ({ especialidadeUnidade, ...storeState }: IRootState) => ({
   unidadeEasies: storeState.unidadeEasy.entities,
+  especialidades: storeState.especialidade.entities,
   especialidadeUnidadeList: especialidadeUnidade.entities,
   totalItems: especialidadeUnidade.totalItems
 });
 
 const mapDispatchToProps = {
   getUnidadeEasies,
+  getEspecialidades,
   getEntities
 };
 

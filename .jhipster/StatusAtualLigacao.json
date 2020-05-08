@@ -19,7 +19,7 @@
         }
     ],
     "relationships": [],
-    "changelogDate": "20200508172800",
+    "changelogDate": "20200508182400",
     "entityTableName": "status_atual_ligacao",
     "dto": "mapstruct",
     "pagination": "pagination",

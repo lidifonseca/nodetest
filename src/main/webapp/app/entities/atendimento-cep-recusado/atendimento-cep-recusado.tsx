@@ -28,6 +28,9 @@ import { IAtendimentoCepRecusado } from 'app/shared/model/atendimento-cep-recusa
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
+import { IPadItem } from 'app/shared/model/pad-item.model';
+import { getEntities as getPadItems } from 'app/entities/pad-item/pad-item.reducer';
+
 export interface IAtendimentoCepRecusadoProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
 export interface IAtendimentoCepRecusadoState extends IAtendimentoCepRecusadoBaseState, IPaginationBaseState {}
@@ -45,12 +48,15 @@ export class AtendimentoCepRecusado extends React.Component<IAtendimentoCepRecus
 
   componentDidMount() {
     this.getEntities();
+
+    this.props.getPadItems();
   }
 
   cancelCourse = () => {
     this.setState(
       {
-        cep: ''
+        cep: '',
+        padItem: ''
       },
       () => this.sortEntities()
     );
@@ -100,6 +106,9 @@ export class AtendimentoCepRecusado extends React.Component<IAtendimentoCepRecus
       'cep=' +
       this.state.cep +
       '&' +
+      'padItem=' +
+      this.state.padItem +
+      '&' +
       ''
     );
   };
@@ -107,12 +116,12 @@ export class AtendimentoCepRecusado extends React.Component<IAtendimentoCepRecus
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { cep, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntities(cep, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const { cep, padItem, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntities(cep, padItem, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   render() {
-    const { atendimentoCepRecusadoList, match, totalItems } = this.props;
+    const { padItems, atendimentoCepRecusadoList, match, totalItems } = this.props;
     return (
       <div>
         <h2 id="page-heading">
@@ -159,6 +168,33 @@ export class AtendimentoCepRecusado extends React.Component<IAtendimentoCepRecus
                           </Row>
                         </Col>
                       ) : null}
+
+                      {this.state.baseFilters !== 'padItem' ? (
+                        <Col md="3">
+                          <Row className="mr-1 mt-1">
+                            <div style={{ width: '100%' }}>
+                              <Label for="atendimento-cep-recusado-padItem">
+                                <Translate contentKey="generadorApp.atendimentoCepRecusado.padItem">Pad Item</Translate>
+                              </Label>
+                              <Select
+                                id="atendimento-cep-recusado-padItem"
+                                isMulti
+                                className={'css-select-control'}
+                                value={
+                                  padItems
+                                    ? padItems.map(p =>
+                                        this.state.padItem.split(',').indexOf(p.id) !== -1 ? { value: p.id, label: p.id } : null
+                                      )
+                                    : null
+                                }
+                                options={padItems ? padItems.map(option => ({ value: option.id, label: option.id })) : null}
+                                onChange={options => this.setState({ padItem: options.map(option => option['value']).join(',') })}
+                                name={'padItem'}
+                              />
+                            </div>
+                          </Row>
+                        </Col>
+                      ) : null}
                     </div>
 
                     <div className="row mb-2 mr-4 justify-content-end">
@@ -193,6 +229,13 @@ export class AtendimentoCepRecusado extends React.Component<IAtendimentoCepRecus
                         </th>
                       ) : null}
 
+                      {this.state.baseFilters !== 'padItem' ? (
+                        <th>
+                          <Translate contentKey="generadorApp.atendimentoCepRecusado.padItem">Pad Item</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+
                       <th />
                     </tr>
                   </thead>
@@ -207,6 +250,16 @@ export class AtendimentoCepRecusado extends React.Component<IAtendimentoCepRecus
                         </td>
 
                         {this.state.baseFilters !== 'cep' ? <td>{atendimentoCepRecusado.cep}</td> : null}
+
+                        {this.state.baseFilters !== 'padItem' ? (
+                          <td>
+                            {atendimentoCepRecusado.padItem ? (
+                              <Link to={`pad-item/${atendimentoCepRecusado.padItem.id}`}>{atendimentoCepRecusado.padItem.id}</Link>
+                            ) : (
+                              ''
+                            )}
+                          </td>
+                        ) : null}
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">
@@ -279,11 +332,13 @@ export class AtendimentoCepRecusado extends React.Component<IAtendimentoCepRecus
 }
 
 const mapStateToProps = ({ atendimentoCepRecusado, ...storeState }: IRootState) => ({
+  padItems: storeState.padItem.entities,
   atendimentoCepRecusadoList: atendimentoCepRecusado.entities,
   totalItems: atendimentoCepRecusado.totalItems
 });
 
 const mapDispatchToProps = {
+  getPadItems,
   getEntities
 };
 

@@ -22,7 +22,13 @@
       "detail": {
         "title": "Log User Franquia"
       },
-      "descricao": "Descricao"
+      "descricao": "Descricao",
+      "acao_empty": "Sem Acao",
+      "acao": "Acao",
+      "tela_empty": "Sem Tela",
+      "tela": "Tela",
+      "usuario_empty": "Sem Usuario",
+      "usuario": "Usuario"
     }
   }
 }

@@ -36,12 +36,15 @@ export interface IPacientePushBaseState {
   idFranquia: any;
   mensagem: any;
   ativo: any;
+  paciente: any;
 }
 
 export interface IPacientePushUpdateState {
   fieldsBase: IPacientePushBaseState;
 
+  pacienteSelectValue: any;
   isNew: boolean;
+  pacienteId: string;
 }
 
 // Reducer
@@ -125,21 +128,23 @@ export type ICrudGetAllActionPacientePush<T> = (
   idFranquia?: any,
   mensagem?: any,
   ativo?: any,
+  paciente?: any,
   page?: number,
   size?: number,
   sort?: string
 ) => IPayload<T> | ((dispatch: any) => IPayload<T>);
 
-export const getEntities: ICrudGetAllActionPacientePush<IPacientePush> = (idFranquia, mensagem, ativo, page, size, sort) => {
+export const getEntities: ICrudGetAllActionPacientePush<IPacientePush> = (idFranquia, mensagem, ativo, paciente, page, size, sort) => {
   const idFranquiaRequest = idFranquia ? `idFranquia.contains=${idFranquia}&` : '';
   const mensagemRequest = mensagem ? `mensagem.contains=${mensagem}&` : '';
   const ativoRequest = ativo ? `ativo.contains=${ativo}&` : '';
+  const pacienteRequest = paciente ? `paciente.equals=${paciente}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_PACIENTEPUSH_LIST,
     payload: axios.get<IPacientePush>(
-      `${requestUrl}${idFranquiaRequest}${mensagemRequest}${ativoRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${idFranquiaRequest}${mensagemRequest}${ativoRequest}${pacienteRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };
@@ -151,23 +156,33 @@ export const getEntity: ICrudGetAction<IPacientePush> = id => {
   };
 };
 
-export const getEntitiesExport: ICrudGetAllActionPacientePush<IPacientePush> = (idFranquia, mensagem, ativo, page, size, sort) => {
+export const getEntitiesExport: ICrudGetAllActionPacientePush<IPacientePush> = (
+  idFranquia,
+  mensagem,
+  ativo,
+  paciente,
+  page,
+  size,
+  sort
+) => {
   const idFranquiaRequest = idFranquia ? `idFranquia.contains=${idFranquia}&` : '';
   const mensagemRequest = mensagem ? `mensagem.contains=${mensagem}&` : '';
   const ativoRequest = ativo ? `ativo.contains=${ativo}&` : '';
+  const pacienteRequest = paciente ? `paciente.equals=${paciente}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_PACIENTEPUSH_LIST,
     payload: axios.get<IPacientePush>(
-      `${requestUrl}${idFranquiaRequest}${mensagemRequest}${ativoRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${idFranquiaRequest}${mensagemRequest}${ativoRequest}${pacienteRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };
 
 export const createEntity: ICrudPutAction<IPacientePush> = entity => async dispatch => {
   entity = {
-    ...entity
+    ...entity,
+    paciente: entity.paciente === 'null' ? null : entity.paciente
   };
   const result = await dispatch({
     type: ACTION_TYPES.CREATE_PACIENTEPUSH,
@@ -178,7 +193,7 @@ export const createEntity: ICrudPutAction<IPacientePush> = entity => async dispa
 };
 
 export const updateEntity: ICrudPutAction<IPacientePush> = entity => async dispatch => {
-  entity = { ...entity };
+  entity = { ...entity, paciente: entity.paciente === 'null' ? null : entity.paciente };
   const result = await dispatch({
     type: ACTION_TYPES.UPDATE_PACIENTEPUSH,
     payload: axios.put(apiUrl, cleanEntity(entity))
@@ -208,10 +223,13 @@ export const getPacientePushState = (location): IPacientePushBaseState => {
   const mensagem = url.searchParams.get('mensagem') || '';
   const ativo = url.searchParams.get('ativo') || '';
 
+  const paciente = url.searchParams.get('paciente') || '';
+
   return {
     baseFilters,
     idFranquia,
     mensagem,
-    ativo
+    ativo,
+    paciente
   };
 };

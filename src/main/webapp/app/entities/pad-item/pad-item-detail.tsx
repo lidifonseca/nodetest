@@ -255,6 +255,58 @@ export class PadItemDetail extends React.Component<IPadItemDetailProps, IPadItem
                       </Col>
                     </Row>
                   </Col>
+
+                  <Col md="12">
+                    <Row>
+                      <Col md="3">
+                        <dt>
+                          <Translate contentKey="generadorApp.padItem.pad">Pad</Translate>
+                        </dt>
+                      </Col>
+                      <Col md="9">
+                        <dd>{padItemEntity.pad ? padItemEntity.pad.id : ''}</dd>
+                      </Col>
+                    </Row>
+                  </Col>
+
+                  <Col md="12">
+                    <Row>
+                      <Col md="3">
+                        <dt>
+                          <Translate contentKey="generadorApp.padItem.especialidade">Especialidade</Translate>
+                        </dt>
+                      </Col>
+                      <Col md="9">
+                        <dd>{padItemEntity.especialidade ? padItemEntity.especialidade.id : ''}</dd>
+                      </Col>
+                    </Row>
+                  </Col>
+
+                  <Col md="12">
+                    <Row>
+                      <Col md="3">
+                        <dt>
+                          <Translate contentKey="generadorApp.padItem.periodicidade">Periodicidade</Translate>
+                        </dt>
+                      </Col>
+                      <Col md="9">
+                        <dd>{padItemEntity.periodicidade ? padItemEntity.periodicidade.id : ''}</dd>
+                      </Col>
+                    </Row>
+                  </Col>
+
+                  <Col md="12">
+                    <Row>
+                      <Col md="3">
+                        <dt>
+                          <Translate contentKey="generadorApp.padItem.periodo">Periodo</Translate>
+                        </dt>
+                      </Col>
+                      <Col md="9">
+                        <dd>{padItemEntity.periodo ? padItemEntity.periodo.id : ''}</dd>
+                      </Col>
+                    </Row>
+                  </Col>
                 </Row>
                 <Button tag={Link} to="/pad-item" replace color="info">
                   <FontAwesomeIcon icon="arrow-left" />{' '}

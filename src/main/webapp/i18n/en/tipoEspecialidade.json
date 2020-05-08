@@ -22,7 +22,9 @@
       "detail": {
         "title": "Tipo Especialidade"
       },
-      "tipoEspecialidade": "Tipo Especialidade"
+      "tipoEspecialidade": "Tipo Especialidade",
+      "especialidade_empty": "Without Especialidade",
+      "especialidade": "Especialidade"
     }
   }
 }

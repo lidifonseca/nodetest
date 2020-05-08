@@ -4,6 +4,8 @@ import { BaseEntity } from './base/base.entity';
 
 import { validate, Contains, IsInt, Length, IsEmail, IsFQDN, IsDate, Min, Max } from 'class-validator';
 
+import Atendimento from './atendimento.entity';
+
 /**
  * A StatusAtendimento.
  */
@@ -20,6 +22,12 @@ export default class StatusAtendimento extends BaseEntity {
 
   @Column({ type: 'integer', name: 'ATIVO' })
   ativo: number;
+
+  @OneToMany(
+    type => Atendimento,
+    other => other.statusAtendimento
+  )
+  atendimentos: Atendimento[];
 
   // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
 }

@@ -43,6 +43,11 @@ import { IPadItemAtividade } from 'app/shared/model/pad-item-atividade.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
+import { ICategoriaAtividade } from 'app/shared/model/categoria-atividade.model';
+import { getEntities as getCategoriaAtividades } from 'app/entities/categoria-atividade/categoria-atividade.reducer';
+import { IPadItem } from 'app/shared/model/pad-item.model';
+import { getEntities as getPadItems } from 'app/entities/pad-item/pad-item.reducer';
+
 export interface IPadItemAtividadeProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
 export interface IPadItemAtividadeState extends IPadItemAtividadeBaseState, IPaginationBaseState {
@@ -63,13 +68,18 @@ export class PadItemAtividade extends React.Component<IPadItemAtividadeProps, IP
 
   componentDidMount() {
     this.getEntities();
+
+    this.props.getCategoriaAtividades();
+    this.props.getPadItems();
   }
 
   cancelCourse = () => {
     this.setState(
       {
         dataInicio: '',
-        dataFim: ''
+        dataFim: '',
+        atividade: '',
+        padItem: ''
       },
       () => this.sortEntities()
     );
@@ -120,6 +130,12 @@ export class PadItemAtividade extends React.Component<IPadItemAtividadeProps, IP
       'dataFim=' +
       this.state.dataFim +
       '&' +
+      'atividade=' +
+      this.state.atividade +
+      '&' +
+      'padItem=' +
+      this.state.padItem +
+      '&' +
       ''
     );
   };
@@ -127,8 +143,8 @@ export class PadItemAtividade extends React.Component<IPadItemAtividadeProps, IP
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { dataInicio, dataFim, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntitiesExport(dataInicio, dataFim, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const { dataInicio, dataFim, atividade, padItem, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntitiesExport(dataInicio, dataFim, atividade, padItem, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   confirmExport() {}
@@ -177,11 +193,15 @@ export class PadItemAtividade extends React.Component<IPadItemAtividadeProps, IP
 }
 
 const mapStateToProps = ({ padItemAtividade, ...storeState }: IRootState) => ({
+  categoriaAtividades: storeState.categoriaAtividade.entities,
+  padItems: storeState.padItem.entities,
   padItemAtividadeList: padItemAtividade.entities,
   totalItems: padItemAtividade.totalItems
 });
 
 const mapDispatchToProps = {
+  getCategoriaAtividades,
+  getPadItems,
   getEntitiesExport
 };
 

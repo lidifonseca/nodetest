@@ -175,6 +175,8 @@ export class PadItemIndicadoresUpdate extends React.Component<IPadItemIndicadore
                         <MaximoStComponentUpdate baseFilters />
 
                         <MinimoStComponentUpdate baseFilters />
+
+                        <CidXPtaNovoPadItemIndiComponentUpdate baseFilter cidXPtaNovoPadItemIndis />
                       </Row>
                     </div>
                   )}
@@ -329,6 +331,14 @@ const MinimoStComponentUpdate = ({ baseFilters }) => {
     </Col>
   ) : (
     <AvInput type="hidden" name="minimoSt" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const CidXPtaNovoPadItemIndiComponentUpdate = ({ baseFilters, cidXPtaNovoPadItemIndis }) => {
+  return baseFilters !== 'cidXPtaNovoPadItemIndi' ? (
+    <Col md="12"></Col>
+  ) : (
+    <AvInput type="hidden" name="cidXPtaNovoPadItemIndi" value={this.state.fieldsBase[baseFilters]} />
   );
 };
 

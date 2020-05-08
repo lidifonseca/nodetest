@@ -600,6 +600,97 @@ export class AtendimentoDetail extends React.Component<IAtendimentoDetailProps, 
                       </Col>
                     </Row>
                   </Col>
+
+                  <Col md="12">
+                    <Row>
+                      <Col md="3">
+                        <dt>
+                          <Translate contentKey="generadorApp.atendimento.paciente">Paciente</Translate>
+                        </dt>
+                      </Col>
+                      <Col md="9">
+                        <dd>{atendimentoEntity.paciente ? atendimentoEntity.paciente.id : ''}</dd>
+                      </Col>
+                    </Row>
+                  </Col>
+
+                  <Col md="12">
+                    <Row>
+                      <Col md="3">
+                        <dt>
+                          <Translate contentKey="generadorApp.atendimento.operadora">Operadora</Translate>
+                        </dt>
+                      </Col>
+                      <Col md="9">
+                        <dd>{atendimentoEntity.operadora ? atendimentoEntity.operadora.id : ''}</dd>
+                      </Col>
+                    </Row>
+                  </Col>
+
+                  <Col md="12">
+                    <Row>
+                      <Col md="3">
+                        <dt>
+                          <Translate contentKey="generadorApp.atendimento.especialidade">Especialidade</Translate>
+                        </dt>
+                      </Col>
+                      <Col md="9">
+                        <dd>{atendimentoEntity.especialidade ? atendimentoEntity.especialidade.id : ''}</dd>
+                      </Col>
+                    </Row>
+                  </Col>
+
+                  <Col md="12">
+                    <Row>
+                      <Col md="3">
+                        <dt>
+                          <Translate contentKey="generadorApp.atendimento.padItem">Pad Item</Translate>
+                        </dt>
+                      </Col>
+                      <Col md="9">
+                        <dd>{atendimentoEntity.padItem ? atendimentoEntity.padItem.id : ''}</dd>
+                      </Col>
+                    </Row>
+                  </Col>
+
+                  <Col md="12">
+                    <Row>
+                      <Col md="3">
+                        <dt>
+                          <Translate contentKey="generadorApp.atendimento.statusAtendimento">Status Atendimento</Translate>
+                        </dt>
+                      </Col>
+                      <Col md="9">
+                        <dd>{atendimentoEntity.statusAtendimento ? atendimentoEntity.statusAtendimento.id : ''}</dd>
+                      </Col>
+                    </Row>
+                  </Col>
+
+                  <Col md="12">
+                    <Row>
+                      <Col md="3">
+                        <dt>
+                          <Translate contentKey="generadorApp.atendimento.periodo">Periodo</Translate>
+                        </dt>
+                      </Col>
+                      <Col md="9">
+                        <dd>{atendimentoEntity.periodo ? atendimentoEntity.periodo.id : ''}</dd>
+                      </Col>
+                    </Row>
+                  </Col>
+
+                  <Col md="12">
+                    <Row>
+                      <Col md="3">
+                        <dt>
+                          <Translate contentKey="generadorApp.atendimento.cidade">Cidade</Translate>
+                        </dt>
+                      </Col>
+                      <Col md="9">
+                        <dd>{atendimentoEntity.cidade ? atendimentoEntity.cidade.id : ''}</dd>
+                      </Col>
+                    </Row>
+                  </Col>
                 </Row>
                 <Button tag={Link} to="/atendimento" replace color="info">
                   <FontAwesomeIcon icon="arrow-left" />{' '}

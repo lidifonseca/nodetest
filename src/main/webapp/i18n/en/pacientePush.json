@@ -24,7 +24,9 @@
       },
       "idFranquia": "Id Franquia",
       "mensagem": "Mensagem",
-      "ativo": "Ativo"
+      "ativo": "Ativo",
+      "paciente_empty": "Without Paciente",
+      "paciente": "Paciente"
     }
   }
 }

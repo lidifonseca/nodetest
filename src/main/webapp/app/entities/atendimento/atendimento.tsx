@@ -39,6 +39,20 @@ import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
 import { IUnidadeEasy } from 'app/shared/model/unidade-easy.model';
 import { getEntities as getUnidadeEasies } from 'app/entities/unidade-easy/unidade-easy.reducer';
+import { IPaciente } from 'app/shared/model/paciente.model';
+import { getEntities as getPacientes } from 'app/entities/paciente/paciente.reducer';
+import { IOperadora } from 'app/shared/model/operadora.model';
+import { getEntities as getOperadoras } from 'app/entities/operadora/operadora.reducer';
+import { IEspecialidade } from 'app/shared/model/especialidade.model';
+import { getEntities as getEspecialidades } from 'app/entities/especialidade/especialidade.reducer';
+import { IPadItem } from 'app/shared/model/pad-item.model';
+import { getEntities as getPadItems } from 'app/entities/pad-item/pad-item.reducer';
+import { IStatusAtendimento } from 'app/shared/model/status-atendimento.model';
+import { getEntities as getStatusAtendimentos } from 'app/entities/status-atendimento/status-atendimento.reducer';
+import { IPeriodo } from 'app/shared/model/periodo.model';
+import { getEntities as getPeriodos } from 'app/entities/periodo/periodo.reducer';
+import { ICidade } from 'app/shared/model/cidade.model';
+import { getEntities as getCidades } from 'app/entities/cidade/cidade.reducer';
 
 export interface IAtendimentoProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
@@ -59,6 +73,13 @@ export class Atendimento extends React.Component<IAtendimentoProps, IAtendimento
     this.getEntities();
 
     this.props.getUnidadeEasies();
+    this.props.getPacientes();
+    this.props.getOperadoras();
+    this.props.getEspecialidades();
+    this.props.getPadItems();
+    this.props.getStatusAtendimentos();
+    this.props.getPeriodos();
+    this.props.getCidades();
   }
 
   cancelCourse = () => {
@@ -99,7 +120,17 @@ export class Atendimento extends React.Component<IAtendimentoProps, IAtendimento
         confidencialProfissional: '',
         confidencialPaciente: '',
         imagemAssinatura: '',
-        unidade: ''
+        atendimentoAceite: '',
+        atendimentoAssinaturas: '',
+        atendimentoAtividades: '',
+        unidade: '',
+        paciente: '',
+        operadora: '',
+        especialidade: '',
+        padItem: '',
+        statusAtendimento: '',
+        periodo: '',
+        cidade: ''
       },
       () => this.sortEntities()
     );
@@ -251,8 +282,38 @@ export class Atendimento extends React.Component<IAtendimentoProps, IAtendimento
       'imagemAssinatura=' +
       this.state.imagemAssinatura +
       '&' +
+      'atendimentoAceite=' +
+      this.state.atendimentoAceite +
+      '&' +
+      'atendimentoAssinaturas=' +
+      this.state.atendimentoAssinaturas +
+      '&' +
+      'atendimentoAtividades=' +
+      this.state.atendimentoAtividades +
+      '&' +
       'unidade=' +
       this.state.unidade +
+      '&' +
+      'paciente=' +
+      this.state.paciente +
+      '&' +
+      'operadora=' +
+      this.state.operadora +
+      '&' +
+      'especialidade=' +
+      this.state.especialidade +
+      '&' +
+      'padItem=' +
+      this.state.padItem +
+      '&' +
+      'statusAtendimento=' +
+      this.state.statusAtendimento +
+      '&' +
+      'periodo=' +
+      this.state.periodo +
+      '&' +
+      'cidade=' +
+      this.state.cidade +
       '&' +
       ''
     );
@@ -297,7 +358,17 @@ export class Atendimento extends React.Component<IAtendimentoProps, IAtendimento
       confidencialProfissional,
       confidencialPaciente,
       imagemAssinatura,
+      atendimentoAceite,
+      atendimentoAssinaturas,
+      atendimentoAtividades,
       unidade,
+      paciente,
+      operadora,
+      especialidade,
+      padItem,
+      statusAtendimento,
+      periodo,
+      cidade,
       activePage,
       itemsPerPage,
       sort,
@@ -339,7 +410,17 @@ export class Atendimento extends React.Component<IAtendimentoProps, IAtendimento
       confidencialProfissional,
       confidencialPaciente,
       imagemAssinatura,
+      atendimentoAceite,
+      atendimentoAssinaturas,
+      atendimentoAtividades,
       unidade,
+      paciente,
+      operadora,
+      especialidade,
+      padItem,
+      statusAtendimento,
+      periodo,
+      cidade,
       activePage - 1,
       itemsPerPage,
       `${sort},${order}`
@@ -347,7 +428,19 @@ export class Atendimento extends React.Component<IAtendimentoProps, IAtendimento
   };
 
   render() {
-    const { unidadeEasies, atendimentoList, match, totalItems } = this.props;
+    const {
+      unidadeEasies,
+      pacientes,
+      operadoras,
+      especialidades,
+      padItems,
+      statusAtendimentos,
+      periodos,
+      cidades,
+      atendimentoList,
+      match,
+      totalItems
+    } = this.props;
     return (
       <div>
         <h2 id="page-heading">
@@ -871,6 +964,24 @@ export class Atendimento extends React.Component<IAtendimentoProps, IAtendimento
                         </Col>
                       ) : null}
 
+                      {this.state.baseFilters !== 'atendimentoAceite' ? (
+                        <Col md="3">
+                          <Row className="mr-1 mt-1"></Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'atendimentoAssinaturas' ? (
+                        <Col md="3">
+                          <Row className="mr-1 mt-1"></Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'atendimentoAtividades' ? (
+                        <Col md="3">
+                          <Row className="mr-1 mt-1"></Row>
+                        </Col>
+                      ) : null}
+
                       {this.state.baseFilters !== 'unidade' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
@@ -894,6 +1005,197 @@ export class Atendimento extends React.Component<IAtendimentoProps, IAtendimento
                                 }
                                 onChange={options => this.setState({ unidade: options.map(option => option['value']).join(',') })}
                                 name={'unidade'}
+                              />
+                            </div>
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'paciente' ? (
+                        <Col md="3">
+                          <Row className="mr-1 mt-1">
+                            <div style={{ width: '100%' }}>
+                              <Label for="atendimento-paciente">
+                                <Translate contentKey="generadorApp.atendimento.paciente">Paciente</Translate>
+                              </Label>
+                              <Select
+                                id="atendimento-paciente"
+                                isMulti
+                                className={'css-select-control'}
+                                value={
+                                  pacientes
+                                    ? pacientes.map(p =>
+                                        this.state.paciente.split(',').indexOf(p.id) !== -1 ? { value: p.id, label: p.id } : null
+                                      )
+                                    : null
+                                }
+                                options={pacientes ? pacientes.map(option => ({ value: option.id, label: option.id })) : null}
+                                onChange={options => this.setState({ paciente: options.map(option => option['value']).join(',') })}
+                                name={'paciente'}
+                              />
+                            </div>
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'operadora' ? (
+                        <Col md="3">
+                          <Row className="mr-1 mt-1">
+                            <div style={{ width: '100%' }}>
+                              <Label for="atendimento-operadora">
+                                <Translate contentKey="generadorApp.atendimento.operadora">Operadora</Translate>
+                              </Label>
+                              <Select
+                                id="atendimento-operadora"
+                                isMulti
+                                className={'css-select-control'}
+                                value={
+                                  operadoras
+                                    ? operadoras.map(p =>
+                                        this.state.operadora.split(',').indexOf(p.id) !== -1 ? { value: p.id, label: p.id } : null
+                                      )
+                                    : null
+                                }
+                                options={operadoras ? operadoras.map(option => ({ value: option.id, label: option.id })) : null}
+                                onChange={options => this.setState({ operadora: options.map(option => option['value']).join(',') })}
+                                name={'operadora'}
+                              />
+                            </div>
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'especialidade' ? (
+                        <Col md="3">
+                          <Row className="mr-1 mt-1">
+                            <div style={{ width: '100%' }}>
+                              <Label for="atendimento-especialidade">
+                                <Translate contentKey="generadorApp.atendimento.especialidade">Especialidade</Translate>
+                              </Label>
+                              <Select
+                                id="atendimento-especialidade"
+                                isMulti
+                                className={'css-select-control'}
+                                value={
+                                  especialidades
+                                    ? especialidades.map(p =>
+                                        this.state.especialidade.split(',').indexOf(p.id) !== -1 ? { value: p.id, label: p.id } : null
+                                      )
+                                    : null
+                                }
+                                options={especialidades ? especialidades.map(option => ({ value: option.id, label: option.id })) : null}
+                                onChange={options => this.setState({ especialidade: options.map(option => option['value']).join(',') })}
+                                name={'especialidade'}
+                              />
+                            </div>
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'padItem' ? (
+                        <Col md="3">
+                          <Row className="mr-1 mt-1">
+                            <div style={{ width: '100%' }}>
+                              <Label for="atendimento-padItem">
+                                <Translate contentKey="generadorApp.atendimento.padItem">Pad Item</Translate>
+                              </Label>
+                              <Select
+                                id="atendimento-padItem"
+                                isMulti
+                                className={'css-select-control'}
+                                value={
+                                  padItems
+                                    ? padItems.map(p =>
+                                        this.state.padItem.split(',').indexOf(p.id) !== -1 ? { value: p.id, label: p.id } : null
+                                      )
+                                    : null
+                                }
+                                options={padItems ? padItems.map(option => ({ value: option.id, label: option.id })) : null}
+                                onChange={options => this.setState({ padItem: options.map(option => option['value']).join(',') })}
+                                name={'padItem'}
+                              />
+                            </div>
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'statusAtendimento' ? (
+                        <Col md="3">
+                          <Row className="mr-1 mt-1">
+                            <div style={{ width: '100%' }}>
+                              <Label for="atendimento-statusAtendimento">
+                                <Translate contentKey="generadorApp.atendimento.statusAtendimento">Status Atendimento</Translate>
+                              </Label>
+                              <Select
+                                id="atendimento-statusAtendimento"
+                                isMulti
+                                className={'css-select-control'}
+                                value={
+                                  statusAtendimentos
+                                    ? statusAtendimentos.map(p =>
+                                        this.state.statusAtendimento.split(',').indexOf(p.id) !== -1 ? { value: p.id, label: p.id } : null
+                                      )
+                                    : null
+                                }
+                                options={
+                                  statusAtendimentos ? statusAtendimentos.map(option => ({ value: option.id, label: option.id })) : null
+                                }
+                                onChange={options => this.setState({ statusAtendimento: options.map(option => option['value']).join(',') })}
+                                name={'statusAtendimento'}
+                              />
+                            </div>
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'periodo' ? (
+                        <Col md="3">
+                          <Row className="mr-1 mt-1">
+                            <div style={{ width: '100%' }}>
+                              <Label for="atendimento-periodo">
+                                <Translate contentKey="generadorApp.atendimento.periodo">Periodo</Translate>
+                              </Label>
+                              <Select
+                                id="atendimento-periodo"
+                                isMulti
+                                className={'css-select-control'}
+                                value={
+                                  periodos
+                                    ? periodos.map(p =>
+                                        this.state.periodo.split(',').indexOf(p.id) !== -1 ? { value: p.id, label: p.id } : null
+                                      )
+                                    : null
+                                }
+                                options={periodos ? periodos.map(option => ({ value: option.id, label: option.id })) : null}
+                                onChange={options => this.setState({ periodo: options.map(option => option['value']).join(',') })}
+                                name={'periodo'}
+                              />
+                            </div>
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'cidade' ? (
+                        <Col md="3">
+                          <Row className="mr-1 mt-1">
+                            <div style={{ width: '100%' }}>
+                              <Label for="atendimento-cidade">
+                                <Translate contentKey="generadorApp.atendimento.cidade">Cidade</Translate>
+                              </Label>
+                              <Select
+                                id="atendimento-cidade"
+                                isMulti
+                                className={'css-select-control'}
+                                value={
+                                  cidades
+                                    ? cidades.map(p =>
+                                        this.state.cidade.split(',').indexOf(p.id) !== -1 ? { value: p.id, label: p.id } : null
+                                      )
+                                    : null
+                                }
+                                options={cidades ? cidades.map(option => ({ value: option.id, label: option.id })) : null}
+                                onChange={options => this.setState({ cidade: options.map(option => option['value']).join(',') })}
+                                name={'cidade'}
                               />
                             </div>
                           </Row>
@@ -1144,6 +1446,55 @@ export class Atendimento extends React.Component<IAtendimentoProps, IAtendimento
                         </th>
                       ) : null}
 
+                      {this.state.baseFilters !== 'paciente' ? (
+                        <th>
+                          <Translate contentKey="generadorApp.atendimento.paciente">Paciente</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'operadora' ? (
+                        <th>
+                          <Translate contentKey="generadorApp.atendimento.operadora">Operadora</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'especialidade' ? (
+                        <th>
+                          <Translate contentKey="generadorApp.atendimento.especialidade">Especialidade</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'padItem' ? (
+                        <th>
+                          <Translate contentKey="generadorApp.atendimento.padItem">Pad Item</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'statusAtendimento' ? (
+                        <th>
+                          <Translate contentKey="generadorApp.atendimento.statusAtendimento">Status Atendimento</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'periodo' ? (
+                        <th>
+                          <Translate contentKey="generadorApp.atendimento.periodo">Periodo</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'cidade' ? (
+                        <th>
+                          <Translate contentKey="generadorApp.atendimento.cidade">Cidade</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+
                       <th />
                     </tr>
                   </thead>
@@ -1253,6 +1604,58 @@ export class Atendimento extends React.Component<IAtendimentoProps, IAtendimento
                           </td>
                         ) : null}
 
+                        {this.state.baseFilters !== 'paciente' ? (
+                          <td>
+                            {atendimento.paciente ? <Link to={`paciente/${atendimento.paciente.id}`}>{atendimento.paciente.id}</Link> : ''}
+                          </td>
+                        ) : null}
+
+                        {this.state.baseFilters !== 'operadora' ? (
+                          <td>
+                            {atendimento.operadora ? (
+                              <Link to={`operadora/${atendimento.operadora.id}`}>{atendimento.operadora.id}</Link>
+                            ) : (
+                              ''
+                            )}
+                          </td>
+                        ) : null}
+
+                        {this.state.baseFilters !== 'especialidade' ? (
+                          <td>
+                            {atendimento.especialidade ? (
+                              <Link to={`especialidade/${atendimento.especialidade.id}`}>{atendimento.especialidade.id}</Link>
+                            ) : (
+                              ''
+                            )}
+                          </td>
+                        ) : null}
+
+                        {this.state.baseFilters !== 'padItem' ? (
+                          <td>
+                            {atendimento.padItem ? <Link to={`pad-item/${atendimento.padItem.id}`}>{atendimento.padItem.id}</Link> : ''}
+                          </td>
+                        ) : null}
+
+                        {this.state.baseFilters !== 'statusAtendimento' ? (
+                          <td>
+                            {atendimento.statusAtendimento ? (
+                              <Link to={`status-atendimento/${atendimento.statusAtendimento.id}`}>{atendimento.statusAtendimento.id}</Link>
+                            ) : (
+                              ''
+                            )}
+                          </td>
+                        ) : null}
+
+                        {this.state.baseFilters !== 'periodo' ? (
+                          <td>
+                            {atendimento.periodo ? <Link to={`periodo/${atendimento.periodo.id}`}>{atendimento.periodo.id}</Link> : ''}
+                          </td>
+                        ) : null}
+
+                        {this.state.baseFilters !== 'cidade' ? (
+                          <td>{atendimento.cidade ? <Link to={`cidade/${atendimento.cidade.id}`}>{atendimento.cidade.id}</Link> : ''}</td>
+                        ) : null}
+
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">
                             <Button tag={Link} to={`${match.url}/${atendimento.id}?${this.getFiltersURL()}`} color="info" size="sm">
@@ -1315,12 +1718,26 @@ export class Atendimento extends React.Component<IAtendimentoProps, IAtendimento
 
 const mapStateToProps = ({ atendimento, ...storeState }: IRootState) => ({
   unidadeEasies: storeState.unidadeEasy.entities,
+  pacientes: storeState.paciente.entities,
+  operadoras: storeState.operadora.entities,
+  especialidades: storeState.especialidade.entities,
+  padItems: storeState.padItem.entities,
+  statusAtendimentos: storeState.statusAtendimento.entities,
+  periodos: storeState.periodo.entities,
+  cidades: storeState.cidade.entities,
   atendimentoList: atendimento.entities,
   totalItems: atendimento.totalItems
 });
 
 const mapDispatchToProps = {
   getUnidadeEasies,
+  getPacientes,
+  getOperadoras,
+  getEspecialidades,
+  getPadItems,
+  getStatusAtendimentos,
+  getPeriodos,
+  getCidades,
   getEntities
 };
 

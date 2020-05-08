@@ -35,7 +35,7 @@
         }
     ],
     "relationships": [],
-    "changelogDate": "20200508161100",
+    "changelogDate": "20200508170700",
     "entityTableName": "motivo_internacao",
     "dto": "mapstruct",
     "pagination": "pagination",

@@ -28,6 +28,9 @@ import { IFranquiaUsuario } from 'app/shared/model/franquia-usuario.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
+import { IFranquia } from 'app/shared/model/franquia.model';
+import { getEntities as getFranquias } from 'app/entities/franquia/franquia.reducer';
+
 export interface IFranquiaUsuarioProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
 export interface IFranquiaUsuarioState extends IFranquiaUsuarioBaseState, IPaginationBaseState {}
@@ -45,6 +48,8 @@ export class FranquiaUsuario extends React.Component<IFranquiaUsuarioProps, IFra
 
   componentDidMount() {
     this.getEntities();
+
+    this.props.getFranquias();
   }
 
   cancelCourse = () => {
@@ -86,7 +91,9 @@ export class FranquiaUsuario extends React.Component<IFranquiaUsuarioProps, IFra
         envioRecusa: '',
         envioIntercorrencia: '',
         envioCancelamento: '',
-        ativo: ''
+        ativo: '',
+        logUserFranquia: '',
+        franquia: ''
       },
       () => this.sortEntities()
     );
@@ -244,6 +251,12 @@ export class FranquiaUsuario extends React.Component<IFranquiaUsuarioProps, IFra
       'ativo=' +
       this.state.ativo +
       '&' +
+      'logUserFranquia=' +
+      this.state.logUserFranquia +
+      '&' +
+      'franquia=' +
+      this.state.franquia +
+      '&' +
       ''
     );
   };
@@ -289,6 +302,8 @@ export class FranquiaUsuario extends React.Component<IFranquiaUsuarioProps, IFra
       envioIntercorrencia,
       envioCancelamento,
       ativo,
+      logUserFranquia,
+      franquia,
       activePage,
       itemsPerPage,
       sort,
@@ -332,6 +347,8 @@ export class FranquiaUsuario extends React.Component<IFranquiaUsuarioProps, IFra
       envioIntercorrencia,
       envioCancelamento,
       ativo,
+      logUserFranquia,
+      franquia,
       activePage - 1,
       itemsPerPage,
       `${sort},${order}`
@@ -339,7 +356,7 @@ export class FranquiaUsuario extends React.Component<IFranquiaUsuarioProps, IFra
   };
 
   render() {
-    const { franquiaUsuarioList, match, totalItems } = this.props;
+    const { franquias, franquiaUsuarioList, match, totalItems } = this.props;
     return (
       <div>
         <h2 id="page-heading">
@@ -864,6 +881,39 @@ export class FranquiaUsuario extends React.Component<IFranquiaUsuarioProps, IFra
                           </Row>
                         </Col>
                       ) : null}
+
+                      {this.state.baseFilters !== 'logUserFranquia' ? (
+                        <Col md="3">
+                          <Row className="mr-1 mt-1"></Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'franquia' ? (
+                        <Col md="3">
+                          <Row className="mr-1 mt-1">
+                            <div style={{ width: '100%' }}>
+                              <Label for="franquia-usuario-franquia">
+                                <Translate contentKey="generadorApp.franquiaUsuario.franquia">Franquia</Translate>
+                              </Label>
+                              <Select
+                                id="franquia-usuario-franquia"
+                                isMulti
+                                className={'css-select-control'}
+                                value={
+                                  franquias
+                                    ? franquias.map(p =>
+                                        this.state.franquia.split(',').indexOf(p.id) !== -1 ? { value: p.id, label: p.id } : null
+                                      )
+                                    : null
+                                }
+                                options={franquias ? franquias.map(option => ({ value: option.id, label: option.id })) : null}
+                                onChange={options => this.setState({ franquia: options.map(option => option['value']).join(',') })}
+                                name={'franquia'}
+                              />
+                            </div>
+                          </Row>
+                        </Col>
+                      ) : null}
                     </div>
 
                     <div className="row mb-2 mr-4 justify-content-end">
@@ -1114,6 +1164,13 @@ export class FranquiaUsuario extends React.Component<IFranquiaUsuarioProps, IFra
                         </th>
                       ) : null}
 
+                      {this.state.baseFilters !== 'franquia' ? (
+                        <th>
+                          <Translate contentKey="generadorApp.franquiaUsuario.franquia">Franquia</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+
                       <th />
                     </tr>
                   </thead>
@@ -1201,6 +1258,16 @@ export class FranquiaUsuario extends React.Component<IFranquiaUsuarioProps, IFra
 
                         {this.state.baseFilters !== 'ativo' ? <td>{franquiaUsuario.ativo}</td> : null}
 
+                        {this.state.baseFilters !== 'franquia' ? (
+                          <td>
+                            {franquiaUsuario.franquia ? (
+                              <Link to={`franquia/${franquiaUsuario.franquia.id}`}>{franquiaUsuario.franquia.id}</Link>
+                            ) : (
+                              ''
+                            )}
+                          </td>
+                        ) : null}
+
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">
                             <Button tag={Link} to={`${match.url}/${franquiaUsuario.id}?${this.getFiltersURL()}`} color="info" size="sm">
@@ -1267,11 +1334,13 @@ export class FranquiaUsuario extends React.Component<IFranquiaUsuarioProps, IFra
 }
 
 const mapStateToProps = ({ franquiaUsuario, ...storeState }: IRootState) => ({
+  franquias: storeState.franquia.entities,
   franquiaUsuarioList: franquiaUsuario.entities,
   totalItems: franquiaUsuario.totalItems
 });
 
 const mapDispatchToProps = {
+  getFranquias,
   getEntities
 };
 

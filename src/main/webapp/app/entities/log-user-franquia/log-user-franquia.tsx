@@ -28,6 +28,13 @@ import { ILogUserFranquia } from 'app/shared/model/log-user-franquia.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
+import { IAcao } from 'app/shared/model/acao.model';
+import { getEntities as getAcaos } from 'app/entities/acao/acao.reducer';
+import { ITela } from 'app/shared/model/tela.model';
+import { getEntities as getTelas } from 'app/entities/tela/tela.reducer';
+import { IFranquiaUsuario } from 'app/shared/model/franquia-usuario.model';
+import { getEntities as getFranquiaUsuarios } from 'app/entities/franquia-usuario/franquia-usuario.reducer';
+
 export interface ILogUserFranquiaProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
 export interface ILogUserFranquiaState extends ILogUserFranquiaBaseState, IPaginationBaseState {}
@@ -45,12 +52,19 @@ export class LogUserFranquia extends React.Component<ILogUserFranquiaProps, ILog
 
   componentDidMount() {
     this.getEntities();
+
+    this.props.getAcaos();
+    this.props.getTelas();
+    this.props.getFranquiaUsuarios();
   }
 
   cancelCourse = () => {
     this.setState(
       {
-        descricao: ''
+        descricao: '',
+        acao: '',
+        tela: '',
+        usuario: ''
       },
       () => this.sortEntities()
     );
@@ -100,6 +114,15 @@ export class LogUserFranquia extends React.Component<ILogUserFranquiaProps, ILog
       'descricao=' +
       this.state.descricao +
       '&' +
+      'acao=' +
+      this.state.acao +
+      '&' +
+      'tela=' +
+      this.state.tela +
+      '&' +
+      'usuario=' +
+      this.state.usuario +
+      '&' +
       ''
     );
   };
@@ -107,12 +130,12 @@ export class LogUserFranquia extends React.Component<ILogUserFranquiaProps, ILog
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { descricao, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntities(descricao, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const { descricao, acao, tela, usuario, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntities(descricao, acao, tela, usuario, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   render() {
-    const { logUserFranquiaList, match, totalItems } = this.props;
+    const { acaos, telas, franquiaUsuarios, logUserFranquiaList, match, totalItems } = this.props;
     return (
       <div>
         <h2 id="page-heading">
@@ -158,6 +181,87 @@ export class LogUserFranquia extends React.Component<ILogUserFranquiaProps, ILog
                           </Row>
                         </Col>
                       ) : null}
+
+                      {this.state.baseFilters !== 'acao' ? (
+                        <Col md="3">
+                          <Row className="mr-1 mt-1">
+                            <div style={{ width: '100%' }}>
+                              <Label for="log-user-franquia-acao">
+                                <Translate contentKey="generadorApp.logUserFranquia.acao">Acao</Translate>
+                              </Label>
+                              <Select
+                                id="log-user-franquia-acao"
+                                isMulti
+                                className={'css-select-control'}
+                                value={
+                                  acaos
+                                    ? acaos.map(p =>
+                                        this.state.acao.split(',').indexOf(p.id) !== -1 ? { value: p.id, label: p.id } : null
+                                      )
+                                    : null
+                                }
+                                options={acaos ? acaos.map(option => ({ value: option.id, label: option.id })) : null}
+                                onChange={options => this.setState({ acao: options.map(option => option['value']).join(',') })}
+                                name={'acao'}
+                              />
+                            </div>
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'tela' ? (
+                        <Col md="3">
+                          <Row className="mr-1 mt-1">
+                            <div style={{ width: '100%' }}>
+                              <Label for="log-user-franquia-tela">
+                                <Translate contentKey="generadorApp.logUserFranquia.tela">Tela</Translate>
+                              </Label>
+                              <Select
+                                id="log-user-franquia-tela"
+                                isMulti
+                                className={'css-select-control'}
+                                value={
+                                  telas
+                                    ? telas.map(p =>
+                                        this.state.tela.split(',').indexOf(p.id) !== -1 ? { value: p.id, label: p.id } : null
+                                      )
+                                    : null
+                                }
+                                options={telas ? telas.map(option => ({ value: option.id, label: option.id })) : null}
+                                onChange={options => this.setState({ tela: options.map(option => option['value']).join(',') })}
+                                name={'tela'}
+                              />
+                            </div>
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'usuario' ? (
+                        <Col md="3">
+                          <Row className="mr-1 mt-1">
+                            <div style={{ width: '100%' }}>
+                              <Label for="log-user-franquia-usuario">
+                                <Translate contentKey="generadorApp.logUserFranquia.usuario">Usuario</Translate>
+                              </Label>
+                              <Select
+                                id="log-user-franquia-usuario"
+                                isMulti
+                                className={'css-select-control'}
+                                value={
+                                  franquiaUsuarios
+                                    ? franquiaUsuarios.map(p =>
+                                        this.state.usuario.split(',').indexOf(p.id) !== -1 ? { value: p.id, label: p.id } : null
+                                      )
+                                    : null
+                                }
+                                options={franquiaUsuarios ? franquiaUsuarios.map(option => ({ value: option.id, label: option.id })) : null}
+                                onChange={options => this.setState({ usuario: options.map(option => option['value']).join(',') })}
+                                name={'usuario'}
+                              />
+                            </div>
+                          </Row>
+                        </Col>
+                      ) : null}
                     </div>
 
                     <div className="row mb-2 mr-4 justify-content-end">
@@ -192,6 +296,27 @@ export class LogUserFranquia extends React.Component<ILogUserFranquiaProps, ILog
                         </th>
                       ) : null}
 
+                      {this.state.baseFilters !== 'acao' ? (
+                        <th>
+                          <Translate contentKey="generadorApp.logUserFranquia.acao">Acao</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'tela' ? (
+                        <th>
+                          <Translate contentKey="generadorApp.logUserFranquia.tela">Tela</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'usuario' ? (
+                        <th>
+                          <Translate contentKey="generadorApp.logUserFranquia.usuario">Usuario</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+
                       <th />
                     </tr>
                   </thead>
@@ -207,6 +332,28 @@ export class LogUserFranquia extends React.Component<ILogUserFranquiaProps, ILog
 
                         {this.state.baseFilters !== 'descricao' ? (
                           <td>{logUserFranquia.descricao ? Buffer.from(logUserFranquia.descricao).toString() : null}</td>
+                        ) : null}
+
+                        {this.state.baseFilters !== 'acao' ? (
+                          <td>
+                            {logUserFranquia.acao ? <Link to={`acao/${logUserFranquia.acao.id}`}>{logUserFranquia.acao.id}</Link> : ''}
+                          </td>
+                        ) : null}
+
+                        {this.state.baseFilters !== 'tela' ? (
+                          <td>
+                            {logUserFranquia.tela ? <Link to={`tela/${logUserFranquia.tela.id}`}>{logUserFranquia.tela.id}</Link> : ''}
+                          </td>
+                        ) : null}
+
+                        {this.state.baseFilters !== 'usuario' ? (
+                          <td>
+                            {logUserFranquia.usuario ? (
+                              <Link to={`franquia-usuario/${logUserFranquia.usuario.id}`}>{logUserFranquia.usuario.id}</Link>
+                            ) : (
+                              ''
+                            )}
+                          </td>
                         ) : null}
 
                         <td className="text-right">
@@ -275,11 +422,17 @@ export class LogUserFranquia extends React.Component<ILogUserFranquiaProps, ILog
 }
 
 const mapStateToProps = ({ logUserFranquia, ...storeState }: IRootState) => ({
+  acaos: storeState.acao.entities,
+  telas: storeState.tela.entities,
+  franquiaUsuarios: storeState.franquiaUsuario.entities,
   logUserFranquiaList: logUserFranquia.entities,
   totalItems: logUserFranquia.totalItems
 });
 
 const mapDispatchToProps = {
+  getAcaos,
+  getTelas,
+  getFranquiaUsuarios,
   getEntities
 };
 

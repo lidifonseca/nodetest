@@ -5,6 +5,7 @@ import IndicadoresValores from '../domain/indicadores-valores.entity';
 import { IndicadoresValoresRepository } from '../repository/indicadores-valores.repository';
 
 const relationshipNames = [];
+relationshipNames.push('indicadores');
 
 @Injectable()
 export class IndicadoresValoresService {

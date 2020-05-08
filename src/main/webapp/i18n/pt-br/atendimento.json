@@ -57,8 +57,28 @@
       "confidencialProfissional": "Confidencial Profissional",
       "confidencialPaciente": "Confidencial Paciente",
       "imagemAssinatura": "Imagem Assinatura",
+      "atendimentoAceite_empty": "Sem Atendimento Aceite",
+      "atendimentoAceite": "Atendimento Aceite",
+      "atendimentoAssinaturas_empty": "Sem Atendimento Assinaturas",
+      "atendimentoAssinaturas": "Atendimento Assinaturas",
+      "atendimentoAtividades_empty": "Sem Atendimento Atividades",
+      "atendimentoAtividades": "Atendimento Atividades",
       "unidade_empty": "Sem Unidade",
-      "unidade": "Unidade"
+      "unidade": "Unidade",
+      "paciente_empty": "Sem Paciente",
+      "paciente": "Paciente",
+      "operadora_empty": "Sem Operadora",
+      "operadora": "Operadora",
+      "especialidade_empty": "Sem Especialidade",
+      "especialidade": "Especialidade",
+      "padItem_empty": "Sem Pad Item",
+      "padItem": "Pad Item",
+      "statusAtendimento_empty": "Sem Status Atendimento",
+      "statusAtendimento": "Status Atendimento",
+      "periodo_empty": "Sem Periodo",
+      "periodo": "Periodo",
+      "cidade_empty": "Sem Cidade",
+      "cidade": "Cidade"
     }
   }
 }

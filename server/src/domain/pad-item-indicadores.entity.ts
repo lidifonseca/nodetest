@@ -4,6 +4,8 @@ import { BaseEntity } from './base/base.entity';
 
 import { validate, Contains, IsInt, Length, IsEmail, IsFQDN, IsDate, Min, Max } from 'class-validator';
 
+import CidXPtaNovoPadItemIndi from './cid-x-pta-novo-pad-item-indi.entity';
+
 /**
  * A PadItemIndicadores.
  */
@@ -26,6 +28,12 @@ export default class PadItemIndicadores extends BaseEntity {
 
   @Column({ type: 'integer', name: 'MINIMO_ST' })
   minimoSt: number;
+
+  @OneToMany(
+    type => CidXPtaNovoPadItemIndi,
+    other => other.padItemIndicadores
+  )
+  cidXPtaNovoPadItemIndis: CidXPtaNovoPadItemIndi[];
 
   // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
 }

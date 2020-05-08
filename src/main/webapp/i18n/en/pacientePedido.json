@@ -30,7 +30,13 @@
       "desconto": "Desconto",
       "tipoValor": "Tipo Valor",
       "unidade_empty": "Without Unidade",
-      "unidade": "Unidade"
+      "unidade": "Unidade",
+      "paciente_empty": "Without Paciente",
+      "paciente": "Paciente",
+      "cartao_empty": "Without Cartao",
+      "cartao": "Cartao",
+      "especialidade_empty": "Without Especialidade",
+      "especialidade": "Especialidade"
     }
   }
 }

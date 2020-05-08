@@ -34,6 +34,9 @@ import { IAtendimentoCepRecusado } from 'app/shared/model/atendimento-cep-recusa
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
+import { IPadItem } from 'app/shared/model/pad-item.model';
+import { getEntities as getPadItems } from 'app/entities/pad-item/pad-item.reducer';
+
 export interface IAtendimentoCepRecusadoProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
 export interface IAtendimentoCepRecusadoState extends IAtendimentoCepRecusadoBaseState, IPaginationBaseState {
@@ -54,12 +57,15 @@ export class AtendimentoCepRecusado extends React.Component<IAtendimentoCepRecus
 
   componentDidMount() {
     this.getEntities();
+
+    this.props.getPadItems();
   }
 
   cancelCourse = () => {
     this.setState(
       {
-        cep: ''
+        cep: '',
+        padItem: ''
       },
       () => this.sortEntities()
     );
@@ -107,6 +113,9 @@ export class AtendimentoCepRecusado extends React.Component<IAtendimentoCepRecus
       'cep=' +
       this.state.cep +
       '&' +
+      'padItem=' +
+      this.state.padItem +
+      '&' +
       ''
     );
   };
@@ -114,8 +123,8 @@ export class AtendimentoCepRecusado extends React.Component<IAtendimentoCepRecus
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { cep, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntitiesExport(cep, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const { cep, padItem, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntitiesExport(cep, padItem, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   confirmExport() {}
@@ -164,11 +173,13 @@ export class AtendimentoCepRecusado extends React.Component<IAtendimentoCepRecus
 }
 
 const mapStateToProps = ({ atendimentoCepRecusado, ...storeState }: IRootState) => ({
+  padItems: storeState.padItem.entities,
   atendimentoCepRecusadoList: atendimentoCepRecusado.entities,
   totalItems: atendimentoCepRecusado.totalItems
 });
 
 const mapDispatchToProps = {
+  getPadItems,
   getEntitiesExport
 };
 

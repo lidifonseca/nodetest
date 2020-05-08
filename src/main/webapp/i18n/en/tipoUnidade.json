@@ -22,7 +22,9 @@
       "detail": {
         "title": "Tipo Unidade"
       },
-      "tipoUnidade": "Tipo Unidade"
+      "tipoUnidade": "Tipo Unidade",
+      "especialidade_empty": "Without Especialidade",
+      "especialidade": "Especialidade"
     }
   }
 }

@@ -11,8 +11,23 @@
             "fieldTypeBlobContent": "text"
         }
     ],
-    "relationships": [],
-    "changelogDate": "20200508174900",
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "tela",
+            "otherEntityRelationshipName": "usuarioAcao",
+            "relationshipName": "tela",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "acao",
+            "otherEntityRelationshipName": "usuarioAcao",
+            "relationshipName": "acao",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20200508184500",
     "entityTableName": "usuario_acao",
     "dto": "mapstruct",
     "pagination": "pagination",

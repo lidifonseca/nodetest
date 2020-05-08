@@ -77,6 +77,7 @@ export class Questionarios extends React.Component<IQuestionariosProps, IQuestio
         etapaAtual: '',
         finalizado: '',
         ultimaPerguntaRespondida: '',
+        respostasQuestionarios: '',
         paciente: ''
       },
       () => this.sortEntities()
@@ -134,6 +135,9 @@ export class Questionarios extends React.Component<IQuestionariosProps, IQuestio
       'ultimaPerguntaRespondida=' +
       this.state.ultimaPerguntaRespondida +
       '&' +
+      'respostasQuestionarios=' +
+      this.state.respostasQuestionarios +
+      '&' +
       'paciente=' +
       this.state.paciente +
       '&' +
@@ -144,12 +148,24 @@ export class Questionarios extends React.Component<IQuestionariosProps, IQuestio
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { dataCadastro, etapaAtual, finalizado, ultimaPerguntaRespondida, paciente, activePage, itemsPerPage, sort, order } = this.state;
+    const {
+      dataCadastro,
+      etapaAtual,
+      finalizado,
+      ultimaPerguntaRespondida,
+      respostasQuestionarios,
+      paciente,
+      activePage,
+      itemsPerPage,
+      sort,
+      order
+    } = this.state;
     this.props.getEntitiesExport(
       dataCadastro,
       etapaAtual,
       finalizado,
       ultimaPerguntaRespondida,
+      respostasQuestionarios,
       paciente,
       activePage - 1,
       itemsPerPage,

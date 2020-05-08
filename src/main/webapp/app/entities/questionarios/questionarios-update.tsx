@@ -180,6 +180,8 @@ export class QuestionariosUpdate extends React.Component<IQuestionariosUpdatePro
 
                         <UltimaPerguntaRespondidaComponentUpdate baseFilters />
 
+                        <RespostasQuestionariosComponentUpdate baseFilter respostasQuestionarios />
+
                         <PacienteComponentUpdate baseFilter pacientes />
                       </Row>
                     </div>
@@ -299,6 +301,14 @@ const UltimaPerguntaRespondidaComponentUpdate = ({ baseFilters }) => {
     </Col>
   ) : (
     <AvInput type="hidden" name="ultimaPerguntaRespondida" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const RespostasQuestionariosComponentUpdate = ({ baseFilters, respostasQuestionarios }) => {
+  return baseFilters !== 'respostasQuestionarios' ? (
+    <Col md="12"></Col>
+  ) : (
+    <AvInput type="hidden" name="respostasQuestionarios" value={this.state.fieldsBase[baseFilters]} />
   );
 };
 

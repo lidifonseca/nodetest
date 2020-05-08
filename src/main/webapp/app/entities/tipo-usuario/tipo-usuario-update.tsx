@@ -153,6 +153,8 @@ export class TipoUsuarioUpdate extends React.Component<ITipoUsuarioUpdateProps, 
                         <TipoUsuarioComponentUpdate baseFilters />
 
                         <AtivoComponentUpdate baseFilters />
+
+                        <UsuarioComponentUpdate baseFilter usuarios />
                       </Row>
                     </div>
                   )}
@@ -222,6 +224,14 @@ const AtivoComponentUpdate = ({ baseFilters }) => {
     </Col>
   ) : (
     <AvInput type="hidden" name="ativo" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const UsuarioComponentUpdate = ({ baseFilters, usuarios }) => {
+  return baseFilters !== 'usuario' ? (
+    <Col md="12"></Col>
+  ) : (
+    <AvInput type="hidden" name="usuario" value={this.state.fieldsBase[baseFilters]} />
   );
 };
 

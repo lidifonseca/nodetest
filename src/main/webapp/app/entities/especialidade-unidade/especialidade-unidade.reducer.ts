@@ -39,14 +39,17 @@ export interface IEspecialidadeUnidadeBaseState {
   publicar: any;
   comentarioPreco: any;
   unidade: any;
+  especialidade: any;
 }
 
 export interface IEspecialidadeUnidadeUpdateState {
   fieldsBase: IEspecialidadeUnidadeBaseState;
 
   unidadeEasySelectValue: any;
+  especialidadeSelectValue: any;
   isNew: boolean;
   unidadeId: string;
+  especialidadeId: string;
 }
 
 // Reducer
@@ -133,6 +136,7 @@ export type ICrudGetAllActionEspecialidadeUnidade<T> = (
   publicar?: any,
   comentarioPreco?: any,
   unidade?: any,
+  especialidade?: any,
   page?: number,
   size?: number,
   sort?: string
@@ -145,6 +149,7 @@ export const getEntities: ICrudGetAllActionEspecialidadeUnidade<IEspecialidadeUn
   publicar,
   comentarioPreco,
   unidade,
+  especialidade,
   page,
   size,
   sort
@@ -155,12 +160,13 @@ export const getEntities: ICrudGetAllActionEspecialidadeUnidade<IEspecialidadeUn
   const publicarRequest = publicar ? `publicar.contains=${publicar}&` : '';
   const comentarioPrecoRequest = comentarioPreco ? `comentarioPreco.contains=${comentarioPreco}&` : '';
   const unidadeRequest = unidade ? `unidade.equals=${unidade}&` : '';
+  const especialidadeRequest = especialidade ? `especialidade.equals=${especialidade}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_ESPECIALIDADEUNIDADE_LIST,
     payload: axios.get<IEspecialidadeUnidade>(
-      `${requestUrl}${valorBaixaUrgRequest}${valorAltaUrgRequest}${valorPagarRequest}${publicarRequest}${comentarioPrecoRequest}${unidadeRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${valorBaixaUrgRequest}${valorAltaUrgRequest}${valorPagarRequest}${publicarRequest}${comentarioPrecoRequest}${unidadeRequest}${especialidadeRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };
@@ -179,6 +185,7 @@ export const getEntitiesExport: ICrudGetAllActionEspecialidadeUnidade<IEspeciali
   publicar,
   comentarioPreco,
   unidade,
+  especialidade,
   page,
   size,
   sort
@@ -189,12 +196,13 @@ export const getEntitiesExport: ICrudGetAllActionEspecialidadeUnidade<IEspeciali
   const publicarRequest = publicar ? `publicar.contains=${publicar}&` : '';
   const comentarioPrecoRequest = comentarioPreco ? `comentarioPreco.contains=${comentarioPreco}&` : '';
   const unidadeRequest = unidade ? `unidade.equals=${unidade}&` : '';
+  const especialidadeRequest = especialidade ? `especialidade.equals=${especialidade}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_ESPECIALIDADEUNIDADE_LIST,
     payload: axios.get<IEspecialidadeUnidade>(
-      `${requestUrl}${valorBaixaUrgRequest}${valorAltaUrgRequest}${valorPagarRequest}${publicarRequest}${comentarioPrecoRequest}${unidadeRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${valorBaixaUrgRequest}${valorAltaUrgRequest}${valorPagarRequest}${publicarRequest}${comentarioPrecoRequest}${unidadeRequest}${especialidadeRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };
@@ -202,7 +210,8 @@ export const getEntitiesExport: ICrudGetAllActionEspecialidadeUnidade<IEspeciali
 export const createEntity: ICrudPutAction<IEspecialidadeUnidade> = entity => async dispatch => {
   entity = {
     ...entity,
-    unidade: entity.unidade === 'null' ? null : entity.unidade
+    unidade: entity.unidade === 'null' ? null : entity.unidade,
+    especialidade: entity.especialidade === 'null' ? null : entity.especialidade
   };
   const result = await dispatch({
     type: ACTION_TYPES.CREATE_ESPECIALIDADEUNIDADE,
@@ -213,7 +222,11 @@ export const createEntity: ICrudPutAction<IEspecialidadeUnidade> = entity => asy
 };
 
 export const updateEntity: ICrudPutAction<IEspecialidadeUnidade> = entity => async dispatch => {
-  entity = { ...entity, unidade: entity.unidade === 'null' ? null : entity.unidade };
+  entity = {
+    ...entity,
+    unidade: entity.unidade === 'null' ? null : entity.unidade,
+    especialidade: entity.especialidade === 'null' ? null : entity.especialidade
+  };
   const result = await dispatch({
     type: ACTION_TYPES.UPDATE_ESPECIALIDADEUNIDADE,
     payload: axios.put(apiUrl, cleanEntity(entity))
@@ -246,6 +259,7 @@ export const getEspecialidadeUnidadeState = (location): IEspecialidadeUnidadeBas
   const comentarioPreco = url.searchParams.get('comentarioPreco') || '';
 
   const unidade = url.searchParams.get('unidade') || '';
+  const especialidade = url.searchParams.get('especialidade') || '';
 
   return {
     baseFilters,
@@ -254,6 +268,7 @@ export const getEspecialidadeUnidadeState = (location): IEspecialidadeUnidadeBas
     valorPagar,
     publicar,
     comentarioPreco,
-    unidade
+    unidade,
+    especialidade
   };
 };

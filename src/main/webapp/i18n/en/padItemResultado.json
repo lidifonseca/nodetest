@@ -25,7 +25,9 @@
       "resultado": "Resultado",
       "dataFim": "Data Fim",
       "resultadoAnalisado": "Resultado Analisado",
-      "usuarioId": "Usuario Id"
+      "usuarioId": "Usuario Id",
+      "padItem_empty": "Without Pad Item",
+      "padItem": "Pad Item"
     }
   }
 }

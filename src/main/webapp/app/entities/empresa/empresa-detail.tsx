@@ -428,6 +428,19 @@ export class EmpresaDetail extends React.Component<IEmpresaDetailProps, IEmpresa
                           </Col>
                         </Row>
                       </Col>
+
+                      <Col md="12">
+                        <Row>
+                          <Col md="3">
+                            <dt>
+                              <Translate contentKey="generadorApp.empresa.cidade">Cidade</Translate>
+                            </dt>
+                          </Col>
+                          <Col md="9">
+                            <dd>{empresaEntity.cidade ? empresaEntity.cidade.id : ''}</dd>
+                          </Col>
+                        </Row>
+                      </Col>
                     </TabPane>
                   </TabContent>
                 </Row>

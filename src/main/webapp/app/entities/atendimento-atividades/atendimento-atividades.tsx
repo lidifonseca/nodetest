@@ -28,6 +28,11 @@ import { IAtendimentoAtividades } from 'app/shared/model/atendimento-atividades.
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
+import { ICategoriaAtividade } from 'app/shared/model/categoria-atividade.model';
+import { getEntities as getCategoriaAtividades } from 'app/entities/categoria-atividade/categoria-atividade.reducer';
+import { IAtendimento } from 'app/shared/model/atendimento.model';
+import { getEntities as getAtendimentos } from 'app/entities/atendimento/atendimento.reducer';
+
 export interface IAtendimentoAtividadesProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
 export interface IAtendimentoAtividadesState extends IAtendimentoAtividadesBaseState, IPaginationBaseState {}
@@ -45,12 +50,17 @@ export class AtendimentoAtividades extends React.Component<IAtendimentoAtividade
 
   componentDidMount() {
     this.getEntities();
+
+    this.props.getCategoriaAtividades();
+    this.props.getAtendimentos();
   }
 
   cancelCourse = () => {
     this.setState(
       {
-        feito: ''
+        feito: '',
+        atividade: '',
+        atendimento: ''
       },
       () => this.sortEntities()
     );
@@ -100,6 +110,12 @@ export class AtendimentoAtividades extends React.Component<IAtendimentoAtividade
       'feito=' +
       this.state.feito +
       '&' +
+      'atividade=' +
+      this.state.atividade +
+      '&' +
+      'atendimento=' +
+      this.state.atendimento +
+      '&' +
       ''
     );
   };
@@ -107,12 +123,12 @@ export class AtendimentoAtividades extends React.Component<IAtendimentoAtividade
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { feito, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntities(feito, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const { feito, atividade, atendimento, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntities(feito, atividade, atendimento, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   render() {
-    const { atendimentoAtividadesList, match, totalItems } = this.props;
+    const { categoriaAtividades, atendimentos, atendimentoAtividadesList, match, totalItems } = this.props;
     return (
       <div>
         <h2 id="page-heading">
@@ -158,6 +174,62 @@ export class AtendimentoAtividades extends React.Component<IAtendimentoAtividade
                           </Row>
                         </Col>
                       ) : null}
+
+                      {this.state.baseFilters !== 'atividade' ? (
+                        <Col md="3">
+                          <Row className="mr-1 mt-1">
+                            <div style={{ width: '100%' }}>
+                              <Label for="atendimento-atividades-atividade">
+                                <Translate contentKey="generadorApp.atendimentoAtividades.atividade">Atividade</Translate>
+                              </Label>
+                              <Select
+                                id="atendimento-atividades-atividade"
+                                isMulti
+                                className={'css-select-control'}
+                                value={
+                                  categoriaAtividades
+                                    ? categoriaAtividades.map(p =>
+                                        this.state.atividade.split(',').indexOf(p.id) !== -1 ? { value: p.id, label: p.id } : null
+                                      )
+                                    : null
+                                }
+                                options={
+                                  categoriaAtividades ? categoriaAtividades.map(option => ({ value: option.id, label: option.id })) : null
+                                }
+                                onChange={options => this.setState({ atividade: options.map(option => option['value']).join(',') })}
+                                name={'atividade'}
+                              />
+                            </div>
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'atendimento' ? (
+                        <Col md="3">
+                          <Row className="mr-1 mt-1">
+                            <div style={{ width: '100%' }}>
+                              <Label for="atendimento-atividades-atendimento">
+                                <Translate contentKey="generadorApp.atendimentoAtividades.atendimento">Atendimento</Translate>
+                              </Label>
+                              <Select
+                                id="atendimento-atividades-atendimento"
+                                isMulti
+                                className={'css-select-control'}
+                                value={
+                                  atendimentos
+                                    ? atendimentos.map(p =>
+                                        this.state.atendimento.split(',').indexOf(p.id) !== -1 ? { value: p.id, label: p.id } : null
+                                      )
+                                    : null
+                                }
+                                options={atendimentos ? atendimentos.map(option => ({ value: option.id, label: option.id })) : null}
+                                onChange={options => this.setState({ atendimento: options.map(option => option['value']).join(',') })}
+                                name={'atendimento'}
+                              />
+                            </div>
+                          </Row>
+                        </Col>
+                      ) : null}
                     </div>
 
                     <div className="row mb-2 mr-4 justify-content-end">
@@ -192,6 +264,20 @@ export class AtendimentoAtividades extends React.Component<IAtendimentoAtividade
                         </th>
                       ) : null}
 
+                      {this.state.baseFilters !== 'atividade' ? (
+                        <th>
+                          <Translate contentKey="generadorApp.atendimentoAtividades.atividade">Atividade</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'atendimento' ? (
+                        <th>
+                          <Translate contentKey="generadorApp.atendimentoAtividades.atendimento">Atendimento</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+
                       <th />
                     </tr>
                   </thead>
@@ -206,6 +292,28 @@ export class AtendimentoAtividades extends React.Component<IAtendimentoAtividade
                         </td>
 
                         {this.state.baseFilters !== 'feito' ? <td>{atendimentoAtividades.feito}</td> : null}
+
+                        {this.state.baseFilters !== 'atividade' ? (
+                          <td>
+                            {atendimentoAtividades.atividade ? (
+                              <Link to={`categoria-atividade/${atendimentoAtividades.atividade.id}`}>
+                                {atendimentoAtividades.atividade.id}
+                              </Link>
+                            ) : (
+                              ''
+                            )}
+                          </td>
+                        ) : null}
+
+                        {this.state.baseFilters !== 'atendimento' ? (
+                          <td>
+                            {atendimentoAtividades.atendimento ? (
+                              <Link to={`atendimento/${atendimentoAtividades.atendimento.id}`}>{atendimentoAtividades.atendimento.id}</Link>
+                            ) : (
+                              ''
+                            )}
+                          </td>
+                        ) : null}
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">
@@ -278,11 +386,15 @@ export class AtendimentoAtividades extends React.Component<IAtendimentoAtividade
 }
 
 const mapStateToProps = ({ atendimentoAtividades, ...storeState }: IRootState) => ({
+  categoriaAtividades: storeState.categoriaAtividade.entities,
+  atendimentos: storeState.atendimento.entities,
   atendimentoAtividadesList: atendimentoAtividades.entities,
   totalItems: atendimentoAtividades.totalItems
 });
 
 const mapDispatchToProps = {
+  getCategoriaAtividades,
+  getAtendimentos,
   getEntities
 };
 

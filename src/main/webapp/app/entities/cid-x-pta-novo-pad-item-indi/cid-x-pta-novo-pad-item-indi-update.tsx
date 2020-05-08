@@ -9,6 +9,12 @@ import { Translate, translate, ICrudGetAction, ICrudGetAllAction, ICrudPutAction
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
+import { IPadItemIndicadores } from 'app/shared/model/pad-item-indicadores.model';
+import { getEntities as getPadItemIndicadores } from 'app/entities/pad-item-indicadores/pad-item-indicadores.reducer';
+import { ICategoria } from 'app/shared/model/categoria.model';
+import { getEntities as getCategorias } from 'app/entities/categoria/categoria.reducer';
+import { ICidXPtaNovo } from 'app/shared/model/cid-x-pta-novo.model';
+import { getEntities as getCidXPtaNovos } from 'app/entities/cid-x-pta-novo/cid-x-pta-novo.reducer';
 import {
   ICidXPtaNovoPadItemIndiUpdateState,
   getEntity,
@@ -29,13 +35,58 @@ export class CidXPtaNovoPadItemIndiUpdate extends React.Component<ICidXPtaNovoPa
     super(props);
 
     this.state = {
+      padItemIndicadoresSelectValue: null,
+      categoriaSelectValue: null,
+      cidXPtaNovoSelectValue: null,
       fieldsBase: getCidXPtaNovoPadItemIndiState(this.props.location),
+      padItemIndicadoresId: '0',
+      categoriasId: '0',
+      cidXPtaNovoId: '0',
       isNew: !this.props.match.params || !this.props.match.params.id
     };
   }
   componentDidUpdate(nextProps, nextState) {
     if (nextProps.updateSuccess !== this.props.updateSuccess && nextProps.updateSuccess) {
       this.handleClose();
+    }
+
+    if (
+      nextProps.padItemIndicadores.length > 0 &&
+      this.state.padItemIndicadoresSelectValue === null &&
+      nextProps.cidXPtaNovoPadItemIndiEntity.padItemIndicadores &&
+      nextProps.cidXPtaNovoPadItemIndiEntity.padItemIndicadores.id
+    ) {
+      this.setState({
+        padItemIndicadoresSelectValue: nextProps.padItemIndicadores.map(p =>
+          nextProps.cidXPtaNovoPadItemIndiEntity.padItemIndicadores.id === p.id ? { value: p.id, label: p.id } : null
+        )
+      });
+    }
+
+    if (
+      nextProps.categorias.length > 0 &&
+      this.state.categoriaSelectValue === null &&
+      nextProps.cidXPtaNovoPadItemIndiEntity.categoria &&
+      nextProps.cidXPtaNovoPadItemIndiEntity.categoria.id
+    ) {
+      this.setState({
+        categoriaSelectValue: nextProps.categorias.map(p =>
+          nextProps.cidXPtaNovoPadItemIndiEntity.categoria.id === p.id ? { value: p.id, label: p.id } : null
+        )
+      });
+    }
+
+    if (
+      nextProps.cidXPtaNovos.length > 0 &&
+      this.state.cidXPtaNovoSelectValue === null &&
+      nextProps.cidXPtaNovoPadItemIndiEntity.cidXPtaNovo &&
+      nextProps.cidXPtaNovoPadItemIndiEntity.cidXPtaNovo.id
+    ) {
+      this.setState({
+        cidXPtaNovoSelectValue: nextProps.cidXPtaNovos.map(p =>
+          nextProps.cidXPtaNovoPadItemIndiEntity.cidXPtaNovo.id === p.id ? { value: p.id, label: p.id } : null
+        )
+      });
     }
   }
 
@@ -45,6 +96,10 @@ export class CidXPtaNovoPadItemIndiUpdate extends React.Component<ICidXPtaNovoPa
     } else {
       this.props.getEntity(this.props.match.params.id);
     }
+
+    this.props.getPadItemIndicadores();
+    this.props.getCategorias();
+    this.props.getCidXPtaNovos();
   }
 
   getFiltersURL = (offset = null) => {
@@ -60,7 +115,9 @@ export class CidXPtaNovoPadItemIndiUpdate extends React.Component<ICidXPtaNovoPa
       const { cidXPtaNovoPadItemIndiEntity } = this.props;
       const entity = {
         ...cidXPtaNovoPadItemIndiEntity,
-
+        padItemIndicadores: this.state.padItemIndicadoresSelectValue ? this.state.padItemIndicadoresSelectValue['value'] : null,
+        categoria: this.state.categoriaSelectValue ? this.state.categoriaSelectValue['value'] : null,
+        cidXPtaNovo: this.state.cidXPtaNovoSelectValue ? this.state.cidXPtaNovoSelectValue['value'] : null,
         ...values
       };
 
@@ -77,7 +134,7 @@ export class CidXPtaNovoPadItemIndiUpdate extends React.Component<ICidXPtaNovoPa
   };
 
   render() {
-    const { cidXPtaNovoPadItemIndiEntity, loading, updating } = this.props;
+    const { cidXPtaNovoPadItemIndiEntity, padItemIndicadores, categorias, cidXPtaNovos, loading, updating } = this.props;
     const { isNew } = this.state;
 
     const baseFilters = this.state.fieldsBase && this.state.fieldsBase['baseFilters'] ? this.state.fieldsBase['baseFilters'] : null;
@@ -88,7 +145,12 @@ export class CidXPtaNovoPadItemIndiUpdate extends React.Component<ICidXPtaNovoPa
             isNew
               ? {}
               : {
-                  ...cidXPtaNovoPadItemIndiEntity
+                  ...cidXPtaNovoPadItemIndiEntity,
+                  padItemIndicadores: cidXPtaNovoPadItemIndiEntity.padItemIndicadores
+                    ? cidXPtaNovoPadItemIndiEntity.padItemIndicadores.id
+                    : null,
+                  categorias: cidXPtaNovoPadItemIndiEntity.categorias ? cidXPtaNovoPadItemIndiEntity.categorias.id : null,
+                  cidXPtaNovo: cidXPtaNovoPadItemIndiEntity.cidXPtaNovo ? cidXPtaNovoPadItemIndiEntity.cidXPtaNovo.id : null
                 }
           }
           onSubmit={this.saveEntity}
@@ -170,6 +232,14 @@ export class CidXPtaNovoPadItemIndiUpdate extends React.Component<ICidXPtaNovoPa
                         <UnidadeMedidaIdComponentUpdate baseFilters />
 
                         <ScoreComponentUpdate baseFilters />
+
+                        <AlertasIndicadoresComponentUpdate baseFilter alertasIndicadores />
+
+                        <PadItemIndicadoresComponentUpdate baseFilter padItemIndicadores />
+
+                        <CategoriasComponentUpdate baseFilter categorias />
+
+                        <CidXPtaNovoComponentUpdate baseFilter cidXPtaNovos />
                       </Row>
                     </div>
                   )}
@@ -184,6 +254,9 @@ export class CidXPtaNovoPadItemIndiUpdate extends React.Component<ICidXPtaNovoPa
 }
 
 const mapStateToProps = (storeState: IRootState) => ({
+  padItemIndicadores: storeState.padItemIndicadores.entities,
+  categorias: storeState.categoria.entities,
+  cidXPtaNovos: storeState.cidXPtaNovo.entities,
   cidXPtaNovoPadItemIndiEntity: storeState.cidXPtaNovoPadItemIndi.entity,
   loading: storeState.cidXPtaNovoPadItemIndi.loading,
   updating: storeState.cidXPtaNovoPadItemIndi.updating,
@@ -191,6 +264,9 @@ const mapStateToProps = (storeState: IRootState) => ({
 });
 
 const mapDispatchToProps = {
+  getPadItemIndicadores,
+  getCategorias,
+  getCidXPtaNovos,
   getEntity,
   updateEntity,
   createEntity,
@@ -323,6 +399,98 @@ const ScoreComponentUpdate = ({ baseFilters }) => {
     </Col>
   ) : (
     <AvInput type="hidden" name="score" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const AlertasIndicadoresComponentUpdate = ({ baseFilters, alertasIndicadores }) => {
+  return baseFilters !== 'alertasIndicadores' ? (
+    <Col md="12"></Col>
+  ) : (
+    <AvInput type="hidden" name="alertasIndicadores" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const PadItemIndicadoresComponentUpdate = ({ baseFilters, padItemIndicadores }) => {
+  return baseFilters !== 'padItemIndicadores' ? (
+    <Col md="12">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" for="cid-x-pta-novo-pad-item-indi-padItemIndicadores">
+              <Translate contentKey="generadorApp.cidXPtaNovoPadItemIndi.padItemIndicadores">Pad Item Indicadores</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <Select
+              id="cid-x-pta-novo-pad-item-indi-padItemIndicadores"
+              className={'css-select-control'}
+              value={this.state.padItemIndicadoresSelectValue}
+              options={padItemIndicadores ? padItemIndicadores.map(option => ({ value: option.id, label: option.id })) : null}
+              onChange={options => this.setState({ padItemIndicadoresSelectValue: options })}
+              name={'padItemIndicadores'}
+            />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="padItemIndicadores" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const CategoriasComponentUpdate = ({ baseFilters, categorias }) => {
+  return baseFilters !== 'categorias' ? (
+    <Col md="12">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" for="cid-x-pta-novo-pad-item-indi-categorias">
+              <Translate contentKey="generadorApp.cidXPtaNovoPadItemIndi.categorias">Categorias</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <Select
+              id="cid-x-pta-novo-pad-item-indi-categorias"
+              className={'css-select-control'}
+              value={this.state.categoriaSelectValue}
+              options={categorias ? categorias.map(option => ({ value: option.id, label: option.id })) : null}
+              onChange={options => this.setState({ categoriaSelectValue: options })}
+              name={'categorias'}
+            />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="categorias" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const CidXPtaNovoComponentUpdate = ({ baseFilters, cidXPtaNovos }) => {
+  return baseFilters !== 'cidXPtaNovo' ? (
+    <Col md="12">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" for="cid-x-pta-novo-pad-item-indi-cidXPtaNovo">
+              <Translate contentKey="generadorApp.cidXPtaNovoPadItemIndi.cidXPtaNovo">Cid X Pta Novo</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <Select
+              id="cid-x-pta-novo-pad-item-indi-cidXPtaNovo"
+              className={'css-select-control'}
+              value={this.state.cidXPtaNovoSelectValue}
+              options={cidXPtaNovos ? cidXPtaNovos.map(option => ({ value: option.id, label: option.id })) : null}
+              onChange={options => this.setState({ cidXPtaNovoSelectValue: options })}
+              name={'cidXPtaNovo'}
+            />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="cidXPtaNovo" value={this.state.fieldsBase[baseFilters]} />
   );
 };
 

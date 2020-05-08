@@ -4,6 +4,9 @@ import { BaseEntity } from './base/base.entity';
 
 import { validate, Contains, IsInt, Length, IsEmail, IsFQDN, IsDate, Min, Max } from 'class-validator';
 
+import Operadora from './operadora.entity';
+import Especialidade from './especialidade.entity';
+
 /**
  * A EspecialidadeOperadora.
  */
@@ -32,6 +35,14 @@ export default class EspecialidadeOperadora extends BaseEntity {
 
   @Column({ type: 'integer', name: 'ATIVO' })
   ativo: number;
+
+  @ManyToOne(type => Operadora)
+  @JoinColumn({ name: 'ID_OPERADORA', referencedColumnName: 'id' })
+  operadora: Operadora;
+
+  @ManyToOne(type => Especialidade)
+  @JoinColumn({ name: 'ID_ESPECIALIDADE', referencedColumnName: 'id' })
+  especialidade: Especialidade;
 
   // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
 }

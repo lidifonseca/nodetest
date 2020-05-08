@@ -5,6 +5,8 @@ import PacienteOperadora from '../domain/paciente-operadora.entity';
 import { PacienteOperadoraRepository } from '../repository/paciente-operadora.repository';
 
 const relationshipNames = [];
+relationshipNames.push('paciente');
+relationshipNames.push('operadora');
 
 @Injectable()
 export class PacienteOperadoraService {

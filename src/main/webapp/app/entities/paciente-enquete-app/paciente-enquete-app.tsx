@@ -28,6 +28,9 @@ import { IPacienteEnqueteApp } from 'app/shared/model/paciente-enquete-app.model
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
+import { IPaciente } from 'app/shared/model/paciente.model';
+import { getEntities as getPacientes } from 'app/entities/paciente/paciente.reducer';
+
 export interface IPacienteEnqueteAppProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
 export interface IPacienteEnqueteAppState extends IPacienteEnqueteAppBaseState, IPaginationBaseState {}
@@ -45,12 +48,15 @@ export class PacienteEnqueteApp extends React.Component<IPacienteEnqueteAppProps
 
   componentDidMount() {
     this.getEntities();
+
+    this.props.getPacientes();
   }
 
   cancelCourse = () => {
     this.setState(
       {
-        votacao: ''
+        votacao: '',
+        paciente: ''
       },
       () => this.sortEntities()
     );
@@ -100,6 +106,9 @@ export class PacienteEnqueteApp extends React.Component<IPacienteEnqueteAppProps
       'votacao=' +
       this.state.votacao +
       '&' +
+      'paciente=' +
+      this.state.paciente +
+      '&' +
       ''
     );
   };
@@ -107,12 +116,12 @@ export class PacienteEnqueteApp extends React.Component<IPacienteEnqueteAppProps
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { votacao, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntities(votacao, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const { votacao, paciente, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntities(votacao, paciente, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   render() {
-    const { pacienteEnqueteAppList, match, totalItems } = this.props;
+    const { pacientes, pacienteEnqueteAppList, match, totalItems } = this.props;
     return (
       <div>
         <h2 id="page-heading">
@@ -158,6 +167,33 @@ export class PacienteEnqueteApp extends React.Component<IPacienteEnqueteAppProps
                           </Row>
                         </Col>
                       ) : null}
+
+                      {this.state.baseFilters !== 'paciente' ? (
+                        <Col md="3">
+                          <Row className="mr-1 mt-1">
+                            <div style={{ width: '100%' }}>
+                              <Label for="paciente-enquete-app-paciente">
+                                <Translate contentKey="generadorApp.pacienteEnqueteApp.paciente">Paciente</Translate>
+                              </Label>
+                              <Select
+                                id="paciente-enquete-app-paciente"
+                                isMulti
+                                className={'css-select-control'}
+                                value={
+                                  pacientes
+                                    ? pacientes.map(p =>
+                                        this.state.paciente.split(',').indexOf(p.id) !== -1 ? { value: p.id, label: p.id } : null
+                                      )
+                                    : null
+                                }
+                                options={pacientes ? pacientes.map(option => ({ value: option.id, label: option.id })) : null}
+                                onChange={options => this.setState({ paciente: options.map(option => option['value']).join(',') })}
+                                name={'paciente'}
+                              />
+                            </div>
+                          </Row>
+                        </Col>
+                      ) : null}
                     </div>
 
                     <div className="row mb-2 mr-4 justify-content-end">
@@ -192,6 +228,13 @@ export class PacienteEnqueteApp extends React.Component<IPacienteEnqueteAppProps
                         </th>
                       ) : null}
 
+                      {this.state.baseFilters !== 'paciente' ? (
+                        <th>
+                          <Translate contentKey="generadorApp.pacienteEnqueteApp.paciente">Paciente</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+
                       <th />
                     </tr>
                   </thead>
@@ -206,6 +249,16 @@ export class PacienteEnqueteApp extends React.Component<IPacienteEnqueteAppProps
                         </td>
 
                         {this.state.baseFilters !== 'votacao' ? <td>{pacienteEnqueteApp.votacao}</td> : null}
+
+                        {this.state.baseFilters !== 'paciente' ? (
+                          <td>
+                            {pacienteEnqueteApp.paciente ? (
+                              <Link to={`paciente/${pacienteEnqueteApp.paciente.id}`}>{pacienteEnqueteApp.paciente.id}</Link>
+                            ) : (
+                              ''
+                            )}
+                          </td>
+                        ) : null}
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">
@@ -273,11 +326,13 @@ export class PacienteEnqueteApp extends React.Component<IPacienteEnqueteAppProps
 }
 
 const mapStateToProps = ({ pacienteEnqueteApp, ...storeState }: IRootState) => ({
+  pacientes: storeState.paciente.entities,
   pacienteEnqueteAppList: pacienteEnqueteApp.entities,
   totalItems: pacienteEnqueteApp.totalItems
 });
 
 const mapDispatchToProps = {
+  getPacientes,
   getEntities
 };
 

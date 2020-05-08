@@ -50,7 +50,10 @@ export class Tela extends React.Component<ITelaProps, ITelaState> {
   cancelCourse = () => {
     this.setState(
       {
-        tela: ''
+        tela: '',
+        logUser: '',
+        logUserFranquia: '',
+        usuarioAcao: ''
       },
       () => this.sortEntities()
     );
@@ -100,6 +103,15 @@ export class Tela extends React.Component<ITelaProps, ITelaState> {
       'tela=' +
       this.state.tela +
       '&' +
+      'logUser=' +
+      this.state.logUser +
+      '&' +
+      'logUserFranquia=' +
+      this.state.logUserFranquia +
+      '&' +
+      'usuarioAcao=' +
+      this.state.usuarioAcao +
+      '&' +
       ''
     );
   };
@@ -107,8 +119,8 @@ export class Tela extends React.Component<ITelaProps, ITelaState> {
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { tela, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntities(tela, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const { tela, logUser, logUserFranquia, usuarioAcao, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntities(tela, logUser, logUserFranquia, usuarioAcao, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   render() {
@@ -157,6 +169,24 @@ export class Tela extends React.Component<ITelaProps, ITelaState> {
 
                             <AvInput type="text" name="tela" id="tela-tela" value={this.state.tela} />
                           </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'logUser' ? (
+                        <Col md="3">
+                          <Row className="mr-1 mt-1"></Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'logUserFranquia' ? (
+                        <Col md="3">
+                          <Row className="mr-1 mt-1"></Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'usuarioAcao' ? (
+                        <Col md="3">
+                          <Row className="mr-1 mt-1"></Row>
                         </Col>
                       ) : null}
                     </div>

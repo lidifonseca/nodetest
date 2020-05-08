@@ -9,6 +9,10 @@ import { Translate, translate, ICrudGetAction, ICrudGetAllAction, ICrudPutAction
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
+import { IPaciente } from 'app/shared/model/paciente.model';
+import { getEntities as getPacientes } from 'app/entities/paciente/paciente.reducer';
+import { IOperadora } from 'app/shared/model/operadora.model';
+import { getEntities as getOperadoras } from 'app/entities/operadora/operadora.reducer';
 import {
   IPacienteOperadoraUpdateState,
   getEntity,
@@ -29,13 +33,43 @@ export class PacienteOperadoraUpdate extends React.Component<IPacienteOperadoraU
     super(props);
 
     this.state = {
+      pacienteSelectValue: null,
+      operadoraSelectValue: null,
       fieldsBase: getPacienteOperadoraState(this.props.location),
+      pacienteId: '0',
+      operadoraId: '0',
       isNew: !this.props.match.params || !this.props.match.params.id
     };
   }
   componentDidUpdate(nextProps, nextState) {
     if (nextProps.updateSuccess !== this.props.updateSuccess && nextProps.updateSuccess) {
       this.handleClose();
+    }
+
+    if (
+      nextProps.pacientes.length > 0 &&
+      this.state.pacienteSelectValue === null &&
+      nextProps.pacienteOperadoraEntity.paciente &&
+      nextProps.pacienteOperadoraEntity.paciente.id
+    ) {
+      this.setState({
+        pacienteSelectValue: nextProps.pacientes.map(p =>
+          nextProps.pacienteOperadoraEntity.paciente.id === p.id ? { value: p.id, label: p.id } : null
+        )
+      });
+    }
+
+    if (
+      nextProps.operadoras.length > 0 &&
+      this.state.operadoraSelectValue === null &&
+      nextProps.pacienteOperadoraEntity.operadora &&
+      nextProps.pacienteOperadoraEntity.operadora.id
+    ) {
+      this.setState({
+        operadoraSelectValue: nextProps.operadoras.map(p =>
+          nextProps.pacienteOperadoraEntity.operadora.id === p.id ? { value: p.id, label: p.id } : null
+        )
+      });
     }
   }
 
@@ -45,6 +79,9 @@ export class PacienteOperadoraUpdate extends React.Component<IPacienteOperadoraU
     } else {
       this.props.getEntity(this.props.match.params.id);
     }
+
+    this.props.getPacientes();
+    this.props.getOperadoras();
   }
 
   getFiltersURL = (offset = null) => {
@@ -60,7 +97,8 @@ export class PacienteOperadoraUpdate extends React.Component<IPacienteOperadoraU
       const { pacienteOperadoraEntity } = this.props;
       const entity = {
         ...pacienteOperadoraEntity,
-
+        paciente: this.state.pacienteSelectValue ? this.state.pacienteSelectValue['value'] : null,
+        operadora: this.state.operadoraSelectValue ? this.state.operadoraSelectValue['value'] : null,
         ...values
       };
 
@@ -77,7 +115,7 @@ export class PacienteOperadoraUpdate extends React.Component<IPacienteOperadoraU
   };
 
   render() {
-    const { pacienteOperadoraEntity, loading, updating } = this.props;
+    const { pacienteOperadoraEntity, pacientes, operadoras, loading, updating } = this.props;
     const { isNew } = this.state;
 
     const baseFilters = this.state.fieldsBase && this.state.fieldsBase['baseFilters'] ? this.state.fieldsBase['baseFilters'] : null;
@@ -88,7 +126,9 @@ export class PacienteOperadoraUpdate extends React.Component<IPacienteOperadoraU
             isNew
               ? {}
               : {
-                  ...pacienteOperadoraEntity
+                  ...pacienteOperadoraEntity,
+                  paciente: pacienteOperadoraEntity.paciente ? pacienteOperadoraEntity.paciente.id : null,
+                  operadora: pacienteOperadoraEntity.operadora ? pacienteOperadoraEntity.operadora.id : null
                 }
           }
           onSubmit={this.saveEntity}
@@ -153,6 +193,10 @@ export class PacienteOperadoraUpdate extends React.Component<IPacienteOperadoraU
                         <RegistroComponentUpdate baseFilters />
 
                         <AtivoComponentUpdate baseFilters />
+
+                        <PacienteComponentUpdate baseFilter pacientes />
+
+                        <OperadoraComponentUpdate baseFilter operadoras />
                       </Row>
                     </div>
                   )}
@@ -167,6 +211,8 @@ export class PacienteOperadoraUpdate extends React.Component<IPacienteOperadoraU
 }
 
 const mapStateToProps = (storeState: IRootState) => ({
+  pacientes: storeState.paciente.entities,
+  operadoras: storeState.operadora.entities,
   pacienteOperadoraEntity: storeState.pacienteOperadora.entity,
   loading: storeState.pacienteOperadora.loading,
   updating: storeState.pacienteOperadora.updating,
@@ -174,6 +220,8 @@ const mapStateToProps = (storeState: IRootState) => ({
 });
 
 const mapDispatchToProps = {
+  getPacientes,
+  getOperadoras,
   getEntity,
   updateEntity,
   createEntity,
@@ -222,6 +270,62 @@ const AtivoComponentUpdate = ({ baseFilters }) => {
     </Col>
   ) : (
     <AvInput type="hidden" name="ativo" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const PacienteComponentUpdate = ({ baseFilters, pacientes }) => {
+  return baseFilters !== 'paciente' ? (
+    <Col md="12">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" for="paciente-operadora-paciente">
+              <Translate contentKey="generadorApp.pacienteOperadora.paciente">Paciente</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <Select
+              id="paciente-operadora-paciente"
+              className={'css-select-control'}
+              value={this.state.pacienteSelectValue}
+              options={pacientes ? pacientes.map(option => ({ value: option.id, label: option.id })) : null}
+              onChange={options => this.setState({ pacienteSelectValue: options })}
+              name={'paciente'}
+            />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="paciente" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const OperadoraComponentUpdate = ({ baseFilters, operadoras }) => {
+  return baseFilters !== 'operadora' ? (
+    <Col md="12">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" for="paciente-operadora-operadora">
+              <Translate contentKey="generadorApp.pacienteOperadora.operadora">Operadora</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <Select
+              id="paciente-operadora-operadora"
+              className={'css-select-control'}
+              value={this.state.operadoraSelectValue}
+              options={operadoras ? operadoras.map(option => ({ value: option.id, label: option.id })) : null}
+              onChange={options => this.setState({ operadoraSelectValue: options })}
+              name={'operadora'}
+            />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="operadora" value={this.state.fieldsBase[baseFilters]} />
   );
 };
 

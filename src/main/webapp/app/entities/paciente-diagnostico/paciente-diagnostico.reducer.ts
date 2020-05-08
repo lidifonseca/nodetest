@@ -38,12 +38,18 @@ export interface IPacienteDiagnosticoBaseState {
   cidPrimario: any;
   complexidade: any;
   cidComAlta: any;
+  paciente: any;
+  c: any;
 }
 
 export interface IPacienteDiagnosticoUpdateState {
   fieldsBase: IPacienteDiagnosticoBaseState;
 
+  pacienteSelectValue: any;
+  cidSelectValue: any;
   isNew: boolean;
+  pacienteId: string;
+  cId: string;
 }
 
 // Reducer
@@ -129,6 +135,8 @@ export type ICrudGetAllActionPacienteDiagnostico<T> = (
   cidPrimario?: any,
   complexidade?: any,
   cidComAlta?: any,
+  paciente?: any,
+  c?: any,
   page?: number,
   size?: number,
   sort?: string
@@ -140,6 +148,8 @@ export const getEntities: ICrudGetAllActionPacienteDiagnostico<IPacienteDiagnost
   cidPrimario,
   complexidade,
   cidComAlta,
+  paciente,
+  c,
   page,
   size,
   sort
@@ -149,12 +159,14 @@ export const getEntities: ICrudGetAllActionPacienteDiagnostico<IPacienteDiagnost
   const cidPrimarioRequest = cidPrimario ? `cidPrimario.contains=${cidPrimario}&` : '';
   const complexidadeRequest = complexidade ? `complexidade.contains=${complexidade}&` : '';
   const cidComAltaRequest = cidComAlta ? `cidComAlta.contains=${cidComAlta}&` : '';
+  const pacienteRequest = paciente ? `paciente.equals=${paciente}&` : '';
+  const cRequest = c ? `c.equals=${c}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_PACIENTEDIAGNOSTICO_LIST,
     payload: axios.get<IPacienteDiagnostico>(
-      `${requestUrl}${observacaoRequest}${ativoRequest}${cidPrimarioRequest}${complexidadeRequest}${cidComAltaRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${observacaoRequest}${ativoRequest}${cidPrimarioRequest}${complexidadeRequest}${cidComAltaRequest}${pacienteRequest}${cRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };
@@ -172,6 +184,8 @@ export const getEntitiesExport: ICrudGetAllActionPacienteDiagnostico<IPacienteDi
   cidPrimario,
   complexidade,
   cidComAlta,
+  paciente,
+  c,
   page,
   size,
   sort
@@ -181,19 +195,23 @@ export const getEntitiesExport: ICrudGetAllActionPacienteDiagnostico<IPacienteDi
   const cidPrimarioRequest = cidPrimario ? `cidPrimario.contains=${cidPrimario}&` : '';
   const complexidadeRequest = complexidade ? `complexidade.contains=${complexidade}&` : '';
   const cidComAltaRequest = cidComAlta ? `cidComAlta.contains=${cidComAlta}&` : '';
+  const pacienteRequest = paciente ? `paciente.equals=${paciente}&` : '';
+  const cRequest = c ? `c.equals=${c}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_PACIENTEDIAGNOSTICO_LIST,
     payload: axios.get<IPacienteDiagnostico>(
-      `${requestUrl}${observacaoRequest}${ativoRequest}${cidPrimarioRequest}${complexidadeRequest}${cidComAltaRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${observacaoRequest}${ativoRequest}${cidPrimarioRequest}${complexidadeRequest}${cidComAltaRequest}${pacienteRequest}${cRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };
 
 export const createEntity: ICrudPutAction<IPacienteDiagnostico> = entity => async dispatch => {
   entity = {
-    ...entity
+    ...entity,
+    paciente: entity.paciente === 'null' ? null : entity.paciente,
+    c: entity.c === 'null' ? null : entity.c
   };
   const result = await dispatch({
     type: ACTION_TYPES.CREATE_PACIENTEDIAGNOSTICO,
@@ -204,7 +222,7 @@ export const createEntity: ICrudPutAction<IPacienteDiagnostico> = entity => asyn
 };
 
 export const updateEntity: ICrudPutAction<IPacienteDiagnostico> = entity => async dispatch => {
-  entity = { ...entity };
+  entity = { ...entity, paciente: entity.paciente === 'null' ? null : entity.paciente, c: entity.c === 'null' ? null : entity.c };
   const result = await dispatch({
     type: ACTION_TYPES.UPDATE_PACIENTEDIAGNOSTICO,
     payload: axios.put(apiUrl, cleanEntity(entity))
@@ -236,12 +254,17 @@ export const getPacienteDiagnosticoState = (location): IPacienteDiagnosticoBaseS
   const complexidade = url.searchParams.get('complexidade') || '';
   const cidComAlta = url.searchParams.get('cidComAlta') || '';
 
+  const paciente = url.searchParams.get('paciente') || '';
+  const c = url.searchParams.get('c') || '';
+
   return {
     baseFilters,
     observacao,
     ativo,
     cidPrimario,
     complexidade,
-    cidComAlta
+    cidComAlta,
+    paciente,
+    c
   };
 };

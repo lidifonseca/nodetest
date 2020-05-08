@@ -4,7 +4,10 @@ import { BaseEntity } from './base/base.entity';
 
 import { validate, Contains, IsInt, Length, IsEmail, IsFQDN, IsDate, Min, Max } from 'class-validator';
 
+import Diario from './diario.entity';
+import PacienteDiario from './paciente-diario.entity';
 import UnidadeEasy from './unidade-easy.entity';
+import TipoUsuario from './tipo-usuario.entity';
 
 /**
  * A Usuario.
@@ -380,9 +383,25 @@ export default class Usuario extends BaseEntity {
   @Column({ type: 'boolean', name: 'ENVIO_MELHORA_TEMPO' })
   envioMelhoraTempo: boolean;
 
+  @OneToMany(
+    type => Diario,
+    other => other.usuario
+  )
+  diarios: Diario[];
+
+  @OneToMany(
+    type => PacienteDiario,
+    other => other.usuario
+  )
+  pacienteDiarios: PacienteDiario[];
+
   @ManyToOne(type => UnidadeEasy)
   @JoinColumn({ name: 'ID_UNIDADE', referencedColumnName: 'id' })
   unidade: UnidadeEasy;
+
+  @ManyToOne(type => TipoUsuario)
+  @JoinColumn({ name: 'ID_TIPO_USUARIO', referencedColumnName: 'id' })
+  tipoUsuario: TipoUsuario;
 
   // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
 }

@@ -23,7 +23,9 @@
         "title": "Status Atual Prof"
       },
       "statusAtualProf": "Status Atual Prof",
-      "styleLabel": "Style Label"
+      "styleLabel": "Style Label",
+      "profissionalStatusAtual_empty": "Sem Profissional Status Atual",
+      "profissionalStatusAtual": "Profissional Status Atual"
     }
   }
 }

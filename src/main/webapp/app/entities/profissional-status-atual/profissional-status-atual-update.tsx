@@ -9,6 +9,8 @@ import { Translate, translate, ICrudGetAction, ICrudGetAllAction, setFileData, I
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
+import { IStatusAtualProf } from 'app/shared/model/status-atual-prof.model';
+import { getEntities as getStatusAtualProfs } from 'app/entities/status-atual-prof/status-atual-prof.reducer';
 import {
   IProfissionalStatusAtualUpdateState,
   getEntity,
@@ -37,13 +39,28 @@ export class ProfissionalStatusAtualUpdate extends React.Component<
     this.obsFileInput = React.createRef();
 
     this.state = {
+      statusAtualProfSelectValue: null,
       fieldsBase: getProfissionalStatusAtualState(this.props.location),
+      statusAtualProfId: '0',
       isNew: !this.props.match.params || !this.props.match.params.id
     };
   }
   componentDidUpdate(nextProps, nextState) {
     if (nextProps.updateSuccess !== this.props.updateSuccess && nextProps.updateSuccess) {
       this.handleClose();
+    }
+
+    if (
+      nextProps.statusAtualProfs.length > 0 &&
+      this.state.statusAtualProfSelectValue === null &&
+      nextProps.profissionalStatusAtualEntity.statusAtualProf &&
+      nextProps.profissionalStatusAtualEntity.statusAtualProf.id
+    ) {
+      this.setState({
+        statusAtualProfSelectValue: nextProps.statusAtualProfs.map(p =>
+          nextProps.profissionalStatusAtualEntity.statusAtualProf.id === p.id ? { value: p.id, label: p.id } : null
+        )
+      });
     }
   }
 
@@ -53,6 +70,8 @@ export class ProfissionalStatusAtualUpdate extends React.Component<
     } else {
       this.props.getEntity(this.props.match.params.id);
     }
+
+    this.props.getStatusAtualProfs();
   }
 
   onBlobChange = (isAnImage, name, fileInput) => event => {
@@ -76,7 +95,7 @@ export class ProfissionalStatusAtualUpdate extends React.Component<
       const { profissionalStatusAtualEntity } = this.props;
       const entity = {
         ...profissionalStatusAtualEntity,
-
+        statusAtualProf: this.state.statusAtualProfSelectValue ? this.state.statusAtualProfSelectValue['value'] : null,
         ...values
       };
 
@@ -93,7 +112,7 @@ export class ProfissionalStatusAtualUpdate extends React.Component<
   };
 
   render() {
-    const { profissionalStatusAtualEntity, loading, updating } = this.props;
+    const { profissionalStatusAtualEntity, statusAtualProfs, loading, updating } = this.props;
     const { isNew } = this.state;
 
     const { obs } = profissionalStatusAtualEntity;
@@ -105,7 +124,8 @@ export class ProfissionalStatusAtualUpdate extends React.Component<
             isNew
               ? {}
               : {
-                  ...profissionalStatusAtualEntity
+                  ...profissionalStatusAtualEntity,
+                  statusAtualProf: profissionalStatusAtualEntity.statusAtualProf ? profissionalStatusAtualEntity.statusAtualProf.id : null
                 }
           }
           onSubmit={this.saveEntity}
@@ -181,6 +201,8 @@ export class ProfissionalStatusAtualUpdate extends React.Component<
                         <ObsComponentUpdate baseFilters />
 
                         <AtivoComponentUpdate baseFilters />
+
+                        <StatusAtualProfComponentUpdate baseFilter statusAtualProfs />
                       </Row>
                     </div>
                   )}
@@ -195,6 +217,7 @@ export class ProfissionalStatusAtualUpdate extends React.Component<
 }
 
 const mapStateToProps = (storeState: IRootState) => ({
+  statusAtualProfs: storeState.statusAtualProf.entities,
   profissionalStatusAtualEntity: storeState.profissionalStatusAtual.entity,
   loading: storeState.profissionalStatusAtual.loading,
   updating: storeState.profissionalStatusAtual.updating,
@@ -202,6 +225,7 @@ const mapStateToProps = (storeState: IRootState) => ({
 });
 
 const mapDispatchToProps = {
+  getStatusAtualProfs,
   getEntity,
   updateEntity,
   setBlob,
@@ -272,6 +296,34 @@ const AtivoComponentUpdate = ({ baseFilters }) => {
     </Col>
   ) : (
     <AvInput type="hidden" name="ativo" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const StatusAtualProfComponentUpdate = ({ baseFilters, statusAtualProfs }) => {
+  return baseFilters !== 'statusAtualProf' ? (
+    <Col md="12">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" for="profissional-status-atual-statusAtualProf">
+              <Translate contentKey="generadorApp.profissionalStatusAtual.statusAtualProf">Status Atual Prof</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <Select
+              id="profissional-status-atual-statusAtualProf"
+              className={'css-select-control'}
+              value={this.state.statusAtualProfSelectValue}
+              options={statusAtualProfs ? statusAtualProfs.map(option => ({ value: option.id, label: option.id })) : null}
+              onChange={options => this.setState({ statusAtualProfSelectValue: options })}
+              name={'statusAtualProf'}
+            />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="statusAtualProf" value={this.state.fieldsBase[baseFilters]} />
   );
 };
 

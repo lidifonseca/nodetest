@@ -36,12 +36,15 @@ export interface IFranquiaAreaAtuacaoBaseState {
   cepIni: any;
   cepFim: any;
   ativo: any;
+  franquia: any;
 }
 
 export interface IFranquiaAreaAtuacaoUpdateState {
   fieldsBase: IFranquiaAreaAtuacaoBaseState;
 
+  franquiaSelectValue: any;
   isNew: boolean;
+  franquiaId: string;
 }
 
 // Reducer
@@ -125,21 +128,31 @@ export type ICrudGetAllActionFranquiaAreaAtuacao<T> = (
   cepIni?: any,
   cepFim?: any,
   ativo?: any,
+  franquia?: any,
   page?: number,
   size?: number,
   sort?: string
 ) => IPayload<T> | ((dispatch: any) => IPayload<T>);
 
-export const getEntities: ICrudGetAllActionFranquiaAreaAtuacao<IFranquiaAreaAtuacao> = (cepIni, cepFim, ativo, page, size, sort) => {
+export const getEntities: ICrudGetAllActionFranquiaAreaAtuacao<IFranquiaAreaAtuacao> = (
+  cepIni,
+  cepFim,
+  ativo,
+  franquia,
+  page,
+  size,
+  sort
+) => {
   const cepIniRequest = cepIni ? `cepIni.contains=${cepIni}&` : '';
   const cepFimRequest = cepFim ? `cepFim.contains=${cepFim}&` : '';
   const ativoRequest = ativo ? `ativo.contains=${ativo}&` : '';
+  const franquiaRequest = franquia ? `franquia.equals=${franquia}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_FRANQUIAAREAATUACAO_LIST,
     payload: axios.get<IFranquiaAreaAtuacao>(
-      `${requestUrl}${cepIniRequest}${cepFimRequest}${ativoRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${cepIniRequest}${cepFimRequest}${ativoRequest}${franquiaRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };
@@ -151,23 +164,33 @@ export const getEntity: ICrudGetAction<IFranquiaAreaAtuacao> = id => {
   };
 };
 
-export const getEntitiesExport: ICrudGetAllActionFranquiaAreaAtuacao<IFranquiaAreaAtuacao> = (cepIni, cepFim, ativo, page, size, sort) => {
+export const getEntitiesExport: ICrudGetAllActionFranquiaAreaAtuacao<IFranquiaAreaAtuacao> = (
+  cepIni,
+  cepFim,
+  ativo,
+  franquia,
+  page,
+  size,
+  sort
+) => {
   const cepIniRequest = cepIni ? `cepIni.contains=${cepIni}&` : '';
   const cepFimRequest = cepFim ? `cepFim.contains=${cepFim}&` : '';
   const ativoRequest = ativo ? `ativo.contains=${ativo}&` : '';
+  const franquiaRequest = franquia ? `franquia.equals=${franquia}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_FRANQUIAAREAATUACAO_LIST,
     payload: axios.get<IFranquiaAreaAtuacao>(
-      `${requestUrl}${cepIniRequest}${cepFimRequest}${ativoRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${cepIniRequest}${cepFimRequest}${ativoRequest}${franquiaRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };
 
 export const createEntity: ICrudPutAction<IFranquiaAreaAtuacao> = entity => async dispatch => {
   entity = {
-    ...entity
+    ...entity,
+    franquia: entity.franquia === 'null' ? null : entity.franquia
   };
   const result = await dispatch({
     type: ACTION_TYPES.CREATE_FRANQUIAAREAATUACAO,
@@ -178,7 +201,7 @@ export const createEntity: ICrudPutAction<IFranquiaAreaAtuacao> = entity => asyn
 };
 
 export const updateEntity: ICrudPutAction<IFranquiaAreaAtuacao> = entity => async dispatch => {
-  entity = { ...entity };
+  entity = { ...entity, franquia: entity.franquia === 'null' ? null : entity.franquia };
   const result = await dispatch({
     type: ACTION_TYPES.UPDATE_FRANQUIAAREAATUACAO,
     payload: axios.put(apiUrl, cleanEntity(entity))
@@ -208,10 +231,13 @@ export const getFranquiaAreaAtuacaoState = (location): IFranquiaAreaAtuacaoBaseS
   const cepFim = url.searchParams.get('cepFim') || '';
   const ativo = url.searchParams.get('ativo') || '';
 
+  const franquia = url.searchParams.get('franquia') || '';
+
   return {
     baseFilters,
     cepIni,
     cepFim,
-    ativo
+    ativo,
+    franquia
   };
 };

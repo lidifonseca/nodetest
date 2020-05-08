@@ -23,7 +23,11 @@
         "title": "Pad Cid"
       },
       "observacao": "Observacao",
-      "ativo": "Ativo"
+      "ativo": "Ativo",
+      "pad_empty": "Sem Pad",
+      "pad": "Pad",
+      "cid_empty": "Sem Cid",
+      "cid": "Cid"
     }
   }
 }

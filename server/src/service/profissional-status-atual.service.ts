@@ -5,6 +5,7 @@ import ProfissionalStatusAtual from '../domain/profissional-status-atual.entity'
 import { ProfissionalStatusAtualRepository } from '../repository/profissional-status-atual.repository';
 
 const relationshipNames = [];
+relationshipNames.push('statusAtualProf');
 
 @Injectable()
 export class ProfissionalStatusAtualService {

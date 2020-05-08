@@ -11,6 +11,12 @@ import { IRootState } from 'app/shared/reducers';
 
 import { IUnidadeEasy } from 'app/shared/model/unidade-easy.model';
 import { getEntities as getUnidadeEasies } from 'app/entities/unidade-easy/unidade-easy.reducer';
+import { IPaciente } from 'app/shared/model/paciente.model';
+import { getEntities as getPacientes } from 'app/entities/paciente/paciente.reducer';
+import { IPacienteDadosCartao } from 'app/shared/model/paciente-dados-cartao.model';
+import { getEntities as getPacienteDadosCartaos } from 'app/entities/paciente-dados-cartao/paciente-dados-cartao.reducer';
+import { IEspecialidade } from 'app/shared/model/especialidade.model';
+import { getEntities as getEspecialidades } from 'app/entities/especialidade/especialidade.reducer';
 import {
   IPacientePedidoUpdateState,
   getEntity,
@@ -32,8 +38,14 @@ export class PacientePedidoUpdate extends React.Component<IPacientePedidoUpdateP
 
     this.state = {
       unidadeEasySelectValue: null,
+      pacienteSelectValue: null,
+      pacienteDadosCartaoSelectValue: null,
+      especialidadeSelectValue: null,
       fieldsBase: getPacientePedidoState(this.props.location),
       unidadeId: '0',
+      pacienteId: '0',
+      cartaoId: '0',
+      especialidadeId: '0',
       isNew: !this.props.match.params || !this.props.match.params.id
     };
   }
@@ -54,6 +66,45 @@ export class PacientePedidoUpdate extends React.Component<IPacientePedidoUpdateP
         )
       });
     }
+
+    if (
+      nextProps.pacientes.length > 0 &&
+      this.state.pacienteSelectValue === null &&
+      nextProps.pacientePedidoEntity.paciente &&
+      nextProps.pacientePedidoEntity.paciente.id
+    ) {
+      this.setState({
+        pacienteSelectValue: nextProps.pacientes.map(p =>
+          nextProps.pacientePedidoEntity.paciente.id === p.id ? { value: p.id, label: p.id } : null
+        )
+      });
+    }
+
+    if (
+      nextProps.pacienteDadosCartaos.length > 0 &&
+      this.state.pacienteDadosCartaoSelectValue === null &&
+      nextProps.pacientePedidoEntity.pacienteDadosCartao &&
+      nextProps.pacientePedidoEntity.pacienteDadosCartao.id
+    ) {
+      this.setState({
+        pacienteDadosCartaoSelectValue: nextProps.pacienteDadosCartaos.map(p =>
+          nextProps.pacientePedidoEntity.pacienteDadosCartao.id === p.id ? { value: p.id, label: p.id } : null
+        )
+      });
+    }
+
+    if (
+      nextProps.especialidades.length > 0 &&
+      this.state.especialidadeSelectValue === null &&
+      nextProps.pacientePedidoEntity.especialidade &&
+      nextProps.pacientePedidoEntity.especialidade.id
+    ) {
+      this.setState({
+        especialidadeSelectValue: nextProps.especialidades.map(p =>
+          nextProps.pacientePedidoEntity.especialidade.id === p.id ? { value: p.id, label: p.id } : null
+        )
+      });
+    }
   }
 
   componentDidMount() {
@@ -64,6 +115,9 @@ export class PacientePedidoUpdate extends React.Component<IPacientePedidoUpdateP
     }
 
     this.props.getUnidadeEasies();
+    this.props.getPacientes();
+    this.props.getPacienteDadosCartaos();
+    this.props.getEspecialidades();
   }
 
   getFiltersURL = (offset = null) => {
@@ -82,6 +136,9 @@ export class PacientePedidoUpdate extends React.Component<IPacientePedidoUpdateP
       const entity = {
         ...pacientePedidoEntity,
         unidadeEasy: this.state.unidadeEasySelectValue ? this.state.unidadeEasySelectValue['value'] : null,
+        paciente: this.state.pacienteSelectValue ? this.state.pacienteSelectValue['value'] : null,
+        pacienteDadosCartao: this.state.pacienteDadosCartaoSelectValue ? this.state.pacienteDadosCartaoSelectValue['value'] : null,
+        especialidade: this.state.especialidadeSelectValue ? this.state.especialidadeSelectValue['value'] : null,
         ...values
       };
 
@@ -98,7 +155,7 @@ export class PacientePedidoUpdate extends React.Component<IPacientePedidoUpdateP
   };
 
   render() {
-    const { pacientePedidoEntity, unidadeEasies, loading, updating } = this.props;
+    const { pacientePedidoEntity, unidadeEasies, pacientes, pacienteDadosCartaos, especialidades, loading, updating } = this.props;
     const { isNew } = this.state;
 
     const baseFilters = this.state.fieldsBase && this.state.fieldsBase['baseFilters'] ? this.state.fieldsBase['baseFilters'] : null;
@@ -110,7 +167,10 @@ export class PacientePedidoUpdate extends React.Component<IPacientePedidoUpdateP
               ? {}
               : {
                   ...pacientePedidoEntity,
-                  unidade: pacientePedidoEntity.unidade ? pacientePedidoEntity.unidade.id : null
+                  unidade: pacientePedidoEntity.unidade ? pacientePedidoEntity.unidade.id : null,
+                  paciente: pacientePedidoEntity.paciente ? pacientePedidoEntity.paciente.id : null,
+                  cartao: pacientePedidoEntity.cartao ? pacientePedidoEntity.cartao.id : null,
+                  especialidade: pacientePedidoEntity.especialidade ? pacientePedidoEntity.especialidade.id : null
                 }
           }
           onSubmit={this.saveEntity}
@@ -187,6 +247,12 @@ export class PacientePedidoUpdate extends React.Component<IPacientePedidoUpdateP
                         <TipoValorComponentUpdate baseFilters />
 
                         <UnidadeComponentUpdate baseFilter unidadeEasies />
+
+                        <PacienteComponentUpdate baseFilter pacientes />
+
+                        <CartaoComponentUpdate baseFilter pacienteDadosCartaos />
+
+                        <EspecialidadeComponentUpdate baseFilter especialidades />
                       </Row>
                     </div>
                   )}
@@ -202,6 +268,9 @@ export class PacientePedidoUpdate extends React.Component<IPacientePedidoUpdateP
 
 const mapStateToProps = (storeState: IRootState) => ({
   unidadeEasies: storeState.unidadeEasy.entities,
+  pacientes: storeState.paciente.entities,
+  pacienteDadosCartaos: storeState.pacienteDadosCartao.entities,
+  especialidades: storeState.especialidade.entities,
   pacientePedidoEntity: storeState.pacientePedido.entity,
   loading: storeState.pacientePedido.loading,
   updating: storeState.pacientePedido.updating,
@@ -210,6 +279,9 @@ const mapStateToProps = (storeState: IRootState) => ({
 
 const mapDispatchToProps = {
   getUnidadeEasies,
+  getPacientes,
+  getPacienteDadosCartaos,
+  getEspecialidades,
   getEntity,
   updateEntity,
   createEntity,
@@ -398,6 +470,90 @@ const UnidadeComponentUpdate = ({ baseFilters, unidadeEasies }) => {
     </Col>
   ) : (
     <AvInput type="hidden" name="unidade" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const PacienteComponentUpdate = ({ baseFilters, pacientes }) => {
+  return baseFilters !== 'paciente' ? (
+    <Col md="12">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" for="paciente-pedido-paciente">
+              <Translate contentKey="generadorApp.pacientePedido.paciente">Paciente</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <Select
+              id="paciente-pedido-paciente"
+              className={'css-select-control'}
+              value={this.state.pacienteSelectValue}
+              options={pacientes ? pacientes.map(option => ({ value: option.id, label: option.id })) : null}
+              onChange={options => this.setState({ pacienteSelectValue: options })}
+              name={'paciente'}
+            />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="paciente" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const CartaoComponentUpdate = ({ baseFilters, pacienteDadosCartaos }) => {
+  return baseFilters !== 'cartao' ? (
+    <Col md="12">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" for="paciente-pedido-cartao">
+              <Translate contentKey="generadorApp.pacientePedido.cartao">Cartao</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <Select
+              id="paciente-pedido-cartao"
+              className={'css-select-control'}
+              value={this.state.pacienteDadosCartaoSelectValue}
+              options={pacienteDadosCartaos ? pacienteDadosCartaos.map(option => ({ value: option.id, label: option.id })) : null}
+              onChange={options => this.setState({ pacienteDadosCartaoSelectValue: options })}
+              name={'cartao'}
+            />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="cartao" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const EspecialidadeComponentUpdate = ({ baseFilters, especialidades }) => {
+  return baseFilters !== 'especialidade' ? (
+    <Col md="12">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" for="paciente-pedido-especialidade">
+              <Translate contentKey="generadorApp.pacientePedido.especialidade">Especialidade</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <Select
+              id="paciente-pedido-especialidade"
+              className={'css-select-control'}
+              value={this.state.especialidadeSelectValue}
+              options={especialidades ? especialidades.map(option => ({ value: option.id, label: option.id })) : null}
+              onChange={options => this.setState({ especialidadeSelectValue: options })}
+              name={'especialidade'}
+            />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="especialidade" value={this.state.fieldsBase[baseFilters]} />
   );
 };
 

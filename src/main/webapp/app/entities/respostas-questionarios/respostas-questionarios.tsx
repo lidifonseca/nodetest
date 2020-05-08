@@ -37,6 +37,9 @@ import { IRespostasQuestionarios } from 'app/shared/model/respostas-questionario
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
+import { IQuestionarios } from 'app/shared/model/questionarios.model';
+import { getEntities as getQuestionarios } from 'app/entities/questionarios/questionarios.reducer';
+
 export interface IRespostasQuestionariosProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
 export interface IRespostasQuestionariosState extends IRespostasQuestionariosBaseState, IPaginationBaseState {}
@@ -54,6 +57,8 @@ export class RespostasQuestionarios extends React.Component<IRespostasQuestionar
 
   componentDidMount() {
     this.getEntities();
+
+    this.props.getQuestionarios();
   }
 
   cancelCourse = () => {
@@ -61,7 +66,8 @@ export class RespostasQuestionarios extends React.Component<IRespostasQuestionar
       {
         dataResposta: '',
         informacaoAdicional: '',
-        questionarioId: ''
+        questionarioId: '',
+        questionarios: ''
       },
       () => this.sortEntities()
     );
@@ -117,6 +123,9 @@ export class RespostasQuestionarios extends React.Component<IRespostasQuestionar
       'questionarioId=' +
       this.state.questionarioId +
       '&' +
+      'questionarios=' +
+      this.state.questionarios +
+      '&' +
       ''
     );
   };
@@ -124,12 +133,20 @@ export class RespostasQuestionarios extends React.Component<IRespostasQuestionar
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { dataResposta, informacaoAdicional, questionarioId, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntities(dataResposta, informacaoAdicional, questionarioId, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const { dataResposta, informacaoAdicional, questionarioId, questionarios, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntities(
+      dataResposta,
+      informacaoAdicional,
+      questionarioId,
+      questionarios,
+      activePage - 1,
+      itemsPerPage,
+      `${sort},${order}`
+    );
   };
 
   render() {
-    const { respostasQuestionariosList, match, totalItems } = this.props;
+    const { questionarios, respostasQuestionariosList, match, totalItems } = this.props;
     return (
       <div>
         <h2 id="page-heading">
@@ -217,6 +234,33 @@ export class RespostasQuestionarios extends React.Component<IRespostasQuestionar
                           </Row>
                         </Col>
                       ) : null}
+
+                      {this.state.baseFilters !== 'questionarios' ? (
+                        <Col md="3">
+                          <Row className="mr-1 mt-1">
+                            <div style={{ width: '100%' }}>
+                              <Label for="respostas-questionarios-questionarios">
+                                <Translate contentKey="generadorApp.respostasQuestionarios.questionarios">Questionarios</Translate>
+                              </Label>
+                              <Select
+                                id="respostas-questionarios-questionarios"
+                                isMulti
+                                className={'css-select-control'}
+                                value={
+                                  questionarios
+                                    ? questionarios.map(p =>
+                                        this.state.questionarios.split(',').indexOf(p.id) !== -1 ? { value: p.id, label: p.id } : null
+                                      )
+                                    : null
+                                }
+                                options={questionarios ? questionarios.map(option => ({ value: option.id, label: option.id })) : null}
+                                onChange={options => this.setState({ questionarios: options.map(option => option['value']).join(',') })}
+                                name={'questionarios'}
+                              />
+                            </div>
+                          </Row>
+                        </Col>
+                      ) : null}
                     </div>
 
                     <div className="row mb-2 mr-4 justify-content-end">
@@ -263,6 +307,13 @@ export class RespostasQuestionarios extends React.Component<IRespostasQuestionar
                         </th>
                       ) : null}
 
+                      {this.state.baseFilters !== 'questionarios' ? (
+                        <th>
+                          <Translate contentKey="generadorApp.respostasQuestionarios.questionarios">Questionarios</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+
                       <th />
                     </tr>
                   </thead>
@@ -285,6 +336,18 @@ export class RespostasQuestionarios extends React.Component<IRespostasQuestionar
                         {this.state.baseFilters !== 'informacaoAdicional' ? <td>{respostasQuestionarios.informacaoAdicional}</td> : null}
 
                         {this.state.baseFilters !== 'questionarioId' ? <td>{respostasQuestionarios.questionarioId}</td> : null}
+
+                        {this.state.baseFilters !== 'questionarios' ? (
+                          <td>
+                            {respostasQuestionarios.questionarios ? (
+                              <Link to={`questionarios/${respostasQuestionarios.questionarios.id}`}>
+                                {respostasQuestionarios.questionarios.id}
+                              </Link>
+                            ) : (
+                              ''
+                            )}
+                          </td>
+                        ) : null}
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">
@@ -357,11 +420,13 @@ export class RespostasQuestionarios extends React.Component<IRespostasQuestionar
 }
 
 const mapStateToProps = ({ respostasQuestionarios, ...storeState }: IRootState) => ({
+  questionarios: storeState.questionarios.entities,
   respostasQuestionariosList: respostasQuestionarios.entities,
   totalItems: respostasQuestionarios.totalItems
 });
 
 const mapDispatchToProps = {
+  getQuestionarios,
   getEntities
 };
 

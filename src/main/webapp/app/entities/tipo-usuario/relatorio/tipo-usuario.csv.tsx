@@ -60,7 +60,8 @@ export class TipoUsuario extends React.Component<ITipoUsuarioProps, ITipoUsuario
     this.setState(
       {
         tipoUsuario: '',
-        ativo: ''
+        ativo: '',
+        usuario: ''
       },
       () => this.sortEntities()
     );
@@ -111,6 +112,9 @@ export class TipoUsuario extends React.Component<ITipoUsuarioProps, ITipoUsuario
       'ativo=' +
       this.state.ativo +
       '&' +
+      'usuario=' +
+      this.state.usuario +
+      '&' +
       ''
     );
   };
@@ -118,8 +122,8 @@ export class TipoUsuario extends React.Component<ITipoUsuarioProps, ITipoUsuario
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { tipoUsuario, ativo, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntitiesExport(tipoUsuario, ativo, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const { tipoUsuario, ativo, usuario, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntitiesExport(tipoUsuario, ativo, usuario, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   confirmExport() {}

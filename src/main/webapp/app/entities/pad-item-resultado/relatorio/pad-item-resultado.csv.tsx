@@ -44,6 +44,9 @@ import { IPadItemResultado } from 'app/shared/model/pad-item-resultado.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
+import { IPadItem } from 'app/shared/model/pad-item.model';
+import { getEntities as getPadItems } from 'app/entities/pad-item/pad-item.reducer';
+
 export interface IPadItemResultadoProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
 export interface IPadItemResultadoState extends IPadItemResultadoBaseState, IPaginationBaseState {
@@ -64,6 +67,8 @@ export class PadItemResultado extends React.Component<IPadItemResultadoProps, IP
 
   componentDidMount() {
     this.getEntities();
+
+    this.props.getPadItems();
   }
 
   cancelCourse = () => {
@@ -72,7 +77,8 @@ export class PadItemResultado extends React.Component<IPadItemResultadoProps, IP
         resultado: '',
         dataFim: '',
         resultadoAnalisado: '',
-        usuarioId: ''
+        usuarioId: '',
+        padItem: ''
       },
       () => this.sortEntities()
     );
@@ -129,6 +135,9 @@ export class PadItemResultado extends React.Component<IPadItemResultadoProps, IP
       'usuarioId=' +
       this.state.usuarioId +
       '&' +
+      'padItem=' +
+      this.state.padItem +
+      '&' +
       ''
     );
   };
@@ -136,8 +145,17 @@ export class PadItemResultado extends React.Component<IPadItemResultadoProps, IP
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { resultado, dataFim, resultadoAnalisado, usuarioId, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntitiesExport(resultado, dataFim, resultadoAnalisado, usuarioId, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const { resultado, dataFim, resultadoAnalisado, usuarioId, padItem, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntitiesExport(
+      resultado,
+      dataFim,
+      resultadoAnalisado,
+      usuarioId,
+      padItem,
+      activePage - 1,
+      itemsPerPage,
+      `${sort},${order}`
+    );
   };
 
   confirmExport() {}
@@ -186,11 +204,13 @@ export class PadItemResultado extends React.Component<IPadItemResultadoProps, IP
 }
 
 const mapStateToProps = ({ padItemResultado, ...storeState }: IRootState) => ({
+  padItems: storeState.padItem.entities,
   padItemResultadoList: padItemResultado.entities,
   totalItems: padItemResultado.totalItems
 });
 
 const mapDispatchToProps = {
+  getPadItems,
   getEntitiesExport
 };
 

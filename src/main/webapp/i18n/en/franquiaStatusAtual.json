@@ -24,7 +24,9 @@
       },
       "statusAtual": "Status Atual",
       "obs": "Obs",
-      "ativo": "Ativo"
+      "ativo": "Ativo",
+      "franquia_empty": "Without Franquia",
+      "franquia": "Franquia"
     }
   }
 }

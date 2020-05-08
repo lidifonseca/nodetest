@@ -5,6 +5,7 @@ import PadItemResultado from '../domain/pad-item-resultado.entity';
 import { PadItemResultadoRepository } from '../repository/pad-item-resultado.repository';
 
 const relationshipNames = [];
+relationshipNames.push('padItem');
 
 @Injectable()
 export class PadItemResultadoService {

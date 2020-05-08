@@ -28,6 +28,13 @@ import { IAtendimentoAssinaturas } from 'app/shared/model/atendimento-assinatura
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
+import { IAtendimento } from 'app/shared/model/atendimento.model';
+import { getEntities as getAtendimentos } from 'app/entities/atendimento/atendimento.reducer';
+import { IProfissional } from 'app/shared/model/profissional.model';
+import { getEntities as getProfissionals } from 'app/entities/profissional/profissional.reducer';
+import { IPaciente } from 'app/shared/model/paciente.model';
+import { getEntities as getPacientes } from 'app/entities/paciente/paciente.reducer';
+
 export interface IAtendimentoAssinaturasProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
 export interface IAtendimentoAssinaturasState extends IAtendimentoAssinaturasBaseState, IPaginationBaseState {}
@@ -45,12 +52,19 @@ export class AtendimentoAssinaturas extends React.Component<IAtendimentoAssinatu
 
   componentDidMount() {
     this.getEntities();
+
+    this.props.getAtendimentos();
+    this.props.getProfissionals();
+    this.props.getPacientes();
   }
 
   cancelCourse = () => {
     this.setState(
       {
-        arquivoAssinatura: ''
+        arquivoAssinatura: '',
+        atendimento: '',
+        profissional: '',
+        paciente: ''
       },
       () => this.sortEntities()
     );
@@ -100,6 +114,15 @@ export class AtendimentoAssinaturas extends React.Component<IAtendimentoAssinatu
       'arquivoAssinatura=' +
       this.state.arquivoAssinatura +
       '&' +
+      'atendimento=' +
+      this.state.atendimento +
+      '&' +
+      'profissional=' +
+      this.state.profissional +
+      '&' +
+      'paciente=' +
+      this.state.paciente +
+      '&' +
       ''
     );
   };
@@ -107,12 +130,12 @@ export class AtendimentoAssinaturas extends React.Component<IAtendimentoAssinatu
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { arquivoAssinatura, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntities(arquivoAssinatura, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const { arquivoAssinatura, atendimento, profissional, paciente, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntities(arquivoAssinatura, atendimento, profissional, paciente, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   render() {
-    const { atendimentoAssinaturasList, match, totalItems } = this.props;
+    const { atendimentos, profissionals, pacientes, atendimentoAssinaturasList, match, totalItems } = this.props;
     return (
       <div>
         <h2 id="page-heading">
@@ -164,6 +187,87 @@ export class AtendimentoAssinaturas extends React.Component<IAtendimentoAssinatu
                           </Row>
                         </Col>
                       ) : null}
+
+                      {this.state.baseFilters !== 'atendimento' ? (
+                        <Col md="3">
+                          <Row className="mr-1 mt-1">
+                            <div style={{ width: '100%' }}>
+                              <Label for="atendimento-assinaturas-atendimento">
+                                <Translate contentKey="generadorApp.atendimentoAssinaturas.atendimento">Atendimento</Translate>
+                              </Label>
+                              <Select
+                                id="atendimento-assinaturas-atendimento"
+                                isMulti
+                                className={'css-select-control'}
+                                value={
+                                  atendimentos
+                                    ? atendimentos.map(p =>
+                                        this.state.atendimento.split(',').indexOf(p.id) !== -1 ? { value: p.id, label: p.id } : null
+                                      )
+                                    : null
+                                }
+                                options={atendimentos ? atendimentos.map(option => ({ value: option.id, label: option.id })) : null}
+                                onChange={options => this.setState({ atendimento: options.map(option => option['value']).join(',') })}
+                                name={'atendimento'}
+                              />
+                            </div>
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'profissional' ? (
+                        <Col md="3">
+                          <Row className="mr-1 mt-1">
+                            <div style={{ width: '100%' }}>
+                              <Label for="atendimento-assinaturas-profissional">
+                                <Translate contentKey="generadorApp.atendimentoAssinaturas.profissional">Profissional</Translate>
+                              </Label>
+                              <Select
+                                id="atendimento-assinaturas-profissional"
+                                isMulti
+                                className={'css-select-control'}
+                                value={
+                                  profissionals
+                                    ? profissionals.map(p =>
+                                        this.state.profissional.split(',').indexOf(p.id) !== -1 ? { value: p.id, label: p.id } : null
+                                      )
+                                    : null
+                                }
+                                options={profissionals ? profissionals.map(option => ({ value: option.id, label: option.id })) : null}
+                                onChange={options => this.setState({ profissional: options.map(option => option['value']).join(',') })}
+                                name={'profissional'}
+                              />
+                            </div>
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'paciente' ? (
+                        <Col md="3">
+                          <Row className="mr-1 mt-1">
+                            <div style={{ width: '100%' }}>
+                              <Label for="atendimento-assinaturas-paciente">
+                                <Translate contentKey="generadorApp.atendimentoAssinaturas.paciente">Paciente</Translate>
+                              </Label>
+                              <Select
+                                id="atendimento-assinaturas-paciente"
+                                isMulti
+                                className={'css-select-control'}
+                                value={
+                                  pacientes
+                                    ? pacientes.map(p =>
+                                        this.state.paciente.split(',').indexOf(p.id) !== -1 ? { value: p.id, label: p.id } : null
+                                      )
+                                    : null
+                                }
+                                options={pacientes ? pacientes.map(option => ({ value: option.id, label: option.id })) : null}
+                                onChange={options => this.setState({ paciente: options.map(option => option['value']).join(',') })}
+                                name={'paciente'}
+                              />
+                            </div>
+                          </Row>
+                        </Col>
+                      ) : null}
                     </div>
 
                     <div className="row mb-2 mr-4 justify-content-end">
@@ -198,6 +302,27 @@ export class AtendimentoAssinaturas extends React.Component<IAtendimentoAssinatu
                         </th>
                       ) : null}
 
+                      {this.state.baseFilters !== 'atendimento' ? (
+                        <th>
+                          <Translate contentKey="generadorApp.atendimentoAssinaturas.atendimento">Atendimento</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'profissional' ? (
+                        <th>
+                          <Translate contentKey="generadorApp.atendimentoAssinaturas.profissional">Profissional</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'paciente' ? (
+                        <th>
+                          <Translate contentKey="generadorApp.atendimentoAssinaturas.paciente">Paciente</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+
                       <th />
                     </tr>
                   </thead>
@@ -212,6 +337,40 @@ export class AtendimentoAssinaturas extends React.Component<IAtendimentoAssinatu
                         </td>
 
                         {this.state.baseFilters !== 'arquivoAssinatura' ? <td>{atendimentoAssinaturas.arquivoAssinatura}</td> : null}
+
+                        {this.state.baseFilters !== 'atendimento' ? (
+                          <td>
+                            {atendimentoAssinaturas.atendimento ? (
+                              <Link to={`atendimento/${atendimentoAssinaturas.atendimento.id}`}>
+                                {atendimentoAssinaturas.atendimento.id}
+                              </Link>
+                            ) : (
+                              ''
+                            )}
+                          </td>
+                        ) : null}
+
+                        {this.state.baseFilters !== 'profissional' ? (
+                          <td>
+                            {atendimentoAssinaturas.profissional ? (
+                              <Link to={`profissional/${atendimentoAssinaturas.profissional.id}`}>
+                                {atendimentoAssinaturas.profissional.id}
+                              </Link>
+                            ) : (
+                              ''
+                            )}
+                          </td>
+                        ) : null}
+
+                        {this.state.baseFilters !== 'paciente' ? (
+                          <td>
+                            {atendimentoAssinaturas.paciente ? (
+                              <Link to={`paciente/${atendimentoAssinaturas.paciente.id}`}>{atendimentoAssinaturas.paciente.id}</Link>
+                            ) : (
+                              ''
+                            )}
+                          </td>
+                        ) : null}
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">
@@ -284,11 +443,17 @@ export class AtendimentoAssinaturas extends React.Component<IAtendimentoAssinatu
 }
 
 const mapStateToProps = ({ atendimentoAssinaturas, ...storeState }: IRootState) => ({
+  atendimentos: storeState.atendimento.entities,
+  profissionals: storeState.profissional.entities,
+  pacientes: storeState.paciente.entities,
   atendimentoAssinaturasList: atendimentoAssinaturas.entities,
   totalItems: atendimentoAssinaturas.totalItems
 });
 
 const mapDispatchToProps = {
+  getAtendimentos,
+  getProfissionals,
+  getPacientes,
   getEntities
 };
 

@@ -27,7 +27,9 @@
       "descricao": "Descricao",
       "meta": "Meta",
       "maximoSt": "Maximo St",
-      "minimoSt": "Minimo St"
+      "minimoSt": "Minimo St",
+      "cidXPtaNovoPadItemIndi_empty": "Sem Cid X Pta Novo Pad Item Indi",
+      "cidXPtaNovoPadItemIndi": "Cid X Pta Novo Pad Item Indi"
     }
   }
 }

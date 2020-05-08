@@ -38,12 +38,16 @@ export interface IPacienteDadosCartaoBaseState {
   validade: any;
   codAtivacao: any;
   ativo: any;
+  pacientePedido: any;
+  paciente: any;
 }
 
 export interface IPacienteDadosCartaoUpdateState {
   fieldsBase: IPacienteDadosCartaoBaseState;
 
+  pacienteSelectValue: any;
   isNew: boolean;
+  pacienteId: string;
 }
 
 // Reducer
@@ -129,6 +133,8 @@ export type ICrudGetAllActionPacienteDadosCartao<T> = (
   validade?: any,
   codAtivacao?: any,
   ativo?: any,
+  pacientePedido?: any,
+  paciente?: any,
   page?: number,
   size?: number,
   sort?: string
@@ -140,6 +146,8 @@ export const getEntities: ICrudGetAllActionPacienteDadosCartao<IPacienteDadosCar
   validade,
   codAtivacao,
   ativo,
+  pacientePedido,
+  paciente,
   page,
   size,
   sort
@@ -149,12 +157,14 @@ export const getEntities: ICrudGetAllActionPacienteDadosCartao<IPacienteDadosCar
   const validadeRequest = validade ? `validade.equals=${validade}&` : '';
   const codAtivacaoRequest = codAtivacao ? `codAtivacao.contains=${codAtivacao}&` : '';
   const ativoRequest = ativo ? `ativo.contains=${ativo}&` : '';
+  const pacientePedidoRequest = pacientePedido ? `pacientePedido.equals=${pacientePedido}&` : '';
+  const pacienteRequest = paciente ? `paciente.equals=${paciente}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_PACIENTEDADOSCARTAO_LIST,
     payload: axios.get<IPacienteDadosCartao>(
-      `${requestUrl}${bandeiraRequest}${numeroCartaoRequest}${validadeRequest}${codAtivacaoRequest}${ativoRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${bandeiraRequest}${numeroCartaoRequest}${validadeRequest}${codAtivacaoRequest}${ativoRequest}${pacientePedidoRequest}${pacienteRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };
@@ -172,6 +182,8 @@ export const getEntitiesExport: ICrudGetAllActionPacienteDadosCartao<IPacienteDa
   validade,
   codAtivacao,
   ativo,
+  pacientePedido,
+  paciente,
   page,
   size,
   sort
@@ -181,19 +193,22 @@ export const getEntitiesExport: ICrudGetAllActionPacienteDadosCartao<IPacienteDa
   const validadeRequest = validade ? `validade.equals=${validade}&` : '';
   const codAtivacaoRequest = codAtivacao ? `codAtivacao.contains=${codAtivacao}&` : '';
   const ativoRequest = ativo ? `ativo.contains=${ativo}&` : '';
+  const pacientePedidoRequest = pacientePedido ? `pacientePedido.equals=${pacientePedido}&` : '';
+  const pacienteRequest = paciente ? `paciente.equals=${paciente}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_PACIENTEDADOSCARTAO_LIST,
     payload: axios.get<IPacienteDadosCartao>(
-      `${requestUrl}${bandeiraRequest}${numeroCartaoRequest}${validadeRequest}${codAtivacaoRequest}${ativoRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${bandeiraRequest}${numeroCartaoRequest}${validadeRequest}${codAtivacaoRequest}${ativoRequest}${pacientePedidoRequest}${pacienteRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };
 
 export const createEntity: ICrudPutAction<IPacienteDadosCartao> = entity => async dispatch => {
   entity = {
-    ...entity
+    ...entity,
+    paciente: entity.paciente === 'null' ? null : entity.paciente
   };
   const result = await dispatch({
     type: ACTION_TYPES.CREATE_PACIENTEDADOSCARTAO,
@@ -204,7 +219,7 @@ export const createEntity: ICrudPutAction<IPacienteDadosCartao> = entity => asyn
 };
 
 export const updateEntity: ICrudPutAction<IPacienteDadosCartao> = entity => async dispatch => {
-  entity = { ...entity };
+  entity = { ...entity, paciente: entity.paciente === 'null' ? null : entity.paciente };
   const result = await dispatch({
     type: ACTION_TYPES.UPDATE_PACIENTEDADOSCARTAO,
     payload: axios.put(apiUrl, cleanEntity(entity))
@@ -236,12 +251,17 @@ export const getPacienteDadosCartaoState = (location): IPacienteDadosCartaoBaseS
   const codAtivacao = url.searchParams.get('codAtivacao') || '';
   const ativo = url.searchParams.get('ativo') || '';
 
+  const pacientePedido = url.searchParams.get('pacientePedido') || '';
+  const paciente = url.searchParams.get('paciente') || '';
+
   return {
     baseFilters,
     bandeira,
     numeroCartao,
     validade,
     codAtivacao,
-    ativo
+    ativo,
+    pacientePedido,
+    paciente
   };
 };

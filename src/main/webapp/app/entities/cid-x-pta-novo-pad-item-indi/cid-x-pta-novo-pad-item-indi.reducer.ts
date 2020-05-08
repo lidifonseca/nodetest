@@ -39,12 +39,22 @@ export interface ICidXPtaNovoPadItemIndiBaseState {
   unidadeMedidaExtra: any;
   unidadeMedidaId: any;
   score: any;
+  alertasIndicadores: any;
+  padItemIndicadores: any;
+  categorias: any;
+  cidXPtaNovo: any;
 }
 
 export interface ICidXPtaNovoPadItemIndiUpdateState {
   fieldsBase: ICidXPtaNovoPadItemIndiBaseState;
 
+  padItemIndicadoresSelectValue: any;
+  categoriaSelectValue: any;
+  cidXPtaNovoSelectValue: any;
   isNew: boolean;
+  padItemIndicadoresId: string;
+  categoriasId: string;
+  cidXPtaNovoId: string;
 }
 
 // Reducer
@@ -131,6 +141,10 @@ export type ICrudGetAllActionCidXPtaNovoPadItemIndi<T> = (
   unidadeMedidaExtra?: any,
   unidadeMedidaId?: any,
   score?: any,
+  alertasIndicadores?: any,
+  padItemIndicadores?: any,
+  categorias?: any,
+  cidXPtaNovo?: any,
   page?: number,
   size?: number,
   sort?: string
@@ -143,6 +157,10 @@ export const getEntities: ICrudGetAllActionCidXPtaNovoPadItemIndi<ICidXPtaNovoPa
   unidadeMedidaExtra,
   unidadeMedidaId,
   score,
+  alertasIndicadores,
+  padItemIndicadores,
+  categorias,
+  cidXPtaNovo,
   page,
   size,
   sort
@@ -153,12 +171,16 @@ export const getEntities: ICrudGetAllActionCidXPtaNovoPadItemIndi<ICidXPtaNovoPa
   const unidadeMedidaExtraRequest = unidadeMedidaExtra ? `unidadeMedidaExtra.contains=${unidadeMedidaExtra}&` : '';
   const unidadeMedidaIdRequest = unidadeMedidaId ? `unidadeMedidaId.contains=${unidadeMedidaId}&` : '';
   const scoreRequest = score ? `score.contains=${score}&` : '';
+  const alertasIndicadoresRequest = alertasIndicadores ? `alertasIndicadores.equals=${alertasIndicadores}&` : '';
+  const padItemIndicadoresRequest = padItemIndicadores ? `padItemIndicadores.equals=${padItemIndicadores}&` : '';
+  const categoriasRequest = categorias ? `categorias.equals=${categorias}&` : '';
+  const cidXPtaNovoRequest = cidXPtaNovo ? `cidXPtaNovo.equals=${cidXPtaNovo}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_CIDXPTANOVOPADITEMINDI_LIST,
     payload: axios.get<ICidXPtaNovoPadItemIndi>(
-      `${requestUrl}${metaRequest}${maximoRequest}${minimoRequest}${unidadeMedidaExtraRequest}${unidadeMedidaIdRequest}${scoreRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${metaRequest}${maximoRequest}${minimoRequest}${unidadeMedidaExtraRequest}${unidadeMedidaIdRequest}${scoreRequest}${alertasIndicadoresRequest}${padItemIndicadoresRequest}${categoriasRequest}${cidXPtaNovoRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };
@@ -177,6 +199,10 @@ export const getEntitiesExport: ICrudGetAllActionCidXPtaNovoPadItemIndi<ICidXPta
   unidadeMedidaExtra,
   unidadeMedidaId,
   score,
+  alertasIndicadores,
+  padItemIndicadores,
+  categorias,
+  cidXPtaNovo,
   page,
   size,
   sort
@@ -187,19 +213,26 @@ export const getEntitiesExport: ICrudGetAllActionCidXPtaNovoPadItemIndi<ICidXPta
   const unidadeMedidaExtraRequest = unidadeMedidaExtra ? `unidadeMedidaExtra.contains=${unidadeMedidaExtra}&` : '';
   const unidadeMedidaIdRequest = unidadeMedidaId ? `unidadeMedidaId.contains=${unidadeMedidaId}&` : '';
   const scoreRequest = score ? `score.contains=${score}&` : '';
+  const alertasIndicadoresRequest = alertasIndicadores ? `alertasIndicadores.equals=${alertasIndicadores}&` : '';
+  const padItemIndicadoresRequest = padItemIndicadores ? `padItemIndicadores.equals=${padItemIndicadores}&` : '';
+  const categoriasRequest = categorias ? `categorias.equals=${categorias}&` : '';
+  const cidXPtaNovoRequest = cidXPtaNovo ? `cidXPtaNovo.equals=${cidXPtaNovo}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_CIDXPTANOVOPADITEMINDI_LIST,
     payload: axios.get<ICidXPtaNovoPadItemIndi>(
-      `${requestUrl}${metaRequest}${maximoRequest}${minimoRequest}${unidadeMedidaExtraRequest}${unidadeMedidaIdRequest}${scoreRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${metaRequest}${maximoRequest}${minimoRequest}${unidadeMedidaExtraRequest}${unidadeMedidaIdRequest}${scoreRequest}${alertasIndicadoresRequest}${padItemIndicadoresRequest}${categoriasRequest}${cidXPtaNovoRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };
 
 export const createEntity: ICrudPutAction<ICidXPtaNovoPadItemIndi> = entity => async dispatch => {
   entity = {
-    ...entity
+    ...entity,
+    padItemIndicadores: entity.padItemIndicadores === 'null' ? null : entity.padItemIndicadores,
+    categorias: entity.categorias === 'null' ? null : entity.categorias,
+    cidXPtaNovo: entity.cidXPtaNovo === 'null' ? null : entity.cidXPtaNovo
   };
   const result = await dispatch({
     type: ACTION_TYPES.CREATE_CIDXPTANOVOPADITEMINDI,
@@ -210,7 +243,12 @@ export const createEntity: ICrudPutAction<ICidXPtaNovoPadItemIndi> = entity => a
 };
 
 export const updateEntity: ICrudPutAction<ICidXPtaNovoPadItemIndi> = entity => async dispatch => {
-  entity = { ...entity };
+  entity = {
+    ...entity,
+    padItemIndicadores: entity.padItemIndicadores === 'null' ? null : entity.padItemIndicadores,
+    categorias: entity.categorias === 'null' ? null : entity.categorias,
+    cidXPtaNovo: entity.cidXPtaNovo === 'null' ? null : entity.cidXPtaNovo
+  };
   const result = await dispatch({
     type: ACTION_TYPES.UPDATE_CIDXPTANOVOPADITEMINDI,
     payload: axios.put(apiUrl, cleanEntity(entity))
@@ -243,6 +281,11 @@ export const getCidXPtaNovoPadItemIndiState = (location): ICidXPtaNovoPadItemInd
   const unidadeMedidaId = url.searchParams.get('unidadeMedidaId') || '';
   const score = url.searchParams.get('score') || '';
 
+  const alertasIndicadores = url.searchParams.get('alertasIndicadores') || '';
+  const padItemIndicadores = url.searchParams.get('padItemIndicadores') || '';
+  const categorias = url.searchParams.get('categorias') || '';
+  const cidXPtaNovo = url.searchParams.get('cidXPtaNovo') || '';
+
   return {
     baseFilters,
     meta,
@@ -250,6 +293,10 @@ export const getCidXPtaNovoPadItemIndiState = (location): ICidXPtaNovoPadItemInd
     minimo,
     unidadeMedidaExtra,
     unidadeMedidaId,
-    score
+    score,
+    alertasIndicadores,
+    padItemIndicadores,
+    categorias,
+    cidXPtaNovo
   };
 };

@@ -98,6 +98,19 @@ export class ProfissionalStatusAtualDetail extends React.Component<IProfissional
                       </Col>
                     </Row>
                   </Col>
+
+                  <Col md="12">
+                    <Row>
+                      <Col md="3">
+                        <dt>
+                          <Translate contentKey="generadorApp.profissionalStatusAtual.statusAtualProf">Status Atual Prof</Translate>
+                        </dt>
+                      </Col>
+                      <Col md="9">
+                        <dd>{profissionalStatusAtualEntity.statusAtualProf ? profissionalStatusAtualEntity.statusAtualProf.id : ''}</dd>
+                      </Col>
+                    </Row>
+                  </Col>
                 </Row>
                 <Button tag={Link} to="/profissional-status-atual" replace color="info">
                   <FontAwesomeIcon icon="arrow-left" />{' '}

@@ -24,7 +24,9 @@
       },
       "dataResposta": "Data Resposta",
       "informacaoAdicional": "Informacao Adicional",
-      "questionarioId": "Questionario Id"
+      "questionarioId": "Questionario Id",
+      "questionarios_empty": "Without Questionarios",
+      "questionarios": "Questionarios"
     }
   }
 }

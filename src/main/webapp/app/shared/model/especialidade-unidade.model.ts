@@ -1,4 +1,5 @@
 import { IUnidadeEasy } from 'app/shared/model/unidade-easy.model';
+import { IEspecialidade } from 'app/shared/model/especialidade.model';
 
 export interface IEspecialidadeUnidade {
   id?: string;
@@ -9,6 +10,7 @@ export interface IEspecialidadeUnidade {
   comentarioPreco?: string;
   unidadeRazaoSocial?: string;
   unidade?: string | any;
+  especialidade?: string | any;
 }
 
 export const defaultValue: Readonly<IEspecialidadeUnidade> = {};

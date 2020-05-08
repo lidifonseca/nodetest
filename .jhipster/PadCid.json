@@ -14,8 +14,23 @@
             "fieldType": "Integer"
         }
     ],
-    "relationships": [],
-    "changelogDate": "20200508163900",
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "pad",
+            "otherEntityRelationshipName": "padCid",
+            "relationshipName": "pad",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "cid",
+            "otherEntityRelationshipName": "padCid",
+            "relationshipName": "cid",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20200508173500",
     "entityTableName": "pad_cid",
     "dto": "mapstruct",
     "pagination": "pagination",

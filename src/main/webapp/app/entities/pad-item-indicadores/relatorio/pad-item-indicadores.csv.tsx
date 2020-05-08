@@ -73,7 +73,8 @@ export class PadItemIndicadores extends React.Component<IPadItemIndicadoresProps
         descricao: '',
         meta: '',
         maximoSt: '',
-        minimoSt: ''
+        minimoSt: '',
+        cidXPtaNovoPadItemIndi: ''
       },
       () => this.sortEntities()
     );
@@ -136,6 +137,9 @@ export class PadItemIndicadores extends React.Component<IPadItemIndicadoresProps
       'minimoSt=' +
       this.state.minimoSt +
       '&' +
+      'cidXPtaNovoPadItemIndi=' +
+      this.state.cidXPtaNovoPadItemIndi +
+      '&' +
       ''
     );
   };
@@ -143,7 +147,19 @@ export class PadItemIndicadores extends React.Component<IPadItemIndicadoresProps
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { idUnidadeMedida, titulo, descricao, meta, maximoSt, minimoSt, activePage, itemsPerPage, sort, order } = this.state;
+    const {
+      idUnidadeMedida,
+      titulo,
+      descricao,
+      meta,
+      maximoSt,
+      minimoSt,
+      cidXPtaNovoPadItemIndi,
+      activePage,
+      itemsPerPage,
+      sort,
+      order
+    } = this.state;
     this.props.getEntitiesExport(
       idUnidadeMedida,
       titulo,
@@ -151,6 +167,7 @@ export class PadItemIndicadores extends React.Component<IPadItemIndicadoresProps
       meta,
       maximoSt,
       minimoSt,
+      cidXPtaNovoPadItemIndi,
       activePage - 1,
       itemsPerPage,
       `${sort},${order}`

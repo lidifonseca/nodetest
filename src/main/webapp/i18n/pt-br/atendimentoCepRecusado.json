@@ -22,7 +22,9 @@
       "detail": {
         "title": "Atendimento Cep Recusado"
       },
-      "cep": "Cep"
+      "cep": "Cep",
+      "padItem_empty": "Sem Pad Item",
+      "padItem": "Pad Item"
     }
   }
 }

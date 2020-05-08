@@ -55,7 +55,8 @@ export class PadItemIndicadores extends React.Component<IPadItemIndicadoresProps
         descricao: '',
         meta: '',
         maximoSt: '',
-        minimoSt: ''
+        minimoSt: '',
+        cidXPtaNovoPadItemIndi: ''
       },
       () => this.sortEntities()
     );
@@ -120,6 +121,9 @@ export class PadItemIndicadores extends React.Component<IPadItemIndicadoresProps
       'minimoSt=' +
       this.state.minimoSt +
       '&' +
+      'cidXPtaNovoPadItemIndi=' +
+      this.state.cidXPtaNovoPadItemIndi +
+      '&' +
       ''
     );
   };
@@ -127,8 +131,31 @@ export class PadItemIndicadores extends React.Component<IPadItemIndicadoresProps
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { idUnidadeMedida, titulo, descricao, meta, maximoSt, minimoSt, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntities(idUnidadeMedida, titulo, descricao, meta, maximoSt, minimoSt, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const {
+      idUnidadeMedida,
+      titulo,
+      descricao,
+      meta,
+      maximoSt,
+      minimoSt,
+      cidXPtaNovoPadItemIndi,
+      activePage,
+      itemsPerPage,
+      sort,
+      order
+    } = this.state;
+    this.props.getEntities(
+      idUnidadeMedida,
+      titulo,
+      descricao,
+      meta,
+      maximoSt,
+      minimoSt,
+      cidXPtaNovoPadItemIndi,
+      activePage - 1,
+      itemsPerPage,
+      `${sort},${order}`
+    );
   };
 
   render() {
@@ -237,6 +264,12 @@ export class PadItemIndicadores extends React.Component<IPadItemIndicadoresProps
                             </Label>
                             <AvInput type="string" name="minimoSt" id="pad-item-indicadores-minimoSt" value={this.state.minimoSt} />
                           </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'cidXPtaNovoPadItemIndi' ? (
+                        <Col md="3">
+                          <Row className="mr-1 mt-1"></Row>
                         </Col>
                       ) : null}
                     </div>

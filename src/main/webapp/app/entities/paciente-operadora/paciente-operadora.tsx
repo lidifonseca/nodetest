@@ -28,6 +28,11 @@ import { IPacienteOperadora } from 'app/shared/model/paciente-operadora.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
+import { IPaciente } from 'app/shared/model/paciente.model';
+import { getEntities as getPacientes } from 'app/entities/paciente/paciente.reducer';
+import { IOperadora } from 'app/shared/model/operadora.model';
+import { getEntities as getOperadoras } from 'app/entities/operadora/operadora.reducer';
+
 export interface IPacienteOperadoraProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
 export interface IPacienteOperadoraState extends IPacienteOperadoraBaseState, IPaginationBaseState {}
@@ -45,13 +50,18 @@ export class PacienteOperadora extends React.Component<IPacienteOperadoraProps, 
 
   componentDidMount() {
     this.getEntities();
+
+    this.props.getPacientes();
+    this.props.getOperadoras();
   }
 
   cancelCourse = () => {
     this.setState(
       {
         registro: '',
-        ativo: ''
+        ativo: '',
+        paciente: '',
+        operadora: ''
       },
       () => this.sortEntities()
     );
@@ -104,6 +114,12 @@ export class PacienteOperadora extends React.Component<IPacienteOperadoraProps, 
       'ativo=' +
       this.state.ativo +
       '&' +
+      'paciente=' +
+      this.state.paciente +
+      '&' +
+      'operadora=' +
+      this.state.operadora +
+      '&' +
       ''
     );
   };
@@ -111,12 +127,12 @@ export class PacienteOperadora extends React.Component<IPacienteOperadoraProps, 
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { registro, ativo, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntities(registro, ativo, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const { registro, ativo, paciente, operadora, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntities(registro, ativo, paciente, operadora, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   render() {
-    const { pacienteOperadoraList, match, totalItems } = this.props;
+    const { pacientes, operadoras, pacienteOperadoraList, match, totalItems } = this.props;
     return (
       <div>
         <h2 id="page-heading">
@@ -174,6 +190,60 @@ export class PacienteOperadora extends React.Component<IPacienteOperadoraProps, 
                           </Row>
                         </Col>
                       ) : null}
+
+                      {this.state.baseFilters !== 'paciente' ? (
+                        <Col md="3">
+                          <Row className="mr-1 mt-1">
+                            <div style={{ width: '100%' }}>
+                              <Label for="paciente-operadora-paciente">
+                                <Translate contentKey="generadorApp.pacienteOperadora.paciente">Paciente</Translate>
+                              </Label>
+                              <Select
+                                id="paciente-operadora-paciente"
+                                isMulti
+                                className={'css-select-control'}
+                                value={
+                                  pacientes
+                                    ? pacientes.map(p =>
+                                        this.state.paciente.split(',').indexOf(p.id) !== -1 ? { value: p.id, label: p.id } : null
+                                      )
+                                    : null
+                                }
+                                options={pacientes ? pacientes.map(option => ({ value: option.id, label: option.id })) : null}
+                                onChange={options => this.setState({ paciente: options.map(option => option['value']).join(',') })}
+                                name={'paciente'}
+                              />
+                            </div>
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'operadora' ? (
+                        <Col md="3">
+                          <Row className="mr-1 mt-1">
+                            <div style={{ width: '100%' }}>
+                              <Label for="paciente-operadora-operadora">
+                                <Translate contentKey="generadorApp.pacienteOperadora.operadora">Operadora</Translate>
+                              </Label>
+                              <Select
+                                id="paciente-operadora-operadora"
+                                isMulti
+                                className={'css-select-control'}
+                                value={
+                                  operadoras
+                                    ? operadoras.map(p =>
+                                        this.state.operadora.split(',').indexOf(p.id) !== -1 ? { value: p.id, label: p.id } : null
+                                      )
+                                    : null
+                                }
+                                options={operadoras ? operadoras.map(option => ({ value: option.id, label: option.id })) : null}
+                                onChange={options => this.setState({ operadora: options.map(option => option['value']).join(',') })}
+                                name={'operadora'}
+                              />
+                            </div>
+                          </Row>
+                        </Col>
+                      ) : null}
                     </div>
 
                     <div className="row mb-2 mr-4 justify-content-end">
@@ -214,6 +284,20 @@ export class PacienteOperadora extends React.Component<IPacienteOperadoraProps, 
                         </th>
                       ) : null}
 
+                      {this.state.baseFilters !== 'paciente' ? (
+                        <th>
+                          <Translate contentKey="generadorApp.pacienteOperadora.paciente">Paciente</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'operadora' ? (
+                        <th>
+                          <Translate contentKey="generadorApp.pacienteOperadora.operadora">Operadora</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+
                       <th />
                     </tr>
                   </thead>
@@ -230,6 +314,26 @@ export class PacienteOperadora extends React.Component<IPacienteOperadoraProps, 
                         {this.state.baseFilters !== 'registro' ? <td>{pacienteOperadora.registro}</td> : null}
 
                         {this.state.baseFilters !== 'ativo' ? <td>{pacienteOperadora.ativo}</td> : null}
+
+                        {this.state.baseFilters !== 'paciente' ? (
+                          <td>
+                            {pacienteOperadora.paciente ? (
+                              <Link to={`paciente/${pacienteOperadora.paciente.id}`}>{pacienteOperadora.paciente.id}</Link>
+                            ) : (
+                              ''
+                            )}
+                          </td>
+                        ) : null}
+
+                        {this.state.baseFilters !== 'operadora' ? (
+                          <td>
+                            {pacienteOperadora.operadora ? (
+                              <Link to={`operadora/${pacienteOperadora.operadora.id}`}>{pacienteOperadora.operadora.id}</Link>
+                            ) : (
+                              ''
+                            )}
+                          </td>
+                        ) : null}
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">
@@ -297,11 +401,15 @@ export class PacienteOperadora extends React.Component<IPacienteOperadoraProps, 
 }
 
 const mapStateToProps = ({ pacienteOperadora, ...storeState }: IRootState) => ({
+  pacientes: storeState.paciente.entities,
+  operadoras: storeState.operadora.entities,
   pacienteOperadoraList: pacienteOperadora.entities,
   totalItems: pacienteOperadora.totalItems
 });
 
 const mapDispatchToProps = {
+  getPacientes,
+  getOperadoras,
   getEntities
 };
 

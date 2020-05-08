@@ -5,6 +5,7 @@ import FranquiaStatusAtual from '../domain/franquia-status-atual.entity';
 import { FranquiaStatusAtualRepository } from '../repository/franquia-status-atual.repository';
 
 const relationshipNames = [];
+relationshipNames.push('franquia');
 
 @Injectable()
 export class FranquiaStatusAtualService {

@@ -4,6 +4,8 @@ import { BaseEntity } from './base/base.entity';
 
 import { validate, Contains, IsInt, Length, IsEmail, IsFQDN, IsDate, Min, Max } from 'class-validator';
 
+import Especialidade from './especialidade.entity';
+
 /**
  * A TipoEspecialidade.
  */
@@ -11,6 +13,12 @@ import { validate, Contains, IsInt, Length, IsEmail, IsFQDN, IsDate, Min, Max } 
 export default class TipoEspecialidade extends BaseEntity {
   @Column({ name: 'TIPO_ESPECIALIDADE', length: 30 })
   tipoEspecialidade: string;
+
+  @OneToMany(
+    type => Especialidade,
+    other => other.tipoEspecialidade
+  )
+  especialidades: Especialidade[];
 
   // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
 }

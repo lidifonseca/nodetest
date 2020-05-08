@@ -9,6 +9,8 @@ import { Translate, translate, ICrudGetAction, ICrudGetAllAction, ICrudPutAction
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
+import { ICidXPtaNovoPadItemIndi } from 'app/shared/model/cid-x-pta-novo-pad-item-indi.model';
+import { getEntities as getCidXPtaNovoPadItemIndis } from 'app/entities/cid-x-pta-novo-pad-item-indi/cid-x-pta-novo-pad-item-indi.reducer';
 import {
   IAlertasIndicadoresUpdateState,
   getEntity,
@@ -29,13 +31,28 @@ export class AlertasIndicadoresUpdate extends React.Component<IAlertasIndicadore
     super(props);
 
     this.state = {
+      cidXPtaNovoPadItemIndiSelectValue: null,
       fieldsBase: getAlertasIndicadoresState(this.props.location),
+      padItemIndicadoresId: '0',
       isNew: !this.props.match.params || !this.props.match.params.id
     };
   }
   componentDidUpdate(nextProps, nextState) {
     if (nextProps.updateSuccess !== this.props.updateSuccess && nextProps.updateSuccess) {
       this.handleClose();
+    }
+
+    if (
+      nextProps.cidXPtaNovoPadItemIndis.length > 0 &&
+      this.state.cidXPtaNovoPadItemIndiSelectValue === null &&
+      nextProps.alertasIndicadoresEntity.cidXPtaNovoPadItemIndi &&
+      nextProps.alertasIndicadoresEntity.cidXPtaNovoPadItemIndi.id
+    ) {
+      this.setState({
+        cidXPtaNovoPadItemIndiSelectValue: nextProps.cidXPtaNovoPadItemIndis.map(p =>
+          nextProps.alertasIndicadoresEntity.cidXPtaNovoPadItemIndi.id === p.id ? { value: p.id, label: p.id } : null
+        )
+      });
     }
   }
 
@@ -45,6 +62,8 @@ export class AlertasIndicadoresUpdate extends React.Component<IAlertasIndicadore
     } else {
       this.props.getEntity(this.props.match.params.id);
     }
+
+    this.props.getCidXPtaNovoPadItemIndis();
   }
 
   getFiltersURL = (offset = null) => {
@@ -60,7 +79,7 @@ export class AlertasIndicadoresUpdate extends React.Component<IAlertasIndicadore
       const { alertasIndicadoresEntity } = this.props;
       const entity = {
         ...alertasIndicadoresEntity,
-
+        cidXPtaNovoPadItemIndi: this.state.cidXPtaNovoPadItemIndiSelectValue ? this.state.cidXPtaNovoPadItemIndiSelectValue['value'] : null,
         ...values
       };
 
@@ -77,7 +96,7 @@ export class AlertasIndicadoresUpdate extends React.Component<IAlertasIndicadore
   };
 
   render() {
-    const { alertasIndicadoresEntity, loading, updating } = this.props;
+    const { alertasIndicadoresEntity, cidXPtaNovoPadItemIndis, loading, updating } = this.props;
     const { isNew } = this.state;
 
     const baseFilters = this.state.fieldsBase && this.state.fieldsBase['baseFilters'] ? this.state.fieldsBase['baseFilters'] : null;
@@ -88,7 +107,8 @@ export class AlertasIndicadoresUpdate extends React.Component<IAlertasIndicadore
             isNew
               ? {}
               : {
-                  ...alertasIndicadoresEntity
+                  ...alertasIndicadoresEntity,
+                  padItemIndicadores: alertasIndicadoresEntity.padItemIndicadores ? alertasIndicadoresEntity.padItemIndicadores.id : null
                 }
           }
           onSubmit={this.saveEntity}
@@ -157,6 +177,8 @@ export class AlertasIndicadoresUpdate extends React.Component<IAlertasIndicadore
                         <ObservacoesComponentUpdate baseFilters />
 
                         <UsuarioIdComponentUpdate baseFilters />
+
+                        <PadItemIndicadoresComponentUpdate baseFilter cidXPtaNovoPadItemIndis />
                       </Row>
                     </div>
                   )}
@@ -171,6 +193,7 @@ export class AlertasIndicadoresUpdate extends React.Component<IAlertasIndicadore
 }
 
 const mapStateToProps = (storeState: IRootState) => ({
+  cidXPtaNovoPadItemIndis: storeState.cidXPtaNovoPadItemIndi.entities,
   alertasIndicadoresEntity: storeState.alertasIndicadores.entity,
   loading: storeState.alertasIndicadores.loading,
   updating: storeState.alertasIndicadores.updating,
@@ -178,6 +201,7 @@ const mapStateToProps = (storeState: IRootState) => ({
 });
 
 const mapDispatchToProps = {
+  getCidXPtaNovoPadItemIndis,
   getEntity,
   updateEntity,
   createEntity,
@@ -266,6 +290,34 @@ const UsuarioIdComponentUpdate = ({ baseFilters }) => {
     </Col>
   ) : (
     <AvInput type="hidden" name="usuarioId" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const PadItemIndicadoresComponentUpdate = ({ baseFilters, cidXPtaNovoPadItemIndis }) => {
+  return baseFilters !== 'padItemIndicadores' ? (
+    <Col md="12">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" for="alertas-indicadores-padItemIndicadores">
+              <Translate contentKey="generadorApp.alertasIndicadores.padItemIndicadores">Pad Item Indicadores</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <Select
+              id="alertas-indicadores-padItemIndicadores"
+              className={'css-select-control'}
+              value={this.state.cidXPtaNovoPadItemIndiSelectValue}
+              options={cidXPtaNovoPadItemIndis ? cidXPtaNovoPadItemIndis.map(option => ({ value: option.id, label: option.id })) : null}
+              onChange={options => this.setState({ cidXPtaNovoPadItemIndiSelectValue: options })}
+              name={'padItemIndicadores'}
+            />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="padItemIndicadores" value={this.state.fieldsBase[baseFilters]} />
   );
 };
 

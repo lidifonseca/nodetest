@@ -34,6 +34,9 @@ export type TelaState = Readonly<typeof initialState>;
 export interface ITelaBaseState {
   baseFilters: any;
   tela: any;
+  logUser: any;
+  logUserFranquia: any;
+  usuarioAcao: any;
 }
 
 export interface ITelaUpdateState {
@@ -121,18 +124,26 @@ const apiUrl = 'api/telas';
 // Actions
 export type ICrudGetAllActionTela<T> = (
   tela?: any,
+  logUser?: any,
+  logUserFranquia?: any,
+  usuarioAcao?: any,
   page?: number,
   size?: number,
   sort?: string
 ) => IPayload<T> | ((dispatch: any) => IPayload<T>);
 
-export const getEntities: ICrudGetAllActionTela<ITela> = (tela, page, size, sort) => {
+export const getEntities: ICrudGetAllActionTela<ITela> = (tela, logUser, logUserFranquia, usuarioAcao, page, size, sort) => {
   const telaRequest = tela ? `tela.contains=${tela}&` : '';
+  const logUserRequest = logUser ? `logUser.equals=${logUser}&` : '';
+  const logUserFranquiaRequest = logUserFranquia ? `logUserFranquia.equals=${logUserFranquia}&` : '';
+  const usuarioAcaoRequest = usuarioAcao ? `usuarioAcao.equals=${usuarioAcao}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_TELA_LIST,
-    payload: axios.get<ITela>(`${requestUrl}${telaRequest}cacheBuster=${new Date().getTime()}`)
+    payload: axios.get<ITela>(
+      `${requestUrl}${telaRequest}${logUserRequest}${logUserFranquiaRequest}${usuarioAcaoRequest}cacheBuster=${new Date().getTime()}`
+    )
   };
 };
 export const getEntity: ICrudGetAction<ITela> = id => {
@@ -143,13 +154,18 @@ export const getEntity: ICrudGetAction<ITela> = id => {
   };
 };
 
-export const getEntitiesExport: ICrudGetAllActionTela<ITela> = (tela, page, size, sort) => {
+export const getEntitiesExport: ICrudGetAllActionTela<ITela> = (tela, logUser, logUserFranquia, usuarioAcao, page, size, sort) => {
   const telaRequest = tela ? `tela.contains=${tela}&` : '';
+  const logUserRequest = logUser ? `logUser.equals=${logUser}&` : '';
+  const logUserFranquiaRequest = logUserFranquia ? `logUserFranquia.equals=${logUserFranquia}&` : '';
+  const usuarioAcaoRequest = usuarioAcao ? `usuarioAcao.equals=${usuarioAcao}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_TELA_LIST,
-    payload: axios.get<ITela>(`${requestUrl}${telaRequest}cacheBuster=${new Date().getTime()}`)
+    payload: axios.get<ITela>(
+      `${requestUrl}${telaRequest}${logUserRequest}${logUserFranquiaRequest}${usuarioAcaoRequest}cacheBuster=${new Date().getTime()}`
+    )
   };
 };
 
@@ -194,8 +210,15 @@ export const getTelaState = (location): ITelaBaseState => {
   const baseFilters = url.searchParams.get('baseFilters') || '';
   const tela = url.searchParams.get('tela') || '';
 
+  const logUser = url.searchParams.get('logUser') || '';
+  const logUserFranquia = url.searchParams.get('logUserFranquia') || '';
+  const usuarioAcao = url.searchParams.get('usuarioAcao') || '';
+
   return {
     baseFilters,
-    tela
+    tela,
+    logUser,
+    logUserFranquia,
+    usuarioAcao
   };
 };

@@ -36,6 +36,8 @@ import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
 import { IUnidadeEasy } from 'app/shared/model/unidade-easy.model';
 import { getEntities as getUnidadeEasies } from 'app/entities/unidade-easy/unidade-easy.reducer';
+import { ICategoria } from 'app/shared/model/categoria.model';
+import { getEntities as getCategorias } from 'app/entities/categoria/categoria.reducer';
 
 export interface ICategoriaAtividadeProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
@@ -59,13 +61,17 @@ export class CategoriaAtividade extends React.Component<ICategoriaAtividadeProps
     this.getEntities();
 
     this.props.getUnidadeEasies();
+    this.props.getCategorias();
   }
 
   cancelCourse = () => {
     this.setState(
       {
         atividade: '',
-        unidade: ''
+        atendimentoAtividades: '',
+        padItemAtividade: '',
+        unidade: '',
+        categoria: ''
       },
       () => this.sortEntities()
     );
@@ -113,8 +119,17 @@ export class CategoriaAtividade extends React.Component<ICategoriaAtividadeProps
       'atividade=' +
       this.state.atividade +
       '&' +
+      'atendimentoAtividades=' +
+      this.state.atendimentoAtividades +
+      '&' +
+      'padItemAtividade=' +
+      this.state.padItemAtividade +
+      '&' +
       'unidade=' +
       this.state.unidade +
+      '&' +
+      'categoria=' +
+      this.state.categoria +
       '&' +
       ''
     );
@@ -123,8 +138,17 @@ export class CategoriaAtividade extends React.Component<ICategoriaAtividadeProps
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { atividade, unidade, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntitiesExport(atividade, unidade, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const { atividade, atendimentoAtividades, padItemAtividade, unidade, categoria, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntitiesExport(
+      atividade,
+      atendimentoAtividades,
+      padItemAtividade,
+      unidade,
+      categoria,
+      activePage - 1,
+      itemsPerPage,
+      `${sort},${order}`
+    );
   };
 
   confirmExport() {}
@@ -174,12 +198,14 @@ export class CategoriaAtividade extends React.Component<ICategoriaAtividadeProps
 
 const mapStateToProps = ({ categoriaAtividade, ...storeState }: IRootState) => ({
   unidadeEasies: storeState.unidadeEasy.entities,
+  categorias: storeState.categoria.entities,
   categoriaAtividadeList: categoriaAtividade.entities,
   totalItems: categoriaAtividade.totalItems
 });
 
 const mapDispatchToProps = {
   getUnidadeEasies,
+  getCategorias,
   getEntitiesExport
 };
 

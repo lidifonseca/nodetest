@@ -98,6 +98,19 @@ export class FranquiaAreaAtuacaoDetail extends React.Component<IFranquiaAreaAtua
                       </Col>
                     </Row>
                   </Col>
+
+                  <Col md="12">
+                    <Row>
+                      <Col md="3">
+                        <dt>
+                          <Translate contentKey="generadorApp.franquiaAreaAtuacao.franquia">Franquia</Translate>
+                        </dt>
+                      </Col>
+                      <Col md="9">
+                        <dd>{franquiaAreaAtuacaoEntity.franquia ? franquiaAreaAtuacaoEntity.franquia.id : ''}</dd>
+                      </Col>
+                    </Row>
+                  </Col>
                 </Row>
                 <Button tag={Link} to="/franquia-area-atuacao" replace color="info">
                   <FontAwesomeIcon icon="arrow-left" />{' '}

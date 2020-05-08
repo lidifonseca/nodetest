@@ -36,12 +36,15 @@ export interface ICategoriaContratoBaseState {
   baseFilters: any;
   contrato: any;
   ativo: any;
+  categoria: any;
 }
 
 export interface ICategoriaContratoUpdateState {
   fieldsBase: ICategoriaContratoBaseState;
 
+  categoriaSelectValue: any;
   isNew: boolean;
+  categoriaId: string;
 }
 
 // Reducer
@@ -136,19 +139,23 @@ const apiUrl = 'api/categoria-contratoes';
 export type ICrudGetAllActionCategoriaContrato<T> = (
   contrato?: any,
   ativo?: any,
+  categoria?: any,
   page?: number,
   size?: number,
   sort?: string
 ) => IPayload<T> | ((dispatch: any) => IPayload<T>);
 
-export const getEntities: ICrudGetAllActionCategoriaContrato<ICategoriaContrato> = (contrato, ativo, page, size, sort) => {
+export const getEntities: ICrudGetAllActionCategoriaContrato<ICategoriaContrato> = (contrato, ativo, categoria, page, size, sort) => {
   const contratoRequest = contrato ? `contrato.contains=${contrato}&` : '';
   const ativoRequest = ativo ? `ativo.contains=${ativo}&` : '';
+  const categoriaRequest = categoria ? `categoria.equals=${categoria}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_CATEGORIACONTRATO_LIST,
-    payload: axios.get<ICategoriaContrato>(`${requestUrl}${contratoRequest}${ativoRequest}cacheBuster=${new Date().getTime()}`)
+    payload: axios.get<ICategoriaContrato>(
+      `${requestUrl}${contratoRequest}${ativoRequest}${categoriaRequest}cacheBuster=${new Date().getTime()}`
+    )
   };
 };
 export const getEntity: ICrudGetAction<ICategoriaContrato> = id => {
@@ -159,20 +166,24 @@ export const getEntity: ICrudGetAction<ICategoriaContrato> = id => {
   };
 };
 
-export const getEntitiesExport: ICrudGetAllActionCategoriaContrato<ICategoriaContrato> = (contrato, ativo, page, size, sort) => {
+export const getEntitiesExport: ICrudGetAllActionCategoriaContrato<ICategoriaContrato> = (contrato, ativo, categoria, page, size, sort) => {
   const contratoRequest = contrato ? `contrato.contains=${contrato}&` : '';
   const ativoRequest = ativo ? `ativo.contains=${ativo}&` : '';
+  const categoriaRequest = categoria ? `categoria.equals=${categoria}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_CATEGORIACONTRATO_LIST,
-    payload: axios.get<ICategoriaContrato>(`${requestUrl}${contratoRequest}${ativoRequest}cacheBuster=${new Date().getTime()}`)
+    payload: axios.get<ICategoriaContrato>(
+      `${requestUrl}${contratoRequest}${ativoRequest}${categoriaRequest}cacheBuster=${new Date().getTime()}`
+    )
   };
 };
 
 export const createEntity: ICrudPutAction<ICategoriaContrato> = entity => async dispatch => {
   entity = {
-    ...entity
+    ...entity,
+    categoria: entity.categoria === 'null' ? null : entity.categoria
   };
   const result = await dispatch({
     type: ACTION_TYPES.CREATE_CATEGORIACONTRATO,
@@ -183,7 +194,7 @@ export const createEntity: ICrudPutAction<ICategoriaContrato> = entity => async 
 };
 
 export const updateEntity: ICrudPutAction<ICategoriaContrato> = entity => async dispatch => {
-  entity = { ...entity };
+  entity = { ...entity, categoria: entity.categoria === 'null' ? null : entity.categoria };
   const result = await dispatch({
     type: ACTION_TYPES.UPDATE_CATEGORIACONTRATO,
     payload: axios.put(apiUrl, cleanEntity(entity))
@@ -222,9 +233,12 @@ export const getCategoriaContratoState = (location): ICategoriaContratoBaseState
   const contrato = url.searchParams.get('contrato') || '';
   const ativo = url.searchParams.get('ativo') || '';
 
+  const categoria = url.searchParams.get('categoria') || '';
+
   return {
     baseFilters,
     contrato,
-    ativo
+    ativo,
+    categoria
   };
 };

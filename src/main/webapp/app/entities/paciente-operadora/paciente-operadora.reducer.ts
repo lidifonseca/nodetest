@@ -35,12 +35,18 @@ export interface IPacienteOperadoraBaseState {
   baseFilters: any;
   registro: any;
   ativo: any;
+  paciente: any;
+  operadora: any;
 }
 
 export interface IPacienteOperadoraUpdateState {
   fieldsBase: IPacienteOperadoraBaseState;
 
+  pacienteSelectValue: any;
+  operadoraSelectValue: any;
   isNew: boolean;
+  pacienteId: string;
+  operadoraId: string;
 }
 
 // Reducer
@@ -123,19 +129,33 @@ const apiUrl = 'api/paciente-operadoras';
 export type ICrudGetAllActionPacienteOperadora<T> = (
   registro?: any,
   ativo?: any,
+  paciente?: any,
+  operadora?: any,
   page?: number,
   size?: number,
   sort?: string
 ) => IPayload<T> | ((dispatch: any) => IPayload<T>);
 
-export const getEntities: ICrudGetAllActionPacienteOperadora<IPacienteOperadora> = (registro, ativo, page, size, sort) => {
+export const getEntities: ICrudGetAllActionPacienteOperadora<IPacienteOperadora> = (
+  registro,
+  ativo,
+  paciente,
+  operadora,
+  page,
+  size,
+  sort
+) => {
   const registroRequest = registro ? `registro.contains=${registro}&` : '';
   const ativoRequest = ativo ? `ativo.contains=${ativo}&` : '';
+  const pacienteRequest = paciente ? `paciente.equals=${paciente}&` : '';
+  const operadoraRequest = operadora ? `operadora.equals=${operadora}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_PACIENTEOPERADORA_LIST,
-    payload: axios.get<IPacienteOperadora>(`${requestUrl}${registroRequest}${ativoRequest}cacheBuster=${new Date().getTime()}`)
+    payload: axios.get<IPacienteOperadora>(
+      `${requestUrl}${registroRequest}${ativoRequest}${pacienteRequest}${operadoraRequest}cacheBuster=${new Date().getTime()}`
+    )
   };
 };
 export const getEntity: ICrudGetAction<IPacienteOperadora> = id => {
@@ -146,20 +166,34 @@ export const getEntity: ICrudGetAction<IPacienteOperadora> = id => {
   };
 };
 
-export const getEntitiesExport: ICrudGetAllActionPacienteOperadora<IPacienteOperadora> = (registro, ativo, page, size, sort) => {
+export const getEntitiesExport: ICrudGetAllActionPacienteOperadora<IPacienteOperadora> = (
+  registro,
+  ativo,
+  paciente,
+  operadora,
+  page,
+  size,
+  sort
+) => {
   const registroRequest = registro ? `registro.contains=${registro}&` : '';
   const ativoRequest = ativo ? `ativo.contains=${ativo}&` : '';
+  const pacienteRequest = paciente ? `paciente.equals=${paciente}&` : '';
+  const operadoraRequest = operadora ? `operadora.equals=${operadora}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_PACIENTEOPERADORA_LIST,
-    payload: axios.get<IPacienteOperadora>(`${requestUrl}${registroRequest}${ativoRequest}cacheBuster=${new Date().getTime()}`)
+    payload: axios.get<IPacienteOperadora>(
+      `${requestUrl}${registroRequest}${ativoRequest}${pacienteRequest}${operadoraRequest}cacheBuster=${new Date().getTime()}`
+    )
   };
 };
 
 export const createEntity: ICrudPutAction<IPacienteOperadora> = entity => async dispatch => {
   entity = {
-    ...entity
+    ...entity,
+    paciente: entity.paciente === 'null' ? null : entity.paciente,
+    operadora: entity.operadora === 'null' ? null : entity.operadora
   };
   const result = await dispatch({
     type: ACTION_TYPES.CREATE_PACIENTEOPERADORA,
@@ -170,7 +204,11 @@ export const createEntity: ICrudPutAction<IPacienteOperadora> = entity => async 
 };
 
 export const updateEntity: ICrudPutAction<IPacienteOperadora> = entity => async dispatch => {
-  entity = { ...entity };
+  entity = {
+    ...entity,
+    paciente: entity.paciente === 'null' ? null : entity.paciente,
+    operadora: entity.operadora === 'null' ? null : entity.operadora
+  };
   const result = await dispatch({
     type: ACTION_TYPES.UPDATE_PACIENTEOPERADORA,
     payload: axios.put(apiUrl, cleanEntity(entity))
@@ -199,9 +237,14 @@ export const getPacienteOperadoraState = (location): IPacienteOperadoraBaseState
   const registro = url.searchParams.get('registro') || '';
   const ativo = url.searchParams.get('ativo') || '';
 
+  const paciente = url.searchParams.get('paciente') || '';
+  const operadora = url.searchParams.get('operadora') || '';
+
   return {
     baseFilters,
     registro,
-    ativo
+    ativo,
+    paciente,
+    operadora
   };
 };

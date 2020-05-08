@@ -19,7 +19,7 @@
         }
     ],
     "relationships": [],
-    "changelogDate": "20200508173000",
+    "changelogDate": "20200508182600",
     "entityTableName": "status_financeiro",
     "dto": "mapstruct",
     "pagination": "pagination",

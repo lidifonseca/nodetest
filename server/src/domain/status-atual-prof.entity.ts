@@ -4,6 +4,8 @@ import { BaseEntity } from './base/base.entity';
 
 import { validate, Contains, IsInt, Length, IsEmail, IsFQDN, IsDate, Min, Max } from 'class-validator';
 
+import ProfissionalStatusAtual from './profissional-status-atual.entity';
+
 /**
  * A StatusAtualProf.
  */
@@ -14,6 +16,12 @@ export default class StatusAtualProf extends BaseEntity {
 
   @Column({ name: 'STYLE_LABEL', length: 40 })
   styleLabel: string;
+
+  @OneToMany(
+    type => ProfissionalStatusAtual,
+    other => other.statusAtualProf
+  )
+  profissionalStatusAtuals: ProfissionalStatusAtual[];
 
   // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
 }

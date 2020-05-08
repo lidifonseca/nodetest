@@ -23,7 +23,11 @@
         "title": "Pad Item Atividade"
       },
       "dataInicio": "Data Inicio",
-      "dataFim": "Data Fim"
+      "dataFim": "Data Fim",
+      "atividade_empty": "Sem Atividade",
+      "atividade": "Atividade",
+      "padItem_empty": "Sem Pad Item",
+      "padItem": "Pad Item"
     }
   }
 }

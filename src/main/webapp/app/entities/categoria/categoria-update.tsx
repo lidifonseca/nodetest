@@ -182,6 +182,14 @@ export class CategoriaUpdate extends React.Component<ICategoriaUpdateProps, ICat
 
                         <PublicarSiteComponentUpdate baseFilters />
 
+                        <CategoriaAtividadeComponentUpdate baseFilter categoriaAtividades />
+
+                        <CategoriaContratoComponentUpdate baseFilter categoriaContratoes />
+
+                        <CidXPtaNovoPadItemIndiComponentUpdate baseFilter cidXPtaNovoPadItemIndis />
+
+                        <EspecialidadeComponentUpdate baseFilter especialidades />
+
                         <UnidadeComponentUpdate baseFilter unidadeEasies />
                       </Row>
                     </div>
@@ -341,6 +349,38 @@ const PublicarSiteComponentUpdate = ({ baseFilters }) => {
   );
 };
 
+const CategoriaAtividadeComponentUpdate = ({ baseFilters, categoriaAtividades }) => {
+  return baseFilters !== 'categoriaAtividade' ? (
+    <Col md="12"></Col>
+  ) : (
+    <AvInput type="hidden" name="categoriaAtividade" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const CategoriaContratoComponentUpdate = ({ baseFilters, categoriaContratoes }) => {
+  return baseFilters !== 'categoriaContrato' ? (
+    <Col md="12"></Col>
+  ) : (
+    <AvInput type="hidden" name="categoriaContrato" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const CidXPtaNovoPadItemIndiComponentUpdate = ({ baseFilters, cidXPtaNovoPadItemIndis }) => {
+  return baseFilters !== 'cidXPtaNovoPadItemIndi' ? (
+    <Col md="12"></Col>
+  ) : (
+    <AvInput type="hidden" name="cidXPtaNovoPadItemIndi" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const EspecialidadeComponentUpdate = ({ baseFilters, especialidades }) => {
+  return baseFilters !== 'especialidade' ? (
+    <Col md="12"></Col>
+  ) : (
+    <AvInput type="hidden" name="especialidade" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
 const UnidadeComponentUpdate = ({ baseFilters, unidadeEasies }) => {
   return baseFilters !== 'unidade' ? (
     <Col md="12">
@@ -358,7 +398,7 @@ const UnidadeComponentUpdate = ({ baseFilters, unidadeEasies }) => {
               className={'css-select-control'}
               value={
                 unidadeEasies
-                  ? unidadeEasies.map(p => (this.state.categoriaEntity.unidade === p.id ? { value: p.id, label: p.id } : null))
+                  ? unidadeEasies.map(p => (this.state.categoriaEntity.unidade === p.id ? { value: p.id, label: p.razaoSocial } : null))
                   : null
               }
               options={unidadeEasies ? unidadeEasies.map(option => ({ value: option.id, label: option.razaoSocial })) : null}

@@ -34,6 +34,11 @@ import { IPacienteDiagnostico } from 'app/shared/model/paciente-diagnostico.mode
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
+import { IPaciente } from 'app/shared/model/paciente.model';
+import { getEntities as getPacientes } from 'app/entities/paciente/paciente.reducer';
+import { ICid } from 'app/shared/model/cid.model';
+import { getEntities as getCids } from 'app/entities/cid/cid.reducer';
+
 export interface IPacienteDiagnosticoProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
 export interface IPacienteDiagnosticoState extends IPacienteDiagnosticoBaseState, IPaginationBaseState {
@@ -54,6 +59,9 @@ export class PacienteDiagnostico extends React.Component<IPacienteDiagnosticoPro
 
   componentDidMount() {
     this.getEntities();
+
+    this.props.getPacientes();
+    this.props.getCids();
   }
 
   cancelCourse = () => {
@@ -63,7 +71,9 @@ export class PacienteDiagnostico extends React.Component<IPacienteDiagnosticoPro
         ativo: '',
         cidPrimario: '',
         complexidade: '',
-        cidComAlta: ''
+        cidComAlta: '',
+        paciente: '',
+        c: ''
       },
       () => this.sortEntities()
     );
@@ -123,6 +133,12 @@ export class PacienteDiagnostico extends React.Component<IPacienteDiagnosticoPro
       'cidComAlta=' +
       this.state.cidComAlta +
       '&' +
+      'paciente=' +
+      this.state.paciente +
+      '&' +
+      'c=' +
+      this.state.c +
+      '&' +
       ''
     );
   };
@@ -130,13 +146,15 @@ export class PacienteDiagnostico extends React.Component<IPacienteDiagnosticoPro
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { observacao, ativo, cidPrimario, complexidade, cidComAlta, activePage, itemsPerPage, sort, order } = this.state;
+    const { observacao, ativo, cidPrimario, complexidade, cidComAlta, paciente, c, activePage, itemsPerPage, sort, order } = this.state;
     this.props.getEntitiesExport(
       observacao,
       ativo,
       cidPrimario,
       complexidade,
       cidComAlta,
+      paciente,
+      c,
       activePage - 1,
       itemsPerPage,
       `${sort},${order}`
@@ -189,11 +207,15 @@ export class PacienteDiagnostico extends React.Component<IPacienteDiagnosticoPro
 }
 
 const mapStateToProps = ({ pacienteDiagnostico, ...storeState }: IRootState) => ({
+  pacientes: storeState.paciente.entities,
+  cids: storeState.cid.entities,
   pacienteDiagnosticoList: pacienteDiagnostico.entities,
   totalItems: pacienteDiagnostico.totalItems
 });
 
 const mapDispatchToProps = {
+  getPacientes,
+  getCids,
   getEntitiesExport
 };
 

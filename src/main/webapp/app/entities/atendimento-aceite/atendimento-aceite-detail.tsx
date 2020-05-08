@@ -68,6 +68,32 @@ export class AtendimentoAceiteDetail extends React.Component<IAtendimentoAceiteD
                       </Col>
                     </Row>
                   </Col>
+
+                  <Col md="12">
+                    <Row>
+                      <Col md="3">
+                        <dt>
+                          <Translate contentKey="generadorApp.atendimentoAceite.profissional">Profissional</Translate>
+                        </dt>
+                      </Col>
+                      <Col md="9">
+                        <dd>{atendimentoAceiteEntity.profissional ? atendimentoAceiteEntity.profissional.id : ''}</dd>
+                      </Col>
+                    </Row>
+                  </Col>
+
+                  <Col md="12">
+                    <Row>
+                      <Col md="3">
+                        <dt>
+                          <Translate contentKey="generadorApp.atendimentoAceite.atendimento">Atendimento</Translate>
+                        </dt>
+                      </Col>
+                      <Col md="9">
+                        <dd>{atendimentoAceiteEntity.atendimento ? atendimentoAceiteEntity.atendimento.id : ''}</dd>
+                      </Col>
+                    </Row>
+                  </Col>
                 </Row>
                 <Button tag={Link} to="/atendimento-aceite" replace color="info">
                   <FontAwesomeIcon icon="arrow-left" />{' '}

@@ -42,8 +42,36 @@
             "fieldType": "Double"
         }
     ],
-    "relationships": [],
-    "changelogDate": "20200508154000",
+    "relationships": [
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "alertasIndicadores",
+            "otherEntityRelationshipName": "padItemIndicadores",
+            "relationshipName": "alertasIndicadores"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "padItemIndicadores",
+            "otherEntityRelationshipName": "cidXPtaNovoPadItemIndi",
+            "relationshipName": "padItemIndicadores",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "categoria",
+            "otherEntityRelationshipName": "cidXPtaNovoPadItemIndi",
+            "relationshipName": "categorias",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "cidXPtaNovo",
+            "otherEntityRelationshipName": "cidXPtaNovoPadItemIndi",
+            "relationshipName": "cidXPtaNovo",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20200508163600",
     "entityTableName": "cid_x_pta_novo_pad_item_indi",
     "dto": "mapstruct",
     "pagination": "pagination",

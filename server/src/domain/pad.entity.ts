@@ -4,7 +4,10 @@ import { BaseEntity } from './base/base.entity';
 
 import { validate, Contains, IsInt, Length, IsEmail, IsFQDN, IsDate, Min, Max } from 'class-validator';
 
+import PadCid from './pad-cid.entity';
+import PadItem from './pad-item.entity';
 import UnidadeEasy from './unidade-easy.entity';
+import Paciente from './paciente.entity';
 
 /**
  * A Pad.
@@ -35,18 +38,31 @@ export default class Pad extends BaseEntity {
   @Column({ type: 'integer', name: 'STATUS_PAD' })
   statusPad: number;
 
-  @Column({ type: 'boolean', name: 'NOVO_MODELO' })
-  novoModelo: boolean;
-
   @Column({ name: 'IMAGE_PATH', length: 250 })
   imagePath: string;
 
   @Column({ type: 'double', name: 'SCORE' })
   score: number;
 
+  @OneToMany(
+    type => PadCid,
+    other => other.pad
+  )
+  padCids: PadCid[];
+
+  @OneToMany(
+    type => PadItem,
+    other => other.pad
+  )
+  padItems: PadItem[];
+
   @ManyToOne(type => UnidadeEasy)
   @JoinColumn({ name: 'ID_UNIDADE', referencedColumnName: 'id' })
   unidade: UnidadeEasy;
+
+  @ManyToOne(type => Paciente)
+  @JoinColumn({ name: 'ID_PACIENTE', referencedColumnName: 'id' })
+  paciente: Paciente;
 
   // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
 }

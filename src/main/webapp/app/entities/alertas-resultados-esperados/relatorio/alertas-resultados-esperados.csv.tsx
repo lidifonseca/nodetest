@@ -38,6 +38,9 @@ import { IAlertasResultadosEsperados } from 'app/shared/model/alertas-resultados
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
+import { IResultados } from 'app/shared/model/resultados.model';
+import { getEntities as getResultados } from 'app/entities/resultados/resultados.reducer';
+
 export interface IAlertasResultadosEsperadosProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
 export interface IAlertasResultadosEsperadosState extends IAlertasResultadosEsperadosBaseState, IPaginationBaseState {
@@ -58,6 +61,8 @@ export class AlertasResultadosEsperados extends React.Component<IAlertasResultad
 
   componentDidMount() {
     this.getEntities();
+
+    this.props.getResultados();
   }
 
   cancelCourse = () => {
@@ -67,7 +72,8 @@ export class AlertasResultadosEsperados extends React.Component<IAlertasResultad
         alteracaoEsperada: '',
         observacoes: '',
         usuarioId: '',
-        valor: ''
+        valor: '',
+        resultados: ''
       },
       () => this.sortEntities()
     );
@@ -127,6 +133,9 @@ export class AlertasResultadosEsperados extends React.Component<IAlertasResultad
       'valor=' +
       this.state.valor +
       '&' +
+      'resultados=' +
+      this.state.resultados +
+      '&' +
       ''
     );
   };
@@ -134,13 +143,14 @@ export class AlertasResultadosEsperados extends React.Component<IAlertasResultad
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { pontuacao, alteracaoEsperada, observacoes, usuarioId, valor, activePage, itemsPerPage, sort, order } = this.state;
+    const { pontuacao, alteracaoEsperada, observacoes, usuarioId, valor, resultados, activePage, itemsPerPage, sort, order } = this.state;
     this.props.getEntitiesExport(
       pontuacao,
       alteracaoEsperada,
       observacoes,
       usuarioId,
       valor,
+      resultados,
       activePage - 1,
       itemsPerPage,
       `${sort},${order}`
@@ -193,11 +203,13 @@ export class AlertasResultadosEsperados extends React.Component<IAlertasResultad
 }
 
 const mapStateToProps = ({ alertasResultadosEsperados, ...storeState }: IRootState) => ({
+  resultados: storeState.resultados.entities,
   alertasResultadosEsperadosList: alertasResultadosEsperados.entities,
   totalItems: alertasResultadosEsperados.totalItems
 });
 
 const mapDispatchToProps = {
+  getResultados,
   getEntitiesExport
 };
 

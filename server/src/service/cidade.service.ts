@@ -5,6 +5,7 @@ import Cidade from '../domain/cidade.entity';
 import { CidadeRepository } from '../repository/cidade.repository';
 
 const relationshipNames = [];
+relationshipNames.push('uf');
 
 @Injectable()
 export class CidadeService {

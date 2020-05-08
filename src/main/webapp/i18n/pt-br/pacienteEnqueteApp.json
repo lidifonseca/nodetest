@@ -22,7 +22,9 @@
       "detail": {
         "title": "Paciente Enquete App"
       },
-      "votacao": "Votacao"
+      "votacao": "Votacao",
+      "paciente_empty": "Sem Paciente",
+      "paciente": "Paciente"
     }
   }
 }

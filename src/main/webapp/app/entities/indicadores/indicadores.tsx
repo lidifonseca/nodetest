@@ -50,7 +50,8 @@ export class Indicadores extends React.Component<IIndicadoresProps, IIndicadores
   cancelCourse = () => {
     this.setState(
       {
-        titulo: ''
+        titulo: '',
+        indicadoresValores: ''
       },
       () => this.sortEntities()
     );
@@ -100,6 +101,9 @@ export class Indicadores extends React.Component<IIndicadoresProps, IIndicadores
       'titulo=' +
       this.state.titulo +
       '&' +
+      'indicadoresValores=' +
+      this.state.indicadoresValores +
+      '&' +
       ''
     );
   };
@@ -107,8 +111,8 @@ export class Indicadores extends React.Component<IIndicadoresProps, IIndicadores
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { titulo, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntities(titulo, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const { titulo, indicadoresValores, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntities(titulo, indicadoresValores, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   render() {
@@ -157,6 +161,12 @@ export class Indicadores extends React.Component<IIndicadoresProps, IIndicadores
 
                             <AvInput type="text" name="titulo" id="indicadores-titulo" value={this.state.titulo} />
                           </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'indicadoresValores' ? (
+                        <Col md="3">
+                          <Row className="mr-1 mt-1"></Row>
                         </Col>
                       ) : null}
                     </div>

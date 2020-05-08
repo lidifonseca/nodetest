@@ -68,6 +68,32 @@ export class AtendimentoAtividadesDetail extends React.Component<IAtendimentoAti
                       </Col>
                     </Row>
                   </Col>
+
+                  <Col md="12">
+                    <Row>
+                      <Col md="3">
+                        <dt>
+                          <Translate contentKey="generadorApp.atendimentoAtividades.atividade">Atividade</Translate>
+                        </dt>
+                      </Col>
+                      <Col md="9">
+                        <dd>{atendimentoAtividadesEntity.atividade ? atendimentoAtividadesEntity.atividade.id : ''}</dd>
+                      </Col>
+                    </Row>
+                  </Col>
+
+                  <Col md="12">
+                    <Row>
+                      <Col md="3">
+                        <dt>
+                          <Translate contentKey="generadorApp.atendimentoAtividades.atendimento">Atendimento</Translate>
+                        </dt>
+                      </Col>
+                      <Col md="9">
+                        <dd>{atendimentoAtividadesEntity.atendimento ? atendimentoAtividadesEntity.atendimento.id : ''}</dd>
+                      </Col>
+                    </Row>
+                  </Col>
                 </Row>
                 <Button tag={Link} to="/atendimento-atividades" replace color="info">
                   <FontAwesomeIcon icon="arrow-left" />{' '}

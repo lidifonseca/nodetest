@@ -36,12 +36,16 @@ export interface IRespostasBaseState {
   resposta: any;
   pontuacao: any;
   respostaAtiva: any;
+  acoesRespostas: any;
+  perguntasQuestionario: any;
 }
 
 export interface IRespostasUpdateState {
   fieldsBase: IRespostasBaseState;
 
+  perguntasQuestionarioSelectValue: any;
   isNew: boolean;
+  perguntasQuestionarioId: string;
 }
 
 // Reducer
@@ -125,21 +129,34 @@ export type ICrudGetAllActionRespostas<T> = (
   resposta?: any,
   pontuacao?: any,
   respostaAtiva?: any,
+  acoesRespostas?: any,
+  perguntasQuestionario?: any,
   page?: number,
   size?: number,
   sort?: string
 ) => IPayload<T> | ((dispatch: any) => IPayload<T>);
 
-export const getEntities: ICrudGetAllActionRespostas<IRespostas> = (resposta, pontuacao, respostaAtiva, page, size, sort) => {
+export const getEntities: ICrudGetAllActionRespostas<IRespostas> = (
+  resposta,
+  pontuacao,
+  respostaAtiva,
+  acoesRespostas,
+  perguntasQuestionario,
+  page,
+  size,
+  sort
+) => {
   const respostaRequest = resposta ? `resposta.contains=${resposta}&` : '';
   const pontuacaoRequest = pontuacao ? `pontuacao.contains=${pontuacao}&` : '';
   const respostaAtivaRequest = respostaAtiva ? `respostaAtiva.contains=${respostaAtiva}&` : '';
+  const acoesRespostasRequest = acoesRespostas ? `acoesRespostas.equals=${acoesRespostas}&` : '';
+  const perguntasQuestionarioRequest = perguntasQuestionario ? `perguntasQuestionario.equals=${perguntasQuestionario}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_RESPOSTAS_LIST,
     payload: axios.get<IRespostas>(
-      `${requestUrl}${respostaRequest}${pontuacaoRequest}${respostaAtivaRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${respostaRequest}${pontuacaoRequest}${respostaAtivaRequest}${acoesRespostasRequest}${perguntasQuestionarioRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };
@@ -151,23 +168,35 @@ export const getEntity: ICrudGetAction<IRespostas> = id => {
   };
 };
 
-export const getEntitiesExport: ICrudGetAllActionRespostas<IRespostas> = (resposta, pontuacao, respostaAtiva, page, size, sort) => {
+export const getEntitiesExport: ICrudGetAllActionRespostas<IRespostas> = (
+  resposta,
+  pontuacao,
+  respostaAtiva,
+  acoesRespostas,
+  perguntasQuestionario,
+  page,
+  size,
+  sort
+) => {
   const respostaRequest = resposta ? `resposta.contains=${resposta}&` : '';
   const pontuacaoRequest = pontuacao ? `pontuacao.contains=${pontuacao}&` : '';
   const respostaAtivaRequest = respostaAtiva ? `respostaAtiva.contains=${respostaAtiva}&` : '';
+  const acoesRespostasRequest = acoesRespostas ? `acoesRespostas.equals=${acoesRespostas}&` : '';
+  const perguntasQuestionarioRequest = perguntasQuestionario ? `perguntasQuestionario.equals=${perguntasQuestionario}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_RESPOSTAS_LIST,
     payload: axios.get<IRespostas>(
-      `${requestUrl}${respostaRequest}${pontuacaoRequest}${respostaAtivaRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${respostaRequest}${pontuacaoRequest}${respostaAtivaRequest}${acoesRespostasRequest}${perguntasQuestionarioRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };
 
 export const createEntity: ICrudPutAction<IRespostas> = entity => async dispatch => {
   entity = {
-    ...entity
+    ...entity,
+    perguntasQuestionario: entity.perguntasQuestionario === 'null' ? null : entity.perguntasQuestionario
   };
   const result = await dispatch({
     type: ACTION_TYPES.CREATE_RESPOSTAS,
@@ -178,7 +207,7 @@ export const createEntity: ICrudPutAction<IRespostas> = entity => async dispatch
 };
 
 export const updateEntity: ICrudPutAction<IRespostas> = entity => async dispatch => {
-  entity = { ...entity };
+  entity = { ...entity, perguntasQuestionario: entity.perguntasQuestionario === 'null' ? null : entity.perguntasQuestionario };
   const result = await dispatch({
     type: ACTION_TYPES.UPDATE_RESPOSTAS,
     payload: axios.put(apiUrl, cleanEntity(entity))
@@ -208,10 +237,15 @@ export const getRespostasState = (location): IRespostasBaseState => {
   const pontuacao = url.searchParams.get('pontuacao') || '';
   const respostaAtiva = url.searchParams.get('respostaAtiva') || '';
 
+  const acoesRespostas = url.searchParams.get('acoesRespostas') || '';
+  const perguntasQuestionario = url.searchParams.get('perguntasQuestionario') || '';
+
   return {
     baseFilters,
     resposta,
     pontuacao,
-    respostaAtiva
+    respostaAtiva,
+    acoesRespostas,
+    perguntasQuestionario
   };
 };

@@ -34,12 +34,18 @@ export type AtendimentoAceiteState = Readonly<typeof initialState>;
 export interface IAtendimentoAceiteBaseState {
   baseFilters: any;
   msgPush: any;
+  profissional: any;
+  atendimento: any;
 }
 
 export interface IAtendimentoAceiteUpdateState {
   fieldsBase: IAtendimentoAceiteBaseState;
 
+  profissionalSelectValue: any;
+  atendimentoSelectValue: any;
   isNew: boolean;
+  profissionalId: string;
+  atendimentoId: string;
 }
 
 // Reducer
@@ -121,18 +127,31 @@ const apiUrl = 'api/atendimento-aceites';
 // Actions
 export type ICrudGetAllActionAtendimentoAceite<T> = (
   msgPush?: any,
+  profissional?: any,
+  atendimento?: any,
   page?: number,
   size?: number,
   sort?: string
 ) => IPayload<T> | ((dispatch: any) => IPayload<T>);
 
-export const getEntities: ICrudGetAllActionAtendimentoAceite<IAtendimentoAceite> = (msgPush, page, size, sort) => {
+export const getEntities: ICrudGetAllActionAtendimentoAceite<IAtendimentoAceite> = (
+  msgPush,
+  profissional,
+  atendimento,
+  page,
+  size,
+  sort
+) => {
   const msgPushRequest = msgPush ? `msgPush.contains=${msgPush}&` : '';
+  const profissionalRequest = profissional ? `profissional.equals=${profissional}&` : '';
+  const atendimentoRequest = atendimento ? `atendimento.equals=${atendimento}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_ATENDIMENTOACEITE_LIST,
-    payload: axios.get<IAtendimentoAceite>(`${requestUrl}${msgPushRequest}cacheBuster=${new Date().getTime()}`)
+    payload: axios.get<IAtendimentoAceite>(
+      `${requestUrl}${msgPushRequest}${profissionalRequest}${atendimentoRequest}cacheBuster=${new Date().getTime()}`
+    )
   };
 };
 export const getEntity: ICrudGetAction<IAtendimentoAceite> = id => {
@@ -143,19 +162,32 @@ export const getEntity: ICrudGetAction<IAtendimentoAceite> = id => {
   };
 };
 
-export const getEntitiesExport: ICrudGetAllActionAtendimentoAceite<IAtendimentoAceite> = (msgPush, page, size, sort) => {
+export const getEntitiesExport: ICrudGetAllActionAtendimentoAceite<IAtendimentoAceite> = (
+  msgPush,
+  profissional,
+  atendimento,
+  page,
+  size,
+  sort
+) => {
   const msgPushRequest = msgPush ? `msgPush.contains=${msgPush}&` : '';
+  const profissionalRequest = profissional ? `profissional.equals=${profissional}&` : '';
+  const atendimentoRequest = atendimento ? `atendimento.equals=${atendimento}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_ATENDIMENTOACEITE_LIST,
-    payload: axios.get<IAtendimentoAceite>(`${requestUrl}${msgPushRequest}cacheBuster=${new Date().getTime()}`)
+    payload: axios.get<IAtendimentoAceite>(
+      `${requestUrl}${msgPushRequest}${profissionalRequest}${atendimentoRequest}cacheBuster=${new Date().getTime()}`
+    )
   };
 };
 
 export const createEntity: ICrudPutAction<IAtendimentoAceite> = entity => async dispatch => {
   entity = {
-    ...entity
+    ...entity,
+    profissional: entity.profissional === 'null' ? null : entity.profissional,
+    atendimento: entity.atendimento === 'null' ? null : entity.atendimento
   };
   const result = await dispatch({
     type: ACTION_TYPES.CREATE_ATENDIMENTOACEITE,
@@ -166,7 +198,11 @@ export const createEntity: ICrudPutAction<IAtendimentoAceite> = entity => async 
 };
 
 export const updateEntity: ICrudPutAction<IAtendimentoAceite> = entity => async dispatch => {
-  entity = { ...entity };
+  entity = {
+    ...entity,
+    profissional: entity.profissional === 'null' ? null : entity.profissional,
+    atendimento: entity.atendimento === 'null' ? null : entity.atendimento
+  };
   const result = await dispatch({
     type: ACTION_TYPES.UPDATE_ATENDIMENTOACEITE,
     payload: axios.put(apiUrl, cleanEntity(entity))
@@ -194,8 +230,13 @@ export const getAtendimentoAceiteState = (location): IAtendimentoAceiteBaseState
   const baseFilters = url.searchParams.get('baseFilters') || '';
   const msgPush = url.searchParams.get('msgPush') || '';
 
+  const profissional = url.searchParams.get('profissional') || '';
+  const atendimento = url.searchParams.get('atendimento') || '';
+
   return {
     baseFilters,
-    msgPush
+    msgPush,
+    profissional,
+    atendimento
   };
 };

@@ -39,6 +39,12 @@ import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
 import { IUnidadeEasy } from 'app/shared/model/unidade-easy.model';
 import { getEntities as getUnidadeEasies } from 'app/entities/unidade-easy/unidade-easy.reducer';
+import { IPaciente } from 'app/shared/model/paciente.model';
+import { getEntities as getPacientes } from 'app/entities/paciente/paciente.reducer';
+import { IPacienteDadosCartao } from 'app/shared/model/paciente-dados-cartao.model';
+import { getEntities as getPacienteDadosCartaos } from 'app/entities/paciente-dados-cartao/paciente-dados-cartao.reducer';
+import { IEspecialidade } from 'app/shared/model/especialidade.model';
+import { getEntities as getEspecialidades } from 'app/entities/especialidade/especialidade.reducer';
 
 export interface IPacientePedidoProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
@@ -59,6 +65,9 @@ export class PacientePedido extends React.Component<IPacientePedidoProps, IPacie
     this.getEntities();
 
     this.props.getUnidadeEasies();
+    this.props.getPacientes();
+    this.props.getPacienteDadosCartaos();
+    this.props.getEspecialidades();
   }
 
   cancelCourse = () => {
@@ -71,7 +80,10 @@ export class PacientePedido extends React.Component<IPacientePedidoProps, IPacie
         valor: '',
         desconto: '',
         tipoValor: '',
-        unidade: ''
+        unidade: '',
+        paciente: '',
+        cartao: '',
+        especialidade: ''
       },
       () => this.sortEntities()
     );
@@ -142,6 +154,15 @@ export class PacientePedido extends React.Component<IPacientePedidoProps, IPacie
       'unidade=' +
       this.state.unidade +
       '&' +
+      'paciente=' +
+      this.state.paciente +
+      '&' +
+      'cartao=' +
+      this.state.cartao +
+      '&' +
+      'especialidade=' +
+      this.state.especialidade +
+      '&' +
       ''
     );
   };
@@ -158,6 +179,9 @@ export class PacientePedido extends React.Component<IPacientePedidoProps, IPacie
       desconto,
       tipoValor,
       unidade,
+      paciente,
+      cartao,
+      especialidade,
       activePage,
       itemsPerPage,
       sort,
@@ -172,6 +196,9 @@ export class PacientePedido extends React.Component<IPacientePedidoProps, IPacie
       desconto,
       tipoValor,
       unidade,
+      paciente,
+      cartao,
+      especialidade,
       activePage - 1,
       itemsPerPage,
       `${sort},${order}`
@@ -179,7 +206,7 @@ export class PacientePedido extends React.Component<IPacientePedidoProps, IPacie
   };
 
   render() {
-    const { unidadeEasies, pacientePedidoList, match, totalItems } = this.props;
+    const { unidadeEasies, pacientes, pacienteDadosCartaos, especialidades, pacientePedidoList, match, totalItems } = this.props;
     return (
       <div>
         <h2 id="page-heading">
@@ -327,6 +354,89 @@ export class PacientePedido extends React.Component<IPacientePedidoProps, IPacie
                           </Row>
                         </Col>
                       ) : null}
+
+                      {this.state.baseFilters !== 'paciente' ? (
+                        <Col md="3">
+                          <Row className="mr-1 mt-1">
+                            <div style={{ width: '100%' }}>
+                              <Label for="paciente-pedido-paciente">
+                                <Translate contentKey="generadorApp.pacientePedido.paciente">Paciente</Translate>
+                              </Label>
+                              <Select
+                                id="paciente-pedido-paciente"
+                                isMulti
+                                className={'css-select-control'}
+                                value={
+                                  pacientes
+                                    ? pacientes.map(p =>
+                                        this.state.paciente.split(',').indexOf(p.id) !== -1 ? { value: p.id, label: p.id } : null
+                                      )
+                                    : null
+                                }
+                                options={pacientes ? pacientes.map(option => ({ value: option.id, label: option.id })) : null}
+                                onChange={options => this.setState({ paciente: options.map(option => option['value']).join(',') })}
+                                name={'paciente'}
+                              />
+                            </div>
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'cartao' ? (
+                        <Col md="3">
+                          <Row className="mr-1 mt-1">
+                            <div style={{ width: '100%' }}>
+                              <Label for="paciente-pedido-cartao">
+                                <Translate contentKey="generadorApp.pacientePedido.cartao">Cartao</Translate>
+                              </Label>
+                              <Select
+                                id="paciente-pedido-cartao"
+                                isMulti
+                                className={'css-select-control'}
+                                value={
+                                  pacienteDadosCartaos
+                                    ? pacienteDadosCartaos.map(p =>
+                                        this.state.cartao.split(',').indexOf(p.id) !== -1 ? { value: p.id, label: p.id } : null
+                                      )
+                                    : null
+                                }
+                                options={
+                                  pacienteDadosCartaos ? pacienteDadosCartaos.map(option => ({ value: option.id, label: option.id })) : null
+                                }
+                                onChange={options => this.setState({ cartao: options.map(option => option['value']).join(',') })}
+                                name={'cartao'}
+                              />
+                            </div>
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'especialidade' ? (
+                        <Col md="3">
+                          <Row className="mr-1 mt-1">
+                            <div style={{ width: '100%' }}>
+                              <Label for="paciente-pedido-especialidade">
+                                <Translate contentKey="generadorApp.pacientePedido.especialidade">Especialidade</Translate>
+                              </Label>
+                              <Select
+                                id="paciente-pedido-especialidade"
+                                isMulti
+                                className={'css-select-control'}
+                                value={
+                                  especialidades
+                                    ? especialidades.map(p =>
+                                        this.state.especialidade.split(',').indexOf(p.id) !== -1 ? { value: p.id, label: p.id } : null
+                                      )
+                                    : null
+                                }
+                                options={especialidades ? especialidades.map(option => ({ value: option.id, label: option.id })) : null}
+                                onChange={options => this.setState({ especialidade: options.map(option => option['value']).join(',') })}
+                                name={'especialidade'}
+                              />
+                            </div>
+                          </Row>
+                        </Col>
+                      ) : null}
                     </div>
 
                     <div className="row mb-2 mr-4 justify-content-end">
@@ -404,6 +514,27 @@ export class PacientePedido extends React.Component<IPacientePedidoProps, IPacie
                         </th>
                       ) : null}
 
+                      {this.state.baseFilters !== 'paciente' ? (
+                        <th>
+                          <Translate contentKey="generadorApp.pacientePedido.paciente">Paciente</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'cartao' ? (
+                        <th>
+                          <Translate contentKey="generadorApp.pacientePedido.cartao">Cartao</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'especialidade' ? (
+                        <th>
+                          <Translate contentKey="generadorApp.pacientePedido.especialidade">Especialidade</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+
                       <th />
                     </tr>
                   </thead>
@@ -443,6 +574,36 @@ export class PacientePedido extends React.Component<IPacientePedidoProps, IPacie
                           <td>
                             {pacientePedido.unidade ? (
                               <Link to={`unidade-easy/${pacientePedido.unidade.id}`}>{pacientePedido.unidade.id}</Link>
+                            ) : (
+                              ''
+                            )}
+                          </td>
+                        ) : null}
+
+                        {this.state.baseFilters !== 'paciente' ? (
+                          <td>
+                            {pacientePedido.paciente ? (
+                              <Link to={`paciente/${pacientePedido.paciente.id}`}>{pacientePedido.paciente.id}</Link>
+                            ) : (
+                              ''
+                            )}
+                          </td>
+                        ) : null}
+
+                        {this.state.baseFilters !== 'cartao' ? (
+                          <td>
+                            {pacientePedido.cartao ? (
+                              <Link to={`paciente-dados-cartao/${pacientePedido.cartao.id}`}>{pacientePedido.cartao.id}</Link>
+                            ) : (
+                              ''
+                            )}
+                          </td>
+                        ) : null}
+
+                        {this.state.baseFilters !== 'especialidade' ? (
+                          <td>
+                            {pacientePedido.especialidade ? (
+                              <Link to={`especialidade/${pacientePedido.especialidade.id}`}>{pacientePedido.especialidade.id}</Link>
                             ) : (
                               ''
                             )}
@@ -516,12 +677,18 @@ export class PacientePedido extends React.Component<IPacientePedidoProps, IPacie
 
 const mapStateToProps = ({ pacientePedido, ...storeState }: IRootState) => ({
   unidadeEasies: storeState.unidadeEasy.entities,
+  pacientes: storeState.paciente.entities,
+  pacienteDadosCartaos: storeState.pacienteDadosCartao.entities,
+  especialidades: storeState.especialidade.entities,
   pacientePedidoList: pacientePedido.entities,
   totalItems: pacientePedido.totalItems
 });
 
 const mapDispatchToProps = {
   getUnidadeEasies,
+  getPacientes,
+  getPacienteDadosCartaos,
+  getEspecialidades,
   getEntities
 };
 

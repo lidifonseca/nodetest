@@ -34,12 +34,15 @@ export type AtendimentoCepRecusadoState = Readonly<typeof initialState>;
 export interface IAtendimentoCepRecusadoBaseState {
   baseFilters: any;
   cep: any;
+  padItem: any;
 }
 
 export interface IAtendimentoCepRecusadoUpdateState {
   fieldsBase: IAtendimentoCepRecusadoBaseState;
 
+  padItemSelectValue: any;
   isNew: boolean;
+  padItemId: string;
 }
 
 // Reducer
@@ -121,18 +124,20 @@ const apiUrl = 'api/atendimento-cep-recusados';
 // Actions
 export type ICrudGetAllActionAtendimentoCepRecusado<T> = (
   cep?: any,
+  padItem?: any,
   page?: number,
   size?: number,
   sort?: string
 ) => IPayload<T> | ((dispatch: any) => IPayload<T>);
 
-export const getEntities: ICrudGetAllActionAtendimentoCepRecusado<IAtendimentoCepRecusado> = (cep, page, size, sort) => {
+export const getEntities: ICrudGetAllActionAtendimentoCepRecusado<IAtendimentoCepRecusado> = (cep, padItem, page, size, sort) => {
   const cepRequest = cep ? `cep.contains=${cep}&` : '';
+  const padItemRequest = padItem ? `padItem.equals=${padItem}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_ATENDIMENTOCEPRECUSADO_LIST,
-    payload: axios.get<IAtendimentoCepRecusado>(`${requestUrl}${cepRequest}cacheBuster=${new Date().getTime()}`)
+    payload: axios.get<IAtendimentoCepRecusado>(`${requestUrl}${cepRequest}${padItemRequest}cacheBuster=${new Date().getTime()}`)
   };
 };
 export const getEntity: ICrudGetAction<IAtendimentoCepRecusado> = id => {
@@ -143,19 +148,21 @@ export const getEntity: ICrudGetAction<IAtendimentoCepRecusado> = id => {
   };
 };
 
-export const getEntitiesExport: ICrudGetAllActionAtendimentoCepRecusado<IAtendimentoCepRecusado> = (cep, page, size, sort) => {
+export const getEntitiesExport: ICrudGetAllActionAtendimentoCepRecusado<IAtendimentoCepRecusado> = (cep, padItem, page, size, sort) => {
   const cepRequest = cep ? `cep.contains=${cep}&` : '';
+  const padItemRequest = padItem ? `padItem.equals=${padItem}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_ATENDIMENTOCEPRECUSADO_LIST,
-    payload: axios.get<IAtendimentoCepRecusado>(`${requestUrl}${cepRequest}cacheBuster=${new Date().getTime()}`)
+    payload: axios.get<IAtendimentoCepRecusado>(`${requestUrl}${cepRequest}${padItemRequest}cacheBuster=${new Date().getTime()}`)
   };
 };
 
 export const createEntity: ICrudPutAction<IAtendimentoCepRecusado> = entity => async dispatch => {
   entity = {
-    ...entity
+    ...entity,
+    padItem: entity.padItem === 'null' ? null : entity.padItem
   };
   const result = await dispatch({
     type: ACTION_TYPES.CREATE_ATENDIMENTOCEPRECUSADO,
@@ -166,7 +173,7 @@ export const createEntity: ICrudPutAction<IAtendimentoCepRecusado> = entity => a
 };
 
 export const updateEntity: ICrudPutAction<IAtendimentoCepRecusado> = entity => async dispatch => {
-  entity = { ...entity };
+  entity = { ...entity, padItem: entity.padItem === 'null' ? null : entity.padItem };
   const result = await dispatch({
     type: ACTION_TYPES.UPDATE_ATENDIMENTOCEPRECUSADO,
     payload: axios.put(apiUrl, cleanEntity(entity))
@@ -194,8 +201,11 @@ export const getAtendimentoCepRecusadoState = (location): IAtendimentoCepRecusad
   const baseFilters = url.searchParams.get('baseFilters') || '';
   const cep = url.searchParams.get('cep') || '';
 
+  const padItem = url.searchParams.get('padItem') || '';
+
   return {
     baseFilters,
-    cep
+    cep,
+    padItem
   };
 };

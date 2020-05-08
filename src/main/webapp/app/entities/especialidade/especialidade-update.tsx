@@ -11,6 +11,12 @@ import { IRootState } from 'app/shared/reducers';
 
 import { IUnidadeEasy } from 'app/shared/model/unidade-easy.model';
 import { getEntities as getUnidadeEasies } from 'app/entities/unidade-easy/unidade-easy.reducer';
+import { ICategoria } from 'app/shared/model/categoria.model';
+import { getEntities as getCategorias } from 'app/entities/categoria/categoria.reducer';
+import { ITipoEspecialidade } from 'app/shared/model/tipo-especialidade.model';
+import { getEntities as getTipoEspecialidades } from 'app/entities/tipo-especialidade/tipo-especialidade.reducer';
+import { ITipoUnidade } from 'app/shared/model/tipo-unidade.model';
+import { getEntities as getTipoUnidades } from 'app/entities/tipo-unidade/tipo-unidade.reducer';
 import {
   IEspecialidadeUpdateState,
   getEntity,
@@ -37,8 +43,14 @@ export class EspecialidadeUpdate extends React.Component<IEspecialidadeUpdatePro
 
     this.state = {
       unidadeEasySelectValue: null,
+      categoriaSelectValue: null,
+      tipoEspecialidadeSelectValue: null,
+      tipoUnidadeSelectValue: null,
       fieldsBase: getEspecialidadeState(this.props.location),
       unidadeId: '0',
+      categoriaId: '0',
+      tipoEspecialidadeId: '0',
+      tipoUnidadeId: '0',
       isNew: !this.props.match.params || !this.props.match.params.id
     };
   }
@@ -59,6 +71,45 @@ export class EspecialidadeUpdate extends React.Component<IEspecialidadeUpdatePro
         )
       });
     }
+
+    if (
+      nextProps.categorias.length > 0 &&
+      this.state.categoriaSelectValue === null &&
+      nextProps.especialidadeEntity.categoria &&
+      nextProps.especialidadeEntity.categoria.id
+    ) {
+      this.setState({
+        categoriaSelectValue: nextProps.categorias.map(p =>
+          nextProps.especialidadeEntity.categoria.id === p.id ? { value: p.id, label: p.id } : null
+        )
+      });
+    }
+
+    if (
+      nextProps.tipoEspecialidades.length > 0 &&
+      this.state.tipoEspecialidadeSelectValue === null &&
+      nextProps.especialidadeEntity.tipoEspecialidade &&
+      nextProps.especialidadeEntity.tipoEspecialidade.id
+    ) {
+      this.setState({
+        tipoEspecialidadeSelectValue: nextProps.tipoEspecialidades.map(p =>
+          nextProps.especialidadeEntity.tipoEspecialidade.id === p.id ? { value: p.id, label: p.id } : null
+        )
+      });
+    }
+
+    if (
+      nextProps.tipoUnidades.length > 0 &&
+      this.state.tipoUnidadeSelectValue === null &&
+      nextProps.especialidadeEntity.tipoUnidade &&
+      nextProps.especialidadeEntity.tipoUnidade.id
+    ) {
+      this.setState({
+        tipoUnidadeSelectValue: nextProps.tipoUnidades.map(p =>
+          nextProps.especialidadeEntity.tipoUnidade.id === p.id ? { value: p.id, label: p.id } : null
+        )
+      });
+    }
   }
 
   componentDidMount() {
@@ -69,6 +120,9 @@ export class EspecialidadeUpdate extends React.Component<IEspecialidadeUpdatePro
     }
 
     this.props.getUnidadeEasies();
+    this.props.getCategorias();
+    this.props.getTipoEspecialidades();
+    this.props.getTipoUnidades();
   }
 
   onBlobChange = (isAnImage, name, fileInput) => event => {
@@ -93,6 +147,9 @@ export class EspecialidadeUpdate extends React.Component<IEspecialidadeUpdatePro
       const entity = {
         ...especialidadeEntity,
         unidadeEasy: this.state.unidadeEasySelectValue ? this.state.unidadeEasySelectValue['value'] : null,
+        categoria: this.state.categoriaSelectValue ? this.state.categoriaSelectValue['value'] : null,
+        tipoEspecialidade: this.state.tipoEspecialidadeSelectValue ? this.state.tipoEspecialidadeSelectValue['value'] : null,
+        tipoUnidade: this.state.tipoUnidadeSelectValue ? this.state.tipoUnidadeSelectValue['value'] : null,
         ...values
       };
 
@@ -109,7 +166,7 @@ export class EspecialidadeUpdate extends React.Component<IEspecialidadeUpdatePro
   };
 
   render() {
-    const { especialidadeEntity, unidadeEasies, loading, updating } = this.props;
+    const { especialidadeEntity, unidadeEasies, categorias, tipoEspecialidades, tipoUnidades, loading, updating } = this.props;
     const { isNew } = this.state;
 
     const { descricao } = especialidadeEntity;
@@ -122,7 +179,10 @@ export class EspecialidadeUpdate extends React.Component<IEspecialidadeUpdatePro
               ? {}
               : {
                   ...especialidadeEntity,
-                  unidade: especialidadeEntity.unidade ? especialidadeEntity.unidade.id : null
+                  unidade: especialidadeEntity.unidade ? especialidadeEntity.unidade.id : null,
+                  categoria: especialidadeEntity.categoria ? especialidadeEntity.categoria.id : null,
+                  tipoEspecialidade: especialidadeEntity.tipoEspecialidade ? especialidadeEntity.tipoEspecialidade.id : null,
+                  tipoUnidade: especialidadeEntity.tipoUnidade ? especialidadeEntity.tipoUnidade.id : null
                 }
           }
           onSubmit={this.saveEntity}
@@ -196,7 +256,25 @@ export class EspecialidadeUpdate extends React.Component<IEspecialidadeUpdatePro
 
                         <AtivoComponentUpdate baseFilters />
 
+                        <AtendimentoComponentUpdate baseFilter atendimentos />
+
+                        <EspecialidadeOperadoraComponentUpdate baseFilter especialidadeOperadoras />
+
+                        <EspecialidadeUnidadeComponentUpdate baseFilter especialidadeUnidades />
+
+                        <EspecialidadeValorComponentUpdate baseFilter especialidadeValors />
+
+                        <PacientePedidoComponentUpdate baseFilter pacientePedidos />
+
+                        <PadItemComponentUpdate baseFilter padItems />
+
                         <UnidadeComponentUpdate baseFilter unidadeEasies />
+
+                        <CategoriaComponentUpdate baseFilter categorias />
+
+                        <TipoEspecialidadeComponentUpdate baseFilter tipoEspecialidades />
+
+                        <TipoUnidadeComponentUpdate baseFilter tipoUnidades />
                       </Row>
                     </div>
                   )}
@@ -212,6 +290,9 @@ export class EspecialidadeUpdate extends React.Component<IEspecialidadeUpdatePro
 
 const mapStateToProps = (storeState: IRootState) => ({
   unidadeEasies: storeState.unidadeEasy.entities,
+  categorias: storeState.categoria.entities,
+  tipoEspecialidades: storeState.tipoEspecialidade.entities,
+  tipoUnidades: storeState.tipoUnidade.entities,
   especialidadeEntity: storeState.especialidade.entity,
   loading: storeState.especialidade.loading,
   updating: storeState.especialidade.updating,
@@ -220,6 +301,9 @@ const mapStateToProps = (storeState: IRootState) => ({
 
 const mapDispatchToProps = {
   getUnidadeEasies,
+  getCategorias,
+  getTipoEspecialidades,
+  getTipoUnidades,
   getEntity,
   updateEntity,
   setBlob,
@@ -356,6 +440,54 @@ const AtivoComponentUpdate = ({ baseFilters }) => {
   );
 };
 
+const AtendimentoComponentUpdate = ({ baseFilters, atendimentos }) => {
+  return baseFilters !== 'atendimento' ? (
+    <Col md="12"></Col>
+  ) : (
+    <AvInput type="hidden" name="atendimento" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const EspecialidadeOperadoraComponentUpdate = ({ baseFilters, especialidadeOperadoras }) => {
+  return baseFilters !== 'especialidadeOperadora' ? (
+    <Col md="12"></Col>
+  ) : (
+    <AvInput type="hidden" name="especialidadeOperadora" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const EspecialidadeUnidadeComponentUpdate = ({ baseFilters, especialidadeUnidades }) => {
+  return baseFilters !== 'especialidadeUnidade' ? (
+    <Col md="12"></Col>
+  ) : (
+    <AvInput type="hidden" name="especialidadeUnidade" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const EspecialidadeValorComponentUpdate = ({ baseFilters, especialidadeValors }) => {
+  return baseFilters !== 'especialidadeValor' ? (
+    <Col md="12"></Col>
+  ) : (
+    <AvInput type="hidden" name="especialidadeValor" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const PacientePedidoComponentUpdate = ({ baseFilters, pacientePedidos }) => {
+  return baseFilters !== 'pacientePedido' ? (
+    <Col md="12"></Col>
+  ) : (
+    <AvInput type="hidden" name="pacientePedido" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const PadItemComponentUpdate = ({ baseFilters, padItems }) => {
+  return baseFilters !== 'padItem' ? (
+    <Col md="12"></Col>
+  ) : (
+    <AvInput type="hidden" name="padItem" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
 const UnidadeComponentUpdate = ({ baseFilters, unidadeEasies }) => {
   return baseFilters !== 'unidade' ? (
     <Col md="12">
@@ -381,6 +513,90 @@ const UnidadeComponentUpdate = ({ baseFilters, unidadeEasies }) => {
     </Col>
   ) : (
     <AvInput type="hidden" name="unidade" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const CategoriaComponentUpdate = ({ baseFilters, categorias }) => {
+  return baseFilters !== 'categoria' ? (
+    <Col md="12">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" for="especialidade-categoria">
+              <Translate contentKey="generadorApp.especialidade.categoria">Categoria</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <Select
+              id="especialidade-categoria"
+              className={'css-select-control'}
+              value={this.state.categoriaSelectValue}
+              options={categorias ? categorias.map(option => ({ value: option.id, label: option.id })) : null}
+              onChange={options => this.setState({ categoriaSelectValue: options })}
+              name={'categoria'}
+            />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="categoria" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const TipoEspecialidadeComponentUpdate = ({ baseFilters, tipoEspecialidades }) => {
+  return baseFilters !== 'tipoEspecialidade' ? (
+    <Col md="12">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" for="especialidade-tipoEspecialidade">
+              <Translate contentKey="generadorApp.especialidade.tipoEspecialidade">Tipo Especialidade</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <Select
+              id="especialidade-tipoEspecialidade"
+              className={'css-select-control'}
+              value={this.state.tipoEspecialidadeSelectValue}
+              options={tipoEspecialidades ? tipoEspecialidades.map(option => ({ value: option.id, label: option.id })) : null}
+              onChange={options => this.setState({ tipoEspecialidadeSelectValue: options })}
+              name={'tipoEspecialidade'}
+            />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="tipoEspecialidade" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const TipoUnidadeComponentUpdate = ({ baseFilters, tipoUnidades }) => {
+  return baseFilters !== 'tipoUnidade' ? (
+    <Col md="12">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" for="especialidade-tipoUnidade">
+              <Translate contentKey="generadorApp.especialidade.tipoUnidade">Tipo Unidade</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <Select
+              id="especialidade-tipoUnidade"
+              className={'css-select-control'}
+              value={this.state.tipoUnidadeSelectValue}
+              options={tipoUnidades ? tipoUnidades.map(option => ({ value: option.id, label: option.id })) : null}
+              onChange={options => this.setState({ tipoUnidadeSelectValue: options })}
+              name={'tipoUnidade'}
+            />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="tipoUnidade" value={this.state.fieldsBase[baseFilters]} />
   );
 };
 

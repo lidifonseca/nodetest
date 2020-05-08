@@ -34,6 +34,9 @@ import { IPacientePush } from 'app/shared/model/paciente-push.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
+import { IPaciente } from 'app/shared/model/paciente.model';
+import { getEntities as getPacientes } from 'app/entities/paciente/paciente.reducer';
+
 export interface IPacientePushProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
 export interface IPacientePushState extends IPacientePushBaseState, IPaginationBaseState {
@@ -54,6 +57,8 @@ export class PacientePush extends React.Component<IPacientePushProps, IPacienteP
 
   componentDidMount() {
     this.getEntities();
+
+    this.props.getPacientes();
   }
 
   cancelCourse = () => {
@@ -61,7 +66,8 @@ export class PacientePush extends React.Component<IPacientePushProps, IPacienteP
       {
         idFranquia: '',
         mensagem: '',
-        ativo: ''
+        ativo: '',
+        paciente: ''
       },
       () => this.sortEntities()
     );
@@ -115,6 +121,9 @@ export class PacientePush extends React.Component<IPacientePushProps, IPacienteP
       'ativo=' +
       this.state.ativo +
       '&' +
+      'paciente=' +
+      this.state.paciente +
+      '&' +
       ''
     );
   };
@@ -122,8 +131,8 @@ export class PacientePush extends React.Component<IPacientePushProps, IPacienteP
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { idFranquia, mensagem, ativo, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntitiesExport(idFranquia, mensagem, ativo, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const { idFranquia, mensagem, ativo, paciente, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntitiesExport(idFranquia, mensagem, ativo, paciente, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   confirmExport() {}
@@ -172,11 +181,13 @@ export class PacientePush extends React.Component<IPacientePushProps, IPacienteP
 }
 
 const mapStateToProps = ({ pacientePush, ...storeState }: IRootState) => ({
+  pacientes: storeState.paciente.entities,
   pacientePushList: pacientePush.entities,
   totalItems: pacientePush.totalItems
 });
 
 const mapDispatchToProps = {
+  getPacientes,
   getEntitiesExport
 };
 

@@ -22,7 +22,9 @@
       "detail": {
         "title": "Pad Item Sorteio Feito"
       },
-      "sorteioFeito": "Sorteio Feito"
+      "sorteioFeito": "Sorteio Feito",
+      "padItem_empty": "Sem Pad Item",
+      "padItem": "Pad Item"
     }
   }
 }

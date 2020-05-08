@@ -28,6 +28,9 @@ import { IProfissionalStatusAtual } from 'app/shared/model/profissional-status-a
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
+import { IStatusAtualProf } from 'app/shared/model/status-atual-prof.model';
+import { getEntities as getStatusAtualProfs } from 'app/entities/status-atual-prof/status-atual-prof.reducer';
+
 export interface IProfissionalStatusAtualProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
 export interface IProfissionalStatusAtualState extends IProfissionalStatusAtualBaseState, IPaginationBaseState {}
@@ -45,6 +48,8 @@ export class ProfissionalStatusAtual extends React.Component<IProfissionalStatus
 
   componentDidMount() {
     this.getEntities();
+
+    this.props.getStatusAtualProfs();
   }
 
   cancelCourse = () => {
@@ -52,7 +57,8 @@ export class ProfissionalStatusAtual extends React.Component<IProfissionalStatus
       {
         idProfissional: '',
         obs: '',
-        ativo: ''
+        ativo: '',
+        statusAtualProf: ''
       },
       () => this.sortEntities()
     );
@@ -108,6 +114,9 @@ export class ProfissionalStatusAtual extends React.Component<IProfissionalStatus
       'ativo=' +
       this.state.ativo +
       '&' +
+      'statusAtualProf=' +
+      this.state.statusAtualProf +
+      '&' +
       ''
     );
   };
@@ -115,12 +124,12 @@ export class ProfissionalStatusAtual extends React.Component<IProfissionalStatus
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { idProfissional, obs, ativo, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntities(idProfissional, obs, ativo, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const { idProfissional, obs, ativo, statusAtualProf, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntities(idProfissional, obs, ativo, statusAtualProf, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   render() {
-    const { profissionalStatusAtualList, match, totalItems } = this.props;
+    const { statusAtualProfs, profissionalStatusAtualList, match, totalItems } = this.props;
     return (
       <div>
         <h2 id="page-heading">
@@ -194,6 +203,33 @@ export class ProfissionalStatusAtual extends React.Component<IProfissionalStatus
                           </Row>
                         </Col>
                       ) : null}
+
+                      {this.state.baseFilters !== 'statusAtualProf' ? (
+                        <Col md="3">
+                          <Row className="mr-1 mt-1">
+                            <div style={{ width: '100%' }}>
+                              <Label for="profissional-status-atual-statusAtualProf">
+                                <Translate contentKey="generadorApp.profissionalStatusAtual.statusAtualProf">Status Atual Prof</Translate>
+                              </Label>
+                              <Select
+                                id="profissional-status-atual-statusAtualProf"
+                                isMulti
+                                className={'css-select-control'}
+                                value={
+                                  statusAtualProfs
+                                    ? statusAtualProfs.map(p =>
+                                        this.state.statusAtualProf.split(',').indexOf(p.id) !== -1 ? { value: p.id, label: p.id } : null
+                                      )
+                                    : null
+                                }
+                                options={statusAtualProfs ? statusAtualProfs.map(option => ({ value: option.id, label: option.id })) : null}
+                                onChange={options => this.setState({ statusAtualProf: options.map(option => option['value']).join(',') })}
+                                name={'statusAtualProf'}
+                              />
+                            </div>
+                          </Row>
+                        </Col>
+                      ) : null}
                     </div>
 
                     <div className="row mb-2 mr-4 justify-content-end">
@@ -240,6 +276,13 @@ export class ProfissionalStatusAtual extends React.Component<IProfissionalStatus
                         </th>
                       ) : null}
 
+                      {this.state.baseFilters !== 'statusAtualProf' ? (
+                        <th>
+                          <Translate contentKey="generadorApp.profissionalStatusAtual.statusAtualProf">Status Atual Prof</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+
                       <th />
                     </tr>
                   </thead>
@@ -260,6 +303,18 @@ export class ProfissionalStatusAtual extends React.Component<IProfissionalStatus
                         ) : null}
 
                         {this.state.baseFilters !== 'ativo' ? <td>{profissionalStatusAtual.ativo}</td> : null}
+
+                        {this.state.baseFilters !== 'statusAtualProf' ? (
+                          <td>
+                            {profissionalStatusAtual.statusAtualProf ? (
+                              <Link to={`status-atual-prof/${profissionalStatusAtual.statusAtualProf.id}`}>
+                                {profissionalStatusAtual.statusAtualProf.id}
+                              </Link>
+                            ) : (
+                              ''
+                            )}
+                          </td>
+                        ) : null}
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">
@@ -332,11 +387,13 @@ export class ProfissionalStatusAtual extends React.Component<IProfissionalStatus
 }
 
 const mapStateToProps = ({ profissionalStatusAtual, ...storeState }: IRootState) => ({
+  statusAtualProfs: storeState.statusAtualProf.entities,
   profissionalStatusAtualList: profissionalStatusAtual.entities,
   totalItems: profissionalStatusAtual.totalItems
 });
 
 const mapDispatchToProps = {
+  getStatusAtualProfs,
   getEntities
 };
 

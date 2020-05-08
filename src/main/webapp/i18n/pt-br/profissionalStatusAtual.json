@@ -24,7 +24,9 @@
       },
       "idProfissional": "Id Profissional",
       "obs": "Obs",
-      "ativo": "Ativo"
+      "ativo": "Ativo",
+      "statusAtualProf_empty": "Sem Status Atual Prof",
+      "statusAtualProf": "Status Atual Prof"
     }
   }
 }

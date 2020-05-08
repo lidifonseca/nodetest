@@ -4,6 +4,8 @@ import { BaseEntity } from './base/base.entity';
 
 import { validate, Contains, IsInt, Length, IsEmail, IsFQDN, IsDate, Min, Max } from 'class-validator';
 
+import PadItem from './pad-item.entity';
+
 /**
  * A Periodicidade.
  */
@@ -14,6 +16,12 @@ export default class Periodicidade extends BaseEntity {
 
   @Column({ type: 'integer', name: 'ATIVO' })
   ativo: number;
+
+  @OneToMany(
+    type => PadItem,
+    other => other.periodicidade
+  )
+  padItems: PadItem[];
 
   // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
 }

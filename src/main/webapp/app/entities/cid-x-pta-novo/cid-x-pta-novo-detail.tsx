@@ -112,6 +112,19 @@ export class CidXPtaNovoDetail extends React.Component<ICidXPtaNovoDetailProps, 
                       </Col>
                     </Row>
                   </Col>
+
+                  <Col md="12">
+                    <Row>
+                      <Col md="3">
+                        <dt>
+                          <Translate contentKey="generadorApp.cidXPtaNovo.cid">Cid</Translate>
+                        </dt>
+                      </Col>
+                      <Col md="9">
+                        <dd>{cidXPtaNovoEntity.cid ? cidXPtaNovoEntity.cid.id : ''}</dd>
+                      </Col>
+                    </Row>
+                  </Col>
                 </Row>
                 <Button tag={Link} to="/cid-x-pta-novo" replace color="info">
                   <FontAwesomeIcon icon="arrow-left" />{' '}

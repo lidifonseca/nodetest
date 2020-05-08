@@ -23,7 +23,9 @@
         "title": "Tipo Usuario"
       },
       "tipoUsuario": "Tipo Usuario",
-      "ativo": "Ativo"
+      "ativo": "Ativo",
+      "usuario_empty": "Without Usuario",
+      "usuario": "Usuario"
     }
   }
 }

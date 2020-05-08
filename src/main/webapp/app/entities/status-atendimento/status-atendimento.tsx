@@ -53,7 +53,8 @@ export class StatusAtendimento extends React.Component<IStatusAtendimentoProps, 
         statusAtendimento: '',
         styleLabel: '',
         ordenacao: '',
-        ativo: ''
+        ativo: '',
+        atendimento: ''
       },
       () => this.sortEntities()
     );
@@ -112,6 +113,9 @@ export class StatusAtendimento extends React.Component<IStatusAtendimentoProps, 
       'ativo=' +
       this.state.ativo +
       '&' +
+      'atendimento=' +
+      this.state.atendimento +
+      '&' +
       ''
     );
   };
@@ -119,8 +123,8 @@ export class StatusAtendimento extends React.Component<IStatusAtendimentoProps, 
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { statusAtendimento, styleLabel, ordenacao, ativo, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntities(statusAtendimento, styleLabel, ordenacao, ativo, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const { statusAtendimento, styleLabel, ordenacao, ativo, atendimento, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntities(statusAtendimento, styleLabel, ordenacao, ativo, atendimento, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   render() {
@@ -208,6 +212,12 @@ export class StatusAtendimento extends React.Component<IStatusAtendimentoProps, 
                             </Label>
                             <AvInput type="string" name="ativo" id="status-atendimento-ativo" value={this.state.ativo} />
                           </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'atendimento' ? (
+                        <Col md="3">
+                          <Row className="mr-1 mt-1"></Row>
                         </Col>
                       ) : null}
                     </div>

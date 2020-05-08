@@ -34,6 +34,13 @@ import { IAtendimentoAssinaturas } from 'app/shared/model/atendimento-assinatura
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
+import { IAtendimento } from 'app/shared/model/atendimento.model';
+import { getEntities as getAtendimentos } from 'app/entities/atendimento/atendimento.reducer';
+import { IProfissional } from 'app/shared/model/profissional.model';
+import { getEntities as getProfissionals } from 'app/entities/profissional/profissional.reducer';
+import { IPaciente } from 'app/shared/model/paciente.model';
+import { getEntities as getPacientes } from 'app/entities/paciente/paciente.reducer';
+
 export interface IAtendimentoAssinaturasProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
 export interface IAtendimentoAssinaturasState extends IAtendimentoAssinaturasBaseState, IPaginationBaseState {
@@ -54,12 +61,19 @@ export class AtendimentoAssinaturas extends React.Component<IAtendimentoAssinatu
 
   componentDidMount() {
     this.getEntities();
+
+    this.props.getAtendimentos();
+    this.props.getProfissionals();
+    this.props.getPacientes();
   }
 
   cancelCourse = () => {
     this.setState(
       {
-        arquivoAssinatura: ''
+        arquivoAssinatura: '',
+        atendimento: '',
+        profissional: '',
+        paciente: ''
       },
       () => this.sortEntities()
     );
@@ -107,6 +121,15 @@ export class AtendimentoAssinaturas extends React.Component<IAtendimentoAssinatu
       'arquivoAssinatura=' +
       this.state.arquivoAssinatura +
       '&' +
+      'atendimento=' +
+      this.state.atendimento +
+      '&' +
+      'profissional=' +
+      this.state.profissional +
+      '&' +
+      'paciente=' +
+      this.state.paciente +
+      '&' +
       ''
     );
   };
@@ -114,8 +137,8 @@ export class AtendimentoAssinaturas extends React.Component<IAtendimentoAssinatu
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { arquivoAssinatura, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntitiesExport(arquivoAssinatura, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const { arquivoAssinatura, atendimento, profissional, paciente, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntitiesExport(arquivoAssinatura, atendimento, profissional, paciente, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   confirmExport() {}
@@ -164,11 +187,17 @@ export class AtendimentoAssinaturas extends React.Component<IAtendimentoAssinatu
 }
 
 const mapStateToProps = ({ atendimentoAssinaturas, ...storeState }: IRootState) => ({
+  atendimentos: storeState.atendimento.entities,
+  profissionals: storeState.profissional.entities,
+  pacientes: storeState.paciente.entities,
   atendimentoAssinaturasList: atendimentoAssinaturas.entities,
   totalItems: atendimentoAssinaturas.totalItems
 });
 
 const mapDispatchToProps = {
+  getAtendimentos,
+  getProfissionals,
+  getPacientes,
   getEntitiesExport
 };
 

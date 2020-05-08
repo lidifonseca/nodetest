@@ -5,6 +5,8 @@ import AcoesRespostas from '../domain/acoes-respostas.entity';
 import { AcoesRespostasRepository } from '../repository/acoes-respostas.repository';
 
 const relationshipNames = [];
+relationshipNames.push('respostas');
+relationshipNames.push('perguntasQuestionario');
 
 @Injectable()
 export class AcoesRespostasService {

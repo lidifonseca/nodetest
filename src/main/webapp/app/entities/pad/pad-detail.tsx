@@ -183,21 +183,6 @@ export class PadDetail extends React.Component<IPadDetailProps, IPadState> {
                     <Row>
                       <Col md="3">
                         <dt>
-                          <span id="novoModelo">
-                            <Translate contentKey="generadorApp.pad.novoModelo">Novo Modelo</Translate>
-                          </span>
-                        </dt>
-                      </Col>
-                      <Col md="9">
-                        <dd>{padEntity.novoModelo ? 'true' : 'false'}</dd>
-                      </Col>
-                    </Row>
-                  </Col>
-
-                  <Col md="12">
-                    <Row>
-                      <Col md="3">
-                        <dt>
                           <span id="imagePath">
                             <Translate contentKey="generadorApp.pad.imagePath">Image Path</Translate>
                           </span>
@@ -233,6 +218,19 @@ export class PadDetail extends React.Component<IPadDetailProps, IPadState> {
                       </Col>
                       <Col md="9">
                         <dd>{padEntity.unidade ? padEntity.unidade.id : ''}</dd>
+                      </Col>
+                    </Row>
+                  </Col>
+
+                  <Col md="12">
+                    <Row>
+                      <Col md="3">
+                        <dt>
+                          <Translate contentKey="generadorApp.pad.paciente">Paciente</Translate>
+                        </dt>
+                      </Col>
+                      <Col md="9">
+                        <dd>{padEntity.paciente ? padEntity.paciente.id : ''}</dd>
                       </Col>
                     </Row>
                   </Col>

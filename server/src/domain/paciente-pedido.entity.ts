@@ -3,6 +3,9 @@ import { Entity, Column, PrimaryGeneratedColumn, JoinColumn, OneToOne, ManyToOne
 import { BaseEntity } from './base/base.entity';
 
 import UnidadeEasy from './unidade-easy.entity';
+import Paciente from './paciente.entity';
+import PacienteDadosCartao from './paciente-dados-cartao.entity';
+import Especialidade from './especialidade.entity';
 
 /**
  * A PacientePedido.
@@ -33,6 +36,18 @@ export default class PacientePedido extends BaseEntity {
   @ManyToOne(type => UnidadeEasy)
   @JoinColumn({ name: 'ID_UNIDADE', referencedColumnName: 'id' })
   unidade: UnidadeEasy;
+
+  @ManyToOne(type => Paciente)
+  @JoinColumn({ name: 'ID_PACIENTE', referencedColumnName: 'id' })
+  paciente: Paciente;
+
+  @ManyToOne(type => PacienteDadosCartao)
+  @JoinColumn({ name: 'ID_CARTAO', referencedColumnName: 'id' })
+  cartao: PacienteDadosCartao;
+
+  @ManyToOne(type => Especialidade)
+  @JoinColumn({ name: 'ID_ESPECIALIDADE', referencedColumnName: 'id' })
+  especialidade: Especialidade;
 
   // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
 }

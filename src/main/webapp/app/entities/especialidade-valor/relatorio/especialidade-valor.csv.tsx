@@ -34,6 +34,9 @@ import { IEspecialidadeValor } from 'app/shared/model/especialidade-valor.model'
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
+import { IEspecialidade } from 'app/shared/model/especialidade.model';
+import { getEntities as getEspecialidades } from 'app/entities/especialidade/especialidade.reducer';
+
 export interface IEspecialidadeValorProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
 export interface IEspecialidadeValorState extends IEspecialidadeValorBaseState, IPaginationBaseState {
@@ -54,6 +57,8 @@ export class EspecialidadeValor extends React.Component<IEspecialidadeValorProps
 
   componentDidMount() {
     this.getEntities();
+
+    this.props.getEspecialidades();
   }
 
   cancelCourse = () => {
@@ -61,7 +66,8 @@ export class EspecialidadeValor extends React.Component<IEspecialidadeValorProps
       {
         idFranquia: '',
         valor: '',
-        ativo: ''
+        ativo: '',
+        especialidade: ''
       },
       () => this.sortEntities()
     );
@@ -115,6 +121,9 @@ export class EspecialidadeValor extends React.Component<IEspecialidadeValorProps
       'ativo=' +
       this.state.ativo +
       '&' +
+      'especialidade=' +
+      this.state.especialidade +
+      '&' +
       ''
     );
   };
@@ -122,8 +131,8 @@ export class EspecialidadeValor extends React.Component<IEspecialidadeValorProps
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { idFranquia, valor, ativo, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntitiesExport(idFranquia, valor, ativo, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const { idFranquia, valor, ativo, especialidade, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntitiesExport(idFranquia, valor, ativo, especialidade, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   confirmExport() {}
@@ -172,11 +181,13 @@ export class EspecialidadeValor extends React.Component<IEspecialidadeValorProps
 }
 
 const mapStateToProps = ({ especialidadeValor, ...storeState }: IRootState) => ({
+  especialidades: storeState.especialidade.entities,
   especialidadeValorList: especialidadeValor.entities,
   totalItems: especialidadeValor.totalItems
 });
 
 const mapDispatchToProps = {
+  getEspecialidades,
   getEntitiesExport
 };
 

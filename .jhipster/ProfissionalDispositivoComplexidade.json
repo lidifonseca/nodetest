@@ -28,7 +28,7 @@
         }
     ],
     "relationships": [],
-    "changelogDate": "20200508170300",
+    "changelogDate": "20200508175900",
     "entityTableName": "profissional_dispositivo_complexidade",
     "dto": "mapstruct",
     "pagination": "pagination",

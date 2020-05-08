@@ -34,6 +34,9 @@ import { IPacienteEnqueteApp } from 'app/shared/model/paciente-enquete-app.model
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
+import { IPaciente } from 'app/shared/model/paciente.model';
+import { getEntities as getPacientes } from 'app/entities/paciente/paciente.reducer';
+
 export interface IPacienteEnqueteAppProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
 export interface IPacienteEnqueteAppState extends IPacienteEnqueteAppBaseState, IPaginationBaseState {
@@ -54,12 +57,15 @@ export class PacienteEnqueteApp extends React.Component<IPacienteEnqueteAppProps
 
   componentDidMount() {
     this.getEntities();
+
+    this.props.getPacientes();
   }
 
   cancelCourse = () => {
     this.setState(
       {
-        votacao: ''
+        votacao: '',
+        paciente: ''
       },
       () => this.sortEntities()
     );
@@ -107,6 +113,9 @@ export class PacienteEnqueteApp extends React.Component<IPacienteEnqueteAppProps
       'votacao=' +
       this.state.votacao +
       '&' +
+      'paciente=' +
+      this.state.paciente +
+      '&' +
       ''
     );
   };
@@ -114,8 +123,8 @@ export class PacienteEnqueteApp extends React.Component<IPacienteEnqueteAppProps
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { votacao, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntitiesExport(votacao, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const { votacao, paciente, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntitiesExport(votacao, paciente, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   confirmExport() {}
@@ -164,11 +173,13 @@ export class PacienteEnqueteApp extends React.Component<IPacienteEnqueteAppProps
 }
 
 const mapStateToProps = ({ pacienteEnqueteApp, ...storeState }: IRootState) => ({
+  pacientes: storeState.paciente.entities,
   pacienteEnqueteAppList: pacienteEnqueteApp.entities,
   totalItems: pacienteEnqueteApp.totalItems
 });
 
 const mapDispatchToProps = {
+  getPacientes,
   getEntitiesExport
 };
 

@@ -22,7 +22,13 @@
       "detail": {
         "title": "Atendimento Assinaturas"
       },
-      "arquivoAssinatura": "Arquivo Assinatura"
+      "arquivoAssinatura": "Arquivo Assinatura",
+      "atendimento_empty": "Sem Atendimento",
+      "atendimento": "Atendimento",
+      "profissional_empty": "Sem Profissional",
+      "profissional": "Profissional",
+      "paciente_empty": "Sem Paciente",
+      "paciente": "Paciente"
     }
   }
 }

@@ -149,8 +149,16 @@
             ]
         }
     ],
-    "relationships": [],
-    "changelogDate": "20200508154600",
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "cidade",
+            "otherEntityRelationshipName": "empresa",
+            "relationshipName": "cidade",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20200508164200",
     "entityTableName": "empresa",
     "dto": "mapstruct",
     "pagination": "pagination",

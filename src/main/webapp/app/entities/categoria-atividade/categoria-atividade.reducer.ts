@@ -34,15 +34,20 @@ export type CategoriaAtividadeState = Readonly<typeof initialState>;
 export interface ICategoriaAtividadeBaseState {
   baseFilters: any;
   atividade: any;
+  atendimentoAtividades: any;
+  padItemAtividade: any;
   unidade: any;
+  categoria: any;
 }
 
 export interface ICategoriaAtividadeUpdateState {
   fieldsBase: ICategoriaAtividadeBaseState;
 
   unidadeEasySelectValue: any;
+  categoriaSelectValue: any;
   isNew: boolean;
   unidadeId: string;
+  categoriaId: string;
 }
 
 // Reducer
@@ -124,20 +129,37 @@ const apiUrl = 'api/categoria-atividades';
 // Actions
 export type ICrudGetAllActionCategoriaAtividade<T> = (
   atividade?: any,
+  atendimentoAtividades?: any,
+  padItemAtividade?: any,
   unidade?: any,
+  categoria?: any,
   page?: number,
   size?: number,
   sort?: string
 ) => IPayload<T> | ((dispatch: any) => IPayload<T>);
 
-export const getEntities: ICrudGetAllActionCategoriaAtividade<ICategoriaAtividade> = (atividade, unidade, page, size, sort) => {
+export const getEntities: ICrudGetAllActionCategoriaAtividade<ICategoriaAtividade> = (
+  atividade,
+  atendimentoAtividades,
+  padItemAtividade,
+  unidade,
+  categoria,
+  page,
+  size,
+  sort
+) => {
   const atividadeRequest = atividade ? `atividade.contains=${atividade}&` : '';
+  const atendimentoAtividadesRequest = atendimentoAtividades ? `atendimentoAtividades.equals=${atendimentoAtividades}&` : '';
+  const padItemAtividadeRequest = padItemAtividade ? `padItemAtividade.equals=${padItemAtividade}&` : '';
   const unidadeRequest = unidade ? `unidade.equals=${unidade}&` : '';
+  const categoriaRequest = categoria ? `categoria.equals=${categoria}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_CATEGORIAATIVIDADE_LIST,
-    payload: axios.get<ICategoriaAtividade>(`${requestUrl}${atividadeRequest}${unidadeRequest}cacheBuster=${new Date().getTime()}`)
+    payload: axios.get<ICategoriaAtividade>(
+      `${requestUrl}${atividadeRequest}${atendimentoAtividadesRequest}${padItemAtividadeRequest}${unidadeRequest}${categoriaRequest}cacheBuster=${new Date().getTime()}`
+    )
   };
 };
 export const getEntity: ICrudGetAction<ICategoriaAtividade> = id => {
@@ -148,21 +170,36 @@ export const getEntity: ICrudGetAction<ICategoriaAtividade> = id => {
   };
 };
 
-export const getEntitiesExport: ICrudGetAllActionCategoriaAtividade<ICategoriaAtividade> = (atividade, unidade, page, size, sort) => {
+export const getEntitiesExport: ICrudGetAllActionCategoriaAtividade<ICategoriaAtividade> = (
+  atividade,
+  atendimentoAtividades,
+  padItemAtividade,
+  unidade,
+  categoria,
+  page,
+  size,
+  sort
+) => {
   const atividadeRequest = atividade ? `atividade.contains=${atividade}&` : '';
+  const atendimentoAtividadesRequest = atendimentoAtividades ? `atendimentoAtividades.equals=${atendimentoAtividades}&` : '';
+  const padItemAtividadeRequest = padItemAtividade ? `padItemAtividade.equals=${padItemAtividade}&` : '';
   const unidadeRequest = unidade ? `unidade.equals=${unidade}&` : '';
+  const categoriaRequest = categoria ? `categoria.equals=${categoria}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_CATEGORIAATIVIDADE_LIST,
-    payload: axios.get<ICategoriaAtividade>(`${requestUrl}${atividadeRequest}${unidadeRequest}cacheBuster=${new Date().getTime()}`)
+    payload: axios.get<ICategoriaAtividade>(
+      `${requestUrl}${atividadeRequest}${atendimentoAtividadesRequest}${padItemAtividadeRequest}${unidadeRequest}${categoriaRequest}cacheBuster=${new Date().getTime()}`
+    )
   };
 };
 
 export const createEntity: ICrudPutAction<ICategoriaAtividade> = entity => async dispatch => {
   entity = {
     ...entity,
-    unidade: entity.unidade === 'null' ? null : entity.unidade
+    unidade: entity.unidade === 'null' ? null : entity.unidade,
+    categoria: entity.categoria === 'null' ? null : entity.categoria
   };
   const result = await dispatch({
     type: ACTION_TYPES.CREATE_CATEGORIAATIVIDADE,
@@ -173,7 +210,11 @@ export const createEntity: ICrudPutAction<ICategoriaAtividade> = entity => async
 };
 
 export const updateEntity: ICrudPutAction<ICategoriaAtividade> = entity => async dispatch => {
-  entity = { ...entity, unidade: entity.unidade === 'null' ? null : entity.unidade };
+  entity = {
+    ...entity,
+    unidade: entity.unidade === 'null' ? null : entity.unidade,
+    categoria: entity.categoria === 'null' ? null : entity.categoria
+  };
   const result = await dispatch({
     type: ACTION_TYPES.UPDATE_CATEGORIAATIVIDADE,
     payload: axios.put(apiUrl, cleanEntity(entity))
@@ -201,11 +242,17 @@ export const getCategoriaAtividadeState = (location): ICategoriaAtividadeBaseSta
   const baseFilters = url.searchParams.get('baseFilters') || '';
   const atividade = url.searchParams.get('atividade') || '';
 
+  const atendimentoAtividades = url.searchParams.get('atendimentoAtividades') || '';
+  const padItemAtividade = url.searchParams.get('padItemAtividade') || '';
   const unidade = url.searchParams.get('unidade') || '';
+  const categoria = url.searchParams.get('categoria') || '';
 
   return {
     baseFilters,
     atividade,
-    unidade
+    atendimentoAtividades,
+    padItemAtividade,
+    unidade,
+    categoria
   };
 };

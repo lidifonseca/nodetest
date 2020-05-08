@@ -26,6 +26,8 @@
       "etapaAtual": "Etapa Atual",
       "finalizado": "Finalizado",
       "ultimaPerguntaRespondida": "Ultima Pergunta Respondida",
+      "respostasQuestionarios_empty": "Without Respostas Questionarios",
+      "respostasQuestionarios": "Respostas Questionarios",
       "paciente_empty": "Without Paciente",
       "paciente": "Paciente"
     }

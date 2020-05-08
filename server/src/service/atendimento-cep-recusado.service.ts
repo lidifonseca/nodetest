@@ -5,6 +5,7 @@ import AtendimentoCepRecusado from '../domain/atendimento-cep-recusado.entity';
 import { AtendimentoCepRecusadoRepository } from '../repository/atendimento-cep-recusado.repository';
 
 const relationshipNames = [];
+relationshipNames.push('padItem');
 
 @Injectable()
 export class AtendimentoCepRecusadoService {

@@ -28,6 +28,11 @@ import { IUsuarioAcao } from 'app/shared/model/usuario-acao.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
+import { ITela } from 'app/shared/model/tela.model';
+import { getEntities as getTelas } from 'app/entities/tela/tela.reducer';
+import { IAcao } from 'app/shared/model/acao.model';
+import { getEntities as getAcaos } from 'app/entities/acao/acao.reducer';
+
 export interface IUsuarioAcaoProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
 export interface IUsuarioAcaoState extends IUsuarioAcaoBaseState, IPaginationBaseState {}
@@ -45,13 +50,18 @@ export class UsuarioAcao extends React.Component<IUsuarioAcaoProps, IUsuarioAcao
 
   componentDidMount() {
     this.getEntities();
+
+    this.props.getTelas();
+    this.props.getAcaos();
   }
 
   cancelCourse = () => {
     this.setState(
       {
         idAtendimento: '',
-        descricao: ''
+        descricao: '',
+        tela: '',
+        acao: ''
       },
       () => this.sortEntities()
     );
@@ -104,6 +114,12 @@ export class UsuarioAcao extends React.Component<IUsuarioAcaoProps, IUsuarioAcao
       'descricao=' +
       this.state.descricao +
       '&' +
+      'tela=' +
+      this.state.tela +
+      '&' +
+      'acao=' +
+      this.state.acao +
+      '&' +
       ''
     );
   };
@@ -111,12 +127,12 @@ export class UsuarioAcao extends React.Component<IUsuarioAcaoProps, IUsuarioAcao
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { idAtendimento, descricao, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntities(idAtendimento, descricao, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const { idAtendimento, descricao, tela, acao, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntities(idAtendimento, descricao, tela, acao, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   render() {
-    const { usuarioAcaoList, match, totalItems } = this.props;
+    const { telas, acaos, usuarioAcaoList, match, totalItems } = this.props;
     return (
       <div>
         <h2 id="page-heading">
@@ -173,6 +189,60 @@ export class UsuarioAcao extends React.Component<IUsuarioAcaoProps, IUsuarioAcao
                           </Row>
                         </Col>
                       ) : null}
+
+                      {this.state.baseFilters !== 'tela' ? (
+                        <Col md="3">
+                          <Row className="mr-1 mt-1">
+                            <div style={{ width: '100%' }}>
+                              <Label for="usuario-acao-tela">
+                                <Translate contentKey="generadorApp.usuarioAcao.tela">Tela</Translate>
+                              </Label>
+                              <Select
+                                id="usuario-acao-tela"
+                                isMulti
+                                className={'css-select-control'}
+                                value={
+                                  telas
+                                    ? telas.map(p =>
+                                        this.state.tela.split(',').indexOf(p.id) !== -1 ? { value: p.id, label: p.id } : null
+                                      )
+                                    : null
+                                }
+                                options={telas ? telas.map(option => ({ value: option.id, label: option.id })) : null}
+                                onChange={options => this.setState({ tela: options.map(option => option['value']).join(',') })}
+                                name={'tela'}
+                              />
+                            </div>
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'acao' ? (
+                        <Col md="3">
+                          <Row className="mr-1 mt-1">
+                            <div style={{ width: '100%' }}>
+                              <Label for="usuario-acao-acao">
+                                <Translate contentKey="generadorApp.usuarioAcao.acao">Acao</Translate>
+                              </Label>
+                              <Select
+                                id="usuario-acao-acao"
+                                isMulti
+                                className={'css-select-control'}
+                                value={
+                                  acaos
+                                    ? acaos.map(p =>
+                                        this.state.acao.split(',').indexOf(p.id) !== -1 ? { value: p.id, label: p.id } : null
+                                      )
+                                    : null
+                                }
+                                options={acaos ? acaos.map(option => ({ value: option.id, label: option.id })) : null}
+                                onChange={options => this.setState({ acao: options.map(option => option['value']).join(',') })}
+                                name={'acao'}
+                              />
+                            </div>
+                          </Row>
+                        </Col>
+                      ) : null}
                     </div>
 
                     <div className="row mb-2 mr-4 justify-content-end">
@@ -213,6 +283,20 @@ export class UsuarioAcao extends React.Component<IUsuarioAcaoProps, IUsuarioAcao
                         </th>
                       ) : null}
 
+                      {this.state.baseFilters !== 'tela' ? (
+                        <th>
+                          <Translate contentKey="generadorApp.usuarioAcao.tela">Tela</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'acao' ? (
+                        <th>
+                          <Translate contentKey="generadorApp.usuarioAcao.acao">Acao</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+
                       <th />
                     </tr>
                   </thead>
@@ -230,6 +314,14 @@ export class UsuarioAcao extends React.Component<IUsuarioAcaoProps, IUsuarioAcao
 
                         {this.state.baseFilters !== 'descricao' ? (
                           <td>{usuarioAcao.descricao ? Buffer.from(usuarioAcao.descricao).toString() : null}</td>
+                        ) : null}
+
+                        {this.state.baseFilters !== 'tela' ? (
+                          <td>{usuarioAcao.tela ? <Link to={`tela/${usuarioAcao.tela.id}`}>{usuarioAcao.tela.id}</Link> : ''}</td>
+                        ) : null}
+
+                        {this.state.baseFilters !== 'acao' ? (
+                          <td>{usuarioAcao.acao ? <Link to={`acao/${usuarioAcao.acao.id}`}>{usuarioAcao.acao.id}</Link> : ''}</td>
                         ) : null}
 
                         <td className="text-right">
@@ -293,11 +385,15 @@ export class UsuarioAcao extends React.Component<IUsuarioAcaoProps, IUsuarioAcao
 }
 
 const mapStateToProps = ({ usuarioAcao, ...storeState }: IRootState) => ({
+  telas: storeState.tela.entities,
+  acaos: storeState.acao.entities,
   usuarioAcaoList: usuarioAcao.entities,
   totalItems: usuarioAcao.totalItems
 });
 
 const mapDispatchToProps = {
+  getTelas,
+  getAcaos,
   getEntities
 };
 

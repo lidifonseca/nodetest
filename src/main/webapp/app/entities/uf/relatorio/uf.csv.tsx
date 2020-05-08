@@ -60,7 +60,8 @@ export class Uf extends React.Component<IUfProps, IUfState> {
     this.setState(
       {
         siglaUf: '',
-        descrUf: ''
+        descrUf: '',
+        cidade: ''
       },
       () => this.sortEntities()
     );
@@ -111,6 +112,9 @@ export class Uf extends React.Component<IUfProps, IUfState> {
       'descrUf=' +
       this.state.descrUf +
       '&' +
+      'cidade=' +
+      this.state.cidade +
+      '&' +
       ''
     );
   };
@@ -118,8 +122,8 @@ export class Uf extends React.Component<IUfProps, IUfState> {
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { siglaUf, descrUf, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntitiesExport(siglaUf, descrUf, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const { siglaUf, descrUf, cidade, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntitiesExport(siglaUf, descrUf, cidade, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   confirmExport() {}

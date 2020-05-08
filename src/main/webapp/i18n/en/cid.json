@@ -26,7 +26,13 @@
       "diagnostico": "Diagnostico",
       "gr": "Gr",
       "temp": "Temp",
-      "apelido": "Apelido"
+      "apelido": "Apelido",
+      "cidXPtaNovo_empty": "Without Cid X Pta Novo",
+      "cidXPtaNovo": "Cid X Pta Novo",
+      "pacienteDiagnostico_empty": "Without Paciente Diagnostico",
+      "pacienteDiagnostico": "Paciente Diagnostico",
+      "padCid_empty": "Without Pad Cid",
+      "padCid": "Pad Cid"
     }
   }
 }

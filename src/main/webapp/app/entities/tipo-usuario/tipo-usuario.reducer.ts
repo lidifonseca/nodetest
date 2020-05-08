@@ -35,6 +35,7 @@ export interface ITipoUsuarioBaseState {
   baseFilters: any;
   tipoUsuario: any;
   ativo: any;
+  usuario: any;
 }
 
 export interface ITipoUsuarioUpdateState {
@@ -123,19 +124,23 @@ const apiUrl = 'api/tipo-usuarios';
 export type ICrudGetAllActionTipoUsuario<T> = (
   tipoUsuario?: any,
   ativo?: any,
+  usuario?: any,
   page?: number,
   size?: number,
   sort?: string
 ) => IPayload<T> | ((dispatch: any) => IPayload<T>);
 
-export const getEntities: ICrudGetAllActionTipoUsuario<ITipoUsuario> = (tipoUsuario, ativo, page, size, sort) => {
+export const getEntities: ICrudGetAllActionTipoUsuario<ITipoUsuario> = (tipoUsuario, ativo, usuario, page, size, sort) => {
   const tipoUsuarioRequest = tipoUsuario ? `tipoUsuario.contains=${tipoUsuario}&` : '';
   const ativoRequest = ativo ? `ativo.contains=${ativo}&` : '';
+  const usuarioRequest = usuario ? `usuario.equals=${usuario}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_TIPOUSUARIO_LIST,
-    payload: axios.get<ITipoUsuario>(`${requestUrl}${tipoUsuarioRequest}${ativoRequest}cacheBuster=${new Date().getTime()}`)
+    payload: axios.get<ITipoUsuario>(
+      `${requestUrl}${tipoUsuarioRequest}${ativoRequest}${usuarioRequest}cacheBuster=${new Date().getTime()}`
+    )
   };
 };
 export const getEntity: ICrudGetAction<ITipoUsuario> = id => {
@@ -146,14 +151,17 @@ export const getEntity: ICrudGetAction<ITipoUsuario> = id => {
   };
 };
 
-export const getEntitiesExport: ICrudGetAllActionTipoUsuario<ITipoUsuario> = (tipoUsuario, ativo, page, size, sort) => {
+export const getEntitiesExport: ICrudGetAllActionTipoUsuario<ITipoUsuario> = (tipoUsuario, ativo, usuario, page, size, sort) => {
   const tipoUsuarioRequest = tipoUsuario ? `tipoUsuario.contains=${tipoUsuario}&` : '';
   const ativoRequest = ativo ? `ativo.contains=${ativo}&` : '';
+  const usuarioRequest = usuario ? `usuario.equals=${usuario}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_TIPOUSUARIO_LIST,
-    payload: axios.get<ITipoUsuario>(`${requestUrl}${tipoUsuarioRequest}${ativoRequest}cacheBuster=${new Date().getTime()}`)
+    payload: axios.get<ITipoUsuario>(
+      `${requestUrl}${tipoUsuarioRequest}${ativoRequest}${usuarioRequest}cacheBuster=${new Date().getTime()}`
+    )
   };
 };
 
@@ -199,9 +207,12 @@ export const getTipoUsuarioState = (location): ITipoUsuarioBaseState => {
   const tipoUsuario = url.searchParams.get('tipoUsuario') || '';
   const ativo = url.searchParams.get('ativo') || '';
 
+  const usuario = url.searchParams.get('usuario') || '';
+
   return {
     baseFilters,
     tipoUsuario,
-    ativo
+    ativo,
+    usuario
   };
 };

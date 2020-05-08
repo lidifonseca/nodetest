@@ -68,6 +68,19 @@ export class PadItemCepRecusadoDetail extends React.Component<IPadItemCepRecusad
                       </Col>
                     </Row>
                   </Col>
+
+                  <Col md="12">
+                    <Row>
+                      <Col md="3">
+                        <dt>
+                          <Translate contentKey="generadorApp.padItemCepRecusado.padItem">Pad Item</Translate>
+                        </dt>
+                      </Col>
+                      <Col md="9">
+                        <dd>{padItemCepRecusadoEntity.padItem ? padItemCepRecusadoEntity.padItem.id : ''}</dd>
+                      </Col>
+                    </Row>
+                  </Col>
                 </Row>
                 <Button tag={Link} to="/pad-item-cep-recusado" replace color="info">
                   <FontAwesomeIcon icon="arrow-left" />{' '}

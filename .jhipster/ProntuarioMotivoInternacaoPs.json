@@ -24,7 +24,7 @@
         }
     ],
     "relationships": [],
-    "changelogDate": "20200508171300",
+    "changelogDate": "20200508180900",
     "entityTableName": "prontuario_motivo_internacao_ps",
     "dto": "mapstruct",
     "pagination": "pagination",

@@ -22,7 +22,11 @@
       "detail": {
         "title": "Atendimento Aceite"
       },
-      "msgPush": "Msg Push"
+      "msgPush": "Msg Push",
+      "profissional_empty": "Without Profissional",
+      "profissional": "Profissional",
+      "atendimento_empty": "Without Atendimento",
+      "atendimento": "Atendimento"
     }
   }
 }

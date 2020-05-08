@@ -23,7 +23,9 @@
         "title": "Categoria Contrato"
       },
       "contrato": "Contrato",
-      "ativo": "Ativo"
+      "ativo": "Ativo",
+      "categoria_empty": "Sem Categoria",
+      "categoria": "Categoria"
     }
   }
 }

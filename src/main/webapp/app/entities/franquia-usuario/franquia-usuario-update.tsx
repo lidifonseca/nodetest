@@ -9,6 +9,8 @@ import { Translate, translate, ICrudGetAction, ICrudGetAllAction, ICrudPutAction
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
+import { IFranquia } from 'app/shared/model/franquia.model';
+import { getEntities as getFranquias } from 'app/entities/franquia/franquia.reducer';
 import {
   IFranquiaUsuarioUpdateState,
   getEntity,
@@ -29,13 +31,28 @@ export class FranquiaUsuarioUpdate extends React.Component<IFranquiaUsuarioUpdat
     super(props);
 
     this.state = {
+      franquiaSelectValue: null,
       fieldsBase: getFranquiaUsuarioState(this.props.location),
+      franquiaId: '0',
       isNew: !this.props.match.params || !this.props.match.params.id
     };
   }
   componentDidUpdate(nextProps, nextState) {
     if (nextProps.updateSuccess !== this.props.updateSuccess && nextProps.updateSuccess) {
       this.handleClose();
+    }
+
+    if (
+      nextProps.franquias.length > 0 &&
+      this.state.franquiaSelectValue === null &&
+      nextProps.franquiaUsuarioEntity.franquia &&
+      nextProps.franquiaUsuarioEntity.franquia.id
+    ) {
+      this.setState({
+        franquiaSelectValue: nextProps.franquias.map(p =>
+          nextProps.franquiaUsuarioEntity.franquia.id === p.id ? { value: p.id, label: p.id } : null
+        )
+      });
     }
   }
 
@@ -45,6 +62,8 @@ export class FranquiaUsuarioUpdate extends React.Component<IFranquiaUsuarioUpdat
     } else {
       this.props.getEntity(this.props.match.params.id);
     }
+
+    this.props.getFranquias();
   }
 
   getFiltersURL = (offset = null) => {
@@ -60,7 +79,7 @@ export class FranquiaUsuarioUpdate extends React.Component<IFranquiaUsuarioUpdat
       const { franquiaUsuarioEntity } = this.props;
       const entity = {
         ...franquiaUsuarioEntity,
-
+        franquia: this.state.franquiaSelectValue ? this.state.franquiaSelectValue['value'] : null,
         ...values
       };
 
@@ -77,7 +96,7 @@ export class FranquiaUsuarioUpdate extends React.Component<IFranquiaUsuarioUpdat
   };
 
   render() {
-    const { franquiaUsuarioEntity, loading, updating } = this.props;
+    const { franquiaUsuarioEntity, franquias, loading, updating } = this.props;
     const { isNew } = this.state;
 
     const baseFilters = this.state.fieldsBase && this.state.fieldsBase['baseFilters'] ? this.state.fieldsBase['baseFilters'] : null;
@@ -88,7 +107,8 @@ export class FranquiaUsuarioUpdate extends React.Component<IFranquiaUsuarioUpdat
             isNew
               ? {}
               : {
-                  ...franquiaUsuarioEntity
+                  ...franquiaUsuarioEntity,
+                  franquia: franquiaUsuarioEntity.franquia ? franquiaUsuarioEntity.franquia.id : null
                 }
           }
           onSubmit={this.saveEntity}
@@ -223,6 +243,10 @@ export class FranquiaUsuarioUpdate extends React.Component<IFranquiaUsuarioUpdat
                         <EnvioCancelamentoComponentUpdate baseFilters />
 
                         <AtivoComponentUpdate baseFilters />
+
+                        <LogUserFranquiaComponentUpdate baseFilter logUserFranquias />
+
+                        <FranquiaComponentUpdate baseFilter franquias />
                       </Row>
                     </div>
                   )}
@@ -237,6 +261,7 @@ export class FranquiaUsuarioUpdate extends React.Component<IFranquiaUsuarioUpdat
 }
 
 const mapStateToProps = (storeState: IRootState) => ({
+  franquias: storeState.franquia.entities,
   franquiaUsuarioEntity: storeState.franquiaUsuario.entity,
   loading: storeState.franquiaUsuario.loading,
   updating: storeState.franquiaUsuario.updating,
@@ -244,6 +269,7 @@ const mapStateToProps = (storeState: IRootState) => ({
 });
 
 const mapDispatchToProps = {
+  getFranquias,
   getEntity,
   updateEntity,
   createEntity,
@@ -1027,6 +1053,42 @@ const AtivoComponentUpdate = ({ baseFilters }) => {
     </Col>
   ) : (
     <AvInput type="hidden" name="ativo" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const LogUserFranquiaComponentUpdate = ({ baseFilters, logUserFranquias }) => {
+  return baseFilters !== 'logUserFranquia' ? (
+    <Col md="12"></Col>
+  ) : (
+    <AvInput type="hidden" name="logUserFranquia" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const FranquiaComponentUpdate = ({ baseFilters, franquias }) => {
+  return baseFilters !== 'franquia' ? (
+    <Col md="12">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" for="franquia-usuario-franquia">
+              <Translate contentKey="generadorApp.franquiaUsuario.franquia">Franquia</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <Select
+              id="franquia-usuario-franquia"
+              className={'css-select-control'}
+              value={this.state.franquiaSelectValue}
+              options={franquias ? franquias.map(option => ({ value: option.id, label: option.id })) : null}
+              onChange={options => this.setState({ franquiaSelectValue: options })}
+              name={'franquia'}
+            />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="franquia" value={this.state.fieldsBase[baseFilters]} />
   );
 };
 

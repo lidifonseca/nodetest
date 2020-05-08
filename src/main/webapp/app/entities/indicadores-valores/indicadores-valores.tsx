@@ -28,6 +28,9 @@ import { IIndicadoresValores } from 'app/shared/model/indicadores-valores.model'
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
+import { IIndicadores } from 'app/shared/model/indicadores.model';
+import { getEntities as getIndicadores } from 'app/entities/indicadores/indicadores.reducer';
+
 export interface IIndicadoresValoresProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
 export interface IIndicadoresValoresState extends IIndicadoresValoresBaseState, IPaginationBaseState {}
@@ -45,6 +48,8 @@ export class IndicadoresValores extends React.Component<IIndicadoresValoresProps
 
   componentDidMount() {
     this.getEntities();
+
+    this.props.getIndicadores();
   }
 
   cancelCourse = () => {
@@ -55,7 +60,8 @@ export class IndicadoresValores extends React.Component<IIndicadoresValoresProps
         vlMaximo: '',
         unidadeMedida: '',
         idadeMinima: '',
-        idadeMaxima: ''
+        idadeMaxima: '',
+        indicadores: ''
       },
       () => this.sortEntities()
     );
@@ -120,6 +126,9 @@ export class IndicadoresValores extends React.Component<IIndicadoresValoresProps
       'idadeMaxima=' +
       this.state.idadeMaxima +
       '&' +
+      'indicadores=' +
+      this.state.indicadores +
+      '&' +
       ''
     );
   };
@@ -127,7 +136,19 @@ export class IndicadoresValores extends React.Component<IIndicadoresValoresProps
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { sexo, vlMinimo, vlMaximo, unidadeMedida, idadeMinima, idadeMaxima, activePage, itemsPerPage, sort, order } = this.state;
+    const {
+      sexo,
+      vlMinimo,
+      vlMaximo,
+      unidadeMedida,
+      idadeMinima,
+      idadeMaxima,
+      indicadores,
+      activePage,
+      itemsPerPage,
+      sort,
+      order
+    } = this.state;
     this.props.getEntities(
       sexo,
       vlMinimo,
@@ -135,6 +156,7 @@ export class IndicadoresValores extends React.Component<IIndicadoresValoresProps
       unidadeMedida,
       idadeMinima,
       idadeMaxima,
+      indicadores,
       activePage - 1,
       itemsPerPage,
       `${sort},${order}`
@@ -142,7 +164,7 @@ export class IndicadoresValores extends React.Component<IIndicadoresValoresProps
   };
 
   render() {
-    const { indicadoresValoresList, match, totalItems } = this.props;
+    const { indicadores, indicadoresValoresList, match, totalItems } = this.props;
     return (
       <div>
         <h2 id="page-heading">
@@ -254,6 +276,33 @@ export class IndicadoresValores extends React.Component<IIndicadoresValoresProps
                           </Row>
                         </Col>
                       ) : null}
+
+                      {this.state.baseFilters !== 'indicadores' ? (
+                        <Col md="3">
+                          <Row className="mr-1 mt-1">
+                            <div style={{ width: '100%' }}>
+                              <Label for="indicadores-valores-indicadores">
+                                <Translate contentKey="generadorApp.indicadoresValores.indicadores">Indicadores</Translate>
+                              </Label>
+                              <Select
+                                id="indicadores-valores-indicadores"
+                                isMulti
+                                className={'css-select-control'}
+                                value={
+                                  indicadores
+                                    ? indicadores.map(p =>
+                                        this.state.indicadores.split(',').indexOf(p.id) !== -1 ? { value: p.id, label: p.id } : null
+                                      )
+                                    : null
+                                }
+                                options={indicadores ? indicadores.map(option => ({ value: option.id, label: option.id })) : null}
+                                onChange={options => this.setState({ indicadores: options.map(option => option['value']).join(',') })}
+                                name={'indicadores'}
+                              />
+                            </div>
+                          </Row>
+                        </Col>
+                      ) : null}
                     </div>
 
                     <div className="row mb-2 mr-4 justify-content-end">
@@ -318,6 +367,13 @@ export class IndicadoresValores extends React.Component<IIndicadoresValoresProps
                         </th>
                       ) : null}
 
+                      {this.state.baseFilters !== 'indicadores' ? (
+                        <th>
+                          <Translate contentKey="generadorApp.indicadoresValores.indicadores">Indicadores</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+
                       <th />
                     </tr>
                   </thead>
@@ -342,6 +398,16 @@ export class IndicadoresValores extends React.Component<IIndicadoresValoresProps
                         {this.state.baseFilters !== 'idadeMinima' ? <td>{indicadoresValores.idadeMinima}</td> : null}
 
                         {this.state.baseFilters !== 'idadeMaxima' ? <td>{indicadoresValores.idadeMaxima}</td> : null}
+
+                        {this.state.baseFilters !== 'indicadores' ? (
+                          <td>
+                            {indicadoresValores.indicadores ? (
+                              <Link to={`indicadores/${indicadoresValores.indicadores.id}`}>{indicadoresValores.indicadores.id}</Link>
+                            ) : (
+                              ''
+                            )}
+                          </td>
+                        ) : null}
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">
@@ -409,11 +475,13 @@ export class IndicadoresValores extends React.Component<IIndicadoresValoresProps
 }
 
 const mapStateToProps = ({ indicadoresValores, ...storeState }: IRootState) => ({
+  indicadores: storeState.indicadores.entities,
   indicadoresValoresList: indicadoresValores.entities,
   totalItems: indicadoresValores.totalItems
 });
 
 const mapDispatchToProps = {
+  getIndicadores,
   getEntities
 };
 

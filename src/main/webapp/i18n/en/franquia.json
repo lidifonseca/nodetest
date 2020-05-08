@@ -40,6 +40,12 @@
       "uf": "Uf",
       "observacao": "Observacao",
       "ativo": "Ativo",
+      "franquiaAreaAtuacao_empty": "Without Franquia Area Atuacao",
+      "franquiaAreaAtuacao": "Franquia Area Atuacao",
+      "franquiaStatusAtual_empty": "Without Franquia Status Atual",
+      "franquiaStatusAtual": "Franquia Status Atual",
+      "franquiaUsuario_empty": "Without Franquia Usuario",
+      "franquiaUsuario": "Franquia Usuario",
       "help": {
         "telefone1": "@dbName TELEFONE1@@",
         "telefone2": "@dbName TELEFONE2@@"

@@ -4,6 +4,10 @@ import { BaseEntity } from './base/base.entity';
 
 import { validate, Contains, IsInt, Length, IsEmail, IsFQDN, IsDate, Min, Max } from 'class-validator';
 
+import FranquiaAreaAtuacao from './franquia-area-atuacao.entity';
+import FranquiaStatusAtual from './franquia-status-atual.entity';
+import FranquiaUsuario from './franquia-usuario.entity';
+
 /**
  * A Franquia.
  */
@@ -68,6 +72,24 @@ export default class Franquia extends BaseEntity {
 
   @Column({ type: 'integer', name: 'ATIVO' })
   ativo: number;
+
+  @OneToMany(
+    type => FranquiaAreaAtuacao,
+    other => other.franquia
+  )
+  franquiaAreaAtuacaos: FranquiaAreaAtuacao[];
+
+  @OneToMany(
+    type => FranquiaStatusAtual,
+    other => other.franquia
+  )
+  franquiaStatusAtuals: FranquiaStatusAtual[];
+
+  @OneToMany(
+    type => FranquiaUsuario,
+    other => other.franquia
+  )
+  franquiaUsuarios: FranquiaUsuario[];
 
   // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
 }

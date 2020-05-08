@@ -9,6 +9,8 @@ import { Translate, translate, ICrudGetAction, ICrudGetAllAction, ICrudPutAction
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
+import { IQuestionarios } from 'app/shared/model/questionarios.model';
+import { getEntities as getQuestionarios } from 'app/entities/questionarios/questionarios.reducer';
 import {
   IRespostasQuestionariosUpdateState,
   getEntity,
@@ -29,13 +31,28 @@ export class RespostasQuestionariosUpdate extends React.Component<IRespostasQues
     super(props);
 
     this.state = {
+      questionariosSelectValue: null,
       fieldsBase: getRespostasQuestionariosState(this.props.location),
+      questionariosId: '0',
       isNew: !this.props.match.params || !this.props.match.params.id
     };
   }
   componentDidUpdate(nextProps, nextState) {
     if (nextProps.updateSuccess !== this.props.updateSuccess && nextProps.updateSuccess) {
       this.handleClose();
+    }
+
+    if (
+      nextProps.questionarios.length > 0 &&
+      this.state.questionariosSelectValue === null &&
+      nextProps.respostasQuestionariosEntity.questionarios &&
+      nextProps.respostasQuestionariosEntity.questionarios.id
+    ) {
+      this.setState({
+        questionariosSelectValue: nextProps.questionarios.map(p =>
+          nextProps.respostasQuestionariosEntity.questionarios.id === p.id ? { value: p.id, label: p.id } : null
+        )
+      });
     }
   }
 
@@ -45,6 +62,8 @@ export class RespostasQuestionariosUpdate extends React.Component<IRespostasQues
     } else {
       this.props.getEntity(this.props.match.params.id);
     }
+
+    this.props.getQuestionarios();
   }
 
   getFiltersURL = (offset = null) => {
@@ -62,7 +81,7 @@ export class RespostasQuestionariosUpdate extends React.Component<IRespostasQues
       const { respostasQuestionariosEntity } = this.props;
       const entity = {
         ...respostasQuestionariosEntity,
-
+        questionarios: this.state.questionariosSelectValue ? this.state.questionariosSelectValue['value'] : null,
         ...values
       };
 
@@ -79,7 +98,7 @@ export class RespostasQuestionariosUpdate extends React.Component<IRespostasQues
   };
 
   render() {
-    const { respostasQuestionariosEntity, loading, updating } = this.props;
+    const { respostasQuestionariosEntity, questionarios, loading, updating } = this.props;
     const { isNew } = this.state;
 
     const baseFilters = this.state.fieldsBase && this.state.fieldsBase['baseFilters'] ? this.state.fieldsBase['baseFilters'] : null;
@@ -90,7 +109,8 @@ export class RespostasQuestionariosUpdate extends React.Component<IRespostasQues
             isNew
               ? {}
               : {
-                  ...respostasQuestionariosEntity
+                  ...respostasQuestionariosEntity,
+                  questionarios: respostasQuestionariosEntity.questionarios ? respostasQuestionariosEntity.questionarios.id : null
                 }
           }
           onSubmit={this.saveEntity}
@@ -159,6 +179,8 @@ export class RespostasQuestionariosUpdate extends React.Component<IRespostasQues
                         <InformacaoAdicionalComponentUpdate baseFilters />
 
                         <QuestionarioIdComponentUpdate baseFilters />
+
+                        <QuestionariosComponentUpdate baseFilter questionarios />
                       </Row>
                     </div>
                   )}
@@ -173,6 +195,7 @@ export class RespostasQuestionariosUpdate extends React.Component<IRespostasQues
 }
 
 const mapStateToProps = (storeState: IRootState) => ({
+  questionarios: storeState.questionarios.entities,
   respostasQuestionariosEntity: storeState.respostasQuestionarios.entity,
   loading: storeState.respostasQuestionarios.loading,
   updating: storeState.respostasQuestionarios.updating,
@@ -180,6 +203,7 @@ const mapStateToProps = (storeState: IRootState) => ({
 });
 
 const mapDispatchToProps = {
+  getQuestionarios,
   getEntity,
   updateEntity,
   createEntity,
@@ -256,6 +280,34 @@ const QuestionarioIdComponentUpdate = ({ baseFilters }) => {
     </Col>
   ) : (
     <AvInput type="hidden" name="questionarioId" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const QuestionariosComponentUpdate = ({ baseFilters, questionarios }) => {
+  return baseFilters !== 'questionarios' ? (
+    <Col md="12">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" for="respostas-questionarios-questionarios">
+              <Translate contentKey="generadorApp.respostasQuestionarios.questionarios">Questionarios</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <Select
+              id="respostas-questionarios-questionarios"
+              className={'css-select-control'}
+              value={this.state.questionariosSelectValue}
+              options={questionarios ? questionarios.map(option => ({ value: option.id, label: option.id })) : null}
+              onChange={options => this.setState({ questionariosSelectValue: options })}
+              name={'questionarios'}
+            />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="questionarios" value={this.state.fieldsBase[baseFilters]} />
   );
 };
 

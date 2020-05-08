@@ -5,6 +5,10 @@ import PadItem from '../domain/pad-item.entity';
 import { PadItemRepository } from '../repository/pad-item.repository';
 
 const relationshipNames = [];
+relationshipNames.push('pad');
+relationshipNames.push('especialidade');
+relationshipNames.push('periodicidade');
+relationshipNames.push('periodo');
 
 @Injectable()
 export class PadItemService {

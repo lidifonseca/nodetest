@@ -150,7 +150,7 @@
         }
     ],
     "relationships": [],
-    "changelogDate": "20200508175300",
+    "changelogDate": "20200508184900",
     "javadoc": "VIEW",
     "entityTableName": "vw_api_atendimentos_aceite",
     "dto": "mapstruct",

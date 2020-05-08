@@ -62,7 +62,8 @@ export class StatusAtendimento extends React.Component<IStatusAtendimentoProps, 
         statusAtendimento: '',
         styleLabel: '',
         ordenacao: '',
-        ativo: ''
+        ativo: '',
+        atendimento: ''
       },
       () => this.sortEntities()
     );
@@ -119,6 +120,9 @@ export class StatusAtendimento extends React.Component<IStatusAtendimentoProps, 
       'ativo=' +
       this.state.ativo +
       '&' +
+      'atendimento=' +
+      this.state.atendimento +
+      '&' +
       ''
     );
   };
@@ -126,8 +130,17 @@ export class StatusAtendimento extends React.Component<IStatusAtendimentoProps, 
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { statusAtendimento, styleLabel, ordenacao, ativo, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntitiesExport(statusAtendimento, styleLabel, ordenacao, ativo, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const { statusAtendimento, styleLabel, ordenacao, ativo, atendimento, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntitiesExport(
+      statusAtendimento,
+      styleLabel,
+      ordenacao,
+      ativo,
+      atendimento,
+      activePage - 1,
+      itemsPerPage,
+      `${sort},${order}`
+    );
   };
 
   confirmExport() {}

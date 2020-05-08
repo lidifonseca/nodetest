@@ -6,8 +6,23 @@
             "fieldType": "Integer"
         }
     ],
-    "relationships": [],
-    "changelogDate": "20200508152600",
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "categoriaAtividade",
+            "otherEntityRelationshipName": "atendimentoAtividades",
+            "relationshipName": "atividade",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "atendimento",
+            "otherEntityRelationshipName": "atendimentoAtividades",
+            "relationshipName": "atendimento",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20200508162200",
     "entityTableName": "atendimento_atividades",
     "dto": "mapstruct",
     "pagination": "pagination",

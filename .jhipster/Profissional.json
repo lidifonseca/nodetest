@@ -261,6 +261,18 @@
     ],
     "relationships": [
         {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "atendimentoAceite",
+            "otherEntityRelationshipName": "profissional",
+            "relationshipName": "atendimentoAceite"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "atendimentoAssinaturas",
+            "otherEntityRelationshipName": "profissional",
+            "relationshipName": "atendimentoAssinaturas"
+        },
+        {
             "relationshipType": "many-to-one",
             "otherEntityName": "unidadeEasy",
             "otherEntityRelationshipName": "profissional",
@@ -268,7 +280,7 @@
             "otherEntityField": "razaoSocial"
         }
     ],
-    "changelogDate": "20200508165600",
+    "changelogDate": "20200508175200",
     "entityTableName": "profissional",
     "dto": "mapstruct",
     "pagination": "pagination",

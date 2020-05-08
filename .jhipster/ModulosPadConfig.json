@@ -18,7 +18,7 @@
         }
     ],
     "relationships": [],
-    "changelogDate": "20200508161000",
+    "changelogDate": "20200508170600",
     "entityTableName": "modulos_pad_config",
     "dto": "mapstruct",
     "pagination": "pagination",

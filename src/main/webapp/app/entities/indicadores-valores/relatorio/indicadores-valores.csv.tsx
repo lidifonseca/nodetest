@@ -34,6 +34,9 @@ import { IIndicadoresValores } from 'app/shared/model/indicadores-valores.model'
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
+import { IIndicadores } from 'app/shared/model/indicadores.model';
+import { getEntities as getIndicadores } from 'app/entities/indicadores/indicadores.reducer';
+
 export interface IIndicadoresValoresProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
 export interface IIndicadoresValoresState extends IIndicadoresValoresBaseState, IPaginationBaseState {
@@ -54,6 +57,8 @@ export class IndicadoresValores extends React.Component<IIndicadoresValoresProps
 
   componentDidMount() {
     this.getEntities();
+
+    this.props.getIndicadores();
   }
 
   cancelCourse = () => {
@@ -64,7 +69,8 @@ export class IndicadoresValores extends React.Component<IIndicadoresValoresProps
         vlMaximo: '',
         unidadeMedida: '',
         idadeMinima: '',
-        idadeMaxima: ''
+        idadeMaxima: '',
+        indicadores: ''
       },
       () => this.sortEntities()
     );
@@ -127,6 +133,9 @@ export class IndicadoresValores extends React.Component<IIndicadoresValoresProps
       'idadeMaxima=' +
       this.state.idadeMaxima +
       '&' +
+      'indicadores=' +
+      this.state.indicadores +
+      '&' +
       ''
     );
   };
@@ -134,7 +143,19 @@ export class IndicadoresValores extends React.Component<IIndicadoresValoresProps
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { sexo, vlMinimo, vlMaximo, unidadeMedida, idadeMinima, idadeMaxima, activePage, itemsPerPage, sort, order } = this.state;
+    const {
+      sexo,
+      vlMinimo,
+      vlMaximo,
+      unidadeMedida,
+      idadeMinima,
+      idadeMaxima,
+      indicadores,
+      activePage,
+      itemsPerPage,
+      sort,
+      order
+    } = this.state;
     this.props.getEntitiesExport(
       sexo,
       vlMinimo,
@@ -142,6 +163,7 @@ export class IndicadoresValores extends React.Component<IIndicadoresValoresProps
       unidadeMedida,
       idadeMinima,
       idadeMaxima,
+      indicadores,
       activePage - 1,
       itemsPerPage,
       `${sort},${order}`
@@ -194,11 +216,13 @@ export class IndicadoresValores extends React.Component<IIndicadoresValoresProps
 }
 
 const mapStateToProps = ({ indicadoresValores, ...storeState }: IRootState) => ({
+  indicadores: storeState.indicadores.entities,
   indicadoresValoresList: indicadoresValores.entities,
   totalItems: indicadoresValores.totalItems
 });
 
 const mapDispatchToProps = {
+  getIndicadores,
   getEntitiesExport
 };
 

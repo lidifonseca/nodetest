@@ -67,7 +67,10 @@ export class Franquia extends React.Component<IFranquiaProps, IFranquiaState> {
         cidade: '',
         uf: '',
         observacao: '',
-        ativo: ''
+        ativo: '',
+        franquiaAreaAtuacao: '',
+        franquiaStatusAtual: '',
+        franquiaUsuario: ''
       },
       () => this.sortEntities()
     );
@@ -168,6 +171,15 @@ export class Franquia extends React.Component<IFranquiaProps, IFranquiaState> {
       'ativo=' +
       this.state.ativo +
       '&' +
+      'franquiaAreaAtuacao=' +
+      this.state.franquiaAreaAtuacao +
+      '&' +
+      'franquiaStatusAtual=' +
+      this.state.franquiaStatusAtual +
+      '&' +
+      'franquiaUsuario=' +
+      this.state.franquiaUsuario +
+      '&' +
       ''
     );
   };
@@ -194,6 +206,9 @@ export class Franquia extends React.Component<IFranquiaProps, IFranquiaState> {
       uf,
       observacao,
       ativo,
+      franquiaAreaAtuacao,
+      franquiaStatusAtual,
+      franquiaUsuario,
       activePage,
       itemsPerPage,
       sort,
@@ -218,6 +233,9 @@ export class Franquia extends React.Component<IFranquiaProps, IFranquiaState> {
       uf,
       observacao,
       ativo,
+      franquiaAreaAtuacao,
+      franquiaStatusAtual,
+      franquiaUsuario,
       activePage - 1,
       itemsPerPage,
       `${sort},${order}`
@@ -473,6 +491,24 @@ export class Franquia extends React.Component<IFranquiaProps, IFranquiaState> {
                             </Label>
                             <AvInput type="string" name="ativo" id="franquia-ativo" value={this.state.ativo} />
                           </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'franquiaAreaAtuacao' ? (
+                        <Col md="3">
+                          <Row className="mr-1 mt-1"></Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'franquiaStatusAtual' ? (
+                        <Col md="3">
+                          <Row className="mr-1 mt-1"></Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'franquiaUsuario' ? (
+                        <Col md="3">
+                          <Row className="mr-1 mt-1"></Row>
                         </Col>
                       ) : null}
                     </div>

@@ -34,6 +34,9 @@ import { ICidXPtaNovo } from 'app/shared/model/cid-x-pta-novo.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
+import { ICid } from 'app/shared/model/cid.model';
+import { getEntities as getCids } from 'app/entities/cid/cid.reducer';
+
 export interface ICidXPtaNovoProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
 export interface ICidXPtaNovoState extends ICidXPtaNovoBaseState, IPaginationBaseState {
@@ -54,6 +57,8 @@ export class CidXPtaNovo extends React.Component<ICidXPtaNovoProps, ICidXPtaNovo
 
   componentDidMount() {
     this.getEntities();
+
+    this.props.getCids();
   }
 
   cancelCourse = () => {
@@ -62,7 +67,9 @@ export class CidXPtaNovo extends React.Component<ICidXPtaNovoProps, ICidXPtaNovo
         complexidade: '',
         versao: '',
         score: '',
-        titulo: ''
+        titulo: '',
+        cidXPtaNovoPadItemIndi: '',
+        cid: ''
       },
       () => this.sortEntities()
     );
@@ -119,6 +126,12 @@ export class CidXPtaNovo extends React.Component<ICidXPtaNovoProps, ICidXPtaNovo
       'titulo=' +
       this.state.titulo +
       '&' +
+      'cidXPtaNovoPadItemIndi=' +
+      this.state.cidXPtaNovoPadItemIndi +
+      '&' +
+      'cid=' +
+      this.state.cid +
+      '&' +
       ''
     );
   };
@@ -126,8 +139,18 @@ export class CidXPtaNovo extends React.Component<ICidXPtaNovoProps, ICidXPtaNovo
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { complexidade, versao, score, titulo, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntitiesExport(complexidade, versao, score, titulo, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const { complexidade, versao, score, titulo, cidXPtaNovoPadItemIndi, cid, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntitiesExport(
+      complexidade,
+      versao,
+      score,
+      titulo,
+      cidXPtaNovoPadItemIndi,
+      cid,
+      activePage - 1,
+      itemsPerPage,
+      `${sort},${order}`
+    );
   };
 
   confirmExport() {}
@@ -176,11 +199,13 @@ export class CidXPtaNovo extends React.Component<ICidXPtaNovoProps, ICidXPtaNovo
 }
 
 const mapStateToProps = ({ cidXPtaNovo, ...storeState }: IRootState) => ({
+  cids: storeState.cid.entities,
   cidXPtaNovoList: cidXPtaNovo.entities,
   totalItems: cidXPtaNovo.totalItems
 });
 
 const mapDispatchToProps = {
+  getCids,
   getEntitiesExport
 };
 

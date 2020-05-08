@@ -28,6 +28,9 @@ import { ICidXPtaNovo } from 'app/shared/model/cid-x-pta-novo.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
+import { ICid } from 'app/shared/model/cid.model';
+import { getEntities as getCids } from 'app/entities/cid/cid.reducer';
+
 export interface ICidXPtaNovoProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
 export interface ICidXPtaNovoState extends ICidXPtaNovoBaseState, IPaginationBaseState {}
@@ -45,6 +48,8 @@ export class CidXPtaNovo extends React.Component<ICidXPtaNovoProps, ICidXPtaNovo
 
   componentDidMount() {
     this.getEntities();
+
+    this.props.getCids();
   }
 
   cancelCourse = () => {
@@ -53,7 +58,9 @@ export class CidXPtaNovo extends React.Component<ICidXPtaNovoProps, ICidXPtaNovo
         complexidade: '',
         versao: '',
         score: '',
-        titulo: ''
+        titulo: '',
+        cidXPtaNovoPadItemIndi: '',
+        cid: ''
       },
       () => this.sortEntities()
     );
@@ -112,6 +119,12 @@ export class CidXPtaNovo extends React.Component<ICidXPtaNovoProps, ICidXPtaNovo
       'titulo=' +
       this.state.titulo +
       '&' +
+      'cidXPtaNovoPadItemIndi=' +
+      this.state.cidXPtaNovoPadItemIndi +
+      '&' +
+      'cid=' +
+      this.state.cid +
+      '&' +
       ''
     );
   };
@@ -119,12 +132,22 @@ export class CidXPtaNovo extends React.Component<ICidXPtaNovoProps, ICidXPtaNovo
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { complexidade, versao, score, titulo, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntities(complexidade, versao, score, titulo, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const { complexidade, versao, score, titulo, cidXPtaNovoPadItemIndi, cid, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntities(
+      complexidade,
+      versao,
+      score,
+      titulo,
+      cidXPtaNovoPadItemIndi,
+      cid,
+      activePage - 1,
+      itemsPerPage,
+      `${sort},${order}`
+    );
   };
 
   render() {
-    const { cidXPtaNovoList, match, totalItems } = this.props;
+    const { cids, cidXPtaNovoList, match, totalItems } = this.props;
     return (
       <div>
         <h2 id="page-heading">
@@ -205,6 +228,37 @@ export class CidXPtaNovo extends React.Component<ICidXPtaNovoProps, ICidXPtaNovo
                           </Row>
                         </Col>
                       ) : null}
+
+                      {this.state.baseFilters !== 'cidXPtaNovoPadItemIndi' ? (
+                        <Col md="3">
+                          <Row className="mr-1 mt-1"></Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'cid' ? (
+                        <Col md="3">
+                          <Row className="mr-1 mt-1">
+                            <div style={{ width: '100%' }}>
+                              <Label for="cid-x-pta-novo-cid">
+                                <Translate contentKey="generadorApp.cidXPtaNovo.cid">Cid</Translate>
+                              </Label>
+                              <Select
+                                id="cid-x-pta-novo-cid"
+                                isMulti
+                                className={'css-select-control'}
+                                value={
+                                  cids
+                                    ? cids.map(p => (this.state.cid.split(',').indexOf(p.id) !== -1 ? { value: p.id, label: p.id } : null))
+                                    : null
+                                }
+                                options={cids ? cids.map(option => ({ value: option.id, label: option.id })) : null}
+                                onChange={options => this.setState({ cid: options.map(option => option['value']).join(',') })}
+                                name={'cid'}
+                              />
+                            </div>
+                          </Row>
+                        </Col>
+                      ) : null}
                     </div>
 
                     <div className="row mb-2 mr-4 justify-content-end">
@@ -257,6 +311,13 @@ export class CidXPtaNovo extends React.Component<ICidXPtaNovoProps, ICidXPtaNovo
                         </th>
                       ) : null}
 
+                      {this.state.baseFilters !== 'cid' ? (
+                        <th>
+                          <Translate contentKey="generadorApp.cidXPtaNovo.cid">Cid</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+
                       <th />
                     </tr>
                   </thead>
@@ -277,6 +338,10 @@ export class CidXPtaNovo extends React.Component<ICidXPtaNovoProps, ICidXPtaNovo
                         {this.state.baseFilters !== 'score' ? <td>{cidXPtaNovo.score}</td> : null}
 
                         {this.state.baseFilters !== 'titulo' ? <td>{cidXPtaNovo.titulo}</td> : null}
+
+                        {this.state.baseFilters !== 'cid' ? (
+                          <td>{cidXPtaNovo.cid ? <Link to={`cid/${cidXPtaNovo.cid.id}`}>{cidXPtaNovo.cid.id}</Link> : ''}</td>
+                        ) : null}
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">
@@ -339,11 +404,13 @@ export class CidXPtaNovo extends React.Component<ICidXPtaNovoProps, ICidXPtaNovo
 }
 
 const mapStateToProps = ({ cidXPtaNovo, ...storeState }: IRootState) => ({
+  cids: storeState.cid.entities,
   cidXPtaNovoList: cidXPtaNovo.entities,
   totalItems: cidXPtaNovo.totalItems
 });
 
 const mapDispatchToProps = {
+  getCids,
   getEntities
 };
 

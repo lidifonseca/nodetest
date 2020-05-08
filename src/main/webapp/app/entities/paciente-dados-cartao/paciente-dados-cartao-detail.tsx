@@ -130,6 +130,19 @@ export class PacienteDadosCartaoDetail extends React.Component<IPacienteDadosCar
                       </Col>
                     </Row>
                   </Col>
+
+                  <Col md="12">
+                    <Row>
+                      <Col md="3">
+                        <dt>
+                          <Translate contentKey="generadorApp.pacienteDadosCartao.paciente">Paciente</Translate>
+                        </dt>
+                      </Col>
+                      <Col md="9">
+                        <dd>{pacienteDadosCartaoEntity.paciente ? pacienteDadosCartaoEntity.paciente.id : ''}</dd>
+                      </Col>
+                    </Row>
+                  </Col>
                 </Row>
                 <Button tag={Link} to="/paciente-dados-cartao" replace color="info">
                   <FontAwesomeIcon icon="arrow-left" />{' '}

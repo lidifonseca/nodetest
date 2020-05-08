@@ -5,6 +5,7 @@ import FranquiaUsuario from '../domain/franquia-usuario.entity';
 import { FranquiaUsuarioRepository } from '../repository/franquia-usuario.repository';
 
 const relationshipNames = [];
+relationshipNames.push('franquia');
 
 @Injectable()
 export class FranquiaUsuarioService {

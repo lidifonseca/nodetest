@@ -28,8 +28,26 @@
       "duracao": "Duracao",
       "importante": "Importante",
       "ativo": "Ativo",
+      "atendimento_empty": "Without Atendimento",
+      "atendimento": "Atendimento",
+      "especialidadeOperadora_empty": "Without Especialidade Operadora",
+      "especialidadeOperadora": "Especialidade Operadora",
+      "especialidadeUnidade_empty": "Without Especialidade Unidade",
+      "especialidadeUnidade": "Especialidade Unidade",
+      "especialidadeValor_empty": "Without Especialidade Valor",
+      "especialidadeValor": "Especialidade Valor",
+      "pacientePedido_empty": "Without Paciente Pedido",
+      "pacientePedido": "Paciente Pedido",
+      "padItem_empty": "Without Pad Item",
+      "padItem": "Pad Item",
       "unidade_empty": "Without Unidade",
-      "unidade": "Unidade"
+      "unidade": "Unidade",
+      "categoria_empty": "Without Categoria",
+      "categoria": "Categoria",
+      "tipoEspecialidade_empty": "Without Tipo Especialidade",
+      "tipoEspecialidade": "Tipo Especialidade",
+      "tipoUnidade_empty": "Without Tipo Unidade",
+      "tipoUnidade": "Tipo Unidade"
     }
   }
 }

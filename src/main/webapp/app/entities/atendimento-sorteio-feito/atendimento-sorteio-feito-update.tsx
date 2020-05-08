@@ -9,6 +9,8 @@ import { Translate, translate, ICrudGetAction, ICrudGetAllAction, ICrudPutAction
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
+import { IPadItem } from 'app/shared/model/pad-item.model';
+import { getEntities as getPadItems } from 'app/entities/pad-item/pad-item.reducer';
 import {
   IAtendimentoSorteioFeitoUpdateState,
   getEntity,
@@ -32,13 +34,28 @@ export class AtendimentoSorteioFeitoUpdate extends React.Component<
     super(props);
 
     this.state = {
+      padItemSelectValue: null,
       fieldsBase: getAtendimentoSorteioFeitoState(this.props.location),
+      padItemId: '0',
       isNew: !this.props.match.params || !this.props.match.params.id
     };
   }
   componentDidUpdate(nextProps, nextState) {
     if (nextProps.updateSuccess !== this.props.updateSuccess && nextProps.updateSuccess) {
       this.handleClose();
+    }
+
+    if (
+      nextProps.padItems.length > 0 &&
+      this.state.padItemSelectValue === null &&
+      nextProps.atendimentoSorteioFeitoEntity.padItem &&
+      nextProps.atendimentoSorteioFeitoEntity.padItem.id
+    ) {
+      this.setState({
+        padItemSelectValue: nextProps.padItems.map(p =>
+          nextProps.atendimentoSorteioFeitoEntity.padItem.id === p.id ? { value: p.id, label: p.id } : null
+        )
+      });
     }
   }
 
@@ -48,6 +65,8 @@ export class AtendimentoSorteioFeitoUpdate extends React.Component<
     } else {
       this.props.getEntity(this.props.match.params.id);
     }
+
+    this.props.getPadItems();
   }
 
   getFiltersURL = (offset = null) => {
@@ -63,7 +82,7 @@ export class AtendimentoSorteioFeitoUpdate extends React.Component<
       const { atendimentoSorteioFeitoEntity } = this.props;
       const entity = {
         ...atendimentoSorteioFeitoEntity,
-
+        padItem: this.state.padItemSelectValue ? this.state.padItemSelectValue['value'] : null,
         ...values
       };
 
@@ -80,7 +99,7 @@ export class AtendimentoSorteioFeitoUpdate extends React.Component<
   };
 
   render() {
-    const { atendimentoSorteioFeitoEntity, loading, updating } = this.props;
+    const { atendimentoSorteioFeitoEntity, padItems, loading, updating } = this.props;
     const { isNew } = this.state;
 
     const baseFilters = this.state.fieldsBase && this.state.fieldsBase['baseFilters'] ? this.state.fieldsBase['baseFilters'] : null;
@@ -91,7 +110,8 @@ export class AtendimentoSorteioFeitoUpdate extends React.Component<
             isNew
               ? {}
               : {
-                  ...atendimentoSorteioFeitoEntity
+                  ...atendimentoSorteioFeitoEntity,
+                  padItem: atendimentoSorteioFeitoEntity.padItem ? atendimentoSorteioFeitoEntity.padItem.id : null
                 }
           }
           onSubmit={this.saveEntity}
@@ -163,6 +183,8 @@ export class AtendimentoSorteioFeitoUpdate extends React.Component<
                       ) : null}
                       <Row>
                         <SorteioFeitoComponentUpdate baseFilters />
+
+                        <PadItemComponentUpdate baseFilter padItems />
                       </Row>
                     </div>
                   )}
@@ -177,6 +199,7 @@ export class AtendimentoSorteioFeitoUpdate extends React.Component<
 }
 
 const mapStateToProps = (storeState: IRootState) => ({
+  padItems: storeState.padItem.entities,
   atendimentoSorteioFeitoEntity: storeState.atendimentoSorteioFeito.entity,
   loading: storeState.atendimentoSorteioFeito.loading,
   updating: storeState.atendimentoSorteioFeito.updating,
@@ -184,6 +207,7 @@ const mapStateToProps = (storeState: IRootState) => ({
 });
 
 const mapDispatchToProps = {
+  getPadItems,
   getEntity,
   updateEntity,
   createEntity,
@@ -211,6 +235,34 @@ const SorteioFeitoComponentUpdate = ({ baseFilters }) => {
     </Col>
   ) : (
     <AvInput type="hidden" name="sorteioFeito" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const PadItemComponentUpdate = ({ baseFilters, padItems }) => {
+  return baseFilters !== 'padItem' ? (
+    <Col md="12">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" for="atendimento-sorteio-feito-padItem">
+              <Translate contentKey="generadorApp.atendimentoSorteioFeito.padItem">Pad Item</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <Select
+              id="atendimento-sorteio-feito-padItem"
+              className={'css-select-control'}
+              value={this.state.padItemSelectValue}
+              options={padItems ? padItems.map(option => ({ value: option.id, label: option.id })) : null}
+              onChange={options => this.setState({ padItemSelectValue: options })}
+              name={'padItem'}
+            />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="padItem" value={this.state.fieldsBase[baseFilters]} />
   );
 };
 

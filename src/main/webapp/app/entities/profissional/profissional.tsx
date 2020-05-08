@@ -101,6 +101,8 @@ export class Profissional extends React.Component<IProfissionalProps, IProfissio
         dataSenha: '',
         expoToken: '',
         preferenciaAtendimento: '',
+        atendimentoAceite: '',
+        atendimentoAssinaturas: '',
         unidade: ''
       },
       () => this.sortEntities()
@@ -259,6 +261,12 @@ export class Profissional extends React.Component<IProfissionalProps, IProfissio
       'preferenciaAtendimento=' +
       this.state.preferenciaAtendimento +
       '&' +
+      'atendimentoAceite=' +
+      this.state.atendimentoAceite +
+      '&' +
+      'atendimentoAssinaturas=' +
+      this.state.atendimentoAssinaturas +
+      '&' +
       'unidade=' +
       this.state.unidade +
       '&' +
@@ -307,6 +315,8 @@ export class Profissional extends React.Component<IProfissionalProps, IProfissio
       dataSenha,
       expoToken,
       preferenciaAtendimento,
+      atendimentoAceite,
+      atendimentoAssinaturas,
       unidade,
       activePage,
       itemsPerPage,
@@ -351,6 +361,8 @@ export class Profissional extends React.Component<IProfissionalProps, IProfissio
       dataSenha,
       expoToken,
       preferenciaAtendimento,
+      atendimentoAceite,
+      atendimentoAssinaturas,
       unidade,
       activePage - 1,
       itemsPerPage,
@@ -843,6 +855,18 @@ export class Profissional extends React.Component<IProfissionalProps, IProfissio
                               value={this.state.preferenciaAtendimento}
                             />
                           </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'atendimentoAceite' ? (
+                        <Col md="3">
+                          <Row className="mr-1 mt-1"></Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'atendimentoAssinaturas' ? (
+                        <Col md="3">
+                          <Row className="mr-1 mt-1"></Row>
                         </Col>
                       ) : null}
 

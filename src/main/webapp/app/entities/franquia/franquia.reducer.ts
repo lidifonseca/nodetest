@@ -51,6 +51,9 @@ export interface IFranquiaBaseState {
   uf: any;
   observacao: any;
   ativo: any;
+  franquiaAreaAtuacao: any;
+  franquiaStatusAtual: any;
+  franquiaUsuario: any;
 }
 
 export interface IFranquiaUpdateState {
@@ -155,6 +158,9 @@ export type ICrudGetAllActionFranquia<T> = (
   uf?: any,
   observacao?: any,
   ativo?: any,
+  franquiaAreaAtuacao?: any,
+  franquiaStatusAtual?: any,
+  franquiaUsuario?: any,
   page?: number,
   size?: number,
   sort?: string
@@ -179,6 +185,9 @@ export const getEntities: ICrudGetAllActionFranquia<IFranquia> = (
   uf,
   observacao,
   ativo,
+  franquiaAreaAtuacao,
+  franquiaStatusAtual,
+  franquiaUsuario,
   page,
   size,
   sort
@@ -201,12 +210,15 @@ export const getEntities: ICrudGetAllActionFranquia<IFranquia> = (
   const ufRequest = uf ? `uf.contains=${uf}&` : '';
   const observacaoRequest = observacao ? `observacao.contains=${observacao}&` : '';
   const ativoRequest = ativo ? `ativo.contains=${ativo}&` : '';
+  const franquiaAreaAtuacaoRequest = franquiaAreaAtuacao ? `franquiaAreaAtuacao.equals=${franquiaAreaAtuacao}&` : '';
+  const franquiaStatusAtualRequest = franquiaStatusAtual ? `franquiaStatusAtual.equals=${franquiaStatusAtual}&` : '';
+  const franquiaUsuarioRequest = franquiaUsuario ? `franquiaUsuario.equals=${franquiaUsuario}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_FRANQUIA_LIST,
     payload: axios.get<IFranquia>(
-      `${requestUrl}${idCidadeRequest}${nomeFantasiaRequest}${razaoSocialRequest}${cnpjRequest}${ieRequest}${siteRequest}${telefone1Request}${telefone2Request}${celularRequest}${cepRequest}${enderecoRequest}${numeroRequest}${complementoRequest}${bairroRequest}${cidadeRequest}${ufRequest}${observacaoRequest}${ativoRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${idCidadeRequest}${nomeFantasiaRequest}${razaoSocialRequest}${cnpjRequest}${ieRequest}${siteRequest}${telefone1Request}${telefone2Request}${celularRequest}${cepRequest}${enderecoRequest}${numeroRequest}${complementoRequest}${bairroRequest}${cidadeRequest}${ufRequest}${observacaoRequest}${ativoRequest}${franquiaAreaAtuacaoRequest}${franquiaStatusAtualRequest}${franquiaUsuarioRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };
@@ -237,6 +249,9 @@ export const getEntitiesExport: ICrudGetAllActionFranquia<IFranquia> = (
   uf,
   observacao,
   ativo,
+  franquiaAreaAtuacao,
+  franquiaStatusAtual,
+  franquiaUsuario,
   page,
   size,
   sort
@@ -259,12 +274,15 @@ export const getEntitiesExport: ICrudGetAllActionFranquia<IFranquia> = (
   const ufRequest = uf ? `uf.contains=${uf}&` : '';
   const observacaoRequest = observacao ? `observacao.contains=${observacao}&` : '';
   const ativoRequest = ativo ? `ativo.contains=${ativo}&` : '';
+  const franquiaAreaAtuacaoRequest = franquiaAreaAtuacao ? `franquiaAreaAtuacao.equals=${franquiaAreaAtuacao}&` : '';
+  const franquiaStatusAtualRequest = franquiaStatusAtual ? `franquiaStatusAtual.equals=${franquiaStatusAtual}&` : '';
+  const franquiaUsuarioRequest = franquiaUsuario ? `franquiaUsuario.equals=${franquiaUsuario}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_FRANQUIA_LIST,
     payload: axios.get<IFranquia>(
-      `${requestUrl}${idCidadeRequest}${nomeFantasiaRequest}${razaoSocialRequest}${cnpjRequest}${ieRequest}${siteRequest}${telefone1Request}${telefone2Request}${celularRequest}${cepRequest}${enderecoRequest}${numeroRequest}${complementoRequest}${bairroRequest}${cidadeRequest}${ufRequest}${observacaoRequest}${ativoRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${idCidadeRequest}${nomeFantasiaRequest}${razaoSocialRequest}${cnpjRequest}${ieRequest}${siteRequest}${telefone1Request}${telefone2Request}${celularRequest}${cepRequest}${enderecoRequest}${numeroRequest}${complementoRequest}${bairroRequest}${cidadeRequest}${ufRequest}${observacaoRequest}${ativoRequest}${franquiaAreaAtuacaoRequest}${franquiaStatusAtualRequest}${franquiaUsuarioRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };
@@ -327,6 +345,10 @@ export const getFranquiaState = (location): IFranquiaBaseState => {
   const observacao = url.searchParams.get('observacao') || '';
   const ativo = url.searchParams.get('ativo') || '';
 
+  const franquiaAreaAtuacao = url.searchParams.get('franquiaAreaAtuacao') || '';
+  const franquiaStatusAtual = url.searchParams.get('franquiaStatusAtual') || '';
+  const franquiaUsuario = url.searchParams.get('franquiaUsuario') || '';
+
   return {
     baseFilters,
     idCidade,
@@ -346,6 +368,9 @@ export const getFranquiaState = (location): IFranquiaBaseState => {
     cidade,
     uf,
     observacao,
-    ativo
+    ativo,
+    franquiaAreaAtuacao,
+    franquiaStatusAtual,
+    franquiaUsuario
   };
 };

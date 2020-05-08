@@ -10,8 +10,15 @@
             "fieldValidateRulesMaxlength": "30"
         }
     ],
-    "relationships": [],
-    "changelogDate": "20200508173500",
+    "relationships": [
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "especialidade",
+            "otherEntityRelationshipName": "tipoEspecialidade",
+            "relationshipName": "especialidade"
+        }
+    ],
+    "changelogDate": "20200508183100",
     "entityTableName": "tipo_especialidade",
     "dto": "mapstruct",
     "pagination": "pagination",

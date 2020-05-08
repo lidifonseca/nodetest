@@ -87,6 +87,32 @@ export class PadItemAtividadeDetail extends React.Component<IPadItemAtividadeDet
                       </Col>
                     </Row>
                   </Col>
+
+                  <Col md="12">
+                    <Row>
+                      <Col md="3">
+                        <dt>
+                          <Translate contentKey="generadorApp.padItemAtividade.atividade">Atividade</Translate>
+                        </dt>
+                      </Col>
+                      <Col md="9">
+                        <dd>{padItemAtividadeEntity.atividade ? padItemAtividadeEntity.atividade.id : ''}</dd>
+                      </Col>
+                    </Row>
+                  </Col>
+
+                  <Col md="12">
+                    <Row>
+                      <Col md="3">
+                        <dt>
+                          <Translate contentKey="generadorApp.padItemAtividade.padItem">Pad Item</Translate>
+                        </dt>
+                      </Col>
+                      <Col md="9">
+                        <dd>{padItemAtividadeEntity.padItem ? padItemAtividadeEntity.padItem.id : ''}</dd>
+                      </Col>
+                    </Row>
+                  </Col>
                 </Row>
                 <Button tag={Link} to="/pad-item-atividade" replace color="info">
                   <FontAwesomeIcon icon="arrow-left" />{' '}

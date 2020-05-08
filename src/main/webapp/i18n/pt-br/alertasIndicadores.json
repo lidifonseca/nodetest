@@ -25,7 +25,9 @@
       "pontuacao": "Pontuacao",
       "alteracaoEsperada": "Alteracao Esperada",
       "observacoes": "Observacoes",
-      "usuarioId": "Usuario Id"
+      "usuarioId": "Usuario Id",
+      "padItemIndicadores_empty": "Sem Pad Item Indicadores",
+      "padItemIndicadores": "Pad Item Indicadores"
     }
   }
 }

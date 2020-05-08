@@ -43,6 +43,9 @@ import { IPacienteDadosCartao } from 'app/shared/model/paciente-dados-cartao.mod
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
+import { IPaciente } from 'app/shared/model/paciente.model';
+import { getEntities as getPacientes } from 'app/entities/paciente/paciente.reducer';
+
 export interface IPacienteDadosCartaoProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
 export interface IPacienteDadosCartaoState extends IPacienteDadosCartaoBaseState, IPaginationBaseState {
@@ -63,6 +66,8 @@ export class PacienteDadosCartao extends React.Component<IPacienteDadosCartaoPro
 
   componentDidMount() {
     this.getEntities();
+
+    this.props.getPacientes();
   }
 
   cancelCourse = () => {
@@ -72,7 +77,9 @@ export class PacienteDadosCartao extends React.Component<IPacienteDadosCartaoPro
         numeroCartao: '',
         validade: '',
         codAtivacao: '',
-        ativo: ''
+        ativo: '',
+        pacientePedido: '',
+        paciente: ''
       },
       () => this.sortEntities()
     );
@@ -132,6 +139,12 @@ export class PacienteDadosCartao extends React.Component<IPacienteDadosCartaoPro
       'ativo=' +
       this.state.ativo +
       '&' +
+      'pacientePedido=' +
+      this.state.pacientePedido +
+      '&' +
+      'paciente=' +
+      this.state.paciente +
+      '&' +
       ''
     );
   };
@@ -139,8 +152,31 @@ export class PacienteDadosCartao extends React.Component<IPacienteDadosCartaoPro
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { bandeira, numeroCartao, validade, codAtivacao, ativo, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntitiesExport(bandeira, numeroCartao, validade, codAtivacao, ativo, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const {
+      bandeira,
+      numeroCartao,
+      validade,
+      codAtivacao,
+      ativo,
+      pacientePedido,
+      paciente,
+      activePage,
+      itemsPerPage,
+      sort,
+      order
+    } = this.state;
+    this.props.getEntitiesExport(
+      bandeira,
+      numeroCartao,
+      validade,
+      codAtivacao,
+      ativo,
+      pacientePedido,
+      paciente,
+      activePage - 1,
+      itemsPerPage,
+      `${sort},${order}`
+    );
   };
 
   confirmExport() {}
@@ -189,11 +225,13 @@ export class PacienteDadosCartao extends React.Component<IPacienteDadosCartaoPro
 }
 
 const mapStateToProps = ({ pacienteDadosCartao, ...storeState }: IRootState) => ({
+  pacientes: storeState.paciente.entities,
   pacienteDadosCartaoList: pacienteDadosCartao.entities,
   totalItems: pacienteDadosCartao.totalItems
 });
 
 const mapDispatchToProps = {
+  getPacientes,
   getEntitiesExport
 };
 

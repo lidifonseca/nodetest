@@ -34,6 +34,11 @@ import { IDiario } from 'app/shared/model/diario.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
+import { IUsuario } from 'app/shared/model/usuario.model';
+import { getEntities as getUsuarios } from 'app/entities/usuario/usuario.reducer';
+import { IPaciente } from 'app/shared/model/paciente.model';
+import { getEntities as getPacientes } from 'app/entities/paciente/paciente.reducer';
+
 export interface IDiarioProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
 export interface IDiarioState extends IDiarioBaseState, IPaginationBaseState {
@@ -54,13 +59,18 @@ export class Diario extends React.Component<IDiarioProps, IDiarioState> {
 
   componentDidMount() {
     this.getEntities();
+
+    this.props.getUsuarios();
+    this.props.getPacientes();
   }
 
   cancelCourse = () => {
     this.setState(
       {
         historico: '',
-        gerarPdf: ''
+        gerarPdf: '',
+        usuario: '',
+        paciente: ''
       },
       () => this.sortEntities()
     );
@@ -111,6 +121,12 @@ export class Diario extends React.Component<IDiarioProps, IDiarioState> {
       'gerarPdf=' +
       this.state.gerarPdf +
       '&' +
+      'usuario=' +
+      this.state.usuario +
+      '&' +
+      'paciente=' +
+      this.state.paciente +
+      '&' +
       ''
     );
   };
@@ -118,8 +134,8 @@ export class Diario extends React.Component<IDiarioProps, IDiarioState> {
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { historico, gerarPdf, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntitiesExport(historico, gerarPdf, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const { historico, gerarPdf, usuario, paciente, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntitiesExport(historico, gerarPdf, usuario, paciente, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   confirmExport() {}
@@ -168,11 +184,15 @@ export class Diario extends React.Component<IDiarioProps, IDiarioState> {
 }
 
 const mapStateToProps = ({ diario, ...storeState }: IRootState) => ({
+  usuarios: storeState.usuario.entities,
+  pacientes: storeState.paciente.entities,
   diarioList: diario.entities,
   totalItems: diario.totalItems
 });
 
 const mapDispatchToProps = {
+  getUsuarios,
+  getPacientes,
   getEntitiesExport
 };
 

@@ -9,6 +9,8 @@ import { Translate, translate, ICrudGetAction, ICrudGetAllAction, ICrudPutAction
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
+import { ICidade } from 'app/shared/model/cidade.model';
+import { getEntities as getCidades } from 'app/entities/cidade/cidade.reducer';
 import { IEmpresaUpdateState, getEntity, getEmpresaState, IEmpresaBaseState, updateEntity, createEntity, reset } from './empresa.reducer';
 import { IEmpresa } from 'app/shared/model/empresa.model';
 import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
@@ -21,13 +23,26 @@ export class EmpresaUpdate extends React.Component<IEmpresaUpdateProps, IEmpresa
     super(props);
 
     this.state = {
+      cidadeSelectValue: null,
       fieldsBase: getEmpresaState(this.props.location),
+      cidadeId: '0',
       isNew: !this.props.match.params || !this.props.match.params.id
     };
   }
   componentDidUpdate(nextProps, nextState) {
     if (nextProps.updateSuccess !== this.props.updateSuccess && nextProps.updateSuccess) {
       this.handleClose();
+    }
+
+    if (
+      nextProps.cidades.length > 0 &&
+      this.state.cidadeSelectValue === null &&
+      nextProps.empresaEntity.cidade &&
+      nextProps.empresaEntity.cidade.id
+    ) {
+      this.setState({
+        cidadeSelectValue: nextProps.cidades.map(p => (nextProps.empresaEntity.cidade.id === p.id ? { value: p.id, label: p.id } : null))
+      });
     }
   }
 
@@ -37,6 +52,8 @@ export class EmpresaUpdate extends React.Component<IEmpresaUpdateProps, IEmpresa
     } else {
       this.props.getEntity(this.props.match.params.id);
     }
+
+    this.props.getCidades();
   }
 
   getFiltersURL = (offset = null) => {
@@ -52,7 +69,7 @@ export class EmpresaUpdate extends React.Component<IEmpresaUpdateProps, IEmpresa
       const { empresaEntity } = this.props;
       const entity = {
         ...empresaEntity,
-
+        cidade: this.state.cidadeSelectValue ? this.state.cidadeSelectValue['value'] : null,
         ...values
       };
 
@@ -69,7 +86,7 @@ export class EmpresaUpdate extends React.Component<IEmpresaUpdateProps, IEmpresa
   };
 
   render() {
-    const { empresaEntity, loading, updating } = this.props;
+    const { empresaEntity, cidades, loading, updating } = this.props;
     const { isNew } = this.state;
 
     const baseFilters = this.state.fieldsBase && this.state.fieldsBase['baseFilters'] ? this.state.fieldsBase['baseFilters'] : null;
@@ -80,7 +97,8 @@ export class EmpresaUpdate extends React.Component<IEmpresaUpdateProps, IEmpresa
             isNew
               ? {}
               : {
-                  ...empresaEntity
+                  ...empresaEntity,
+                  cidade: empresaEntity.cidade ? empresaEntity.cidade.id : null
                 }
           }
           onSubmit={this.saveEntity}
@@ -179,6 +197,8 @@ export class EmpresaUpdate extends React.Component<IEmpresaUpdateProps, IEmpresa
                         <UfComponentUpdate baseFilters />
 
                         <TipoComponentUpdate baseFilters />
+
+                        <CidadeComponentUpdate baseFilter cidades />
                       </Row>
                     </div>
                   )}
@@ -193,6 +213,7 @@ export class EmpresaUpdate extends React.Component<IEmpresaUpdateProps, IEmpresa
 }
 
 const mapStateToProps = (storeState: IRootState) => ({
+  cidades: storeState.cidade.entities,
   empresaEntity: storeState.empresa.entity,
   loading: storeState.empresa.loading,
   updating: storeState.empresa.updating,
@@ -200,6 +221,7 @@ const mapStateToProps = (storeState: IRootState) => ({
 });
 
 const mapDispatchToProps = {
+  getCidades,
   getEntity,
   updateEntity,
   createEntity,
@@ -617,6 +639,34 @@ const TipoComponentUpdate = ({ baseFilters }) => {
     </Col>
   ) : (
     <AvInput type="hidden" name="tipo" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const CidadeComponentUpdate = ({ baseFilters, cidades }) => {
+  return baseFilters !== 'cidade' ? (
+    <Col md="12">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" for="empresa-cidade">
+              <Translate contentKey="generadorApp.empresa.cidade">Cidade</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <Select
+              id="empresa-cidade"
+              className={'css-select-control'}
+              value={this.state.cidadeSelectValue}
+              options={cidades ? cidades.map(option => ({ value: option.id, label: option.id })) : null}
+              onChange={options => this.setState({ cidadeSelectValue: options })}
+              name={'cidade'}
+            />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="cidade" value={this.state.fieldsBase[baseFilters]} />
   );
 };
 

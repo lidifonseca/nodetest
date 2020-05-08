@@ -34,6 +34,7 @@ export type IndicadoresState = Readonly<typeof initialState>;
 export interface IIndicadoresBaseState {
   baseFilters: any;
   titulo: any;
+  indicadoresValores: any;
 }
 
 export interface IIndicadoresUpdateState {
@@ -121,18 +122,20 @@ const apiUrl = 'api/indicadores';
 // Actions
 export type ICrudGetAllActionIndicadores<T> = (
   titulo?: any,
+  indicadoresValores?: any,
   page?: number,
   size?: number,
   sort?: string
 ) => IPayload<T> | ((dispatch: any) => IPayload<T>);
 
-export const getEntities: ICrudGetAllActionIndicadores<IIndicadores> = (titulo, page, size, sort) => {
+export const getEntities: ICrudGetAllActionIndicadores<IIndicadores> = (titulo, indicadoresValores, page, size, sort) => {
   const tituloRequest = titulo ? `titulo.contains=${titulo}&` : '';
+  const indicadoresValoresRequest = indicadoresValores ? `indicadoresValores.equals=${indicadoresValores}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_INDICADORES_LIST,
-    payload: axios.get<IIndicadores>(`${requestUrl}${tituloRequest}cacheBuster=${new Date().getTime()}`)
+    payload: axios.get<IIndicadores>(`${requestUrl}${tituloRequest}${indicadoresValoresRequest}cacheBuster=${new Date().getTime()}`)
   };
 };
 export const getEntity: ICrudGetAction<IIndicadores> = id => {
@@ -143,13 +146,14 @@ export const getEntity: ICrudGetAction<IIndicadores> = id => {
   };
 };
 
-export const getEntitiesExport: ICrudGetAllActionIndicadores<IIndicadores> = (titulo, page, size, sort) => {
+export const getEntitiesExport: ICrudGetAllActionIndicadores<IIndicadores> = (titulo, indicadoresValores, page, size, sort) => {
   const tituloRequest = titulo ? `titulo.contains=${titulo}&` : '';
+  const indicadoresValoresRequest = indicadoresValores ? `indicadoresValores.equals=${indicadoresValores}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_INDICADORES_LIST,
-    payload: axios.get<IIndicadores>(`${requestUrl}${tituloRequest}cacheBuster=${new Date().getTime()}`)
+    payload: axios.get<IIndicadores>(`${requestUrl}${tituloRequest}${indicadoresValoresRequest}cacheBuster=${new Date().getTime()}`)
   };
 };
 
@@ -194,8 +198,11 @@ export const getIndicadoresState = (location): IIndicadoresBaseState => {
   const baseFilters = url.searchParams.get('baseFilters') || '';
   const titulo = url.searchParams.get('titulo') || '';
 
+  const indicadoresValores = url.searchParams.get('indicadoresValores') || '';
+
   return {
     baseFilters,
-    titulo
+    titulo,
+    indicadoresValores
   };
 };

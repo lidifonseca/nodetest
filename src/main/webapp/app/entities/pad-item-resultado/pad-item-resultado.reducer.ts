@@ -38,12 +38,15 @@ export interface IPadItemResultadoBaseState {
   dataFim: any;
   resultadoAnalisado: any;
   usuarioId: any;
+  padItem: any;
 }
 
 export interface IPadItemResultadoUpdateState {
   fieldsBase: IPadItemResultadoBaseState;
 
+  padItemSelectValue: any;
   isNew: boolean;
+  padItemId: string;
 }
 
 // Reducer
@@ -143,6 +146,7 @@ export type ICrudGetAllActionPadItemResultado<T> = (
   dataFim?: any,
   resultadoAnalisado?: any,
   usuarioId?: any,
+  padItem?: any,
   page?: number,
   size?: number,
   sort?: string
@@ -153,6 +157,7 @@ export const getEntities: ICrudGetAllActionPadItemResultado<IPadItemResultado> =
   dataFim,
   resultadoAnalisado,
   usuarioId,
+  padItem,
   page,
   size,
   sort
@@ -161,12 +166,13 @@ export const getEntities: ICrudGetAllActionPadItemResultado<IPadItemResultado> =
   const dataFimRequest = dataFim ? `dataFim.equals=${dataFim}&` : '';
   const resultadoAnalisadoRequest = resultadoAnalisado ? `resultadoAnalisado.contains=${resultadoAnalisado}&` : '';
   const usuarioIdRequest = usuarioId ? `usuarioId.contains=${usuarioId}&` : '';
+  const padItemRequest = padItem ? `padItem.equals=${padItem}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_PADITEMRESULTADO_LIST,
     payload: axios.get<IPadItemResultado>(
-      `${requestUrl}${resultadoRequest}${dataFimRequest}${resultadoAnalisadoRequest}${usuarioIdRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${resultadoRequest}${dataFimRequest}${resultadoAnalisadoRequest}${usuarioIdRequest}${padItemRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };
@@ -183,6 +189,7 @@ export const getEntitiesExport: ICrudGetAllActionPadItemResultado<IPadItemResult
   dataFim,
   resultadoAnalisado,
   usuarioId,
+  padItem,
   page,
   size,
   sort
@@ -191,19 +198,21 @@ export const getEntitiesExport: ICrudGetAllActionPadItemResultado<IPadItemResult
   const dataFimRequest = dataFim ? `dataFim.equals=${dataFim}&` : '';
   const resultadoAnalisadoRequest = resultadoAnalisado ? `resultadoAnalisado.contains=${resultadoAnalisado}&` : '';
   const usuarioIdRequest = usuarioId ? `usuarioId.contains=${usuarioId}&` : '';
+  const padItemRequest = padItem ? `padItem.equals=${padItem}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_PADITEMRESULTADO_LIST,
     payload: axios.get<IPadItemResultado>(
-      `${requestUrl}${resultadoRequest}${dataFimRequest}${resultadoAnalisadoRequest}${usuarioIdRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${resultadoRequest}${dataFimRequest}${resultadoAnalisadoRequest}${usuarioIdRequest}${padItemRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };
 
 export const createEntity: ICrudPutAction<IPadItemResultado> = entity => async dispatch => {
   entity = {
-    ...entity
+    ...entity,
+    padItem: entity.padItem === 'null' ? null : entity.padItem
   };
   const result = await dispatch({
     type: ACTION_TYPES.CREATE_PADITEMRESULTADO,
@@ -214,7 +223,7 @@ export const createEntity: ICrudPutAction<IPadItemResultado> = entity => async d
 };
 
 export const updateEntity: ICrudPutAction<IPadItemResultado> = entity => async dispatch => {
-  entity = { ...entity };
+  entity = { ...entity, padItem: entity.padItem === 'null' ? null : entity.padItem };
   const result = await dispatch({
     type: ACTION_TYPES.UPDATE_PADITEMRESULTADO,
     payload: axios.put(apiUrl, cleanEntity(entity))
@@ -255,11 +264,14 @@ export const getPadItemResultadoState = (location): IPadItemResultadoBaseState =
   const resultadoAnalisado = url.searchParams.get('resultadoAnalisado') || '';
   const usuarioId = url.searchParams.get('usuarioId') || '';
 
+  const padItem = url.searchParams.get('padItem') || '';
+
   return {
     baseFilters,
     resultado,
     dataFim,
     resultadoAnalisado,
-    usuarioId
+    usuarioId,
+    padItem
   };
 };

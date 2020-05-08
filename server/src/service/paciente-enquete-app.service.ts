@@ -5,6 +5,7 @@ import PacienteEnqueteApp from '../domain/paciente-enquete-app.entity';
 import { PacienteEnqueteAppRepository } from '../repository/paciente-enquete-app.repository';
 
 const relationshipNames = [];
+relationshipNames.push('paciente');
 
 @Injectable()
 export class PacienteEnqueteAppService {

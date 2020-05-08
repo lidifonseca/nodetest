@@ -38,6 +38,13 @@ import { ICidXPtaNovoPadItemIndi } from 'app/shared/model/cid-x-pta-novo-pad-ite
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
+import { IPadItemIndicadores } from 'app/shared/model/pad-item-indicadores.model';
+import { getEntities as getPadItemIndicadores } from 'app/entities/pad-item-indicadores/pad-item-indicadores.reducer';
+import { ICategoria } from 'app/shared/model/categoria.model';
+import { getEntities as getCategorias } from 'app/entities/categoria/categoria.reducer';
+import { ICidXPtaNovo } from 'app/shared/model/cid-x-pta-novo.model';
+import { getEntities as getCidXPtaNovos } from 'app/entities/cid-x-pta-novo/cid-x-pta-novo.reducer';
+
 export interface ICidXPtaNovoPadItemIndiProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
 export interface ICidXPtaNovoPadItemIndiState extends ICidXPtaNovoPadItemIndiBaseState, IPaginationBaseState {
@@ -58,6 +65,10 @@ export class CidXPtaNovoPadItemIndi extends React.Component<ICidXPtaNovoPadItemI
 
   componentDidMount() {
     this.getEntities();
+
+    this.props.getPadItemIndicadores();
+    this.props.getCategorias();
+    this.props.getCidXPtaNovos();
   }
 
   cancelCourse = () => {
@@ -68,7 +79,11 @@ export class CidXPtaNovoPadItemIndi extends React.Component<ICidXPtaNovoPadItemI
         minimo: '',
         unidadeMedidaExtra: '',
         unidadeMedidaId: '',
-        score: ''
+        score: '',
+        alertasIndicadores: '',
+        padItemIndicadores: '',
+        categorias: '',
+        cidXPtaNovo: ''
       },
       () => this.sortEntities()
     );
@@ -131,6 +146,18 @@ export class CidXPtaNovoPadItemIndi extends React.Component<ICidXPtaNovoPadItemI
       'score=' +
       this.state.score +
       '&' +
+      'alertasIndicadores=' +
+      this.state.alertasIndicadores +
+      '&' +
+      'padItemIndicadores=' +
+      this.state.padItemIndicadores +
+      '&' +
+      'categorias=' +
+      this.state.categorias +
+      '&' +
+      'cidXPtaNovo=' +
+      this.state.cidXPtaNovo +
+      '&' +
       ''
     );
   };
@@ -138,7 +165,22 @@ export class CidXPtaNovoPadItemIndi extends React.Component<ICidXPtaNovoPadItemI
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { meta, maximo, minimo, unidadeMedidaExtra, unidadeMedidaId, score, activePage, itemsPerPage, sort, order } = this.state;
+    const {
+      meta,
+      maximo,
+      minimo,
+      unidadeMedidaExtra,
+      unidadeMedidaId,
+      score,
+      alertasIndicadores,
+      padItemIndicadores,
+      categorias,
+      cidXPtaNovo,
+      activePage,
+      itemsPerPage,
+      sort,
+      order
+    } = this.state;
     this.props.getEntitiesExport(
       meta,
       maximo,
@@ -146,6 +188,10 @@ export class CidXPtaNovoPadItemIndi extends React.Component<ICidXPtaNovoPadItemI
       unidadeMedidaExtra,
       unidadeMedidaId,
       score,
+      alertasIndicadores,
+      padItemIndicadores,
+      categorias,
+      cidXPtaNovo,
       activePage - 1,
       itemsPerPage,
       `${sort},${order}`
@@ -198,11 +244,17 @@ export class CidXPtaNovoPadItemIndi extends React.Component<ICidXPtaNovoPadItemI
 }
 
 const mapStateToProps = ({ cidXPtaNovoPadItemIndi, ...storeState }: IRootState) => ({
+  padItemIndicadores: storeState.padItemIndicadores.entities,
+  categorias: storeState.categoria.entities,
+  cidXPtaNovos: storeState.cidXPtaNovo.entities,
   cidXPtaNovoPadItemIndiList: cidXPtaNovoPadItemIndi.entities,
   totalItems: cidXPtaNovoPadItemIndi.totalItems
 });
 
 const mapDispatchToProps = {
+  getPadItemIndicadores,
+  getCategorias,
+  getCidXPtaNovos,
   getEntitiesExport
 };
 

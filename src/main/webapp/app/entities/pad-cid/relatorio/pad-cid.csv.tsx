@@ -34,6 +34,11 @@ import { IPadCid } from 'app/shared/model/pad-cid.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
+import { IPad } from 'app/shared/model/pad.model';
+import { getEntities as getPads } from 'app/entities/pad/pad.reducer';
+import { ICid } from 'app/shared/model/cid.model';
+import { getEntities as getCids } from 'app/entities/cid/cid.reducer';
+
 export interface IPadCidProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
 export interface IPadCidState extends IPadCidBaseState, IPaginationBaseState {
@@ -54,13 +59,18 @@ export class PadCid extends React.Component<IPadCidProps, IPadCidState> {
 
   componentDidMount() {
     this.getEntities();
+
+    this.props.getPads();
+    this.props.getCids();
   }
 
   cancelCourse = () => {
     this.setState(
       {
         observacao: '',
-        ativo: ''
+        ativo: '',
+        pad: '',
+        cid: ''
       },
       () => this.sortEntities()
     );
@@ -111,6 +121,12 @@ export class PadCid extends React.Component<IPadCidProps, IPadCidState> {
       'ativo=' +
       this.state.ativo +
       '&' +
+      'pad=' +
+      this.state.pad +
+      '&' +
+      'cid=' +
+      this.state.cid +
+      '&' +
       ''
     );
   };
@@ -118,8 +134,8 @@ export class PadCid extends React.Component<IPadCidProps, IPadCidState> {
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { observacao, ativo, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntitiesExport(observacao, ativo, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const { observacao, ativo, pad, cid, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntitiesExport(observacao, ativo, pad, cid, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   confirmExport() {}
@@ -168,11 +184,15 @@ export class PadCid extends React.Component<IPadCidProps, IPadCidState> {
 }
 
 const mapStateToProps = ({ padCid, ...storeState }: IRootState) => ({
+  pads: storeState.pad.entities,
+  cids: storeState.cid.entities,
   padCidList: padCid.entities,
   totalItems: padCid.totalItems
 });
 
 const mapDispatchToProps = {
+  getPads,
+  getCids,
   getEntitiesExport
 };
 

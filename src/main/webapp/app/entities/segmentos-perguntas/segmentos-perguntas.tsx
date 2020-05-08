@@ -50,7 +50,8 @@ export class SegmentosPerguntas extends React.Component<ISegmentosPerguntasProps
   cancelCourse = () => {
     this.setState(
       {
-        segmento: ''
+        segmento: '',
+        perguntasQuestionario: ''
       },
       () => this.sortEntities()
     );
@@ -100,6 +101,9 @@ export class SegmentosPerguntas extends React.Component<ISegmentosPerguntasProps
       'segmento=' +
       this.state.segmento +
       '&' +
+      'perguntasQuestionario=' +
+      this.state.perguntasQuestionario +
+      '&' +
       ''
     );
   };
@@ -107,8 +111,8 @@ export class SegmentosPerguntas extends React.Component<ISegmentosPerguntasProps
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { segmento, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntities(segmento, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const { segmento, perguntasQuestionario, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntities(segmento, perguntasQuestionario, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   render() {
@@ -157,6 +161,12 @@ export class SegmentosPerguntas extends React.Component<ISegmentosPerguntasProps
 
                             <AvInput type="text" name="segmento" id="segmentos-perguntas-segmento" value={this.state.segmento} />
                           </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'perguntasQuestionario' ? (
+                        <Col md="3">
+                          <Row className="mr-1 mt-1"></Row>
                         </Col>
                       ) : null}
                     </div>

@@ -9,6 +9,10 @@ import { Translate, translate, ICrudGetAction, ICrudGetAllAction, ICrudPutAction
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
+import { IUsuario } from 'app/shared/model/usuario.model';
+import { getEntities as getUsuarios } from 'app/entities/usuario/usuario.reducer';
+import { IPaciente } from 'app/shared/model/paciente.model';
+import { getEntities as getPacientes } from 'app/entities/paciente/paciente.reducer';
 import { IDiarioUpdateState, getEntity, getDiarioState, IDiarioBaseState, updateEntity, createEntity, reset } from './diario.reducer';
 import { IDiario } from 'app/shared/model/diario.model';
 import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
@@ -21,13 +25,41 @@ export class DiarioUpdate extends React.Component<IDiarioUpdateProps, IDiarioUpd
     super(props);
 
     this.state = {
+      usuarioSelectValue: null,
+      pacienteSelectValue: null,
       fieldsBase: getDiarioState(this.props.location),
+      usuarioId: '0',
+      pacienteId: '0',
       isNew: !this.props.match.params || !this.props.match.params.id
     };
   }
   componentDidUpdate(nextProps, nextState) {
     if (nextProps.updateSuccess !== this.props.updateSuccess && nextProps.updateSuccess) {
       this.handleClose();
+    }
+
+    if (
+      nextProps.usuarios.length > 0 &&
+      this.state.usuarioSelectValue === null &&
+      nextProps.diarioEntity.usuario &&
+      nextProps.diarioEntity.usuario.id
+    ) {
+      this.setState({
+        usuarioSelectValue: nextProps.usuarios.map(p => (nextProps.diarioEntity.usuario.id === p.id ? { value: p.id, label: p.id } : null))
+      });
+    }
+
+    if (
+      nextProps.pacientes.length > 0 &&
+      this.state.pacienteSelectValue === null &&
+      nextProps.diarioEntity.paciente &&
+      nextProps.diarioEntity.paciente.id
+    ) {
+      this.setState({
+        pacienteSelectValue: nextProps.pacientes.map(p =>
+          nextProps.diarioEntity.paciente.id === p.id ? { value: p.id, label: p.id } : null
+        )
+      });
     }
   }
 
@@ -37,6 +69,9 @@ export class DiarioUpdate extends React.Component<IDiarioUpdateProps, IDiarioUpd
     } else {
       this.props.getEntity(this.props.match.params.id);
     }
+
+    this.props.getUsuarios();
+    this.props.getPacientes();
   }
 
   getFiltersURL = (offset = null) => {
@@ -52,7 +87,8 @@ export class DiarioUpdate extends React.Component<IDiarioUpdateProps, IDiarioUpd
       const { diarioEntity } = this.props;
       const entity = {
         ...diarioEntity,
-
+        usuario: this.state.usuarioSelectValue ? this.state.usuarioSelectValue['value'] : null,
+        paciente: this.state.pacienteSelectValue ? this.state.pacienteSelectValue['value'] : null,
         ...values
       };
 
@@ -69,7 +105,7 @@ export class DiarioUpdate extends React.Component<IDiarioUpdateProps, IDiarioUpd
   };
 
   render() {
-    const { diarioEntity, loading, updating } = this.props;
+    const { diarioEntity, usuarios, pacientes, loading, updating } = this.props;
     const { isNew } = this.state;
 
     const baseFilters = this.state.fieldsBase && this.state.fieldsBase['baseFilters'] ? this.state.fieldsBase['baseFilters'] : null;
@@ -80,7 +116,9 @@ export class DiarioUpdate extends React.Component<IDiarioUpdateProps, IDiarioUpd
             isNew
               ? {}
               : {
-                  ...diarioEntity
+                  ...diarioEntity,
+                  usuario: diarioEntity.usuario ? diarioEntity.usuario.id : null,
+                  paciente: diarioEntity.paciente ? diarioEntity.paciente.id : null
                 }
           }
           onSubmit={this.saveEntity}
@@ -145,6 +183,10 @@ export class DiarioUpdate extends React.Component<IDiarioUpdateProps, IDiarioUpd
                         <HistoricoComponentUpdate baseFilters />
 
                         <GerarPdfComponentUpdate baseFilters />
+
+                        <UsuarioComponentUpdate baseFilter usuarios />
+
+                        <PacienteComponentUpdate baseFilter pacientes />
                       </Row>
                     </div>
                   )}
@@ -159,6 +201,8 @@ export class DiarioUpdate extends React.Component<IDiarioUpdateProps, IDiarioUpd
 }
 
 const mapStateToProps = (storeState: IRootState) => ({
+  usuarios: storeState.usuario.entities,
+  pacientes: storeState.paciente.entities,
   diarioEntity: storeState.diario.entity,
   loading: storeState.diario.loading,
   updating: storeState.diario.updating,
@@ -166,6 +210,8 @@ const mapStateToProps = (storeState: IRootState) => ({
 });
 
 const mapDispatchToProps = {
+  getUsuarios,
+  getPacientes,
   getEntity,
   updateEntity,
   createEntity,
@@ -214,6 +260,62 @@ const GerarPdfComponentUpdate = ({ baseFilters }) => {
     </Col>
   ) : (
     <AvInput type="hidden" name="gerarPdf" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const UsuarioComponentUpdate = ({ baseFilters, usuarios }) => {
+  return baseFilters !== 'usuario' ? (
+    <Col md="12">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" for="diario-usuario">
+              <Translate contentKey="generadorApp.diario.usuario">Usuario</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <Select
+              id="diario-usuario"
+              className={'css-select-control'}
+              value={this.state.usuarioSelectValue}
+              options={usuarios ? usuarios.map(option => ({ value: option.id, label: option.id })) : null}
+              onChange={options => this.setState({ usuarioSelectValue: options })}
+              name={'usuario'}
+            />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="usuario" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const PacienteComponentUpdate = ({ baseFilters, pacientes }) => {
+  return baseFilters !== 'paciente' ? (
+    <Col md="12">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" for="diario-paciente">
+              <Translate contentKey="generadorApp.diario.paciente">Paciente</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <Select
+              id="diario-paciente"
+              className={'css-select-control'}
+              value={this.state.pacienteSelectValue}
+              options={pacientes ? pacientes.map(option => ({ value: option.id, label: option.id })) : null}
+              onChange={options => this.setState({ pacienteSelectValue: options })}
+              name={'paciente'}
+            />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="paciente" value={this.state.fieldsBase[baseFilters]} />
   );
 };
 

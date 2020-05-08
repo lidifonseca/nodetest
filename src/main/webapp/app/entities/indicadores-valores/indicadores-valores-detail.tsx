@@ -143,6 +143,19 @@ export class IndicadoresValoresDetail extends React.Component<IIndicadoresValore
                       </Col>
                     </Row>
                   </Col>
+
+                  <Col md="12">
+                    <Row>
+                      <Col md="3">
+                        <dt>
+                          <Translate contentKey="generadorApp.indicadoresValores.indicadores">Indicadores</Translate>
+                        </dt>
+                      </Col>
+                      <Col md="9">
+                        <dd>{indicadoresValoresEntity.indicadores ? indicadoresValoresEntity.indicadores.id : ''}</dd>
+                      </Col>
+                    </Row>
+                  </Col>
                 </Row>
                 <Button tag={Link} to="/indicadores-valores" replace color="info">
                   <FontAwesomeIcon icon="arrow-left" />{' '}

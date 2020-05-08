@@ -9,6 +9,8 @@ import { Translate, translate, ICrudGetAction, ICrudGetAllAction, ICrudPutAction
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
+import { IPaciente } from 'app/shared/model/paciente.model';
+import { getEntities as getPacientes } from 'app/entities/paciente/paciente.reducer';
 import {
   IPacienteDadosCartaoUpdateState,
   getEntity,
@@ -29,13 +31,28 @@ export class PacienteDadosCartaoUpdate extends React.Component<IPacienteDadosCar
     super(props);
 
     this.state = {
+      pacienteSelectValue: null,
       fieldsBase: getPacienteDadosCartaoState(this.props.location),
+      pacienteId: '0',
       isNew: !this.props.match.params || !this.props.match.params.id
     };
   }
   componentDidUpdate(nextProps, nextState) {
     if (nextProps.updateSuccess !== this.props.updateSuccess && nextProps.updateSuccess) {
       this.handleClose();
+    }
+
+    if (
+      nextProps.pacientes.length > 0 &&
+      this.state.pacienteSelectValue === null &&
+      nextProps.pacienteDadosCartaoEntity.paciente &&
+      nextProps.pacienteDadosCartaoEntity.paciente.id
+    ) {
+      this.setState({
+        pacienteSelectValue: nextProps.pacientes.map(p =>
+          nextProps.pacienteDadosCartaoEntity.paciente.id === p.id ? { value: p.id, label: p.id } : null
+        )
+      });
     }
   }
 
@@ -45,6 +62,8 @@ export class PacienteDadosCartaoUpdate extends React.Component<IPacienteDadosCar
     } else {
       this.props.getEntity(this.props.match.params.id);
     }
+
+    this.props.getPacientes();
   }
 
   getFiltersURL = (offset = null) => {
@@ -60,7 +79,7 @@ export class PacienteDadosCartaoUpdate extends React.Component<IPacienteDadosCar
       const { pacienteDadosCartaoEntity } = this.props;
       const entity = {
         ...pacienteDadosCartaoEntity,
-
+        paciente: this.state.pacienteSelectValue ? this.state.pacienteSelectValue['value'] : null,
         ...values
       };
 
@@ -77,7 +96,7 @@ export class PacienteDadosCartaoUpdate extends React.Component<IPacienteDadosCar
   };
 
   render() {
-    const { pacienteDadosCartaoEntity, loading, updating } = this.props;
+    const { pacienteDadosCartaoEntity, pacientes, loading, updating } = this.props;
     const { isNew } = this.state;
 
     const baseFilters = this.state.fieldsBase && this.state.fieldsBase['baseFilters'] ? this.state.fieldsBase['baseFilters'] : null;
@@ -88,7 +107,8 @@ export class PacienteDadosCartaoUpdate extends React.Component<IPacienteDadosCar
             isNew
               ? {}
               : {
-                  ...pacienteDadosCartaoEntity
+                  ...pacienteDadosCartaoEntity,
+                  paciente: pacienteDadosCartaoEntity.paciente ? pacienteDadosCartaoEntity.paciente.id : null
                 }
           }
           onSubmit={this.saveEntity}
@@ -161,6 +181,10 @@ export class PacienteDadosCartaoUpdate extends React.Component<IPacienteDadosCar
                         <CodAtivacaoComponentUpdate baseFilters />
 
                         <AtivoComponentUpdate baseFilters />
+
+                        <PacientePedidoComponentUpdate baseFilter pacientePedidos />
+
+                        <PacienteComponentUpdate baseFilter pacientes />
                       </Row>
                     </div>
                   )}
@@ -175,6 +199,7 @@ export class PacienteDadosCartaoUpdate extends React.Component<IPacienteDadosCar
 }
 
 const mapStateToProps = (storeState: IRootState) => ({
+  pacientes: storeState.paciente.entities,
   pacienteDadosCartaoEntity: storeState.pacienteDadosCartao.entity,
   loading: storeState.pacienteDadosCartao.loading,
   updating: storeState.pacienteDadosCartao.updating,
@@ -182,6 +207,7 @@ const mapStateToProps = (storeState: IRootState) => ({
 });
 
 const mapDispatchToProps = {
+  getPacientes,
   getEntity,
   updateEntity,
   createEntity,
@@ -293,6 +319,42 @@ const AtivoComponentUpdate = ({ baseFilters }) => {
     </Col>
   ) : (
     <AvInput type="hidden" name="ativo" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const PacientePedidoComponentUpdate = ({ baseFilters, pacientePedidos }) => {
+  return baseFilters !== 'pacientePedido' ? (
+    <Col md="12"></Col>
+  ) : (
+    <AvInput type="hidden" name="pacientePedido" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const PacienteComponentUpdate = ({ baseFilters, pacientes }) => {
+  return baseFilters !== 'paciente' ? (
+    <Col md="12">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" for="paciente-dados-cartao-paciente">
+              <Translate contentKey="generadorApp.pacienteDadosCartao.paciente">Paciente</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <Select
+              id="paciente-dados-cartao-paciente"
+              className={'css-select-control'}
+              value={this.state.pacienteSelectValue}
+              options={pacientes ? pacientes.map(option => ({ value: option.id, label: option.id })) : null}
+              onChange={options => this.setState({ pacienteSelectValue: options })}
+              name={'paciente'}
+            />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="paciente" value={this.state.fieldsBase[baseFilters]} />
   );
 };
 

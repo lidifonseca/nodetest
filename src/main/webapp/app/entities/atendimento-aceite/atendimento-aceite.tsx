@@ -28,6 +28,11 @@ import { IAtendimentoAceite } from 'app/shared/model/atendimento-aceite.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
+import { IProfissional } from 'app/shared/model/profissional.model';
+import { getEntities as getProfissionals } from 'app/entities/profissional/profissional.reducer';
+import { IAtendimento } from 'app/shared/model/atendimento.model';
+import { getEntities as getAtendimentos } from 'app/entities/atendimento/atendimento.reducer';
+
 export interface IAtendimentoAceiteProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
 export interface IAtendimentoAceiteState extends IAtendimentoAceiteBaseState, IPaginationBaseState {}
@@ -45,12 +50,17 @@ export class AtendimentoAceite extends React.Component<IAtendimentoAceiteProps, 
 
   componentDidMount() {
     this.getEntities();
+
+    this.props.getProfissionals();
+    this.props.getAtendimentos();
   }
 
   cancelCourse = () => {
     this.setState(
       {
-        msgPush: ''
+        msgPush: '',
+        profissional: '',
+        atendimento: ''
       },
       () => this.sortEntities()
     );
@@ -100,6 +110,12 @@ export class AtendimentoAceite extends React.Component<IAtendimentoAceiteProps, 
       'msgPush=' +
       this.state.msgPush +
       '&' +
+      'profissional=' +
+      this.state.profissional +
+      '&' +
+      'atendimento=' +
+      this.state.atendimento +
+      '&' +
       ''
     );
   };
@@ -107,12 +123,12 @@ export class AtendimentoAceite extends React.Component<IAtendimentoAceiteProps, 
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { msgPush, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntities(msgPush, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const { msgPush, profissional, atendimento, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntities(msgPush, profissional, atendimento, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   render() {
-    const { atendimentoAceiteList, match, totalItems } = this.props;
+    const { profissionals, atendimentos, atendimentoAceiteList, match, totalItems } = this.props;
     return (
       <div>
         <h2 id="page-heading">
@@ -159,6 +175,60 @@ export class AtendimentoAceite extends React.Component<IAtendimentoAceiteProps, 
                           </Row>
                         </Col>
                       ) : null}
+
+                      {this.state.baseFilters !== 'profissional' ? (
+                        <Col md="3">
+                          <Row className="mr-1 mt-1">
+                            <div style={{ width: '100%' }}>
+                              <Label for="atendimento-aceite-profissional">
+                                <Translate contentKey="generadorApp.atendimentoAceite.profissional">Profissional</Translate>
+                              </Label>
+                              <Select
+                                id="atendimento-aceite-profissional"
+                                isMulti
+                                className={'css-select-control'}
+                                value={
+                                  profissionals
+                                    ? profissionals.map(p =>
+                                        this.state.profissional.split(',').indexOf(p.id) !== -1 ? { value: p.id, label: p.id } : null
+                                      )
+                                    : null
+                                }
+                                options={profissionals ? profissionals.map(option => ({ value: option.id, label: option.id })) : null}
+                                onChange={options => this.setState({ profissional: options.map(option => option['value']).join(',') })}
+                                name={'profissional'}
+                              />
+                            </div>
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'atendimento' ? (
+                        <Col md="3">
+                          <Row className="mr-1 mt-1">
+                            <div style={{ width: '100%' }}>
+                              <Label for="atendimento-aceite-atendimento">
+                                <Translate contentKey="generadorApp.atendimentoAceite.atendimento">Atendimento</Translate>
+                              </Label>
+                              <Select
+                                id="atendimento-aceite-atendimento"
+                                isMulti
+                                className={'css-select-control'}
+                                value={
+                                  atendimentos
+                                    ? atendimentos.map(p =>
+                                        this.state.atendimento.split(',').indexOf(p.id) !== -1 ? { value: p.id, label: p.id } : null
+                                      )
+                                    : null
+                                }
+                                options={atendimentos ? atendimentos.map(option => ({ value: option.id, label: option.id })) : null}
+                                onChange={options => this.setState({ atendimento: options.map(option => option['value']).join(',') })}
+                                name={'atendimento'}
+                              />
+                            </div>
+                          </Row>
+                        </Col>
+                      ) : null}
                     </div>
 
                     <div className="row mb-2 mr-4 justify-content-end">
@@ -193,6 +263,20 @@ export class AtendimentoAceite extends React.Component<IAtendimentoAceiteProps, 
                         </th>
                       ) : null}
 
+                      {this.state.baseFilters !== 'profissional' ? (
+                        <th>
+                          <Translate contentKey="generadorApp.atendimentoAceite.profissional">Profissional</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'atendimento' ? (
+                        <th>
+                          <Translate contentKey="generadorApp.atendimentoAceite.atendimento">Atendimento</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+
                       <th />
                     </tr>
                   </thead>
@@ -207,6 +291,26 @@ export class AtendimentoAceite extends React.Component<IAtendimentoAceiteProps, 
                         </td>
 
                         {this.state.baseFilters !== 'msgPush' ? <td>{atendimentoAceite.msgPush}</td> : null}
+
+                        {this.state.baseFilters !== 'profissional' ? (
+                          <td>
+                            {atendimentoAceite.profissional ? (
+                              <Link to={`profissional/${atendimentoAceite.profissional.id}`}>{atendimentoAceite.profissional.id}</Link>
+                            ) : (
+                              ''
+                            )}
+                          </td>
+                        ) : null}
+
+                        {this.state.baseFilters !== 'atendimento' ? (
+                          <td>
+                            {atendimentoAceite.atendimento ? (
+                              <Link to={`atendimento/${atendimentoAceite.atendimento.id}`}>{atendimentoAceite.atendimento.id}</Link>
+                            ) : (
+                              ''
+                            )}
+                          </td>
+                        ) : null}
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">
@@ -274,11 +378,15 @@ export class AtendimentoAceite extends React.Component<IAtendimentoAceiteProps, 
 }
 
 const mapStateToProps = ({ atendimentoAceite, ...storeState }: IRootState) => ({
+  profissionals: storeState.profissional.entities,
+  atendimentos: storeState.atendimento.entities,
   atendimentoAceiteList: atendimentoAceite.entities,
   totalItems: atendimentoAceite.totalItems
 });
 
 const mapDispatchToProps = {
+  getProfissionals,
+  getAtendimentos,
   getEntities
 };
 

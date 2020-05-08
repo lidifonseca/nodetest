@@ -45,6 +45,20 @@ import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
 import { IUnidadeEasy } from 'app/shared/model/unidade-easy.model';
 import { getEntities as getUnidadeEasies } from 'app/entities/unidade-easy/unidade-easy.reducer';
+import { IPaciente } from 'app/shared/model/paciente.model';
+import { getEntities as getPacientes } from 'app/entities/paciente/paciente.reducer';
+import { IOperadora } from 'app/shared/model/operadora.model';
+import { getEntities as getOperadoras } from 'app/entities/operadora/operadora.reducer';
+import { IEspecialidade } from 'app/shared/model/especialidade.model';
+import { getEntities as getEspecialidades } from 'app/entities/especialidade/especialidade.reducer';
+import { IPadItem } from 'app/shared/model/pad-item.model';
+import { getEntities as getPadItems } from 'app/entities/pad-item/pad-item.reducer';
+import { IStatusAtendimento } from 'app/shared/model/status-atendimento.model';
+import { getEntities as getStatusAtendimentos } from 'app/entities/status-atendimento/status-atendimento.reducer';
+import { IPeriodo } from 'app/shared/model/periodo.model';
+import { getEntities as getPeriodos } from 'app/entities/periodo/periodo.reducer';
+import { ICidade } from 'app/shared/model/cidade.model';
+import { getEntities as getCidades } from 'app/entities/cidade/cidade.reducer';
 
 export interface IAtendimentoProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
@@ -68,6 +82,13 @@ export class Atendimento extends React.Component<IAtendimentoProps, IAtendimento
     this.getEntities();
 
     this.props.getUnidadeEasies();
+    this.props.getPacientes();
+    this.props.getOperadoras();
+    this.props.getEspecialidades();
+    this.props.getPadItems();
+    this.props.getStatusAtendimentos();
+    this.props.getPeriodos();
+    this.props.getCidades();
   }
 
   cancelCourse = () => {
@@ -108,7 +129,17 @@ export class Atendimento extends React.Component<IAtendimentoProps, IAtendimento
         confidencialProfissional: '',
         confidencialPaciente: '',
         imagemAssinatura: '',
-        unidade: ''
+        atendimentoAceite: '',
+        atendimentoAssinaturas: '',
+        atendimentoAtividades: '',
+        unidade: '',
+        paciente: '',
+        operadora: '',
+        especialidade: '',
+        padItem: '',
+        statusAtendimento: '',
+        periodo: '',
+        cidade: ''
       },
       () => this.sortEntities()
     );
@@ -258,8 +289,38 @@ export class Atendimento extends React.Component<IAtendimentoProps, IAtendimento
       'imagemAssinatura=' +
       this.state.imagemAssinatura +
       '&' +
+      'atendimentoAceite=' +
+      this.state.atendimentoAceite +
+      '&' +
+      'atendimentoAssinaturas=' +
+      this.state.atendimentoAssinaturas +
+      '&' +
+      'atendimentoAtividades=' +
+      this.state.atendimentoAtividades +
+      '&' +
       'unidade=' +
       this.state.unidade +
+      '&' +
+      'paciente=' +
+      this.state.paciente +
+      '&' +
+      'operadora=' +
+      this.state.operadora +
+      '&' +
+      'especialidade=' +
+      this.state.especialidade +
+      '&' +
+      'padItem=' +
+      this.state.padItem +
+      '&' +
+      'statusAtendimento=' +
+      this.state.statusAtendimento +
+      '&' +
+      'periodo=' +
+      this.state.periodo +
+      '&' +
+      'cidade=' +
+      this.state.cidade +
       '&' +
       ''
     );
@@ -304,7 +365,17 @@ export class Atendimento extends React.Component<IAtendimentoProps, IAtendimento
       confidencialProfissional,
       confidencialPaciente,
       imagemAssinatura,
+      atendimentoAceite,
+      atendimentoAssinaturas,
+      atendimentoAtividades,
       unidade,
+      paciente,
+      operadora,
+      especialidade,
+      padItem,
+      statusAtendimento,
+      periodo,
+      cidade,
       activePage,
       itemsPerPage,
       sort,
@@ -346,7 +417,17 @@ export class Atendimento extends React.Component<IAtendimentoProps, IAtendimento
       confidencialProfissional,
       confidencialPaciente,
       imagemAssinatura,
+      atendimentoAceite,
+      atendimentoAssinaturas,
+      atendimentoAtividades,
       unidade,
+      paciente,
+      operadora,
+      especialidade,
+      padItem,
+      statusAtendimento,
+      periodo,
+      cidade,
       activePage - 1,
       itemsPerPage,
       `${sort},${order}`
@@ -400,12 +481,26 @@ export class Atendimento extends React.Component<IAtendimentoProps, IAtendimento
 
 const mapStateToProps = ({ atendimento, ...storeState }: IRootState) => ({
   unidadeEasies: storeState.unidadeEasy.entities,
+  pacientes: storeState.paciente.entities,
+  operadoras: storeState.operadora.entities,
+  especialidades: storeState.especialidade.entities,
+  padItems: storeState.padItem.entities,
+  statusAtendimentos: storeState.statusAtendimento.entities,
+  periodos: storeState.periodo.entities,
+  cidades: storeState.cidade.entities,
   atendimentoList: atendimento.entities,
   totalItems: atendimento.totalItems
 });
 
 const mapDispatchToProps = {
   getUnidadeEasies,
+  getPacientes,
+  getOperadoras,
+  getEspecialidades,
+  getPadItems,
+  getStatusAtendimentos,
+  getPeriodos,
+  getCidades,
   getEntitiesExport
 };
 

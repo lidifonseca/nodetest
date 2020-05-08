@@ -52,12 +52,15 @@ export interface IEmpresaBaseState {
   cidade: any;
   uf: any;
   tipo: any;
+  cidade: any;
 }
 
 export interface IEmpresaUpdateState {
   fieldsBase: IEmpresaBaseState;
 
+  cidadeSelectValue: any;
   isNew: boolean;
+  cidadeId: string;
 }
 
 // Reducer
@@ -157,6 +160,7 @@ export type ICrudGetAllActionEmpresa<T> = (
   cidade?: any,
   uf?: any,
   tipo?: any,
+  cidade?: any,
   page?: number,
   size?: number,
   sort?: string
@@ -182,6 +186,7 @@ export const getEntities: ICrudGetAllActionEmpresa<IEmpresa> = (
   cidade,
   uf,
   tipo,
+  cidade,
   page,
   size,
   sort
@@ -205,12 +210,13 @@ export const getEntities: ICrudGetAllActionEmpresa<IEmpresa> = (
   const cidadeRequest = cidade ? `cidade.contains=${cidade}&` : '';
   const ufRequest = uf ? `uf.contains=${uf}&` : '';
   const tipoRequest = tipo ? `tipo.contains=${tipo}&` : '';
+  const cidadeRequest = cidade ? `cidade.equals=${cidade}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_EMPRESA_LIST,
     payload: axios.get<IEmpresa>(
-      `${requestUrl}${empresaRequest}${nomeRequest}${emailRequest}${cpfRequest}${rgRequest}${nascimentoRequest}${sexoRequest}${telefone1Request}${telefone2Request}${celular1Request}${celular2Request}${cepRequest}${enderecoRequest}${numeroRequest}${complementoRequest}${bairroRequest}${cidadeRequest}${ufRequest}${tipoRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${empresaRequest}${nomeRequest}${emailRequest}${cpfRequest}${rgRequest}${nascimentoRequest}${sexoRequest}${telefone1Request}${telefone2Request}${celular1Request}${celular2Request}${cepRequest}${enderecoRequest}${numeroRequest}${complementoRequest}${bairroRequest}${cidadeRequest}${ufRequest}${tipoRequest}${cidadeRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };
@@ -242,6 +248,7 @@ export const getEntitiesExport: ICrudGetAllActionEmpresa<IEmpresa> = (
   cidade,
   uf,
   tipo,
+  cidade,
   page,
   size,
   sort
@@ -265,19 +272,21 @@ export const getEntitiesExport: ICrudGetAllActionEmpresa<IEmpresa> = (
   const cidadeRequest = cidade ? `cidade.contains=${cidade}&` : '';
   const ufRequest = uf ? `uf.contains=${uf}&` : '';
   const tipoRequest = tipo ? `tipo.contains=${tipo}&` : '';
+  const cidadeRequest = cidade ? `cidade.equals=${cidade}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_EMPRESA_LIST,
     payload: axios.get<IEmpresa>(
-      `${requestUrl}${empresaRequest}${nomeRequest}${emailRequest}${cpfRequest}${rgRequest}${nascimentoRequest}${sexoRequest}${telefone1Request}${telefone2Request}${celular1Request}${celular2Request}${cepRequest}${enderecoRequest}${numeroRequest}${complementoRequest}${bairroRequest}${cidadeRequest}${ufRequest}${tipoRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${empresaRequest}${nomeRequest}${emailRequest}${cpfRequest}${rgRequest}${nascimentoRequest}${sexoRequest}${telefone1Request}${telefone2Request}${celular1Request}${celular2Request}${cepRequest}${enderecoRequest}${numeroRequest}${complementoRequest}${bairroRequest}${cidadeRequest}${ufRequest}${tipoRequest}${cidadeRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };
 
 export const createEntity: ICrudPutAction<IEmpresa> = entity => async dispatch => {
   entity = {
-    ...entity
+    ...entity,
+    cidade: entity.cidade === 'null' ? null : entity.cidade
   };
   const result = await dispatch({
     type: ACTION_TYPES.CREATE_EMPRESA,
@@ -288,7 +297,7 @@ export const createEntity: ICrudPutAction<IEmpresa> = entity => async dispatch =
 };
 
 export const updateEntity: ICrudPutAction<IEmpresa> = entity => async dispatch => {
-  entity = { ...entity };
+  entity = { ...entity, cidade: entity.cidade === 'null' ? null : entity.cidade };
   const result = await dispatch({
     type: ACTION_TYPES.UPDATE_EMPRESA,
     payload: axios.put(apiUrl, cleanEntity(entity))
@@ -334,6 +343,8 @@ export const getEmpresaState = (location): IEmpresaBaseState => {
   const uf = url.searchParams.get('uf') || '';
   const tipo = url.searchParams.get('tipo') || '';
 
+  const cidade = url.searchParams.get('cidade') || '';
+
   return {
     baseFilters,
     empresa,
@@ -354,6 +365,7 @@ export const getEmpresaState = (location): IEmpresaBaseState => {
     bairro,
     cidade,
     uf,
-    tipo
+    tipo,
+    cidade
   };
 };

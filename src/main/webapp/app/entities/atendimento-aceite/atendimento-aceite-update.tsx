@@ -9,6 +9,10 @@ import { Translate, translate, ICrudGetAction, ICrudGetAllAction, ICrudPutAction
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
+import { IProfissional } from 'app/shared/model/profissional.model';
+import { getEntities as getProfissionals } from 'app/entities/profissional/profissional.reducer';
+import { IAtendimento } from 'app/shared/model/atendimento.model';
+import { getEntities as getAtendimentos } from 'app/entities/atendimento/atendimento.reducer';
 import {
   IAtendimentoAceiteUpdateState,
   getEntity,
@@ -29,13 +33,43 @@ export class AtendimentoAceiteUpdate extends React.Component<IAtendimentoAceiteU
     super(props);
 
     this.state = {
+      profissionalSelectValue: null,
+      atendimentoSelectValue: null,
       fieldsBase: getAtendimentoAceiteState(this.props.location),
+      profissionalId: '0',
+      atendimentoId: '0',
       isNew: !this.props.match.params || !this.props.match.params.id
     };
   }
   componentDidUpdate(nextProps, nextState) {
     if (nextProps.updateSuccess !== this.props.updateSuccess && nextProps.updateSuccess) {
       this.handleClose();
+    }
+
+    if (
+      nextProps.profissionals.length > 0 &&
+      this.state.profissionalSelectValue === null &&
+      nextProps.atendimentoAceiteEntity.profissional &&
+      nextProps.atendimentoAceiteEntity.profissional.id
+    ) {
+      this.setState({
+        profissionalSelectValue: nextProps.profissionals.map(p =>
+          nextProps.atendimentoAceiteEntity.profissional.id === p.id ? { value: p.id, label: p.id } : null
+        )
+      });
+    }
+
+    if (
+      nextProps.atendimentos.length > 0 &&
+      this.state.atendimentoSelectValue === null &&
+      nextProps.atendimentoAceiteEntity.atendimento &&
+      nextProps.atendimentoAceiteEntity.atendimento.id
+    ) {
+      this.setState({
+        atendimentoSelectValue: nextProps.atendimentos.map(p =>
+          nextProps.atendimentoAceiteEntity.atendimento.id === p.id ? { value: p.id, label: p.id } : null
+        )
+      });
     }
   }
 
@@ -45,6 +79,9 @@ export class AtendimentoAceiteUpdate extends React.Component<IAtendimentoAceiteU
     } else {
       this.props.getEntity(this.props.match.params.id);
     }
+
+    this.props.getProfissionals();
+    this.props.getAtendimentos();
   }
 
   getFiltersURL = (offset = null) => {
@@ -60,7 +97,8 @@ export class AtendimentoAceiteUpdate extends React.Component<IAtendimentoAceiteU
       const { atendimentoAceiteEntity } = this.props;
       const entity = {
         ...atendimentoAceiteEntity,
-
+        profissional: this.state.profissionalSelectValue ? this.state.profissionalSelectValue['value'] : null,
+        atendimento: this.state.atendimentoSelectValue ? this.state.atendimentoSelectValue['value'] : null,
         ...values
       };
 
@@ -77,7 +115,7 @@ export class AtendimentoAceiteUpdate extends React.Component<IAtendimentoAceiteU
   };
 
   render() {
-    const { atendimentoAceiteEntity, loading, updating } = this.props;
+    const { atendimentoAceiteEntity, profissionals, atendimentos, loading, updating } = this.props;
     const { isNew } = this.state;
 
     const baseFilters = this.state.fieldsBase && this.state.fieldsBase['baseFilters'] ? this.state.fieldsBase['baseFilters'] : null;
@@ -88,7 +126,9 @@ export class AtendimentoAceiteUpdate extends React.Component<IAtendimentoAceiteU
             isNew
               ? {}
               : {
-                  ...atendimentoAceiteEntity
+                  ...atendimentoAceiteEntity,
+                  profissional: atendimentoAceiteEntity.profissional ? atendimentoAceiteEntity.profissional.id : null,
+                  atendimento: atendimentoAceiteEntity.atendimento ? atendimentoAceiteEntity.atendimento.id : null
                 }
           }
           onSubmit={this.saveEntity}
@@ -151,6 +191,10 @@ export class AtendimentoAceiteUpdate extends React.Component<IAtendimentoAceiteU
                       ) : null}
                       <Row>
                         <MsgPushComponentUpdate baseFilters />
+
+                        <ProfissionalComponentUpdate baseFilter profissionals />
+
+                        <AtendimentoComponentUpdate baseFilter atendimentos />
                       </Row>
                     </div>
                   )}
@@ -165,6 +209,8 @@ export class AtendimentoAceiteUpdate extends React.Component<IAtendimentoAceiteU
 }
 
 const mapStateToProps = (storeState: IRootState) => ({
+  profissionals: storeState.profissional.entities,
+  atendimentos: storeState.atendimento.entities,
   atendimentoAceiteEntity: storeState.atendimentoAceite.entity,
   loading: storeState.atendimentoAceite.loading,
   updating: storeState.atendimentoAceite.updating,
@@ -172,6 +218,8 @@ const mapStateToProps = (storeState: IRootState) => ({
 });
 
 const mapDispatchToProps = {
+  getProfissionals,
+  getAtendimentos,
   getEntity,
   updateEntity,
   createEntity,
@@ -199,6 +247,62 @@ const MsgPushComponentUpdate = ({ baseFilters }) => {
     </Col>
   ) : (
     <AvInput type="hidden" name="msgPush" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const ProfissionalComponentUpdate = ({ baseFilters, profissionals }) => {
+  return baseFilters !== 'profissional' ? (
+    <Col md="12">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" for="atendimento-aceite-profissional">
+              <Translate contentKey="generadorApp.atendimentoAceite.profissional">Profissional</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <Select
+              id="atendimento-aceite-profissional"
+              className={'css-select-control'}
+              value={this.state.profissionalSelectValue}
+              options={profissionals ? profissionals.map(option => ({ value: option.id, label: option.id })) : null}
+              onChange={options => this.setState({ profissionalSelectValue: options })}
+              name={'profissional'}
+            />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="profissional" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const AtendimentoComponentUpdate = ({ baseFilters, atendimentos }) => {
+  return baseFilters !== 'atendimento' ? (
+    <Col md="12">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" for="atendimento-aceite-atendimento">
+              <Translate contentKey="generadorApp.atendimentoAceite.atendimento">Atendimento</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <Select
+              id="atendimento-aceite-atendimento"
+              className={'css-select-control'}
+              value={this.state.atendimentoSelectValue}
+              options={atendimentos ? atendimentos.map(option => ({ value: option.id, label: option.id })) : null}
+              onChange={options => this.setState({ atendimentoSelectValue: options })}
+              name={'atendimento'}
+            />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="atendimento" value={this.state.fieldsBase[baseFilters]} />
   );
 };
 

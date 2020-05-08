@@ -535,14 +535,33 @@
     ],
     "relationships": [
         {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "diario",
+            "otherEntityRelationshipName": "usuario",
+            "relationshipName": "diario"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "pacienteDiario",
+            "otherEntityRelationshipName": "usuario",
+            "relationshipName": "pacienteDiario"
+        },
+        {
             "relationshipType": "many-to-one",
             "otherEntityName": "unidadeEasy",
             "otherEntityRelationshipName": "usuario",
             "relationshipName": "unidade",
             "otherEntityField": "razaoSocial"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "tipoUsuario",
+            "otherEntityRelationshipName": "usuario",
+            "relationshipName": "tipoUsuario",
+            "otherEntityField": "id"
         }
     ],
-    "changelogDate": "20200508174800",
+    "changelogDate": "20200508184400",
     "entityTableName": "usuario",
     "dto": "mapstruct",
     "pagination": "pagination",

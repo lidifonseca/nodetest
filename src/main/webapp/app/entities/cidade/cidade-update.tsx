@@ -9,6 +9,8 @@ import { Translate, translate, ICrudGetAction, ICrudGetAllAction, ICrudPutAction
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
+import { IUf } from 'app/shared/model/uf.model';
+import { getEntities as getUfs } from 'app/entities/uf/uf.reducer';
 import { ICidadeUpdateState, getEntity, getCidadeState, ICidadeBaseState, updateEntity, createEntity, reset } from './cidade.reducer';
 import { ICidade } from 'app/shared/model/cidade.model';
 import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
@@ -21,13 +23,21 @@ export class CidadeUpdate extends React.Component<ICidadeUpdateProps, ICidadeUpd
     super(props);
 
     this.state = {
+      ufSelectValue: null,
       fieldsBase: getCidadeState(this.props.location),
+      ufId: '0',
       isNew: !this.props.match.params || !this.props.match.params.id
     };
   }
   componentDidUpdate(nextProps, nextState) {
     if (nextProps.updateSuccess !== this.props.updateSuccess && nextProps.updateSuccess) {
       this.handleClose();
+    }
+
+    if (nextProps.ufs.length > 0 && this.state.ufSelectValue === null && nextProps.cidadeEntity.uf && nextProps.cidadeEntity.uf.id) {
+      this.setState({
+        ufSelectValue: nextProps.ufs.map(p => (nextProps.cidadeEntity.uf.id === p.id ? { value: p.id, label: p.id } : null))
+      });
     }
   }
 
@@ -37,6 +47,8 @@ export class CidadeUpdate extends React.Component<ICidadeUpdateProps, ICidadeUpd
     } else {
       this.props.getEntity(this.props.match.params.id);
     }
+
+    this.props.getUfs();
   }
 
   getFiltersURL = (offset = null) => {
@@ -52,7 +64,7 @@ export class CidadeUpdate extends React.Component<ICidadeUpdateProps, ICidadeUpd
       const { cidadeEntity } = this.props;
       const entity = {
         ...cidadeEntity,
-
+        uf: this.state.ufSelectValue ? this.state.ufSelectValue['value'] : null,
         ...values
       };
 
@@ -69,7 +81,7 @@ export class CidadeUpdate extends React.Component<ICidadeUpdateProps, ICidadeUpd
   };
 
   render() {
-    const { cidadeEntity, loading, updating } = this.props;
+    const { cidadeEntity, ufs, loading, updating } = this.props;
     const { isNew } = this.state;
 
     const baseFilters = this.state.fieldsBase && this.state.fieldsBase['baseFilters'] ? this.state.fieldsBase['baseFilters'] : null;
@@ -80,7 +92,8 @@ export class CidadeUpdate extends React.Component<ICidadeUpdateProps, ICidadeUpd
             isNew
               ? {}
               : {
-                  ...cidadeEntity
+                  ...cidadeEntity,
+                  uf: cidadeEntity.uf ? cidadeEntity.uf.id : null
                 }
           }
           onSubmit={this.saveEntity}
@@ -143,6 +156,12 @@ export class CidadeUpdate extends React.Component<ICidadeUpdateProps, ICidadeUpd
                       ) : null}
                       <Row>
                         <DescrCidadeComponentUpdate baseFilters />
+
+                        <AtendimentoComponentUpdate baseFilter atendimentos />
+
+                        <EmpresaComponentUpdate baseFilter empresas />
+
+                        <UfComponentUpdate baseFilter ufs />
                       </Row>
                     </div>
                   )}
@@ -157,6 +176,7 @@ export class CidadeUpdate extends React.Component<ICidadeUpdateProps, ICidadeUpd
 }
 
 const mapStateToProps = (storeState: IRootState) => ({
+  ufs: storeState.uf.entities,
   cidadeEntity: storeState.cidade.entity,
   loading: storeState.cidade.loading,
   updating: storeState.cidade.updating,
@@ -164,6 +184,7 @@ const mapStateToProps = (storeState: IRootState) => ({
 });
 
 const mapDispatchToProps = {
+  getUfs,
   getEntity,
   updateEntity,
   createEntity,
@@ -191,6 +212,50 @@ const DescrCidadeComponentUpdate = ({ baseFilters }) => {
     </Col>
   ) : (
     <AvInput type="hidden" name="descrCidade" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const AtendimentoComponentUpdate = ({ baseFilters, atendimentos }) => {
+  return baseFilters !== 'atendimento' ? (
+    <Col md="12"></Col>
+  ) : (
+    <AvInput type="hidden" name="atendimento" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const EmpresaComponentUpdate = ({ baseFilters, empresas }) => {
+  return baseFilters !== 'empresa' ? (
+    <Col md="12"></Col>
+  ) : (
+    <AvInput type="hidden" name="empresa" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const UfComponentUpdate = ({ baseFilters, ufs }) => {
+  return baseFilters !== 'uf' ? (
+    <Col md="12">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" for="cidade-uf">
+              <Translate contentKey="generadorApp.cidade.uf">Uf</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <Select
+              id="cidade-uf"
+              className={'css-select-control'}
+              value={this.state.ufSelectValue}
+              options={ufs ? ufs.map(option => ({ value: option.id, label: option.id })) : null}
+              onChange={options => this.setState({ ufSelectValue: options })}
+              name={'uf'}
+            />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="uf" value={this.state.fieldsBase[baseFilters]} />
   );
 };
 

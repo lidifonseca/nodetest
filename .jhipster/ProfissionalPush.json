@@ -23,7 +23,7 @@
         }
     ],
     "relationships": [],
-    "changelogDate": "20200508171000",
+    "changelogDate": "20200508180600",
     "entityTableName": "profissional_push",
     "dto": "mapstruct",
     "pagination": "pagination",

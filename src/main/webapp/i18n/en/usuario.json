@@ -145,8 +145,14 @@
       "envioAnaliseResultadoEsperado": "Envio Analise Resultado Esperado",
       "envioDescumprimento": "Envio Descumprimento",
       "envioMelhoraTempo": "Envio Melhora Tempo",
+      "diario_empty": "Without Diario",
+      "diario": "Diario",
+      "pacienteDiario_empty": "Without Paciente Diario",
+      "pacienteDiario": "Paciente Diario",
       "unidade_empty": "Without Unidade",
-      "unidade": "Unidade"
+      "unidade": "Unidade",
+      "tipoUsuario_empty": "Without Tipo Usuario",
+      "tipoUsuario": "Tipo Usuario"
     }
   }
 }

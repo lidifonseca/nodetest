@@ -68,15 +68,39 @@ export interface IAtendimentoBaseState {
   confidencialProfissional: any;
   confidencialPaciente: any;
   imagemAssinatura: any;
+  atendimentoAceite: any;
+  atendimentoAssinaturas: any;
+  atendimentoAtividades: any;
   unidade: any;
+  paciente: any;
+  operadora: any;
+  especialidade: any;
+  padItem: any;
+  statusAtendimento: any;
+  periodo: any;
+  cidade: any;
 }
 
 export interface IAtendimentoUpdateState {
   fieldsBase: IAtendimentoBaseState;
 
   unidadeEasySelectValue: any;
+  pacienteSelectValue: any;
+  operadoraSelectValue: any;
+  especialidadeSelectValue: any;
+  padItemSelectValue: any;
+  statusAtendimentoSelectValue: any;
+  periodoSelectValue: any;
+  cidadeSelectValue: any;
   isNew: boolean;
   unidadeId: string;
+  pacienteId: string;
+  operadoraId: string;
+  especialidadeId: string;
+  padItemId: string;
+  statusAtendimentoId: string;
+  periodoId: string;
+  cidadeId: string;
 }
 
 // Reducer
@@ -192,7 +216,17 @@ export type ICrudGetAllActionAtendimento<T> = (
   confidencialProfissional?: any,
   confidencialPaciente?: any,
   imagemAssinatura?: any,
+  atendimentoAceite?: any,
+  atendimentoAssinaturas?: any,
+  atendimentoAtividades?: any,
   unidade?: any,
+  paciente?: any,
+  operadora?: any,
+  especialidade?: any,
+  padItem?: any,
+  statusAtendimento?: any,
+  periodo?: any,
+  cidade?: any,
   page?: number,
   size?: number,
   sort?: string
@@ -234,7 +268,17 @@ export const getEntities: ICrudGetAllActionAtendimento<IAtendimento> = (
   confidencialProfissional,
   confidencialPaciente,
   imagemAssinatura,
+  atendimentoAceite,
+  atendimentoAssinaturas,
+  atendimentoAtividades,
   unidade,
+  paciente,
+  operadora,
+  especialidade,
+  padItem,
+  statusAtendimento,
+  periodo,
+  cidade,
   page,
   size,
   sort
@@ -274,13 +318,23 @@ export const getEntities: ICrudGetAllActionAtendimento<IAtendimento> = (
   const confidencialProfissionalRequest = confidencialProfissional ? `confidencialProfissional.contains=${confidencialProfissional}&` : '';
   const confidencialPacienteRequest = confidencialPaciente ? `confidencialPaciente.contains=${confidencialPaciente}&` : '';
   const imagemAssinaturaRequest = imagemAssinatura ? `imagemAssinatura.contains=${imagemAssinatura}&` : '';
+  const atendimentoAceiteRequest = atendimentoAceite ? `atendimentoAceite.equals=${atendimentoAceite}&` : '';
+  const atendimentoAssinaturasRequest = atendimentoAssinaturas ? `atendimentoAssinaturas.equals=${atendimentoAssinaturas}&` : '';
+  const atendimentoAtividadesRequest = atendimentoAtividades ? `atendimentoAtividades.equals=${atendimentoAtividades}&` : '';
   const unidadeRequest = unidade ? `unidade.equals=${unidade}&` : '';
+  const pacienteRequest = paciente ? `paciente.equals=${paciente}&` : '';
+  const operadoraRequest = operadora ? `operadora.equals=${operadora}&` : '';
+  const especialidadeRequest = especialidade ? `especialidade.equals=${especialidade}&` : '';
+  const padItemRequest = padItem ? `padItem.equals=${padItem}&` : '';
+  const statusAtendimentoRequest = statusAtendimento ? `statusAtendimento.equals=${statusAtendimento}&` : '';
+  const periodoRequest = periodo ? `periodo.equals=${periodo}&` : '';
+  const cidadeRequest = cidade ? `cidade.equals=${cidade}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_ATENDIMENTO_LIST,
     payload: axios.get<IAtendimento>(
-      `${requestUrl}${idFranquiaRequest}${idProfissionalRequest}${cepRequest}${enderecoRequest}${numeroRequest}${complementoRequest}${bairroRequest}${cidadeRequest}${ufRequest}${latitudeRequest}${longitudeRequest}${dataAgendaRequest}${horarioRequest}${dataChegadaRequest}${latitudeChegadaRequest}${longitudeChegadaRequest}${dataSaidaRequest}${latitudeSaidaRequest}${longitudeSaidaRequest}${evolucaoRequest}${observacaoRequest}${intercorrenciaRequest}${avaliacaoRequest}${aceitoRequest}${motivoRequest}${valorRequest}${ordemAtendimentoRequest}${ativoRequest}${dataForaHoraRequest}${idUsuarioCancelamentoRequest}${dataCancelamentoRequest}${tipoUsuarioCancelamentoRequest}${confidencialProfissionalRequest}${confidencialPacienteRequest}${imagemAssinaturaRequest}${unidadeRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${idFranquiaRequest}${idProfissionalRequest}${cepRequest}${enderecoRequest}${numeroRequest}${complementoRequest}${bairroRequest}${cidadeRequest}${ufRequest}${latitudeRequest}${longitudeRequest}${dataAgendaRequest}${horarioRequest}${dataChegadaRequest}${latitudeChegadaRequest}${longitudeChegadaRequest}${dataSaidaRequest}${latitudeSaidaRequest}${longitudeSaidaRequest}${evolucaoRequest}${observacaoRequest}${intercorrenciaRequest}${avaliacaoRequest}${aceitoRequest}${motivoRequest}${valorRequest}${ordemAtendimentoRequest}${ativoRequest}${dataForaHoraRequest}${idUsuarioCancelamentoRequest}${dataCancelamentoRequest}${tipoUsuarioCancelamentoRequest}${confidencialProfissionalRequest}${confidencialPacienteRequest}${imagemAssinaturaRequest}${atendimentoAceiteRequest}${atendimentoAssinaturasRequest}${atendimentoAtividadesRequest}${unidadeRequest}${pacienteRequest}${operadoraRequest}${especialidadeRequest}${padItemRequest}${statusAtendimentoRequest}${periodoRequest}${cidadeRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };
@@ -328,7 +382,17 @@ export const getEntitiesExport: ICrudGetAllActionAtendimento<IAtendimento> = (
   confidencialProfissional,
   confidencialPaciente,
   imagemAssinatura,
+  atendimentoAceite,
+  atendimentoAssinaturas,
+  atendimentoAtividades,
   unidade,
+  paciente,
+  operadora,
+  especialidade,
+  padItem,
+  statusAtendimento,
+  periodo,
+  cidade,
   page,
   size,
   sort
@@ -368,13 +432,23 @@ export const getEntitiesExport: ICrudGetAllActionAtendimento<IAtendimento> = (
   const confidencialProfissionalRequest = confidencialProfissional ? `confidencialProfissional.contains=${confidencialProfissional}&` : '';
   const confidencialPacienteRequest = confidencialPaciente ? `confidencialPaciente.contains=${confidencialPaciente}&` : '';
   const imagemAssinaturaRequest = imagemAssinatura ? `imagemAssinatura.contains=${imagemAssinatura}&` : '';
+  const atendimentoAceiteRequest = atendimentoAceite ? `atendimentoAceite.equals=${atendimentoAceite}&` : '';
+  const atendimentoAssinaturasRequest = atendimentoAssinaturas ? `atendimentoAssinaturas.equals=${atendimentoAssinaturas}&` : '';
+  const atendimentoAtividadesRequest = atendimentoAtividades ? `atendimentoAtividades.equals=${atendimentoAtividades}&` : '';
   const unidadeRequest = unidade ? `unidade.equals=${unidade}&` : '';
+  const pacienteRequest = paciente ? `paciente.equals=${paciente}&` : '';
+  const operadoraRequest = operadora ? `operadora.equals=${operadora}&` : '';
+  const especialidadeRequest = especialidade ? `especialidade.equals=${especialidade}&` : '';
+  const padItemRequest = padItem ? `padItem.equals=${padItem}&` : '';
+  const statusAtendimentoRequest = statusAtendimento ? `statusAtendimento.equals=${statusAtendimento}&` : '';
+  const periodoRequest = periodo ? `periodo.equals=${periodo}&` : '';
+  const cidadeRequest = cidade ? `cidade.equals=${cidade}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_ATENDIMENTO_LIST,
     payload: axios.get<IAtendimento>(
-      `${requestUrl}${idFranquiaRequest}${idProfissionalRequest}${cepRequest}${enderecoRequest}${numeroRequest}${complementoRequest}${bairroRequest}${cidadeRequest}${ufRequest}${latitudeRequest}${longitudeRequest}${dataAgendaRequest}${horarioRequest}${dataChegadaRequest}${latitudeChegadaRequest}${longitudeChegadaRequest}${dataSaidaRequest}${latitudeSaidaRequest}${longitudeSaidaRequest}${evolucaoRequest}${observacaoRequest}${intercorrenciaRequest}${avaliacaoRequest}${aceitoRequest}${motivoRequest}${valorRequest}${ordemAtendimentoRequest}${ativoRequest}${dataForaHoraRequest}${idUsuarioCancelamentoRequest}${dataCancelamentoRequest}${tipoUsuarioCancelamentoRequest}${confidencialProfissionalRequest}${confidencialPacienteRequest}${imagemAssinaturaRequest}${unidadeRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${idFranquiaRequest}${idProfissionalRequest}${cepRequest}${enderecoRequest}${numeroRequest}${complementoRequest}${bairroRequest}${cidadeRequest}${ufRequest}${latitudeRequest}${longitudeRequest}${dataAgendaRequest}${horarioRequest}${dataChegadaRequest}${latitudeChegadaRequest}${longitudeChegadaRequest}${dataSaidaRequest}${latitudeSaidaRequest}${longitudeSaidaRequest}${evolucaoRequest}${observacaoRequest}${intercorrenciaRequest}${avaliacaoRequest}${aceitoRequest}${motivoRequest}${valorRequest}${ordemAtendimentoRequest}${ativoRequest}${dataForaHoraRequest}${idUsuarioCancelamentoRequest}${dataCancelamentoRequest}${tipoUsuarioCancelamentoRequest}${confidencialProfissionalRequest}${confidencialPacienteRequest}${imagemAssinaturaRequest}${atendimentoAceiteRequest}${atendimentoAssinaturasRequest}${atendimentoAtividadesRequest}${unidadeRequest}${pacienteRequest}${operadoraRequest}${especialidadeRequest}${padItemRequest}${statusAtendimentoRequest}${periodoRequest}${cidadeRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };
@@ -382,7 +456,14 @@ export const getEntitiesExport: ICrudGetAllActionAtendimento<IAtendimento> = (
 export const createEntity: ICrudPutAction<IAtendimento> = entity => async dispatch => {
   entity = {
     ...entity,
-    unidade: entity.unidade === 'null' ? null : entity.unidade
+    unidade: entity.unidade === 'null' ? null : entity.unidade,
+    paciente: entity.paciente === 'null' ? null : entity.paciente,
+    operadora: entity.operadora === 'null' ? null : entity.operadora,
+    especialidade: entity.especialidade === 'null' ? null : entity.especialidade,
+    padItem: entity.padItem === 'null' ? null : entity.padItem,
+    statusAtendimento: entity.statusAtendimento === 'null' ? null : entity.statusAtendimento,
+    periodo: entity.periodo === 'null' ? null : entity.periodo,
+    cidade: entity.cidade === 'null' ? null : entity.cidade
   };
   const result = await dispatch({
     type: ACTION_TYPES.CREATE_ATENDIMENTO,
@@ -393,7 +474,17 @@ export const createEntity: ICrudPutAction<IAtendimento> = entity => async dispat
 };
 
 export const updateEntity: ICrudPutAction<IAtendimento> = entity => async dispatch => {
-  entity = { ...entity, unidade: entity.unidade === 'null' ? null : entity.unidade };
+  entity = {
+    ...entity,
+    unidade: entity.unidade === 'null' ? null : entity.unidade,
+    paciente: entity.paciente === 'null' ? null : entity.paciente,
+    operadora: entity.operadora === 'null' ? null : entity.operadora,
+    especialidade: entity.especialidade === 'null' ? null : entity.especialidade,
+    padItem: entity.padItem === 'null' ? null : entity.padItem,
+    statusAtendimento: entity.statusAtendimento === 'null' ? null : entity.statusAtendimento,
+    periodo: entity.periodo === 'null' ? null : entity.periodo,
+    cidade: entity.cidade === 'null' ? null : entity.cidade
+  };
   const result = await dispatch({
     type: ACTION_TYPES.UPDATE_ATENDIMENTO,
     payload: axios.put(apiUrl, cleanEntity(entity))
@@ -455,7 +546,17 @@ export const getAtendimentoState = (location): IAtendimentoBaseState => {
   const confidencialPaciente = url.searchParams.get('confidencialPaciente') || '';
   const imagemAssinatura = url.searchParams.get('imagemAssinatura') || '';
 
+  const atendimentoAceite = url.searchParams.get('atendimentoAceite') || '';
+  const atendimentoAssinaturas = url.searchParams.get('atendimentoAssinaturas') || '';
+  const atendimentoAtividades = url.searchParams.get('atendimentoAtividades') || '';
   const unidade = url.searchParams.get('unidade') || '';
+  const paciente = url.searchParams.get('paciente') || '';
+  const operadora = url.searchParams.get('operadora') || '';
+  const especialidade = url.searchParams.get('especialidade') || '';
+  const padItem = url.searchParams.get('padItem') || '';
+  const statusAtendimento = url.searchParams.get('statusAtendimento') || '';
+  const periodo = url.searchParams.get('periodo') || '';
+  const cidade = url.searchParams.get('cidade') || '';
 
   return {
     baseFilters,
@@ -494,6 +595,16 @@ export const getAtendimentoState = (location): IAtendimentoBaseState => {
     confidencialProfissional,
     confidencialPaciente,
     imagemAssinatura,
-    unidade
+    atendimentoAceite,
+    atendimentoAssinaturas,
+    atendimentoAtividades,
+    unidade,
+    paciente,
+    operadora,
+    especialidade,
+    padItem,
+    statusAtendimento,
+    periodo,
+    cidade
   };
 };

@@ -14,8 +14,21 @@
             "fieldType": "Integer"
         }
     ],
-    "relationships": [],
-    "changelogDate": "20200508165500",
+    "relationships": [
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "atendimento",
+            "otherEntityRelationshipName": "periodo",
+            "relationshipName": "atendimento"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "padItem",
+            "otherEntityRelationshipName": "periodo",
+            "relationshipName": "padItem"
+        }
+    ],
+    "changelogDate": "20200508175100",
     "entityTableName": "periodo",
     "dto": "mapstruct",
     "pagination": "pagination",

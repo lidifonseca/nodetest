@@ -151,6 +151,8 @@ export class IndicadoresUpdate extends React.Component<IIndicadoresUpdateProps, 
                       ) : null}
                       <Row>
                         <TituloComponentUpdate baseFilters />
+
+                        <IndicadoresValoresComponentUpdate baseFilter indicadoresValores />
                       </Row>
                     </div>
                   )}
@@ -199,6 +201,14 @@ const TituloComponentUpdate = ({ baseFilters }) => {
     </Col>
   ) : (
     <AvInput type="hidden" name="titulo" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const IndicadoresValoresComponentUpdate = ({ baseFilters, indicadoresValores }) => {
+  return baseFilters !== 'indicadoresValores' ? (
+    <Col md="12"></Col>
+  ) : (
+    <AvInput type="hidden" name="indicadoresValores" value={this.state.fieldsBase[baseFilters]} />
   );
 };
 

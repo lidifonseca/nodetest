@@ -37,12 +37,15 @@ export interface IProfissionalStatusAtualBaseState {
   idProfissional: any;
   obs: any;
   ativo: any;
+  statusAtualProf: any;
 }
 
 export interface IProfissionalStatusAtualUpdateState {
   fieldsBase: IProfissionalStatusAtualBaseState;
 
+  statusAtualProfSelectValue: any;
   isNew: boolean;
+  statusAtualProfId: string;
 }
 
 // Reducer
@@ -139,6 +142,7 @@ export type ICrudGetAllActionProfissionalStatusAtual<T> = (
   idProfissional?: any,
   obs?: any,
   ativo?: any,
+  statusAtualProf?: any,
   page?: number,
   size?: number,
   sort?: string
@@ -148,6 +152,7 @@ export const getEntities: ICrudGetAllActionProfissionalStatusAtual<IProfissional
   idProfissional,
   obs,
   ativo,
+  statusAtualProf,
   page,
   size,
   sort
@@ -155,12 +160,13 @@ export const getEntities: ICrudGetAllActionProfissionalStatusAtual<IProfissional
   const idProfissionalRequest = idProfissional ? `idProfissional.contains=${idProfissional}&` : '';
   const obsRequest = obs ? `obs.contains=${obs}&` : '';
   const ativoRequest = ativo ? `ativo.contains=${ativo}&` : '';
+  const statusAtualProfRequest = statusAtualProf ? `statusAtualProf.equals=${statusAtualProf}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_PROFISSIONALSTATUSATUAL_LIST,
     payload: axios.get<IProfissionalStatusAtual>(
-      `${requestUrl}${idProfissionalRequest}${obsRequest}${ativoRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${idProfissionalRequest}${obsRequest}${ativoRequest}${statusAtualProfRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };
@@ -176,6 +182,7 @@ export const getEntitiesExport: ICrudGetAllActionProfissionalStatusAtual<IProfis
   idProfissional,
   obs,
   ativo,
+  statusAtualProf,
   page,
   size,
   sort
@@ -183,19 +190,21 @@ export const getEntitiesExport: ICrudGetAllActionProfissionalStatusAtual<IProfis
   const idProfissionalRequest = idProfissional ? `idProfissional.contains=${idProfissional}&` : '';
   const obsRequest = obs ? `obs.contains=${obs}&` : '';
   const ativoRequest = ativo ? `ativo.contains=${ativo}&` : '';
+  const statusAtualProfRequest = statusAtualProf ? `statusAtualProf.equals=${statusAtualProf}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_PROFISSIONALSTATUSATUAL_LIST,
     payload: axios.get<IProfissionalStatusAtual>(
-      `${requestUrl}${idProfissionalRequest}${obsRequest}${ativoRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${idProfissionalRequest}${obsRequest}${ativoRequest}${statusAtualProfRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };
 
 export const createEntity: ICrudPutAction<IProfissionalStatusAtual> = entity => async dispatch => {
   entity = {
-    ...entity
+    ...entity,
+    statusAtualProf: entity.statusAtualProf === 'null' ? null : entity.statusAtualProf
   };
   const result = await dispatch({
     type: ACTION_TYPES.CREATE_PROFISSIONALSTATUSATUAL,
@@ -206,7 +215,7 @@ export const createEntity: ICrudPutAction<IProfissionalStatusAtual> = entity => 
 };
 
 export const updateEntity: ICrudPutAction<IProfissionalStatusAtual> = entity => async dispatch => {
-  entity = { ...entity };
+  entity = { ...entity, statusAtualProf: entity.statusAtualProf === 'null' ? null : entity.statusAtualProf };
   const result = await dispatch({
     type: ACTION_TYPES.UPDATE_PROFISSIONALSTATUSATUAL,
     payload: axios.put(apiUrl, cleanEntity(entity))
@@ -246,10 +255,13 @@ export const getProfissionalStatusAtualState = (location): IProfissionalStatusAt
   const obs = url.searchParams.get('obs') || '';
   const ativo = url.searchParams.get('ativo') || '';
 
+  const statusAtualProf = url.searchParams.get('statusAtualProf') || '';
+
   return {
     baseFilters,
     idProfissional,
     obs,
-    ativo
+    ativo,
+    statusAtualProf
   };
 };

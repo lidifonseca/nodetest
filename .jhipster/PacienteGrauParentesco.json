@@ -15,7 +15,7 @@
         }
     ],
     "relationships": [],
-    "changelogDate": "20200508162900",
+    "changelogDate": "20200508172500",
     "entityTableName": "paciente_grau_parentesco",
     "dto": "mapstruct",
     "pagination": "pagination",

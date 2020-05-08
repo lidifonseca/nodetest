@@ -28,6 +28,11 @@ import { IPacienteDiagnostico } from 'app/shared/model/paciente-diagnostico.mode
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
+import { IPaciente } from 'app/shared/model/paciente.model';
+import { getEntities as getPacientes } from 'app/entities/paciente/paciente.reducer';
+import { ICid } from 'app/shared/model/cid.model';
+import { getEntities as getCids } from 'app/entities/cid/cid.reducer';
+
 export interface IPacienteDiagnosticoProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
 export interface IPacienteDiagnosticoState extends IPacienteDiagnosticoBaseState, IPaginationBaseState {}
@@ -45,6 +50,9 @@ export class PacienteDiagnostico extends React.Component<IPacienteDiagnosticoPro
 
   componentDidMount() {
     this.getEntities();
+
+    this.props.getPacientes();
+    this.props.getCids();
   }
 
   cancelCourse = () => {
@@ -54,7 +62,9 @@ export class PacienteDiagnostico extends React.Component<IPacienteDiagnosticoPro
         ativo: '',
         cidPrimario: '',
         complexidade: '',
-        cidComAlta: ''
+        cidComAlta: '',
+        paciente: '',
+        c: ''
       },
       () => this.sortEntities()
     );
@@ -116,6 +126,12 @@ export class PacienteDiagnostico extends React.Component<IPacienteDiagnosticoPro
       'cidComAlta=' +
       this.state.cidComAlta +
       '&' +
+      'paciente=' +
+      this.state.paciente +
+      '&' +
+      'c=' +
+      this.state.c +
+      '&' +
       ''
     );
   };
@@ -123,12 +139,23 @@ export class PacienteDiagnostico extends React.Component<IPacienteDiagnosticoPro
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { observacao, ativo, cidPrimario, complexidade, cidComAlta, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntities(observacao, ativo, cidPrimario, complexidade, cidComAlta, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const { observacao, ativo, cidPrimario, complexidade, cidComAlta, paciente, c, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntities(
+      observacao,
+      ativo,
+      cidPrimario,
+      complexidade,
+      cidComAlta,
+      paciente,
+      c,
+      activePage - 1,
+      itemsPerPage,
+      `${sort},${order}`
+    );
   };
 
   render() {
-    const { pacienteDiagnosticoList, match, totalItems } = this.props;
+    const { pacientes, cids, pacienteDiagnosticoList, match, totalItems } = this.props;
     return (
       <div>
         <h2 id="page-heading">
@@ -225,6 +252,58 @@ export class PacienteDiagnostico extends React.Component<IPacienteDiagnosticoPro
                           </Row>
                         </Col>
                       ) : null}
+
+                      {this.state.baseFilters !== 'paciente' ? (
+                        <Col md="3">
+                          <Row className="mr-1 mt-1">
+                            <div style={{ width: '100%' }}>
+                              <Label for="paciente-diagnostico-paciente">
+                                <Translate contentKey="generadorApp.pacienteDiagnostico.paciente">Paciente</Translate>
+                              </Label>
+                              <Select
+                                id="paciente-diagnostico-paciente"
+                                isMulti
+                                className={'css-select-control'}
+                                value={
+                                  pacientes
+                                    ? pacientes.map(p =>
+                                        this.state.paciente.split(',').indexOf(p.id) !== -1 ? { value: p.id, label: p.id } : null
+                                      )
+                                    : null
+                                }
+                                options={pacientes ? pacientes.map(option => ({ value: option.id, label: option.id })) : null}
+                                onChange={options => this.setState({ paciente: options.map(option => option['value']).join(',') })}
+                                name={'paciente'}
+                              />
+                            </div>
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'c' ? (
+                        <Col md="3">
+                          <Row className="mr-1 mt-1">
+                            <div style={{ width: '100%' }}>
+                              <Label for="paciente-diagnostico-c">
+                                <Translate contentKey="generadorApp.pacienteDiagnostico.c">C</Translate>
+                              </Label>
+                              <Select
+                                id="paciente-diagnostico-c"
+                                isMulti
+                                className={'css-select-control'}
+                                value={
+                                  cids
+                                    ? cids.map(p => (this.state.c.split(',').indexOf(p.id) !== -1 ? { value: p.id, label: p.id } : null))
+                                    : null
+                                }
+                                options={cids ? cids.map(option => ({ value: option.id, label: option.id })) : null}
+                                onChange={options => this.setState({ c: options.map(option => option['value']).join(',') })}
+                                name={'c'}
+                              />
+                            </div>
+                          </Row>
+                        </Col>
+                      ) : null}
                     </div>
 
                     <div className="row mb-2 mr-4 justify-content-end">
@@ -283,6 +362,20 @@ export class PacienteDiagnostico extends React.Component<IPacienteDiagnosticoPro
                         </th>
                       ) : null}
 
+                      {this.state.baseFilters !== 'paciente' ? (
+                        <th>
+                          <Translate contentKey="generadorApp.pacienteDiagnostico.paciente">Paciente</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'c' ? (
+                        <th>
+                          <Translate contentKey="generadorApp.pacienteDiagnostico.c">C</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+
                       <th />
                     </tr>
                   </thead>
@@ -305,6 +398,22 @@ export class PacienteDiagnostico extends React.Component<IPacienteDiagnosticoPro
                         {this.state.baseFilters !== 'complexidade' ? <td>{pacienteDiagnostico.complexidade}</td> : null}
 
                         {this.state.baseFilters !== 'cidComAlta' ? <td>{pacienteDiagnostico.cidComAlta ? 'true' : 'false'}</td> : null}
+
+                        {this.state.baseFilters !== 'paciente' ? (
+                          <td>
+                            {pacienteDiagnostico.paciente ? (
+                              <Link to={`paciente/${pacienteDiagnostico.paciente.id}`}>{pacienteDiagnostico.paciente.id}</Link>
+                            ) : (
+                              ''
+                            )}
+                          </td>
+                        ) : null}
+
+                        {this.state.baseFilters !== 'c' ? (
+                          <td>
+                            {pacienteDiagnostico.c ? <Link to={`cid/${pacienteDiagnostico.c.id}`}>{pacienteDiagnostico.c.id}</Link> : ''}
+                          </td>
+                        ) : null}
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">
@@ -372,11 +481,15 @@ export class PacienteDiagnostico extends React.Component<IPacienteDiagnosticoPro
 }
 
 const mapStateToProps = ({ pacienteDiagnostico, ...storeState }: IRootState) => ({
+  pacientes: storeState.paciente.entities,
+  cids: storeState.cid.entities,
   pacienteDiagnosticoList: pacienteDiagnostico.entities,
   totalItems: pacienteDiagnostico.totalItems
 });
 
 const mapDispatchToProps = {
+  getPacientes,
+  getCids,
   getEntities
 };
 

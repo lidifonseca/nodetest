@@ -151,6 +151,8 @@ export class SegmentosPerguntasUpdate extends React.Component<ISegmentosPergunta
                       ) : null}
                       <Row>
                         <SegmentoComponentUpdate baseFilters />
+
+                        <PerguntasQuestionarioComponentUpdate baseFilter perguntasQuestionarios />
                       </Row>
                     </div>
                   )}
@@ -199,6 +201,14 @@ const SegmentoComponentUpdate = ({ baseFilters }) => {
     </Col>
   ) : (
     <AvInput type="hidden" name="segmento" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const PerguntasQuestionarioComponentUpdate = ({ baseFilters, perguntasQuestionarios }) => {
+  return baseFilters !== 'perguntasQuestionario' ? (
+    <Col md="12"></Col>
+  ) : (
+    <AvInput type="hidden" name="perguntasQuestionario" value={this.state.fieldsBase[baseFilters]} />
   );
 };
 

@@ -143,6 +143,45 @@ export class CidXPtaNovoPadItemIndiDetail extends React.Component<ICidXPtaNovoPa
                       </Col>
                     </Row>
                   </Col>
+
+                  <Col md="12">
+                    <Row>
+                      <Col md="3">
+                        <dt>
+                          <Translate contentKey="generadorApp.cidXPtaNovoPadItemIndi.padItemIndicadores">Pad Item Indicadores</Translate>
+                        </dt>
+                      </Col>
+                      <Col md="9">
+                        <dd>{cidXPtaNovoPadItemIndiEntity.padItemIndicadores ? cidXPtaNovoPadItemIndiEntity.padItemIndicadores.id : ''}</dd>
+                      </Col>
+                    </Row>
+                  </Col>
+
+                  <Col md="12">
+                    <Row>
+                      <Col md="3">
+                        <dt>
+                          <Translate contentKey="generadorApp.cidXPtaNovoPadItemIndi.categorias">Categorias</Translate>
+                        </dt>
+                      </Col>
+                      <Col md="9">
+                        <dd>{cidXPtaNovoPadItemIndiEntity.categorias ? cidXPtaNovoPadItemIndiEntity.categorias.id : ''}</dd>
+                      </Col>
+                    </Row>
+                  </Col>
+
+                  <Col md="12">
+                    <Row>
+                      <Col md="3">
+                        <dt>
+                          <Translate contentKey="generadorApp.cidXPtaNovoPadItemIndi.cidXPtaNovo">Cid X Pta Novo</Translate>
+                        </dt>
+                      </Col>
+                      <Col md="9">
+                        <dd>{cidXPtaNovoPadItemIndiEntity.cidXPtaNovo ? cidXPtaNovoPadItemIndiEntity.cidXPtaNovo.id : ''}</dd>
+                      </Col>
+                    </Row>
+                  </Col>
                 </Row>
                 <Button tag={Link} to="/cid-x-pta-novo-pad-item-indi" replace color="info">
                   <FontAwesomeIcon icon="arrow-left" />{' '}

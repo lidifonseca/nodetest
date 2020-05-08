@@ -43,6 +43,13 @@ import { ILogUserFranquia } from 'app/shared/model/log-user-franquia.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
+import { IAcao } from 'app/shared/model/acao.model';
+import { getEntities as getAcaos } from 'app/entities/acao/acao.reducer';
+import { ITela } from 'app/shared/model/tela.model';
+import { getEntities as getTelas } from 'app/entities/tela/tela.reducer';
+import { IFranquiaUsuario } from 'app/shared/model/franquia-usuario.model';
+import { getEntities as getFranquiaUsuarios } from 'app/entities/franquia-usuario/franquia-usuario.reducer';
+
 export interface ILogUserFranquiaProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
 export interface ILogUserFranquiaState extends ILogUserFranquiaBaseState, IPaginationBaseState {
@@ -63,12 +70,19 @@ export class LogUserFranquia extends React.Component<ILogUserFranquiaProps, ILog
 
   componentDidMount() {
     this.getEntities();
+
+    this.props.getAcaos();
+    this.props.getTelas();
+    this.props.getFranquiaUsuarios();
   }
 
   cancelCourse = () => {
     this.setState(
       {
-        descricao: ''
+        descricao: '',
+        acao: '',
+        tela: '',
+        usuario: ''
       },
       () => this.sortEntities()
     );
@@ -116,6 +130,15 @@ export class LogUserFranquia extends React.Component<ILogUserFranquiaProps, ILog
       'descricao=' +
       this.state.descricao +
       '&' +
+      'acao=' +
+      this.state.acao +
+      '&' +
+      'tela=' +
+      this.state.tela +
+      '&' +
+      'usuario=' +
+      this.state.usuario +
+      '&' +
       ''
     );
   };
@@ -123,8 +146,8 @@ export class LogUserFranquia extends React.Component<ILogUserFranquiaProps, ILog
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { descricao, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntitiesExport(descricao, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const { descricao, acao, tela, usuario, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntitiesExport(descricao, acao, tela, usuario, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   confirmExport() {}
@@ -173,11 +196,17 @@ export class LogUserFranquia extends React.Component<ILogUserFranquiaProps, ILog
 }
 
 const mapStateToProps = ({ logUserFranquia, ...storeState }: IRootState) => ({
+  acaos: storeState.acao.entities,
+  telas: storeState.tela.entities,
+  franquiaUsuarios: storeState.franquiaUsuario.entities,
   logUserFranquiaList: logUserFranquia.entities,
   totalItems: logUserFranquia.totalItems
 });
 
 const mapDispatchToProps = {
+  getAcaos,
+  getTelas,
+  getFranquiaUsuarios,
   getEntitiesExport
 };
 

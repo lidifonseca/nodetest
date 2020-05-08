@@ -143,6 +143,12 @@ export class TelaUpdate extends React.Component<ITelaUpdateProps, ITelaUpdateSta
                       ) : null}
                       <Row>
                         <TelaComponentUpdate baseFilters />
+
+                        <LogUserComponentUpdate baseFilter logUsers />
+
+                        <LogUserFranquiaComponentUpdate baseFilter logUserFranquias />
+
+                        <UsuarioAcaoComponentUpdate baseFilter usuarioAcaos />
                       </Row>
                     </div>
                   )}
@@ -191,6 +197,30 @@ const TelaComponentUpdate = ({ baseFilters }) => {
     </Col>
   ) : (
     <AvInput type="hidden" name="tela" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const LogUserComponentUpdate = ({ baseFilters, logUsers }) => {
+  return baseFilters !== 'logUser' ? (
+    <Col md="12"></Col>
+  ) : (
+    <AvInput type="hidden" name="logUser" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const LogUserFranquiaComponentUpdate = ({ baseFilters, logUserFranquias }) => {
+  return baseFilters !== 'logUserFranquia' ? (
+    <Col md="12"></Col>
+  ) : (
+    <AvInput type="hidden" name="logUserFranquia" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const UsuarioAcaoComponentUpdate = ({ baseFilters, usuarioAcaos }) => {
+  return baseFilters !== 'usuarioAcao' ? (
+    <Col md="12"></Col>
+  ) : (
+    <AvInput type="hidden" name="usuarioAcao" value={this.state.fieldsBase[baseFilters]} />
   );
 };
 

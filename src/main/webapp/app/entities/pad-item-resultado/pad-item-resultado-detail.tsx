@@ -115,6 +115,19 @@ export class PadItemResultadoDetail extends React.Component<IPadItemResultadoDet
                       </Col>
                     </Row>
                   </Col>
+
+                  <Col md="12">
+                    <Row>
+                      <Col md="3">
+                        <dt>
+                          <Translate contentKey="generadorApp.padItemResultado.padItem">Pad Item</Translate>
+                        </dt>
+                      </Col>
+                      <Col md="9">
+                        <dd>{padItemResultadoEntity.padItem ? padItemResultadoEntity.padItem.id : ''}</dd>
+                      </Col>
+                    </Row>
+                  </Col>
                 </Row>
                 <Button tag={Link} to="/pad-item-resultado" replace color="info">
                   <FontAwesomeIcon icon="arrow-left" />{' '}

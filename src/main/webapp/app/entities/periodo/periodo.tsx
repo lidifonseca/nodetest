@@ -51,7 +51,9 @@ export class Periodo extends React.Component<IPeriodoProps, IPeriodoState> {
     this.setState(
       {
         periodo: '',
-        ativo: ''
+        ativo: '',
+        atendimento: '',
+        padItem: ''
       },
       () => this.sortEntities()
     );
@@ -104,6 +106,12 @@ export class Periodo extends React.Component<IPeriodoProps, IPeriodoState> {
       'ativo=' +
       this.state.ativo +
       '&' +
+      'atendimento=' +
+      this.state.atendimento +
+      '&' +
+      'padItem=' +
+      this.state.padItem +
+      '&' +
       ''
     );
   };
@@ -111,8 +119,8 @@ export class Periodo extends React.Component<IPeriodoProps, IPeriodoState> {
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { periodo, ativo, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntities(periodo, ativo, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const { periodo, ativo, atendimento, padItem, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntities(periodo, ativo, atendimento, padItem, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   render() {
@@ -172,6 +180,18 @@ export class Periodo extends React.Component<IPeriodoProps, IPeriodoState> {
                             </Label>
                             <AvInput type="string" name="ativo" id="periodo-ativo" value={this.state.ativo} />
                           </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'atendimento' ? (
+                        <Col md="3">
+                          <Row className="mr-1 mt-1"></Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'padItem' ? (
+                        <Col md="3">
+                          <Row className="mr-1 mt-1"></Row>
                         </Col>
                       ) : null}
                     </div>

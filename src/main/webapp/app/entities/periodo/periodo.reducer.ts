@@ -35,6 +35,8 @@ export interface IPeriodoBaseState {
   baseFilters: any;
   periodo: any;
   ativo: any;
+  atendimento: any;
+  padItem: any;
 }
 
 export interface IPeriodoUpdateState {
@@ -123,19 +125,25 @@ const apiUrl = 'api/periodos';
 export type ICrudGetAllActionPeriodo<T> = (
   periodo?: any,
   ativo?: any,
+  atendimento?: any,
+  padItem?: any,
   page?: number,
   size?: number,
   sort?: string
 ) => IPayload<T> | ((dispatch: any) => IPayload<T>);
 
-export const getEntities: ICrudGetAllActionPeriodo<IPeriodo> = (periodo, ativo, page, size, sort) => {
+export const getEntities: ICrudGetAllActionPeriodo<IPeriodo> = (periodo, ativo, atendimento, padItem, page, size, sort) => {
   const periodoRequest = periodo ? `periodo.contains=${periodo}&` : '';
   const ativoRequest = ativo ? `ativo.contains=${ativo}&` : '';
+  const atendimentoRequest = atendimento ? `atendimento.equals=${atendimento}&` : '';
+  const padItemRequest = padItem ? `padItem.equals=${padItem}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_PERIODO_LIST,
-    payload: axios.get<IPeriodo>(`${requestUrl}${periodoRequest}${ativoRequest}cacheBuster=${new Date().getTime()}`)
+    payload: axios.get<IPeriodo>(
+      `${requestUrl}${periodoRequest}${ativoRequest}${atendimentoRequest}${padItemRequest}cacheBuster=${new Date().getTime()}`
+    )
   };
 };
 export const getEntity: ICrudGetAction<IPeriodo> = id => {
@@ -146,14 +154,18 @@ export const getEntity: ICrudGetAction<IPeriodo> = id => {
   };
 };
 
-export const getEntitiesExport: ICrudGetAllActionPeriodo<IPeriodo> = (periodo, ativo, page, size, sort) => {
+export const getEntitiesExport: ICrudGetAllActionPeriodo<IPeriodo> = (periodo, ativo, atendimento, padItem, page, size, sort) => {
   const periodoRequest = periodo ? `periodo.contains=${periodo}&` : '';
   const ativoRequest = ativo ? `ativo.contains=${ativo}&` : '';
+  const atendimentoRequest = atendimento ? `atendimento.equals=${atendimento}&` : '';
+  const padItemRequest = padItem ? `padItem.equals=${padItem}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_PERIODO_LIST,
-    payload: axios.get<IPeriodo>(`${requestUrl}${periodoRequest}${ativoRequest}cacheBuster=${new Date().getTime()}`)
+    payload: axios.get<IPeriodo>(
+      `${requestUrl}${periodoRequest}${ativoRequest}${atendimentoRequest}${padItemRequest}cacheBuster=${new Date().getTime()}`
+    )
   };
 };
 
@@ -199,9 +211,14 @@ export const getPeriodoState = (location): IPeriodoBaseState => {
   const periodo = url.searchParams.get('periodo') || '';
   const ativo = url.searchParams.get('ativo') || '';
 
+  const atendimento = url.searchParams.get('atendimento') || '';
+  const padItem = url.searchParams.get('padItem') || '';
+
   return {
     baseFilters,
     periodo,
-    ativo
+    ativo,
+    atendimento,
+    padItem
   };
 };

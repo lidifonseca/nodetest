@@ -34,6 +34,11 @@ import { IAtendimentoAceite } from 'app/shared/model/atendimento-aceite.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
+import { IProfissional } from 'app/shared/model/profissional.model';
+import { getEntities as getProfissionals } from 'app/entities/profissional/profissional.reducer';
+import { IAtendimento } from 'app/shared/model/atendimento.model';
+import { getEntities as getAtendimentos } from 'app/entities/atendimento/atendimento.reducer';
+
 export interface IAtendimentoAceiteProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
 export interface IAtendimentoAceiteState extends IAtendimentoAceiteBaseState, IPaginationBaseState {
@@ -54,12 +59,17 @@ export class AtendimentoAceite extends React.Component<IAtendimentoAceiteProps, 
 
   componentDidMount() {
     this.getEntities();
+
+    this.props.getProfissionals();
+    this.props.getAtendimentos();
   }
 
   cancelCourse = () => {
     this.setState(
       {
-        msgPush: ''
+        msgPush: '',
+        profissional: '',
+        atendimento: ''
       },
       () => this.sortEntities()
     );
@@ -107,6 +117,12 @@ export class AtendimentoAceite extends React.Component<IAtendimentoAceiteProps, 
       'msgPush=' +
       this.state.msgPush +
       '&' +
+      'profissional=' +
+      this.state.profissional +
+      '&' +
+      'atendimento=' +
+      this.state.atendimento +
+      '&' +
       ''
     );
   };
@@ -114,8 +130,8 @@ export class AtendimentoAceite extends React.Component<IAtendimentoAceiteProps, 
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { msgPush, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntitiesExport(msgPush, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const { msgPush, profissional, atendimento, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntitiesExport(msgPush, profissional, atendimento, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   confirmExport() {}
@@ -164,11 +180,15 @@ export class AtendimentoAceite extends React.Component<IAtendimentoAceiteProps, 
 }
 
 const mapStateToProps = ({ atendimentoAceite, ...storeState }: IRootState) => ({
+  profissionals: storeState.profissional.entities,
+  atendimentos: storeState.atendimento.entities,
   atendimentoAceiteList: atendimentoAceite.entities,
   totalItems: atendimentoAceite.totalItems
 });
 
 const mapDispatchToProps = {
+  getProfissionals,
+  getAtendimentos,
   getEntitiesExport
 };
 

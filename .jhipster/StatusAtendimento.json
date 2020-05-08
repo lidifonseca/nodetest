@@ -26,8 +26,15 @@
             "fieldType": "Integer"
         }
     ],
-    "relationships": [],
-    "changelogDate": "20200508172600",
+    "relationships": [
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "atendimento",
+            "otherEntityRelationshipName": "statusAtendimento",
+            "relationshipName": "atendimento"
+        }
+    ],
+    "changelogDate": "20200508182200",
     "entityTableName": "status_atendimento",
     "dto": "mapstruct",
     "pagination": "pagination",

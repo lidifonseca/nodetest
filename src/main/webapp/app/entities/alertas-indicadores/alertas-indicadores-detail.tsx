@@ -113,6 +113,19 @@ export class AlertasIndicadoresDetail extends React.Component<IAlertasIndicadore
                       </Col>
                     </Row>
                   </Col>
+
+                  <Col md="12">
+                    <Row>
+                      <Col md="3">
+                        <dt>
+                          <Translate contentKey="generadorApp.alertasIndicadores.padItemIndicadores">Pad Item Indicadores</Translate>
+                        </dt>
+                      </Col>
+                      <Col md="9">
+                        <dd>{alertasIndicadoresEntity.padItemIndicadores ? alertasIndicadoresEntity.padItemIndicadores.id : ''}</dd>
+                      </Col>
+                    </Row>
+                  </Col>
                 </Row>
                 <Button tag={Link} to="/alertas-indicadores" replace color="info">
                   <FontAwesomeIcon icon="arrow-left" />{' '}

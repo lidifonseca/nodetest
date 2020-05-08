@@ -4,6 +4,10 @@ import { BaseEntity } from './base/base.entity';
 
 import { validate, Contains, IsInt, Length, IsEmail, IsFQDN, IsDate, Min, Max } from 'class-validator';
 
+import AcoesRespostas from './acoes-respostas.entity';
+import Respostas from './respostas.entity';
+import SegmentosPerguntas from './segmentos-perguntas.entity';
+
 /**
  * A PerguntasQuestionario.
  */
@@ -20,6 +24,22 @@ export default class PerguntasQuestionario extends BaseEntity {
 
   @Column({ name: 'TIPO_CAMPO', length: 45 })
   tipoCampo: string;
+
+  @OneToMany(
+    type => AcoesRespostas,
+    other => other.perguntasQuestionario
+  )
+  acoesRespostas: AcoesRespostas[];
+
+  @OneToMany(
+    type => Respostas,
+    other => other.perguntasQuestionario
+  )
+  respostas: Respostas[];
+
+  @ManyToOne(type => SegmentosPerguntas)
+  @JoinColumn({ name: 'ID_SEGMENTOS_PERGUNTAS', referencedColumnName: 'id' })
+  segmentosPerguntas: SegmentosPerguntas;
 
   // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
 }

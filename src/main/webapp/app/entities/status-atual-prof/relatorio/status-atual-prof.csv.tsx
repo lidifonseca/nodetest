@@ -60,7 +60,8 @@ export class StatusAtualProf extends React.Component<IStatusAtualProfProps, ISta
     this.setState(
       {
         statusAtualProf: '',
-        styleLabel: ''
+        styleLabel: '',
+        profissionalStatusAtual: ''
       },
       () => this.sortEntities()
     );
@@ -111,6 +112,9 @@ export class StatusAtualProf extends React.Component<IStatusAtualProfProps, ISta
       'styleLabel=' +
       this.state.styleLabel +
       '&' +
+      'profissionalStatusAtual=' +
+      this.state.profissionalStatusAtual +
+      '&' +
       ''
     );
   };
@@ -118,8 +122,8 @@ export class StatusAtualProf extends React.Component<IStatusAtualProfProps, ISta
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { statusAtualProf, styleLabel, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntitiesExport(statusAtualProf, styleLabel, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const { statusAtualProf, styleLabel, profissionalStatusAtual, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntitiesExport(statusAtualProf, styleLabel, profissionalStatusAtual, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   confirmExport() {}

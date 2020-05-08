@@ -9,6 +9,14 @@ import { Translate, translate, ICrudGetAction, ICrudGetAllAction, setFileData, I
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
+import { IPad } from 'app/shared/model/pad.model';
+import { getEntities as getPads } from 'app/entities/pad/pad.reducer';
+import { IEspecialidade } from 'app/shared/model/especialidade.model';
+import { getEntities as getEspecialidades } from 'app/entities/especialidade/especialidade.reducer';
+import { IPeriodicidade } from 'app/shared/model/periodicidade.model';
+import { getEntities as getPeriodicidades } from 'app/entities/periodicidade/periodicidade.reducer';
+import { IPeriodo } from 'app/shared/model/periodo.model';
+import { getEntities as getPeriodos } from 'app/entities/periodo/periodo.reducer';
 import {
   IPadItemUpdateState,
   getEntity,
@@ -34,13 +42,64 @@ export class PadItemUpdate extends React.Component<IPadItemUpdateProps, IPadItem
     this.observacaoFileInput = React.createRef();
 
     this.state = {
+      padSelectValue: null,
+      especialidadeSelectValue: null,
+      periodicidadeSelectValue: null,
+      periodoSelectValue: null,
       fieldsBase: getPadItemState(this.props.location),
+      padId: '0',
+      especialidadeId: '0',
+      periodicidadeId: '0',
+      periodoId: '0',
       isNew: !this.props.match.params || !this.props.match.params.id
     };
   }
   componentDidUpdate(nextProps, nextState) {
     if (nextProps.updateSuccess !== this.props.updateSuccess && nextProps.updateSuccess) {
       this.handleClose();
+    }
+
+    if (nextProps.pads.length > 0 && this.state.padSelectValue === null && nextProps.padItemEntity.pad && nextProps.padItemEntity.pad.id) {
+      this.setState({
+        padSelectValue: nextProps.pads.map(p => (nextProps.padItemEntity.pad.id === p.id ? { value: p.id, label: p.id } : null))
+      });
+    }
+
+    if (
+      nextProps.especialidades.length > 0 &&
+      this.state.especialidadeSelectValue === null &&
+      nextProps.padItemEntity.especialidade &&
+      nextProps.padItemEntity.especialidade.id
+    ) {
+      this.setState({
+        especialidadeSelectValue: nextProps.especialidades.map(p =>
+          nextProps.padItemEntity.especialidade.id === p.id ? { value: p.id, label: p.id } : null
+        )
+      });
+    }
+
+    if (
+      nextProps.periodicidades.length > 0 &&
+      this.state.periodicidadeSelectValue === null &&
+      nextProps.padItemEntity.periodicidade &&
+      nextProps.padItemEntity.periodicidade.id
+    ) {
+      this.setState({
+        periodicidadeSelectValue: nextProps.periodicidades.map(p =>
+          nextProps.padItemEntity.periodicidade.id === p.id ? { value: p.id, label: p.id } : null
+        )
+      });
+    }
+
+    if (
+      nextProps.periodos.length > 0 &&
+      this.state.periodoSelectValue === null &&
+      nextProps.padItemEntity.periodo &&
+      nextProps.padItemEntity.periodo.id
+    ) {
+      this.setState({
+        periodoSelectValue: nextProps.periodos.map(p => (nextProps.padItemEntity.periodo.id === p.id ? { value: p.id, label: p.id } : null))
+      });
     }
   }
 
@@ -50,6 +109,11 @@ export class PadItemUpdate extends React.Component<IPadItemUpdateProps, IPadItem
     } else {
       this.props.getEntity(this.props.match.params.id);
     }
+
+    this.props.getPads();
+    this.props.getEspecialidades();
+    this.props.getPeriodicidades();
+    this.props.getPeriodos();
   }
 
   onBlobChange = (isAnImage, name, fileInput) => event => {
@@ -76,7 +140,10 @@ export class PadItemUpdate extends React.Component<IPadItemUpdateProps, IPadItem
       const { padItemEntity } = this.props;
       const entity = {
         ...padItemEntity,
-
+        pad: this.state.padSelectValue ? this.state.padSelectValue['value'] : null,
+        especialidade: this.state.especialidadeSelectValue ? this.state.especialidadeSelectValue['value'] : null,
+        periodicidade: this.state.periodicidadeSelectValue ? this.state.periodicidadeSelectValue['value'] : null,
+        periodo: this.state.periodoSelectValue ? this.state.periodoSelectValue['value'] : null,
         ...values
       };
 
@@ -93,7 +160,7 @@ export class PadItemUpdate extends React.Component<IPadItemUpdateProps, IPadItem
   };
 
   render() {
-    const { padItemEntity, loading, updating } = this.props;
+    const { padItemEntity, pads, especialidades, periodicidades, periodos, loading, updating } = this.props;
     const { isNew } = this.state;
 
     const { observacao } = padItemEntity;
@@ -105,7 +172,11 @@ export class PadItemUpdate extends React.Component<IPadItemUpdateProps, IPadItem
             isNew
               ? {}
               : {
-                  ...padItemEntity
+                  ...padItemEntity,
+                  pad: padItemEntity.pad ? padItemEntity.pad.id : null,
+                  especialidade: padItemEntity.especialidade ? padItemEntity.especialidade.id : null,
+                  periodicidade: padItemEntity.periodicidade ? padItemEntity.periodicidade.id : null,
+                  periodo: padItemEntity.periodo ? padItemEntity.periodo.id : null
                 }
           }
           onSubmit={this.saveEntity}
@@ -192,6 +263,28 @@ export class PadItemUpdate extends React.Component<IPadItemUpdateProps, IPadItem
                         <CategoriaIdComponentUpdate baseFilters />
 
                         <ScoreComponentUpdate baseFilters />
+
+                        <AtendimentoComponentUpdate baseFilter atendimentos />
+
+                        <AtendimentoCepRecusadoComponentUpdate baseFilter atendimentoCepRecusados />
+
+                        <AtendimentoSorteioFeitoComponentUpdate baseFilter atendimentoSorteioFeitos />
+
+                        <PadItemAtividadeComponentUpdate baseFilter padItemAtividades />
+
+                        <PadItemCepRecusadoComponentUpdate baseFilter padItemCepRecusados />
+
+                        <PadItemResultadoComponentUpdate baseFilter padItemResultados />
+
+                        <PadItemSorteioFeitoComponentUpdate baseFilter padItemSorteioFeitos />
+
+                        <PadComponentUpdate baseFilter pads />
+
+                        <EspecialidadeComponentUpdate baseFilter especialidades />
+
+                        <PeriodicidadeComponentUpdate baseFilter periodicidades />
+
+                        <PeriodoComponentUpdate baseFilter periodos />
                       </Row>
                     </div>
                   )}
@@ -206,6 +299,10 @@ export class PadItemUpdate extends React.Component<IPadItemUpdateProps, IPadItem
 }
 
 const mapStateToProps = (storeState: IRootState) => ({
+  pads: storeState.pad.entities,
+  especialidades: storeState.especialidade.entities,
+  periodicidades: storeState.periodicidade.entities,
+  periodos: storeState.periodo.entities,
   padItemEntity: storeState.padItem.entity,
   loading: storeState.padItem.loading,
   updating: storeState.padItem.updating,
@@ -213,6 +310,10 @@ const mapStateToProps = (storeState: IRootState) => ({
 });
 
 const mapDispatchToProps = {
+  getPads,
+  getEspecialidades,
+  getPeriodicidades,
+  getPeriodos,
   getEntity,
   updateEntity,
   setBlob,
@@ -507,6 +608,174 @@ const ScoreComponentUpdate = ({ baseFilters }) => {
     </Col>
   ) : (
     <AvInput type="hidden" name="score" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const AtendimentoComponentUpdate = ({ baseFilters, atendimentos }) => {
+  return baseFilters !== 'atendimento' ? (
+    <Col md="12"></Col>
+  ) : (
+    <AvInput type="hidden" name="atendimento" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const AtendimentoCepRecusadoComponentUpdate = ({ baseFilters, atendimentoCepRecusados }) => {
+  return baseFilters !== 'atendimentoCepRecusado' ? (
+    <Col md="12"></Col>
+  ) : (
+    <AvInput type="hidden" name="atendimentoCepRecusado" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const AtendimentoSorteioFeitoComponentUpdate = ({ baseFilters, atendimentoSorteioFeitos }) => {
+  return baseFilters !== 'atendimentoSorteioFeito' ? (
+    <Col md="12"></Col>
+  ) : (
+    <AvInput type="hidden" name="atendimentoSorteioFeito" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const PadItemAtividadeComponentUpdate = ({ baseFilters, padItemAtividades }) => {
+  return baseFilters !== 'padItemAtividade' ? (
+    <Col md="12"></Col>
+  ) : (
+    <AvInput type="hidden" name="padItemAtividade" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const PadItemCepRecusadoComponentUpdate = ({ baseFilters, padItemCepRecusados }) => {
+  return baseFilters !== 'padItemCepRecusado' ? (
+    <Col md="12"></Col>
+  ) : (
+    <AvInput type="hidden" name="padItemCepRecusado" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const PadItemResultadoComponentUpdate = ({ baseFilters, padItemResultados }) => {
+  return baseFilters !== 'padItemResultado' ? (
+    <Col md="12"></Col>
+  ) : (
+    <AvInput type="hidden" name="padItemResultado" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const PadItemSorteioFeitoComponentUpdate = ({ baseFilters, padItemSorteioFeitos }) => {
+  return baseFilters !== 'padItemSorteioFeito' ? (
+    <Col md="12"></Col>
+  ) : (
+    <AvInput type="hidden" name="padItemSorteioFeito" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const PadComponentUpdate = ({ baseFilters, pads }) => {
+  return baseFilters !== 'pad' ? (
+    <Col md="12">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" for="pad-item-pad">
+              <Translate contentKey="generadorApp.padItem.pad">Pad</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <Select
+              id="pad-item-pad"
+              className={'css-select-control'}
+              value={this.state.padSelectValue}
+              options={pads ? pads.map(option => ({ value: option.id, label: option.id })) : null}
+              onChange={options => this.setState({ padSelectValue: options })}
+              name={'pad'}
+            />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="pad" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const EspecialidadeComponentUpdate = ({ baseFilters, especialidades }) => {
+  return baseFilters !== 'especialidade' ? (
+    <Col md="12">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" for="pad-item-especialidade">
+              <Translate contentKey="generadorApp.padItem.especialidade">Especialidade</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <Select
+              id="pad-item-especialidade"
+              className={'css-select-control'}
+              value={this.state.especialidadeSelectValue}
+              options={especialidades ? especialidades.map(option => ({ value: option.id, label: option.id })) : null}
+              onChange={options => this.setState({ especialidadeSelectValue: options })}
+              name={'especialidade'}
+            />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="especialidade" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const PeriodicidadeComponentUpdate = ({ baseFilters, periodicidades }) => {
+  return baseFilters !== 'periodicidade' ? (
+    <Col md="12">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" for="pad-item-periodicidade">
+              <Translate contentKey="generadorApp.padItem.periodicidade">Periodicidade</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <Select
+              id="pad-item-periodicidade"
+              className={'css-select-control'}
+              value={this.state.periodicidadeSelectValue}
+              options={periodicidades ? periodicidades.map(option => ({ value: option.id, label: option.id })) : null}
+              onChange={options => this.setState({ periodicidadeSelectValue: options })}
+              name={'periodicidade'}
+            />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="periodicidade" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const PeriodoComponentUpdate = ({ baseFilters, periodos }) => {
+  return baseFilters !== 'periodo' ? (
+    <Col md="12">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" for="pad-item-periodo">
+              <Translate contentKey="generadorApp.padItem.periodo">Periodo</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <Select
+              id="pad-item-periodo"
+              className={'css-select-control'}
+              value={this.state.periodoSelectValue}
+              options={periodos ? periodos.map(option => ({ value: option.id, label: option.id })) : null}
+              onChange={options => this.setState({ periodoSelectValue: options })}
+              name={'periodo'}
+            />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="periodo" value={this.state.fieldsBase[baseFilters]} />
   );
 };
 

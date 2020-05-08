@@ -43,6 +43,11 @@ import { IUsuarioAcao } from 'app/shared/model/usuario-acao.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
+import { ITela } from 'app/shared/model/tela.model';
+import { getEntities as getTelas } from 'app/entities/tela/tela.reducer';
+import { IAcao } from 'app/shared/model/acao.model';
+import { getEntities as getAcaos } from 'app/entities/acao/acao.reducer';
+
 export interface IUsuarioAcaoProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
 export interface IUsuarioAcaoState extends IUsuarioAcaoBaseState, IPaginationBaseState {
@@ -63,13 +68,18 @@ export class UsuarioAcao extends React.Component<IUsuarioAcaoProps, IUsuarioAcao
 
   componentDidMount() {
     this.getEntities();
+
+    this.props.getTelas();
+    this.props.getAcaos();
   }
 
   cancelCourse = () => {
     this.setState(
       {
         idAtendimento: '',
-        descricao: ''
+        descricao: '',
+        tela: '',
+        acao: ''
       },
       () => this.sortEntities()
     );
@@ -120,6 +130,12 @@ export class UsuarioAcao extends React.Component<IUsuarioAcaoProps, IUsuarioAcao
       'descricao=' +
       this.state.descricao +
       '&' +
+      'tela=' +
+      this.state.tela +
+      '&' +
+      'acao=' +
+      this.state.acao +
+      '&' +
       ''
     );
   };
@@ -127,8 +143,8 @@ export class UsuarioAcao extends React.Component<IUsuarioAcaoProps, IUsuarioAcao
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { idAtendimento, descricao, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntitiesExport(idAtendimento, descricao, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const { idAtendimento, descricao, tela, acao, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntitiesExport(idAtendimento, descricao, tela, acao, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   confirmExport() {}
@@ -177,11 +193,15 @@ export class UsuarioAcao extends React.Component<IUsuarioAcaoProps, IUsuarioAcao
 }
 
 const mapStateToProps = ({ usuarioAcao, ...storeState }: IRootState) => ({
+  telas: storeState.tela.entities,
+  acaos: storeState.acao.entities,
   usuarioAcaoList: usuarioAcao.entities,
   totalItems: usuarioAcao.totalItems
 });
 
 const mapDispatchToProps = {
+  getTelas,
+  getAcaos,
   getEntitiesExport
 };
 

@@ -10,8 +10,23 @@
             "fieldValidateRulesMaxlength": "255"
         }
     ],
-    "relationships": [],
-    "changelogDate": "20200508152300",
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "profissional",
+            "otherEntityRelationshipName": "atendimentoAceite",
+            "relationshipName": "profissional",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "atendimento",
+            "otherEntityRelationshipName": "atendimentoAceite",
+            "relationshipName": "atendimento",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20200508161900",
     "entityTableName": "atendimento_aceite",
     "dto": "mapstruct",
     "pagination": "pagination",

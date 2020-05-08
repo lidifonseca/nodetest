@@ -6,8 +6,16 @@
             "fieldType": "Integer"
         }
     ],
-    "relationships": [],
-    "changelogDate": "20200508162800",
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "paciente",
+            "otherEntityRelationshipName": "pacienteEnqueteApp",
+            "relationshipName": "paciente",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20200508172400",
     "entityTableName": "paciente_enquete_app",
     "dto": "mapstruct",
     "pagination": "pagination",

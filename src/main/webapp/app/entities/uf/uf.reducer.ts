@@ -35,6 +35,7 @@ export interface IUfBaseState {
   baseFilters: any;
   siglaUf: any;
   descrUf: any;
+  cidade: any;
 }
 
 export interface IUfUpdateState {
@@ -123,19 +124,21 @@ const apiUrl = 'api/ufs';
 export type ICrudGetAllActionUf<T> = (
   siglaUf?: any,
   descrUf?: any,
+  cidade?: any,
   page?: number,
   size?: number,
   sort?: string
 ) => IPayload<T> | ((dispatch: any) => IPayload<T>);
 
-export const getEntities: ICrudGetAllActionUf<IUf> = (siglaUf, descrUf, page, size, sort) => {
+export const getEntities: ICrudGetAllActionUf<IUf> = (siglaUf, descrUf, cidade, page, size, sort) => {
   const siglaUfRequest = siglaUf ? `siglaUf.contains=${siglaUf}&` : '';
   const descrUfRequest = descrUf ? `descrUf.contains=${descrUf}&` : '';
+  const cidadeRequest = cidade ? `cidade.equals=${cidade}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_UF_LIST,
-    payload: axios.get<IUf>(`${requestUrl}${siglaUfRequest}${descrUfRequest}cacheBuster=${new Date().getTime()}`)
+    payload: axios.get<IUf>(`${requestUrl}${siglaUfRequest}${descrUfRequest}${cidadeRequest}cacheBuster=${new Date().getTime()}`)
   };
 };
 export const getEntity: ICrudGetAction<IUf> = id => {
@@ -146,14 +149,15 @@ export const getEntity: ICrudGetAction<IUf> = id => {
   };
 };
 
-export const getEntitiesExport: ICrudGetAllActionUf<IUf> = (siglaUf, descrUf, page, size, sort) => {
+export const getEntitiesExport: ICrudGetAllActionUf<IUf> = (siglaUf, descrUf, cidade, page, size, sort) => {
   const siglaUfRequest = siglaUf ? `siglaUf.contains=${siglaUf}&` : '';
   const descrUfRequest = descrUf ? `descrUf.contains=${descrUf}&` : '';
+  const cidadeRequest = cidade ? `cidade.equals=${cidade}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_UF_LIST,
-    payload: axios.get<IUf>(`${requestUrl}${siglaUfRequest}${descrUfRequest}cacheBuster=${new Date().getTime()}`)
+    payload: axios.get<IUf>(`${requestUrl}${siglaUfRequest}${descrUfRequest}${cidadeRequest}cacheBuster=${new Date().getTime()}`)
   };
 };
 
@@ -199,9 +203,12 @@ export const getUfState = (location): IUfBaseState => {
   const siglaUf = url.searchParams.get('siglaUf') || '';
   const descrUf = url.searchParams.get('descrUf') || '';
 
+  const cidade = url.searchParams.get('cidade') || '';
+
   return {
     baseFilters,
     siglaUf,
-    descrUf
+    descrUf,
+    cidade
   };
 };

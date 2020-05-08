@@ -68,6 +68,19 @@ export class PadItemSorteioFeitoDetail extends React.Component<IPadItemSorteioFe
                       </Col>
                     </Row>
                   </Col>
+
+                  <Col md="12">
+                    <Row>
+                      <Col md="3">
+                        <dt>
+                          <Translate contentKey="generadorApp.padItemSorteioFeito.padItem">Pad Item</Translate>
+                        </dt>
+                      </Col>
+                      <Col md="9">
+                        <dd>{padItemSorteioFeitoEntity.padItem ? padItemSorteioFeitoEntity.padItem.id : ''}</dd>
+                      </Col>
+                    </Row>
+                  </Col>
                 </Row>
                 <Button tag={Link} to="/pad-item-sorteio-feito" replace color="info">
                   <FontAwesomeIcon icon="arrow-left" />{' '}

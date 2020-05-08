@@ -40,6 +40,7 @@ export interface IPadItemIndicadoresBaseState {
   meta: any;
   maximoSt: any;
   minimoSt: any;
+  cidXPtaNovoPadItemIndi: any;
 }
 
 export interface IPadItemIndicadoresUpdateState {
@@ -147,6 +148,7 @@ export type ICrudGetAllActionPadItemIndicadores<T> = (
   meta?: any,
   maximoSt?: any,
   minimoSt?: any,
+  cidXPtaNovoPadItemIndi?: any,
   page?: number,
   size?: number,
   sort?: string
@@ -159,6 +161,7 @@ export const getEntities: ICrudGetAllActionPadItemIndicadores<IPadItemIndicadore
   meta,
   maximoSt,
   minimoSt,
+  cidXPtaNovoPadItemIndi,
   page,
   size,
   sort
@@ -169,12 +172,13 @@ export const getEntities: ICrudGetAllActionPadItemIndicadores<IPadItemIndicadore
   const metaRequest = meta ? `meta.contains=${meta}&` : '';
   const maximoStRequest = maximoSt ? `maximoSt.contains=${maximoSt}&` : '';
   const minimoStRequest = minimoSt ? `minimoSt.contains=${minimoSt}&` : '';
+  const cidXPtaNovoPadItemIndiRequest = cidXPtaNovoPadItemIndi ? `cidXPtaNovoPadItemIndi.equals=${cidXPtaNovoPadItemIndi}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_PADITEMINDICADORES_LIST,
     payload: axios.get<IPadItemIndicadores>(
-      `${requestUrl}${idUnidadeMedidaRequest}${tituloRequest}${descricaoRequest}${metaRequest}${maximoStRequest}${minimoStRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${idUnidadeMedidaRequest}${tituloRequest}${descricaoRequest}${metaRequest}${maximoStRequest}${minimoStRequest}${cidXPtaNovoPadItemIndiRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };
@@ -193,6 +197,7 @@ export const getEntitiesExport: ICrudGetAllActionPadItemIndicadores<IPadItemIndi
   meta,
   maximoSt,
   minimoSt,
+  cidXPtaNovoPadItemIndi,
   page,
   size,
   sort
@@ -203,12 +208,13 @@ export const getEntitiesExport: ICrudGetAllActionPadItemIndicadores<IPadItemIndi
   const metaRequest = meta ? `meta.contains=${meta}&` : '';
   const maximoStRequest = maximoSt ? `maximoSt.contains=${maximoSt}&` : '';
   const minimoStRequest = minimoSt ? `minimoSt.contains=${minimoSt}&` : '';
+  const cidXPtaNovoPadItemIndiRequest = cidXPtaNovoPadItemIndi ? `cidXPtaNovoPadItemIndi.equals=${cidXPtaNovoPadItemIndi}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_PADITEMINDICADORES_LIST,
     payload: axios.get<IPadItemIndicadores>(
-      `${requestUrl}${idUnidadeMedidaRequest}${tituloRequest}${descricaoRequest}${metaRequest}${maximoStRequest}${minimoStRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${idUnidadeMedidaRequest}${tituloRequest}${descricaoRequest}${metaRequest}${maximoStRequest}${minimoStRequest}${cidXPtaNovoPadItemIndiRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };
@@ -269,6 +275,8 @@ export const getPadItemIndicadoresState = (location): IPadItemIndicadoresBaseSta
   const maximoSt = url.searchParams.get('maximoSt') || '';
   const minimoSt = url.searchParams.get('minimoSt') || '';
 
+  const cidXPtaNovoPadItemIndi = url.searchParams.get('cidXPtaNovoPadItemIndi') || '';
+
   return {
     baseFilters,
     idUnidadeMedida,
@@ -276,6 +284,7 @@ export const getPadItemIndicadoresState = (location): IPadItemIndicadoresBaseSta
     descricao,
     meta,
     maximoSt,
-    minimoSt
+    minimoSt,
+    cidXPtaNovoPadItemIndi
   };
 };

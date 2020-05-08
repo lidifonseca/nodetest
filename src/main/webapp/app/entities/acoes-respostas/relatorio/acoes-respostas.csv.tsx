@@ -34,6 +34,11 @@ import { IAcoesRespostas } from 'app/shared/model/acoes-respostas.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
+import { IRespostas } from 'app/shared/model/respostas.model';
+import { getEntities as getRespostas } from 'app/entities/respostas/respostas.reducer';
+import { IPerguntasQuestionario } from 'app/shared/model/perguntas-questionario.model';
+import { getEntities as getPerguntasQuestionarios } from 'app/entities/perguntas-questionario/perguntas-questionario.reducer';
+
 export interface IAcoesRespostasProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
 export interface IAcoesRespostasState extends IAcoesRespostasBaseState, IPaginationBaseState {
@@ -54,6 +59,9 @@ export class AcoesRespostas extends React.Component<IAcoesRespostasProps, IAcoes
 
   componentDidMount() {
     this.getEntities();
+
+    this.props.getRespostas();
+    this.props.getPerguntasQuestionarios();
   }
 
   cancelCourse = () => {
@@ -63,7 +71,9 @@ export class AcoesRespostas extends React.Component<IAcoesRespostasProps, IAcoes
         condicaoSexo: '',
         observacoes: '',
         tipoCampo1: '',
-        tipoCampo2: ''
+        tipoCampo2: '',
+        respostas: '',
+        perguntasQuestionario: ''
       },
       () => this.sortEntities()
     );
@@ -123,6 +133,12 @@ export class AcoesRespostas extends React.Component<IAcoesRespostasProps, IAcoes
       'tipoCampo2=' +
       this.state.tipoCampo2 +
       '&' +
+      'respostas=' +
+      this.state.respostas +
+      '&' +
+      'perguntasQuestionario=' +
+      this.state.perguntasQuestionario +
+      '&' +
       ''
     );
   };
@@ -136,6 +152,8 @@ export class AcoesRespostas extends React.Component<IAcoesRespostasProps, IAcoes
       observacoes,
       tipoCampo1,
       tipoCampo2,
+      respostas,
+      perguntasQuestionario,
       activePage,
       itemsPerPage,
       sort,
@@ -147,6 +165,8 @@ export class AcoesRespostas extends React.Component<IAcoesRespostasProps, IAcoes
       observacoes,
       tipoCampo1,
       tipoCampo2,
+      respostas,
+      perguntasQuestionario,
       activePage - 1,
       itemsPerPage,
       `${sort},${order}`
@@ -199,11 +219,15 @@ export class AcoesRespostas extends React.Component<IAcoesRespostasProps, IAcoes
 }
 
 const mapStateToProps = ({ acoesRespostas, ...storeState }: IRootState) => ({
+  respostas: storeState.respostas.entities,
+  perguntasQuestionarios: storeState.perguntasQuestionario.entities,
   acoesRespostasList: acoesRespostas.entities,
   totalItems: acoesRespostas.totalItems
 });
 
 const mapDispatchToProps = {
+  getRespostas,
+  getPerguntasQuestionarios,
   getEntitiesExport
 };
 

@@ -5,6 +5,7 @@ import AlertasResultadosEsperados from '../domain/alertas-resultados-esperados.e
 import { AlertasResultadosEsperadosRepository } from '../repository/alertas-resultados-esperados.repository';
 
 const relationshipNames = [];
+relationshipNames.push('resultados');
 
 @Injectable()
 export class AlertasResultadosEsperadosService {

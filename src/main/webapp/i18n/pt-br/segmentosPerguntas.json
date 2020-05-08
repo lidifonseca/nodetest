@@ -22,7 +22,9 @@
       "detail": {
         "title": "Segmentos Perguntas"
       },
-      "segmento": "Segmento"
+      "segmento": "Segmento",
+      "perguntasQuestionario_empty": "Sem Perguntas Questionario",
+      "perguntasQuestionario": "Perguntas Questionario"
     }
   }
 }

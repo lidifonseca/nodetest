@@ -26,8 +26,22 @@
             "fieldValidateRulesMaxlength": "245"
         }
     ],
-    "relationships": [],
-    "changelogDate": "20200508153900",
+    "relationships": [
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "cidXPtaNovoPadItemIndi",
+            "otherEntityRelationshipName": "cidXPtaNovo",
+            "relationshipName": "cidXPtaNovoPadItemIndi"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "cid",
+            "otherEntityRelationshipName": "cidXPtaNovo",
+            "relationshipName": "cid",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20200508163500",
     "entityTableName": "cid_x_pta_novo",
     "dto": "mapstruct",
     "pagination": "pagination",

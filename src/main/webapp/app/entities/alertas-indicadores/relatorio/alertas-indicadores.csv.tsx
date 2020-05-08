@@ -34,6 +34,9 @@ import { IAlertasIndicadores } from 'app/shared/model/alertas-indicadores.model'
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
+import { ICidXPtaNovoPadItemIndi } from 'app/shared/model/cid-x-pta-novo-pad-item-indi.model';
+import { getEntities as getCidXPtaNovoPadItemIndis } from 'app/entities/cid-x-pta-novo-pad-item-indi/cid-x-pta-novo-pad-item-indi.reducer';
+
 export interface IAlertasIndicadoresProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
 export interface IAlertasIndicadoresState extends IAlertasIndicadoresBaseState, IPaginationBaseState {
@@ -54,6 +57,8 @@ export class AlertasIndicadores extends React.Component<IAlertasIndicadoresProps
 
   componentDidMount() {
     this.getEntities();
+
+    this.props.getCidXPtaNovoPadItemIndis();
   }
 
   cancelCourse = () => {
@@ -62,7 +67,8 @@ export class AlertasIndicadores extends React.Component<IAlertasIndicadoresProps
         pontuacao: '',
         alteracaoEsperada: '',
         observacoes: '',
-        usuarioId: ''
+        usuarioId: '',
+        padItemIndicadores: ''
       },
       () => this.sortEntities()
     );
@@ -119,6 +125,9 @@ export class AlertasIndicadores extends React.Component<IAlertasIndicadoresProps
       'usuarioId=' +
       this.state.usuarioId +
       '&' +
+      'padItemIndicadores=' +
+      this.state.padItemIndicadores +
+      '&' +
       ''
     );
   };
@@ -126,8 +135,17 @@ export class AlertasIndicadores extends React.Component<IAlertasIndicadoresProps
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { pontuacao, alteracaoEsperada, observacoes, usuarioId, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntitiesExport(pontuacao, alteracaoEsperada, observacoes, usuarioId, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const { pontuacao, alteracaoEsperada, observacoes, usuarioId, padItemIndicadores, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntitiesExport(
+      pontuacao,
+      alteracaoEsperada,
+      observacoes,
+      usuarioId,
+      padItemIndicadores,
+      activePage - 1,
+      itemsPerPage,
+      `${sort},${order}`
+    );
   };
 
   confirmExport() {}
@@ -176,11 +194,13 @@ export class AlertasIndicadores extends React.Component<IAlertasIndicadoresProps
 }
 
 const mapStateToProps = ({ alertasIndicadores, ...storeState }: IRootState) => ({
+  cidXPtaNovoPadItemIndis: storeState.cidXPtaNovoPadItemIndi.entities,
   alertasIndicadoresList: alertasIndicadores.entities,
   totalItems: alertasIndicadores.totalItems
 });
 
 const mapDispatchToProps = {
+  getCidXPtaNovoPadItemIndis,
   getEntitiesExport
 };
 

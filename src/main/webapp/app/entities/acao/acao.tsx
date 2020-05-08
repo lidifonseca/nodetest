@@ -50,7 +50,10 @@ export class Acao extends React.Component<IAcaoProps, IAcaoState> {
   cancelCourse = () => {
     this.setState(
       {
-        acao: ''
+        acao: '',
+        logUser: '',
+        logUserFranquia: '',
+        usuarioAcao: ''
       },
       () => this.sortEntities()
     );
@@ -100,6 +103,15 @@ export class Acao extends React.Component<IAcaoProps, IAcaoState> {
       'acao=' +
       this.state.acao +
       '&' +
+      'logUser=' +
+      this.state.logUser +
+      '&' +
+      'logUserFranquia=' +
+      this.state.logUserFranquia +
+      '&' +
+      'usuarioAcao=' +
+      this.state.usuarioAcao +
+      '&' +
       ''
     );
   };
@@ -107,8 +119,8 @@ export class Acao extends React.Component<IAcaoProps, IAcaoState> {
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { acao, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntities(acao, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const { acao, logUser, logUserFranquia, usuarioAcao, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntities(acao, logUser, logUserFranquia, usuarioAcao, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   render() {
@@ -157,6 +169,24 @@ export class Acao extends React.Component<IAcaoProps, IAcaoState> {
 
                             <AvInput type="text" name="acao" id="acao-acao" value={this.state.acao} />
                           </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'logUser' ? (
+                        <Col md="3">
+                          <Row className="mr-1 mt-1"></Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'logUserFranquia' ? (
+                        <Col md="3">
+                          <Row className="mr-1 mt-1"></Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'usuarioAcao' ? (
+                        <Col md="3">
+                          <Row className="mr-1 mt-1"></Row>
                         </Col>
                       ) : null}
                     </div>

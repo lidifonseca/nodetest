@@ -4,6 +4,18 @@ import { BaseEntity } from './base/base.entity';
 
 import { validate, Contains, IsInt, Length, IsEmail, IsFQDN, IsDate, Min, Max } from 'class-validator';
 
+import Atendimento from './atendimento.entity';
+import AtendimentoCepRecusado from './atendimento-cep-recusado.entity';
+import AtendimentoSorteioFeito from './atendimento-sorteio-feito.entity';
+import PadItemAtividade from './pad-item-atividade.entity';
+import PadItemCepRecusado from './pad-item-cep-recusado.entity';
+import PadItemResultado from './pad-item-resultado.entity';
+import PadItemSorteioFeito from './pad-item-sorteio-feito.entity';
+import Pad from './pad.entity';
+import Especialidade from './especialidade.entity';
+import Periodicidade from './periodicidade.entity';
+import Periodo from './periodo.entity';
+
 /**
  * A PadItem.
  */
@@ -47,6 +59,64 @@ export default class PadItem extends BaseEntity {
 
   @Column({ type: 'double', name: 'SCORE' })
   score: number;
+
+  @OneToMany(
+    type => Atendimento,
+    other => other.padItem
+  )
+  atendimentos: Atendimento[];
+
+  @OneToMany(
+    type => AtendimentoCepRecusado,
+    other => other.padItem
+  )
+  atendimentoCepRecusados: AtendimentoCepRecusado[];
+
+  @OneToMany(
+    type => AtendimentoSorteioFeito,
+    other => other.padItem
+  )
+  atendimentoSorteioFeitos: AtendimentoSorteioFeito[];
+
+  @OneToMany(
+    type => PadItemAtividade,
+    other => other.padItem
+  )
+  padItemAtividades: PadItemAtividade[];
+
+  @OneToMany(
+    type => PadItemCepRecusado,
+    other => other.padItem
+  )
+  padItemCepRecusados: PadItemCepRecusado[];
+
+  @OneToMany(
+    type => PadItemResultado,
+    other => other.padItem
+  )
+  padItemResultados: PadItemResultado[];
+
+  @OneToMany(
+    type => PadItemSorteioFeito,
+    other => other.padItem
+  )
+  padItemSorteioFeitos: PadItemSorteioFeito[];
+
+  @ManyToOne(type => Pad)
+  @JoinColumn({ name: 'ID_PAD', referencedColumnName: 'id' })
+  pad: Pad;
+
+  @ManyToOne(type => Especialidade)
+  @JoinColumn({ name: 'ID_ESPECIALIDADE', referencedColumnName: 'id' })
+  especialidade: Especialidade;
+
+  @ManyToOne(type => Periodicidade)
+  @JoinColumn({ name: 'ID_PERIODICIDADE', referencedColumnName: 'id' })
+  periodicidade: Periodicidade;
+
+  @ManyToOne(type => Periodo)
+  @JoinColumn({ name: 'ID_PERIODO', referencedColumnName: 'id' })
+  periodo: Periodo;
 
   // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
 }

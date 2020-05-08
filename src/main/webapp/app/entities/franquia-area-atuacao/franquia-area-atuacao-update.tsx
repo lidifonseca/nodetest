@@ -9,6 +9,8 @@ import { Translate, translate, ICrudGetAction, ICrudGetAllAction, ICrudPutAction
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
+import { IFranquia } from 'app/shared/model/franquia.model';
+import { getEntities as getFranquias } from 'app/entities/franquia/franquia.reducer';
 import {
   IFranquiaAreaAtuacaoUpdateState,
   getEntity,
@@ -29,13 +31,28 @@ export class FranquiaAreaAtuacaoUpdate extends React.Component<IFranquiaAreaAtua
     super(props);
 
     this.state = {
+      franquiaSelectValue: null,
       fieldsBase: getFranquiaAreaAtuacaoState(this.props.location),
+      franquiaId: '0',
       isNew: !this.props.match.params || !this.props.match.params.id
     };
   }
   componentDidUpdate(nextProps, nextState) {
     if (nextProps.updateSuccess !== this.props.updateSuccess && nextProps.updateSuccess) {
       this.handleClose();
+    }
+
+    if (
+      nextProps.franquias.length > 0 &&
+      this.state.franquiaSelectValue === null &&
+      nextProps.franquiaAreaAtuacaoEntity.franquia &&
+      nextProps.franquiaAreaAtuacaoEntity.franquia.id
+    ) {
+      this.setState({
+        franquiaSelectValue: nextProps.franquias.map(p =>
+          nextProps.franquiaAreaAtuacaoEntity.franquia.id === p.id ? { value: p.id, label: p.id } : null
+        )
+      });
     }
   }
 
@@ -45,6 +62,8 @@ export class FranquiaAreaAtuacaoUpdate extends React.Component<IFranquiaAreaAtua
     } else {
       this.props.getEntity(this.props.match.params.id);
     }
+
+    this.props.getFranquias();
   }
 
   getFiltersURL = (offset = null) => {
@@ -60,7 +79,7 @@ export class FranquiaAreaAtuacaoUpdate extends React.Component<IFranquiaAreaAtua
       const { franquiaAreaAtuacaoEntity } = this.props;
       const entity = {
         ...franquiaAreaAtuacaoEntity,
-
+        franquia: this.state.franquiaSelectValue ? this.state.franquiaSelectValue['value'] : null,
         ...values
       };
 
@@ -77,7 +96,7 @@ export class FranquiaAreaAtuacaoUpdate extends React.Component<IFranquiaAreaAtua
   };
 
   render() {
-    const { franquiaAreaAtuacaoEntity, loading, updating } = this.props;
+    const { franquiaAreaAtuacaoEntity, franquias, loading, updating } = this.props;
     const { isNew } = this.state;
 
     const baseFilters = this.state.fieldsBase && this.state.fieldsBase['baseFilters'] ? this.state.fieldsBase['baseFilters'] : null;
@@ -88,7 +107,8 @@ export class FranquiaAreaAtuacaoUpdate extends React.Component<IFranquiaAreaAtua
             isNew
               ? {}
               : {
-                  ...franquiaAreaAtuacaoEntity
+                  ...franquiaAreaAtuacaoEntity,
+                  franquia: franquiaAreaAtuacaoEntity.franquia ? franquiaAreaAtuacaoEntity.franquia.id : null
                 }
           }
           onSubmit={this.saveEntity}
@@ -157,6 +177,8 @@ export class FranquiaAreaAtuacaoUpdate extends React.Component<IFranquiaAreaAtua
                         <CepFimComponentUpdate baseFilters />
 
                         <AtivoComponentUpdate baseFilters />
+
+                        <FranquiaComponentUpdate baseFilter franquias />
                       </Row>
                     </div>
                   )}
@@ -171,6 +193,7 @@ export class FranquiaAreaAtuacaoUpdate extends React.Component<IFranquiaAreaAtua
 }
 
 const mapStateToProps = (storeState: IRootState) => ({
+  franquias: storeState.franquia.entities,
   franquiaAreaAtuacaoEntity: storeState.franquiaAreaAtuacao.entity,
   loading: storeState.franquiaAreaAtuacao.loading,
   updating: storeState.franquiaAreaAtuacao.updating,
@@ -178,6 +201,7 @@ const mapStateToProps = (storeState: IRootState) => ({
 });
 
 const mapDispatchToProps = {
+  getFranquias,
   getEntity,
   updateEntity,
   createEntity,
@@ -247,6 +271,34 @@ const AtivoComponentUpdate = ({ baseFilters }) => {
     </Col>
   ) : (
     <AvInput type="hidden" name="ativo" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const FranquiaComponentUpdate = ({ baseFilters, franquias }) => {
+  return baseFilters !== 'franquia' ? (
+    <Col md="12">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" for="franquia-area-atuacao-franquia">
+              <Translate contentKey="generadorApp.franquiaAreaAtuacao.franquia">Franquia</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <Select
+              id="franquia-area-atuacao-franquia"
+              className={'css-select-control'}
+              value={this.state.franquiaSelectValue}
+              options={franquias ? franquias.map(option => ({ value: option.id, label: option.id })) : null}
+              onChange={options => this.setState({ franquiaSelectValue: options })}
+              name={'franquia'}
+            />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="franquia" value={this.state.fieldsBase[baseFilters]} />
   );
 };
 

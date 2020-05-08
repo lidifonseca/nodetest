@@ -28,7 +28,7 @@
         }
     ],
     "relationships": [],
-    "changelogDate": "20200508170800",
+    "changelogDate": "20200508180400",
     "entityTableName": "profissional_horario",
     "dto": "mapstruct",
     "pagination": "pagination",

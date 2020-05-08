@@ -5,6 +5,8 @@ import PadItemAtividade from '../domain/pad-item-atividade.entity';
 import { PadItemAtividadeRepository } from '../repository/pad-item-atividade.repository';
 
 const relationshipNames = [];
+relationshipNames.push('atividade');
+relationshipNames.push('padItem');
 
 @Injectable()
 export class PadItemAtividadeService {

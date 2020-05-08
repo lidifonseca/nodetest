@@ -1918,6 +1918,19 @@ export class UsuarioDetail extends React.Component<IUsuarioDetailProps, IUsuario
                       </Col>
                     </Row>
                   </Col>
+
+                  <Col md="12">
+                    <Row>
+                      <Col md="3">
+                        <dt>
+                          <Translate contentKey="generadorApp.usuario.tipoUsuario">Tipo Usuario</Translate>
+                        </dt>
+                      </Col>
+                      <Col md="9">
+                        <dd>{usuarioEntity.tipoUsuario ? usuarioEntity.tipoUsuario.id : ''}</dd>
+                      </Col>
+                    </Row>
+                  </Col>
                 </Row>
                 <Button tag={Link} to="/usuario" replace color="info">
                   <FontAwesomeIcon icon="arrow-left" />{' '}

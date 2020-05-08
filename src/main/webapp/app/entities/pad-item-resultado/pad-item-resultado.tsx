@@ -37,6 +37,9 @@ import { IPadItemResultado } from 'app/shared/model/pad-item-resultado.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
+import { IPadItem } from 'app/shared/model/pad-item.model';
+import { getEntities as getPadItems } from 'app/entities/pad-item/pad-item.reducer';
+
 export interface IPadItemResultadoProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
 export interface IPadItemResultadoState extends IPadItemResultadoBaseState, IPaginationBaseState {}
@@ -54,6 +57,8 @@ export class PadItemResultado extends React.Component<IPadItemResultadoProps, IP
 
   componentDidMount() {
     this.getEntities();
+
+    this.props.getPadItems();
   }
 
   cancelCourse = () => {
@@ -62,7 +67,8 @@ export class PadItemResultado extends React.Component<IPadItemResultadoProps, IP
         resultado: '',
         dataFim: '',
         resultadoAnalisado: '',
-        usuarioId: ''
+        usuarioId: '',
+        padItem: ''
       },
       () => this.sortEntities()
     );
@@ -121,6 +127,9 @@ export class PadItemResultado extends React.Component<IPadItemResultadoProps, IP
       'usuarioId=' +
       this.state.usuarioId +
       '&' +
+      'padItem=' +
+      this.state.padItem +
+      '&' +
       ''
     );
   };
@@ -128,12 +137,12 @@ export class PadItemResultado extends React.Component<IPadItemResultadoProps, IP
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { resultado, dataFim, resultadoAnalisado, usuarioId, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntities(resultado, dataFim, resultadoAnalisado, usuarioId, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const { resultado, dataFim, resultadoAnalisado, usuarioId, padItem, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntities(resultado, dataFim, resultadoAnalisado, usuarioId, padItem, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   render() {
-    const { padItemResultadoList, match, totalItems } = this.props;
+    const { padItems, padItemResultadoList, match, totalItems } = this.props;
     return (
       <div>
         <h2 id="page-heading">
@@ -217,6 +226,33 @@ export class PadItemResultado extends React.Component<IPadItemResultadoProps, IP
                           </Row>
                         </Col>
                       ) : null}
+
+                      {this.state.baseFilters !== 'padItem' ? (
+                        <Col md="3">
+                          <Row className="mr-1 mt-1">
+                            <div style={{ width: '100%' }}>
+                              <Label for="pad-item-resultado-padItem">
+                                <Translate contentKey="generadorApp.padItemResultado.padItem">Pad Item</Translate>
+                              </Label>
+                              <Select
+                                id="pad-item-resultado-padItem"
+                                isMulti
+                                className={'css-select-control'}
+                                value={
+                                  padItems
+                                    ? padItems.map(p =>
+                                        this.state.padItem.split(',').indexOf(p.id) !== -1 ? { value: p.id, label: p.id } : null
+                                      )
+                                    : null
+                                }
+                                options={padItems ? padItems.map(option => ({ value: option.id, label: option.id })) : null}
+                                onChange={options => this.setState({ padItem: options.map(option => option['value']).join(',') })}
+                                name={'padItem'}
+                              />
+                            </div>
+                          </Row>
+                        </Col>
+                      ) : null}
                     </div>
 
                     <div className="row mb-2 mr-4 justify-content-end">
@@ -269,6 +305,13 @@ export class PadItemResultado extends React.Component<IPadItemResultadoProps, IP
                         </th>
                       ) : null}
 
+                      {this.state.baseFilters !== 'padItem' ? (
+                        <th>
+                          <Translate contentKey="generadorApp.padItemResultado.padItem">Pad Item</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+
                       <th />
                     </tr>
                   </thead>
@@ -297,6 +340,16 @@ export class PadItemResultado extends React.Component<IPadItemResultadoProps, IP
                         ) : null}
 
                         {this.state.baseFilters !== 'usuarioId' ? <td>{padItemResultado.usuarioId}</td> : null}
+
+                        {this.state.baseFilters !== 'padItem' ? (
+                          <td>
+                            {padItemResultado.padItem ? (
+                              <Link to={`pad-item/${padItemResultado.padItem.id}`}>{padItemResultado.padItem.id}</Link>
+                            ) : (
+                              ''
+                            )}
+                          </td>
+                        ) : null}
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">
@@ -364,11 +417,13 @@ export class PadItemResultado extends React.Component<IPadItemResultadoProps, IP
 }
 
 const mapStateToProps = ({ padItemResultado, ...storeState }: IRootState) => ({
+  padItems: storeState.padItem.entities,
   padItemResultadoList: padItemResultado.entities,
   totalItems: padItemResultado.totalItems
 });
 
 const mapDispatchToProps = {
+  getPadItems,
   getEntities
 };
 

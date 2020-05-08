@@ -28,6 +28,9 @@ import { IPacientePush } from 'app/shared/model/paciente-push.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
+import { IPaciente } from 'app/shared/model/paciente.model';
+import { getEntities as getPacientes } from 'app/entities/paciente/paciente.reducer';
+
 export interface IPacientePushProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
 export interface IPacientePushState extends IPacientePushBaseState, IPaginationBaseState {}
@@ -45,6 +48,8 @@ export class PacientePush extends React.Component<IPacientePushProps, IPacienteP
 
   componentDidMount() {
     this.getEntities();
+
+    this.props.getPacientes();
   }
 
   cancelCourse = () => {
@@ -52,7 +57,8 @@ export class PacientePush extends React.Component<IPacientePushProps, IPacienteP
       {
         idFranquia: '',
         mensagem: '',
-        ativo: ''
+        ativo: '',
+        paciente: ''
       },
       () => this.sortEntities()
     );
@@ -108,6 +114,9 @@ export class PacientePush extends React.Component<IPacientePushProps, IPacienteP
       'ativo=' +
       this.state.ativo +
       '&' +
+      'paciente=' +
+      this.state.paciente +
+      '&' +
       ''
     );
   };
@@ -115,12 +124,12 @@ export class PacientePush extends React.Component<IPacientePushProps, IPacienteP
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { idFranquia, mensagem, ativo, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntities(idFranquia, mensagem, ativo, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const { idFranquia, mensagem, ativo, paciente, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntities(idFranquia, mensagem, ativo, paciente, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   render() {
-    const { pacientePushList, match, totalItems } = this.props;
+    const { pacientes, pacientePushList, match, totalItems } = this.props;
     return (
       <div>
         <h2 id="page-heading">
@@ -190,6 +199,33 @@ export class PacientePush extends React.Component<IPacientePushProps, IPacienteP
                           </Row>
                         </Col>
                       ) : null}
+
+                      {this.state.baseFilters !== 'paciente' ? (
+                        <Col md="3">
+                          <Row className="mr-1 mt-1">
+                            <div style={{ width: '100%' }}>
+                              <Label for="paciente-push-paciente">
+                                <Translate contentKey="generadorApp.pacientePush.paciente">Paciente</Translate>
+                              </Label>
+                              <Select
+                                id="paciente-push-paciente"
+                                isMulti
+                                className={'css-select-control'}
+                                value={
+                                  pacientes
+                                    ? pacientes.map(p =>
+                                        this.state.paciente.split(',').indexOf(p.id) !== -1 ? { value: p.id, label: p.id } : null
+                                      )
+                                    : null
+                                }
+                                options={pacientes ? pacientes.map(option => ({ value: option.id, label: option.id })) : null}
+                                onChange={options => this.setState({ paciente: options.map(option => option['value']).join(',') })}
+                                name={'paciente'}
+                              />
+                            </div>
+                          </Row>
+                        </Col>
+                      ) : null}
                     </div>
 
                     <div className="row mb-2 mr-4 justify-content-end">
@@ -236,6 +272,13 @@ export class PacientePush extends React.Component<IPacientePushProps, IPacienteP
                         </th>
                       ) : null}
 
+                      {this.state.baseFilters !== 'paciente' ? (
+                        <th>
+                          <Translate contentKey="generadorApp.pacientePush.paciente">Paciente</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+
                       <th />
                     </tr>
                   </thead>
@@ -254,6 +297,16 @@ export class PacientePush extends React.Component<IPacientePushProps, IPacienteP
                         {this.state.baseFilters !== 'mensagem' ? <td>{pacientePush.mensagem}</td> : null}
 
                         {this.state.baseFilters !== 'ativo' ? <td>{pacientePush.ativo}</td> : null}
+
+                        {this.state.baseFilters !== 'paciente' ? (
+                          <td>
+                            {pacientePush.paciente ? (
+                              <Link to={`paciente/${pacientePush.paciente.id}`}>{pacientePush.paciente.id}</Link>
+                            ) : (
+                              ''
+                            )}
+                          </td>
+                        ) : null}
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">
@@ -321,11 +374,13 @@ export class PacientePush extends React.Component<IPacientePushProps, IPacienteP
 }
 
 const mapStateToProps = ({ pacientePush, ...storeState }: IRootState) => ({
+  pacientes: storeState.paciente.entities,
   pacientePushList: pacientePush.entities,
   totalItems: pacientePush.totalItems
 });
 
 const mapDispatchToProps = {
+  getPacientes,
   getEntities
 };
 

@@ -28,6 +28,13 @@ import { ICidXPtaNovoPadItemIndi } from 'app/shared/model/cid-x-pta-novo-pad-ite
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
+import { IPadItemIndicadores } from 'app/shared/model/pad-item-indicadores.model';
+import { getEntities as getPadItemIndicadores } from 'app/entities/pad-item-indicadores/pad-item-indicadores.reducer';
+import { ICategoria } from 'app/shared/model/categoria.model';
+import { getEntities as getCategorias } from 'app/entities/categoria/categoria.reducer';
+import { ICidXPtaNovo } from 'app/shared/model/cid-x-pta-novo.model';
+import { getEntities as getCidXPtaNovos } from 'app/entities/cid-x-pta-novo/cid-x-pta-novo.reducer';
+
 export interface ICidXPtaNovoPadItemIndiProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
 export interface ICidXPtaNovoPadItemIndiState extends ICidXPtaNovoPadItemIndiBaseState, IPaginationBaseState {}
@@ -45,6 +52,10 @@ export class CidXPtaNovoPadItemIndi extends React.Component<ICidXPtaNovoPadItemI
 
   componentDidMount() {
     this.getEntities();
+
+    this.props.getPadItemIndicadores();
+    this.props.getCategorias();
+    this.props.getCidXPtaNovos();
   }
 
   cancelCourse = () => {
@@ -55,7 +66,11 @@ export class CidXPtaNovoPadItemIndi extends React.Component<ICidXPtaNovoPadItemI
         minimo: '',
         unidadeMedidaExtra: '',
         unidadeMedidaId: '',
-        score: ''
+        score: '',
+        alertasIndicadores: '',
+        padItemIndicadores: '',
+        categorias: '',
+        cidXPtaNovo: ''
       },
       () => this.sortEntities()
     );
@@ -120,6 +135,18 @@ export class CidXPtaNovoPadItemIndi extends React.Component<ICidXPtaNovoPadItemI
       'score=' +
       this.state.score +
       '&' +
+      'alertasIndicadores=' +
+      this.state.alertasIndicadores +
+      '&' +
+      'padItemIndicadores=' +
+      this.state.padItemIndicadores +
+      '&' +
+      'categorias=' +
+      this.state.categorias +
+      '&' +
+      'cidXPtaNovo=' +
+      this.state.cidXPtaNovo +
+      '&' +
       ''
     );
   };
@@ -127,7 +154,22 @@ export class CidXPtaNovoPadItemIndi extends React.Component<ICidXPtaNovoPadItemI
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { meta, maximo, minimo, unidadeMedidaExtra, unidadeMedidaId, score, activePage, itemsPerPage, sort, order } = this.state;
+    const {
+      meta,
+      maximo,
+      minimo,
+      unidadeMedidaExtra,
+      unidadeMedidaId,
+      score,
+      alertasIndicadores,
+      padItemIndicadores,
+      categorias,
+      cidXPtaNovo,
+      activePage,
+      itemsPerPage,
+      sort,
+      order
+    } = this.state;
     this.props.getEntities(
       meta,
       maximo,
@@ -135,6 +177,10 @@ export class CidXPtaNovoPadItemIndi extends React.Component<ICidXPtaNovoPadItemI
       unidadeMedidaExtra,
       unidadeMedidaId,
       score,
+      alertasIndicadores,
+      padItemIndicadores,
+      categorias,
+      cidXPtaNovo,
       activePage - 1,
       itemsPerPage,
       `${sort},${order}`
@@ -142,7 +188,7 @@ export class CidXPtaNovoPadItemIndi extends React.Component<ICidXPtaNovoPadItemI
   };
 
   render() {
-    const { cidXPtaNovoPadItemIndiList, match, totalItems } = this.props;
+    const { padItemIndicadores, categorias, cidXPtaNovos, cidXPtaNovoPadItemIndiList, match, totalItems } = this.props;
     return (
       <div>
         <h2 id="page-heading">
@@ -261,6 +307,99 @@ export class CidXPtaNovoPadItemIndi extends React.Component<ICidXPtaNovoPadItemI
                           </Row>
                         </Col>
                       ) : null}
+
+                      {this.state.baseFilters !== 'alertasIndicadores' ? (
+                        <Col md="3">
+                          <Row className="mr-1 mt-1"></Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'padItemIndicadores' ? (
+                        <Col md="3">
+                          <Row className="mr-1 mt-1">
+                            <div style={{ width: '100%' }}>
+                              <Label for="cid-x-pta-novo-pad-item-indi-padItemIndicadores">
+                                <Translate contentKey="generadorApp.cidXPtaNovoPadItemIndi.padItemIndicadores">
+                                  Pad Item Indicadores
+                                </Translate>
+                              </Label>
+                              <Select
+                                id="cid-x-pta-novo-pad-item-indi-padItemIndicadores"
+                                isMulti
+                                className={'css-select-control'}
+                                value={
+                                  padItemIndicadores
+                                    ? padItemIndicadores.map(p =>
+                                        this.state.padItemIndicadores.split(',').indexOf(p.id) !== -1 ? { value: p.id, label: p.id } : null
+                                      )
+                                    : null
+                                }
+                                options={
+                                  padItemIndicadores ? padItemIndicadores.map(option => ({ value: option.id, label: option.id })) : null
+                                }
+                                onChange={options =>
+                                  this.setState({ padItemIndicadores: options.map(option => option['value']).join(',') })
+                                }
+                                name={'padItemIndicadores'}
+                              />
+                            </div>
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'categorias' ? (
+                        <Col md="3">
+                          <Row className="mr-1 mt-1">
+                            <div style={{ width: '100%' }}>
+                              <Label for="cid-x-pta-novo-pad-item-indi-categorias">
+                                <Translate contentKey="generadorApp.cidXPtaNovoPadItemIndi.categorias">Categorias</Translate>
+                              </Label>
+                              <Select
+                                id="cid-x-pta-novo-pad-item-indi-categorias"
+                                isMulti
+                                className={'css-select-control'}
+                                value={
+                                  categorias
+                                    ? categorias.map(p =>
+                                        this.state.categorias.split(',').indexOf(p.id) !== -1 ? { value: p.id, label: p.id } : null
+                                      )
+                                    : null
+                                }
+                                options={categorias ? categorias.map(option => ({ value: option.id, label: option.id })) : null}
+                                onChange={options => this.setState({ categorias: options.map(option => option['value']).join(',') })}
+                                name={'categorias'}
+                              />
+                            </div>
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'cidXPtaNovo' ? (
+                        <Col md="3">
+                          <Row className="mr-1 mt-1">
+                            <div style={{ width: '100%' }}>
+                              <Label for="cid-x-pta-novo-pad-item-indi-cidXPtaNovo">
+                                <Translate contentKey="generadorApp.cidXPtaNovoPadItemIndi.cidXPtaNovo">Cid X Pta Novo</Translate>
+                              </Label>
+                              <Select
+                                id="cid-x-pta-novo-pad-item-indi-cidXPtaNovo"
+                                isMulti
+                                className={'css-select-control'}
+                                value={
+                                  cidXPtaNovos
+                                    ? cidXPtaNovos.map(p =>
+                                        this.state.cidXPtaNovo.split(',').indexOf(p.id) !== -1 ? { value: p.id, label: p.id } : null
+                                      )
+                                    : null
+                                }
+                                options={cidXPtaNovos ? cidXPtaNovos.map(option => ({ value: option.id, label: option.id })) : null}
+                                onChange={options => this.setState({ cidXPtaNovo: options.map(option => option['value']).join(',') })}
+                                name={'cidXPtaNovo'}
+                              />
+                            </div>
+                          </Row>
+                        </Col>
+                      ) : null}
                     </div>
 
                     <div className="row mb-2 mr-4 justify-content-end">
@@ -325,6 +464,27 @@ export class CidXPtaNovoPadItemIndi extends React.Component<ICidXPtaNovoPadItemI
                         </th>
                       ) : null}
 
+                      {this.state.baseFilters !== 'padItemIndicadores' ? (
+                        <th>
+                          <Translate contentKey="generadorApp.cidXPtaNovoPadItemIndi.padItemIndicadores">Pad Item Indicadores</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'categorias' ? (
+                        <th>
+                          <Translate contentKey="generadorApp.cidXPtaNovoPadItemIndi.categorias">Categorias</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'cidXPtaNovo' ? (
+                        <th>
+                          <Translate contentKey="generadorApp.cidXPtaNovoPadItemIndi.cidXPtaNovo">Cid X Pta Novo</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+
                       <th />
                     </tr>
                   </thead>
@@ -349,6 +509,40 @@ export class CidXPtaNovoPadItemIndi extends React.Component<ICidXPtaNovoPadItemI
                         {this.state.baseFilters !== 'unidadeMedidaId' ? <td>{cidXPtaNovoPadItemIndi.unidadeMedidaId}</td> : null}
 
                         {this.state.baseFilters !== 'score' ? <td>{cidXPtaNovoPadItemIndi.score}</td> : null}
+
+                        {this.state.baseFilters !== 'padItemIndicadores' ? (
+                          <td>
+                            {cidXPtaNovoPadItemIndi.padItemIndicadores ? (
+                              <Link to={`pad-item-indicadores/${cidXPtaNovoPadItemIndi.padItemIndicadores.id}`}>
+                                {cidXPtaNovoPadItemIndi.padItemIndicadores.id}
+                              </Link>
+                            ) : (
+                              ''
+                            )}
+                          </td>
+                        ) : null}
+
+                        {this.state.baseFilters !== 'categorias' ? (
+                          <td>
+                            {cidXPtaNovoPadItemIndi.categorias ? (
+                              <Link to={`categoria/${cidXPtaNovoPadItemIndi.categorias.id}`}>{cidXPtaNovoPadItemIndi.categorias.id}</Link>
+                            ) : (
+                              ''
+                            )}
+                          </td>
+                        ) : null}
+
+                        {this.state.baseFilters !== 'cidXPtaNovo' ? (
+                          <td>
+                            {cidXPtaNovoPadItemIndi.cidXPtaNovo ? (
+                              <Link to={`cid-x-pta-novo/${cidXPtaNovoPadItemIndi.cidXPtaNovo.id}`}>
+                                {cidXPtaNovoPadItemIndi.cidXPtaNovo.id}
+                              </Link>
+                            ) : (
+                              ''
+                            )}
+                          </td>
+                        ) : null}
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">
@@ -423,11 +617,17 @@ export class CidXPtaNovoPadItemIndi extends React.Component<ICidXPtaNovoPadItemI
 }
 
 const mapStateToProps = ({ cidXPtaNovoPadItemIndi, ...storeState }: IRootState) => ({
+  padItemIndicadores: storeState.padItemIndicadores.entities,
+  categorias: storeState.categoria.entities,
+  cidXPtaNovos: storeState.cidXPtaNovo.entities,
   cidXPtaNovoPadItemIndiList: cidXPtaNovoPadItemIndi.entities,
   totalItems: cidXPtaNovoPadItemIndi.totalItems
 });
 
 const mapDispatchToProps = {
+  getPadItemIndicadores,
+  getCategorias,
+  getCidXPtaNovos,
   getEntities
 };
 

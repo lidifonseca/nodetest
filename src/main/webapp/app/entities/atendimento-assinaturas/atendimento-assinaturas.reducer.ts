@@ -34,12 +34,21 @@ export type AtendimentoAssinaturasState = Readonly<typeof initialState>;
 export interface IAtendimentoAssinaturasBaseState {
   baseFilters: any;
   arquivoAssinatura: any;
+  atendimento: any;
+  profissional: any;
+  paciente: any;
 }
 
 export interface IAtendimentoAssinaturasUpdateState {
   fieldsBase: IAtendimentoAssinaturasBaseState;
 
+  atendimentoSelectValue: any;
+  profissionalSelectValue: any;
+  pacienteSelectValue: any;
   isNew: boolean;
+  atendimentoId: string;
+  profissionalId: string;
+  pacienteId: string;
 }
 
 // Reducer
@@ -121,18 +130,34 @@ const apiUrl = 'api/atendimento-assinaturas';
 // Actions
 export type ICrudGetAllActionAtendimentoAssinaturas<T> = (
   arquivoAssinatura?: any,
+  atendimento?: any,
+  profissional?: any,
+  paciente?: any,
   page?: number,
   size?: number,
   sort?: string
 ) => IPayload<T> | ((dispatch: any) => IPayload<T>);
 
-export const getEntities: ICrudGetAllActionAtendimentoAssinaturas<IAtendimentoAssinaturas> = (arquivoAssinatura, page, size, sort) => {
+export const getEntities: ICrudGetAllActionAtendimentoAssinaturas<IAtendimentoAssinaturas> = (
+  arquivoAssinatura,
+  atendimento,
+  profissional,
+  paciente,
+  page,
+  size,
+  sort
+) => {
   const arquivoAssinaturaRequest = arquivoAssinatura ? `arquivoAssinatura.contains=${arquivoAssinatura}&` : '';
+  const atendimentoRequest = atendimento ? `atendimento.equals=${atendimento}&` : '';
+  const profissionalRequest = profissional ? `profissional.equals=${profissional}&` : '';
+  const pacienteRequest = paciente ? `paciente.equals=${paciente}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_ATENDIMENTOASSINATURAS_LIST,
-    payload: axios.get<IAtendimentoAssinaturas>(`${requestUrl}${arquivoAssinaturaRequest}cacheBuster=${new Date().getTime()}`)
+    payload: axios.get<IAtendimentoAssinaturas>(
+      `${requestUrl}${arquivoAssinaturaRequest}${atendimentoRequest}${profissionalRequest}${pacienteRequest}cacheBuster=${new Date().getTime()}`
+    )
   };
 };
 export const getEntity: ICrudGetAction<IAtendimentoAssinaturas> = id => {
@@ -145,22 +170,33 @@ export const getEntity: ICrudGetAction<IAtendimentoAssinaturas> = id => {
 
 export const getEntitiesExport: ICrudGetAllActionAtendimentoAssinaturas<IAtendimentoAssinaturas> = (
   arquivoAssinatura,
+  atendimento,
+  profissional,
+  paciente,
   page,
   size,
   sort
 ) => {
   const arquivoAssinaturaRequest = arquivoAssinatura ? `arquivoAssinatura.contains=${arquivoAssinatura}&` : '';
+  const atendimentoRequest = atendimento ? `atendimento.equals=${atendimento}&` : '';
+  const profissionalRequest = profissional ? `profissional.equals=${profissional}&` : '';
+  const pacienteRequest = paciente ? `paciente.equals=${paciente}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_ATENDIMENTOASSINATURAS_LIST,
-    payload: axios.get<IAtendimentoAssinaturas>(`${requestUrl}${arquivoAssinaturaRequest}cacheBuster=${new Date().getTime()}`)
+    payload: axios.get<IAtendimentoAssinaturas>(
+      `${requestUrl}${arquivoAssinaturaRequest}${atendimentoRequest}${profissionalRequest}${pacienteRequest}cacheBuster=${new Date().getTime()}`
+    )
   };
 };
 
 export const createEntity: ICrudPutAction<IAtendimentoAssinaturas> = entity => async dispatch => {
   entity = {
-    ...entity
+    ...entity,
+    atendimento: entity.atendimento === 'null' ? null : entity.atendimento,
+    profissional: entity.profissional === 'null' ? null : entity.profissional,
+    paciente: entity.paciente === 'null' ? null : entity.paciente
   };
   const result = await dispatch({
     type: ACTION_TYPES.CREATE_ATENDIMENTOASSINATURAS,
@@ -171,7 +207,12 @@ export const createEntity: ICrudPutAction<IAtendimentoAssinaturas> = entity => a
 };
 
 export const updateEntity: ICrudPutAction<IAtendimentoAssinaturas> = entity => async dispatch => {
-  entity = { ...entity };
+  entity = {
+    ...entity,
+    atendimento: entity.atendimento === 'null' ? null : entity.atendimento,
+    profissional: entity.profissional === 'null' ? null : entity.profissional,
+    paciente: entity.paciente === 'null' ? null : entity.paciente
+  };
   const result = await dispatch({
     type: ACTION_TYPES.UPDATE_ATENDIMENTOASSINATURAS,
     payload: axios.put(apiUrl, cleanEntity(entity))
@@ -199,8 +240,15 @@ export const getAtendimentoAssinaturasState = (location): IAtendimentoAssinatura
   const baseFilters = url.searchParams.get('baseFilters') || '';
   const arquivoAssinatura = url.searchParams.get('arquivoAssinatura') || '';
 
+  const atendimento = url.searchParams.get('atendimento') || '';
+  const profissional = url.searchParams.get('profissional') || '';
+  const paciente = url.searchParams.get('paciente') || '';
+
   return {
     baseFilters,
-    arquivoAssinatura
+    arquivoAssinatura,
+    atendimento,
+    profissional,
+    paciente
   };
 };

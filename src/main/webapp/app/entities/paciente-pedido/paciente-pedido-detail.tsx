@@ -175,6 +175,45 @@ export class PacientePedidoDetail extends React.Component<IPacientePedidoDetailP
                       </Col>
                     </Row>
                   </Col>
+
+                  <Col md="12">
+                    <Row>
+                      <Col md="3">
+                        <dt>
+                          <Translate contentKey="generadorApp.pacientePedido.paciente">Paciente</Translate>
+                        </dt>
+                      </Col>
+                      <Col md="9">
+                        <dd>{pacientePedidoEntity.paciente ? pacientePedidoEntity.paciente.id : ''}</dd>
+                      </Col>
+                    </Row>
+                  </Col>
+
+                  <Col md="12">
+                    <Row>
+                      <Col md="3">
+                        <dt>
+                          <Translate contentKey="generadorApp.pacientePedido.cartao">Cartao</Translate>
+                        </dt>
+                      </Col>
+                      <Col md="9">
+                        <dd>{pacientePedidoEntity.cartao ? pacientePedidoEntity.cartao.id : ''}</dd>
+                      </Col>
+                    </Row>
+                  </Col>
+
+                  <Col md="12">
+                    <Row>
+                      <Col md="3">
+                        <dt>
+                          <Translate contentKey="generadorApp.pacientePedido.especialidade">Especialidade</Translate>
+                        </dt>
+                      </Col>
+                      <Col md="9">
+                        <dd>{pacientePedidoEntity.especialidade ? pacientePedidoEntity.especialidade.id : ''}</dd>
+                      </Col>
+                    </Row>
+                  </Col>
                 </Row>
                 <Button tag={Link} to="/paciente-pedido" replace color="info">
                   <FontAwesomeIcon icon="arrow-left" />{' '}

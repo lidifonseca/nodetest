@@ -145,6 +145,8 @@ export class UfUpdate extends React.Component<IUfUpdateProps, IUfUpdateState> {
                         <SiglaUfComponentUpdate baseFilters />
 
                         <DescrUfComponentUpdate baseFilters />
+
+                        <CidadeComponentUpdate baseFilter cidades />
                       </Row>
                     </div>
                   )}
@@ -214,6 +216,14 @@ const DescrUfComponentUpdate = ({ baseFilters }) => {
     </Col>
   ) : (
     <AvInput type="hidden" name="descrUf" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const CidadeComponentUpdate = ({ baseFilters, cidades }) => {
+  return baseFilters !== 'cidade' ? (
+    <Col md="12"></Col>
+  ) : (
+    <AvInput type="hidden" name="cidade" value={this.state.fieldsBase[baseFilters]} />
   );
 };
 

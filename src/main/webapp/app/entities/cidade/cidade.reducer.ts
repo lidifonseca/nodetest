@@ -34,12 +34,17 @@ export type CidadeState = Readonly<typeof initialState>;
 export interface ICidadeBaseState {
   baseFilters: any;
   descrCidade: any;
+  atendimento: any;
+  empresa: any;
+  uf: any;
 }
 
 export interface ICidadeUpdateState {
   fieldsBase: ICidadeBaseState;
 
+  ufSelectValue: any;
   isNew: boolean;
+  ufId: string;
 }
 
 // Reducer
@@ -121,18 +126,26 @@ const apiUrl = 'api/cidades';
 // Actions
 export type ICrudGetAllActionCidade<T> = (
   descrCidade?: any,
+  atendimento?: any,
+  empresa?: any,
+  uf?: any,
   page?: number,
   size?: number,
   sort?: string
 ) => IPayload<T> | ((dispatch: any) => IPayload<T>);
 
-export const getEntities: ICrudGetAllActionCidade<ICidade> = (descrCidade, page, size, sort) => {
+export const getEntities: ICrudGetAllActionCidade<ICidade> = (descrCidade, atendimento, empresa, uf, page, size, sort) => {
   const descrCidadeRequest = descrCidade ? `descrCidade.contains=${descrCidade}&` : '';
+  const atendimentoRequest = atendimento ? `atendimento.equals=${atendimento}&` : '';
+  const empresaRequest = empresa ? `empresa.equals=${empresa}&` : '';
+  const ufRequest = uf ? `uf.equals=${uf}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_CIDADE_LIST,
-    payload: axios.get<ICidade>(`${requestUrl}${descrCidadeRequest}cacheBuster=${new Date().getTime()}`)
+    payload: axios.get<ICidade>(
+      `${requestUrl}${descrCidadeRequest}${atendimentoRequest}${empresaRequest}${ufRequest}cacheBuster=${new Date().getTime()}`
+    )
   };
 };
 export const getEntity: ICrudGetAction<ICidade> = id => {
@@ -143,19 +156,25 @@ export const getEntity: ICrudGetAction<ICidade> = id => {
   };
 };
 
-export const getEntitiesExport: ICrudGetAllActionCidade<ICidade> = (descrCidade, page, size, sort) => {
+export const getEntitiesExport: ICrudGetAllActionCidade<ICidade> = (descrCidade, atendimento, empresa, uf, page, size, sort) => {
   const descrCidadeRequest = descrCidade ? `descrCidade.contains=${descrCidade}&` : '';
+  const atendimentoRequest = atendimento ? `atendimento.equals=${atendimento}&` : '';
+  const empresaRequest = empresa ? `empresa.equals=${empresa}&` : '';
+  const ufRequest = uf ? `uf.equals=${uf}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_CIDADE_LIST,
-    payload: axios.get<ICidade>(`${requestUrl}${descrCidadeRequest}cacheBuster=${new Date().getTime()}`)
+    payload: axios.get<ICidade>(
+      `${requestUrl}${descrCidadeRequest}${atendimentoRequest}${empresaRequest}${ufRequest}cacheBuster=${new Date().getTime()}`
+    )
   };
 };
 
 export const createEntity: ICrudPutAction<ICidade> = entity => async dispatch => {
   entity = {
-    ...entity
+    ...entity,
+    uf: entity.uf === 'null' ? null : entity.uf
   };
   const result = await dispatch({
     type: ACTION_TYPES.CREATE_CIDADE,
@@ -166,7 +185,7 @@ export const createEntity: ICrudPutAction<ICidade> = entity => async dispatch =>
 };
 
 export const updateEntity: ICrudPutAction<ICidade> = entity => async dispatch => {
-  entity = { ...entity };
+  entity = { ...entity, uf: entity.uf === 'null' ? null : entity.uf };
   const result = await dispatch({
     type: ACTION_TYPES.UPDATE_CIDADE,
     payload: axios.put(apiUrl, cleanEntity(entity))
@@ -194,8 +213,15 @@ export const getCidadeState = (location): ICidadeBaseState => {
   const baseFilters = url.searchParams.get('baseFilters') || '';
   const descrCidade = url.searchParams.get('descrCidade') || '';
 
+  const atendimento = url.searchParams.get('atendimento') || '';
+  const empresa = url.searchParams.get('empresa') || '';
+  const uf = url.searchParams.get('uf') || '';
+
   return {
     baseFilters,
-    descrCidade
+    descrCidade,
+    atendimento,
+    empresa,
+    uf
   };
 };

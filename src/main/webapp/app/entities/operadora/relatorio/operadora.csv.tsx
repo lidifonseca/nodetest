@@ -82,6 +82,9 @@ export class Operadora extends React.Component<IOperadoraProps, IOperadoraState>
         nomeContatoFinanceiro: '',
         contatoFinanceiro: '',
         emailFinanceiro: '',
+        atendimento: '',
+        especialidadeOperadora: '',
+        pacienteOperadora: '',
         unidade: '',
         tipoOperadora: ''
       },
@@ -173,6 +176,15 @@ export class Operadora extends React.Component<IOperadoraProps, IOperadoraState>
       'emailFinanceiro=' +
       this.state.emailFinanceiro +
       '&' +
+      'atendimento=' +
+      this.state.atendimento +
+      '&' +
+      'especialidadeOperadora=' +
+      this.state.especialidadeOperadora +
+      '&' +
+      'pacienteOperadora=' +
+      this.state.pacienteOperadora +
+      '&' +
       'unidade=' +
       this.state.unidade +
       '&' +
@@ -202,6 +214,9 @@ export class Operadora extends React.Component<IOperadoraProps, IOperadoraState>
       nomeContatoFinanceiro,
       contatoFinanceiro,
       emailFinanceiro,
+      atendimento,
+      especialidadeOperadora,
+      pacienteOperadora,
       unidade,
       tipoOperadora,
       activePage,
@@ -225,6 +240,9 @@ export class Operadora extends React.Component<IOperadoraProps, IOperadoraState>
       nomeContatoFinanceiro,
       contatoFinanceiro,
       emailFinanceiro,
+      atendimento,
+      especialidadeOperadora,
+      pacienteOperadora,
       unidade,
       tipoOperadora,
       activePage - 1,

@@ -82,6 +82,32 @@ export class PadCidDetail extends React.Component<IPadCidDetailProps, IPadCidSta
                       </Col>
                     </Row>
                   </Col>
+
+                  <Col md="12">
+                    <Row>
+                      <Col md="3">
+                        <dt>
+                          <Translate contentKey="generadorApp.padCid.pad">Pad</Translate>
+                        </dt>
+                      </Col>
+                      <Col md="9">
+                        <dd>{padCidEntity.pad ? padCidEntity.pad.id : ''}</dd>
+                      </Col>
+                    </Row>
+                  </Col>
+
+                  <Col md="12">
+                    <Row>
+                      <Col md="3">
+                        <dt>
+                          <Translate contentKey="generadorApp.padCid.cid">Cid</Translate>
+                        </dt>
+                      </Col>
+                      <Col md="9">
+                        <dd>{padCidEntity.cid ? padCidEntity.cid.id : ''}</dd>
+                      </Col>
+                    </Row>
+                  </Col>
                 </Row>
                 <Button tag={Link} to="/pad-cid" replace color="info">
                   <FontAwesomeIcon icon="arrow-left" />{' '}

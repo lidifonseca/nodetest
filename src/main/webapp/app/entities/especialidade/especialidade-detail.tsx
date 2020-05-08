@@ -155,6 +155,45 @@ export class EspecialidadeDetail extends React.Component<IEspecialidadeDetailPro
                       </Col>
                     </Row>
                   </Col>
+
+                  <Col md="12">
+                    <Row>
+                      <Col md="3">
+                        <dt>
+                          <Translate contentKey="generadorApp.especialidade.categoria">Categoria</Translate>
+                        </dt>
+                      </Col>
+                      <Col md="9">
+                        <dd>{especialidadeEntity.categoria ? especialidadeEntity.categoria.id : ''}</dd>
+                      </Col>
+                    </Row>
+                  </Col>
+
+                  <Col md="12">
+                    <Row>
+                      <Col md="3">
+                        <dt>
+                          <Translate contentKey="generadorApp.especialidade.tipoEspecialidade">Tipo Especialidade</Translate>
+                        </dt>
+                      </Col>
+                      <Col md="9">
+                        <dd>{especialidadeEntity.tipoEspecialidade ? especialidadeEntity.tipoEspecialidade.id : ''}</dd>
+                      </Col>
+                    </Row>
+                  </Col>
+
+                  <Col md="12">
+                    <Row>
+                      <Col md="3">
+                        <dt>
+                          <Translate contentKey="generadorApp.especialidade.tipoUnidade">Tipo Unidade</Translate>
+                        </dt>
+                      </Col>
+                      <Col md="9">
+                        <dd>{especialidadeEntity.tipoUnidade ? especialidadeEntity.tipoUnidade.id : ''}</dd>
+                      </Col>
+                    </Row>
+                  </Col>
                 </Row>
                 <Button tag={Link} to="/especialidade" replace color="info">
                   <FontAwesomeIcon icon="arrow-left" />{' '}

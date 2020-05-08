@@ -14,8 +14,23 @@
             "fieldType": "Integer"
         }
     ],
-    "relationships": [],
-    "changelogDate": "20200508163200",
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "paciente",
+            "otherEntityRelationshipName": "pacienteOperadora",
+            "relationshipName": "paciente",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "operadora",
+            "otherEntityRelationshipName": "pacienteOperadora",
+            "relationshipName": "operadora",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20200508172800",
     "entityTableName": "paciente_operadora",
     "dto": "mapstruct",
     "pagination": "pagination",

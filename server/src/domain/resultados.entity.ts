@@ -4,6 +4,8 @@ import { BaseEntity } from './base/base.entity';
 
 import { validate, Contains, IsInt, Length, IsEmail, IsFQDN, IsDate, Min, Max } from 'class-validator';
 
+import AlertasResultadosEsperados from './alertas-resultados-esperados.entity';
+
 /**
  * A Resultados.
  */
@@ -26,6 +28,12 @@ export default class Resultados extends BaseEntity {
 
   @Column({ type: 'date', name: 'DATA_VENCIMENTO_PRAZO' })
   dataVencimentoPrazo: any;
+
+  @OneToMany(
+    type => AlertasResultadosEsperados,
+    other => other.resultados
+  )
+  alertasResultadosEsperados: AlertasResultadosEsperados[];
 
   // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
 }

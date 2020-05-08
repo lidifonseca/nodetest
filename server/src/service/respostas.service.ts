@@ -5,6 +5,7 @@ import Respostas from '../domain/respostas.entity';
 import { RespostasRepository } from '../repository/respostas.repository';
 
 const relationshipNames = [];
+relationshipNames.push('perguntasQuestionario');
 
 @Injectable()
 export class RespostasService {

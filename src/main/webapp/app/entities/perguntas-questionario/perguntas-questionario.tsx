@@ -28,6 +28,9 @@ import { IPerguntasQuestionario } from 'app/shared/model/perguntas-questionario.
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
+import { ISegmentosPerguntas } from 'app/shared/model/segmentos-perguntas.model';
+import { getEntities as getSegmentosPerguntas } from 'app/entities/segmentos-perguntas/segmentos-perguntas.reducer';
+
 export interface IPerguntasQuestionarioProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
 export interface IPerguntasQuestionarioState extends IPerguntasQuestionarioBaseState, IPaginationBaseState {}
@@ -45,6 +48,8 @@ export class PerguntasQuestionario extends React.Component<IPerguntasQuestionari
 
   componentDidMount() {
     this.getEntities();
+
+    this.props.getSegmentosPerguntas();
   }
 
   cancelCourse = () => {
@@ -53,7 +58,10 @@ export class PerguntasQuestionario extends React.Component<IPerguntasQuestionari
         pergunta: '',
         tipoResposta: '',
         obrigatorio: '',
-        tipoCampo: ''
+        tipoCampo: '',
+        acoesRespostas: '',
+        respostas: '',
+        segmentosPerguntas: ''
       },
       () => this.sortEntities()
     );
@@ -112,6 +120,15 @@ export class PerguntasQuestionario extends React.Component<IPerguntasQuestionari
       'tipoCampo=' +
       this.state.tipoCampo +
       '&' +
+      'acoesRespostas=' +
+      this.state.acoesRespostas +
+      '&' +
+      'respostas=' +
+      this.state.respostas +
+      '&' +
+      'segmentosPerguntas=' +
+      this.state.segmentosPerguntas +
+      '&' +
       ''
     );
   };
@@ -119,12 +136,35 @@ export class PerguntasQuestionario extends React.Component<IPerguntasQuestionari
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { pergunta, tipoResposta, obrigatorio, tipoCampo, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntities(pergunta, tipoResposta, obrigatorio, tipoCampo, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const {
+      pergunta,
+      tipoResposta,
+      obrigatorio,
+      tipoCampo,
+      acoesRespostas,
+      respostas,
+      segmentosPerguntas,
+      activePage,
+      itemsPerPage,
+      sort,
+      order
+    } = this.state;
+    this.props.getEntities(
+      pergunta,
+      tipoResposta,
+      obrigatorio,
+      tipoCampo,
+      acoesRespostas,
+      respostas,
+      segmentosPerguntas,
+      activePage - 1,
+      itemsPerPage,
+      `${sort},${order}`
+    );
   };
 
   render() {
-    const { perguntasQuestionarioList, match, totalItems } = this.props;
+    const { segmentosPerguntas, perguntasQuestionarioList, match, totalItems } = this.props;
     return (
       <div>
         <h2 id="page-heading">
@@ -216,6 +256,51 @@ export class PerguntasQuestionario extends React.Component<IPerguntasQuestionari
                           </Row>
                         </Col>
                       ) : null}
+
+                      {this.state.baseFilters !== 'acoesRespostas' ? (
+                        <Col md="3">
+                          <Row className="mr-1 mt-1"></Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'respostas' ? (
+                        <Col md="3">
+                          <Row className="mr-1 mt-1"></Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'segmentosPerguntas' ? (
+                        <Col md="3">
+                          <Row className="mr-1 mt-1">
+                            <div style={{ width: '100%' }}>
+                              <Label for="perguntas-questionario-segmentosPerguntas">
+                                <Translate contentKey="generadorApp.perguntasQuestionario.segmentosPerguntas">
+                                  Segmentos Perguntas
+                                </Translate>
+                              </Label>
+                              <Select
+                                id="perguntas-questionario-segmentosPerguntas"
+                                isMulti
+                                className={'css-select-control'}
+                                value={
+                                  segmentosPerguntas
+                                    ? segmentosPerguntas.map(p =>
+                                        this.state.segmentosPerguntas.split(',').indexOf(p.id) !== -1 ? { value: p.id, label: p.id } : null
+                                      )
+                                    : null
+                                }
+                                options={
+                                  segmentosPerguntas ? segmentosPerguntas.map(option => ({ value: option.id, label: option.id })) : null
+                                }
+                                onChange={options =>
+                                  this.setState({ segmentosPerguntas: options.map(option => option['value']).join(',') })
+                                }
+                                name={'segmentosPerguntas'}
+                              />
+                            </div>
+                          </Row>
+                        </Col>
+                      ) : null}
                     </div>
 
                     <div className="row mb-2 mr-4 justify-content-end">
@@ -268,6 +353,13 @@ export class PerguntasQuestionario extends React.Component<IPerguntasQuestionari
                         </th>
                       ) : null}
 
+                      {this.state.baseFilters !== 'segmentosPerguntas' ? (
+                        <th>
+                          <Translate contentKey="generadorApp.perguntasQuestionario.segmentosPerguntas">Segmentos Perguntas</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+
                       <th />
                     </tr>
                   </thead>
@@ -288,6 +380,18 @@ export class PerguntasQuestionario extends React.Component<IPerguntasQuestionari
                         {this.state.baseFilters !== 'obrigatorio' ? <td>{perguntasQuestionario.obrigatorio ? 'true' : 'false'}</td> : null}
 
                         {this.state.baseFilters !== 'tipoCampo' ? <td>{perguntasQuestionario.tipoCampo}</td> : null}
+
+                        {this.state.baseFilters !== 'segmentosPerguntas' ? (
+                          <td>
+                            {perguntasQuestionario.segmentosPerguntas ? (
+                              <Link to={`segmentos-perguntas/${perguntasQuestionario.segmentosPerguntas.id}`}>
+                                {perguntasQuestionario.segmentosPerguntas.id}
+                              </Link>
+                            ) : (
+                              ''
+                            )}
+                          </td>
+                        ) : null}
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">
@@ -360,11 +464,13 @@ export class PerguntasQuestionario extends React.Component<IPerguntasQuestionari
 }
 
 const mapStateToProps = ({ perguntasQuestionario, ...storeState }: IRootState) => ({
+  segmentosPerguntas: storeState.segmentosPerguntas.entities,
   perguntasQuestionarioList: perguntasQuestionario.entities,
   totalItems: perguntasQuestionario.totalItems
 });
 
 const mapDispatchToProps = {
+  getSegmentosPerguntas,
   getEntities
 };
 

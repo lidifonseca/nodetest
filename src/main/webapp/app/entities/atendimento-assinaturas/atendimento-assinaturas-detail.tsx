@@ -68,6 +68,45 @@ export class AtendimentoAssinaturasDetail extends React.Component<IAtendimentoAs
                       </Col>
                     </Row>
                   </Col>
+
+                  <Col md="12">
+                    <Row>
+                      <Col md="3">
+                        <dt>
+                          <Translate contentKey="generadorApp.atendimentoAssinaturas.atendimento">Atendimento</Translate>
+                        </dt>
+                      </Col>
+                      <Col md="9">
+                        <dd>{atendimentoAssinaturasEntity.atendimento ? atendimentoAssinaturasEntity.atendimento.id : ''}</dd>
+                      </Col>
+                    </Row>
+                  </Col>
+
+                  <Col md="12">
+                    <Row>
+                      <Col md="3">
+                        <dt>
+                          <Translate contentKey="generadorApp.atendimentoAssinaturas.profissional">Profissional</Translate>
+                        </dt>
+                      </Col>
+                      <Col md="9">
+                        <dd>{atendimentoAssinaturasEntity.profissional ? atendimentoAssinaturasEntity.profissional.id : ''}</dd>
+                      </Col>
+                    </Row>
+                  </Col>
+
+                  <Col md="12">
+                    <Row>
+                      <Col md="3">
+                        <dt>
+                          <Translate contentKey="generadorApp.atendimentoAssinaturas.paciente">Paciente</Translate>
+                        </dt>
+                      </Col>
+                      <Col md="9">
+                        <dd>{atendimentoAssinaturasEntity.paciente ? atendimentoAssinaturasEntity.paciente.id : ''}</dd>
+                      </Col>
+                    </Row>
+                  </Col>
                 </Row>
                 <Button tag={Link} to="/atendimento-assinaturas" replace color="info">
                   <FontAwesomeIcon icon="arrow-left" />{' '}

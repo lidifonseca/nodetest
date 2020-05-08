@@ -30,8 +30,22 @@
             "fieldType": "Integer"
         }
     ],
-    "relationships": [],
-    "changelogDate": "20200508162100",
+    "relationships": [
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "pacientePedido",
+            "otherEntityRelationshipName": "cartao",
+            "relationshipName": "pacientePedido"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "paciente",
+            "otherEntityRelationshipName": "pacienteDadosCartao",
+            "relationshipName": "paciente",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20200508171700",
     "entityTableName": "paciente_dados_cartao",
     "dto": "mapstruct",
     "pagination": "pagination",

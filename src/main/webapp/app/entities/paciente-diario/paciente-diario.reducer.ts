@@ -37,12 +37,18 @@ export interface IPacienteDiarioBaseState {
   idOperadora: any;
   historico: any;
   ativo: any;
+  paciente: any;
+  usuario: any;
 }
 
 export interface IPacienteDiarioUpdateState {
   fieldsBase: IPacienteDiarioBaseState;
 
+  pacienteSelectValue: any;
+  usuarioSelectValue: any;
   isNew: boolean;
+  pacienteId: string;
+  usuarioId: string;
 }
 
 // Reducer
@@ -141,21 +147,34 @@ export type ICrudGetAllActionPacienteDiario<T> = (
   idOperadora?: any,
   historico?: any,
   ativo?: any,
+  paciente?: any,
+  usuario?: any,
   page?: number,
   size?: number,
   sort?: string
 ) => IPayload<T> | ((dispatch: any) => IPayload<T>);
 
-export const getEntities: ICrudGetAllActionPacienteDiario<IPacienteDiario> = (idOperadora, historico, ativo, page, size, sort) => {
+export const getEntities: ICrudGetAllActionPacienteDiario<IPacienteDiario> = (
+  idOperadora,
+  historico,
+  ativo,
+  paciente,
+  usuario,
+  page,
+  size,
+  sort
+) => {
   const idOperadoraRequest = idOperadora ? `idOperadora.contains=${idOperadora}&` : '';
   const historicoRequest = historico ? `historico.contains=${historico}&` : '';
   const ativoRequest = ativo ? `ativo.contains=${ativo}&` : '';
+  const pacienteRequest = paciente ? `paciente.equals=${paciente}&` : '';
+  const usuarioRequest = usuario ? `usuario.equals=${usuario}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_PACIENTEDIARIO_LIST,
     payload: axios.get<IPacienteDiario>(
-      `${requestUrl}${idOperadoraRequest}${historicoRequest}${ativoRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${idOperadoraRequest}${historicoRequest}${ativoRequest}${pacienteRequest}${usuarioRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };
@@ -167,23 +186,36 @@ export const getEntity: ICrudGetAction<IPacienteDiario> = id => {
   };
 };
 
-export const getEntitiesExport: ICrudGetAllActionPacienteDiario<IPacienteDiario> = (idOperadora, historico, ativo, page, size, sort) => {
+export const getEntitiesExport: ICrudGetAllActionPacienteDiario<IPacienteDiario> = (
+  idOperadora,
+  historico,
+  ativo,
+  paciente,
+  usuario,
+  page,
+  size,
+  sort
+) => {
   const idOperadoraRequest = idOperadora ? `idOperadora.contains=${idOperadora}&` : '';
   const historicoRequest = historico ? `historico.contains=${historico}&` : '';
   const ativoRequest = ativo ? `ativo.contains=${ativo}&` : '';
+  const pacienteRequest = paciente ? `paciente.equals=${paciente}&` : '';
+  const usuarioRequest = usuario ? `usuario.equals=${usuario}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_PACIENTEDIARIO_LIST,
     payload: axios.get<IPacienteDiario>(
-      `${requestUrl}${idOperadoraRequest}${historicoRequest}${ativoRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${idOperadoraRequest}${historicoRequest}${ativoRequest}${pacienteRequest}${usuarioRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };
 
 export const createEntity: ICrudPutAction<IPacienteDiario> = entity => async dispatch => {
   entity = {
-    ...entity
+    ...entity,
+    paciente: entity.paciente === 'null' ? null : entity.paciente,
+    usuario: entity.usuario === 'null' ? null : entity.usuario
   };
   const result = await dispatch({
     type: ACTION_TYPES.CREATE_PACIENTEDIARIO,
@@ -194,7 +226,11 @@ export const createEntity: ICrudPutAction<IPacienteDiario> = entity => async dis
 };
 
 export const updateEntity: ICrudPutAction<IPacienteDiario> = entity => async dispatch => {
-  entity = { ...entity };
+  entity = {
+    ...entity,
+    paciente: entity.paciente === 'null' ? null : entity.paciente,
+    usuario: entity.usuario === 'null' ? null : entity.usuario
+  };
   const result = await dispatch({
     type: ACTION_TYPES.UPDATE_PACIENTEDIARIO,
     payload: axios.put(apiUrl, cleanEntity(entity))
@@ -234,10 +270,15 @@ export const getPacienteDiarioState = (location): IPacienteDiarioBaseState => {
   const historico = url.searchParams.get('historico') || '';
   const ativo = url.searchParams.get('ativo') || '';
 
+  const paciente = url.searchParams.get('paciente') || '';
+  const usuario = url.searchParams.get('usuario') || '';
+
   return {
     baseFilters,
     idOperadora,
     historico,
-    ativo
+    ativo,
+    paciente,
+    usuario
   };
 };

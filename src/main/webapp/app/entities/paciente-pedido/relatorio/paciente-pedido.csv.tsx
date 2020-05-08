@@ -45,6 +45,12 @@ import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
 import { IUnidadeEasy } from 'app/shared/model/unidade-easy.model';
 import { getEntities as getUnidadeEasies } from 'app/entities/unidade-easy/unidade-easy.reducer';
+import { IPaciente } from 'app/shared/model/paciente.model';
+import { getEntities as getPacientes } from 'app/entities/paciente/paciente.reducer';
+import { IPacienteDadosCartao } from 'app/shared/model/paciente-dados-cartao.model';
+import { getEntities as getPacienteDadosCartaos } from 'app/entities/paciente-dados-cartao/paciente-dados-cartao.reducer';
+import { IEspecialidade } from 'app/shared/model/especialidade.model';
+import { getEntities as getEspecialidades } from 'app/entities/especialidade/especialidade.reducer';
 
 export interface IPacientePedidoProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
@@ -68,6 +74,9 @@ export class PacientePedido extends React.Component<IPacientePedidoProps, IPacie
     this.getEntities();
 
     this.props.getUnidadeEasies();
+    this.props.getPacientes();
+    this.props.getPacienteDadosCartaos();
+    this.props.getEspecialidades();
   }
 
   cancelCourse = () => {
@@ -80,7 +89,10 @@ export class PacientePedido extends React.Component<IPacientePedidoProps, IPacie
         valor: '',
         desconto: '',
         tipoValor: '',
-        unidade: ''
+        unidade: '',
+        paciente: '',
+        cartao: '',
+        especialidade: ''
       },
       () => this.sortEntities()
     );
@@ -149,6 +161,15 @@ export class PacientePedido extends React.Component<IPacientePedidoProps, IPacie
       'unidade=' +
       this.state.unidade +
       '&' +
+      'paciente=' +
+      this.state.paciente +
+      '&' +
+      'cartao=' +
+      this.state.cartao +
+      '&' +
+      'especialidade=' +
+      this.state.especialidade +
+      '&' +
       ''
     );
   };
@@ -165,6 +186,9 @@ export class PacientePedido extends React.Component<IPacientePedidoProps, IPacie
       desconto,
       tipoValor,
       unidade,
+      paciente,
+      cartao,
+      especialidade,
       activePage,
       itemsPerPage,
       sort,
@@ -179,6 +203,9 @@ export class PacientePedido extends React.Component<IPacientePedidoProps, IPacie
       desconto,
       tipoValor,
       unidade,
+      paciente,
+      cartao,
+      especialidade,
       activePage - 1,
       itemsPerPage,
       `${sort},${order}`
@@ -232,12 +259,18 @@ export class PacientePedido extends React.Component<IPacientePedidoProps, IPacie
 
 const mapStateToProps = ({ pacientePedido, ...storeState }: IRootState) => ({
   unidadeEasies: storeState.unidadeEasy.entities,
+  pacientes: storeState.paciente.entities,
+  pacienteDadosCartaos: storeState.pacienteDadosCartao.entities,
+  especialidades: storeState.especialidade.entities,
   pacientePedidoList: pacientePedido.entities,
   totalItems: pacientePedido.totalItems
 });
 
 const mapDispatchToProps = {
   getUnidadeEasies,
+  getPacientes,
+  getPacienteDadosCartaos,
+  getEspecialidades,
   getEntitiesExport
 };
 

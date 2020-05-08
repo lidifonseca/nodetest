@@ -5,6 +5,7 @@ import CategoriaContrato from '../domain/categoria-contrato.entity';
 import { CategoriaContratoRepository } from '../repository/categoria-contrato.repository';
 
 const relationshipNames = [];
+relationshipNames.push('categoria');
 
 @Injectable()
 export class CategoriaContratoService {

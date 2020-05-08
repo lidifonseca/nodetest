@@ -4,7 +4,17 @@ import { BaseEntity } from './base/base.entity';
 
 import { validate, Contains, IsInt, Length, IsEmail, IsFQDN, IsDate, Min, Max } from 'class-validator';
 
+import AtendimentoAceite from './atendimento-aceite.entity';
+import AtendimentoAssinaturas from './atendimento-assinaturas.entity';
+import AtendimentoAtividades from './atendimento-atividades.entity';
 import UnidadeEasy from './unidade-easy.entity';
+import Paciente from './paciente.entity';
+import Operadora from './operadora.entity';
+import Especialidade from './especialidade.entity';
+import PadItem from './pad-item.entity';
+import StatusAtendimento from './status-atendimento.entity';
+import Periodo from './periodo.entity';
+import Cidade from './cidade.entity';
 
 /**
  * A Atendimento.
@@ -116,9 +126,55 @@ export default class Atendimento extends BaseEntity {
   @Column({ name: 'IMAGEM_ASSINATURA', length: 245 })
   imagemAssinatura: string;
 
+  @OneToMany(
+    type => AtendimentoAceite,
+    other => other.atendimento
+  )
+  atendimentoAceites: AtendimentoAceite[];
+
+  @OneToMany(
+    type => AtendimentoAssinaturas,
+    other => other.atendimento
+  )
+  atendimentoAssinaturas: AtendimentoAssinaturas[];
+
+  @OneToMany(
+    type => AtendimentoAtividades,
+    other => other.atendimento
+  )
+  atendimentoAtividades: AtendimentoAtividades[];
+
   @ManyToOne(type => UnidadeEasy)
   @JoinColumn({ name: 'ID_UNIDADE', referencedColumnName: 'id' })
   unidade: UnidadeEasy;
+
+  @ManyToOne(type => Paciente)
+  @JoinColumn({ name: 'ID_PACIENTE', referencedColumnName: 'id' })
+  paciente: Paciente;
+
+  @ManyToOne(type => Operadora)
+  @JoinColumn({ name: 'ID_OPERADORA', referencedColumnName: 'id' })
+  operadora: Operadora;
+
+  @ManyToOne(type => Especialidade)
+  @JoinColumn({ name: 'ID_ESPECIALIDADE', referencedColumnName: 'id' })
+  especialidade: Especialidade;
+
+  @ManyToOne(type => PadItem)
+  @JoinColumn({ name: 'ID_PAD_ITEM', referencedColumnName: 'id' })
+  padItem: PadItem;
+
+  @ManyToOne(type => StatusAtendimento)
+  @JoinColumn({ name: 'ID_STATUS_ATENDIMENTO', referencedColumnName: 'id' })
+  statusAtendimento: StatusAtendimento;
+
+  @ManyToOne(type => Periodo)
+  @JoinColumn({ name: 'ID_PERIODO', referencedColumnName: 'id' })
+  periodo: Periodo;
+
+  @ManyToOne(type => Cidade)
+  @JoinColumn({ name: 'ID_CIDADE', referencedColumnName: 'id' })
+  cidade: Cidade;
 
   // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
 }

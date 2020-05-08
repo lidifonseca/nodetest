@@ -28,7 +28,9 @@
       "publicar": "Publicar",
       "comentarioPreco": "Comentario Preco",
       "unidade_empty": "Sem Unidade",
-      "unidade": "Unidade"
+      "unidade": "Unidade",
+      "especialidade_empty": "Sem Especialidade",
+      "especialidade": "Especialidade"
     }
   }
 }

@@ -24,7 +24,11 @@
       },
       "idOperadora": "Id Operadora",
       "historico": "Historico",
-      "ativo": "Ativo"
+      "ativo": "Ativo",
+      "paciente_empty": "Without Paciente",
+      "paciente": "Paciente",
+      "usuario_empty": "Without Usuario",
+      "usuario": "Usuario"
     }
   }
 }

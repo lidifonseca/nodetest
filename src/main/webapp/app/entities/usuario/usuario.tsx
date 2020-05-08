@@ -39,6 +39,8 @@ import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
 import { IUnidadeEasy } from 'app/shared/model/unidade-easy.model';
 import { getEntities as getUnidadeEasies } from 'app/entities/unidade-easy/unidade-easy.reducer';
+import { ITipoUsuario } from 'app/shared/model/tipo-usuario.model';
+import { getEntities as getTipoUsuarios } from 'app/entities/tipo-usuario/tipo-usuario.reducer';
 
 export interface IUsuarioProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
@@ -59,6 +61,7 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
     this.getEntities();
 
     this.props.getUnidadeEasies();
+    this.props.getTipoUsuarios();
   }
 
   cancelCourse = () => {
@@ -187,7 +190,10 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
         envioAnaliseResultadoEsperado: '',
         envioDescumprimento: '',
         envioMelhoraTempo: '',
-        unidade: ''
+        diario: '',
+        pacienteDiario: '',
+        unidade: '',
+        tipoUsuario: ''
       },
       () => this.sortEntities()
     );
@@ -603,8 +609,17 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
       'envioMelhoraTempo=' +
       this.state.envioMelhoraTempo +
       '&' +
+      'diario=' +
+      this.state.diario +
+      '&' +
+      'pacienteDiario=' +
+      this.state.pacienteDiario +
+      '&' +
       'unidade=' +
       this.state.unidade +
+      '&' +
+      'tipoUsuario=' +
+      this.state.tipoUsuario +
       '&' +
       ''
     );
@@ -737,7 +752,10 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
       envioAnaliseResultadoEsperado,
       envioDescumprimento,
       envioMelhoraTempo,
+      diario,
+      pacienteDiario,
       unidade,
+      tipoUsuario,
       activePage,
       itemsPerPage,
       sort,
@@ -867,7 +885,10 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
       envioAnaliseResultadoEsperado,
       envioDescumprimento,
       envioMelhoraTempo,
+      diario,
+      pacienteDiario,
       unidade,
+      tipoUsuario,
       activePage - 1,
       itemsPerPage,
       `${sort},${order}`
@@ -875,7 +896,7 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
   };
 
   render() {
-    const { unidadeEasies, usuarioList, match, totalItems } = this.props;
+    const { unidadeEasies, tipoUsuarios, usuarioList, match, totalItems } = this.props;
     return (
       <div>
         <h2 id="page-heading">
@@ -2451,6 +2472,18 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
                         </Col>
                       ) : null}
 
+                      {this.state.baseFilters !== 'diario' ? (
+                        <Col md="3">
+                          <Row className="mr-1 mt-1"></Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'pacienteDiario' ? (
+                        <Col md="3">
+                          <Row className="mr-1 mt-1"></Row>
+                        </Col>
+                      ) : null}
+
                       {this.state.baseFilters !== 'unidade' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
@@ -2474,6 +2507,33 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
                                 }
                                 onChange={options => this.setState({ unidade: options.map(option => option['value']).join(',') })}
                                 name={'unidade'}
+                              />
+                            </div>
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'tipoUsuario' ? (
+                        <Col md="3">
+                          <Row className="mr-1 mt-1">
+                            <div style={{ width: '100%' }}>
+                              <Label for="usuario-tipoUsuario">
+                                <Translate contentKey="generadorApp.usuario.tipoUsuario">Tipo Usuario</Translate>
+                              </Label>
+                              <Select
+                                id="usuario-tipoUsuario"
+                                isMulti
+                                className={'css-select-control'}
+                                value={
+                                  tipoUsuarios
+                                    ? tipoUsuarios.map(p =>
+                                        this.state.tipoUsuario.split(',').indexOf(p.id) !== -1 ? { value: p.id, label: p.id } : null
+                                      )
+                                    : null
+                                }
+                                options={tipoUsuarios ? tipoUsuarios.map(option => ({ value: option.id, label: option.id })) : null}
+                                onChange={options => this.setState({ tipoUsuario: options.map(option => option['value']).join(',') })}
+                                name={'tipoUsuario'}
                               />
                             </div>
                           </Row>
@@ -3258,6 +3318,13 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
                         </th>
                       ) : null}
 
+                      {this.state.baseFilters !== 'tipoUsuario' ? (
+                        <th>
+                          <Translate contentKey="generadorApp.usuario.tipoUsuario">Tipo Usuario</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+
                       <th />
                     </tr>
                   </thead>
@@ -3527,6 +3594,12 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
                           <td>{usuario.unidade ? <Link to={`unidade-easy/${usuario.unidade.id}`}>{usuario.unidade.id}</Link> : ''}</td>
                         ) : null}
 
+                        {this.state.baseFilters !== 'tipoUsuario' ? (
+                          <td>
+                            {usuario.tipoUsuario ? <Link to={`tipo-usuario/${usuario.tipoUsuario.id}`}>{usuario.tipoUsuario.id}</Link> : ''}
+                          </td>
+                        ) : null}
+
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">
                             <Button tag={Link} to={`${match.url}/${usuario.id}?${this.getFiltersURL()}`} color="info" size="sm">
@@ -3584,12 +3657,14 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
 
 const mapStateToProps = ({ usuario, ...storeState }: IRootState) => ({
   unidadeEasies: storeState.unidadeEasy.entities,
+  tipoUsuarios: storeState.tipoUsuario.entities,
   usuarioList: usuario.entities,
   totalItems: usuario.totalItems
 });
 
 const mapDispatchToProps = {
   getUnidadeEasies,
+  getTipoUsuarios,
   getEntities
 };
 

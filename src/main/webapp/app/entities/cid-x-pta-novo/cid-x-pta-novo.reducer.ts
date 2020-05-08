@@ -37,12 +37,16 @@ export interface ICidXPtaNovoBaseState {
   versao: any;
   score: any;
   titulo: any;
+  cidXPtaNovoPadItemIndi: any;
+  cid: any;
 }
 
 export interface ICidXPtaNovoUpdateState {
   fieldsBase: ICidXPtaNovoBaseState;
 
+  cidSelectValue: any;
   isNew: boolean;
+  cidId: string;
 }
 
 // Reducer
@@ -127,22 +131,36 @@ export type ICrudGetAllActionCidXPtaNovo<T> = (
   versao?: any,
   score?: any,
   titulo?: any,
+  cidXPtaNovoPadItemIndi?: any,
+  cid?: any,
   page?: number,
   size?: number,
   sort?: string
 ) => IPayload<T> | ((dispatch: any) => IPayload<T>);
 
-export const getEntities: ICrudGetAllActionCidXPtaNovo<ICidXPtaNovo> = (complexidade, versao, score, titulo, page, size, sort) => {
+export const getEntities: ICrudGetAllActionCidXPtaNovo<ICidXPtaNovo> = (
+  complexidade,
+  versao,
+  score,
+  titulo,
+  cidXPtaNovoPadItemIndi,
+  cid,
+  page,
+  size,
+  sort
+) => {
   const complexidadeRequest = complexidade ? `complexidade.contains=${complexidade}&` : '';
   const versaoRequest = versao ? `versao.contains=${versao}&` : '';
   const scoreRequest = score ? `score.contains=${score}&` : '';
   const tituloRequest = titulo ? `titulo.contains=${titulo}&` : '';
+  const cidXPtaNovoPadItemIndiRequest = cidXPtaNovoPadItemIndi ? `cidXPtaNovoPadItemIndi.equals=${cidXPtaNovoPadItemIndi}&` : '';
+  const cidRequest = cid ? `cid.equals=${cid}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_CIDXPTANOVO_LIST,
     payload: axios.get<ICidXPtaNovo>(
-      `${requestUrl}${complexidadeRequest}${versaoRequest}${scoreRequest}${tituloRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${complexidadeRequest}${versaoRequest}${scoreRequest}${tituloRequest}${cidXPtaNovoPadItemIndiRequest}${cidRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };
@@ -154,24 +172,37 @@ export const getEntity: ICrudGetAction<ICidXPtaNovo> = id => {
   };
 };
 
-export const getEntitiesExport: ICrudGetAllActionCidXPtaNovo<ICidXPtaNovo> = (complexidade, versao, score, titulo, page, size, sort) => {
+export const getEntitiesExport: ICrudGetAllActionCidXPtaNovo<ICidXPtaNovo> = (
+  complexidade,
+  versao,
+  score,
+  titulo,
+  cidXPtaNovoPadItemIndi,
+  cid,
+  page,
+  size,
+  sort
+) => {
   const complexidadeRequest = complexidade ? `complexidade.contains=${complexidade}&` : '';
   const versaoRequest = versao ? `versao.contains=${versao}&` : '';
   const scoreRequest = score ? `score.contains=${score}&` : '';
   const tituloRequest = titulo ? `titulo.contains=${titulo}&` : '';
+  const cidXPtaNovoPadItemIndiRequest = cidXPtaNovoPadItemIndi ? `cidXPtaNovoPadItemIndi.equals=${cidXPtaNovoPadItemIndi}&` : '';
+  const cidRequest = cid ? `cid.equals=${cid}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_CIDXPTANOVO_LIST,
     payload: axios.get<ICidXPtaNovo>(
-      `${requestUrl}${complexidadeRequest}${versaoRequest}${scoreRequest}${tituloRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${complexidadeRequest}${versaoRequest}${scoreRequest}${tituloRequest}${cidXPtaNovoPadItemIndiRequest}${cidRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };
 
 export const createEntity: ICrudPutAction<ICidXPtaNovo> = entity => async dispatch => {
   entity = {
-    ...entity
+    ...entity,
+    cid: entity.cid === 'null' ? null : entity.cid
   };
   const result = await dispatch({
     type: ACTION_TYPES.CREATE_CIDXPTANOVO,
@@ -182,7 +213,7 @@ export const createEntity: ICrudPutAction<ICidXPtaNovo> = entity => async dispat
 };
 
 export const updateEntity: ICrudPutAction<ICidXPtaNovo> = entity => async dispatch => {
-  entity = { ...entity };
+  entity = { ...entity, cid: entity.cid === 'null' ? null : entity.cid };
   const result = await dispatch({
     type: ACTION_TYPES.UPDATE_CIDXPTANOVO,
     payload: axios.put(apiUrl, cleanEntity(entity))
@@ -213,11 +244,16 @@ export const getCidXPtaNovoState = (location): ICidXPtaNovoBaseState => {
   const score = url.searchParams.get('score') || '';
   const titulo = url.searchParams.get('titulo') || '';
 
+  const cidXPtaNovoPadItemIndi = url.searchParams.get('cidXPtaNovoPadItemIndi') || '';
+  const cid = url.searchParams.get('cid') || '';
+
   return {
     baseFilters,
     complexidade,
     versao,
     score,
-    titulo
+    titulo,
+    cidXPtaNovoPadItemIndi,
+    cid
   };
 };

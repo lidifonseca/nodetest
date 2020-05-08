@@ -5,6 +5,7 @@ import AlertasIndicadores from '../domain/alertas-indicadores.entity';
 import { AlertasIndicadoresRepository } from '../repository/alertas-indicadores.repository';
 
 const relationshipNames = [];
+relationshipNames.push('padItemIndicadores');
 
 @Injectable()
 export class AlertasIndicadoresService {

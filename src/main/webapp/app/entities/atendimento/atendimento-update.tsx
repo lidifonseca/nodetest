@@ -11,6 +11,20 @@ import { IRootState } from 'app/shared/reducers';
 
 import { IUnidadeEasy } from 'app/shared/model/unidade-easy.model';
 import { getEntities as getUnidadeEasies } from 'app/entities/unidade-easy/unidade-easy.reducer';
+import { IPaciente } from 'app/shared/model/paciente.model';
+import { getEntities as getPacientes } from 'app/entities/paciente/paciente.reducer';
+import { IOperadora } from 'app/shared/model/operadora.model';
+import { getEntities as getOperadoras } from 'app/entities/operadora/operadora.reducer';
+import { IEspecialidade } from 'app/shared/model/especialidade.model';
+import { getEntities as getEspecialidades } from 'app/entities/especialidade/especialidade.reducer';
+import { IPadItem } from 'app/shared/model/pad-item.model';
+import { getEntities as getPadItems } from 'app/entities/pad-item/pad-item.reducer';
+import { IStatusAtendimento } from 'app/shared/model/status-atendimento.model';
+import { getEntities as getStatusAtendimentos } from 'app/entities/status-atendimento/status-atendimento.reducer';
+import { IPeriodo } from 'app/shared/model/periodo.model';
+import { getEntities as getPeriodos } from 'app/entities/periodo/periodo.reducer';
+import { ICidade } from 'app/shared/model/cidade.model';
+import { getEntities as getCidades } from 'app/entities/cidade/cidade.reducer';
 import {
   IAtendimentoUpdateState,
   getEntity,
@@ -32,8 +46,22 @@ export class AtendimentoUpdate extends React.Component<IAtendimentoUpdateProps, 
 
     this.state = {
       unidadeEasySelectValue: null,
+      pacienteSelectValue: null,
+      operadoraSelectValue: null,
+      especialidadeSelectValue: null,
+      padItemSelectValue: null,
+      statusAtendimentoSelectValue: null,
+      periodoSelectValue: null,
+      cidadeSelectValue: null,
       fieldsBase: getAtendimentoState(this.props.location),
       unidadeId: '0',
+      pacienteId: '0',
+      operadoraId: '0',
+      especialidadeId: '0',
+      padItemId: '0',
+      statusAtendimentoId: '0',
+      periodoId: '0',
+      cidadeId: '0',
       isNew: !this.props.match.params || !this.props.match.params.id
     };
   }
@@ -54,6 +82,97 @@ export class AtendimentoUpdate extends React.Component<IAtendimentoUpdateProps, 
         )
       });
     }
+
+    if (
+      nextProps.pacientes.length > 0 &&
+      this.state.pacienteSelectValue === null &&
+      nextProps.atendimentoEntity.paciente &&
+      nextProps.atendimentoEntity.paciente.id
+    ) {
+      this.setState({
+        pacienteSelectValue: nextProps.pacientes.map(p =>
+          nextProps.atendimentoEntity.paciente.id === p.id ? { value: p.id, label: p.id } : null
+        )
+      });
+    }
+
+    if (
+      nextProps.operadoras.length > 0 &&
+      this.state.operadoraSelectValue === null &&
+      nextProps.atendimentoEntity.operadora &&
+      nextProps.atendimentoEntity.operadora.id
+    ) {
+      this.setState({
+        operadoraSelectValue: nextProps.operadoras.map(p =>
+          nextProps.atendimentoEntity.operadora.id === p.id ? { value: p.id, label: p.id } : null
+        )
+      });
+    }
+
+    if (
+      nextProps.especialidades.length > 0 &&
+      this.state.especialidadeSelectValue === null &&
+      nextProps.atendimentoEntity.especialidade &&
+      nextProps.atendimentoEntity.especialidade.id
+    ) {
+      this.setState({
+        especialidadeSelectValue: nextProps.especialidades.map(p =>
+          nextProps.atendimentoEntity.especialidade.id === p.id ? { value: p.id, label: p.id } : null
+        )
+      });
+    }
+
+    if (
+      nextProps.padItems.length > 0 &&
+      this.state.padItemSelectValue === null &&
+      nextProps.atendimentoEntity.padItem &&
+      nextProps.atendimentoEntity.padItem.id
+    ) {
+      this.setState({
+        padItemSelectValue: nextProps.padItems.map(p =>
+          nextProps.atendimentoEntity.padItem.id === p.id ? { value: p.id, label: p.id } : null
+        )
+      });
+    }
+
+    if (
+      nextProps.statusAtendimentos.length > 0 &&
+      this.state.statusAtendimentoSelectValue === null &&
+      nextProps.atendimentoEntity.statusAtendimento &&
+      nextProps.atendimentoEntity.statusAtendimento.id
+    ) {
+      this.setState({
+        statusAtendimentoSelectValue: nextProps.statusAtendimentos.map(p =>
+          nextProps.atendimentoEntity.statusAtendimento.id === p.id ? { value: p.id, label: p.id } : null
+        )
+      });
+    }
+
+    if (
+      nextProps.periodos.length > 0 &&
+      this.state.periodoSelectValue === null &&
+      nextProps.atendimentoEntity.periodo &&
+      nextProps.atendimentoEntity.periodo.id
+    ) {
+      this.setState({
+        periodoSelectValue: nextProps.periodos.map(p =>
+          nextProps.atendimentoEntity.periodo.id === p.id ? { value: p.id, label: p.id } : null
+        )
+      });
+    }
+
+    if (
+      nextProps.cidades.length > 0 &&
+      this.state.cidadeSelectValue === null &&
+      nextProps.atendimentoEntity.cidade &&
+      nextProps.atendimentoEntity.cidade.id
+    ) {
+      this.setState({
+        cidadeSelectValue: nextProps.cidades.map(p =>
+          nextProps.atendimentoEntity.cidade.id === p.id ? { value: p.id, label: p.id } : null
+        )
+      });
+    }
   }
 
   componentDidMount() {
@@ -64,6 +183,13 @@ export class AtendimentoUpdate extends React.Component<IAtendimentoUpdateProps, 
     }
 
     this.props.getUnidadeEasies();
+    this.props.getPacientes();
+    this.props.getOperadoras();
+    this.props.getEspecialidades();
+    this.props.getPadItems();
+    this.props.getStatusAtendimentos();
+    this.props.getPeriodos();
+    this.props.getCidades();
   }
 
   getFiltersURL = (offset = null) => {
@@ -85,6 +211,13 @@ export class AtendimentoUpdate extends React.Component<IAtendimentoUpdateProps, 
       const entity = {
         ...atendimentoEntity,
         unidadeEasy: this.state.unidadeEasySelectValue ? this.state.unidadeEasySelectValue['value'] : null,
+        paciente: this.state.pacienteSelectValue ? this.state.pacienteSelectValue['value'] : null,
+        operadora: this.state.operadoraSelectValue ? this.state.operadoraSelectValue['value'] : null,
+        especialidade: this.state.especialidadeSelectValue ? this.state.especialidadeSelectValue['value'] : null,
+        padItem: this.state.padItemSelectValue ? this.state.padItemSelectValue['value'] : null,
+        statusAtendimento: this.state.statusAtendimentoSelectValue ? this.state.statusAtendimentoSelectValue['value'] : null,
+        periodo: this.state.periodoSelectValue ? this.state.periodoSelectValue['value'] : null,
+        cidade: this.state.cidadeSelectValue ? this.state.cidadeSelectValue['value'] : null,
         ...values
       };
 
@@ -101,7 +234,19 @@ export class AtendimentoUpdate extends React.Component<IAtendimentoUpdateProps, 
   };
 
   render() {
-    const { atendimentoEntity, unidadeEasies, loading, updating } = this.props;
+    const {
+      atendimentoEntity,
+      unidadeEasies,
+      pacientes,
+      operadoras,
+      especialidades,
+      padItems,
+      statusAtendimentos,
+      periodos,
+      cidades,
+      loading,
+      updating
+    } = this.props;
     const { isNew } = this.state;
 
     const baseFilters = this.state.fieldsBase && this.state.fieldsBase['baseFilters'] ? this.state.fieldsBase['baseFilters'] : null;
@@ -113,7 +258,14 @@ export class AtendimentoUpdate extends React.Component<IAtendimentoUpdateProps, 
               ? {}
               : {
                   ...atendimentoEntity,
-                  unidade: atendimentoEntity.unidade ? atendimentoEntity.unidade.id : null
+                  unidade: atendimentoEntity.unidade ? atendimentoEntity.unidade.id : null,
+                  paciente: atendimentoEntity.paciente ? atendimentoEntity.paciente.id : null,
+                  operadora: atendimentoEntity.operadora ? atendimentoEntity.operadora.id : null,
+                  especialidade: atendimentoEntity.especialidade ? atendimentoEntity.especialidade.id : null,
+                  padItem: atendimentoEntity.padItem ? atendimentoEntity.padItem.id : null,
+                  statusAtendimento: atendimentoEntity.statusAtendimento ? atendimentoEntity.statusAtendimento.id : null,
+                  periodo: atendimentoEntity.periodo ? atendimentoEntity.periodo.id : null,
+                  cidade: atendimentoEntity.cidade ? atendimentoEntity.cidade.id : null
                 }
           }
           onSubmit={this.saveEntity}
@@ -245,7 +397,27 @@ export class AtendimentoUpdate extends React.Component<IAtendimentoUpdateProps, 
 
                         <ImagemAssinaturaComponentUpdate baseFilters />
 
+                        <AtendimentoAceiteComponentUpdate baseFilter atendimentoAceites />
+
+                        <AtendimentoAssinaturasComponentUpdate baseFilter atendimentoAssinaturas />
+
+                        <AtendimentoAtividadesComponentUpdate baseFilter atendimentoAtividades />
+
                         <UnidadeComponentUpdate baseFilter unidadeEasies />
+
+                        <PacienteComponentUpdate baseFilter pacientes />
+
+                        <OperadoraComponentUpdate baseFilter operadoras />
+
+                        <EspecialidadeComponentUpdate baseFilter especialidades />
+
+                        <PadItemComponentUpdate baseFilter padItems />
+
+                        <StatusAtendimentoComponentUpdate baseFilter statusAtendimentos />
+
+                        <PeriodoComponentUpdate baseFilter periodos />
+
+                        <CidadeComponentUpdate baseFilter cidades />
                       </Row>
                     </div>
                   )}
@@ -261,6 +433,13 @@ export class AtendimentoUpdate extends React.Component<IAtendimentoUpdateProps, 
 
 const mapStateToProps = (storeState: IRootState) => ({
   unidadeEasies: storeState.unidadeEasy.entities,
+  pacientes: storeState.paciente.entities,
+  operadoras: storeState.operadora.entities,
+  especialidades: storeState.especialidade.entities,
+  padItems: storeState.padItem.entities,
+  statusAtendimentos: storeState.statusAtendimento.entities,
+  periodos: storeState.periodo.entities,
+  cidades: storeState.cidade.entities,
   atendimentoEntity: storeState.atendimento.entity,
   loading: storeState.atendimento.loading,
   updating: storeState.atendimento.updating,
@@ -269,6 +448,13 @@ const mapStateToProps = (storeState: IRootState) => ({
 
 const mapDispatchToProps = {
   getUnidadeEasies,
+  getPacientes,
+  getOperadoras,
+  getEspecialidades,
+  getPadItems,
+  getStatusAtendimentos,
+  getPeriodos,
+  getCidades,
   getEntity,
   updateEntity,
   createEntity,
@@ -1041,6 +1227,30 @@ const ImagemAssinaturaComponentUpdate = ({ baseFilters }) => {
   );
 };
 
+const AtendimentoAceiteComponentUpdate = ({ baseFilters, atendimentoAceites }) => {
+  return baseFilters !== 'atendimentoAceite' ? (
+    <Col md="12"></Col>
+  ) : (
+    <AvInput type="hidden" name="atendimentoAceite" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const AtendimentoAssinaturasComponentUpdate = ({ baseFilters, atendimentoAssinaturas }) => {
+  return baseFilters !== 'atendimentoAssinaturas' ? (
+    <Col md="12"></Col>
+  ) : (
+    <AvInput type="hidden" name="atendimentoAssinaturas" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const AtendimentoAtividadesComponentUpdate = ({ baseFilters, atendimentoAtividades }) => {
+  return baseFilters !== 'atendimentoAtividades' ? (
+    <Col md="12"></Col>
+  ) : (
+    <AvInput type="hidden" name="atendimentoAtividades" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
 const UnidadeComponentUpdate = ({ baseFilters, unidadeEasies }) => {
   return baseFilters !== 'unidade' ? (
     <Col md="12">
@@ -1066,6 +1276,202 @@ const UnidadeComponentUpdate = ({ baseFilters, unidadeEasies }) => {
     </Col>
   ) : (
     <AvInput type="hidden" name="unidade" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const PacienteComponentUpdate = ({ baseFilters, pacientes }) => {
+  return baseFilters !== 'paciente' ? (
+    <Col md="12">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" for="atendimento-paciente">
+              <Translate contentKey="generadorApp.atendimento.paciente">Paciente</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <Select
+              id="atendimento-paciente"
+              className={'css-select-control'}
+              value={this.state.pacienteSelectValue}
+              options={pacientes ? pacientes.map(option => ({ value: option.id, label: option.id })) : null}
+              onChange={options => this.setState({ pacienteSelectValue: options })}
+              name={'paciente'}
+            />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="paciente" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const OperadoraComponentUpdate = ({ baseFilters, operadoras }) => {
+  return baseFilters !== 'operadora' ? (
+    <Col md="12">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" for="atendimento-operadora">
+              <Translate contentKey="generadorApp.atendimento.operadora">Operadora</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <Select
+              id="atendimento-operadora"
+              className={'css-select-control'}
+              value={this.state.operadoraSelectValue}
+              options={operadoras ? operadoras.map(option => ({ value: option.id, label: option.id })) : null}
+              onChange={options => this.setState({ operadoraSelectValue: options })}
+              name={'operadora'}
+            />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="operadora" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const EspecialidadeComponentUpdate = ({ baseFilters, especialidades }) => {
+  return baseFilters !== 'especialidade' ? (
+    <Col md="12">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" for="atendimento-especialidade">
+              <Translate contentKey="generadorApp.atendimento.especialidade">Especialidade</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <Select
+              id="atendimento-especialidade"
+              className={'css-select-control'}
+              value={this.state.especialidadeSelectValue}
+              options={especialidades ? especialidades.map(option => ({ value: option.id, label: option.id })) : null}
+              onChange={options => this.setState({ especialidadeSelectValue: options })}
+              name={'especialidade'}
+            />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="especialidade" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const PadItemComponentUpdate = ({ baseFilters, padItems }) => {
+  return baseFilters !== 'padItem' ? (
+    <Col md="12">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" for="atendimento-padItem">
+              <Translate contentKey="generadorApp.atendimento.padItem">Pad Item</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <Select
+              id="atendimento-padItem"
+              className={'css-select-control'}
+              value={this.state.padItemSelectValue}
+              options={padItems ? padItems.map(option => ({ value: option.id, label: option.id })) : null}
+              onChange={options => this.setState({ padItemSelectValue: options })}
+              name={'padItem'}
+            />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="padItem" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const StatusAtendimentoComponentUpdate = ({ baseFilters, statusAtendimentos }) => {
+  return baseFilters !== 'statusAtendimento' ? (
+    <Col md="12">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" for="atendimento-statusAtendimento">
+              <Translate contentKey="generadorApp.atendimento.statusAtendimento">Status Atendimento</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <Select
+              id="atendimento-statusAtendimento"
+              className={'css-select-control'}
+              value={this.state.statusAtendimentoSelectValue}
+              options={statusAtendimentos ? statusAtendimentos.map(option => ({ value: option.id, label: option.id })) : null}
+              onChange={options => this.setState({ statusAtendimentoSelectValue: options })}
+              name={'statusAtendimento'}
+            />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="statusAtendimento" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const PeriodoComponentUpdate = ({ baseFilters, periodos }) => {
+  return baseFilters !== 'periodo' ? (
+    <Col md="12">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" for="atendimento-periodo">
+              <Translate contentKey="generadorApp.atendimento.periodo">Periodo</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <Select
+              id="atendimento-periodo"
+              className={'css-select-control'}
+              value={this.state.periodoSelectValue}
+              options={periodos ? periodos.map(option => ({ value: option.id, label: option.id })) : null}
+              onChange={options => this.setState({ periodoSelectValue: options })}
+              name={'periodo'}
+            />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="periodo" value={this.state.fieldsBase[baseFilters]} />
+  );
+};
+
+const CidadeComponentUpdate = ({ baseFilters, cidades }) => {
+  return baseFilters !== 'cidade' ? (
+    <Col md="12">
+      <AvGroup>
+        <Row>
+          <Col md="3">
+            <Label className="mt-2" for="atendimento-cidade">
+              <Translate contentKey="generadorApp.atendimento.cidade">Cidade</Translate>
+            </Label>
+          </Col>
+          <Col md="9">
+            <Select
+              id="atendimento-cidade"
+              className={'css-select-control'}
+              value={this.state.cidadeSelectValue}
+              options={cidades ? cidades.map(option => ({ value: option.id, label: option.id })) : null}
+              onChange={options => this.setState({ cidadeSelectValue: options })}
+              name={'cidade'}
+            />
+          </Col>
+        </Row>
+      </AvGroup>
+    </Col>
+  ) : (
+    <AvInput type="hidden" name="cidade" value={this.state.fieldsBase[baseFilters]} />
   );
 };
 

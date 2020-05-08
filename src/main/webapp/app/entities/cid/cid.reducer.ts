@@ -38,6 +38,9 @@ export interface ICidBaseState {
   gr: any;
   temp: any;
   apelido: any;
+  cidXPtaNovo: any;
+  pacienteDiagnostico: any;
+  padCid: any;
 }
 
 export interface ICidUpdateState {
@@ -129,23 +132,41 @@ export type ICrudGetAllActionCid<T> = (
   gr?: any,
   temp?: any,
   apelido?: any,
+  cidXPtaNovo?: any,
+  pacienteDiagnostico?: any,
+  padCid?: any,
   page?: number,
   size?: number,
   sort?: string
 ) => IPayload<T> | ((dispatch: any) => IPayload<T>);
 
-export const getEntities: ICrudGetAllActionCid<ICid> = (codigo, diagnostico, gr, temp, apelido, page, size, sort) => {
+export const getEntities: ICrudGetAllActionCid<ICid> = (
+  codigo,
+  diagnostico,
+  gr,
+  temp,
+  apelido,
+  cidXPtaNovo,
+  pacienteDiagnostico,
+  padCid,
+  page,
+  size,
+  sort
+) => {
   const codigoRequest = codigo ? `codigo.contains=${codigo}&` : '';
   const diagnosticoRequest = diagnostico ? `diagnostico.contains=${diagnostico}&` : '';
   const grRequest = gr ? `gr.contains=${gr}&` : '';
   const tempRequest = temp ? `temp.contains=${temp}&` : '';
   const apelidoRequest = apelido ? `apelido.contains=${apelido}&` : '';
+  const cidXPtaNovoRequest = cidXPtaNovo ? `cidXPtaNovo.equals=${cidXPtaNovo}&` : '';
+  const pacienteDiagnosticoRequest = pacienteDiagnostico ? `pacienteDiagnostico.equals=${pacienteDiagnostico}&` : '';
+  const padCidRequest = padCid ? `padCid.equals=${padCid}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_CID_LIST,
     payload: axios.get<ICid>(
-      `${requestUrl}${codigoRequest}${diagnosticoRequest}${grRequest}${tempRequest}${apelidoRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${codigoRequest}${diagnosticoRequest}${grRequest}${tempRequest}${apelidoRequest}${cidXPtaNovoRequest}${pacienteDiagnosticoRequest}${padCidRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };
@@ -157,18 +178,33 @@ export const getEntity: ICrudGetAction<ICid> = id => {
   };
 };
 
-export const getEntitiesExport: ICrudGetAllActionCid<ICid> = (codigo, diagnostico, gr, temp, apelido, page, size, sort) => {
+export const getEntitiesExport: ICrudGetAllActionCid<ICid> = (
+  codigo,
+  diagnostico,
+  gr,
+  temp,
+  apelido,
+  cidXPtaNovo,
+  pacienteDiagnostico,
+  padCid,
+  page,
+  size,
+  sort
+) => {
   const codigoRequest = codigo ? `codigo.contains=${codigo}&` : '';
   const diagnosticoRequest = diagnostico ? `diagnostico.contains=${diagnostico}&` : '';
   const grRequest = gr ? `gr.contains=${gr}&` : '';
   const tempRequest = temp ? `temp.contains=${temp}&` : '';
   const apelidoRequest = apelido ? `apelido.contains=${apelido}&` : '';
+  const cidXPtaNovoRequest = cidXPtaNovo ? `cidXPtaNovo.equals=${cidXPtaNovo}&` : '';
+  const pacienteDiagnosticoRequest = pacienteDiagnostico ? `pacienteDiagnostico.equals=${pacienteDiagnostico}&` : '';
+  const padCidRequest = padCid ? `padCid.equals=${padCid}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_CID_LIST,
     payload: axios.get<ICid>(
-      `${requestUrl}${codigoRequest}${diagnosticoRequest}${grRequest}${tempRequest}${apelidoRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${codigoRequest}${diagnosticoRequest}${grRequest}${tempRequest}${apelidoRequest}${cidXPtaNovoRequest}${pacienteDiagnosticoRequest}${padCidRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };
@@ -218,12 +254,19 @@ export const getCidState = (location): ICidBaseState => {
   const temp = url.searchParams.get('temp') || '';
   const apelido = url.searchParams.get('apelido') || '';
 
+  const cidXPtaNovo = url.searchParams.get('cidXPtaNovo') || '';
+  const pacienteDiagnostico = url.searchParams.get('pacienteDiagnostico') || '';
+  const padCid = url.searchParams.get('padCid') || '';
+
   return {
     baseFilters,
     codigo,
     diagnostico,
     gr,
     temp,
-    apelido
+    apelido,
+    cidXPtaNovo,
+    pacienteDiagnostico,
+    padCid
   };
 };

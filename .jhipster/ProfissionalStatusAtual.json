@@ -15,8 +15,16 @@
             "fieldType": "Integer"
         }
     ],
-    "relationships": [],
-    "changelogDate": "20200508171100",
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "statusAtualProf",
+            "otherEntityRelationshipName": "profissionalStatusAtual",
+            "relationshipName": "statusAtualProf",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20200508180700",
     "entityTableName": "profissional_status_atual",
     "dto": "mapstruct",
     "pagination": "pagination",

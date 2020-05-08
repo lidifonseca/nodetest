@@ -59,7 +59,8 @@ export class SegmentosPerguntas extends React.Component<ISegmentosPerguntasProps
   cancelCourse = () => {
     this.setState(
       {
-        segmento: ''
+        segmento: '',
+        perguntasQuestionario: ''
       },
       () => this.sortEntities()
     );
@@ -107,6 +108,9 @@ export class SegmentosPerguntas extends React.Component<ISegmentosPerguntasProps
       'segmento=' +
       this.state.segmento +
       '&' +
+      'perguntasQuestionario=' +
+      this.state.perguntasQuestionario +
+      '&' +
       ''
     );
   };
@@ -114,8 +118,8 @@ export class SegmentosPerguntas extends React.Component<ISegmentosPerguntasProps
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { segmento, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntitiesExport(segmento, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const { segmento, perguntasQuestionario, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntitiesExport(segmento, perguntasQuestionario, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   confirmExport() {}

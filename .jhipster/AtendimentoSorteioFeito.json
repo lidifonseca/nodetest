@@ -9,8 +9,16 @@
             ]
         }
     ],
-    "relationships": [],
-    "changelogDate": "20200508153000",
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "padItem",
+            "otherEntityRelationshipName": "atendimentoSorteioFeito",
+            "relationshipName": "padItem",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20200508162600",
     "entityTableName": "atendimento_sorteio_feito",
     "dto": "mapstruct",
     "pagination": "pagination",

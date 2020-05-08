@@ -28,6 +28,9 @@ import { IAlertasIndicadores } from 'app/shared/model/alertas-indicadores.model'
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
+import { ICidXPtaNovoPadItemIndi } from 'app/shared/model/cid-x-pta-novo-pad-item-indi.model';
+import { getEntities as getCidXPtaNovoPadItemIndis } from 'app/entities/cid-x-pta-novo-pad-item-indi/cid-x-pta-novo-pad-item-indi.reducer';
+
 export interface IAlertasIndicadoresProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
 export interface IAlertasIndicadoresState extends IAlertasIndicadoresBaseState, IPaginationBaseState {}
@@ -45,6 +48,8 @@ export class AlertasIndicadores extends React.Component<IAlertasIndicadoresProps
 
   componentDidMount() {
     this.getEntities();
+
+    this.props.getCidXPtaNovoPadItemIndis();
   }
 
   cancelCourse = () => {
@@ -53,7 +58,8 @@ export class AlertasIndicadores extends React.Component<IAlertasIndicadoresProps
         pontuacao: '',
         alteracaoEsperada: '',
         observacoes: '',
-        usuarioId: ''
+        usuarioId: '',
+        padItemIndicadores: ''
       },
       () => this.sortEntities()
     );
@@ -112,6 +118,9 @@ export class AlertasIndicadores extends React.Component<IAlertasIndicadoresProps
       'usuarioId=' +
       this.state.usuarioId +
       '&' +
+      'padItemIndicadores=' +
+      this.state.padItemIndicadores +
+      '&' +
       ''
     );
   };
@@ -119,12 +128,21 @@ export class AlertasIndicadores extends React.Component<IAlertasIndicadoresProps
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { pontuacao, alteracaoEsperada, observacoes, usuarioId, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntities(pontuacao, alteracaoEsperada, observacoes, usuarioId, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const { pontuacao, alteracaoEsperada, observacoes, usuarioId, padItemIndicadores, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntities(
+      pontuacao,
+      alteracaoEsperada,
+      observacoes,
+      usuarioId,
+      padItemIndicadores,
+      activePage - 1,
+      itemsPerPage,
+      `${sort},${order}`
+    );
   };
 
   render() {
-    const { alertasIndicadoresList, match, totalItems } = this.props;
+    const { cidXPtaNovoPadItemIndis, alertasIndicadoresList, match, totalItems } = this.props;
     return (
       <div>
         <h2 id="page-heading">
@@ -209,6 +227,39 @@ export class AlertasIndicadores extends React.Component<IAlertasIndicadoresProps
                           </Row>
                         </Col>
                       ) : null}
+
+                      {this.state.baseFilters !== 'padItemIndicadores' ? (
+                        <Col md="3">
+                          <Row className="mr-1 mt-1">
+                            <div style={{ width: '100%' }}>
+                              <Label for="alertas-indicadores-padItemIndicadores">
+                                <Translate contentKey="generadorApp.alertasIndicadores.padItemIndicadores">Pad Item Indicadores</Translate>
+                              </Label>
+                              <Select
+                                id="alertas-indicadores-padItemIndicadores"
+                                isMulti
+                                className={'css-select-control'}
+                                value={
+                                  cidXPtaNovoPadItemIndis
+                                    ? cidXPtaNovoPadItemIndis.map(p =>
+                                        this.state.padItemIndicadores.split(',').indexOf(p.id) !== -1 ? { value: p.id, label: p.id } : null
+                                      )
+                                    : null
+                                }
+                                options={
+                                  cidXPtaNovoPadItemIndis
+                                    ? cidXPtaNovoPadItemIndis.map(option => ({ value: option.id, label: option.id }))
+                                    : null
+                                }
+                                onChange={options =>
+                                  this.setState({ padItemIndicadores: options.map(option => option['value']).join(',') })
+                                }
+                                name={'padItemIndicadores'}
+                              />
+                            </div>
+                          </Row>
+                        </Col>
+                      ) : null}
                     </div>
 
                     <div className="row mb-2 mr-4 justify-content-end">
@@ -261,6 +312,13 @@ export class AlertasIndicadores extends React.Component<IAlertasIndicadoresProps
                         </th>
                       ) : null}
 
+                      {this.state.baseFilters !== 'padItemIndicadores' ? (
+                        <th>
+                          <Translate contentKey="generadorApp.alertasIndicadores.padItemIndicadores">Pad Item Indicadores</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+
                       <th />
                     </tr>
                   </thead>
@@ -283,6 +341,18 @@ export class AlertasIndicadores extends React.Component<IAlertasIndicadoresProps
                         {this.state.baseFilters !== 'observacoes' ? <td>{alertasIndicadores.observacoes}</td> : null}
 
                         {this.state.baseFilters !== 'usuarioId' ? <td>{alertasIndicadores.usuarioId}</td> : null}
+
+                        {this.state.baseFilters !== 'padItemIndicadores' ? (
+                          <td>
+                            {alertasIndicadores.padItemIndicadores ? (
+                              <Link to={`cid-x-pta-novo-pad-item-indi/${alertasIndicadores.padItemIndicadores.id}`}>
+                                {alertasIndicadores.padItemIndicadores.id}
+                              </Link>
+                            ) : (
+                              ''
+                            )}
+                          </td>
+                        ) : null}
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">
@@ -350,11 +420,13 @@ export class AlertasIndicadores extends React.Component<IAlertasIndicadoresProps
 }
 
 const mapStateToProps = ({ alertasIndicadores, ...storeState }: IRootState) => ({
+  cidXPtaNovoPadItemIndis: storeState.cidXPtaNovoPadItemIndi.entities,
   alertasIndicadoresList: alertasIndicadores.entities,
   totalItems: alertasIndicadores.totalItems
 });
 
 const mapDispatchToProps = {
+  getCidXPtaNovoPadItemIndis,
   getEntities
 };
 

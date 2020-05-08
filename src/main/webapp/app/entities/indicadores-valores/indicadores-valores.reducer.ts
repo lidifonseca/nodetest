@@ -39,12 +39,15 @@ export interface IIndicadoresValoresBaseState {
   unidadeMedida: any;
   idadeMinima: any;
   idadeMaxima: any;
+  indicadores: any;
 }
 
 export interface IIndicadoresValoresUpdateState {
   fieldsBase: IIndicadoresValoresBaseState;
 
+  indicadoresSelectValue: any;
   isNew: boolean;
+  indicadoresId: string;
 }
 
 // Reducer
@@ -131,6 +134,7 @@ export type ICrudGetAllActionIndicadoresValores<T> = (
   unidadeMedida?: any,
   idadeMinima?: any,
   idadeMaxima?: any,
+  indicadores?: any,
   page?: number,
   size?: number,
   sort?: string
@@ -143,6 +147,7 @@ export const getEntities: ICrudGetAllActionIndicadoresValores<IIndicadoresValore
   unidadeMedida,
   idadeMinima,
   idadeMaxima,
+  indicadores,
   page,
   size,
   sort
@@ -153,12 +158,13 @@ export const getEntities: ICrudGetAllActionIndicadoresValores<IIndicadoresValore
   const unidadeMedidaRequest = unidadeMedida ? `unidadeMedida.contains=${unidadeMedida}&` : '';
   const idadeMinimaRequest = idadeMinima ? `idadeMinima.contains=${idadeMinima}&` : '';
   const idadeMaximaRequest = idadeMaxima ? `idadeMaxima.contains=${idadeMaxima}&` : '';
+  const indicadoresRequest = indicadores ? `indicadores.equals=${indicadores}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_INDICADORESVALORES_LIST,
     payload: axios.get<IIndicadoresValores>(
-      `${requestUrl}${sexoRequest}${vlMinimoRequest}${vlMaximoRequest}${unidadeMedidaRequest}${idadeMinimaRequest}${idadeMaximaRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${sexoRequest}${vlMinimoRequest}${vlMaximoRequest}${unidadeMedidaRequest}${idadeMinimaRequest}${idadeMaximaRequest}${indicadoresRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };
@@ -177,6 +183,7 @@ export const getEntitiesExport: ICrudGetAllActionIndicadoresValores<IIndicadores
   unidadeMedida,
   idadeMinima,
   idadeMaxima,
+  indicadores,
   page,
   size,
   sort
@@ -187,19 +194,21 @@ export const getEntitiesExport: ICrudGetAllActionIndicadoresValores<IIndicadores
   const unidadeMedidaRequest = unidadeMedida ? `unidadeMedida.contains=${unidadeMedida}&` : '';
   const idadeMinimaRequest = idadeMinima ? `idadeMinima.contains=${idadeMinima}&` : '';
   const idadeMaximaRequest = idadeMaxima ? `idadeMaxima.contains=${idadeMaxima}&` : '';
+  const indicadoresRequest = indicadores ? `indicadores.equals=${indicadores}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_INDICADORESVALORES_LIST,
     payload: axios.get<IIndicadoresValores>(
-      `${requestUrl}${sexoRequest}${vlMinimoRequest}${vlMaximoRequest}${unidadeMedidaRequest}${idadeMinimaRequest}${idadeMaximaRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${sexoRequest}${vlMinimoRequest}${vlMaximoRequest}${unidadeMedidaRequest}${idadeMinimaRequest}${idadeMaximaRequest}${indicadoresRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };
 
 export const createEntity: ICrudPutAction<IIndicadoresValores> = entity => async dispatch => {
   entity = {
-    ...entity
+    ...entity,
+    indicadores: entity.indicadores === 'null' ? null : entity.indicadores
   };
   const result = await dispatch({
     type: ACTION_TYPES.CREATE_INDICADORESVALORES,
@@ -210,7 +219,7 @@ export const createEntity: ICrudPutAction<IIndicadoresValores> = entity => async
 };
 
 export const updateEntity: ICrudPutAction<IIndicadoresValores> = entity => async dispatch => {
-  entity = { ...entity };
+  entity = { ...entity, indicadores: entity.indicadores === 'null' ? null : entity.indicadores };
   const result = await dispatch({
     type: ACTION_TYPES.UPDATE_INDICADORESVALORES,
     payload: axios.put(apiUrl, cleanEntity(entity))
@@ -243,6 +252,8 @@ export const getIndicadoresValoresState = (location): IIndicadoresValoresBaseSta
   const idadeMinima = url.searchParams.get('idadeMinima') || '';
   const idadeMaxima = url.searchParams.get('idadeMaxima') || '';
 
+  const indicadores = url.searchParams.get('indicadores') || '';
+
   return {
     baseFilters,
     sexo,
@@ -250,6 +261,7 @@ export const getIndicadoresValoresState = (location): IIndicadoresValoresBaseSta
     vlMaximo,
     unidadeMedida,
     idadeMinima,
-    idadeMaxima
+    idadeMaxima,
+    indicadores
   };
 };

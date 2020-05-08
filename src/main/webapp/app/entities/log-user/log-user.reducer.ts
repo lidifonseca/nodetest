@@ -35,12 +35,18 @@ export type LogUserState = Readonly<typeof initialState>;
 export interface ILogUserBaseState {
   baseFilters: any;
   descricao: any;
+  acao: any;
+  tela: any;
 }
 
 export interface ILogUserUpdateState {
   fieldsBase: ILogUserBaseState;
 
+  acaoSelectValue: any;
+  telaSelectValue: any;
   isNew: boolean;
+  acaoId: string;
+  telaId: string;
 }
 
 // Reducer
@@ -137,18 +143,22 @@ const apiUrl = 'api/log-users';
 // Actions
 export type ICrudGetAllActionLogUser<T> = (
   descricao?: any,
+  acao?: any,
+  tela?: any,
   page?: number,
   size?: number,
   sort?: string
 ) => IPayload<T> | ((dispatch: any) => IPayload<T>);
 
-export const getEntities: ICrudGetAllActionLogUser<ILogUser> = (descricao, page, size, sort) => {
+export const getEntities: ICrudGetAllActionLogUser<ILogUser> = (descricao, acao, tela, page, size, sort) => {
   const descricaoRequest = descricao ? `descricao.contains=${descricao}&` : '';
+  const acaoRequest = acao ? `acao.equals=${acao}&` : '';
+  const telaRequest = tela ? `tela.equals=${tela}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_LOGUSER_LIST,
-    payload: axios.get<ILogUser>(`${requestUrl}${descricaoRequest}cacheBuster=${new Date().getTime()}`)
+    payload: axios.get<ILogUser>(`${requestUrl}${descricaoRequest}${acaoRequest}${telaRequest}cacheBuster=${new Date().getTime()}`)
   };
 };
 export const getEntity: ICrudGetAction<ILogUser> = id => {
@@ -159,19 +169,23 @@ export const getEntity: ICrudGetAction<ILogUser> = id => {
   };
 };
 
-export const getEntitiesExport: ICrudGetAllActionLogUser<ILogUser> = (descricao, page, size, sort) => {
+export const getEntitiesExport: ICrudGetAllActionLogUser<ILogUser> = (descricao, acao, tela, page, size, sort) => {
   const descricaoRequest = descricao ? `descricao.contains=${descricao}&` : '';
+  const acaoRequest = acao ? `acao.equals=${acao}&` : '';
+  const telaRequest = tela ? `tela.equals=${tela}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_LOGUSER_LIST,
-    payload: axios.get<ILogUser>(`${requestUrl}${descricaoRequest}cacheBuster=${new Date().getTime()}`)
+    payload: axios.get<ILogUser>(`${requestUrl}${descricaoRequest}${acaoRequest}${telaRequest}cacheBuster=${new Date().getTime()}`)
   };
 };
 
 export const createEntity: ICrudPutAction<ILogUser> = entity => async dispatch => {
   entity = {
-    ...entity
+    ...entity,
+    acao: entity.acao === 'null' ? null : entity.acao,
+    tela: entity.tela === 'null' ? null : entity.tela
   };
   const result = await dispatch({
     type: ACTION_TYPES.CREATE_LOGUSER,
@@ -182,7 +196,7 @@ export const createEntity: ICrudPutAction<ILogUser> = entity => async dispatch =
 };
 
 export const updateEntity: ICrudPutAction<ILogUser> = entity => async dispatch => {
-  entity = { ...entity };
+  entity = { ...entity, acao: entity.acao === 'null' ? null : entity.acao, tela: entity.tela === 'null' ? null : entity.tela };
   const result = await dispatch({
     type: ACTION_TYPES.UPDATE_LOGUSER,
     payload: axios.put(apiUrl, cleanEntity(entity))
@@ -220,8 +234,13 @@ export const getLogUserState = (location): ILogUserBaseState => {
   const baseFilters = url.searchParams.get('baseFilters') || '';
   const descricao = url.searchParams.get('descricao') || '';
 
+  const acao = url.searchParams.get('acao') || '';
+  const tela = url.searchParams.get('tela') || '';
+
   return {
     baseFilters,
-    descricao
+    descricao,
+    acao,
+    tela
   };
 };

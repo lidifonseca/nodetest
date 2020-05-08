@@ -40,6 +40,12 @@
       "uf": "Uf",
       "observacao": "Observacao",
       "ativo": "Ativo",
+      "franquiaAreaAtuacao_empty": "Sem Franquia Area Atuacao",
+      "franquiaAreaAtuacao": "Franquia Area Atuacao",
+      "franquiaStatusAtual_empty": "Sem Franquia Status Atual",
+      "franquiaStatusAtual": "Franquia Status Atual",
+      "franquiaUsuario_empty": "Sem Franquia Usuario",
+      "franquiaUsuario": "Franquia Usuario",
       "help": {}
     }
   }

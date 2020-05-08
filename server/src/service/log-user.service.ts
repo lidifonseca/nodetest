@@ -5,6 +5,8 @@ import LogUser from '../domain/log-user.entity';
 import { LogUserRepository } from '../repository/log-user.repository';
 
 const relationshipNames = [];
+relationshipNames.push('acao');
+relationshipNames.push('tela');
 
 @Injectable()
 export class LogUserService {

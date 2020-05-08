@@ -37,6 +37,9 @@ import { IEmpresa } from 'app/shared/model/empresa.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
+import { ICidade } from 'app/shared/model/cidade.model';
+import { getEntities as getCidades } from 'app/entities/cidade/cidade.reducer';
+
 export interface IEmpresaProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
 export interface IEmpresaState extends IEmpresaBaseState, IPaginationBaseState {}
@@ -54,6 +57,8 @@ export class Empresa extends React.Component<IEmpresaProps, IEmpresaState> {
 
   componentDidMount() {
     this.getEntities();
+
+    this.props.getCidades();
   }
 
   cancelCourse = () => {
@@ -77,7 +82,8 @@ export class Empresa extends React.Component<IEmpresaProps, IEmpresaState> {
         bairro: '',
         cidade: '',
         uf: '',
-        tipo: ''
+        tipo: '',
+        cidade: ''
       },
       () => this.sortEntities()
     );
@@ -181,6 +187,9 @@ export class Empresa extends React.Component<IEmpresaProps, IEmpresaState> {
       'tipo=' +
       this.state.tipo +
       '&' +
+      'cidade=' +
+      this.state.cidade +
+      '&' +
       ''
     );
   };
@@ -208,6 +217,7 @@ export class Empresa extends React.Component<IEmpresaProps, IEmpresaState> {
       cidade,
       uf,
       tipo,
+      cidade,
       activePage,
       itemsPerPage,
       sort,
@@ -233,6 +243,7 @@ export class Empresa extends React.Component<IEmpresaProps, IEmpresaState> {
       cidade,
       uf,
       tipo,
+      cidade,
       activePage - 1,
       itemsPerPage,
       `${sort},${order}`
@@ -240,7 +251,7 @@ export class Empresa extends React.Component<IEmpresaProps, IEmpresaState> {
   };
 
   render() {
-    const { empresaList, match, totalItems } = this.props;
+    const { cidades, empresaList, match, totalItems } = this.props;
     return (
       <div>
         <h2 id="page-heading">
@@ -500,6 +511,33 @@ export class Empresa extends React.Component<IEmpresaProps, IEmpresaState> {
                           </Row>
                         </Col>
                       ) : null}
+
+                      {this.state.baseFilters !== 'cidade' ? (
+                        <Col md="3">
+                          <Row className="mr-1 mt-1">
+                            <div style={{ width: '100%' }}>
+                              <Label for="empresa-cidade">
+                                <Translate contentKey="generadorApp.empresa.cidade">Cidade</Translate>
+                              </Label>
+                              <Select
+                                id="empresa-cidade"
+                                isMulti
+                                className={'css-select-control'}
+                                value={
+                                  cidades
+                                    ? cidades.map(p =>
+                                        this.state.cidade.split(',').indexOf(p.id) !== -1 ? { value: p.id, label: p.id } : null
+                                      )
+                                    : null
+                                }
+                                options={cidades ? cidades.map(option => ({ value: option.id, label: option.id })) : null}
+                                onChange={options => this.setState({ cidade: options.map(option => option['value']).join(',') })}
+                                name={'cidade'}
+                              />
+                            </div>
+                          </Row>
+                        </Col>
+                      ) : null}
                     </div>
 
                     <div className="row mb-2 mr-4 justify-content-end">
@@ -642,6 +680,13 @@ export class Empresa extends React.Component<IEmpresaProps, IEmpresaState> {
                         </th>
                       ) : null}
 
+                      {this.state.baseFilters !== 'cidade' ? (
+                        <th>
+                          <Translate contentKey="generadorApp.empresa.cidade">Cidade</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+
                       <th />
                     </tr>
                   </thead>
@@ -696,6 +741,10 @@ export class Empresa extends React.Component<IEmpresaProps, IEmpresaState> {
                         {this.state.baseFilters !== 'uf' ? <td>{empresa.uf}</td> : null}
 
                         {this.state.baseFilters !== 'tipo' ? <td>{empresa.tipo}</td> : null}
+
+                        {this.state.baseFilters !== 'cidade' ? (
+                          <td>{empresa.cidade ? <Link to={`cidade/${empresa.cidade.id}`}>{empresa.cidade.id}</Link> : ''}</td>
+                        ) : null}
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">
@@ -753,11 +802,13 @@ export class Empresa extends React.Component<IEmpresaProps, IEmpresaState> {
 }
 
 const mapStateToProps = ({ empresa, ...storeState }: IRootState) => ({
+  cidades: storeState.cidade.entities,
   empresaList: empresa.entities,
   totalItems: empresa.totalItems
 });
 
 const mapDispatchToProps = {
+  getCidades,
   getEntities
 };
 

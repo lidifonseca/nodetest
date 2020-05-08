@@ -34,6 +34,7 @@ export type SegmentosPerguntasState = Readonly<typeof initialState>;
 export interface ISegmentosPerguntasBaseState {
   baseFilters: any;
   segmento: any;
+  perguntasQuestionario: any;
 }
 
 export interface ISegmentosPerguntasUpdateState {
@@ -121,18 +122,28 @@ const apiUrl = 'api/segmentos-perguntas';
 // Actions
 export type ICrudGetAllActionSegmentosPerguntas<T> = (
   segmento?: any,
+  perguntasQuestionario?: any,
   page?: number,
   size?: number,
   sort?: string
 ) => IPayload<T> | ((dispatch: any) => IPayload<T>);
 
-export const getEntities: ICrudGetAllActionSegmentosPerguntas<ISegmentosPerguntas> = (segmento, page, size, sort) => {
+export const getEntities: ICrudGetAllActionSegmentosPerguntas<ISegmentosPerguntas> = (
+  segmento,
+  perguntasQuestionario,
+  page,
+  size,
+  sort
+) => {
   const segmentoRequest = segmento ? `segmento.contains=${segmento}&` : '';
+  const perguntasQuestionarioRequest = perguntasQuestionario ? `perguntasQuestionario.equals=${perguntasQuestionario}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_SEGMENTOSPERGUNTAS_LIST,
-    payload: axios.get<ISegmentosPerguntas>(`${requestUrl}${segmentoRequest}cacheBuster=${new Date().getTime()}`)
+    payload: axios.get<ISegmentosPerguntas>(
+      `${requestUrl}${segmentoRequest}${perguntasQuestionarioRequest}cacheBuster=${new Date().getTime()}`
+    )
   };
 };
 export const getEntity: ICrudGetAction<ISegmentosPerguntas> = id => {
@@ -143,13 +154,22 @@ export const getEntity: ICrudGetAction<ISegmentosPerguntas> = id => {
   };
 };
 
-export const getEntitiesExport: ICrudGetAllActionSegmentosPerguntas<ISegmentosPerguntas> = (segmento, page, size, sort) => {
+export const getEntitiesExport: ICrudGetAllActionSegmentosPerguntas<ISegmentosPerguntas> = (
+  segmento,
+  perguntasQuestionario,
+  page,
+  size,
+  sort
+) => {
   const segmentoRequest = segmento ? `segmento.contains=${segmento}&` : '';
+  const perguntasQuestionarioRequest = perguntasQuestionario ? `perguntasQuestionario.equals=${perguntasQuestionario}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_SEGMENTOSPERGUNTAS_LIST,
-    payload: axios.get<ISegmentosPerguntas>(`${requestUrl}${segmentoRequest}cacheBuster=${new Date().getTime()}`)
+    payload: axios.get<ISegmentosPerguntas>(
+      `${requestUrl}${segmentoRequest}${perguntasQuestionarioRequest}cacheBuster=${new Date().getTime()}`
+    )
   };
 };
 
@@ -194,8 +214,11 @@ export const getSegmentosPerguntasState = (location): ISegmentosPerguntasBaseSta
   const baseFilters = url.searchParams.get('baseFilters') || '';
   const segmento = url.searchParams.get('segmento') || '';
 
+  const perguntasQuestionario = url.searchParams.get('perguntasQuestionario') || '';
+
   return {
     baseFilters,
-    segmento
+    segmento,
+    perguntasQuestionario
   };
 };

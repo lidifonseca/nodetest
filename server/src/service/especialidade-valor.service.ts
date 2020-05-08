@@ -5,6 +5,7 @@ import EspecialidadeValor from '../domain/especialidade-valor.entity';
 import { EspecialidadeValorRepository } from '../repository/especialidade-valor.repository';
 
 const relationshipNames = [];
+relationshipNames.push('especialidade');
 
 @Injectable()
 export class EspecialidadeValorService {

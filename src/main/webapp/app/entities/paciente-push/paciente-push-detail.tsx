@@ -97,6 +97,19 @@ export class PacientePushDetail extends React.Component<IPacientePushDetailProps
                       </Col>
                     </Row>
                   </Col>
+
+                  <Col md="12">
+                    <Row>
+                      <Col md="3">
+                        <dt>
+                          <Translate contentKey="generadorApp.pacientePush.paciente">Paciente</Translate>
+                        </dt>
+                      </Col>
+                      <Col md="9">
+                        <dd>{pacientePushEntity.paciente ? pacientePushEntity.paciente.id : ''}</dd>
+                      </Col>
+                    </Row>
+                  </Col>
                 </Row>
                 <Button tag={Link} to="/paciente-push" replace color="info">
                   <FontAwesomeIcon icon="arrow-left" />{' '}

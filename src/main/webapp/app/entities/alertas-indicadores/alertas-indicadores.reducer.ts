@@ -37,12 +37,15 @@ export interface IAlertasIndicadoresBaseState {
   alteracaoEsperada: any;
   observacoes: any;
   usuarioId: any;
+  padItemIndicadores: any;
 }
 
 export interface IAlertasIndicadoresUpdateState {
   fieldsBase: IAlertasIndicadoresBaseState;
 
+  cidXPtaNovoPadItemIndiSelectValue: any;
   isNew: boolean;
+  padItemIndicadoresId: string;
 }
 
 // Reducer
@@ -127,6 +130,7 @@ export type ICrudGetAllActionAlertasIndicadores<T> = (
   alteracaoEsperada?: any,
   observacoes?: any,
   usuarioId?: any,
+  padItemIndicadores?: any,
   page?: number,
   size?: number,
   sort?: string
@@ -137,6 +141,7 @@ export const getEntities: ICrudGetAllActionAlertasIndicadores<IAlertasIndicadore
   alteracaoEsperada,
   observacoes,
   usuarioId,
+  padItemIndicadores,
   page,
   size,
   sort
@@ -145,12 +150,13 @@ export const getEntities: ICrudGetAllActionAlertasIndicadores<IAlertasIndicadore
   const alteracaoEsperadaRequest = alteracaoEsperada ? `alteracaoEsperada.contains=${alteracaoEsperada}&` : '';
   const observacoesRequest = observacoes ? `observacoes.contains=${observacoes}&` : '';
   const usuarioIdRequest = usuarioId ? `usuarioId.contains=${usuarioId}&` : '';
+  const padItemIndicadoresRequest = padItemIndicadores ? `padItemIndicadores.equals=${padItemIndicadores}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_ALERTASINDICADORES_LIST,
     payload: axios.get<IAlertasIndicadores>(
-      `${requestUrl}${pontuacaoRequest}${alteracaoEsperadaRequest}${observacoesRequest}${usuarioIdRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${pontuacaoRequest}${alteracaoEsperadaRequest}${observacoesRequest}${usuarioIdRequest}${padItemIndicadoresRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };
@@ -167,6 +173,7 @@ export const getEntitiesExport: ICrudGetAllActionAlertasIndicadores<IAlertasIndi
   alteracaoEsperada,
   observacoes,
   usuarioId,
+  padItemIndicadores,
   page,
   size,
   sort
@@ -175,19 +182,21 @@ export const getEntitiesExport: ICrudGetAllActionAlertasIndicadores<IAlertasIndi
   const alteracaoEsperadaRequest = alteracaoEsperada ? `alteracaoEsperada.contains=${alteracaoEsperada}&` : '';
   const observacoesRequest = observacoes ? `observacoes.contains=${observacoes}&` : '';
   const usuarioIdRequest = usuarioId ? `usuarioId.contains=${usuarioId}&` : '';
+  const padItemIndicadoresRequest = padItemIndicadores ? `padItemIndicadores.equals=${padItemIndicadores}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_ALERTASINDICADORES_LIST,
     payload: axios.get<IAlertasIndicadores>(
-      `${requestUrl}${pontuacaoRequest}${alteracaoEsperadaRequest}${observacoesRequest}${usuarioIdRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${pontuacaoRequest}${alteracaoEsperadaRequest}${observacoesRequest}${usuarioIdRequest}${padItemIndicadoresRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };
 
 export const createEntity: ICrudPutAction<IAlertasIndicadores> = entity => async dispatch => {
   entity = {
-    ...entity
+    ...entity,
+    padItemIndicadores: entity.padItemIndicadores === 'null' ? null : entity.padItemIndicadores
   };
   const result = await dispatch({
     type: ACTION_TYPES.CREATE_ALERTASINDICADORES,
@@ -198,7 +207,7 @@ export const createEntity: ICrudPutAction<IAlertasIndicadores> = entity => async
 };
 
 export const updateEntity: ICrudPutAction<IAlertasIndicadores> = entity => async dispatch => {
-  entity = { ...entity };
+  entity = { ...entity, padItemIndicadores: entity.padItemIndicadores === 'null' ? null : entity.padItemIndicadores };
   const result = await dispatch({
     type: ACTION_TYPES.UPDATE_ALERTASINDICADORES,
     payload: axios.put(apiUrl, cleanEntity(entity))
@@ -229,11 +238,14 @@ export const getAlertasIndicadoresState = (location): IAlertasIndicadoresBaseSta
   const observacoes = url.searchParams.get('observacoes') || '';
   const usuarioId = url.searchParams.get('usuarioId') || '';
 
+  const padItemIndicadores = url.searchParams.get('padItemIndicadores') || '';
+
   return {
     baseFilters,
     pontuacao,
     alteracaoEsperada,
     observacoes,
-    usuarioId
+    usuarioId,
+    padItemIndicadores
   };
 };

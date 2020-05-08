@@ -41,14 +41,23 @@ export interface IPacientePedidoBaseState {
   desconto: any;
   tipoValor: any;
   unidade: any;
+  paciente: any;
+  cartao: any;
+  especialidade: any;
 }
 
 export interface IPacientePedidoUpdateState {
   fieldsBase: IPacientePedidoBaseState;
 
   unidadeEasySelectValue: any;
+  pacienteSelectValue: any;
+  pacienteDadosCartaoSelectValue: any;
+  especialidadeSelectValue: any;
   isNew: boolean;
   unidadeId: string;
+  pacienteId: string;
+  cartaoId: string;
+  especialidadeId: string;
 }
 
 // Reducer
@@ -137,6 +146,9 @@ export type ICrudGetAllActionPacientePedido<T> = (
   desconto?: any,
   tipoValor?: any,
   unidade?: any,
+  paciente?: any,
+  cartao?: any,
+  especialidade?: any,
   page?: number,
   size?: number,
   sort?: string
@@ -151,6 +163,9 @@ export const getEntities: ICrudGetAllActionPacientePedido<IPacientePedido> = (
   desconto,
   tipoValor,
   unidade,
+  paciente,
+  cartao,
+  especialidade,
   page,
   size,
   sort
@@ -163,12 +178,15 @@ export const getEntities: ICrudGetAllActionPacientePedido<IPacientePedido> = (
   const descontoRequest = desconto ? `desconto.contains=${desconto}&` : '';
   const tipoValorRequest = tipoValor ? `tipoValor.contains=${tipoValor}&` : '';
   const unidadeRequest = unidade ? `unidade.equals=${unidade}&` : '';
+  const pacienteRequest = paciente ? `paciente.equals=${paciente}&` : '';
+  const cartaoRequest = cartao ? `cartao.equals=${cartao}&` : '';
+  const especialidadeRequest = especialidade ? `especialidade.equals=${especialidade}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_PACIENTEPEDIDO_LIST,
     payload: axios.get<IPacientePedido>(
-      `${requestUrl}${dataPedidoRequest}${dataAgendaRequest}${qtdSessoesRequest}${parcelasRequest}${valorRequest}${descontoRequest}${tipoValorRequest}${unidadeRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${dataPedidoRequest}${dataAgendaRequest}${qtdSessoesRequest}${parcelasRequest}${valorRequest}${descontoRequest}${tipoValorRequest}${unidadeRequest}${pacienteRequest}${cartaoRequest}${especialidadeRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };
@@ -189,6 +207,9 @@ export const getEntitiesExport: ICrudGetAllActionPacientePedido<IPacientePedido>
   desconto,
   tipoValor,
   unidade,
+  paciente,
+  cartao,
+  especialidade,
   page,
   size,
   sort
@@ -201,12 +222,15 @@ export const getEntitiesExport: ICrudGetAllActionPacientePedido<IPacientePedido>
   const descontoRequest = desconto ? `desconto.contains=${desconto}&` : '';
   const tipoValorRequest = tipoValor ? `tipoValor.contains=${tipoValor}&` : '';
   const unidadeRequest = unidade ? `unidade.equals=${unidade}&` : '';
+  const pacienteRequest = paciente ? `paciente.equals=${paciente}&` : '';
+  const cartaoRequest = cartao ? `cartao.equals=${cartao}&` : '';
+  const especialidadeRequest = especialidade ? `especialidade.equals=${especialidade}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_PACIENTEPEDIDO_LIST,
     payload: axios.get<IPacientePedido>(
-      `${requestUrl}${dataPedidoRequest}${dataAgendaRequest}${qtdSessoesRequest}${parcelasRequest}${valorRequest}${descontoRequest}${tipoValorRequest}${unidadeRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${dataPedidoRequest}${dataAgendaRequest}${qtdSessoesRequest}${parcelasRequest}${valorRequest}${descontoRequest}${tipoValorRequest}${unidadeRequest}${pacienteRequest}${cartaoRequest}${especialidadeRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };
@@ -214,7 +238,10 @@ export const getEntitiesExport: ICrudGetAllActionPacientePedido<IPacientePedido>
 export const createEntity: ICrudPutAction<IPacientePedido> = entity => async dispatch => {
   entity = {
     ...entity,
-    unidade: entity.unidade === 'null' ? null : entity.unidade
+    unidade: entity.unidade === 'null' ? null : entity.unidade,
+    paciente: entity.paciente === 'null' ? null : entity.paciente,
+    cartao: entity.cartao === 'null' ? null : entity.cartao,
+    especialidade: entity.especialidade === 'null' ? null : entity.especialidade
   };
   const result = await dispatch({
     type: ACTION_TYPES.CREATE_PACIENTEPEDIDO,
@@ -225,7 +252,13 @@ export const createEntity: ICrudPutAction<IPacientePedido> = entity => async dis
 };
 
 export const updateEntity: ICrudPutAction<IPacientePedido> = entity => async dispatch => {
-  entity = { ...entity, unidade: entity.unidade === 'null' ? null : entity.unidade };
+  entity = {
+    ...entity,
+    unidade: entity.unidade === 'null' ? null : entity.unidade,
+    paciente: entity.paciente === 'null' ? null : entity.paciente,
+    cartao: entity.cartao === 'null' ? null : entity.cartao,
+    especialidade: entity.especialidade === 'null' ? null : entity.especialidade
+  };
   const result = await dispatch({
     type: ACTION_TYPES.UPDATE_PACIENTEPEDIDO,
     payload: axios.put(apiUrl, cleanEntity(entity))
@@ -260,6 +293,9 @@ export const getPacientePedidoState = (location): IPacientePedidoBaseState => {
   const tipoValor = url.searchParams.get('tipoValor') || '';
 
   const unidade = url.searchParams.get('unidade') || '';
+  const paciente = url.searchParams.get('paciente') || '';
+  const cartao = url.searchParams.get('cartao') || '';
+  const especialidade = url.searchParams.get('especialidade') || '';
 
   return {
     baseFilters,
@@ -270,6 +306,9 @@ export const getPacientePedidoState = (location): IPacientePedidoBaseState => {
     valor,
     desconto,
     tipoValor,
-    unidade
+    unidade,
+    paciente,
+    cartao,
+    especialidade
   };
 };

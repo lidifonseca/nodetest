@@ -68,6 +68,19 @@ export class AtendimentoSorteioFeitoDetail extends React.Component<IAtendimentoS
                       </Col>
                     </Row>
                   </Col>
+
+                  <Col md="12">
+                    <Row>
+                      <Col md="3">
+                        <dt>
+                          <Translate contentKey="generadorApp.atendimentoSorteioFeito.padItem">Pad Item</Translate>
+                        </dt>
+                      </Col>
+                      <Col md="9">
+                        <dd>{atendimentoSorteioFeitoEntity.padItem ? atendimentoSorteioFeitoEntity.padItem.id : ''}</dd>
+                      </Col>
+                    </Row>
+                  </Col>
                 </Row>
                 <Button tag={Link} to="/atendimento-sorteio-feito" replace color="info">
                   <FontAwesomeIcon icon="arrow-left" />{' '}

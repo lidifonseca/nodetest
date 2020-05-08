@@ -29,7 +29,11 @@
       "valorVenda": "Valor Venda",
       "descontoCusto": "Desconto Custo",
       "descontoVenda": "Desconto Venda",
-      "ativo": "Ativo"
+      "ativo": "Ativo",
+      "operadora_empty": "Without Operadora",
+      "operadora": "Operadora",
+      "especialidade_empty": "Without Especialidade",
+      "especialidade": "Especialidade"
     }
   }
 }

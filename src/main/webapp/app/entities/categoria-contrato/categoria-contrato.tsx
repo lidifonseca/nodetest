@@ -37,6 +37,9 @@ import { ICategoriaContrato } from 'app/shared/model/categoria-contrato.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
+import { ICategoria } from 'app/shared/model/categoria.model';
+import { getEntities as getCategorias } from 'app/entities/categoria/categoria.reducer';
+
 export interface ICategoriaContratoProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
 export interface ICategoriaContratoState extends ICategoriaContratoBaseState, IPaginationBaseState {}
@@ -54,13 +57,16 @@ export class CategoriaContrato extends React.Component<ICategoriaContratoProps, 
 
   componentDidMount() {
     this.getEntities();
+
+    this.props.getCategorias();
   }
 
   cancelCourse = () => {
     this.setState(
       {
         contrato: '',
-        ativo: ''
+        ativo: '',
+        categoria: ''
       },
       () => this.sortEntities()
     );
@@ -113,6 +119,9 @@ export class CategoriaContrato extends React.Component<ICategoriaContratoProps, 
       'ativo=' +
       this.state.ativo +
       '&' +
+      'categoria=' +
+      this.state.categoria +
+      '&' +
       ''
     );
   };
@@ -120,12 +129,12 @@ export class CategoriaContrato extends React.Component<ICategoriaContratoProps, 
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { contrato, ativo, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntities(contrato, ativo, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const { contrato, ativo, categoria, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntities(contrato, ativo, categoria, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   render() {
-    const { categoriaContratoList, match, totalItems } = this.props;
+    const { categorias, categoriaContratoList, match, totalItems } = this.props;
     return (
       <div>
         <h2 id="page-heading">
@@ -177,6 +186,33 @@ export class CategoriaContrato extends React.Component<ICategoriaContratoProps, 
                           </Row>
                         </Col>
                       ) : null}
+
+                      {this.state.baseFilters !== 'categoria' ? (
+                        <Col md="3">
+                          <Row className="mr-1 mt-1">
+                            <div style={{ width: '100%' }}>
+                              <Label for="categoria-contrato-categoria">
+                                <Translate contentKey="generadorApp.categoriaContrato.categoria">Categoria</Translate>
+                              </Label>
+                              <Select
+                                id="categoria-contrato-categoria"
+                                isMulti
+                                className={'css-select-control'}
+                                value={
+                                  categorias
+                                    ? categorias.map(p =>
+                                        this.state.categoria.split(',').indexOf(p.id) !== -1 ? { value: p.id, label: p.id } : null
+                                      )
+                                    : null
+                                }
+                                options={categorias ? categorias.map(option => ({ value: option.id, label: option.id })) : null}
+                                onChange={options => this.setState({ categoria: options.map(option => option['value']).join(',') })}
+                                name={'categoria'}
+                              />
+                            </div>
+                          </Row>
+                        </Col>
+                      ) : null}
                     </div>
 
                     <div className="row mb-2 mr-4 justify-content-end">
@@ -217,6 +253,13 @@ export class CategoriaContrato extends React.Component<ICategoriaContratoProps, 
                         </th>
                       ) : null}
 
+                      {this.state.baseFilters !== 'categoria' ? (
+                        <th>
+                          <Translate contentKey="generadorApp.categoriaContrato.categoria">Categoria</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+
                       <th />
                     </tr>
                   </thead>
@@ -247,6 +290,16 @@ export class CategoriaContrato extends React.Component<ICategoriaContratoProps, 
                         ) : null}
 
                         {this.state.baseFilters !== 'ativo' ? <td>{categoriaContrato.ativo}</td> : null}
+
+                        {this.state.baseFilters !== 'categoria' ? (
+                          <td>
+                            {categoriaContrato.categoria ? (
+                              <Link to={`categoria/${categoriaContrato.categoria.id}`}>{categoriaContrato.categoria.id}</Link>
+                            ) : (
+                              ''
+                            )}
+                          </td>
+                        ) : null}
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">
@@ -314,11 +367,13 @@ export class CategoriaContrato extends React.Component<ICategoriaContratoProps, 
 }
 
 const mapStateToProps = ({ categoriaContrato, ...storeState }: IRootState) => ({
+  categorias: storeState.categoria.entities,
   categoriaContratoList: categoriaContrato.entities,
   totalItems: categoriaContrato.totalItems
 });
 
 const mapDispatchToProps = {
+  getCategorias,
   getEntities
 };
 

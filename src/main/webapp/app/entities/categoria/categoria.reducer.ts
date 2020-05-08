@@ -39,6 +39,10 @@ export interface ICategoriaBaseState {
   publicar: any;
   ordem: any;
   publicarSite: any;
+  categoriaAtividade: any;
+  categoriaContrato: any;
+  cidXPtaNovoPadItemIndi: any;
+  especialidade: any;
   unidade: any;
 }
 
@@ -134,6 +138,10 @@ export type ICrudGetAllActionCategoria<T> = (
   publicar?: any,
   ordem?: any,
   publicarSite?: any,
+  categoriaAtividade?: any,
+  categoriaContrato?: any,
+  cidXPtaNovoPadItemIndi?: any,
+  especialidade?: any,
   unidade?: any,
   page?: number,
   size?: number,
@@ -147,6 +155,10 @@ export const getEntities: ICrudGetAllActionCategoria<ICategoria> = (
   publicar,
   ordem,
   publicarSite,
+  categoriaAtividade,
+  categoriaContrato,
+  cidXPtaNovoPadItemIndi,
+  especialidade,
   unidade,
   page,
   size,
@@ -158,13 +170,17 @@ export const getEntities: ICrudGetAllActionCategoria<ICategoria> = (
   const publicarRequest = publicar ? `publicar.contains=${publicar}&` : '';
   const ordemRequest = ordem ? `ordem.contains=${ordem}&` : '';
   const publicarSiteRequest = publicarSite ? `publicarSite.contains=${publicarSite}&` : '';
+  const categoriaAtividadeRequest = categoriaAtividade ? `categoriaAtividade.equals=${categoriaAtividade}&` : '';
+  const categoriaContratoRequest = categoriaContrato ? `categoriaContrato.equals=${categoriaContrato}&` : '';
+  const cidXPtaNovoPadItemIndiRequest = cidXPtaNovoPadItemIndi ? `cidXPtaNovoPadItemIndi.equals=${cidXPtaNovoPadItemIndi}&` : '';
+  const especialidadeRequest = especialidade ? `especialidade.equals=${especialidade}&` : '';
   const unidadeRequest = unidade ? `unidade.equals=${unidade}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_CATEGORIA_LIST,
     payload: axios.get<ICategoria>(
-      `${requestUrl}${categoriaRequest}${styleCategoriaRequest}${iconRequest}${publicarRequest}${ordemRequest}${publicarSiteRequest}${unidadeRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${categoriaRequest}${styleCategoriaRequest}${iconRequest}${publicarRequest}${ordemRequest}${publicarSiteRequest}${categoriaAtividadeRequest}${categoriaContratoRequest}${cidXPtaNovoPadItemIndiRequest}${especialidadeRequest}${unidadeRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };
@@ -183,6 +199,10 @@ export const getEntitiesExport: ICrudGetAllActionCategoria<ICategoria> = (
   publicar,
   ordem,
   publicarSite,
+  categoriaAtividade,
+  categoriaContrato,
+  cidXPtaNovoPadItemIndi,
+  especialidade,
   unidade,
   page,
   size,
@@ -194,13 +214,17 @@ export const getEntitiesExport: ICrudGetAllActionCategoria<ICategoria> = (
   const publicarRequest = publicar ? `publicar.contains=${publicar}&` : '';
   const ordemRequest = ordem ? `ordem.contains=${ordem}&` : '';
   const publicarSiteRequest = publicarSite ? `publicarSite.contains=${publicarSite}&` : '';
+  const categoriaAtividadeRequest = categoriaAtividade ? `categoriaAtividade.equals=${categoriaAtividade}&` : '';
+  const categoriaContratoRequest = categoriaContrato ? `categoriaContrato.equals=${categoriaContrato}&` : '';
+  const cidXPtaNovoPadItemIndiRequest = cidXPtaNovoPadItemIndi ? `cidXPtaNovoPadItemIndi.equals=${cidXPtaNovoPadItemIndi}&` : '';
+  const especialidadeRequest = especialidade ? `especialidade.equals=${especialidade}&` : '';
   const unidadeRequest = unidade ? `unidade.equals=${unidade}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_CATEGORIA_LIST,
     payload: axios.get<ICategoria>(
-      `${requestUrl}${categoriaRequest}${styleCategoriaRequest}${iconRequest}${publicarRequest}${ordemRequest}${publicarSiteRequest}${unidadeRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${categoriaRequest}${styleCategoriaRequest}${iconRequest}${publicarRequest}${ordemRequest}${publicarSiteRequest}${categoriaAtividadeRequest}${categoriaContratoRequest}${cidXPtaNovoPadItemIndiRequest}${especialidadeRequest}${unidadeRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };
@@ -251,6 +275,10 @@ export const getCategoriaState = (location): ICategoriaBaseState => {
   const ordem = url.searchParams.get('ordem') || '';
   const publicarSite = url.searchParams.get('publicarSite') || '';
 
+  const categoriaAtividade = url.searchParams.get('categoriaAtividade') || '';
+  const categoriaContrato = url.searchParams.get('categoriaContrato') || '';
+  const cidXPtaNovoPadItemIndi = url.searchParams.get('cidXPtaNovoPadItemIndi') || '';
+  const especialidade = url.searchParams.get('especialidade') || '';
   const unidade = url.searchParams.get('unidade') || '';
 
   return {
@@ -261,6 +289,10 @@ export const getCategoriaState = (location): ICategoriaBaseState => {
     publicar,
     ordem,
     publicarSite,
+    categoriaAtividade,
+    categoriaContrato,
+    cidXPtaNovoPadItemIndi,
+    especialidade,
     unidade
   };
 };

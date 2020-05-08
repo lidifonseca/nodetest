@@ -173,6 +173,32 @@ export class EspecialidadeOperadoraDetail extends React.Component<IEspecialidade
                       </Col>
                     </Row>
                   </Col>
+
+                  <Col md="12">
+                    <Row>
+                      <Col md="3">
+                        <dt>
+                          <Translate contentKey="generadorApp.especialidadeOperadora.operadora">Operadora</Translate>
+                        </dt>
+                      </Col>
+                      <Col md="9">
+                        <dd>{especialidadeOperadoraEntity.operadora ? especialidadeOperadoraEntity.operadora.id : ''}</dd>
+                      </Col>
+                    </Row>
+                  </Col>
+
+                  <Col md="12">
+                    <Row>
+                      <Col md="3">
+                        <dt>
+                          <Translate contentKey="generadorApp.especialidadeOperadora.especialidade">Especialidade</Translate>
+                        </dt>
+                      </Col>
+                      <Col md="9">
+                        <dd>{especialidadeOperadoraEntity.especialidade ? especialidadeOperadoraEntity.especialidade.id : ''}</dd>
+                      </Col>
+                    </Row>
+                  </Col>
                 </Row>
                 <Button tag={Link} to="/especialidade-operadora" replace color="info">
                   <FontAwesomeIcon icon="arrow-left" />{' '}

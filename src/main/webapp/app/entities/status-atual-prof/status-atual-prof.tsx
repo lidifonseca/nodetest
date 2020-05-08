@@ -51,7 +51,8 @@ export class StatusAtualProf extends React.Component<IStatusAtualProfProps, ISta
     this.setState(
       {
         statusAtualProf: '',
-        styleLabel: ''
+        styleLabel: '',
+        profissionalStatusAtual: ''
       },
       () => this.sortEntities()
     );
@@ -104,6 +105,9 @@ export class StatusAtualProf extends React.Component<IStatusAtualProfProps, ISta
       'styleLabel=' +
       this.state.styleLabel +
       '&' +
+      'profissionalStatusAtual=' +
+      this.state.profissionalStatusAtual +
+      '&' +
       ''
     );
   };
@@ -111,8 +115,8 @@ export class StatusAtualProf extends React.Component<IStatusAtualProfProps, ISta
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { statusAtualProf, styleLabel, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntities(statusAtualProf, styleLabel, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const { statusAtualProf, styleLabel, profissionalStatusAtual, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntities(statusAtualProf, styleLabel, profissionalStatusAtual, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   render() {
@@ -178,6 +182,12 @@ export class StatusAtualProf extends React.Component<IStatusAtualProfProps, ISta
 
                             <AvInput type="text" name="styleLabel" id="status-atual-prof-styleLabel" value={this.state.styleLabel} />
                           </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'profissionalStatusAtual' ? (
+                        <Col md="3">
+                          <Row className="mr-1 mt-1"></Row>
                         </Col>
                       ) : null}
                     </div>
