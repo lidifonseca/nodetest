@@ -211,13 +211,11 @@ export class EspecialidadeValorUpdate extends React.Component<IEspecialidadeValo
                           <Col md="ativo">
                             <AvGroup>
                               <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="ativoLabel" for="especialidade-valor-ativo">
+                                <Col md="12">
+                                  <Label className="mt-2" id="ativoLabel" check>
+                                    <AvInput id="especialidade-valor-ativo" type="checkbox" className="form-control" name="ativo" />
                                     <Translate contentKey="generadorApp.especialidadeValor.ativo">Ativo</Translate>
                                   </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField id="especialidade-valor-ativo" type="string" className="form-control" name="ativo" />
                                 </Col>
                               </Row>
                             </AvGroup>

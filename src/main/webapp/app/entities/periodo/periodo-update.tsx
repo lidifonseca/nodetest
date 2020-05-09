@@ -165,13 +165,11 @@ export class PeriodoUpdate extends React.Component<IPeriodoUpdateProps, IPeriodo
                           <Col md="ativo">
                             <AvGroup>
                               <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="ativoLabel" for="periodo-ativo">
+                                <Col md="12">
+                                  <Label className="mt-2" id="ativoLabel" check>
+                                    <AvInput id="periodo-ativo" type="checkbox" className="form-control" name="ativo" />
                                     <Translate contentKey="generadorApp.periodo.ativo">Ativo</Translate>
                                   </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField id="periodo-ativo" type="string" className="form-control" name="ativo" />
                                 </Col>
                               </Row>
                             </AvGroup>

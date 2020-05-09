@@ -4,9 +4,11 @@ import { ICid } from 'app/shared/model/cid.model';
 export interface IPadCid {
   id?: string;
   observacao?: string;
-  ativo?: number;
+  ativo?: boolean;
   pad?: string | any;
   cid?: string | any;
 }
 
-export const defaultValue: Readonly<IPadCid> = {};
+export const defaultValue: Readonly<IPadCid> = {
+  ativo: false
+};

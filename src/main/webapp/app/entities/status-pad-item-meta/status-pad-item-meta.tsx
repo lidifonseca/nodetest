@@ -203,10 +203,10 @@ export class StatusPadItemMeta extends React.Component<IStatusPadItemMetaProps, 
                       {this.state.baseFilters !== 'ativo' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="ativoLabel" for="status-pad-item-meta-ativo">
+                            <Label id="ativoLabel" check>
+                              <AvInput id="status-pad-item-meta-ativo" type="checkbox" className="form-control" name="ativo" />
                               <Translate contentKey="generadorApp.statusPadItemMeta.ativo">Ativo</Translate>
                             </Label>
-                            <AvInput type="string" name="ativo" id="status-pad-item-meta-ativo" value={this.state.ativo} />
                           </Row>
                         </Col>
                       ) : null}
@@ -281,7 +281,7 @@ export class StatusPadItemMeta extends React.Component<IStatusPadItemMetaProps, 
 
                         {this.state.baseFilters !== 'ordenacao' ? <td>{statusPadItemMeta.ordenacao}</td> : null}
 
-                        {this.state.baseFilters !== 'ativo' ? <td>{statusPadItemMeta.ativo}</td> : null}
+                        {this.state.baseFilters !== 'ativo' ? <td>{statusPadItemMeta.ativo ? 'true' : 'false'}</td> : null}
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">

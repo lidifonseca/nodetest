@@ -2,7 +2,9 @@ export interface IDescPta {
   id?: string;
   nome?: string;
   resultadoEsperado?: string;
-  ativo?: number;
+  ativo?: boolean;
 }
 
-export const defaultValue: Readonly<IDescPta> = {};
+export const defaultValue: Readonly<IDescPta> = {
+  ativo: false
+};

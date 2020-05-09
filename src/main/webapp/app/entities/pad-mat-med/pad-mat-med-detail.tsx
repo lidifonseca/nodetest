@@ -108,7 +108,7 @@ export class PadMatMedDetail extends React.Component<IPadMatMedDetailProps, IPad
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{padMatMedEntity.ativo}</dd>
+                        <dd>{padMatMedEntity.ativo ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>

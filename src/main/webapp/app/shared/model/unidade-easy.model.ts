@@ -22,8 +22,10 @@ export interface IUnidadeEasy {
   tissinscricao?: string;
   tisscbo?: string;
   tisscoduf?: string;
-  ativo?: number;
+  ativo?: boolean;
   categorias?: ICategoria[];
 }
 
-export const defaultValue: Readonly<IUnidadeEasy> = {};
+export const defaultValue: Readonly<IUnidadeEasy> = {
+  ativo: false
+};

@@ -204,13 +204,11 @@ export class MatMedUpdate extends React.Component<IMatMedUpdateProps, IMatMedUpd
                           <Col md="ativo">
                             <AvGroup>
                               <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="ativoLabel" for="mat-med-ativo">
+                                <Col md="12">
+                                  <Label className="mt-2" id="ativoLabel" check>
+                                    <AvInput id="mat-med-ativo" type="checkbox" className="form-control" name="ativo" />
                                     <Translate contentKey="generadorApp.matMed.ativo">Ativo</Translate>
                                   </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField id="mat-med-ativo" type="string" className="form-control" name="ativo" />
                                 </Col>
                               </Row>
                             </AvGroup>

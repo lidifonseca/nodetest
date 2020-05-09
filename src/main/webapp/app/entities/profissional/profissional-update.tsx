@@ -12,6 +12,8 @@ import { IRootState } from 'app/shared/reducers';
 
 import { IUnidadeEasy } from 'app/shared/model/unidade-easy.model';
 import { getEntities as getUnidadeEasies } from 'app/entities/unidade-easy/unidade-easy.reducer';
+import { IEspecialidade } from 'app/shared/model/especialidade.model';
+import { getEntities as getEspecialidades } from 'app/entities/especialidade/especialidade.reducer';
 import {
   IProfissionalUpdateState,
   getEntity,
@@ -38,7 +40,9 @@ export class ProfissionalUpdate extends React.Component<IProfissionalUpdateProps
 
     this.state = {
       unidadeEasySelectValue: null,
+      especialidadeSelectValue: null,
       fieldsBase: getProfissionalState(this.props.location),
+      idsespecialidade: [],
       unidadeId: '0',
       isNew: !this.props.match.params || !this.props.match.params.id
     };
@@ -60,6 +64,19 @@ export class ProfissionalUpdate extends React.Component<IProfissionalUpdateProps
         )
       });
     }
+
+    if (
+      nextProps.especialidades.length > 0 &&
+      this.state.especialidadeSelectValue === null &&
+      nextProps.profissionalEntity.especialidade &&
+      nextProps.profissionalEntity.especialidade.id
+    ) {
+      this.setState({
+        especialidadeSelectValue: nextProps.especialidades.map(p =>
+          nextProps.profissionalEntity.especialidade.id === p.id ? { value: p.id, label: p.especialidade } : null
+        )
+      });
+    }
   }
 
   componentDidMount() {
@@ -70,6 +87,7 @@ export class ProfissionalUpdate extends React.Component<IProfissionalUpdateProps
     }
 
     this.props.getUnidadeEasies();
+    this.props.getEspecialidades();
   }
 
   onBlobChange = (isAnImage, name, fileInput) => event => {
@@ -96,7 +114,9 @@ export class ProfissionalUpdate extends React.Component<IProfissionalUpdateProps
       const entity = {
         ...profissionalEntity,
         unidadeEasy: this.state.unidadeEasySelectValue ? this.state.unidadeEasySelectValue['value'] : null,
-        ...values
+        especialidade: this.state.especialidadeSelectValue ? this.state.especialidadeSelectValue['value'] : null,
+        ...values,
+        especialidades: mapIdList(values.especialidades)
       };
 
       if (this.state.isNew) {
@@ -112,7 +132,7 @@ export class ProfissionalUpdate extends React.Component<IProfissionalUpdateProps
   };
 
   render() {
-    const { profissionalEntity, unidadeEasies, loading, updating } = this.props;
+    const { profissionalEntity, unidadeEasies, especialidades, loading, updating } = this.props;
     const { isNew } = this.state;
 
     const { obs } = profissionalEntity;
@@ -784,13 +804,11 @@ export class ProfissionalUpdate extends React.Component<IProfissionalUpdateProps
                           <Col md="ativo">
                             <AvGroup>
                               <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="ativoLabel" for="profissional-ativo">
+                                <Col md="12">
+                                  <Label className="mt-2" id="ativoLabel" check>
+                                    <AvInput id="profissional-ativo" type="checkbox" className="form-control" name="ativo" />
                                     <Translate contentKey="generadorApp.profissional.ativo">Ativo</Translate>
                                   </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField id="profissional-ativo" type="string" className="form-control" name="ativo" />
                                 </Col>
                               </Row>
                             </AvGroup>
@@ -921,6 +939,61 @@ export class ProfissionalUpdate extends React.Component<IProfissionalUpdateProps
                         ) : (
                           <AvInput type="hidden" name="unidade" value={this.state.fieldsBase[baseFilters]} />
                         )}
+                        {baseFilters !== 'especialidade' ? (
+                          <Col md="12">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" for="profissional-especialidade">
+                                    <Translate contentKey="generadorApp.profissional.especialidade">Especialidade</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <Select
+                                    id="profissional-especialidade"
+                                    isMulti
+                                    className={'css-select-control'}
+                                    value={
+                                      especialidades
+                                        ? especialidades.map(p =>
+                                            this.state.profissionalEntity.especialidade === p.id ? { value: p.id, label: p.id } : null
+                                          )
+                                        : null
+                                    }
+                                    options={
+                                      especialidades
+                                        ? especialidades.map(option => ({ value: option.id, label: option.especialidade }))
+                                        : null
+                                    }
+                                    onChange={options => this.setState({ especialidade: options.map(option => option['value']).join(',') })}
+                                    name={'especialidade'}
+                                  />
+                                  <AvInput
+                                    id="profissional-especialidade"
+                                    type="select"
+                                    multiple
+                                    className="form-control"
+                                    name="especialidades"
+                                    value={profissionalEntity.especialidades && profissionalEntity.especialidades.map(e => e.id)}
+                                  >
+                                    <option value="null" key="0">
+                                      {translate('generadorApp.profissional.especialidade_empty')}
+                                    </option>
+                                    {especialidades
+                                      ? especialidades.map(otherEntity => (
+                                          <option value={otherEntity.id} key={otherEntity.id}>
+                                            {otherEntity.especialidade}
+                                          </option>
+                                        ))
+                                      : null}
+                                  </AvInput>
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="especialidade" value={this.state.fieldsBase[baseFilters]} />
+                        )}
                       </Row>
                     </div>
                   )}
@@ -936,6 +1009,7 @@ export class ProfissionalUpdate extends React.Component<IProfissionalUpdateProps
 
 const mapStateToProps = (storeState: IRootState) => ({
   unidadeEasies: storeState.unidadeEasy.entities,
+  especialidades: storeState.especialidade.entities,
   profissionalEntity: storeState.profissional.entity,
   loading: storeState.profissional.loading,
   updating: storeState.profissional.updating,
@@ -944,6 +1018,7 @@ const mapStateToProps = (storeState: IRootState) => ({
 
 const mapDispatchToProps = {
   getUnidadeEasies,
+  getEspecialidades,
   getEntity,
   updateEntity,
   setBlob,

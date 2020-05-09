@@ -196,10 +196,10 @@ export class PadMatMed extends React.Component<IPadMatMedProps, IPadMatMedState>
                       {this.state.baseFilters !== 'ativo' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="ativoLabel" for="pad-mat-med-ativo">
+                            <Label id="ativoLabel" check>
+                              <AvInput id="pad-mat-med-ativo" type="checkbox" className="form-control" name="ativo" />
                               <Translate contentKey="generadorApp.padMatMed.ativo">Ativo</Translate>
                             </Label>
-                            <AvInput type="string" name="ativo" id="pad-mat-med-ativo" value={this.state.ativo} />
                           </Row>
                         </Col>
                       ) : null}
@@ -274,7 +274,7 @@ export class PadMatMed extends React.Component<IPadMatMedProps, IPadMatMedState>
 
                         {this.state.baseFilters !== 'qtd' ? <td>{padMatMed.qtd}</td> : null}
 
-                        {this.state.baseFilters !== 'ativo' ? <td>{padMatMed.ativo}</td> : null}
+                        {this.state.baseFilters !== 'ativo' ? <td>{padMatMed.ativo ? 'true' : 'false'}</td> : null}
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">

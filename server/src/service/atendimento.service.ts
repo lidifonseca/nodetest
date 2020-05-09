@@ -6,10 +6,12 @@ import { AtendimentoRepository } from '../repository/atendimento.repository';
 
 const relationshipNames = [];
 relationshipNames.push('unidade');
+relationshipNames.push('padItem');
 relationshipNames.push('paciente');
 relationshipNames.push('operadora');
+relationshipNames.push('profissional');
+relationshipNames.push('franquia');
 relationshipNames.push('especialidade');
-relationshipNames.push('padItem');
 relationshipNames.push('statusAtendimento');
 relationshipNames.push('periodo');
 relationshipNames.push('cidade');

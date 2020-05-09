@@ -12,8 +12,8 @@ export default class PacienteGrauParentesco extends BaseEntity {
   @Column({ name: 'GRAU_PARENTESCO', length: 60 })
   grauParentesco: string;
 
-  @Column({ type: 'integer', name: 'ATIVO' })
-  ativo: number;
+  @Column({ type: 'boolean', name: 'ATIVO' })
+  ativo: boolean;
 
   // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
 }

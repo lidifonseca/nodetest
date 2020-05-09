@@ -7,19 +7,15 @@ import { validate, Contains, IsInt, Length, IsEmail, IsFQDN, IsDate, Min, Max } 
 import PadCid from './pad-cid.entity';
 import PadItem from './pad-item.entity';
 import UnidadeEasy from './unidade-easy.entity';
+import Operadora from './operadora.entity';
+import Franquia from './franquia.entity';
 import Paciente from './paciente.entity';
 
 /**
- * A Pad.
+ * \n\n
  */
 @Entity('tb_pad')
 export default class Pad extends BaseEntity {
-  @Column({ type: 'integer', name: 'ID_OPERADORA' })
-  idOperadora: number;
-
-  @Column({ name: 'ID_FRANQUIA' })
-  idFranquia: string;
-
   @Column({ name: 'NRO_PAD', length: 30 })
   nroPad: string;
 
@@ -32,8 +28,8 @@ export default class Pad extends BaseEntity {
   @Column({ type: 'date', name: 'DATA_CONFERIDO' })
   dataConferido: any;
 
-  @Column({ type: 'integer', name: 'ATIVO' })
-  ativo: number;
+  @Column({ type: 'boolean', name: 'ATIVO' })
+  ativo: boolean;
 
   @Column({ type: 'integer', name: 'STATUS_PAD' })
   statusPad: number;
@@ -53,6 +49,14 @@ export default class Pad extends BaseEntity {
   @ManyToOne(type => UnidadeEasy)
   @JoinColumn({ name: 'ID_UNIDADE', referencedColumnName: 'id' })
   unidade: UnidadeEasy;
+
+  @ManyToOne(type => Operadora)
+  @JoinColumn({ name: 'ID_OPERADORA', referencedColumnName: 'id' })
+  operadora: Operadora;
+
+  @ManyToOne(type => Franquia)
+  @JoinColumn({ name: 'ID_FRANQUIA', referencedColumnName: 'id' })
+  franquia: Franquia;
 
   @ManyToOne(type => Paciente)
   @JoinColumn({ name: 'ID_PACIENTE', referencedColumnName: 'id' })

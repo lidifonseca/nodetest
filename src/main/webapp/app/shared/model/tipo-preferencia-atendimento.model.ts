@@ -1,7 +1,9 @@
 export interface ITipoPreferenciaAtendimento {
   id?: string;
   nome?: string;
-  ativo?: number;
+  ativo?: boolean;
 }
 
-export const defaultValue: Readonly<ITipoPreferenciaAtendimento> = {};
+export const defaultValue: Readonly<ITipoPreferenciaAtendimento> = {
+  ativo: false
+};

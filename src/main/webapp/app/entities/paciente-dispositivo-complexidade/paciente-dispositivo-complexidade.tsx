@@ -185,10 +185,10 @@ export class PacienteDispositivoComplexidade extends React.Component<
                       {this.state.baseFilters !== 'ativo' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="ativoLabel" for="paciente-dispositivo-complexidade-ativo">
+                            <Label id="ativoLabel" check>
+                              <AvInput id="paciente-dispositivo-complexidade-ativo" type="checkbox" className="form-control" name="ativo" />
                               <Translate contentKey="generadorApp.pacienteDispositivoComplexidade.ativo">Ativo</Translate>
                             </Label>
-                            <AvInput type="string" name="ativo" id="paciente-dispositivo-complexidade-ativo" value={this.state.ativo} />
                           </Row>
                         </Col>
                       ) : null}
@@ -265,7 +265,7 @@ export class PacienteDispositivoComplexidade extends React.Component<
 
                         {this.state.baseFilters !== 'caracteristica' ? <td>{pacienteDispositivoComplexidade.caracteristica}</td> : null}
 
-                        {this.state.baseFilters !== 'ativo' ? <td>{pacienteDispositivoComplexidade.ativo}</td> : null}
+                        {this.state.baseFilters !== 'ativo' ? <td>{pacienteDispositivoComplexidade.ativo ? 'true' : 'false'}</td> : null}
 
                         {this.state.baseFilters !== 'tipo' ? <td>{pacienteDispositivoComplexidade.tipo}</td> : null}
 

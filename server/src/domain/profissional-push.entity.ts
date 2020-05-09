@@ -18,8 +18,8 @@ export default class ProfissionalPush extends BaseEntity {
   @Column({ name: 'MENSAGEM', length: 255 })
   mensagem: string;
 
-  @Column({ type: 'integer', name: 'ATIVO' })
-  ativo: number;
+  @Column({ type: 'boolean', name: 'ATIVO' })
+  ativo: boolean;
 
   // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
 }

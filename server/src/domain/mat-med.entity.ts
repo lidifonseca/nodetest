@@ -21,8 +21,8 @@ export default class MatMed extends BaseEntity {
   @Column({ type: 'decimal', name: 'VALOR', precision: 10, scale: 2 })
   valor: number;
 
-  @Column({ type: 'integer', name: 'ATIVO' })
-  ativo: number;
+  @Column({ type: 'boolean', name: 'ATIVO' })
+  ativo: boolean;
 
   // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
 }

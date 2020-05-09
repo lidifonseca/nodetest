@@ -2,7 +2,9 @@ export interface IProfissionalArquivo {
   id?: string;
   idProfissional?: string;
   arquivo?: string;
-  ativo?: number;
+  ativo?: boolean;
 }
 
-export const defaultValue: Readonly<IProfissionalArquivo> = {};
+export const defaultValue: Readonly<IProfissionalArquivo> = {
+  ativo: false
+};

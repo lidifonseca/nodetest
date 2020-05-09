@@ -64,7 +64,7 @@ export class UsuarioPainelGerencialDetail extends React.Component<IUsuarioPainel
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{usuarioPainelGerencialEntity.verCronicos}</dd>
+                        <dd>{usuarioPainelGerencialEntity.verCronicos ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>
@@ -81,7 +81,7 @@ export class UsuarioPainelGerencialDetail extends React.Component<IUsuarioPainel
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{usuarioPainelGerencialEntity.verPacientesAtivosCr}</dd>
+                        <dd>{usuarioPainelGerencialEntity.verPacientesAtivosCr ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>
@@ -98,7 +98,7 @@ export class UsuarioPainelGerencialDetail extends React.Component<IUsuarioPainel
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{usuarioPainelGerencialEntity.filtroPacientesAtivosCr}</dd>
+                        <dd>{usuarioPainelGerencialEntity.filtroPacientesAtivosCr ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>
@@ -113,7 +113,7 @@ export class UsuarioPainelGerencialDetail extends React.Component<IUsuarioPainel
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{usuarioPainelGerencialEntity.verNumHospCr}</dd>
+                        <dd>{usuarioPainelGerencialEntity.verNumHospCr ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>
@@ -128,7 +128,7 @@ export class UsuarioPainelGerencialDetail extends React.Component<IUsuarioPainel
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{usuarioPainelGerencialEntity.filtroNumHospCr}</dd>
+                        <dd>{usuarioPainelGerencialEntity.filtroNumHospCr ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>
@@ -143,7 +143,7 @@ export class UsuarioPainelGerencialDetail extends React.Component<IUsuarioPainel
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{usuarioPainelGerencialEntity.verNumDesospCr}</dd>
+                        <dd>{usuarioPainelGerencialEntity.verNumDesospCr ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>
@@ -158,7 +158,7 @@ export class UsuarioPainelGerencialDetail extends React.Component<IUsuarioPainel
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{usuarioPainelGerencialEntity.filtroNumDesospCr}</dd>
+                        <dd>{usuarioPainelGerencialEntity.filtroNumDesospCr ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>
@@ -173,7 +173,7 @@ export class UsuarioPainelGerencialDetail extends React.Component<IUsuarioPainel
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{usuarioPainelGerencialEntity.verNumPsCr}</dd>
+                        <dd>{usuarioPainelGerencialEntity.verNumPsCr ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>
@@ -188,7 +188,7 @@ export class UsuarioPainelGerencialDetail extends React.Component<IUsuarioPainel
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{usuarioPainelGerencialEntity.filtroNumPsCr}</dd>
+                        <dd>{usuarioPainelGerencialEntity.filtroNumPsCr ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>
@@ -203,7 +203,7 @@ export class UsuarioPainelGerencialDetail extends React.Component<IUsuarioPainel
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{usuarioPainelGerencialEntity.verNumObitoCr}</dd>
+                        <dd>{usuarioPainelGerencialEntity.verNumObitoCr ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>
@@ -218,7 +218,7 @@ export class UsuarioPainelGerencialDetail extends React.Component<IUsuarioPainel
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{usuarioPainelGerencialEntity.filtroNumObitoCr}</dd>
+                        <dd>{usuarioPainelGerencialEntity.filtroNumObitoCr ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>
@@ -235,7 +235,7 @@ export class UsuarioPainelGerencialDetail extends React.Component<IUsuarioPainel
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{usuarioPainelGerencialEntity.verIndCliEstaveisCr}</dd>
+                        <dd>{usuarioPainelGerencialEntity.verIndCliEstaveisCr ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>
@@ -252,7 +252,7 @@ export class UsuarioPainelGerencialDetail extends React.Component<IUsuarioPainel
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{usuarioPainelGerencialEntity.filtroIndCliEstaveisCr}</dd>
+                        <dd>{usuarioPainelGerencialEntity.filtroIndCliEstaveisCr ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>
@@ -269,7 +269,7 @@ export class UsuarioPainelGerencialDetail extends React.Component<IUsuarioPainel
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{usuarioPainelGerencialEntity.verNumConsMedInternasCr}</dd>
+                        <dd>{usuarioPainelGerencialEntity.verNumConsMedInternasCr ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>
@@ -286,7 +286,7 @@ export class UsuarioPainelGerencialDetail extends React.Component<IUsuarioPainel
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{usuarioPainelGerencialEntity.filtroNumConsMedInternasCr}</dd>
+                        <dd>{usuarioPainelGerencialEntity.filtroNumConsMedInternasCr ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>
@@ -303,7 +303,7 @@ export class UsuarioPainelGerencialDetail extends React.Component<IUsuarioPainel
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{usuarioPainelGerencialEntity.verNumConsMedExternasCr}</dd>
+                        <dd>{usuarioPainelGerencialEntity.verNumConsMedExternasCr ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>
@@ -320,7 +320,7 @@ export class UsuarioPainelGerencialDetail extends React.Component<IUsuarioPainel
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{usuarioPainelGerencialEntity.filtroNumConsMedExternasCr}</dd>
+                        <dd>{usuarioPainelGerencialEntity.filtroNumConsMedExternasCr ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>
@@ -337,7 +337,7 @@ export class UsuarioPainelGerencialDetail extends React.Component<IUsuarioPainel
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{usuarioPainelGerencialEntity.verNumLaboratorialCr}</dd>
+                        <dd>{usuarioPainelGerencialEntity.verNumLaboratorialCr ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>
@@ -354,7 +354,7 @@ export class UsuarioPainelGerencialDetail extends React.Component<IUsuarioPainel
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{usuarioPainelGerencialEntity.filtroNumLaboratorialCr}</dd>
+                        <dd>{usuarioPainelGerencialEntity.filtroNumLaboratorialCr ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>
@@ -369,7 +369,7 @@ export class UsuarioPainelGerencialDetail extends React.Component<IUsuarioPainel
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{usuarioPainelGerencialEntity.verNumImagemCr}</dd>
+                        <dd>{usuarioPainelGerencialEntity.verNumImagemCr ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>
@@ -384,7 +384,7 @@ export class UsuarioPainelGerencialDetail extends React.Component<IUsuarioPainel
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{usuarioPainelGerencialEntity.filtroNumImagemCr}</dd>
+                        <dd>{usuarioPainelGerencialEntity.filtroNumImagemCr ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>
@@ -399,7 +399,7 @@ export class UsuarioPainelGerencialDetail extends React.Component<IUsuarioPainel
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{usuarioPainelGerencialEntity.verNumOutrosCr}</dd>
+                        <dd>{usuarioPainelGerencialEntity.verNumOutrosCr ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>
@@ -414,7 +414,7 @@ export class UsuarioPainelGerencialDetail extends React.Component<IUsuarioPainel
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{usuarioPainelGerencialEntity.filtroNumOutrosCr}</dd>
+                        <dd>{usuarioPainelGerencialEntity.filtroNumOutrosCr ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>
@@ -429,7 +429,7 @@ export class UsuarioPainelGerencialDetail extends React.Component<IUsuarioPainel
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{usuarioPainelGerencialEntity.verNumAtCatCr}</dd>
+                        <dd>{usuarioPainelGerencialEntity.verNumAtCatCr ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>
@@ -444,7 +444,7 @@ export class UsuarioPainelGerencialDetail extends React.Component<IUsuarioPainel
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{usuarioPainelGerencialEntity.filtroNumAtCatCr}</dd>
+                        <dd>{usuarioPainelGerencialEntity.filtroNumAtCatCr ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>
@@ -459,7 +459,7 @@ export class UsuarioPainelGerencialDetail extends React.Component<IUsuarioPainel
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{usuarioPainelGerencialEntity.verNumCatCompCr}</dd>
+                        <dd>{usuarioPainelGerencialEntity.verNumCatCompCr ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>
@@ -476,7 +476,7 @@ export class UsuarioPainelGerencialDetail extends React.Component<IUsuarioPainel
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{usuarioPainelGerencialEntity.filtroNumCatCompCr}</dd>
+                        <dd>{usuarioPainelGerencialEntity.filtroNumCatCompCr ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>
@@ -491,7 +491,7 @@ export class UsuarioPainelGerencialDetail extends React.Component<IUsuarioPainel
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{usuarioPainelGerencialEntity.verAtCmSucessoCr}</dd>
+                        <dd>{usuarioPainelGerencialEntity.verAtCmSucessoCr ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>
@@ -508,7 +508,7 @@ export class UsuarioPainelGerencialDetail extends React.Component<IUsuarioPainel
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{usuarioPainelGerencialEntity.filtroAtCmSucessoCr}</dd>
+                        <dd>{usuarioPainelGerencialEntity.filtroAtCmSucessoCr ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>
@@ -525,7 +525,7 @@ export class UsuarioPainelGerencialDetail extends React.Component<IUsuarioPainel
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{usuarioPainelGerencialEntity.verMediaPadAbertoCr}</dd>
+                        <dd>{usuarioPainelGerencialEntity.verMediaPadAbertoCr ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>
@@ -542,7 +542,7 @@ export class UsuarioPainelGerencialDetail extends React.Component<IUsuarioPainel
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{usuarioPainelGerencialEntity.filtroMediaPadAbertoCr}</dd>
+                        <dd>{usuarioPainelGerencialEntity.filtroMediaPadAbertoCr ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>
@@ -559,7 +559,7 @@ export class UsuarioPainelGerencialDetail extends React.Component<IUsuarioPainel
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{usuarioPainelGerencialEntity.verAtIntercorrenciaCr}</dd>
+                        <dd>{usuarioPainelGerencialEntity.verAtIntercorrenciaCr ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>
@@ -576,7 +576,7 @@ export class UsuarioPainelGerencialDetail extends React.Component<IUsuarioPainel
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{usuarioPainelGerencialEntity.filtroAtIntercorrenciaCr}</dd>
+                        <dd>{usuarioPainelGerencialEntity.filtroAtIntercorrenciaCr ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>
@@ -591,7 +591,7 @@ export class UsuarioPainelGerencialDetail extends React.Component<IUsuarioPainel
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{usuarioPainelGerencialEntity.verTempoMedioAtCr}</dd>
+                        <dd>{usuarioPainelGerencialEntity.verTempoMedioAtCr ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>
@@ -608,7 +608,7 @@ export class UsuarioPainelGerencialDetail extends React.Component<IUsuarioPainel
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{usuarioPainelGerencialEntity.filtroTempoMedioAtCr}</dd>
+                        <dd>{usuarioPainelGerencialEntity.filtroTempoMedioAtCr ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>
@@ -623,7 +623,7 @@ export class UsuarioPainelGerencialDetail extends React.Component<IUsuarioPainel
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{usuarioPainelGerencialEntity.verMediaPtaCr}</dd>
+                        <dd>{usuarioPainelGerencialEntity.verMediaPtaCr ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>
@@ -638,7 +638,7 @@ export class UsuarioPainelGerencialDetail extends React.Component<IUsuarioPainel
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{usuarioPainelGerencialEntity.filtroMediaPtaCr}</dd>
+                        <dd>{usuarioPainelGerencialEntity.filtroMediaPtaCr ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>
@@ -655,7 +655,7 @@ export class UsuarioPainelGerencialDetail extends React.Component<IUsuarioPainel
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{usuarioPainelGerencialEntity.verIndicadorUsoAppCr}</dd>
+                        <dd>{usuarioPainelGerencialEntity.verIndicadorUsoAppCr ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>
@@ -672,7 +672,7 @@ export class UsuarioPainelGerencialDetail extends React.Component<IUsuarioPainel
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{usuarioPainelGerencialEntity.filtroIndicadorUsoAppCr}</dd>
+                        <dd>{usuarioPainelGerencialEntity.filtroIndicadorUsoAppCr ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>

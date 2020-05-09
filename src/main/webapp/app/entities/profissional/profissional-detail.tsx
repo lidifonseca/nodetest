@@ -634,7 +634,7 @@ export class ProfissionalDetail extends React.Component<IProfissionalDetailProps
                             </dt>
                           </Col>
                           <Col md="9">
-                            <dd>{profissionalEntity.ativo}</dd>
+                            <dd>{profissionalEntity.ativo ? 'true' : 'false'}</dd>
                           </Col>
                         </Row>
                       </Col>
@@ -710,6 +710,28 @@ export class ProfissionalDetail extends React.Component<IProfissionalDetailProps
                           </Col>
                           <Col md="9">
                             <dd>{profissionalEntity.unidade ? profissionalEntity.unidade.id : ''}</dd>
+                          </Col>
+                        </Row>
+                      </Col>
+
+                      <Col md="12">
+                        <Row>
+                          <Col md="3">
+                            <dt>
+                              <Translate contentKey="generadorApp.profissional.especialidade">Especialidade</Translate>
+                            </dt>
+                          </Col>
+                          <Col md="9">
+                            <dd>
+                              {profissionalEntity.especialidades
+                                ? profissionalEntity.especialidades.map((val, i) => (
+                                    <span key={val.id}>
+                                      <a>{val.especialidade}</a>
+                                      {i === profissionalEntity.especialidades.length - 1 ? '' : ', '}
+                                    </span>
+                                  ))
+                                : null}
+                            </dd>
                           </Col>
                         </Row>
                       </Col>

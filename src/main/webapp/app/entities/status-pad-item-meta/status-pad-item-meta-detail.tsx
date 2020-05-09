@@ -109,7 +109,7 @@ export class StatusPadItemMetaDetail extends React.Component<IStatusPadItemMetaD
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{statusPadItemMetaEntity.ativo}</dd>
+                        <dd>{statusPadItemMetaEntity.ativo ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>

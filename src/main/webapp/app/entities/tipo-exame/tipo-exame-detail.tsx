@@ -93,7 +93,7 @@ export class TipoExameDetail extends React.Component<ITipoExameDetailProps, ITip
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{tipoExameEntity.ativo}</dd>
+                        <dd>{tipoExameEntity.ativo ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>

@@ -15,8 +15,8 @@ export default class EspecialidadeValor extends BaseEntity {
   @Column({ type: 'float', name: 'VALOR' })
   valor: number;
 
-  @Column({ type: 'integer', name: 'ATIVO' })
-  ativo: number;
+  @Column({ type: 'boolean', name: 'ATIVO' })
+  ativo: boolean;
 
   @ManyToOne(type => Especialidade)
   @JoinColumn({ name: 'ID_ESPECIALIDADE', referencedColumnName: 'id' })

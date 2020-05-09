@@ -4,7 +4,9 @@ export interface IApiInput {
   apiInput?: string;
   apiType?: string;
   obs?: string;
-  ativo?: number;
+  ativo?: boolean;
 }
 
-export const defaultValue: Readonly<IApiInput> = {};
+export const defaultValue: Readonly<IApiInput> = {
+  ativo: false
+};

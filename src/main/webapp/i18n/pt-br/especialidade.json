@@ -47,7 +47,9 @@
       "tipoEspecialidade_empty": "Sem Tipo Especialidade",
       "tipoEspecialidade": "Tipo Especialidade",
       "tipoUnidade_empty": "Sem Tipo Unidade",
-      "tipoUnidade": "Tipo Unidade"
+      "tipoUnidade": "Tipo Unidade",
+      "profissional_empty": "Sem Profissional",
+      "profissional": "Profissional"
     }
   }
 }

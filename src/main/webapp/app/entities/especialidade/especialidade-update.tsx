@@ -18,6 +18,8 @@ import { ITipoEspecialidade } from 'app/shared/model/tipo-especialidade.model';
 import { getEntities as getTipoEspecialidades } from 'app/entities/tipo-especialidade/tipo-especialidade.reducer';
 import { ITipoUnidade } from 'app/shared/model/tipo-unidade.model';
 import { getEntities as getTipoUnidades } from 'app/entities/tipo-unidade/tipo-unidade.reducer';
+import { IProfissional } from 'app/shared/model/profissional.model';
+import { getEntities as getProfissionals } from 'app/entities/profissional/profissional.reducer';
 import {
   IEspecialidadeUpdateState,
   getEntity,
@@ -47,11 +49,13 @@ export class EspecialidadeUpdate extends React.Component<IEspecialidadeUpdatePro
       categoriaSelectValue: null,
       tipoEspecialidadeSelectValue: null,
       tipoUnidadeSelectValue: null,
+      profissionalSelectValue: null,
       fieldsBase: getEspecialidadeState(this.props.location),
       unidadeId: '0',
       categoriaId: '0',
       tipoEspecialidadeId: '0',
       tipoUnidadeId: '0',
+      profissionalId: '0',
       isNew: !this.props.match.params || !this.props.match.params.id
     };
   }
@@ -111,6 +115,19 @@ export class EspecialidadeUpdate extends React.Component<IEspecialidadeUpdatePro
         )
       });
     }
+
+    if (
+      nextProps.profissionals.length > 0 &&
+      this.state.profissionalSelectValue === null &&
+      nextProps.especialidadeEntity.profissional &&
+      nextProps.especialidadeEntity.profissional.id
+    ) {
+      this.setState({
+        profissionalSelectValue: nextProps.profissionals.map(p =>
+          nextProps.especialidadeEntity.profissional.id === p.id ? { value: p.id, label: p.nome } : null
+        )
+      });
+    }
   }
 
   componentDidMount() {
@@ -124,6 +141,7 @@ export class EspecialidadeUpdate extends React.Component<IEspecialidadeUpdatePro
     this.props.getCategorias();
     this.props.getTipoEspecialidades();
     this.props.getTipoUnidades();
+    this.props.getProfissionals();
   }
 
   onBlobChange = (isAnImage, name, fileInput) => event => {
@@ -151,6 +169,7 @@ export class EspecialidadeUpdate extends React.Component<IEspecialidadeUpdatePro
         categoria: this.state.categoriaSelectValue ? this.state.categoriaSelectValue['value'] : null,
         tipoEspecialidade: this.state.tipoEspecialidadeSelectValue ? this.state.tipoEspecialidadeSelectValue['value'] : null,
         tipoUnidade: this.state.tipoUnidadeSelectValue ? this.state.tipoUnidadeSelectValue['value'] : null,
+        profissional: this.state.profissionalSelectValue ? this.state.profissionalSelectValue['value'] : null,
         ...values
       };
 
@@ -167,7 +186,16 @@ export class EspecialidadeUpdate extends React.Component<IEspecialidadeUpdatePro
   };
 
   render() {
-    const { especialidadeEntity, unidadeEasies, categorias, tipoEspecialidades, tipoUnidades, loading, updating } = this.props;
+    const {
+      especialidadeEntity,
+      unidadeEasies,
+      categorias,
+      tipoEspecialidades,
+      tipoUnidades,
+      profissionals,
+      loading,
+      updating
+    } = this.props;
     const { isNew } = this.state;
 
     const { descricao } = especialidadeEntity;
@@ -183,7 +211,8 @@ export class EspecialidadeUpdate extends React.Component<IEspecialidadeUpdatePro
                   unidade: especialidadeEntity.unidade ? especialidadeEntity.unidade.id : null,
                   categoria: especialidadeEntity.categoria ? especialidadeEntity.categoria.id : null,
                   tipoEspecialidade: especialidadeEntity.tipoEspecialidade ? especialidadeEntity.tipoEspecialidade.id : null,
-                  tipoUnidade: especialidadeEntity.tipoUnidade ? especialidadeEntity.tipoUnidade.id : null
+                  tipoUnidade: especialidadeEntity.tipoUnidade ? especialidadeEntity.tipoUnidade.id : null,
+                  profissional: especialidadeEntity.profissional ? especialidadeEntity.profissional.id : null
                 }
           }
           onSubmit={this.saveEntity}
@@ -339,13 +368,11 @@ export class EspecialidadeUpdate extends React.Component<IEspecialidadeUpdatePro
                           <Col md="ativo">
                             <AvGroup>
                               <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="ativoLabel" for="especialidade-ativo">
+                                <Col md="12">
+                                  <Label className="mt-2" id="ativoLabel" check>
+                                    <AvInput id="especialidade-ativo" type="checkbox" className="form-control" name="ativo" />
                                     <Translate contentKey="generadorApp.especialidade.ativo">Ativo</Translate>
                                   </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField id="especialidade-ativo" type="string" className="form-control" name="ativo" />
                                 </Col>
                               </Row>
                             </AvGroup>
@@ -487,6 +514,11 @@ export class EspecialidadeUpdate extends React.Component<IEspecialidadeUpdatePro
                         ) : (
                           <AvInput type="hidden" name="tipoUnidade" value={this.state.fieldsBase[baseFilters]} />
                         )}
+                        {baseFilters !== 'profissional' ? (
+                          <Col md="12"></Col>
+                        ) : (
+                          <AvInput type="hidden" name="profissional" value={this.state.fieldsBase[baseFilters]} />
+                        )}
                       </Row>
                     </div>
                   )}
@@ -505,6 +537,7 @@ const mapStateToProps = (storeState: IRootState) => ({
   categorias: storeState.categoria.entities,
   tipoEspecialidades: storeState.tipoEspecialidade.entities,
   tipoUnidades: storeState.tipoUnidade.entities,
+  profissionals: storeState.profissional.entities,
   especialidadeEntity: storeState.especialidade.entity,
   loading: storeState.especialidade.loading,
   updating: storeState.especialidade.updating,
@@ -516,6 +549,7 @@ const mapDispatchToProps = {
   getCategorias,
   getTipoEspecialidades,
   getTipoUnidades,
+  getProfissionals,
   getEntity,
   updateEntity,
   setBlob,

@@ -15,8 +15,8 @@ export default class ProntuarioTipoManifestacao extends BaseEntity {
   @Column({ type: 'integer', name: 'ID_PAI' })
   idPai: number;
 
-  @Column({ type: 'integer', name: 'ATIVO' })
-  ativo: number;
+  @Column({ type: 'boolean', name: 'ATIVO' })
+  ativo: boolean;
 
   // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
 }

@@ -75,438 +75,435 @@
         },
         {
             "fieldName": "verAtendimento",
-            "fieldType": "Integer"
+            "fieldType": "Boolean"
         },
         {
             "fieldName": "cadAtendimento",
-            "fieldType": "Integer"
+            "fieldType": "Boolean"
         },
         {
             "fieldName": "ediAtendimento",
-            "fieldType": "Integer"
+            "fieldType": "Boolean"
         },
         {
             "fieldName": "baixaManualAtendimento",
-            "fieldType": "Integer"
+            "fieldType": "Boolean"
         },
         {
             "fieldName": "delAtendimento",
-            "fieldType": "Integer"
+            "fieldType": "Boolean"
         },
         {
             "fieldName": "relAtendimento",
-            "fieldType": "Integer"
+            "fieldType": "Boolean"
         },
         {
             "fieldName": "verPad",
-            "fieldType": "Integer"
+            "fieldType": "Boolean"
         },
         {
             "fieldName": "cadPad",
-            "fieldType": "Integer"
+            "fieldType": "Boolean"
         },
         {
             "fieldName": "ediPad",
-            "fieldType": "Integer"
+            "fieldType": "Boolean"
         },
         {
             "fieldName": "delPad",
-            "fieldType": "Integer"
+            "fieldType": "Boolean"
         },
         {
             "fieldName": "relPad",
-            "fieldType": "Integer"
+            "fieldType": "Boolean"
         },
         {
             "fieldName": "verDiario",
-            "fieldType": "Integer"
+            "fieldType": "Boolean"
         },
         {
             "fieldName": "cadDiario",
-            "fieldType": "Integer"
+            "fieldType": "Boolean"
         },
         {
             "fieldName": "ediDiario",
-            "fieldType": "Integer"
+            "fieldType": "Boolean"
         },
         {
             "fieldName": "delDiario",
-            "fieldType": "Integer"
+            "fieldType": "Boolean"
         },
         {
             "fieldName": "relDiario",
-            "fieldType": "Integer"
+            "fieldType": "Boolean"
         },
         {
             "fieldName": "verCategoria",
-            "fieldType": "Integer"
+            "fieldType": "Boolean"
         },
         {
             "fieldName": "cadCategoria",
-            "fieldType": "Integer"
+            "fieldType": "Boolean"
         },
         {
             "fieldName": "ediCategoria",
-            "fieldType": "Integer"
+            "fieldType": "Boolean"
         },
         {
             "fieldName": "delCategoria",
-            "fieldType": "Integer"
+            "fieldType": "Boolean"
         },
         {
             "fieldName": "verEspecialidade",
-            "fieldType": "Integer"
+            "fieldType": "Boolean"
         },
         {
             "fieldName": "cadEspecialidade",
-            "fieldType": "Integer"
+            "fieldType": "Boolean"
         },
         {
             "fieldName": "ediEspecialidade",
-            "fieldType": "Integer"
+            "fieldType": "Boolean"
         },
         {
             "fieldName": "delEspecialidade",
-            "fieldType": "Integer"
+            "fieldType": "Boolean"
         },
         {
             "fieldName": "relEspecialidade",
-            "fieldType": "Integer"
+            "fieldType": "Boolean"
         },
         {
             "fieldName": "verEspecialidadeValor",
-            "fieldType": "Integer"
+            "fieldType": "Boolean"
         },
         {
             "fieldName": "cadEspecialidadeValor",
-            "fieldType": "Integer"
+            "fieldType": "Boolean"
         },
         {
             "fieldName": "ediEspecialidadeValor",
-            "fieldType": "Integer"
+            "fieldType": "Boolean"
         },
         {
             "fieldName": "delEspecialidadeValor",
-            "fieldType": "Integer"
+            "fieldType": "Boolean"
         },
         {
             "fieldName": "relEspecialidadeValor",
-            "fieldType": "Integer"
+            "fieldType": "Boolean"
         },
         {
             "fieldName": "verOperadora",
-            "fieldType": "Integer"
+            "fieldType": "Boolean"
         },
         {
             "fieldName": "cadOperadora",
-            "fieldType": "Integer"
+            "fieldType": "Boolean"
         },
         {
             "fieldName": "ediOperadora",
-            "fieldType": "Integer"
+            "fieldType": "Boolean"
         },
         {
             "fieldName": "delOperadora",
-            "fieldType": "Integer"
+            "fieldType": "Boolean"
         },
         {
             "fieldName": "verPaciente",
-            "fieldType": "Integer"
+            "fieldType": "Boolean"
         },
         {
             "fieldName": "cadPaciente",
-            "fieldType": "Integer"
+            "fieldType": "Boolean"
         },
         {
             "fieldName": "ediPaciente",
-            "fieldType": "Integer"
+            "fieldType": "Boolean"
         },
         {
             "fieldName": "delPaciente",
-            "fieldType": "Integer"
+            "fieldType": "Boolean"
         },
         {
             "fieldName": "relPaciente",
-            "fieldType": "Integer"
+            "fieldType": "Boolean"
         },
         {
             "fieldName": "verProfissional",
-            "fieldType": "Integer"
+            "fieldType": "Boolean"
         },
         {
             "fieldName": "cadProfissional",
-            "fieldType": "Integer"
+            "fieldType": "Boolean"
         },
         {
             "fieldName": "ediProfissional",
-            "fieldType": "Integer"
+            "fieldType": "Boolean"
         },
         {
             "fieldName": "delProfissional",
-            "fieldType": "Integer"
+            "fieldType": "Boolean"
         },
         {
             "fieldName": "ativProfissional",
-            "fieldType": "Integer"
+            "fieldType": "Boolean"
         },
         {
             "fieldName": "relProfissional",
-            "fieldType": "Integer"
+            "fieldType": "Boolean"
         },
         {
             "fieldName": "verPush",
-            "fieldType": "Integer"
+            "fieldType": "Boolean"
         },
         {
             "fieldName": "cadPushPaciente",
-            "fieldType": "Integer"
+            "fieldType": "Boolean"
         },
         {
             "fieldName": "cadPushProfissional",
-            "fieldType": "Integer"
+            "fieldType": "Boolean"
         },
         {
             "fieldName": "verTermoPaciente",
-            "fieldType": "Integer"
+            "fieldType": "Boolean"
         },
         {
             "fieldName": "ediTermoPaciente",
-            "fieldType": "Integer"
+            "fieldType": "Boolean"
         },
         {
             "fieldName": "verTermoProfissional",
-            "fieldType": "Integer"
+            "fieldType": "Boolean"
         },
         {
             "fieldName": "ediTermoProfissional",
-            "fieldType": "Integer"
+            "fieldType": "Boolean"
         },
         {
             "fieldName": "verOutros",
-            "fieldType": "Integer"
+            "fieldType": "Boolean"
         },
         {
             "fieldName": "cadOutros",
-            "fieldType": "Integer"
+            "fieldType": "Boolean"
         },
         {
             "fieldName": "ediOutros",
-            "fieldType": "Integer"
+            "fieldType": "Boolean"
         },
         {
             "fieldName": "delOutros",
-            "fieldType": "Integer"
+            "fieldType": "Boolean"
         },
         {
             "fieldName": "relOutros",
-            "fieldType": "Integer"
+            "fieldType": "Boolean"
         },
         {
             "fieldName": "verUnidadeEasy",
-            "fieldType": "Integer"
+            "fieldType": "Boolean"
         },
         {
             "fieldName": "cadUnidadeEasy",
-            "fieldType": "Integer"
+            "fieldType": "Boolean"
         },
         {
             "fieldName": "ediUnidadeEasy",
-            "fieldType": "Integer"
+            "fieldType": "Boolean"
         },
         {
             "fieldName": "delUnidadeEasy",
-            "fieldType": "Integer"
+            "fieldType": "Boolean"
         },
         {
             "fieldName": "verUsuario",
-            "fieldType": "Integer"
+            "fieldType": "Boolean"
         },
         {
             "fieldName": "cadUsuario",
-            "fieldType": "Integer"
+            "fieldType": "Boolean"
         },
         {
             "fieldName": "ediUsuario",
-            "fieldType": "Integer"
+            "fieldType": "Boolean"
         },
         {
             "fieldName": "delUsuario",
-            "fieldType": "Integer"
+            "fieldType": "Boolean"
         },
         {
             "fieldName": "verPtaResultado",
-            "fieldType": "Integer"
+            "fieldType": "Boolean"
         },
         {
             "fieldName": "cadPtaResultado",
-            "fieldType": "Integer"
+            "fieldType": "Boolean"
         },
         {
             "fieldName": "delPtaResultado",
-            "fieldType": "Integer"
+            "fieldType": "Boolean"
         },
         {
             "fieldName": "verPtaAtividade",
-            "fieldType": "Integer"
+            "fieldType": "Boolean"
         },
         {
             "fieldName": "cadPtaAtividade",
-            "fieldType": "Integer"
+            "fieldType": "Boolean"
         },
         {
             "fieldName": "delPtaAtividade",
-            "fieldType": "Integer"
+            "fieldType": "Boolean"
         },
         {
             "fieldName": "permissaoUsuario",
-            "fieldType": "Integer"
+            "fieldType": "Boolean"
         },
         {
             "fieldName": "verProntuario",
-            "fieldType": "Integer"
+            "fieldType": "Boolean"
         },
         {
             "fieldName": "cadProntuario",
-            "fieldType": "Integer"
+            "fieldType": "Boolean"
         },
         {
             "fieldName": "ediProntuario",
-            "fieldType": "Integer"
+            "fieldType": "Boolean"
         },
         {
             "fieldName": "delProntuario",
-            "fieldType": "Integer"
+            "fieldType": "Boolean"
         },
         {
             "fieldName": "delProntuarioFoto",
-            "fieldType": "Integer"
+            "fieldType": "Boolean"
         },
         {
             "fieldName": "valoresFinanceiro",
-            "fieldType": "Integer"
+            "fieldType": "Boolean"
         },
         {
             "fieldName": "autorizacaoValorFinanceiro",
-            "fieldType": "Integer"
+            "fieldType": "Boolean"
         },
         {
             "fieldName": "confirmarPagamentoFinanceiro",
-            "fieldType": "Integer"
+            "fieldType": "Boolean"
         },
         {
             "fieldName": "gerenciarSorteios",
-            "fieldType": "Integer"
+            "fieldType": "Boolean"
         },
         {
             "fieldName": "envioRecusa",
-            "fieldType": "Integer"
+            "fieldType": "Boolean"
         },
         {
             "fieldName": "envioIntercorrencia",
-            "fieldType": "Integer"
+            "fieldType": "Boolean"
         },
         {
             "fieldName": "envioCancelamento",
-            "fieldType": "Integer"
+            "fieldType": "Boolean"
         },
         {
             "fieldName": "envioAvaliacao",
-            "fieldType": "Integer"
+            "fieldType": "Boolean"
         },
         {
             "fieldName": "envioPedido",
-            "fieldType": "Integer"
+            "fieldType": "Boolean"
         },
         {
             "fieldName": "alertaAtendimento",
-            "fieldType": "Integer"
+            "fieldType": "Boolean"
         },
         {
             "fieldName": "ativo",
-            "fieldType": "Integer"
+            "fieldType": "Boolean"
         },
         {
             "fieldName": "envioGlosado",
-            "fieldType": "Integer"
+            "fieldType": "Boolean"
         },
         {
             "fieldName": "emergencia",
-            "fieldType": "Integer"
+            "fieldType": "Boolean"
         },
         {
             "fieldName": "token",
-            "fieldType": "Integer"
+            "fieldType": "Boolean"
         },
         {
             "fieldName": "editAtendimento",
-            "fieldType": "Integer"
+            "fieldType": "Boolean"
         },
         {
             "fieldName": "ouvirLigacao",
-            "fieldType": "Integer",
-            "fieldValidateRules": [
-                "required"
-            ]
+            "fieldType": "Boolean"
         },
         {
             "fieldName": "verPainelIndicadores",
-            "fieldType": "Integer"
+            "fieldType": "Boolean"
         },
         {
             "fieldName": "prorrogarPad",
-            "fieldType": "Integer"
+            "fieldType": "Boolean"
         },
         {
             "fieldName": "cancelarAtendMassa",
-            "fieldType": "Integer"
+            "fieldType": "Boolean"
         },
         {
             "fieldName": "cadMatMed",
-            "fieldType": "Integer"
+            "fieldType": "Boolean"
         },
         {
             "fieldName": "ediMatMed",
-            "fieldType": "Integer"
+            "fieldType": "Boolean"
         },
         {
             "fieldName": "delMatMed",
-            "fieldType": "Integer"
+            "fieldType": "Boolean"
         },
         {
             "fieldName": "verColPta",
-            "fieldType": "Integer"
+            "fieldType": "Boolean"
         },
         {
             "fieldName": "verColFoto",
-            "fieldType": "Integer"
+            "fieldType": "Boolean"
         },
         {
             "fieldName": "verColLc",
-            "fieldType": "Integer"
+            "fieldType": "Boolean"
         },
         {
             "fieldName": "verAtendCancelado",
-            "fieldType": "Integer"
+            "fieldType": "Boolean"
         },
         {
             "fieldName": "verAtendAgConfirmacao",
-            "fieldType": "Integer"
+            "fieldType": "Boolean"
         },
         {
             "fieldName": "ediGeoLocalizacaoAtendimento",
-            "fieldType": "Integer"
+            "fieldType": "Boolean"
         },
         {
             "fieldName": "copiarEvolucao",
-            "fieldType": "Integer"
+            "fieldType": "Boolean"
         },
         {
             "fieldName": "copiarNomeProf",
-            "fieldType": "Integer"
+            "fieldType": "Boolean"
         },
         {
             "fieldName": "copiarRegistroProf",
-            "fieldType": "Integer"
+            "fieldType": "Boolean"
         },
         {
             "fieldName": "idAreaAtuacao",

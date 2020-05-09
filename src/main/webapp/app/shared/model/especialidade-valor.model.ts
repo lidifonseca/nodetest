@@ -4,8 +4,10 @@ export interface IEspecialidadeValor {
   id?: string;
   idFranquia?: string;
   valor?: number;
-  ativo?: number;
+  ativo?: boolean;
   especialidade?: string | any;
 }
 
-export const defaultValue: Readonly<IEspecialidadeValor> = {};
+export const defaultValue: Readonly<IEspecialidadeValor> = {
+  ativo: false
+};

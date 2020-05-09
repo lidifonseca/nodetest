@@ -6,7 +6,7 @@ export interface IPacienteProntuario {
   idTipoProntuario?: number;
   oQue?: any;
   resultado?: any;
-  ativo?: number;
+  ativo?: boolean;
   idEspecialidade?: number;
   dataConsulta?: Moment;
   idExame?: number;
@@ -20,4 +20,6 @@ export interface IPacienteProntuario {
   dataManifestacao?: Moment;
 }
 
-export const defaultValue: Readonly<IPacienteProntuario> = {};
+export const defaultValue: Readonly<IPacienteProntuario> = {
+  ativo: false
+};

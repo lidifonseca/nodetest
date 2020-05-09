@@ -39,9 +39,11 @@ export interface IFranquiaUsuario {
   envioRecusa?: number;
   envioIntercorrencia?: number;
   envioCancelamento?: number;
-  ativo?: number;
+  ativo?: boolean;
   logUserFranquias?: ILogUserFranquia[];
   franquia?: string | any;
 }
 
-export const defaultValue: Readonly<IFranquiaUsuario> = {};
+export const defaultValue: Readonly<IFranquiaUsuario> = {
+  ativo: false
+};

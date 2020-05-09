@@ -3,7 +3,9 @@ export interface IPadMatMed {
   idPad?: number;
   idMatMed?: number;
   qtd?: number;
-  ativo?: number;
+  ativo?: boolean;
 }
 
-export const defaultValue: Readonly<IPadMatMed> = {};
+export const defaultValue: Readonly<IPadMatMed> = {
+  ativo: false
+};

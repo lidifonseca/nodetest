@@ -94,7 +94,7 @@ export class CategoriaContratoDetail extends React.Component<ICategoriaContratoD
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{categoriaContratoEntity.ativo}</dd>
+                        <dd>{categoriaContratoEntity.ativo ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>

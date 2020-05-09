@@ -1,7 +1,15 @@
 {
   "generadorApp": {
     "atendimento": {
-      "listButtons": {},
+      "listButtons": {
+        "detalhes": "Detalhes",
+        "VisualizarPTA": "VisualizarPTA",
+        "VisualizarPTA": "VisualizarPTA",
+        "LicaodeCasa": "LiçãodeCasa",
+        "Fotos": "Fotos",
+        "edit": "Editar",
+        "delete": "Excluir"
+      },
       "viewButtons": {},
       "dropdown_btn": "Actions",
       "home": {
@@ -22,8 +30,6 @@
       "detail": {
         "title": "Atendimento"
       },
-      "idFranquia": "Id Franquia",
-      "idProfissional": "Id Profissional",
       "cep": "Cep",
       "endereco": "Endereco",
       "numero": "Numero",
@@ -63,14 +69,18 @@
       "atendimentoAtividades": "Atendimento Atividades",
       "unidade_empty": "Sem Unidade",
       "unidade": "Unidade",
+      "padItem_empty": "Sem Pad Item",
+      "padItem": "Pad Item",
       "paciente_empty": "Sem Paciente",
       "paciente": "Paciente",
       "operadora_empty": "Sem Operadora",
       "operadora": "Operadora",
+      "profissional_empty": "Sem Profissional",
+      "profissional": "Profissional",
+      "franquia_empty": "Sem Franquia",
+      "franquia": "Franquia",
       "especialidade_empty": "Sem Especialidade",
       "especialidade": "Especialidade",
-      "padItem_empty": "Sem Pad Item",
-      "padItem": "Pad Item",
       "statusAtendimento_empty": "Sem Status Atendimento",
       "statusAtendimento": "Status Atendimento",
       "periodo_empty": "Sem Periodo",

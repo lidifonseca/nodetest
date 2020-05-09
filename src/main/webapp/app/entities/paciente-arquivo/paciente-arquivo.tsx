@@ -179,10 +179,10 @@ export class PacienteArquivo extends React.Component<IPacienteArquivoProps, IPac
                       {this.state.baseFilters !== 'ativo' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="ativoLabel" for="paciente-arquivo-ativo">
+                            <Label id="ativoLabel" check>
+                              <AvInput id="paciente-arquivo-ativo" type="checkbox" className="form-control" name="ativo" />
                               <Translate contentKey="generadorApp.pacienteArquivo.ativo">Ativo</Translate>
                             </Label>
-                            <AvInput type="string" name="ativo" id="paciente-arquivo-ativo" value={this.state.ativo} />
                           </Row>
                         </Col>
                       ) : null}
@@ -289,12 +289,12 @@ export class PacienteArquivo extends React.Component<IPacienteArquivoProps, IPac
                           </td>
                         ) : null}
 
-                        {this.state.baseFilters !== 'ativo' ? <td>{pacienteArquivo.ativo}</td> : null}
+                        {this.state.baseFilters !== 'ativo' ? <td>{pacienteArquivo.ativo ? 'true' : 'false'}</td> : null}
 
                         {this.state.baseFilters !== 'paciente' ? (
                           <td>
                             {pacienteArquivo.paciente ? (
-                              <Link to={`paciente/${pacienteArquivo.paciente.id}`}>{pacienteArquivo.paciente.id}</Link>
+                              <Link to={`paciente/${pacienteArquivo.paciente.id}`}>{pacienteArquivo.paciente.nome}</Link>
                             ) : (
                               ''
                             )}

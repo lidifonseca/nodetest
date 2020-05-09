@@ -3,7 +3,9 @@ export interface IDiarioTags {
   nome?: string;
   idPai?: number;
   nomeId?: string;
-  ativo?: number;
+  ativo?: boolean;
 }
 
-export const defaultValue: Readonly<IDiarioTags> = {};
+export const defaultValue: Readonly<IDiarioTags> = {
+  ativo: false
+};

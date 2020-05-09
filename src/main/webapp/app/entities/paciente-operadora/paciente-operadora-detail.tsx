@@ -79,7 +79,7 @@ export class PacienteOperadoraDetail extends React.Component<IPacienteOperadoraD
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{pacienteOperadoraEntity.ativo}</dd>
+                        <dd>{pacienteOperadoraEntity.ativo ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>

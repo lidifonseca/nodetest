@@ -44,329 +44,329 @@ export default class Usuario extends BaseEntity {
   @Column({ type: 'date', name: 'NASCIMENTO' })
   nascimento: any;
 
-  @Column({ type: 'integer', name: 'VER_ATENDIMENTO' })
-  verAtendimento: number;
+  @Column({ type: 'boolean', name: 'VER_ATENDIMENTO' })
+  verAtendimento: boolean;
 
-  @Column({ type: 'integer', name: 'CAD_ATENDIMENTO' })
-  cadAtendimento: number;
+  @Column({ type: 'boolean', name: 'CAD_ATENDIMENTO' })
+  cadAtendimento: boolean;
 
-  @Column({ type: 'integer', name: 'EDI_ATENDIMENTO' })
-  ediAtendimento: number;
+  @Column({ type: 'boolean', name: 'EDI_ATENDIMENTO' })
+  ediAtendimento: boolean;
 
-  @Column({ type: 'integer', name: 'BAIXA_MANUAL_ATENDIMENTO' })
-  baixaManualAtendimento: number;
+  @Column({ type: 'boolean', name: 'BAIXA_MANUAL_ATENDIMENTO' })
+  baixaManualAtendimento: boolean;
 
-  @Column({ type: 'integer', name: 'DEL_ATENDIMENTO' })
-  delAtendimento: number;
+  @Column({ type: 'boolean', name: 'DEL_ATENDIMENTO' })
+  delAtendimento: boolean;
 
-  @Column({ type: 'integer', name: 'REL_ATENDIMENTO' })
-  relAtendimento: number;
+  @Column({ type: 'boolean', name: 'REL_ATENDIMENTO' })
+  relAtendimento: boolean;
 
-  @Column({ type: 'integer', name: 'VER_PAD' })
-  verPad: number;
+  @Column({ type: 'boolean', name: 'VER_PAD' })
+  verPad: boolean;
 
-  @Column({ type: 'integer', name: 'CAD_PAD' })
-  cadPad: number;
+  @Column({ type: 'boolean', name: 'CAD_PAD' })
+  cadPad: boolean;
 
-  @Column({ type: 'integer', name: 'EDI_PAD' })
-  ediPad: number;
+  @Column({ type: 'boolean', name: 'EDI_PAD' })
+  ediPad: boolean;
 
-  @Column({ type: 'integer', name: 'DEL_PAD' })
-  delPad: number;
+  @Column({ type: 'boolean', name: 'DEL_PAD' })
+  delPad: boolean;
 
-  @Column({ type: 'integer', name: 'REL_PAD' })
-  relPad: number;
+  @Column({ type: 'boolean', name: 'REL_PAD' })
+  relPad: boolean;
 
-  @Column({ type: 'integer', name: 'VER_DIARIO' })
-  verDiario: number;
+  @Column({ type: 'boolean', name: 'VER_DIARIO' })
+  verDiario: boolean;
 
-  @Column({ type: 'integer', name: 'CAD_DIARIO' })
-  cadDiario: number;
+  @Column({ type: 'boolean', name: 'CAD_DIARIO' })
+  cadDiario: boolean;
 
-  @Column({ type: 'integer', name: 'EDI_DIARIO' })
-  ediDiario: number;
+  @Column({ type: 'boolean', name: 'EDI_DIARIO' })
+  ediDiario: boolean;
 
-  @Column({ type: 'integer', name: 'DEL_DIARIO' })
-  delDiario: number;
+  @Column({ type: 'boolean', name: 'DEL_DIARIO' })
+  delDiario: boolean;
 
-  @Column({ type: 'integer', name: 'REL_DIARIO' })
-  relDiario: number;
+  @Column({ type: 'boolean', name: 'REL_DIARIO' })
+  relDiario: boolean;
 
-  @Column({ type: 'integer', name: 'VER_CATEGORIA' })
-  verCategoria: number;
+  @Column({ type: 'boolean', name: 'VER_CATEGORIA' })
+  verCategoria: boolean;
 
-  @Column({ type: 'integer', name: 'CAD_CATEGORIA' })
-  cadCategoria: number;
+  @Column({ type: 'boolean', name: 'CAD_CATEGORIA' })
+  cadCategoria: boolean;
 
-  @Column({ type: 'integer', name: 'EDI_CATEGORIA' })
-  ediCategoria: number;
+  @Column({ type: 'boolean', name: 'EDI_CATEGORIA' })
+  ediCategoria: boolean;
 
-  @Column({ type: 'integer', name: 'DEL_CATEGORIA' })
-  delCategoria: number;
+  @Column({ type: 'boolean', name: 'DEL_CATEGORIA' })
+  delCategoria: boolean;
 
-  @Column({ type: 'integer', name: 'VER_ESPECIALIDADE' })
-  verEspecialidade: number;
+  @Column({ type: 'boolean', name: 'VER_ESPECIALIDADE' })
+  verEspecialidade: boolean;
 
-  @Column({ type: 'integer', name: 'CAD_ESPECIALIDADE' })
-  cadEspecialidade: number;
+  @Column({ type: 'boolean', name: 'CAD_ESPECIALIDADE' })
+  cadEspecialidade: boolean;
 
-  @Column({ type: 'integer', name: 'EDI_ESPECIALIDADE' })
-  ediEspecialidade: number;
+  @Column({ type: 'boolean', name: 'EDI_ESPECIALIDADE' })
+  ediEspecialidade: boolean;
 
-  @Column({ type: 'integer', name: 'DEL_ESPECIALIDADE' })
-  delEspecialidade: number;
+  @Column({ type: 'boolean', name: 'DEL_ESPECIALIDADE' })
+  delEspecialidade: boolean;
 
-  @Column({ type: 'integer', name: 'REL_ESPECIALIDADE' })
-  relEspecialidade: number;
+  @Column({ type: 'boolean', name: 'REL_ESPECIALIDADE' })
+  relEspecialidade: boolean;
 
-  @Column({ type: 'integer', name: 'VER_ESPECIALIDADE_VALOR' })
-  verEspecialidadeValor: number;
+  @Column({ type: 'boolean', name: 'VER_ESPECIALIDADE_VALOR' })
+  verEspecialidadeValor: boolean;
 
-  @Column({ type: 'integer', name: 'CAD_ESPECIALIDADE_VALOR' })
-  cadEspecialidadeValor: number;
+  @Column({ type: 'boolean', name: 'CAD_ESPECIALIDADE_VALOR' })
+  cadEspecialidadeValor: boolean;
 
-  @Column({ type: 'integer', name: 'EDI_ESPECIALIDADE_VALOR' })
-  ediEspecialidadeValor: number;
+  @Column({ type: 'boolean', name: 'EDI_ESPECIALIDADE_VALOR' })
+  ediEspecialidadeValor: boolean;
 
-  @Column({ type: 'integer', name: 'DEL_ESPECIALIDADE_VALOR' })
-  delEspecialidadeValor: number;
+  @Column({ type: 'boolean', name: 'DEL_ESPECIALIDADE_VALOR' })
+  delEspecialidadeValor: boolean;
 
-  @Column({ type: 'integer', name: 'REL_ESPECIALIDADE_VALOR' })
-  relEspecialidadeValor: number;
+  @Column({ type: 'boolean', name: 'REL_ESPECIALIDADE_VALOR' })
+  relEspecialidadeValor: boolean;
 
-  @Column({ type: 'integer', name: 'VER_OPERADORA' })
-  verOperadora: number;
+  @Column({ type: 'boolean', name: 'VER_OPERADORA' })
+  verOperadora: boolean;
 
-  @Column({ type: 'integer', name: 'CAD_OPERADORA' })
-  cadOperadora: number;
+  @Column({ type: 'boolean', name: 'CAD_OPERADORA' })
+  cadOperadora: boolean;
 
-  @Column({ type: 'integer', name: 'EDI_OPERADORA' })
-  ediOperadora: number;
+  @Column({ type: 'boolean', name: 'EDI_OPERADORA' })
+  ediOperadora: boolean;
 
-  @Column({ type: 'integer', name: 'DEL_OPERADORA' })
-  delOperadora: number;
+  @Column({ type: 'boolean', name: 'DEL_OPERADORA' })
+  delOperadora: boolean;
 
-  @Column({ type: 'integer', name: 'VER_PACIENTE' })
-  verPaciente: number;
+  @Column({ type: 'boolean', name: 'VER_PACIENTE' })
+  verPaciente: boolean;
 
-  @Column({ type: 'integer', name: 'CAD_PACIENTE' })
-  cadPaciente: number;
+  @Column({ type: 'boolean', name: 'CAD_PACIENTE' })
+  cadPaciente: boolean;
 
-  @Column({ type: 'integer', name: 'EDI_PACIENTE' })
-  ediPaciente: number;
+  @Column({ type: 'boolean', name: 'EDI_PACIENTE' })
+  ediPaciente: boolean;
 
-  @Column({ type: 'integer', name: 'DEL_PACIENTE' })
-  delPaciente: number;
+  @Column({ type: 'boolean', name: 'DEL_PACIENTE' })
+  delPaciente: boolean;
 
-  @Column({ type: 'integer', name: 'REL_PACIENTE' })
-  relPaciente: number;
+  @Column({ type: 'boolean', name: 'REL_PACIENTE' })
+  relPaciente: boolean;
 
-  @Column({ type: 'integer', name: 'VER_PROFISSIONAL' })
-  verProfissional: number;
+  @Column({ type: 'boolean', name: 'VER_PROFISSIONAL' })
+  verProfissional: boolean;
 
-  @Column({ type: 'integer', name: 'CAD_PROFISSIONAL' })
-  cadProfissional: number;
+  @Column({ type: 'boolean', name: 'CAD_PROFISSIONAL' })
+  cadProfissional: boolean;
 
-  @Column({ type: 'integer', name: 'EDI_PROFISSIONAL' })
-  ediProfissional: number;
+  @Column({ type: 'boolean', name: 'EDI_PROFISSIONAL' })
+  ediProfissional: boolean;
 
-  @Column({ type: 'integer', name: 'DEL_PROFISSIONAL' })
-  delProfissional: number;
+  @Column({ type: 'boolean', name: 'DEL_PROFISSIONAL' })
+  delProfissional: boolean;
 
-  @Column({ type: 'integer', name: 'ATIV_PROFISSIONAL' })
-  ativProfissional: number;
+  @Column({ type: 'boolean', name: 'ATIV_PROFISSIONAL' })
+  ativProfissional: boolean;
 
-  @Column({ type: 'integer', name: 'REL_PROFISSIONAL' })
-  relProfissional: number;
+  @Column({ type: 'boolean', name: 'REL_PROFISSIONAL' })
+  relProfissional: boolean;
 
-  @Column({ type: 'integer', name: 'VER_PUSH' })
-  verPush: number;
+  @Column({ type: 'boolean', name: 'VER_PUSH' })
+  verPush: boolean;
 
-  @Column({ type: 'integer', name: 'CAD_PUSH_PACIENTE' })
-  cadPushPaciente: number;
+  @Column({ type: 'boolean', name: 'CAD_PUSH_PACIENTE' })
+  cadPushPaciente: boolean;
 
-  @Column({ type: 'integer', name: 'CAD_PUSH_PROFISSIONAL' })
-  cadPushProfissional: number;
+  @Column({ type: 'boolean', name: 'CAD_PUSH_PROFISSIONAL' })
+  cadPushProfissional: boolean;
 
-  @Column({ type: 'integer', name: 'VER_TERMO_PACIENTE' })
-  verTermoPaciente: number;
+  @Column({ type: 'boolean', name: 'VER_TERMO_PACIENTE' })
+  verTermoPaciente: boolean;
 
-  @Column({ type: 'integer', name: 'EDI_TERMO_PACIENTE' })
-  ediTermoPaciente: number;
+  @Column({ type: 'boolean', name: 'EDI_TERMO_PACIENTE' })
+  ediTermoPaciente: boolean;
 
-  @Column({ type: 'integer', name: 'VER_TERMO_PROFISSIONAL' })
-  verTermoProfissional: number;
+  @Column({ type: 'boolean', name: 'VER_TERMO_PROFISSIONAL' })
+  verTermoProfissional: boolean;
 
-  @Column({ type: 'integer', name: 'EDI_TERMO_PROFISSIONAL' })
-  ediTermoProfissional: number;
+  @Column({ type: 'boolean', name: 'EDI_TERMO_PROFISSIONAL' })
+  ediTermoProfissional: boolean;
 
-  @Column({ type: 'integer', name: 'VER_OUTROS' })
-  verOutros: number;
+  @Column({ type: 'boolean', name: 'VER_OUTROS' })
+  verOutros: boolean;
 
-  @Column({ type: 'integer', name: 'CAD_OUTROS' })
-  cadOutros: number;
+  @Column({ type: 'boolean', name: 'CAD_OUTROS' })
+  cadOutros: boolean;
 
-  @Column({ type: 'integer', name: 'EDI_OUTROS' })
-  ediOutros: number;
+  @Column({ type: 'boolean', name: 'EDI_OUTROS' })
+  ediOutros: boolean;
 
-  @Column({ type: 'integer', name: 'DEL_OUTROS' })
-  delOutros: number;
+  @Column({ type: 'boolean', name: 'DEL_OUTROS' })
+  delOutros: boolean;
 
-  @Column({ type: 'integer', name: 'REL_OUTROS' })
-  relOutros: number;
+  @Column({ type: 'boolean', name: 'REL_OUTROS' })
+  relOutros: boolean;
 
-  @Column({ type: 'integer', name: 'VER_UNIDADE_EASY' })
-  verUnidadeEasy: number;
+  @Column({ type: 'boolean', name: 'VER_UNIDADE_EASY' })
+  verUnidadeEasy: boolean;
 
-  @Column({ type: 'integer', name: 'CAD_UNIDADE_EASY' })
-  cadUnidadeEasy: number;
+  @Column({ type: 'boolean', name: 'CAD_UNIDADE_EASY' })
+  cadUnidadeEasy: boolean;
 
-  @Column({ type: 'integer', name: 'EDI_UNIDADE_EASY' })
-  ediUnidadeEasy: number;
+  @Column({ type: 'boolean', name: 'EDI_UNIDADE_EASY' })
+  ediUnidadeEasy: boolean;
 
-  @Column({ type: 'integer', name: 'DEL_UNIDADE_EASY' })
-  delUnidadeEasy: number;
+  @Column({ type: 'boolean', name: 'DEL_UNIDADE_EASY' })
+  delUnidadeEasy: boolean;
 
-  @Column({ type: 'integer', name: 'VER_USUARIO' })
-  verUsuario: number;
+  @Column({ type: 'boolean', name: 'VER_USUARIO' })
+  verUsuario: boolean;
 
-  @Column({ type: 'integer', name: 'CAD_USUARIO' })
-  cadUsuario: number;
+  @Column({ type: 'boolean', name: 'CAD_USUARIO' })
+  cadUsuario: boolean;
 
-  @Column({ type: 'integer', name: 'EDI_USUARIO' })
-  ediUsuario: number;
+  @Column({ type: 'boolean', name: 'EDI_USUARIO' })
+  ediUsuario: boolean;
 
-  @Column({ type: 'integer', name: 'DEL_USUARIO' })
-  delUsuario: number;
+  @Column({ type: 'boolean', name: 'DEL_USUARIO' })
+  delUsuario: boolean;
 
-  @Column({ type: 'integer', name: 'VER_PTA_RESULTADO' })
-  verPtaResultado: number;
+  @Column({ type: 'boolean', name: 'VER_PTA_RESULTADO' })
+  verPtaResultado: boolean;
 
-  @Column({ type: 'integer', name: 'CAD_PTA_RESULTADO' })
-  cadPtaResultado: number;
+  @Column({ type: 'boolean', name: 'CAD_PTA_RESULTADO' })
+  cadPtaResultado: boolean;
 
-  @Column({ type: 'integer', name: 'DEL_PTA_RESULTADO' })
-  delPtaResultado: number;
+  @Column({ type: 'boolean', name: 'DEL_PTA_RESULTADO' })
+  delPtaResultado: boolean;
 
-  @Column({ type: 'integer', name: 'VER_PTA_ATIVIDADE' })
-  verPtaAtividade: number;
+  @Column({ type: 'boolean', name: 'VER_PTA_ATIVIDADE' })
+  verPtaAtividade: boolean;
 
-  @Column({ type: 'integer', name: 'CAD_PTA_ATIVIDADE' })
-  cadPtaAtividade: number;
+  @Column({ type: 'boolean', name: 'CAD_PTA_ATIVIDADE' })
+  cadPtaAtividade: boolean;
 
-  @Column({ type: 'integer', name: 'DEL_PTA_ATIVIDADE' })
-  delPtaAtividade: number;
+  @Column({ type: 'boolean', name: 'DEL_PTA_ATIVIDADE' })
+  delPtaAtividade: boolean;
 
-  @Column({ type: 'integer', name: 'PERMISSAO_USUARIO' })
-  permissaoUsuario: number;
+  @Column({ type: 'boolean', name: 'PERMISSAO_USUARIO' })
+  permissaoUsuario: boolean;
 
-  @Column({ type: 'integer', name: 'VER_PRONTUARIO' })
-  verProntuario: number;
+  @Column({ type: 'boolean', name: 'VER_PRONTUARIO' })
+  verProntuario: boolean;
 
-  @Column({ type: 'integer', name: 'CAD_PRONTUARIO' })
-  cadProntuario: number;
+  @Column({ type: 'boolean', name: 'CAD_PRONTUARIO' })
+  cadProntuario: boolean;
 
-  @Column({ type: 'integer', name: 'EDI_PRONTUARIO' })
-  ediProntuario: number;
+  @Column({ type: 'boolean', name: 'EDI_PRONTUARIO' })
+  ediProntuario: boolean;
 
-  @Column({ type: 'integer', name: 'DEL_PRONTUARIO' })
-  delProntuario: number;
+  @Column({ type: 'boolean', name: 'DEL_PRONTUARIO' })
+  delProntuario: boolean;
 
-  @Column({ type: 'integer', name: 'DEL_PRONTUARIO_FOTO' })
-  delProntuarioFoto: number;
+  @Column({ type: 'boolean', name: 'DEL_PRONTUARIO_FOTO' })
+  delProntuarioFoto: boolean;
 
-  @Column({ type: 'integer', name: 'VALORES_FINANCEIRO' })
-  valoresFinanceiro: number;
+  @Column({ type: 'boolean', name: 'VALORES_FINANCEIRO' })
+  valoresFinanceiro: boolean;
 
-  @Column({ type: 'integer', name: 'AUTORIZACAO_VALOR_FINANCEIRO' })
-  autorizacaoValorFinanceiro: number;
+  @Column({ type: 'boolean', name: 'AUTORIZACAO_VALOR_FINANCEIRO' })
+  autorizacaoValorFinanceiro: boolean;
 
-  @Column({ type: 'integer', name: 'CONFIRMAR_PAGAMENTO_FINANCEIRO' })
-  confirmarPagamentoFinanceiro: number;
+  @Column({ type: 'boolean', name: 'CONFIRMAR_PAGAMENTO_FINANCEIRO' })
+  confirmarPagamentoFinanceiro: boolean;
 
-  @Column({ type: 'integer', name: 'GERENCIAR_SORTEIOS' })
-  gerenciarSorteios: number;
+  @Column({ type: 'boolean', name: 'GERENCIAR_SORTEIOS' })
+  gerenciarSorteios: boolean;
 
-  @Column({ type: 'integer', name: 'ENVIO_RECUSA' })
-  envioRecusa: number;
+  @Column({ type: 'boolean', name: 'ENVIO_RECUSA' })
+  envioRecusa: boolean;
 
-  @Column({ type: 'integer', name: 'ENVIO_INTERCORRENCIA' })
-  envioIntercorrencia: number;
+  @Column({ type: 'boolean', name: 'ENVIO_INTERCORRENCIA' })
+  envioIntercorrencia: boolean;
 
-  @Column({ type: 'integer', name: 'ENVIO_CANCELAMENTO' })
-  envioCancelamento: number;
+  @Column({ type: 'boolean', name: 'ENVIO_CANCELAMENTO' })
+  envioCancelamento: boolean;
 
-  @Column({ type: 'integer', name: 'ENVIO_AVALIACAO' })
-  envioAvaliacao: number;
+  @Column({ type: 'boolean', name: 'ENVIO_AVALIACAO' })
+  envioAvaliacao: boolean;
 
-  @Column({ type: 'integer', name: 'ENVIO_PEDIDO' })
-  envioPedido: number;
+  @Column({ type: 'boolean', name: 'ENVIO_PEDIDO' })
+  envioPedido: boolean;
 
-  @Column({ type: 'integer', name: 'ALERTA_ATENDIMENTO' })
-  alertaAtendimento: number;
+  @Column({ type: 'boolean', name: 'ALERTA_ATENDIMENTO' })
+  alertaAtendimento: boolean;
 
-  @Column({ type: 'integer', name: 'ATIVO' })
-  ativo: number;
+  @Column({ type: 'boolean', name: 'ATIVO' })
+  ativo: boolean;
 
-  @Column({ type: 'integer', name: 'ENVIO_GLOSADO' })
-  envioGlosado: number;
+  @Column({ type: 'boolean', name: 'ENVIO_GLOSADO' })
+  envioGlosado: boolean;
 
-  @Column({ type: 'integer', name: 'EMERGENCIA' })
-  emergencia: number;
+  @Column({ type: 'boolean', name: 'EMERGENCIA' })
+  emergencia: boolean;
 
-  @Column({ type: 'integer', name: 'TOKEN' })
-  token: number;
+  @Column({ type: 'boolean', name: 'TOKEN' })
+  token: boolean;
 
-  @Column({ type: 'integer', name: 'EDIT_ATENDIMENTO' })
-  editAtendimento: number;
+  @Column({ type: 'boolean', name: 'EDIT_ATENDIMENTO' })
+  editAtendimento: boolean;
 
-  @Column({ type: 'integer', name: 'OUVIR_LIGACAO', nullable: false })
-  ouvirLigacao: number;
+  @Column({ type: 'boolean', name: 'OUVIR_LIGACAO' })
+  ouvirLigacao: boolean;
 
-  @Column({ type: 'integer', name: 'VER_PAINEL_INDICADORES' })
-  verPainelIndicadores: number;
+  @Column({ type: 'boolean', name: 'VER_PAINEL_INDICADORES' })
+  verPainelIndicadores: boolean;
 
-  @Column({ type: 'integer', name: 'PRORROGAR_PAD' })
-  prorrogarPad: number;
+  @Column({ type: 'boolean', name: 'PRORROGAR_PAD' })
+  prorrogarPad: boolean;
 
-  @Column({ type: 'integer', name: 'CANCELAR_ATEND_MASSA' })
-  cancelarAtendMassa: number;
+  @Column({ type: 'boolean', name: 'CANCELAR_ATEND_MASSA' })
+  cancelarAtendMassa: boolean;
 
-  @Column({ type: 'integer', name: 'CAD_MAT_MED' })
-  cadMatMed: number;
+  @Column({ type: 'boolean', name: 'CAD_MAT_MED' })
+  cadMatMed: boolean;
 
-  @Column({ type: 'integer', name: 'EDI_MAT_MED' })
-  ediMatMed: number;
+  @Column({ type: 'boolean', name: 'EDI_MAT_MED' })
+  ediMatMed: boolean;
 
-  @Column({ type: 'integer', name: 'DEL_MAT_MED' })
-  delMatMed: number;
+  @Column({ type: 'boolean', name: 'DEL_MAT_MED' })
+  delMatMed: boolean;
 
-  @Column({ type: 'integer', name: 'VER_COL_PTA' })
-  verColPta: number;
+  @Column({ type: 'boolean', name: 'VER_COL_PTA' })
+  verColPta: boolean;
 
-  @Column({ type: 'integer', name: 'VER_COL_FOTO' })
-  verColFoto: number;
+  @Column({ type: 'boolean', name: 'VER_COL_FOTO' })
+  verColFoto: boolean;
 
-  @Column({ type: 'integer', name: 'VER_COL_LC' })
-  verColLc: number;
+  @Column({ type: 'boolean', name: 'VER_COL_LC' })
+  verColLc: boolean;
 
-  @Column({ type: 'integer', name: 'VER_ATEND_CANCELADO' })
-  verAtendCancelado: number;
+  @Column({ type: 'boolean', name: 'VER_ATEND_CANCELADO' })
+  verAtendCancelado: boolean;
 
-  @Column({ type: 'integer', name: 'VER_ATEND_AG_CONFIRMACAO' })
-  verAtendAgConfirmacao: number;
+  @Column({ type: 'boolean', name: 'VER_ATEND_AG_CONFIRMACAO' })
+  verAtendAgConfirmacao: boolean;
 
-  @Column({ type: 'integer', name: 'EDI_GEO_LOCALIZACAO_ATENDIMENTO' })
-  ediGeoLocalizacaoAtendimento: number;
+  @Column({ type: 'boolean', name: 'EDI_GEO_LOCALIZACAO_ATENDIMENTO' })
+  ediGeoLocalizacaoAtendimento: boolean;
 
-  @Column({ type: 'integer', name: 'COPIAR_EVOLUCAO' })
-  copiarEvolucao: number;
+  @Column({ type: 'boolean', name: 'COPIAR_EVOLUCAO' })
+  copiarEvolucao: boolean;
 
-  @Column({ type: 'integer', name: 'COPIAR_NOME_PROF' })
-  copiarNomeProf: number;
+  @Column({ type: 'boolean', name: 'COPIAR_NOME_PROF' })
+  copiarNomeProf: boolean;
 
-  @Column({ type: 'integer', name: 'COPIAR_REGISTRO_PROF' })
-  copiarRegistroProf: number;
+  @Column({ type: 'boolean', name: 'COPIAR_REGISTRO_PROF' })
+  copiarRegistroProf: boolean;
 
   @Column({ name: 'ID_AREA_ATUACAO', length: 100 })
   idAreaAtuacao: string;

@@ -77,8 +77,8 @@ export default class UnidadeEasy extends BaseEntity {
   @Column({ name: 'TISSCODUF', length: 5 })
   tisscoduf: string;
 
-  @Column({ type: 'integer', name: 'ATIVO' })
-  ativo: number;
+  @Column({ type: 'boolean', name: 'ATIVO' })
+  ativo: boolean;
 
   @ManyToMany(type => Categoria)
   categorias: Categoria[];

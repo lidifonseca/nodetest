@@ -94,7 +94,7 @@ export class PacienteDiarioDetail extends React.Component<IPacienteDiarioDetailP
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{pacienteDiarioEntity.ativo}</dd>
+                        <dd>{pacienteDiarioEntity.ativo ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>

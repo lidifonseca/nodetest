@@ -123,7 +123,7 @@ export class ApiReturnDetail extends React.Component<IApiReturnDetailProps, IApi
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{apiReturnEntity.ativo}</dd>
+                        <dd>{apiReturnEntity.ativo ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>

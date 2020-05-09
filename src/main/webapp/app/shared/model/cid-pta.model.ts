@@ -3,7 +3,9 @@ export interface ICidPta {
   idDescPta?: number;
   idCid?: number;
   idAtividade?: number;
-  ativo?: number;
+  ativo?: boolean;
 }
 
-export const defaultValue: Readonly<ICidPta> = {};
+export const defaultValue: Readonly<ICidPta> = {
+  ativo: false
+};

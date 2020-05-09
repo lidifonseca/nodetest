@@ -192,10 +192,10 @@ export class FranquiaAreaAtuacao extends React.Component<IFranquiaAreaAtuacaoPro
                       {this.state.baseFilters !== 'ativo' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="ativoLabel" for="franquia-area-atuacao-ativo">
+                            <Label id="ativoLabel" check>
+                              <AvInput id="franquia-area-atuacao-ativo" type="checkbox" className="form-control" name="ativo" />
                               <Translate contentKey="generadorApp.franquiaAreaAtuacao.ativo">Ativo</Translate>
                             </Label>
-                            <AvInput type="string" name="ativo" id="franquia-area-atuacao-ativo" value={this.state.ativo} />
                           </Row>
                         </Col>
                       ) : null}
@@ -296,7 +296,7 @@ export class FranquiaAreaAtuacao extends React.Component<IFranquiaAreaAtuacaoPro
 
                         {this.state.baseFilters !== 'cepFim' ? <td>{franquiaAreaAtuacao.cepFim}</td> : null}
 
-                        {this.state.baseFilters !== 'ativo' ? <td>{franquiaAreaAtuacao.ativo}</td> : null}
+                        {this.state.baseFilters !== 'ativo' ? <td>{franquiaAreaAtuacao.ativo ? 'true' : 'false'}</td> : null}
 
                         {this.state.baseFilters !== 'franquia' ? (
                           <td>

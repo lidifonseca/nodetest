@@ -1,7 +1,16 @@
 {
   "generadorApp": {
     "pad": {
-      "listButtons": {},
+      "listButtons": {
+        "VisualizarPTA": "VisualizarPTA",
+        "detalhes": "Detalhes",
+        "RelatorioConsolidado": "RelatórioConsolidado",
+        "edit": "Editar",
+        "Status": "Status",
+        "Aditivos": "Aditivos",
+        "ResultadosEsperados": "ResultadosEsperados",
+        "AtividadesdosAtendimentos": "AtividadesdosAtendimentos"
+      },
       "viewButtons": {},
       "dropdown_btn": "Ações",
       "home": {
@@ -22,8 +31,6 @@
       "detail": {
         "title": "Pad"
       },
-      "idOperadora": "Id Operadora",
-      "idFranquia": "Id Franquia",
       "nroPad": "Nro Pad",
       "dataInicio": "Data Inicio",
       "dataFim": "Data Fim",
@@ -36,6 +43,10 @@
       "padItem": "Pad Item",
       "unidade_empty": "Without Unidade",
       "unidade": "Unidade",
+      "operadora_empty": "Without Operadora",
+      "operadora": "Operadora",
+      "franquia_empty": "Without Franquia",
+      "franquia": "Franquia",
       "paciente_empty": "Without Paciente",
       "paciente": "Paciente"
     }

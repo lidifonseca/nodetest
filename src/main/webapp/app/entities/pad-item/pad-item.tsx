@@ -83,7 +83,6 @@ export class PadItem extends React.Component<IPadItemProps, IPadItemState> {
         dataPadItemIncompleto: '',
         dataPadItemCompleto: '',
         numGhc: '',
-        atendimento: '',
         atendimentoCepRecusado: '',
         atendimentoSorteioFeito: '',
         padItemAtividade: '',
@@ -170,9 +169,6 @@ export class PadItem extends React.Component<IPadItemProps, IPadItemState> {
       'numGhc=' +
       this.state.numGhc +
       '&' +
-      'atendimento=' +
-      this.state.atendimento +
-      '&' +
       'atendimentoCepRecusado=' +
       this.state.atendimentoCepRecusado +
       '&' +
@@ -221,7 +217,6 @@ export class PadItem extends React.Component<IPadItemProps, IPadItemState> {
       dataPadItemIncompleto,
       dataPadItemCompleto,
       numGhc,
-      atendimento,
       atendimentoCepRecusado,
       atendimentoSorteioFeito,
       padItemAtividade,
@@ -248,7 +243,6 @@ export class PadItem extends React.Component<IPadItemProps, IPadItemState> {
       dataPadItemIncompleto,
       dataPadItemCompleto,
       numGhc,
-      atendimento,
       atendimentoCepRecusado,
       atendimentoSorteioFeito,
       padItemAtividade,
@@ -372,10 +366,10 @@ export class PadItem extends React.Component<IPadItemProps, IPadItemState> {
                       {this.state.baseFilters !== 'ativo' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="ativoLabel" for="pad-item-ativo">
+                            <Label id="ativoLabel" check>
+                              <AvInput id="pad-item-ativo" type="checkbox" className="form-control" name="ativo" />
                               <Translate contentKey="generadorApp.padItem.ativo">Ativo</Translate>
                             </Label>
-                            <AvInput type="string" name="ativo" id="pad-item-ativo" value={this.state.ativo} />
                           </Row>
                         </Col>
                       ) : null}
@@ -425,12 +419,6 @@ export class PadItem extends React.Component<IPadItemProps, IPadItemState> {
 
                             <AvInput type="text" name="numGhc" id="pad-item-numGhc" value={this.state.numGhc} />
                           </Row>
-                        </Col>
-                      ) : null}
-
-                      {this.state.baseFilters !== 'atendimento' ? (
-                        <Col md="3">
-                          <Row className="mr-1 mt-1"></Row>
                         </Col>
                       ) : null}
 
@@ -726,7 +714,7 @@ export class PadItem extends React.Component<IPadItemProps, IPadItemState> {
 
                         {this.state.baseFilters !== 'sub' ? <td>{padItem.sub}</td> : null}
 
-                        {this.state.baseFilters !== 'ativo' ? <td>{padItem.ativo}</td> : null}
+                        {this.state.baseFilters !== 'ativo' ? <td>{padItem.ativo ? 'true' : 'false'}</td> : null}
 
                         {this.state.baseFilters !== 'dataPadItemIncompleto' ? (
                           <td>

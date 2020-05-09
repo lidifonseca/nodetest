@@ -5,7 +5,7 @@ import Select from 'react-select';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 import { Button, Row, Col, Label } from 'reactstrap';
-import { AvFeedback, AvForm, AvGroup, AvInput, AvField } from 'availity-reactstrap-validation';
+import { AvFeedback, AvForm, AvGroup, AvInput } from 'availity-reactstrap-validation';
 import { Translate, translate, ICrudGetAction, ICrudGetAllAction, ICrudPutAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
@@ -164,18 +164,16 @@ export class UsuarioPainelGerencialUpdate extends React.Component<IUsuarioPainel
                           <Col md="verCronicos">
                             <AvGroup>
                               <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="verCronicosLabel" for="usuario-painel-gerencial-verCronicos">
+                                <Col md="12">
+                                  <Label className="mt-2" id="verCronicosLabel" check>
+                                    <AvInput
+                                      id="usuario-painel-gerencial-verCronicos"
+                                      type="checkbox"
+                                      className="form-control"
+                                      name="verCronicos"
+                                    />
                                     <Translate contentKey="generadorApp.usuarioPainelGerencial.verCronicos">Ver Cronicos</Translate>
                                   </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField
-                                    id="usuario-painel-gerencial-verCronicos"
-                                    type="string"
-                                    className="form-control"
-                                    name="verCronicos"
-                                  />
                                 </Col>
                               </Row>
                             </AvGroup>
@@ -187,24 +185,18 @@ export class UsuarioPainelGerencialUpdate extends React.Component<IUsuarioPainel
                           <Col md="verPacientesAtivosCr">
                             <AvGroup>
                               <Row>
-                                <Col md="3">
-                                  <Label
-                                    className="mt-2"
-                                    id="verPacientesAtivosCrLabel"
-                                    for="usuario-painel-gerencial-verPacientesAtivosCr"
-                                  >
+                                <Col md="12">
+                                  <Label className="mt-2" id="verPacientesAtivosCrLabel" check>
+                                    <AvInput
+                                      id="usuario-painel-gerencial-verPacientesAtivosCr"
+                                      type="checkbox"
+                                      className="form-control"
+                                      name="verPacientesAtivosCr"
+                                    />
                                     <Translate contentKey="generadorApp.usuarioPainelGerencial.verPacientesAtivosCr">
                                       Ver Pacientes Ativos Cr
                                     </Translate>
                                   </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField
-                                    id="usuario-painel-gerencial-verPacientesAtivosCr"
-                                    type="string"
-                                    className="form-control"
-                                    name="verPacientesAtivosCr"
-                                  />
                                 </Col>
                               </Row>
                             </AvGroup>
@@ -216,24 +208,18 @@ export class UsuarioPainelGerencialUpdate extends React.Component<IUsuarioPainel
                           <Col md="filtroPacientesAtivosCr">
                             <AvGroup>
                               <Row>
-                                <Col md="3">
-                                  <Label
-                                    className="mt-2"
-                                    id="filtroPacientesAtivosCrLabel"
-                                    for="usuario-painel-gerencial-filtroPacientesAtivosCr"
-                                  >
+                                <Col md="12">
+                                  <Label className="mt-2" id="filtroPacientesAtivosCrLabel" check>
+                                    <AvInput
+                                      id="usuario-painel-gerencial-filtroPacientesAtivosCr"
+                                      type="checkbox"
+                                      className="form-control"
+                                      name="filtroPacientesAtivosCr"
+                                    />
                                     <Translate contentKey="generadorApp.usuarioPainelGerencial.filtroPacientesAtivosCr">
                                       Filtro Pacientes Ativos Cr
                                     </Translate>
                                   </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField
-                                    id="usuario-painel-gerencial-filtroPacientesAtivosCr"
-                                    type="string"
-                                    className="form-control"
-                                    name="filtroPacientesAtivosCr"
-                                  />
                                 </Col>
                               </Row>
                             </AvGroup>
@@ -245,18 +231,16 @@ export class UsuarioPainelGerencialUpdate extends React.Component<IUsuarioPainel
                           <Col md="verNumHospCr">
                             <AvGroup>
                               <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="verNumHospCrLabel" for="usuario-painel-gerencial-verNumHospCr">
+                                <Col md="12">
+                                  <Label className="mt-2" id="verNumHospCrLabel" check>
+                                    <AvInput
+                                      id="usuario-painel-gerencial-verNumHospCr"
+                                      type="checkbox"
+                                      className="form-control"
+                                      name="verNumHospCr"
+                                    />
                                     <Translate contentKey="generadorApp.usuarioPainelGerencial.verNumHospCr">Ver Num Hosp Cr</Translate>
                                   </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField
-                                    id="usuario-painel-gerencial-verNumHospCr"
-                                    type="string"
-                                    className="form-control"
-                                    name="verNumHospCr"
-                                  />
                                 </Col>
                               </Row>
                             </AvGroup>
@@ -268,20 +252,18 @@ export class UsuarioPainelGerencialUpdate extends React.Component<IUsuarioPainel
                           <Col md="filtroNumHospCr">
                             <AvGroup>
                               <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="filtroNumHospCrLabel" for="usuario-painel-gerencial-filtroNumHospCr">
+                                <Col md="12">
+                                  <Label className="mt-2" id="filtroNumHospCrLabel" check>
+                                    <AvInput
+                                      id="usuario-painel-gerencial-filtroNumHospCr"
+                                      type="checkbox"
+                                      className="form-control"
+                                      name="filtroNumHospCr"
+                                    />
                                     <Translate contentKey="generadorApp.usuarioPainelGerencial.filtroNumHospCr">
                                       Filtro Num Hosp Cr
                                     </Translate>
                                   </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField
-                                    id="usuario-painel-gerencial-filtroNumHospCr"
-                                    type="string"
-                                    className="form-control"
-                                    name="filtroNumHospCr"
-                                  />
                                 </Col>
                               </Row>
                             </AvGroup>
@@ -293,18 +275,16 @@ export class UsuarioPainelGerencialUpdate extends React.Component<IUsuarioPainel
                           <Col md="verNumDesospCr">
                             <AvGroup>
                               <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="verNumDesospCrLabel" for="usuario-painel-gerencial-verNumDesospCr">
+                                <Col md="12">
+                                  <Label className="mt-2" id="verNumDesospCrLabel" check>
+                                    <AvInput
+                                      id="usuario-painel-gerencial-verNumDesospCr"
+                                      type="checkbox"
+                                      className="form-control"
+                                      name="verNumDesospCr"
+                                    />
                                     <Translate contentKey="generadorApp.usuarioPainelGerencial.verNumDesospCr">Ver Num Desosp Cr</Translate>
                                   </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField
-                                    id="usuario-painel-gerencial-verNumDesospCr"
-                                    type="string"
-                                    className="form-control"
-                                    name="verNumDesospCr"
-                                  />
                                 </Col>
                               </Row>
                             </AvGroup>
@@ -316,20 +296,18 @@ export class UsuarioPainelGerencialUpdate extends React.Component<IUsuarioPainel
                           <Col md="filtroNumDesospCr">
                             <AvGroup>
                               <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="filtroNumDesospCrLabel" for="usuario-painel-gerencial-filtroNumDesospCr">
+                                <Col md="12">
+                                  <Label className="mt-2" id="filtroNumDesospCrLabel" check>
+                                    <AvInput
+                                      id="usuario-painel-gerencial-filtroNumDesospCr"
+                                      type="checkbox"
+                                      className="form-control"
+                                      name="filtroNumDesospCr"
+                                    />
                                     <Translate contentKey="generadorApp.usuarioPainelGerencial.filtroNumDesospCr">
                                       Filtro Num Desosp Cr
                                     </Translate>
                                   </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField
-                                    id="usuario-painel-gerencial-filtroNumDesospCr"
-                                    type="string"
-                                    className="form-control"
-                                    name="filtroNumDesospCr"
-                                  />
                                 </Col>
                               </Row>
                             </AvGroup>
@@ -341,18 +319,16 @@ export class UsuarioPainelGerencialUpdate extends React.Component<IUsuarioPainel
                           <Col md="verNumPsCr">
                             <AvGroup>
                               <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="verNumPsCrLabel" for="usuario-painel-gerencial-verNumPsCr">
+                                <Col md="12">
+                                  <Label className="mt-2" id="verNumPsCrLabel" check>
+                                    <AvInput
+                                      id="usuario-painel-gerencial-verNumPsCr"
+                                      type="checkbox"
+                                      className="form-control"
+                                      name="verNumPsCr"
+                                    />
                                     <Translate contentKey="generadorApp.usuarioPainelGerencial.verNumPsCr">Ver Num Ps Cr</Translate>
                                   </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField
-                                    id="usuario-painel-gerencial-verNumPsCr"
-                                    type="string"
-                                    className="form-control"
-                                    name="verNumPsCr"
-                                  />
                                 </Col>
                               </Row>
                             </AvGroup>
@@ -364,18 +340,16 @@ export class UsuarioPainelGerencialUpdate extends React.Component<IUsuarioPainel
                           <Col md="filtroNumPsCr">
                             <AvGroup>
                               <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="filtroNumPsCrLabel" for="usuario-painel-gerencial-filtroNumPsCr">
+                                <Col md="12">
+                                  <Label className="mt-2" id="filtroNumPsCrLabel" check>
+                                    <AvInput
+                                      id="usuario-painel-gerencial-filtroNumPsCr"
+                                      type="checkbox"
+                                      className="form-control"
+                                      name="filtroNumPsCr"
+                                    />
                                     <Translate contentKey="generadorApp.usuarioPainelGerencial.filtroNumPsCr">Filtro Num Ps Cr</Translate>
                                   </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField
-                                    id="usuario-painel-gerencial-filtroNumPsCr"
-                                    type="string"
-                                    className="form-control"
-                                    name="filtroNumPsCr"
-                                  />
                                 </Col>
                               </Row>
                             </AvGroup>
@@ -387,18 +361,16 @@ export class UsuarioPainelGerencialUpdate extends React.Component<IUsuarioPainel
                           <Col md="verNumObitoCr">
                             <AvGroup>
                               <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="verNumObitoCrLabel" for="usuario-painel-gerencial-verNumObitoCr">
+                                <Col md="12">
+                                  <Label className="mt-2" id="verNumObitoCrLabel" check>
+                                    <AvInput
+                                      id="usuario-painel-gerencial-verNumObitoCr"
+                                      type="checkbox"
+                                      className="form-control"
+                                      name="verNumObitoCr"
+                                    />
                                     <Translate contentKey="generadorApp.usuarioPainelGerencial.verNumObitoCr">Ver Num Obito Cr</Translate>
                                   </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField
-                                    id="usuario-painel-gerencial-verNumObitoCr"
-                                    type="string"
-                                    className="form-control"
-                                    name="verNumObitoCr"
-                                  />
                                 </Col>
                               </Row>
                             </AvGroup>
@@ -410,20 +382,18 @@ export class UsuarioPainelGerencialUpdate extends React.Component<IUsuarioPainel
                           <Col md="filtroNumObitoCr">
                             <AvGroup>
                               <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="filtroNumObitoCrLabel" for="usuario-painel-gerencial-filtroNumObitoCr">
+                                <Col md="12">
+                                  <Label className="mt-2" id="filtroNumObitoCrLabel" check>
+                                    <AvInput
+                                      id="usuario-painel-gerencial-filtroNumObitoCr"
+                                      type="checkbox"
+                                      className="form-control"
+                                      name="filtroNumObitoCr"
+                                    />
                                     <Translate contentKey="generadorApp.usuarioPainelGerencial.filtroNumObitoCr">
                                       Filtro Num Obito Cr
                                     </Translate>
                                   </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField
-                                    id="usuario-painel-gerencial-filtroNumObitoCr"
-                                    type="string"
-                                    className="form-control"
-                                    name="filtroNumObitoCr"
-                                  />
                                 </Col>
                               </Row>
                             </AvGroup>
@@ -435,20 +405,18 @@ export class UsuarioPainelGerencialUpdate extends React.Component<IUsuarioPainel
                           <Col md="verIndCliEstaveisCr">
                             <AvGroup>
                               <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="verIndCliEstaveisCrLabel" for="usuario-painel-gerencial-verIndCliEstaveisCr">
+                                <Col md="12">
+                                  <Label className="mt-2" id="verIndCliEstaveisCrLabel" check>
+                                    <AvInput
+                                      id="usuario-painel-gerencial-verIndCliEstaveisCr"
+                                      type="checkbox"
+                                      className="form-control"
+                                      name="verIndCliEstaveisCr"
+                                    />
                                     <Translate contentKey="generadorApp.usuarioPainelGerencial.verIndCliEstaveisCr">
                                       Ver Ind Cli Estaveis Cr
                                     </Translate>
                                   </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField
-                                    id="usuario-painel-gerencial-verIndCliEstaveisCr"
-                                    type="string"
-                                    className="form-control"
-                                    name="verIndCliEstaveisCr"
-                                  />
                                 </Col>
                               </Row>
                             </AvGroup>
@@ -460,24 +428,18 @@ export class UsuarioPainelGerencialUpdate extends React.Component<IUsuarioPainel
                           <Col md="filtroIndCliEstaveisCr">
                             <AvGroup>
                               <Row>
-                                <Col md="3">
-                                  <Label
-                                    className="mt-2"
-                                    id="filtroIndCliEstaveisCrLabel"
-                                    for="usuario-painel-gerencial-filtroIndCliEstaveisCr"
-                                  >
+                                <Col md="12">
+                                  <Label className="mt-2" id="filtroIndCliEstaveisCrLabel" check>
+                                    <AvInput
+                                      id="usuario-painel-gerencial-filtroIndCliEstaveisCr"
+                                      type="checkbox"
+                                      className="form-control"
+                                      name="filtroIndCliEstaveisCr"
+                                    />
                                     <Translate contentKey="generadorApp.usuarioPainelGerencial.filtroIndCliEstaveisCr">
                                       Filtro Ind Cli Estaveis Cr
                                     </Translate>
                                   </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField
-                                    id="usuario-painel-gerencial-filtroIndCliEstaveisCr"
-                                    type="string"
-                                    className="form-control"
-                                    name="filtroIndCliEstaveisCr"
-                                  />
                                 </Col>
                               </Row>
                             </AvGroup>
@@ -489,24 +451,18 @@ export class UsuarioPainelGerencialUpdate extends React.Component<IUsuarioPainel
                           <Col md="verNumConsMedInternasCr">
                             <AvGroup>
                               <Row>
-                                <Col md="3">
-                                  <Label
-                                    className="mt-2"
-                                    id="verNumConsMedInternasCrLabel"
-                                    for="usuario-painel-gerencial-verNumConsMedInternasCr"
-                                  >
+                                <Col md="12">
+                                  <Label className="mt-2" id="verNumConsMedInternasCrLabel" check>
+                                    <AvInput
+                                      id="usuario-painel-gerencial-verNumConsMedInternasCr"
+                                      type="checkbox"
+                                      className="form-control"
+                                      name="verNumConsMedInternasCr"
+                                    />
                                     <Translate contentKey="generadorApp.usuarioPainelGerencial.verNumConsMedInternasCr">
                                       Ver Num Cons Med Internas Cr
                                     </Translate>
                                   </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField
-                                    id="usuario-painel-gerencial-verNumConsMedInternasCr"
-                                    type="string"
-                                    className="form-control"
-                                    name="verNumConsMedInternasCr"
-                                  />
                                 </Col>
                               </Row>
                             </AvGroup>
@@ -518,24 +474,18 @@ export class UsuarioPainelGerencialUpdate extends React.Component<IUsuarioPainel
                           <Col md="filtroNumConsMedInternasCr">
                             <AvGroup>
                               <Row>
-                                <Col md="3">
-                                  <Label
-                                    className="mt-2"
-                                    id="filtroNumConsMedInternasCrLabel"
-                                    for="usuario-painel-gerencial-filtroNumConsMedInternasCr"
-                                  >
+                                <Col md="12">
+                                  <Label className="mt-2" id="filtroNumConsMedInternasCrLabel" check>
+                                    <AvInput
+                                      id="usuario-painel-gerencial-filtroNumConsMedInternasCr"
+                                      type="checkbox"
+                                      className="form-control"
+                                      name="filtroNumConsMedInternasCr"
+                                    />
                                     <Translate contentKey="generadorApp.usuarioPainelGerencial.filtroNumConsMedInternasCr">
                                       Filtro Num Cons Med Internas Cr
                                     </Translate>
                                   </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField
-                                    id="usuario-painel-gerencial-filtroNumConsMedInternasCr"
-                                    type="string"
-                                    className="form-control"
-                                    name="filtroNumConsMedInternasCr"
-                                  />
                                 </Col>
                               </Row>
                             </AvGroup>
@@ -547,24 +497,18 @@ export class UsuarioPainelGerencialUpdate extends React.Component<IUsuarioPainel
                           <Col md="verNumConsMedExternasCr">
                             <AvGroup>
                               <Row>
-                                <Col md="3">
-                                  <Label
-                                    className="mt-2"
-                                    id="verNumConsMedExternasCrLabel"
-                                    for="usuario-painel-gerencial-verNumConsMedExternasCr"
-                                  >
+                                <Col md="12">
+                                  <Label className="mt-2" id="verNumConsMedExternasCrLabel" check>
+                                    <AvInput
+                                      id="usuario-painel-gerencial-verNumConsMedExternasCr"
+                                      type="checkbox"
+                                      className="form-control"
+                                      name="verNumConsMedExternasCr"
+                                    />
                                     <Translate contentKey="generadorApp.usuarioPainelGerencial.verNumConsMedExternasCr">
                                       Ver Num Cons Med Externas Cr
                                     </Translate>
                                   </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField
-                                    id="usuario-painel-gerencial-verNumConsMedExternasCr"
-                                    type="string"
-                                    className="form-control"
-                                    name="verNumConsMedExternasCr"
-                                  />
                                 </Col>
                               </Row>
                             </AvGroup>
@@ -576,24 +520,18 @@ export class UsuarioPainelGerencialUpdate extends React.Component<IUsuarioPainel
                           <Col md="filtroNumConsMedExternasCr">
                             <AvGroup>
                               <Row>
-                                <Col md="3">
-                                  <Label
-                                    className="mt-2"
-                                    id="filtroNumConsMedExternasCrLabel"
-                                    for="usuario-painel-gerencial-filtroNumConsMedExternasCr"
-                                  >
+                                <Col md="12">
+                                  <Label className="mt-2" id="filtroNumConsMedExternasCrLabel" check>
+                                    <AvInput
+                                      id="usuario-painel-gerencial-filtroNumConsMedExternasCr"
+                                      type="checkbox"
+                                      className="form-control"
+                                      name="filtroNumConsMedExternasCr"
+                                    />
                                     <Translate contentKey="generadorApp.usuarioPainelGerencial.filtroNumConsMedExternasCr">
                                       Filtro Num Cons Med Externas Cr
                                     </Translate>
                                   </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField
-                                    id="usuario-painel-gerencial-filtroNumConsMedExternasCr"
-                                    type="string"
-                                    className="form-control"
-                                    name="filtroNumConsMedExternasCr"
-                                  />
                                 </Col>
                               </Row>
                             </AvGroup>
@@ -605,24 +543,18 @@ export class UsuarioPainelGerencialUpdate extends React.Component<IUsuarioPainel
                           <Col md="verNumLaboratorialCr">
                             <AvGroup>
                               <Row>
-                                <Col md="3">
-                                  <Label
-                                    className="mt-2"
-                                    id="verNumLaboratorialCrLabel"
-                                    for="usuario-painel-gerencial-verNumLaboratorialCr"
-                                  >
+                                <Col md="12">
+                                  <Label className="mt-2" id="verNumLaboratorialCrLabel" check>
+                                    <AvInput
+                                      id="usuario-painel-gerencial-verNumLaboratorialCr"
+                                      type="checkbox"
+                                      className="form-control"
+                                      name="verNumLaboratorialCr"
+                                    />
                                     <Translate contentKey="generadorApp.usuarioPainelGerencial.verNumLaboratorialCr">
                                       Ver Num Laboratorial Cr
                                     </Translate>
                                   </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField
-                                    id="usuario-painel-gerencial-verNumLaboratorialCr"
-                                    type="string"
-                                    className="form-control"
-                                    name="verNumLaboratorialCr"
-                                  />
                                 </Col>
                               </Row>
                             </AvGroup>
@@ -634,24 +566,18 @@ export class UsuarioPainelGerencialUpdate extends React.Component<IUsuarioPainel
                           <Col md="filtroNumLaboratorialCr">
                             <AvGroup>
                               <Row>
-                                <Col md="3">
-                                  <Label
-                                    className="mt-2"
-                                    id="filtroNumLaboratorialCrLabel"
-                                    for="usuario-painel-gerencial-filtroNumLaboratorialCr"
-                                  >
+                                <Col md="12">
+                                  <Label className="mt-2" id="filtroNumLaboratorialCrLabel" check>
+                                    <AvInput
+                                      id="usuario-painel-gerencial-filtroNumLaboratorialCr"
+                                      type="checkbox"
+                                      className="form-control"
+                                      name="filtroNumLaboratorialCr"
+                                    />
                                     <Translate contentKey="generadorApp.usuarioPainelGerencial.filtroNumLaboratorialCr">
                                       Filtro Num Laboratorial Cr
                                     </Translate>
                                   </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField
-                                    id="usuario-painel-gerencial-filtroNumLaboratorialCr"
-                                    type="string"
-                                    className="form-control"
-                                    name="filtroNumLaboratorialCr"
-                                  />
                                 </Col>
                               </Row>
                             </AvGroup>
@@ -663,18 +589,16 @@ export class UsuarioPainelGerencialUpdate extends React.Component<IUsuarioPainel
                           <Col md="verNumImagemCr">
                             <AvGroup>
                               <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="verNumImagemCrLabel" for="usuario-painel-gerencial-verNumImagemCr">
+                                <Col md="12">
+                                  <Label className="mt-2" id="verNumImagemCrLabel" check>
+                                    <AvInput
+                                      id="usuario-painel-gerencial-verNumImagemCr"
+                                      type="checkbox"
+                                      className="form-control"
+                                      name="verNumImagemCr"
+                                    />
                                     <Translate contentKey="generadorApp.usuarioPainelGerencial.verNumImagemCr">Ver Num Imagem Cr</Translate>
                                   </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField
-                                    id="usuario-painel-gerencial-verNumImagemCr"
-                                    type="string"
-                                    className="form-control"
-                                    name="verNumImagemCr"
-                                  />
                                 </Col>
                               </Row>
                             </AvGroup>
@@ -686,20 +610,18 @@ export class UsuarioPainelGerencialUpdate extends React.Component<IUsuarioPainel
                           <Col md="filtroNumImagemCr">
                             <AvGroup>
                               <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="filtroNumImagemCrLabel" for="usuario-painel-gerencial-filtroNumImagemCr">
+                                <Col md="12">
+                                  <Label className="mt-2" id="filtroNumImagemCrLabel" check>
+                                    <AvInput
+                                      id="usuario-painel-gerencial-filtroNumImagemCr"
+                                      type="checkbox"
+                                      className="form-control"
+                                      name="filtroNumImagemCr"
+                                    />
                                     <Translate contentKey="generadorApp.usuarioPainelGerencial.filtroNumImagemCr">
                                       Filtro Num Imagem Cr
                                     </Translate>
                                   </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField
-                                    id="usuario-painel-gerencial-filtroNumImagemCr"
-                                    type="string"
-                                    className="form-control"
-                                    name="filtroNumImagemCr"
-                                  />
                                 </Col>
                               </Row>
                             </AvGroup>
@@ -711,18 +633,16 @@ export class UsuarioPainelGerencialUpdate extends React.Component<IUsuarioPainel
                           <Col md="verNumOutrosCr">
                             <AvGroup>
                               <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="verNumOutrosCrLabel" for="usuario-painel-gerencial-verNumOutrosCr">
+                                <Col md="12">
+                                  <Label className="mt-2" id="verNumOutrosCrLabel" check>
+                                    <AvInput
+                                      id="usuario-painel-gerencial-verNumOutrosCr"
+                                      type="checkbox"
+                                      className="form-control"
+                                      name="verNumOutrosCr"
+                                    />
                                     <Translate contentKey="generadorApp.usuarioPainelGerencial.verNumOutrosCr">Ver Num Outros Cr</Translate>
                                   </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField
-                                    id="usuario-painel-gerencial-verNumOutrosCr"
-                                    type="string"
-                                    className="form-control"
-                                    name="verNumOutrosCr"
-                                  />
                                 </Col>
                               </Row>
                             </AvGroup>
@@ -734,20 +654,18 @@ export class UsuarioPainelGerencialUpdate extends React.Component<IUsuarioPainel
                           <Col md="filtroNumOutrosCr">
                             <AvGroup>
                               <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="filtroNumOutrosCrLabel" for="usuario-painel-gerencial-filtroNumOutrosCr">
+                                <Col md="12">
+                                  <Label className="mt-2" id="filtroNumOutrosCrLabel" check>
+                                    <AvInput
+                                      id="usuario-painel-gerencial-filtroNumOutrosCr"
+                                      type="checkbox"
+                                      className="form-control"
+                                      name="filtroNumOutrosCr"
+                                    />
                                     <Translate contentKey="generadorApp.usuarioPainelGerencial.filtroNumOutrosCr">
                                       Filtro Num Outros Cr
                                     </Translate>
                                   </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField
-                                    id="usuario-painel-gerencial-filtroNumOutrosCr"
-                                    type="string"
-                                    className="form-control"
-                                    name="filtroNumOutrosCr"
-                                  />
                                 </Col>
                               </Row>
                             </AvGroup>
@@ -759,18 +677,16 @@ export class UsuarioPainelGerencialUpdate extends React.Component<IUsuarioPainel
                           <Col md="verNumAtCatCr">
                             <AvGroup>
                               <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="verNumAtCatCrLabel" for="usuario-painel-gerencial-verNumAtCatCr">
+                                <Col md="12">
+                                  <Label className="mt-2" id="verNumAtCatCrLabel" check>
+                                    <AvInput
+                                      id="usuario-painel-gerencial-verNumAtCatCr"
+                                      type="checkbox"
+                                      className="form-control"
+                                      name="verNumAtCatCr"
+                                    />
                                     <Translate contentKey="generadorApp.usuarioPainelGerencial.verNumAtCatCr">Ver Num At Cat Cr</Translate>
                                   </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField
-                                    id="usuario-painel-gerencial-verNumAtCatCr"
-                                    type="string"
-                                    className="form-control"
-                                    name="verNumAtCatCr"
-                                  />
                                 </Col>
                               </Row>
                             </AvGroup>
@@ -782,20 +698,18 @@ export class UsuarioPainelGerencialUpdate extends React.Component<IUsuarioPainel
                           <Col md="filtroNumAtCatCr">
                             <AvGroup>
                               <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="filtroNumAtCatCrLabel" for="usuario-painel-gerencial-filtroNumAtCatCr">
+                                <Col md="12">
+                                  <Label className="mt-2" id="filtroNumAtCatCrLabel" check>
+                                    <AvInput
+                                      id="usuario-painel-gerencial-filtroNumAtCatCr"
+                                      type="checkbox"
+                                      className="form-control"
+                                      name="filtroNumAtCatCr"
+                                    />
                                     <Translate contentKey="generadorApp.usuarioPainelGerencial.filtroNumAtCatCr">
                                       Filtro Num At Cat Cr
                                     </Translate>
                                   </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField
-                                    id="usuario-painel-gerencial-filtroNumAtCatCr"
-                                    type="string"
-                                    className="form-control"
-                                    name="filtroNumAtCatCr"
-                                  />
                                 </Col>
                               </Row>
                             </AvGroup>
@@ -807,20 +721,18 @@ export class UsuarioPainelGerencialUpdate extends React.Component<IUsuarioPainel
                           <Col md="verNumCatCompCr">
                             <AvGroup>
                               <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="verNumCatCompCrLabel" for="usuario-painel-gerencial-verNumCatCompCr">
+                                <Col md="12">
+                                  <Label className="mt-2" id="verNumCatCompCrLabel" check>
+                                    <AvInput
+                                      id="usuario-painel-gerencial-verNumCatCompCr"
+                                      type="checkbox"
+                                      className="form-control"
+                                      name="verNumCatCompCr"
+                                    />
                                     <Translate contentKey="generadorApp.usuarioPainelGerencial.verNumCatCompCr">
                                       Ver Num Cat Comp Cr
                                     </Translate>
                                   </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField
-                                    id="usuario-painel-gerencial-verNumCatCompCr"
-                                    type="string"
-                                    className="form-control"
-                                    name="verNumCatCompCr"
-                                  />
                                 </Col>
                               </Row>
                             </AvGroup>
@@ -832,20 +744,18 @@ export class UsuarioPainelGerencialUpdate extends React.Component<IUsuarioPainel
                           <Col md="filtroNumCatCompCr">
                             <AvGroup>
                               <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="filtroNumCatCompCrLabel" for="usuario-painel-gerencial-filtroNumCatCompCr">
+                                <Col md="12">
+                                  <Label className="mt-2" id="filtroNumCatCompCrLabel" check>
+                                    <AvInput
+                                      id="usuario-painel-gerencial-filtroNumCatCompCr"
+                                      type="checkbox"
+                                      className="form-control"
+                                      name="filtroNumCatCompCr"
+                                    />
                                     <Translate contentKey="generadorApp.usuarioPainelGerencial.filtroNumCatCompCr">
                                       Filtro Num Cat Comp Cr
                                     </Translate>
                                   </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField
-                                    id="usuario-painel-gerencial-filtroNumCatCompCr"
-                                    type="string"
-                                    className="form-control"
-                                    name="filtroNumCatCompCr"
-                                  />
                                 </Col>
                               </Row>
                             </AvGroup>
@@ -857,20 +767,18 @@ export class UsuarioPainelGerencialUpdate extends React.Component<IUsuarioPainel
                           <Col md="verAtCmSucessoCr">
                             <AvGroup>
                               <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="verAtCmSucessoCrLabel" for="usuario-painel-gerencial-verAtCmSucessoCr">
+                                <Col md="12">
+                                  <Label className="mt-2" id="verAtCmSucessoCrLabel" check>
+                                    <AvInput
+                                      id="usuario-painel-gerencial-verAtCmSucessoCr"
+                                      type="checkbox"
+                                      className="form-control"
+                                      name="verAtCmSucessoCr"
+                                    />
                                     <Translate contentKey="generadorApp.usuarioPainelGerencial.verAtCmSucessoCr">
                                       Ver At Cm Sucesso Cr
                                     </Translate>
                                   </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField
-                                    id="usuario-painel-gerencial-verAtCmSucessoCr"
-                                    type="string"
-                                    className="form-control"
-                                    name="verAtCmSucessoCr"
-                                  />
                                 </Col>
                               </Row>
                             </AvGroup>
@@ -882,20 +790,18 @@ export class UsuarioPainelGerencialUpdate extends React.Component<IUsuarioPainel
                           <Col md="filtroAtCmSucessoCr">
                             <AvGroup>
                               <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="filtroAtCmSucessoCrLabel" for="usuario-painel-gerencial-filtroAtCmSucessoCr">
+                                <Col md="12">
+                                  <Label className="mt-2" id="filtroAtCmSucessoCrLabel" check>
+                                    <AvInput
+                                      id="usuario-painel-gerencial-filtroAtCmSucessoCr"
+                                      type="checkbox"
+                                      className="form-control"
+                                      name="filtroAtCmSucessoCr"
+                                    />
                                     <Translate contentKey="generadorApp.usuarioPainelGerencial.filtroAtCmSucessoCr">
                                       Filtro At Cm Sucesso Cr
                                     </Translate>
                                   </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField
-                                    id="usuario-painel-gerencial-filtroAtCmSucessoCr"
-                                    type="string"
-                                    className="form-control"
-                                    name="filtroAtCmSucessoCr"
-                                  />
                                 </Col>
                               </Row>
                             </AvGroup>
@@ -907,20 +813,18 @@ export class UsuarioPainelGerencialUpdate extends React.Component<IUsuarioPainel
                           <Col md="verMediaPadAbertoCr">
                             <AvGroup>
                               <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="verMediaPadAbertoCrLabel" for="usuario-painel-gerencial-verMediaPadAbertoCr">
+                                <Col md="12">
+                                  <Label className="mt-2" id="verMediaPadAbertoCrLabel" check>
+                                    <AvInput
+                                      id="usuario-painel-gerencial-verMediaPadAbertoCr"
+                                      type="checkbox"
+                                      className="form-control"
+                                      name="verMediaPadAbertoCr"
+                                    />
                                     <Translate contentKey="generadorApp.usuarioPainelGerencial.verMediaPadAbertoCr">
                                       Ver Media Pad Aberto Cr
                                     </Translate>
                                   </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField
-                                    id="usuario-painel-gerencial-verMediaPadAbertoCr"
-                                    type="string"
-                                    className="form-control"
-                                    name="verMediaPadAbertoCr"
-                                  />
                                 </Col>
                               </Row>
                             </AvGroup>
@@ -932,24 +836,18 @@ export class UsuarioPainelGerencialUpdate extends React.Component<IUsuarioPainel
                           <Col md="filtroMediaPadAbertoCr">
                             <AvGroup>
                               <Row>
-                                <Col md="3">
-                                  <Label
-                                    className="mt-2"
-                                    id="filtroMediaPadAbertoCrLabel"
-                                    for="usuario-painel-gerencial-filtroMediaPadAbertoCr"
-                                  >
+                                <Col md="12">
+                                  <Label className="mt-2" id="filtroMediaPadAbertoCrLabel" check>
+                                    <AvInput
+                                      id="usuario-painel-gerencial-filtroMediaPadAbertoCr"
+                                      type="checkbox"
+                                      className="form-control"
+                                      name="filtroMediaPadAbertoCr"
+                                    />
                                     <Translate contentKey="generadorApp.usuarioPainelGerencial.filtroMediaPadAbertoCr">
                                       Filtro Media Pad Aberto Cr
                                     </Translate>
                                   </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField
-                                    id="usuario-painel-gerencial-filtroMediaPadAbertoCr"
-                                    type="string"
-                                    className="form-control"
-                                    name="filtroMediaPadAbertoCr"
-                                  />
                                 </Col>
                               </Row>
                             </AvGroup>
@@ -961,24 +859,18 @@ export class UsuarioPainelGerencialUpdate extends React.Component<IUsuarioPainel
                           <Col md="verAtIntercorrenciaCr">
                             <AvGroup>
                               <Row>
-                                <Col md="3">
-                                  <Label
-                                    className="mt-2"
-                                    id="verAtIntercorrenciaCrLabel"
-                                    for="usuario-painel-gerencial-verAtIntercorrenciaCr"
-                                  >
+                                <Col md="12">
+                                  <Label className="mt-2" id="verAtIntercorrenciaCrLabel" check>
+                                    <AvInput
+                                      id="usuario-painel-gerencial-verAtIntercorrenciaCr"
+                                      type="checkbox"
+                                      className="form-control"
+                                      name="verAtIntercorrenciaCr"
+                                    />
                                     <Translate contentKey="generadorApp.usuarioPainelGerencial.verAtIntercorrenciaCr">
                                       Ver At Intercorrencia Cr
                                     </Translate>
                                   </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField
-                                    id="usuario-painel-gerencial-verAtIntercorrenciaCr"
-                                    type="string"
-                                    className="form-control"
-                                    name="verAtIntercorrenciaCr"
-                                  />
                                 </Col>
                               </Row>
                             </AvGroup>
@@ -990,24 +882,18 @@ export class UsuarioPainelGerencialUpdate extends React.Component<IUsuarioPainel
                           <Col md="filtroAtIntercorrenciaCr">
                             <AvGroup>
                               <Row>
-                                <Col md="3">
-                                  <Label
-                                    className="mt-2"
-                                    id="filtroAtIntercorrenciaCrLabel"
-                                    for="usuario-painel-gerencial-filtroAtIntercorrenciaCr"
-                                  >
+                                <Col md="12">
+                                  <Label className="mt-2" id="filtroAtIntercorrenciaCrLabel" check>
+                                    <AvInput
+                                      id="usuario-painel-gerencial-filtroAtIntercorrenciaCr"
+                                      type="checkbox"
+                                      className="form-control"
+                                      name="filtroAtIntercorrenciaCr"
+                                    />
                                     <Translate contentKey="generadorApp.usuarioPainelGerencial.filtroAtIntercorrenciaCr">
                                       Filtro At Intercorrencia Cr
                                     </Translate>
                                   </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField
-                                    id="usuario-painel-gerencial-filtroAtIntercorrenciaCr"
-                                    type="string"
-                                    className="form-control"
-                                    name="filtroAtIntercorrenciaCr"
-                                  />
                                 </Col>
                               </Row>
                             </AvGroup>
@@ -1019,20 +905,18 @@ export class UsuarioPainelGerencialUpdate extends React.Component<IUsuarioPainel
                           <Col md="verTempoMedioAtCr">
                             <AvGroup>
                               <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="verTempoMedioAtCrLabel" for="usuario-painel-gerencial-verTempoMedioAtCr">
+                                <Col md="12">
+                                  <Label className="mt-2" id="verTempoMedioAtCrLabel" check>
+                                    <AvInput
+                                      id="usuario-painel-gerencial-verTempoMedioAtCr"
+                                      type="checkbox"
+                                      className="form-control"
+                                      name="verTempoMedioAtCr"
+                                    />
                                     <Translate contentKey="generadorApp.usuarioPainelGerencial.verTempoMedioAtCr">
                                       Ver Tempo Medio At Cr
                                     </Translate>
                                   </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField
-                                    id="usuario-painel-gerencial-verTempoMedioAtCr"
-                                    type="string"
-                                    className="form-control"
-                                    name="verTempoMedioAtCr"
-                                  />
                                 </Col>
                               </Row>
                             </AvGroup>
@@ -1044,24 +928,18 @@ export class UsuarioPainelGerencialUpdate extends React.Component<IUsuarioPainel
                           <Col md="filtroTempoMedioAtCr">
                             <AvGroup>
                               <Row>
-                                <Col md="3">
-                                  <Label
-                                    className="mt-2"
-                                    id="filtroTempoMedioAtCrLabel"
-                                    for="usuario-painel-gerencial-filtroTempoMedioAtCr"
-                                  >
+                                <Col md="12">
+                                  <Label className="mt-2" id="filtroTempoMedioAtCrLabel" check>
+                                    <AvInput
+                                      id="usuario-painel-gerencial-filtroTempoMedioAtCr"
+                                      type="checkbox"
+                                      className="form-control"
+                                      name="filtroTempoMedioAtCr"
+                                    />
                                     <Translate contentKey="generadorApp.usuarioPainelGerencial.filtroTempoMedioAtCr">
                                       Filtro Tempo Medio At Cr
                                     </Translate>
                                   </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField
-                                    id="usuario-painel-gerencial-filtroTempoMedioAtCr"
-                                    type="string"
-                                    className="form-control"
-                                    name="filtroTempoMedioAtCr"
-                                  />
                                 </Col>
                               </Row>
                             </AvGroup>
@@ -1073,18 +951,16 @@ export class UsuarioPainelGerencialUpdate extends React.Component<IUsuarioPainel
                           <Col md="verMediaPtaCr">
                             <AvGroup>
                               <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="verMediaPtaCrLabel" for="usuario-painel-gerencial-verMediaPtaCr">
+                                <Col md="12">
+                                  <Label className="mt-2" id="verMediaPtaCrLabel" check>
+                                    <AvInput
+                                      id="usuario-painel-gerencial-verMediaPtaCr"
+                                      type="checkbox"
+                                      className="form-control"
+                                      name="verMediaPtaCr"
+                                    />
                                     <Translate contentKey="generadorApp.usuarioPainelGerencial.verMediaPtaCr">Ver Media Pta Cr</Translate>
                                   </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField
-                                    id="usuario-painel-gerencial-verMediaPtaCr"
-                                    type="string"
-                                    className="form-control"
-                                    name="verMediaPtaCr"
-                                  />
                                 </Col>
                               </Row>
                             </AvGroup>
@@ -1096,20 +972,18 @@ export class UsuarioPainelGerencialUpdate extends React.Component<IUsuarioPainel
                           <Col md="filtroMediaPtaCr">
                             <AvGroup>
                               <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="filtroMediaPtaCrLabel" for="usuario-painel-gerencial-filtroMediaPtaCr">
+                                <Col md="12">
+                                  <Label className="mt-2" id="filtroMediaPtaCrLabel" check>
+                                    <AvInput
+                                      id="usuario-painel-gerencial-filtroMediaPtaCr"
+                                      type="checkbox"
+                                      className="form-control"
+                                      name="filtroMediaPtaCr"
+                                    />
                                     <Translate contentKey="generadorApp.usuarioPainelGerencial.filtroMediaPtaCr">
                                       Filtro Media Pta Cr
                                     </Translate>
                                   </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField
-                                    id="usuario-painel-gerencial-filtroMediaPtaCr"
-                                    type="string"
-                                    className="form-control"
-                                    name="filtroMediaPtaCr"
-                                  />
                                 </Col>
                               </Row>
                             </AvGroup>
@@ -1121,24 +995,18 @@ export class UsuarioPainelGerencialUpdate extends React.Component<IUsuarioPainel
                           <Col md="verIndicadorUsoAppCr">
                             <AvGroup>
                               <Row>
-                                <Col md="3">
-                                  <Label
-                                    className="mt-2"
-                                    id="verIndicadorUsoAppCrLabel"
-                                    for="usuario-painel-gerencial-verIndicadorUsoAppCr"
-                                  >
+                                <Col md="12">
+                                  <Label className="mt-2" id="verIndicadorUsoAppCrLabel" check>
+                                    <AvInput
+                                      id="usuario-painel-gerencial-verIndicadorUsoAppCr"
+                                      type="checkbox"
+                                      className="form-control"
+                                      name="verIndicadorUsoAppCr"
+                                    />
                                     <Translate contentKey="generadorApp.usuarioPainelGerencial.verIndicadorUsoAppCr">
                                       Ver Indicador Uso App Cr
                                     </Translate>
                                   </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField
-                                    id="usuario-painel-gerencial-verIndicadorUsoAppCr"
-                                    type="string"
-                                    className="form-control"
-                                    name="verIndicadorUsoAppCr"
-                                  />
                                 </Col>
                               </Row>
                             </AvGroup>
@@ -1150,24 +1018,18 @@ export class UsuarioPainelGerencialUpdate extends React.Component<IUsuarioPainel
                           <Col md="filtroIndicadorUsoAppCr">
                             <AvGroup>
                               <Row>
-                                <Col md="3">
-                                  <Label
-                                    className="mt-2"
-                                    id="filtroIndicadorUsoAppCrLabel"
-                                    for="usuario-painel-gerencial-filtroIndicadorUsoAppCr"
-                                  >
+                                <Col md="12">
+                                  <Label className="mt-2" id="filtroIndicadorUsoAppCrLabel" check>
+                                    <AvInput
+                                      id="usuario-painel-gerencial-filtroIndicadorUsoAppCr"
+                                      type="checkbox"
+                                      className="form-control"
+                                      name="filtroIndicadorUsoAppCr"
+                                    />
                                     <Translate contentKey="generadorApp.usuarioPainelGerencial.filtroIndicadorUsoAppCr">
                                       Filtro Indicador Uso App Cr
                                     </Translate>
                                   </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField
-                                    id="usuario-painel-gerencial-filtroIndicadorUsoAppCr"
-                                    type="string"
-                                    className="form-control"
-                                    name="filtroIndicadorUsoAppCr"
-                                  />
                                 </Col>
                               </Row>
                             </AvGroup>

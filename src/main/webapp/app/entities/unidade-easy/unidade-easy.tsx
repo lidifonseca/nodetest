@@ -538,10 +538,10 @@ export class UnidadeEasy extends React.Component<IUnidadeEasyProps, IUnidadeEasy
                       {this.state.baseFilters !== 'ativo' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="ativoLabel" for="unidade-easy-ativo">
+                            <Label id="ativoLabel" check>
+                              <AvInput id="unidade-easy-ativo" type="checkbox" className="form-control" name="ativo" />
                               <Translate contentKey="generadorApp.unidadeEasy.ativo">Ativo</Translate>
                             </Label>
-                            <AvInput type="string" name="ativo" id="unidade-easy-ativo" value={this.state.ativo} />
                           </Row>
                         </Col>
                       ) : null}
@@ -758,7 +758,7 @@ export class UnidadeEasy extends React.Component<IUnidadeEasyProps, IUnidadeEasy
 
                         {this.state.baseFilters !== 'tisscoduf' ? <td>{unidadeEasy.tisscoduf}</td> : null}
 
-                        {this.state.baseFilters !== 'ativo' ? <td>{unidadeEasy.ativo}</td> : null}
+                        {this.state.baseFilters !== 'ativo' ? <td>{unidadeEasy.ativo ? 'true' : 'false'}</td> : null}
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">

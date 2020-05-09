@@ -16,8 +16,8 @@ export default class PacienteStatusAtual extends BaseEntity {
   @Column({ name: 'OBSERVACAO' })
   observacao: string;
 
-  @Column({ type: 'integer', name: 'ATIVO' })
-  ativo: number;
+  @Column({ type: 'boolean', name: 'ATIVO' })
+  ativo: boolean;
 
   @ManyToOne(type => Paciente)
   @JoinColumn({ name: 'ID_PACIENTE', referencedColumnName: 'id' })

@@ -1,7 +1,9 @@
 export interface IPacienteGrauParentesco {
   id?: string;
   grauParentesco?: string;
-  ativo?: number;
+  ativo?: boolean;
 }
 
-export const defaultValue: Readonly<IPacienteGrauParentesco> = {};
+export const defaultValue: Readonly<IPacienteGrauParentesco> = {
+  ativo: false
+};

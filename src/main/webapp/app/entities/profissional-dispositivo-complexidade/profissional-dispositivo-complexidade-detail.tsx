@@ -90,7 +90,7 @@ export class ProfissionalDispositivoComplexidadeDetail extends React.Component<
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{profissionalDispositivoComplexidadeEntity.ativo}</dd>
+                        <dd>{profissionalDispositivoComplexidadeEntity.ativo ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>

@@ -18,8 +18,8 @@ export default class ApiName extends BaseEntity {
   @Column({ name: 'API_OBS', length: 255 })
   apiObs: string;
 
-  @Column({ type: 'integer', name: 'ATIVO' })
-  ativo: number;
+  @Column({ type: 'boolean', name: 'ATIVO' })
+  ativo: boolean;
 
   // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
 }

@@ -173,10 +173,10 @@ export class TipoPreferenciaAtendimento extends React.Component<ITipoPreferencia
                       {this.state.baseFilters !== 'ativo' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="ativoLabel" for="tipo-preferencia-atendimento-ativo">
+                            <Label id="ativoLabel" check>
+                              <AvInput id="tipo-preferencia-atendimento-ativo" type="checkbox" className="form-control" name="ativo" />
                               <Translate contentKey="generadorApp.tipoPreferenciaAtendimento.ativo">Ativo</Translate>
                             </Label>
-                            <AvInput type="string" name="ativo" id="tipo-preferencia-atendimento-ativo" value={this.state.ativo} />
                           </Row>
                         </Col>
                       ) : null}
@@ -235,7 +235,7 @@ export class TipoPreferenciaAtendimento extends React.Component<ITipoPreferencia
 
                         {this.state.baseFilters !== 'nome' ? <td>{tipoPreferenciaAtendimento.nome}</td> : null}
 
-                        {this.state.baseFilters !== 'ativo' ? <td>{tipoPreferenciaAtendimento.ativo}</td> : null}
+                        {this.state.baseFilters !== 'ativo' ? <td>{tipoPreferenciaAtendimento.ativo ? 'true' : 'false'}</td> : null}
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">

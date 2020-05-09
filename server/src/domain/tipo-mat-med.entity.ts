@@ -12,8 +12,8 @@ export default class TipoMatMed extends BaseEntity {
   @Column({ name: 'TIPO', length: 45, nullable: false })
   tipo: string;
 
-  @Column({ type: 'integer', name: 'ATIVO' })
-  ativo: number;
+  @Column({ type: 'boolean', name: 'ATIVO' })
+  ativo: boolean;
 
   // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
 }

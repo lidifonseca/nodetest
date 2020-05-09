@@ -874,10 +874,10 @@ export class FranquiaUsuario extends React.Component<IFranquiaUsuarioProps, IFra
                       {this.state.baseFilters !== 'ativo' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="ativoLabel" for="franquia-usuario-ativo">
+                            <Label id="ativoLabel" check>
+                              <AvInput id="franquia-usuario-ativo" type="checkbox" className="form-control" name="ativo" />
                               <Translate contentKey="generadorApp.franquiaUsuario.ativo">Ativo</Translate>
                             </Label>
-                            <AvInput type="string" name="ativo" id="franquia-usuario-ativo" value={this.state.ativo} />
                           </Row>
                         </Col>
                       ) : null}
@@ -1256,7 +1256,7 @@ export class FranquiaUsuario extends React.Component<IFranquiaUsuarioProps, IFra
 
                         {this.state.baseFilters !== 'envioCancelamento' ? <td>{franquiaUsuario.envioCancelamento}</td> : null}
 
-                        {this.state.baseFilters !== 'ativo' ? <td>{franquiaUsuario.ativo}</td> : null}
+                        {this.state.baseFilters !== 'ativo' ? <td>{franquiaUsuario.ativo ? 'true' : 'false'}</td> : null}
 
                         {this.state.baseFilters !== 'franquia' ? (
                           <td>

@@ -44,7 +44,6 @@ export interface IPadItemBaseState {
   dataPadItemIncompleto: any;
   dataPadItemCompleto: any;
   numGhc: any;
-  atendimento: any;
   atendimentoCepRecusado: any;
   atendimentoSorteioFeito: any;
   padItemAtividade: any;
@@ -174,7 +173,6 @@ export type ICrudGetAllActionPadItem<T> = (
   dataPadItemIncompleto?: any,
   dataPadItemCompleto?: any,
   numGhc?: any,
-  atendimento?: any,
   atendimentoCepRecusado?: any,
   atendimentoSorteioFeito?: any,
   padItemAtividade?: any,
@@ -201,7 +199,6 @@ export const getEntities: ICrudGetAllActionPadItem<IPadItem> = (
   dataPadItemIncompleto,
   dataPadItemCompleto,
   numGhc,
-  atendimento,
   atendimentoCepRecusado,
   atendimentoSorteioFeito,
   padItemAtividade,
@@ -226,7 +223,6 @@ export const getEntities: ICrudGetAllActionPadItem<IPadItem> = (
   const dataPadItemIncompletoRequest = dataPadItemIncompleto ? `dataPadItemIncompleto.contains=${dataPadItemIncompleto}&` : '';
   const dataPadItemCompletoRequest = dataPadItemCompleto ? `dataPadItemCompleto.contains=${dataPadItemCompleto}&` : '';
   const numGhcRequest = numGhc ? `numGhc.contains=${numGhc}&` : '';
-  const atendimentoRequest = atendimento ? `atendimento.equals=${atendimento}&` : '';
   const atendimentoCepRecusadoRequest = atendimentoCepRecusado ? `atendimentoCepRecusado.equals=${atendimentoCepRecusado}&` : '';
   const atendimentoSorteioFeitoRequest = atendimentoSorteioFeito ? `atendimentoSorteioFeito.equals=${atendimentoSorteioFeito}&` : '';
   const padItemAtividadeRequest = padItemAtividade ? `padItemAtividade.equals=${padItemAtividade}&` : '';
@@ -242,7 +238,7 @@ export const getEntities: ICrudGetAllActionPadItem<IPadItem> = (
   return {
     type: ACTION_TYPES.FETCH_PADITEM_LIST,
     payload: axios.get<IPadItem>(
-      `${requestUrl}${idPedidoRequest}${dataInicioRequest}${dataFimRequest}${qtdSessoesRequest}${observacaoRequest}${subRequest}${ativoRequest}${dataPadItemIncompletoRequest}${dataPadItemCompletoRequest}${numGhcRequest}${atendimentoRequest}${atendimentoCepRecusadoRequest}${atendimentoSorteioFeitoRequest}${padItemAtividadeRequest}${padItemCepRecusadoRequest}${padItemResultadoRequest}${padItemSorteioFeitoRequest}${padRequest}${especialidadeRequest}${periodicidadeRequest}${periodoRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${idPedidoRequest}${dataInicioRequest}${dataFimRequest}${qtdSessoesRequest}${observacaoRequest}${subRequest}${ativoRequest}${dataPadItemIncompletoRequest}${dataPadItemCompletoRequest}${numGhcRequest}${atendimentoCepRecusadoRequest}${atendimentoSorteioFeitoRequest}${padItemAtividadeRequest}${padItemCepRecusadoRequest}${padItemResultadoRequest}${padItemSorteioFeitoRequest}${padRequest}${especialidadeRequest}${periodicidadeRequest}${periodoRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };
@@ -265,7 +261,6 @@ export const getEntitiesExport: ICrudGetAllActionPadItem<IPadItem> = (
   dataPadItemIncompleto,
   dataPadItemCompleto,
   numGhc,
-  atendimento,
   atendimentoCepRecusado,
   atendimentoSorteioFeito,
   padItemAtividade,
@@ -290,7 +285,6 @@ export const getEntitiesExport: ICrudGetAllActionPadItem<IPadItem> = (
   const dataPadItemIncompletoRequest = dataPadItemIncompleto ? `dataPadItemIncompleto.contains=${dataPadItemIncompleto}&` : '';
   const dataPadItemCompletoRequest = dataPadItemCompleto ? `dataPadItemCompleto.contains=${dataPadItemCompleto}&` : '';
   const numGhcRequest = numGhc ? `numGhc.contains=${numGhc}&` : '';
-  const atendimentoRequest = atendimento ? `atendimento.equals=${atendimento}&` : '';
   const atendimentoCepRecusadoRequest = atendimentoCepRecusado ? `atendimentoCepRecusado.equals=${atendimentoCepRecusado}&` : '';
   const atendimentoSorteioFeitoRequest = atendimentoSorteioFeito ? `atendimentoSorteioFeito.equals=${atendimentoSorteioFeito}&` : '';
   const padItemAtividadeRequest = padItemAtividade ? `padItemAtividade.equals=${padItemAtividade}&` : '';
@@ -306,7 +300,7 @@ export const getEntitiesExport: ICrudGetAllActionPadItem<IPadItem> = (
   return {
     type: ACTION_TYPES.FETCH_PADITEM_LIST,
     payload: axios.get<IPadItem>(
-      `${requestUrl}${idPedidoRequest}${dataInicioRequest}${dataFimRequest}${qtdSessoesRequest}${observacaoRequest}${subRequest}${ativoRequest}${dataPadItemIncompletoRequest}${dataPadItemCompletoRequest}${numGhcRequest}${atendimentoRequest}${atendimentoCepRecusadoRequest}${atendimentoSorteioFeitoRequest}${padItemAtividadeRequest}${padItemCepRecusadoRequest}${padItemResultadoRequest}${padItemSorteioFeitoRequest}${padRequest}${especialidadeRequest}${periodicidadeRequest}${periodoRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${idPedidoRequest}${dataInicioRequest}${dataFimRequest}${qtdSessoesRequest}${observacaoRequest}${subRequest}${ativoRequest}${dataPadItemIncompletoRequest}${dataPadItemCompletoRequest}${numGhcRequest}${atendimentoCepRecusadoRequest}${atendimentoSorteioFeitoRequest}${padItemAtividadeRequest}${padItemCepRecusadoRequest}${padItemResultadoRequest}${padItemSorteioFeitoRequest}${padRequest}${especialidadeRequest}${periodicidadeRequest}${periodoRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };
@@ -381,7 +375,6 @@ export const getPadItemState = (location): IPadItemBaseState => {
   const dataPadItemCompleto = url.searchParams.get('dataPadItemCompleto') || '';
   const numGhc = url.searchParams.get('numGhc') || '';
 
-  const atendimento = url.searchParams.get('atendimento') || '';
   const atendimentoCepRecusado = url.searchParams.get('atendimentoCepRecusado') || '';
   const atendimentoSorteioFeito = url.searchParams.get('atendimentoSorteioFeito') || '';
   const padItemAtividade = url.searchParams.get('padItemAtividade') || '';
@@ -405,7 +398,6 @@ export const getPadItemState = (location): IPadItemBaseState => {
     dataPadItemIncompleto,
     dataPadItemCompleto,
     numGhc,
-    atendimento,
     atendimentoCepRecusado,
     atendimentoSorteioFeito,
     padItemAtividade,

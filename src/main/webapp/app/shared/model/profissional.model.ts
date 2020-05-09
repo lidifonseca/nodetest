@@ -2,6 +2,7 @@ import { Moment } from 'moment';
 import { IAtendimentoAceite } from 'app/shared/model/atendimento-aceite.model';
 import { IAtendimentoAssinaturas } from 'app/shared/model/atendimento-assinaturas.model';
 import { IUnidadeEasy } from 'app/shared/model/unidade-easy.model';
+import { IEspecialidade } from 'app/shared/model/especialidade.model';
 
 export interface IProfissional {
   id?: string;
@@ -37,7 +38,7 @@ export interface IProfissional {
   origemCadastro?: string;
   obs?: any;
   chavePrivada?: string;
-  ativo?: number;
+  ativo?: boolean;
   senhaOriginal?: string;
   dataSenha?: Moment;
   expoToken?: string;
@@ -46,6 +47,9 @@ export interface IProfissional {
   atendimentoAssinaturas?: IAtendimentoAssinaturas[];
   unidadeRazaoSocial?: string;
   unidade?: string | any;
+  especialidades?: IEspecialidade[];
 }
 
-export const defaultValue: Readonly<IProfissional> = {};
+export const defaultValue: Readonly<IProfissional> = {
+  ativo: false
+};

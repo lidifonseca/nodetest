@@ -167,10 +167,10 @@ export class TipoProntuario extends React.Component<ITipoProntuarioProps, ITipoP
                       {this.state.baseFilters !== 'ativo' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="ativoLabel" for="tipo-prontuario-ativo">
+                            <Label id="ativoLabel" check>
+                              <AvInput id="tipo-prontuario-ativo" type="checkbox" className="form-control" name="ativo" />
                               <Translate contentKey="generadorApp.tipoProntuario.ativo">Ativo</Translate>
                             </Label>
-                            <AvInput type="string" name="ativo" id="tipo-prontuario-ativo" value={this.state.ativo} />
                           </Row>
                         </Col>
                       ) : null}
@@ -229,7 +229,7 @@ export class TipoProntuario extends React.Component<ITipoProntuarioProps, ITipoP
 
                         {this.state.baseFilters !== 'prontuario' ? <td>{tipoProntuario.prontuario}</td> : null}
 
-                        {this.state.baseFilters !== 'ativo' ? <td>{tipoProntuario.ativo}</td> : null}
+                        {this.state.baseFilters !== 'ativo' ? <td>{tipoProntuario.ativo ? 'true' : 'false'}</td> : null}
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">

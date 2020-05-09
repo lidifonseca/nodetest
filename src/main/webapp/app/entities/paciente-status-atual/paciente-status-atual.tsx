@@ -206,10 +206,10 @@ export class PacienteStatusAtual extends React.Component<IPacienteStatusAtualPro
                       {this.state.baseFilters !== 'ativo' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="ativoLabel" for="paciente-status-atual-ativo">
+                            <Label id="ativoLabel" check>
+                              <AvInput id="paciente-status-atual-ativo" type="checkbox" className="form-control" name="ativo" />
                               <Translate contentKey="generadorApp.pacienteStatusAtual.ativo">Ativo</Translate>
                             </Label>
-                            <AvInput type="string" name="ativo" id="paciente-status-atual-ativo" value={this.state.ativo} />
                           </Row>
                         </Col>
                       ) : null}
@@ -352,12 +352,12 @@ export class PacienteStatusAtual extends React.Component<IPacienteStatusAtualPro
                           <td>{pacienteStatusAtual.observacao ? Buffer.from(pacienteStatusAtual.observacao).toString() : null}</td>
                         ) : null}
 
-                        {this.state.baseFilters !== 'ativo' ? <td>{pacienteStatusAtual.ativo}</td> : null}
+                        {this.state.baseFilters !== 'ativo' ? <td>{pacienteStatusAtual.ativo ? 'true' : 'false'}</td> : null}
 
                         {this.state.baseFilters !== 'paciente' ? (
                           <td>
                             {pacienteStatusAtual.paciente ? (
-                              <Link to={`paciente/${pacienteStatusAtual.paciente.id}`}>{pacienteStatusAtual.paciente.id}</Link>
+                              <Link to={`paciente/${pacienteStatusAtual.paciente.id}`}>{pacienteStatusAtual.paciente.nome}</Link>
                             ) : (
                               ''
                             )}
@@ -367,7 +367,7 @@ export class PacienteStatusAtual extends React.Component<IPacienteStatusAtualPro
                         {this.state.baseFilters !== 'status' ? (
                           <td>
                             {pacienteStatusAtual.status ? (
-                              <Link to={`status-atual/${pacienteStatusAtual.status.id}`}>{pacienteStatusAtual.status.id}</Link>
+                              <Link to={`status-atual/${pacienteStatusAtual.status.id}`}>{pacienteStatusAtual.status.statusAtual}</Link>
                             ) : (
                               ''
                             )}

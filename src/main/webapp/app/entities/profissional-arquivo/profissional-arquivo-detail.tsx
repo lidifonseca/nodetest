@@ -94,7 +94,7 @@ export class ProfissionalArquivoDetail extends React.Component<IProfissionalArqu
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{profissionalArquivoEntity.ativo}</dd>
+                        <dd>{profissionalArquivoEntity.ativo ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>

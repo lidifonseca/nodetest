@@ -187,18 +187,16 @@ export class PacienteDispositivoComplexidadeUpdate extends React.Component<
                           <Col md="ativo">
                             <AvGroup>
                               <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="ativoLabel" for="paciente-dispositivo-complexidade-ativo">
+                                <Col md="12">
+                                  <Label className="mt-2" id="ativoLabel" check>
+                                    <AvInput
+                                      id="paciente-dispositivo-complexidade-ativo"
+                                      type="checkbox"
+                                      className="form-control"
+                                      name="ativo"
+                                    />
                                     <Translate contentKey="generadorApp.pacienteDispositivoComplexidade.ativo">Ativo</Translate>
                                   </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField
-                                    id="paciente-dispositivo-complexidade-ativo"
-                                    type="string"
-                                    className="form-control"
-                                    name="ativo"
-                                  />
                                 </Col>
                               </Row>
                             </AvGroup>

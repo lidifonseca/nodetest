@@ -268,10 +268,10 @@ export class PacienteDadosCartao extends React.Component<IPacienteDadosCartaoPro
                       {this.state.baseFilters !== 'ativo' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="ativoLabel" for="paciente-dados-cartao-ativo">
+                            <Label id="ativoLabel" check>
+                              <AvInput id="paciente-dados-cartao-ativo" type="checkbox" className="form-control" name="ativo" />
                               <Translate contentKey="generadorApp.pacienteDadosCartao.ativo">Ativo</Translate>
                             </Label>
-                            <AvInput type="string" name="ativo" id="paciente-dados-cartao-ativo" value={this.state.ativo} />
                           </Row>
                         </Col>
                       ) : null}
@@ -398,7 +398,7 @@ export class PacienteDadosCartao extends React.Component<IPacienteDadosCartaoPro
 
                         {this.state.baseFilters !== 'codAtivacao' ? <td>{pacienteDadosCartao.codAtivacao}</td> : null}
 
-                        {this.state.baseFilters !== 'ativo' ? <td>{pacienteDadosCartao.ativo}</td> : null}
+                        {this.state.baseFilters !== 'ativo' ? <td>{pacienteDadosCartao.ativo ? 'true' : 'false'}</td> : null}
 
                         {this.state.baseFilters !== 'paciente' ? (
                           <td>

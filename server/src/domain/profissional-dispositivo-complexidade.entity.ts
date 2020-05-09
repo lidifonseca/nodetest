@@ -12,8 +12,8 @@ export default class ProfissionalDispositivoComplexidade extends BaseEntity {
   @Column({ name: 'CARACTERISTICA', length: 100, nullable: false })
   caracteristica: string;
 
-  @Column({ type: 'integer', name: 'ATIVO', nullable: false })
-  ativo: number;
+  @Column({ type: 'boolean', name: 'ATIVO', nullable: false })
+  ativo: boolean;
 
   @Column({ name: 'TIPO', length: 1, nullable: false })
   tipo: string;

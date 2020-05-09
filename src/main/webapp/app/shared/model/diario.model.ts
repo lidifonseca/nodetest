@@ -3,10 +3,12 @@ import { IPaciente } from 'app/shared/model/paciente.model';
 
 export interface IDiario {
   id?: string;
-  historico?: string;
-  gerarPdf?: number;
+  historico?: any;
+  gerarPdf?: boolean;
   usuario?: string | any;
   paciente?: string | any;
 }
 
-export const defaultValue: Readonly<IDiario> = {};
+export const defaultValue: Readonly<IDiario> = {
+  gerarPdf: false
+};

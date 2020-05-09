@@ -254,13 +254,11 @@ export class PacienteDadosCartaoUpdate extends React.Component<IPacienteDadosCar
                           <Col md="ativo">
                             <AvGroup>
                               <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="ativoLabel" for="paciente-dados-cartao-ativo">
+                                <Col md="12">
+                                  <Label className="mt-2" id="ativoLabel" check>
+                                    <AvInput id="paciente-dados-cartao-ativo" type="checkbox" className="form-control" name="ativo" />
                                     <Translate contentKey="generadorApp.pacienteDadosCartao.ativo">Ativo</Translate>
                                   </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField id="paciente-dados-cartao-ativo" type="string" className="form-control" name="ativo" />
                                 </Col>
                               </Row>
                             </AvGroup>

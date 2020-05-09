@@ -185,13 +185,16 @@ export class TipoPreferenciaAtendimentoUpdate extends React.Component<
                           <Col md="ativo">
                             <AvGroup>
                               <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="ativoLabel" for="tipo-preferencia-atendimento-ativo">
+                                <Col md="12">
+                                  <Label className="mt-2" id="ativoLabel" check>
+                                    <AvInput
+                                      id="tipo-preferencia-atendimento-ativo"
+                                      type="checkbox"
+                                      className="form-control"
+                                      name="ativo"
+                                    />
                                     <Translate contentKey="generadorApp.tipoPreferenciaAtendimento.ativo">Ativo</Translate>
                                   </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField id="tipo-preferencia-atendimento-ativo" type="string" className="form-control" name="ativo" />
                                 </Col>
                               </Row>
                             </AvGroup>

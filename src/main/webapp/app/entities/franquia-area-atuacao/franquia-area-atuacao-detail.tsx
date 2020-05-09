@@ -94,7 +94,7 @@ export class FranquiaAreaAtuacaoDetail extends React.Component<IFranquiaAreaAtua
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{franquiaAreaAtuacaoEntity.ativo}</dd>
+                        <dd>{franquiaAreaAtuacaoEntity.ativo ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>

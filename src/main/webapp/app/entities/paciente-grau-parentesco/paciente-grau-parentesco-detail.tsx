@@ -79,7 +79,7 @@ export class PacienteGrauParentescoDetail extends React.Component<IPacienteGrauP
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{pacienteGrauParentescoEntity.ativo}</dd>
+                        <dd>{pacienteGrauParentescoEntity.ativo ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>

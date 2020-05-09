@@ -78,7 +78,7 @@ export class DiarioDetail extends React.Component<IDiarioDetailProps, IDiarioSta
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{diarioEntity.gerarPdf}</dd>
+                        <dd>{diarioEntity.gerarPdf ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>

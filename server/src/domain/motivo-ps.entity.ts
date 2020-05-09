@@ -15,8 +15,8 @@ export default class MotivoPs extends BaseEntity {
   @Column({ type: 'integer', name: 'ID_PAI' })
   idPai: number;
 
-  @Column({ type: 'integer', name: 'ATIVO' })
-  ativo: number;
+  @Column({ type: 'boolean', name: 'ATIVO' })
+  ativo: boolean;
 
   @Column({ name: 'CLASSE', length: 40 })
   classe: string;

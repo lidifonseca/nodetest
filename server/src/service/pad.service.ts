@@ -6,6 +6,8 @@ import { PadRepository } from '../repository/pad.repository';
 
 const relationshipNames = [];
 relationshipNames.push('unidade');
+relationshipNames.push('operadora');
+relationshipNames.push('franquia');
 relationshipNames.push('paciente');
 
 @Injectable()

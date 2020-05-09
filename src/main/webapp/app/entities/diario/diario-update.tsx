@@ -6,7 +6,7 @@ import { Link, RouteComponentProps } from 'react-router-dom';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 import { Button, Row, Col, Label } from 'reactstrap';
 import { AvFeedback, AvForm, AvGroup, AvInput, AvField } from 'availity-reactstrap-validation';
-import { Translate, translate, ICrudGetAction, ICrudGetAllAction, ICrudPutAction } from 'react-jhipster';
+import { Translate, translate, ICrudGetAction, ICrudGetAllAction, setFileData, ICrudPutAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
@@ -14,7 +14,16 @@ import { IUsuario } from 'app/shared/model/usuario.model';
 import { getEntities as getUsuarios } from 'app/entities/usuario/usuario.reducer';
 import { IPaciente } from 'app/shared/model/paciente.model';
 import { getEntities as getPacientes } from 'app/entities/paciente/paciente.reducer';
-import { IDiarioUpdateState, getEntity, getDiarioState, IDiarioBaseState, updateEntity, createEntity, reset } from './diario.reducer';
+import {
+  IDiarioUpdateState,
+  getEntity,
+  getDiarioState,
+  IDiarioBaseState,
+  updateEntity,
+  createEntity,
+  setBlob,
+  reset
+} from './diario.reducer';
 import { IDiario } from 'app/shared/model/diario.model';
 import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
 import { mapIdList } from 'app/shared/util/entity-utils';
@@ -22,8 +31,12 @@ import { mapIdList } from 'app/shared/util/entity-utils';
 export interface IDiarioUpdateProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
 export class DiarioUpdate extends React.Component<IDiarioUpdateProps, IDiarioUpdateState> {
+  historicoFileInput: React.RefObject<HTMLInputElement>;
+
   constructor(props: Readonly<IDiarioUpdateProps>) {
     super(props);
+
+    this.historicoFileInput = React.createRef();
 
     this.state = {
       usuarioSelectValue: null,
@@ -75,6 +88,14 @@ export class DiarioUpdate extends React.Component<IDiarioUpdateProps, IDiarioUpd
     this.props.getPacientes();
   }
 
+  onBlobChange = (isAnImage, name, fileInput) => event => {
+    const fileName = fileInput.current.files[0].name;
+    setFileData(event, (contentType, data) => this.props.setBlob(name, data, contentType, fileName), isAnImage);
+  };
+
+  clearBlob = name => () => {
+    this.props.setBlob(name, undefined, undefined);
+  };
   getFiltersURL = (offset = null) => {
     const fieldsBase = this.state.fieldsBase;
     let url = '_back=1' + (offset !== null ? '&offset=' + offset : '');
@@ -109,6 +130,7 @@ export class DiarioUpdate extends React.Component<IDiarioUpdateProps, IDiarioUpd
     const { diarioEntity, usuarios, pacientes, loading, updating } = this.props;
     const { isNew } = this.state;
 
+    const { historico } = diarioEntity;
     const baseFilters = this.state.fieldsBase && this.state.fieldsBase['baseFilters'] ? this.state.fieldsBase['baseFilters'] : null;
     return (
       <div>
@@ -191,7 +213,7 @@ export class DiarioUpdate extends React.Component<IDiarioUpdateProps, IDiarioUpd
                                   </Label>
                                 </Col>
                                 <Col md="9">
-                                  <AvField id="diario-historico" type="text" name="historico" />
+                                  <AvInput id="diario-historico" type="textarea" name="historico" />
                                 </Col>
                               </Row>
                             </AvGroup>
@@ -203,13 +225,11 @@ export class DiarioUpdate extends React.Component<IDiarioUpdateProps, IDiarioUpd
                           <Col md="gerarPdf">
                             <AvGroup>
                               <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="gerarPdfLabel" for="diario-gerarPdf">
+                                <Col md="12">
+                                  <Label className="mt-2" id="gerarPdfLabel" check>
+                                    <AvInput id="diario-gerarPdf" type="checkbox" className="form-control" name="gerarPdf" />
                                     <Translate contentKey="generadorApp.diario.gerarPdf">Gerar Pdf</Translate>
                                   </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField id="diario-gerarPdf" type="string" className="form-control" name="gerarPdf" />
                                 </Col>
                               </Row>
                             </AvGroup>
@@ -294,6 +314,7 @@ const mapDispatchToProps = {
   getPacientes,
   getEntity,
   updateEntity,
+  setBlob,
   createEntity,
   reset
 };

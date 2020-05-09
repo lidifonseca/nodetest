@@ -4,8 +4,10 @@ export interface IFranquiaAreaAtuacao {
   id?: string;
   cepIni?: string;
   cepFim?: string;
-  ativo?: number;
+  ativo?: boolean;
   franquia?: string | any;
 }
 
-export const defaultValue: Readonly<IFranquiaAreaAtuacao> = {};
+export const defaultValue: Readonly<IFranquiaAreaAtuacao> = {
+  ativo: false
+};

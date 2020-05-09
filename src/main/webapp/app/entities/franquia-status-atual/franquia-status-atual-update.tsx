@@ -218,13 +218,11 @@ export class FranquiaStatusAtualUpdate extends React.Component<IFranquiaStatusAt
                           <Col md="ativo">
                             <AvGroup>
                               <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="ativoLabel" for="franquia-status-atual-ativo">
+                                <Col md="12">
+                                  <Label className="mt-2" id="ativoLabel" check>
+                                    <AvInput id="franquia-status-atual-ativo" type="checkbox" className="form-control" name="ativo" />
                                     <Translate contentKey="generadorApp.franquiaStatusAtual.ativo">Ativo</Translate>
                                   </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField id="franquia-status-atual-ativo" type="string" className="form-control" name="ativo" />
                                 </Col>
                               </Row>
                             </AvGroup>

@@ -94,7 +94,7 @@ export class ProfissionalStatusAtualDetail extends React.Component<IProfissional
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{profissionalStatusAtualEntity.ativo}</dd>
+                        <dd>{profissionalStatusAtualEntity.ativo ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>

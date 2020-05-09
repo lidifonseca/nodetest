@@ -28,7 +28,7 @@
         },
         {
             "fieldName": "ativo",
-            "fieldType": "Integer"
+            "fieldType": "Boolean"
         },
         {
             "fieldName": "dataPadItemIncompleto",
@@ -48,12 +48,6 @@
         }
     ],
     "relationships": [
-        {
-            "relationshipType": "one-to-many",
-            "otherEntityName": "atendimento",
-            "otherEntityRelationshipName": "padItem",
-            "relationshipName": "atendimento"
-        },
         {
             "relationshipType": "one-to-many",
             "otherEntityName": "atendimentoCepRecusado",

@@ -4,7 +4,6 @@ import { BaseEntity } from './base/base.entity';
 
 import { validate, Contains, IsInt, Length, IsEmail, IsFQDN, IsDate, Min, Max } from 'class-validator';
 
-import Atendimento from './atendimento.entity';
 import EspecialidadeOperadora from './especialidade-operadora.entity';
 import PacienteOperadora from './paciente-operadora.entity';
 import UnidadeEasy from './unidade-easy.entity';
@@ -30,8 +29,8 @@ export default class Operadora extends BaseEntity {
   @Column({ name: 'SITE', length: 100 })
   site: string;
 
-  @Column({ type: 'integer', name: 'ATIVO' })
-  ativo: number;
+  @Column({ type: 'boolean', name: 'ATIVO' })
+  ativo: boolean;
 
   @Column({ name: 'ENDERECO', length: 200 })
   endereco: string;
@@ -59,12 +58,6 @@ export default class Operadora extends BaseEntity {
 
   @Column({ name: 'EMAIL_FINANCEIRO', length: 50 })
   emailFinanceiro: string;
-
-  @OneToMany(
-    type => Atendimento,
-    other => other.operadora
-  )
-  atendimentos: Atendimento[];
 
   @OneToMany(
     type => EspecialidadeOperadora,

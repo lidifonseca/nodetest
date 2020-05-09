@@ -15,8 +15,8 @@ export default class ImagemProntuario extends BaseEntity {
   @Column({ name: 'IMAGEM', length: 100, nullable: false })
   imagem: string;
 
-  @Column({ type: 'integer', name: 'ATIVO', nullable: false })
-  ativo: number;
+  @Column({ type: 'boolean', name: 'ATIVO', nullable: false })
+  ativo: boolean;
 
   @Column({ name: 'DIRETORIO', length: 500 })
   diretorio: string;

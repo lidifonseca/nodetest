@@ -191,10 +191,10 @@ export class EspecialidadeValor extends React.Component<IEspecialidadeValorProps
                       {this.state.baseFilters !== 'ativo' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="ativoLabel" for="especialidade-valor-ativo">
+                            <Label id="ativoLabel" check>
+                              <AvInput id="especialidade-valor-ativo" type="checkbox" className="form-control" name="ativo" />
                               <Translate contentKey="generadorApp.especialidadeValor.ativo">Ativo</Translate>
                             </Label>
-                            <AvInput type="string" name="ativo" id="especialidade-valor-ativo" value={this.state.ativo} />
                           </Row>
                         </Col>
                       ) : null}
@@ -295,7 +295,7 @@ export class EspecialidadeValor extends React.Component<IEspecialidadeValorProps
 
                         {this.state.baseFilters !== 'valor' ? <td>{especialidadeValor.valor}</td> : null}
 
-                        {this.state.baseFilters !== 'ativo' ? <td>{especialidadeValor.ativo}</td> : null}
+                        {this.state.baseFilters !== 'ativo' ? <td>{especialidadeValor.ativo ? 'true' : 'false'}</td> : null}
 
                         {this.state.baseFilters !== 'especialidade' ? (
                           <td>

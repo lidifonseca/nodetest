@@ -190,10 +190,10 @@ export class MotivoInternacao extends React.Component<IMotivoInternacaoProps, IM
                       {this.state.baseFilters !== 'ativo' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="ativoLabel" for="motivo-internacao-ativo">
+                            <Label id="ativoLabel" check>
+                              <AvInput id="motivo-internacao-ativo" type="checkbox" className="form-control" name="ativo" />
                               <Translate contentKey="generadorApp.motivoInternacao.ativo">Ativo</Translate>
                             </Label>
-                            <AvInput type="string" name="ativo" id="motivo-internacao-ativo" value={this.state.ativo} />
                           </Row>
                         </Col>
                       ) : null}
@@ -296,7 +296,7 @@ export class MotivoInternacao extends React.Component<IMotivoInternacaoProps, IM
 
                         {this.state.baseFilters !== 'idPai' ? <td>{motivoInternacao.idPai}</td> : null}
 
-                        {this.state.baseFilters !== 'ativo' ? <td>{motivoInternacao.ativo}</td> : null}
+                        {this.state.baseFilters !== 'ativo' ? <td>{motivoInternacao.ativo ? 'true' : 'false'}</td> : null}
 
                         {this.state.baseFilters !== 'classe' ? <td>{motivoInternacao.classe}</td> : null}
 

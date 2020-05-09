@@ -8,25 +8,21 @@ import AtendimentoAceite from './atendimento-aceite.entity';
 import AtendimentoAssinaturas from './atendimento-assinaturas.entity';
 import AtendimentoAtividades from './atendimento-atividades.entity';
 import UnidadeEasy from './unidade-easy.entity';
+import PadItem from './pad-item.entity';
 import Paciente from './paciente.entity';
 import Operadora from './operadora.entity';
+import Profissional from './profissional.entity';
+import Franquia from './franquia.entity';
 import Especialidade from './especialidade.entity';
-import PadItem from './pad-item.entity';
 import StatusAtendimento from './status-atendimento.entity';
 import Periodo from './periodo.entity';
 import Cidade from './cidade.entity';
 
 /**
- * A Atendimento.
+ * \n\n
  */
 @Entity('tb_atendimento')
 export default class Atendimento extends BaseEntity {
-  @Column({ name: 'ID_FRANQUIA' })
-  idFranquia: string;
-
-  @Column({ name: 'ID_PROFISSIONAL' })
-  idProfissional: string;
-
   @Column({ name: 'CEP', length: 10 })
   cep: string;
 
@@ -99,8 +95,8 @@ export default class Atendimento extends BaseEntity {
   @Column({ type: 'integer', name: 'ORDEM_ATENDIMENTO' })
   ordemAtendimento: number;
 
-  @Column({ type: 'integer', name: 'ATIVO' })
-  ativo: number;
+  @Column({ type: 'boolean', name: 'ATIVO' })
+  ativo: boolean;
 
   @Column({ type: 'timestamp', name: 'DATA_FORA_HORA' })
   dataForaHora: any;
@@ -142,6 +138,10 @@ export default class Atendimento extends BaseEntity {
   @JoinColumn({ name: 'ID_UNIDADE', referencedColumnName: 'id' })
   unidade: UnidadeEasy;
 
+  @ManyToOne(type => PadItem)
+  @JoinColumn({ name: 'ID_PAD_ITEM', referencedColumnName: 'id' })
+  padItem: PadItem;
+
   @ManyToOne(type => Paciente)
   @JoinColumn({ name: 'ID_PACIENTE', referencedColumnName: 'id' })
   paciente: Paciente;
@@ -150,13 +150,17 @@ export default class Atendimento extends BaseEntity {
   @JoinColumn({ name: 'ID_OPERADORA', referencedColumnName: 'id' })
   operadora: Operadora;
 
+  @ManyToOne(type => Profissional)
+  @JoinColumn({ name: 'ID_PROFISSIONAL', referencedColumnName: 'id' })
+  profissional: Profissional;
+
+  @ManyToOne(type => Franquia)
+  @JoinColumn({ name: 'ID_FRANQUIA', referencedColumnName: 'id' })
+  franquia: Franquia;
+
   @ManyToOne(type => Especialidade)
   @JoinColumn({ name: 'ID_ESPECIALIDADE', referencedColumnName: 'id' })
   especialidade: Especialidade;
-
-  @ManyToOne(type => PadItem)
-  @JoinColumn({ name: 'ID_PAD_ITEM', referencedColumnName: 'id' })
-  padItem: PadItem;
 
   @ManyToOne(type => StatusAtendimento)
   @JoinColumn({ name: 'ID_STATUS_ATENDIMENTO', referencedColumnName: 'id' })

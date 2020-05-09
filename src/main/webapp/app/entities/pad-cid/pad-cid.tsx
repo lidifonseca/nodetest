@@ -183,10 +183,10 @@ export class PadCid extends React.Component<IPadCidProps, IPadCidState> {
                       {this.state.baseFilters !== 'ativo' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="ativoLabel" for="pad-cid-ativo">
+                            <Label id="ativoLabel" check>
+                              <AvInput id="pad-cid-ativo" type="checkbox" className="form-control" name="ativo" />
                               <Translate contentKey="generadorApp.padCid.ativo">Ativo</Translate>
                             </Label>
-                            <AvInput type="string" name="ativo" id="pad-cid-ativo" value={this.state.ativo} />
                           </Row>
                         </Col>
                       ) : null}
@@ -309,7 +309,7 @@ export class PadCid extends React.Component<IPadCidProps, IPadCidState> {
 
                         {this.state.baseFilters !== 'observacao' ? <td>{padCid.observacao}</td> : null}
 
-                        {this.state.baseFilters !== 'ativo' ? <td>{padCid.ativo}</td> : null}
+                        {this.state.baseFilters !== 'ativo' ? <td>{padCid.ativo ? 'true' : 'false'}</td> : null}
 
                         {this.state.baseFilters !== 'pad' ? (
                           <td>{padCid.pad ? <Link to={`pad/${padCid.pad.id}`}>{padCid.pad.id}</Link> : ''}</td>

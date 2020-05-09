@@ -17,8 +17,8 @@ export default class FranquiaStatusAtual extends BaseEntity {
   @Column({ name: 'OBS', length: 255 })
   obs: string;
 
-  @Column({ type: 'integer', name: 'ATIVO' })
-  ativo: number;
+  @Column({ type: 'boolean', name: 'ATIVO' })
+  ativo: boolean;
 
   @ManyToOne(type => Franquia)
   @JoinColumn({ name: 'ID_FRANQUIA', referencedColumnName: 'id' })

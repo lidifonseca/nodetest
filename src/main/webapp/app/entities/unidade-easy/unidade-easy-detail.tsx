@@ -422,7 +422,7 @@ export class UnidadeEasyDetail extends React.Component<IUnidadeEasyDetailProps, 
                             </dt>
                           </Col>
                           <Col md="9">
-                            <dd>{unidadeEasyEntity.ativo}</dd>
+                            <dd>{unidadeEasyEntity.ativo ? 'true' : 'false'}</dd>
                           </Col>
                         </Row>
                       </Col>

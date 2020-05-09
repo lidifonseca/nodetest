@@ -3,7 +3,9 @@ export interface IStatusPadItemMeta {
   statusItemMeta?: string;
   styleLabel?: string;
   ordenacao?: number;
-  ativo?: number;
+  ativo?: boolean;
 }
 
-export const defaultValue: Readonly<IStatusPadItemMeta> = {};
+export const defaultValue: Readonly<IStatusPadItemMeta> = {
+  ativo: false
+};

@@ -201,10 +201,10 @@ export class MatMed extends React.Component<IMatMedProps, IMatMedState> {
                       {this.state.baseFilters !== 'ativo' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="ativoLabel" for="mat-med-ativo">
+                            <Label id="ativoLabel" check>
+                              <AvInput id="mat-med-ativo" type="checkbox" className="form-control" name="ativo" />
                               <Translate contentKey="generadorApp.matMed.ativo">Ativo</Translate>
                             </Label>
-                            <AvInput type="string" name="ativo" id="mat-med-ativo" value={this.state.ativo} />
                           </Row>
                         </Col>
                       ) : null}
@@ -279,7 +279,7 @@ export class MatMed extends React.Component<IMatMedProps, IMatMedState> {
 
                         {this.state.baseFilters !== 'valor' ? <td>{matMed.valor}</td> : null}
 
-                        {this.state.baseFilters !== 'ativo' ? <td>{matMed.ativo}</td> : null}
+                        {this.state.baseFilters !== 'ativo' ? <td>{matMed.ativo ? 'true' : 'false'}</td> : null}
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">

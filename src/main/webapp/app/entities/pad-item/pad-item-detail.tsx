@@ -157,7 +157,7 @@ export class PadItemDetail extends React.Component<IPadItemDetailProps, IPadItem
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{padItemEntity.ativo}</dd>
+                        <dd>{padItemEntity.ativo ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>

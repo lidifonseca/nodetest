@@ -12,8 +12,8 @@ export default class TipoProntuario extends BaseEntity {
   @Column({ name: 'PRONTUARIO', length: 45, nullable: false })
   prontuario: string;
 
-  @Column({ type: 'integer', name: 'ATIVO', nullable: false })
-  ativo: number;
+  @Column({ type: 'boolean', name: 'ATIVO', nullable: false })
+  ativo: boolean;
 
   // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
 }

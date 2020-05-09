@@ -10,10 +10,10 @@ import { Translate, translate, ICrudGetAction, ICrudGetAllAction, ICrudPutAction
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
-import { ICategoriaAtividade } from 'app/shared/model/categoria-atividade.model';
-import { getEntities as getCategoriaAtividades } from 'app/entities/categoria-atividade/categoria-atividade.reducer';
 import { IAtendimento } from 'app/shared/model/atendimento.model';
 import { getEntities as getAtendimentos } from 'app/entities/atendimento/atendimento.reducer';
+import { ICategoriaAtividade } from 'app/shared/model/categoria-atividade.model';
+import { getEntities as getCategoriaAtividades } from 'app/entities/categoria-atividade/categoria-atividade.reducer';
 import {
   IAtendimentoAtividadesUpdateState,
   getEntity,
@@ -34,30 +34,17 @@ export class AtendimentoAtividadesUpdate extends React.Component<IAtendimentoAti
     super(props);
 
     this.state = {
-      categoriaAtividadeSelectValue: null,
       atendimentoSelectValue: null,
+      categoriaAtividadeSelectValue: null,
       fieldsBase: getAtendimentoAtividadesState(this.props.location),
-      atividadeId: '0',
       atendimentoId: '0',
+      atividadeId: '0',
       isNew: !this.props.match.params || !this.props.match.params.id
     };
   }
   componentDidUpdate(nextProps, nextState) {
     if (nextProps.updateSuccess !== this.props.updateSuccess && nextProps.updateSuccess) {
       this.handleClose();
-    }
-
-    if (
-      nextProps.categoriaAtividades.length > 0 &&
-      this.state.categoriaAtividadeSelectValue === null &&
-      nextProps.atendimentoAtividadesEntity.categoriaAtividade &&
-      nextProps.atendimentoAtividadesEntity.categoriaAtividade.id
-    ) {
-      this.setState({
-        categoriaAtividadeSelectValue: nextProps.categoriaAtividades.map(p =>
-          nextProps.atendimentoAtividadesEntity.categoriaAtividade.id === p.id ? { value: p.id, label: p.id } : null
-        )
-      });
     }
 
     if (
@@ -72,6 +59,19 @@ export class AtendimentoAtividadesUpdate extends React.Component<IAtendimentoAti
         )
       });
     }
+
+    if (
+      nextProps.categoriaAtividades.length > 0 &&
+      this.state.categoriaAtividadeSelectValue === null &&
+      nextProps.atendimentoAtividadesEntity.categoriaAtividade &&
+      nextProps.atendimentoAtividadesEntity.categoriaAtividade.id
+    ) {
+      this.setState({
+        categoriaAtividadeSelectValue: nextProps.categoriaAtividades.map(p =>
+          nextProps.atendimentoAtividadesEntity.categoriaAtividade.id === p.id ? { value: p.id, label: p.id } : null
+        )
+      });
+    }
   }
 
   componentDidMount() {
@@ -81,8 +81,8 @@ export class AtendimentoAtividadesUpdate extends React.Component<IAtendimentoAti
       this.props.getEntity(this.props.match.params.id);
     }
 
-    this.props.getCategoriaAtividades();
     this.props.getAtendimentos();
+    this.props.getCategoriaAtividades();
   }
 
   getFiltersURL = (offset = null) => {
@@ -98,8 +98,8 @@ export class AtendimentoAtividadesUpdate extends React.Component<IAtendimentoAti
       const { atendimentoAtividadesEntity } = this.props;
       const entity = {
         ...atendimentoAtividadesEntity,
-        categoriaAtividade: this.state.categoriaAtividadeSelectValue ? this.state.categoriaAtividadeSelectValue['value'] : null,
         atendimento: this.state.atendimentoSelectValue ? this.state.atendimentoSelectValue['value'] : null,
+        categoriaAtividade: this.state.categoriaAtividadeSelectValue ? this.state.categoriaAtividadeSelectValue['value'] : null,
         ...values
       };
 
@@ -116,7 +116,7 @@ export class AtendimentoAtividadesUpdate extends React.Component<IAtendimentoAti
   };
 
   render() {
-    const { atendimentoAtividadesEntity, categoriaAtividades, atendimentos, loading, updating } = this.props;
+    const { atendimentoAtividadesEntity, atendimentos, categoriaAtividades, loading, updating } = this.props;
     const { isNew } = this.state;
 
     const baseFilters = this.state.fieldsBase && this.state.fieldsBase['baseFilters'] ? this.state.fieldsBase['baseFilters'] : null;
@@ -128,8 +128,8 @@ export class AtendimentoAtividadesUpdate extends React.Component<IAtendimentoAti
               ? {}
               : {
                   ...atendimentoAtividadesEntity,
-                  atividade: atendimentoAtividadesEntity.atividade ? atendimentoAtividadesEntity.atividade.id : null,
-                  atendimento: atendimentoAtividadesEntity.atendimento ? atendimentoAtividadesEntity.atendimento.id : null
+                  atendimento: atendimentoAtividadesEntity.atendimento ? atendimentoAtividadesEntity.atendimento.id : null,
+                  atividade: atendimentoAtividadesEntity.atividade ? atendimentoAtividadesEntity.atividade.id : null
                 }
           }
           onSubmit={this.saveEntity}
@@ -211,6 +211,31 @@ export class AtendimentoAtividadesUpdate extends React.Component<IAtendimentoAti
                         ) : (
                           <AvInput type="hidden" name="feito" value={this.state.fieldsBase[baseFilters]} />
                         )}
+                        {baseFilters !== 'atendimento' ? (
+                          <Col md="12">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" for="atendimento-atividades-atendimento">
+                                    <Translate contentKey="generadorApp.atendimentoAtividades.atendimento">Atendimento</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <Select
+                                    id="atendimento-atividades-atendimento"
+                                    className={'css-select-control'}
+                                    value={this.state.atendimentoSelectValue}
+                                    options={atendimentos ? atendimentos.map(option => ({ value: option.id, label: option.id })) : null}
+                                    onChange={options => this.setState({ atendimentoSelectValue: options })}
+                                    name={'atendimento'}
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="atendimento" value={this.state.fieldsBase[baseFilters]} />
+                        )}
                         {baseFilters !== 'atividade' ? (
                           <Col md="12">
                             <AvGroup>
@@ -240,31 +265,6 @@ export class AtendimentoAtividadesUpdate extends React.Component<IAtendimentoAti
                         ) : (
                           <AvInput type="hidden" name="atividade" value={this.state.fieldsBase[baseFilters]} />
                         )}
-                        {baseFilters !== 'atendimento' ? (
-                          <Col md="12">
-                            <AvGroup>
-                              <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" for="atendimento-atividades-atendimento">
-                                    <Translate contentKey="generadorApp.atendimentoAtividades.atendimento">Atendimento</Translate>
-                                  </Label>
-                                </Col>
-                                <Col md="9">
-                                  <Select
-                                    id="atendimento-atividades-atendimento"
-                                    className={'css-select-control'}
-                                    value={this.state.atendimentoSelectValue}
-                                    options={atendimentos ? atendimentos.map(option => ({ value: option.id, label: option.id })) : null}
-                                    onChange={options => this.setState({ atendimentoSelectValue: options })}
-                                    name={'atendimento'}
-                                  />
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
-                        ) : (
-                          <AvInput type="hidden" name="atendimento" value={this.state.fieldsBase[baseFilters]} />
-                        )}
                       </Row>
                     </div>
                   )}
@@ -279,8 +279,8 @@ export class AtendimentoAtividadesUpdate extends React.Component<IAtendimentoAti
 }
 
 const mapStateToProps = (storeState: IRootState) => ({
-  categoriaAtividades: storeState.categoriaAtividade.entities,
   atendimentos: storeState.atendimento.entities,
+  categoriaAtividades: storeState.categoriaAtividade.entities,
   atendimentoAtividadesEntity: storeState.atendimentoAtividades.entity,
   loading: storeState.atendimentoAtividades.loading,
   updating: storeState.atendimentoAtividades.updating,
@@ -288,8 +288,8 @@ const mapStateToProps = (storeState: IRootState) => ({
 });
 
 const mapDispatchToProps = {
-  getCategoriaAtividades,
   getAtendimentos,
+  getCategoriaAtividades,
   getEntity,
   updateEntity,
   createEntity,

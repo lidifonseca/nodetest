@@ -6,6 +6,7 @@ import { ProfissionalRepository } from '../repository/profissional.repository';
 
 const relationshipNames = [];
 relationshipNames.push('unidade');
+relationshipNames.push('especialidades');
 
 @Injectable()
 export class ProfissionalService {

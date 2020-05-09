@@ -192,10 +192,10 @@ export class PacientePush extends React.Component<IPacientePushProps, IPacienteP
                       {this.state.baseFilters !== 'ativo' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="ativoLabel" for="paciente-push-ativo">
+                            <Label id="ativoLabel" check>
+                              <AvInput id="paciente-push-ativo" type="checkbox" className="form-control" name="ativo" />
                               <Translate contentKey="generadorApp.pacientePush.ativo">Ativo</Translate>
                             </Label>
-                            <AvInput type="string" name="ativo" id="paciente-push-ativo" value={this.state.ativo} />
                           </Row>
                         </Col>
                       ) : null}
@@ -296,7 +296,7 @@ export class PacientePush extends React.Component<IPacientePushProps, IPacienteP
 
                         {this.state.baseFilters !== 'mensagem' ? <td>{pacientePush.mensagem}</td> : null}
 
-                        {this.state.baseFilters !== 'ativo' ? <td>{pacientePush.ativo}</td> : null}
+                        {this.state.baseFilters !== 'ativo' ? <td>{pacientePush.ativo ? 'true' : 'false'}</td> : null}
 
                         {this.state.baseFilters !== 'paciente' ? (
                           <td>

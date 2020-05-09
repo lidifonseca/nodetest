@@ -1,5 +1,4 @@
 import { Moment } from 'moment';
-import { IAtendimento } from 'app/shared/model/atendimento.model';
 import { IAtendimentoAssinaturas } from 'app/shared/model/atendimento-assinaturas.model';
 import { IDiario } from 'app/shared/model/diario.model';
 import { IPacienteDadosCartao } from 'app/shared/model/paciente-dados-cartao.model';
@@ -9,7 +8,6 @@ import { IPacienteEnqueteApp } from 'app/shared/model/paciente-enquete-app.model
 import { IPacienteOperadora } from 'app/shared/model/paciente-operadora.model';
 import { IPacientePedido } from 'app/shared/model/paciente-pedido.model';
 import { IPacientePush } from 'app/shared/model/paciente-push.model';
-import { IPad } from 'app/shared/model/pad.model';
 import { IUnidadeEasy } from 'app/shared/model/unidade-easy.model';
 import { IFranquia } from 'app/shared/model/franquia.model';
 import { ICidade } from 'app/shared/model/cidade.model';
@@ -70,11 +68,10 @@ export interface IPaciente {
   acessoFamiliar?: number;
   comResponsavel?: number;
   cadastroCompleto?: number;
-  ativo?: number;
+  ativo?: boolean;
   detalhes?: any;
   liminar?: string;
   expoToken?: string;
-  atendimentos?: IAtendimento[];
   atendimentoAssinaturas?: IAtendimentoAssinaturas[];
   diarios?: IDiario[];
   pacienteDadosCartaos?: IPacienteDadosCartao[];
@@ -84,7 +81,6 @@ export interface IPaciente {
   pacienteOperadoras?: IPacienteOperadora[];
   pacientePedidos?: IPacientePedido[];
   pacientePushes?: IPacientePush[];
-  pads?: IPad[];
   unidadeRazaoSocial?: string;
   unidade?: string | any;
   franquiaNomeFantasia?: string;
@@ -101,4 +97,6 @@ export interface IPaciente {
   tipohospital?: string | any;
 }
 
-export const defaultValue: Readonly<IPaciente> = {};
+export const defaultValue: Readonly<IPaciente> = {
+  ativo: false
+};

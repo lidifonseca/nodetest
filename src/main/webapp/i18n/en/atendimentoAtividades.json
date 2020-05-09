@@ -23,10 +23,10 @@
         "title": "Atendimento Atividades"
       },
       "feito": "Feito",
-      "atividade_empty": "Without Atividade",
-      "atividade": "Atividade",
       "atendimento_empty": "Without Atendimento",
-      "atendimento": "Atendimento"
+      "atendimento": "Atendimento",
+      "atividade_empty": "Without Atividade",
+      "atividade": "Atividade"
     }
   }
 }

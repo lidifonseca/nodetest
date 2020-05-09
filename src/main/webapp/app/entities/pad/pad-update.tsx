@@ -12,6 +12,10 @@ import { IRootState } from 'app/shared/reducers';
 
 import { IUnidadeEasy } from 'app/shared/model/unidade-easy.model';
 import { getEntities as getUnidadeEasies } from 'app/entities/unidade-easy/unidade-easy.reducer';
+import { IOperadora } from 'app/shared/model/operadora.model';
+import { getEntities as getOperadoras } from 'app/entities/operadora/operadora.reducer';
+import { IFranquia } from 'app/shared/model/franquia.model';
+import { getEntities as getFranquias } from 'app/entities/franquia/franquia.reducer';
 import { IPaciente } from 'app/shared/model/paciente.model';
 import { getEntities as getPacientes } from 'app/entities/paciente/paciente.reducer';
 import { IPadUpdateState, getEntity, getPadState, IPadBaseState, updateEntity, createEntity, reset } from './pad.reducer';
@@ -27,9 +31,13 @@ export class PadUpdate extends React.Component<IPadUpdateProps, IPadUpdateState>
 
     this.state = {
       unidadeEasySelectValue: null,
+      operadoraSelectValue: null,
+      franquiaSelectValue: null,
       pacienteSelectValue: null,
       fieldsBase: getPadState(this.props.location),
       unidadeId: '0',
+      operadoraId: '0',
+      franquiaId: '0',
       pacienteId: '0',
       isNew: !this.props.match.params || !this.props.match.params.id
     };
@@ -53,13 +61,41 @@ export class PadUpdate extends React.Component<IPadUpdateProps, IPadUpdateState>
     }
 
     if (
+      nextProps.operadoras.length > 0 &&
+      this.state.operadoraSelectValue === null &&
+      nextProps.padEntity.operadora &&
+      nextProps.padEntity.operadora.id
+    ) {
+      this.setState({
+        operadoraSelectValue: nextProps.operadoras.map(p =>
+          nextProps.padEntity.operadora.id === p.id ? { value: p.id, label: p.nomeFantasia } : null
+        )
+      });
+    }
+
+    if (
+      nextProps.franquias.length > 0 &&
+      this.state.franquiaSelectValue === null &&
+      nextProps.padEntity.franquia &&
+      nextProps.padEntity.franquia.id
+    ) {
+      this.setState({
+        franquiaSelectValue: nextProps.franquias.map(p =>
+          nextProps.padEntity.franquia.id === p.id ? { value: p.id, label: p.nomeFantasia } : null
+        )
+      });
+    }
+
+    if (
       nextProps.pacientes.length > 0 &&
       this.state.pacienteSelectValue === null &&
       nextProps.padEntity.paciente &&
       nextProps.padEntity.paciente.id
     ) {
       this.setState({
-        pacienteSelectValue: nextProps.pacientes.map(p => (nextProps.padEntity.paciente.id === p.id ? { value: p.id, label: p.id } : null))
+        pacienteSelectValue: nextProps.pacientes.map(p =>
+          nextProps.padEntity.paciente.id === p.id ? { value: p.id, label: p.nome } : null
+        )
       });
     }
   }
@@ -72,6 +108,8 @@ export class PadUpdate extends React.Component<IPadUpdateProps, IPadUpdateState>
     }
 
     this.props.getUnidadeEasies();
+    this.props.getOperadoras();
+    this.props.getFranquias();
     this.props.getPacientes();
   }
 
@@ -89,6 +127,8 @@ export class PadUpdate extends React.Component<IPadUpdateProps, IPadUpdateState>
       const entity = {
         ...padEntity,
         unidadeEasy: this.state.unidadeEasySelectValue ? this.state.unidadeEasySelectValue['value'] : null,
+        operadora: this.state.operadoraSelectValue ? this.state.operadoraSelectValue['value'] : null,
+        franquia: this.state.franquiaSelectValue ? this.state.franquiaSelectValue['value'] : null,
         paciente: this.state.pacienteSelectValue ? this.state.pacienteSelectValue['value'] : null,
         ...values
       };
@@ -106,7 +146,7 @@ export class PadUpdate extends React.Component<IPadUpdateProps, IPadUpdateState>
   };
 
   render() {
-    const { padEntity, unidadeEasies, pacientes, loading, updating } = this.props;
+    const { padEntity, unidadeEasies, operadoras, franquias, pacientes, loading, updating } = this.props;
     const { isNew } = this.state;
 
     const baseFilters = this.state.fieldsBase && this.state.fieldsBase['baseFilters'] ? this.state.fieldsBase['baseFilters'] : null;
@@ -119,6 +159,8 @@ export class PadUpdate extends React.Component<IPadUpdateProps, IPadUpdateState>
               : {
                   ...padEntity,
                   unidade: padEntity.unidade ? padEntity.unidade.id : null,
+                  operadora: padEntity.operadora ? padEntity.operadora.id : null,
+                  franquia: padEntity.franquia ? padEntity.franquia.id : null,
                   paciente: padEntity.paciente ? padEntity.paciente.id : null
                 }
           }
@@ -181,42 +223,6 @@ export class PadUpdate extends React.Component<IPadUpdateProps, IPadUpdateState>
                         </AvGroup>
                       ) : null}
                       <Row>
-                        {baseFilters !== 'idOperadora' ? (
-                          <Col md="idOperadora">
-                            <AvGroup>
-                              <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="idOperadoraLabel" for="pad-idOperadora">
-                                    <Translate contentKey="generadorApp.pad.idOperadora">Id Operadora</Translate>
-                                  </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField id="pad-idOperadora" type="string" className="form-control" name="idOperadora" />
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
-                        ) : (
-                          <AvInput type="hidden" name="idOperadora" value={this.state.fieldsBase[baseFilters]} />
-                        )}
-                        {baseFilters !== 'idFranquia' ? (
-                          <Col md="idFranquia">
-                            <AvGroup>
-                              <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="idFranquiaLabel" for="pad-idFranquia">
-                                    <Translate contentKey="generadorApp.pad.idFranquia">Id Franquia</Translate>
-                                  </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField id="pad-idFranquia" type="text" name="idFranquia" />
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
-                        ) : (
-                          <AvInput type="hidden" name="idFranquia" value={this.state.fieldsBase[baseFilters]} />
-                        )}
                         {baseFilters !== 'nroPad' ? (
                           <Col md="nroPad">
                             <AvGroup>
@@ -293,13 +299,11 @@ export class PadUpdate extends React.Component<IPadUpdateProps, IPadUpdateState>
                           <Col md="ativo">
                             <AvGroup>
                               <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="ativoLabel" for="pad-ativo">
+                                <Col md="12">
+                                  <Label className="mt-2" id="ativoLabel" check>
+                                    <AvInput id="pad-ativo" type="checkbox" className="form-control" name="ativo" />
                                     <Translate contentKey="generadorApp.pad.ativo">Ativo</Translate>
                                   </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField id="pad-ativo" type="string" className="form-control" name="ativo" />
                                 </Col>
                               </Row>
                             </AvGroup>
@@ -362,6 +366,58 @@ export class PadUpdate extends React.Component<IPadUpdateProps, IPadUpdateState>
                         ) : (
                           <AvInput type="hidden" name="unidade" value={this.state.fieldsBase[baseFilters]} />
                         )}
+                        {baseFilters !== 'operadora' ? (
+                          <Col md="12">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" for="pad-operadora">
+                                    <Translate contentKey="generadorApp.pad.operadora">Operadora</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <Select
+                                    id="pad-operadora"
+                                    className={'css-select-control'}
+                                    value={this.state.operadoraSelectValue}
+                                    options={
+                                      operadoras ? operadoras.map(option => ({ value: option.id, label: option.nomeFantasia })) : null
+                                    }
+                                    onChange={options => this.setState({ operadoraSelectValue: options })}
+                                    name={'operadora'}
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="operadora" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'franquia' ? (
+                          <Col md="12">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" for="pad-franquia">
+                                    <Translate contentKey="generadorApp.pad.franquia">Franquia</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <Select
+                                    id="pad-franquia"
+                                    className={'css-select-control'}
+                                    value={this.state.franquiaSelectValue}
+                                    options={franquias ? franquias.map(option => ({ value: option.id, label: option.nomeFantasia })) : null}
+                                    onChange={options => this.setState({ franquiaSelectValue: options })}
+                                    name={'franquia'}
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="franquia" value={this.state.fieldsBase[baseFilters]} />
+                        )}
                         {baseFilters !== 'paciente' ? (
                           <Col md="12">
                             <AvGroup>
@@ -376,7 +432,7 @@ export class PadUpdate extends React.Component<IPadUpdateProps, IPadUpdateState>
                                     id="pad-paciente"
                                     className={'css-select-control'}
                                     value={this.state.pacienteSelectValue}
-                                    options={pacientes ? pacientes.map(option => ({ value: option.id, label: option.id })) : null}
+                                    options={pacientes ? pacientes.map(option => ({ value: option.id, label: option.nome })) : null}
                                     onChange={options => this.setState({ pacienteSelectValue: options })}
                                     name={'paciente'}
                                   />
@@ -402,6 +458,8 @@ export class PadUpdate extends React.Component<IPadUpdateProps, IPadUpdateState>
 
 const mapStateToProps = (storeState: IRootState) => ({
   unidadeEasies: storeState.unidadeEasy.entities,
+  operadoras: storeState.operadora.entities,
+  franquias: storeState.franquia.entities,
   pacientes: storeState.paciente.entities,
   padEntity: storeState.pad.entity,
   loading: storeState.pad.loading,
@@ -411,6 +469,8 @@ const mapStateToProps = (storeState: IRootState) => ({
 
 const mapDispatchToProps = {
   getUnidadeEasies,
+  getOperadoras,
+  getFranquias,
   getPacientes,
   getEntity,
   updateEntity,

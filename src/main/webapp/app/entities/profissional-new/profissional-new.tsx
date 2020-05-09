@@ -766,10 +766,10 @@ export class ProfissionalNew extends React.Component<IProfissionalNewProps, IPro
                       {this.state.baseFilters !== 'ativo' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="ativoLabel" for="profissional-new-ativo">
+                            <Label id="ativoLabel" check>
+                              <AvInput id="profissional-new-ativo" type="checkbox" className="form-control" name="ativo" />
                               <Translate contentKey="generadorApp.profissionalNew.ativo">Ativo</Translate>
                             </Label>
-                            <AvInput type="string" name="ativo" id="profissional-new-ativo" value={this.state.ativo} />
                           </Row>
                         </Col>
                       ) : null}
@@ -1118,12 +1118,12 @@ export class ProfissionalNew extends React.Component<IProfissionalNewProps, IPro
 
                         {this.state.baseFilters !== 'chavePrivada' ? <td>{profissionalNew.chavePrivada}</td> : null}
 
-                        {this.state.baseFilters !== 'ativo' ? <td>{profissionalNew.ativo}</td> : null}
+                        {this.state.baseFilters !== 'ativo' ? <td>{profissionalNew.ativo ? 'true' : 'false'}</td> : null}
 
                         {this.state.baseFilters !== 'unidade' ? (
                           <td>
                             {profissionalNew.unidade ? (
-                              <Link to={`unidade-easy/${profissionalNew.unidade.id}`}>{profissionalNew.unidade.id}</Link>
+                              <Link to={`unidade-easy/${profissionalNew.unidade.id}`}>{profissionalNew.unidade.razaoSocial}</Link>
                             ) : (
                               ''
                             )}

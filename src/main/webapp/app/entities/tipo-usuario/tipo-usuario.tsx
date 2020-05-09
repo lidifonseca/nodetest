@@ -171,10 +171,10 @@ export class TipoUsuario extends React.Component<ITipoUsuarioProps, ITipoUsuario
                       {this.state.baseFilters !== 'ativo' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="ativoLabel" for="tipo-usuario-ativo">
+                            <Label id="ativoLabel" check>
+                              <AvInput id="tipo-usuario-ativo" type="checkbox" className="form-control" name="ativo" />
                               <Translate contentKey="generadorApp.tipoUsuario.ativo">Ativo</Translate>
                             </Label>
-                            <AvInput type="string" name="ativo" id="tipo-usuario-ativo" value={this.state.ativo} />
                           </Row>
                         </Col>
                       ) : null}
@@ -239,7 +239,7 @@ export class TipoUsuario extends React.Component<ITipoUsuarioProps, ITipoUsuario
 
                         {this.state.baseFilters !== 'tipoUsuario' ? <td>{tipoUsuario.tipoUsuario}</td> : null}
 
-                        {this.state.baseFilters !== 'ativo' ? <td>{tipoUsuario.ativo}</td> : null}
+                        {this.state.baseFilters !== 'ativo' ? <td>{tipoUsuario.ativo ? 'true' : 'false'}</td> : null}
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">

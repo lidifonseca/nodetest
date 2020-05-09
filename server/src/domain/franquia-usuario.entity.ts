@@ -120,8 +120,8 @@ export default class FranquiaUsuario extends BaseEntity {
   @Column({ type: 'integer', name: 'ENVIO_CANCELAMENTO' })
   envioCancelamento: number;
 
-  @Column({ type: 'integer', name: 'ATIVO' })
-  ativo: number;
+  @Column({ type: 'boolean', name: 'ATIVO' })
+  ativo: boolean;
 
   @OneToMany(
     type => LogUserFranquia,

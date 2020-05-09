@@ -30,14 +30,14 @@ entity ApiInput {
 	apiInput String maxlength(100),
 	apiType String maxlength(50),
 	obs String maxlength(255),
-	ativo Integer
+	ativo Boolean
 }
 
 entity ApiName {
 	apiName String maxlength(100),
 	apiReceiver String maxlength(60),
 	apiObs String maxlength(255),
-	ativo Integer
+	ativo Boolean
 }
 
 entity ApiReturn {
@@ -45,13 +45,13 @@ entity ApiReturn {
 	apiReturn String maxlength(100),
 	apiType String maxlength(50),
 	obs String maxlength(255),
-	ativo Integer
+	ativo Boolean
 }
 
 
 
-/*
-	@listTableLayout padItem dataAgenda paciente profissional operadora dataChegada dataSaida @@ 
+/**
+	@listTableLayout padItem dataAgenda paciente profissional operadora dataChegada dataSaida@@ 
 	@listFilterLayout 
 		padItem{Label:top,Size:6}
 		dataAgenda{Label:top,Size:6}
@@ -61,8 +61,16 @@ entity ApiReturn {
 		dataChegada{Label:top,Size:6}
 		dataSaida{Label:top,Size:6}
 	@@
+	@listButtons 
+		detalhes{inDropdown:true,tag:Link,to:`${match.url}/${atendimento.id}`,color:info,size:sm,icon:eye,text:Detalhes} 
+	  VisualizarPTA{inDropdown:true,tag:Link,to:`${match.url}/${atendimento.id}/delete`,color:info,size:sm,icon:search,text:VisualizarPTA}
+	  VisualizarPTA{inDropdown:true,tag:Link,to:`${match.url}/${atendimento.id}/delete`,color:info,size:sm,icon:search,text:VisualizarPTA}
+	  LicaodeCasa{inDropdown:true,tag:Link,to:`${match.url}/${atendimento.id}/delete`,color:info,size:sm,icon:file-text-o,text:LiçãodeCasa}
+	  Fotos{inDropdown:true,tag:Link,to:`${match.url}/${atendimento.id}/delete`,color:info,size:sm,icon:calendar-check-o,text:Fotos}
+		edit{inDropdown:true,tag:Link,to:`${match.url}/${atendimento.id}/edit`,color:info,size:sm,icon:pencil-alt,text:Editar} 
+	  delete{inDropdown:true,tag:Link,to:`${match.url}/${atendimento.id}/delete`,color:info,size:sm,icon:trash,text:Excluir} 
+	@@
 */
-
 entity Atendimento {
 	cep String maxlength(10),
 	endereco String maxlength(100),
@@ -88,7 +96,7 @@ entity Atendimento {
 	motivo String maxlength(255),
 	valor Float,
 	ordemAtendimento Integer,
-	ativo Integer,
+	ativo Boolean,
 	dataForaHora Instant,
 	idUsuarioCancelamento Integer,
 	dataCancelamento LocalDate,
@@ -147,7 +155,7 @@ entity AtendimentoStatusFinanceiro {
 
 entity Atividades {
 	atividade String maxlength(100),
-	ativo Integer
+	ativo Boolean
 }
 
 entity Banco {
@@ -170,7 +178,7 @@ entity CategoriaAtividade {
 
 entity CategoriaContrato {
 	contrato Blob,
-	ativo Integer
+	ativo Boolean
 }
 
 entity Cid {
@@ -185,7 +193,7 @@ entity CidPta {
 	idDescPta Integer required,
 	idCid Integer required,
 	idAtividade Integer required,
-	ativo Integer required
+	ativo Boolean required
 }
 
 entity CidXPtaNovo {
@@ -220,19 +228,19 @@ entity ControleDisparoAviso {
 entity DescPta {
 	nome String maxlength(45),
 	resultadoEsperado String maxlength(255),
-	ativo Integer required
+	ativo Boolean required
 }
 
 entity Diario {
-	historico String maxlength(255),
-	gerarPdf Integer
+	historico TextBlob,
+	gerarPdf Boolean
 }
 
 entity DiarioTags {
 	nome String required maxlength(45),
 	idPai Integer,
 	nomeId String maxlength(45),
-	ativo Integer
+	ativo Boolean
 }
 
 entity Empresa {
@@ -266,7 +274,7 @@ entity Especialidade {
 	descricao TextBlob,
 	duracao Integer,
 	importante String maxlength(255),
-	ativo Integer
+	ativo Boolean
 }
 
 entity EspecialidadeOperadora {
@@ -277,7 +285,7 @@ entity EspecialidadeOperadora {
 	valorVenda Float,
 	descontoCusto Float,
 	descontoVenda Float,
-	ativo Integer
+	ativo Boolean
 }
 
 entity EspecialidadeUnidade {
@@ -291,7 +299,7 @@ entity EspecialidadeUnidade {
 entity EspecialidadeValor {
 	idFranquia String,
 	valor Float,
-	ativo Integer
+	ativo Boolean
 }
 
 entity FilesPanico {
@@ -322,19 +330,19 @@ entity Franquia {
 	cidade String maxlength(100),
 	uf String maxlength(5),
 	observacao String maxlength(255),
-	ativo Integer
+	ativo Boolean
 }
 
 entity FranquiaAreaAtuacao {
 	cepIni String maxlength(10),
 	cepFim String maxlength(10),
-	ativo Integer
+	ativo Boolean
 }
 
 entity FranquiaStatusAtual {
 	statusAtual Integer,
 	obs String maxlength(255),
-	ativo Integer
+	ativo Boolean
 }
 
 entity FranquiaUsuario {
@@ -374,7 +382,7 @@ entity FranquiaUsuario {
 	envioRecusa Integer,
 	envioIntercorrencia Integer,
 	envioCancelamento Integer,
-	ativo Integer
+	ativo Boolean
 }
 
 entity GeoPanico {
@@ -396,7 +404,7 @@ entity GrupoRisco {
 entity ImagemProntuario {
 	idProntuario String required,
 	imagem String required maxlength(100),
-	ativo Integer required,
+	ativo Boolean required,
 	diretorio String maxlength(500)
 }
 
@@ -464,7 +472,7 @@ entity MatMed {
 	/** Tipo 1 - Medicamento, Tipo 2 - Materiais, Tipo 3 - Equipamento */
 	idTipoMatMed Integer,
 	valor BigDecimal,
-	ativo Integer
+	ativo Boolean
 }
 
 entity Migracao {
@@ -486,7 +494,7 @@ entity ModulosPadConfig {
 entity MotivoInternacao {
 	nome String maxlength(255),
 	idPai Integer,
-	ativo Integer,
+	ativo Boolean,
 	classe String maxlength(40),
 	name String maxlength(20)
 }
@@ -494,7 +502,7 @@ entity MotivoInternacao {
 entity MotivoPs {
 	nome String maxlength(255),
 	idPai Integer,
-	ativo Integer,
+	ativo Boolean,
 	classe String maxlength(40),
 	name String maxlength(20)
 }
@@ -567,7 +575,7 @@ entity Operadora {
 	cnpj String maxlength(20),
 	ie String maxlength(30),
 	site String maxlength(100),
-	ativo Integer,
+	ativo Boolean,
 	endereco String maxlength(200),
 	contatoCentralAtendimento String maxlength(20),
 	emailCentralAtendimento String maxlength(50),
@@ -738,7 +746,7 @@ entity Paciente {
 	acessoFamiliar Integer,
 	comResponsavel Integer,
 	cadastroCompleto Integer,
-	ativo Integer,
+	ativo Boolean,
 	detalhes TextBlob,
 	liminar String maxlength(50),
 	expoToken String maxlength(255)
@@ -746,7 +754,7 @@ entity Paciente {
 
 entity PacienteArquivo {
 	arquivo ImageBlob,
-	ativo Integer
+	ativo Boolean
 }
 
 entity PacienteCaracteristicaAtual {
@@ -769,12 +777,12 @@ entity PacienteDadosCartao {
 	numeroCartao String maxlength(30),
 	validade LocalDate,
 	codAtivacao Integer,
-	ativo Integer
+	ativo Boolean
 }
 
 entity PacienteDiagnostico {
 	observacao String maxlength(255),
-	ativo Integer,
+	ativo Boolean,
 	cidPrimario Boolean,
 	complexidade String maxlength(80),
 	cidComAlta Boolean
@@ -792,7 +800,7 @@ entity PacienteDiagnosticoTemp {
 entity PacienteDiario {
 	idOperadora Integer,
 	historico TextBlob,
-	ativo Integer
+	ativo Boolean
 }
 
 entity PacienteDiarioTags {
@@ -901,7 +909,7 @@ entity PacienteDispositivoAtual {
 
 entity PacienteDispositivoComplexidade {
 	caracteristica String required maxlength(100),
-	ativo Integer required,
+	ativo Boolean required,
 	tipo String maxlength(45)
 }
 
@@ -911,7 +919,7 @@ entity PacienteEnqueteApp {
 
 entity PacienteGrauParentesco {
 	grauParentesco String maxlength(60),
-	ativo Integer
+	ativo Boolean
 }
 
 entity PacienteHospital {
@@ -926,7 +934,7 @@ entity PacienteMotivoInternacao {
 
 entity PacienteOperadora {
 	registro String maxlength(100),
-	ativo Integer
+	ativo Boolean
 }
 
 entity PacientePedido {
@@ -944,7 +952,7 @@ entity PacienteProntuario {
 	idTipoProntuario Integer required,
 	oQue TextBlob,
 	resultado TextBlob,
-	ativo Integer required,
+	ativo Boolean required,
 	idEspecialidade Integer,
 	dataConsulta Instant,
 	idExame Integer,
@@ -961,7 +969,7 @@ entity PacienteProntuario {
 entity PacientePush {
 	idFranquia String,
 	mensagem String maxlength(255),
-	ativo Integer
+	ativo Boolean
 }
 
 entity PacienteServico {
@@ -972,17 +980,38 @@ entity PacienteServico {
 entity PacienteStatusAtual {
 	dataStatus LocalDate,
 	observacao TextBlob,
-	ativo Integer
+	ativo Boolean
 }
 
+
+/**
+	@listTableLayout nroPad operadora paciente dataInicio dataFim ativo statusPad@@ 
+	@listFilterLayout 
+		nroPad{Label:top,Size:6}
+		operadora{Label:top,Size:6}
+		paciente{Label:top,Size:6}
+		dataInicio{Label:top,Size:6}
+		dataFim{Label:top,Size:6}
+		ativo{Label:top,Size:6}
+		statusPad{Label:top,Size:6}
+	@@
+	@listButtons 
+		VisualizarPTA{inDropdown:true,tag:Link,to:`${match.url}/${pad.id}`,color:info,size:sm,icon:eye,text:VisualizarPTA} 
+		detalhes{inDropdown:true,tag:Link,to:`${match.url}/${pad.id}`,color:info,size:sm,icon:eye,text:Detalhes} 
+	  RelatorioConsolidado{inDropdown:true,tag:Link,to:`${match.url}/${pad.id}/delete`,color:info,size:sm,icon:file-text-o,text:RelatórioConsolidado}
+		edit{inDropdown:true,tag:Link,to:`${match.url}/${pad.id}/edit`,color:info,size:sm,icon:pencil-alt,text:Editar} 
+	  Status{inDropdown:true,tag:Link,to:`/pad-status-atual?baseFilters=pad&pad=${pad.id}`,color:info,size:sm,icon:upload,text:Status}
+	  Aditivos{inDropdown:true,tag:Link,to:`/pad-arquivo?baseFilters=pad&pad=${pad.id}`,color:info,size:sm,icon:upload,text:Aditivos}
+	  ResultadosEsperados{inDropdown:true,tag:Link,to:`${match.url}/${pad.id}/delete`,color:info,size:sm,icon:list,text:ResultadosEsperados}
+	  AtividadesdosAtendimentos{inDropdown:true,tag:Link,to:`${match.url}/${pad.id}/delete`,color:info,size:sm,icon:list-ol,text:AtividadesdosAtendimentos} 
+	@@
+*/
 entity Pad {
-	idOperadora Integer,
-	idFranquia String,
 	nroPad String maxlength(30),
 	dataInicio LocalDate,
 	dataFim LocalDate,
 	dataConferido LocalDate,
-	ativo Integer,
+	ativo Boolean,
 	statusPad Integer
 	// ,
 	// imagePath String maxlength(250),
@@ -991,7 +1020,7 @@ entity Pad {
 
 entity PadCid {
 	observacao String maxlength(255),
-	ativo Integer
+	ativo Boolean
 }
 
 entity PadItem {
@@ -1001,7 +1030,7 @@ entity PadItem {
 	qtdSessoes Integer,
 	observacao TextBlob,
 	sub Integer,
-	ativo Integer,
+	ativo Boolean,
 	dataPadItemIncompleto Instant,
 	dataPadItemCompleto Instant,
 	numGhc String maxlength(40)
@@ -1097,7 +1126,7 @@ entity PadMatMed {
 	idPad Integer required,
 	idMatMed Integer required,
 	qtd Integer required required,
-	ativo Integer required
+	ativo Boolean required
 }
 
 entity PadPta {
@@ -1123,14 +1152,34 @@ entity PerguntasQuestionario {
 
 entity Periodicidade {
 	periodicidade String maxlength(40),
-	ativo Integer
+	ativo Boolean
 }
 
 entity Periodo {
 	periodo String maxlength(40),
-	ativo Integer
+	ativo Boolean
 }
 
+/**
+	@listTableLayout nome registro cep categoria especialidade ativo@@ 
+	@listFilterLayout 
+		nome{Label:top,Size:6}
+		registro{Label:top,Size:6}
+		cep{Label:top,Size:6}
+		categoria{Label:top,Size:6}
+		especialidade{Label:top,Size:6}
+		ativo{Label:top,Size:6}
+	@@
+	@listButtons 
+		detalhes{inDropdown:true,tag:Link,to:`${match.url}/${profissional.id}`,color:info,size:sm,icon:eye,text:Detalhes} 
+	  RelatoriodeInformacoes{inDropdown:true,tag:Link,to:`${match.url}/${profissional.id}/delete`,color:info,size:sm,icon:file-text-o,text:RelatóriodeInformações}
+		edit{inDropdown:true,tag:Link,to:`${match.url}/${profissional.id}/edit`,color:info,size:sm,icon:pencil-alt,text:Editar} 
+	  Status{inDropdown:true,tag:Link,to:`/profissional-status-atual?baseFilters=profissional&profissional=${profissional.id}`,color:info,size:sm,icon:upload,text:Status}
+	  Arquivos{inDropdown:true,tag:Link,to:`/profissional-arquivo?baseFilters=profissional&profissional=${profissional.id}`,color:info,size:sm,icon:upload,text:Arquivos}
+	  AlterarSenha{inDropdown:true,tag:Link,to:`${match.url}/${profissional.id}/delete`,color:info,size:sm,icon:refresh,text:AlterarSenha}
+	  delete{inDropdown:true,tag:Link,to:`${match.url}/${profissional.id}/delete`,color:info,size:sm,icon:trash,text:Excluir} 
+	@@
+*/
 entity Profissional {
 	idCidade String,
 	idTempoExperiencia Integer,
@@ -1168,7 +1217,7 @@ entity Profissional {
 	origemCadastro String maxlength(100),
 	obs TextBlob,
 	chavePrivada String maxlength(255),
-	ativo Integer,
+	ativo Boolean,
 	senhaOriginal String maxlength(100),
 	dataSenha Instant,
 	expoToken String maxlength(255),
@@ -1179,7 +1228,7 @@ entity ProfissionalAreaAtuacao {
 	idProfissional String,
 	cepArea String maxlength(10),
 	cepFim String maxlength(10),
-	ativo Integer,
+	ativo Boolean,
 	cepIni String maxlength(45)
 }
 
@@ -1187,14 +1236,14 @@ entity ProfissionalAreaAtuacaoNew {
 	idProfissional String,
 	cepArea String maxlength(10),
 	cepFim String maxlength(10),
-	ativo Integer,
+	ativo Boolean,
 	cepIni String maxlength(45)
 }
 
 entity ProfissionalArquivo {
 	idProfissional String,
 	arquivo String maxlength(100),
-	ativo Integer
+	ativo Boolean
 }
 
 entity ProfissionalCategoriaContrato {
@@ -1237,7 +1286,7 @@ entity ProfissionalDispositivoAtual {
 
 entity ProfissionalDispositivoComplexidade {
 	caracteristica String required maxlength(100),
-	ativo Integer required,
+	ativo Boolean required,
 	tipo String required maxlength(1)
 }
 
@@ -1305,27 +1354,27 @@ entity ProfissionalNew {
 	origemCadastro String maxlength(100),
 	obs TextBlob,
 	chavePrivada String maxlength(255),
-	ativo Integer
+	ativo Boolean
 }
 
 entity ProfissionalPush {
 	idProfissional String,
 	idFranquia String,
 	mensagem String maxlength(255),
-	ativo Integer
+	ativo Boolean
 }
 
 entity ProfissionalStatusAtual {
 	idProfissional String,
 	obs TextBlob,
-	ativo Integer
+	ativo Boolean
 }
 
 entity ProfissionalStatusAtualNew {
 	idProfissional String,
 	idStatusAtualProf Integer,
 	obs TextBlob,
-	ativo Integer
+	ativo Boolean
 }
 
 entity ProntuarioMotivoInternacaoPs {
@@ -1348,13 +1397,13 @@ entity ProntuarioMotivoManifestacao {
 entity ProntuarioTipoManifestacao {
 	nome String maxlength(45),
 	idPai Integer,
-	ativo Integer
+	ativo Boolean
 }
 
 entity ProntuarioTipoMotivo {
 	nome String maxlength(45),
 	idPai Integer,
-	ativo Integer,
+	ativo Boolean,
 	classe String maxlength(45),
 	name String maxlength(45),
 	idTipoProntuario Integer
@@ -1415,7 +1464,7 @@ entity StatusAtendimento {
 	statusAtendimento String maxlength(40),
 	styleLabel String maxlength(40),
 	ordenacao Integer,
-	ativo Integer
+	ativo Boolean
 }
 
 entity StatusAtual {
@@ -1442,7 +1491,7 @@ entity StatusPadItemMeta {
 	statusItemMeta String maxlength(200),
 	styleLabel String maxlength(40),
 	ordenacao Integer,
-	ativo Integer
+	ativo Boolean
 }
 
 entity Tela {
@@ -1465,12 +1514,12 @@ entity TipoEspecialidade {
 entity TipoExame {
 	exame String required maxlength(45),
 	idPai Integer,
-	ativo Integer required
+	ativo Boolean required
 }
 
 entity TipoMatMed {
 	tipo String required maxlength(45),
-	ativo Integer
+	ativo Boolean
 }
 
 entity TipoOperadora {
@@ -1480,12 +1529,12 @@ entity TipoOperadora {
 
 entity TipoPreferenciaAtendimento {
 	nome String maxlength(80),
-	ativo Integer
+	ativo Boolean
 }
 
 entity TipoProntuario {
 	prontuario String required maxlength(45),
-	ativo Integer required
+	ativo Boolean required
 }
 
 entity TipoUnidade {
@@ -1494,7 +1543,7 @@ entity TipoUnidade {
 
 entity TipoUsuario {
 	tipoUsuario String maxlength(30),
-	ativo Integer
+	ativo Boolean
 }
 
 entity TokenUsuario {
@@ -1531,7 +1580,7 @@ entity UnidadeEasy {
 	tissinscricao String maxlength(20),
 	tisscbo String maxlength(20),
 	tisscoduf String maxlength(5),
-	ativo Integer
+	ativo Boolean
 }
 
 entity UnidadeEasyAreaAtuacao {
@@ -1555,119 +1604,119 @@ entity Usuario {
 	rg String maxlength(30),
 	sexo Integer,
 	nascimento LocalDate,
-	verAtendimento Integer,
-	cadAtendimento Integer,
-	ediAtendimento Integer,
-	baixaManualAtendimento Integer,
-	delAtendimento Integer,
-	relAtendimento Integer,
-	verPad Integer,
-	cadPad Integer,
-	ediPad Integer,
-	delPad Integer,
-	relPad Integer,
-	verDiario Integer,
-	cadDiario Integer,
-	ediDiario Integer,
-	delDiario Integer,
-	relDiario Integer,
-	verCategoria Integer,
-	cadCategoria Integer,
-	ediCategoria Integer,
-	delCategoria Integer,
-	verEspecialidade Integer,
-	cadEspecialidade Integer,
-	ediEspecialidade Integer,
-	delEspecialidade Integer,
-	relEspecialidade Integer,
-	verEspecialidadeValor Integer,
-	cadEspecialidadeValor Integer,
-	ediEspecialidadeValor Integer,
-	delEspecialidadeValor Integer,
-	relEspecialidadeValor Integer,
-	verOperadora Integer,
-	cadOperadora Integer,
-	ediOperadora Integer,
-	delOperadora Integer,
-	verPaciente Integer,
-	cadPaciente Integer,
-	ediPaciente Integer,
-	delPaciente Integer,
-	relPaciente Integer,
-	verProfissional Integer,
-	cadProfissional Integer,
-	ediProfissional Integer,
-	delProfissional Integer,
-	ativProfissional Integer,
-	relProfissional Integer,
-	verPush Integer,
-	cadPushPaciente Integer,
-	cadPushProfissional Integer,
-	verTermoPaciente Integer,
-	ediTermoPaciente Integer,
-	verTermoProfissional Integer,
-	ediTermoProfissional Integer,
-	verOutros Integer,
-	cadOutros Integer,
-	ediOutros Integer,
-	delOutros Integer,
-	relOutros Integer,
-	verUnidadeEasy Integer,
-	cadUnidadeEasy Integer,
-	ediUnidadeEasy Integer,
-	delUnidadeEasy Integer,
-	verUsuario Integer,
-	cadUsuario Integer,
-	ediUsuario Integer,
-	delUsuario Integer,
-	verPtaResultado Integer,
-	cadPtaResultado Integer,
-	delPtaResultado Integer,
-	verPtaAtividade Integer,
-	cadPtaAtividade Integer,
-	delPtaAtividade Integer,
-	permissaoUsuario Integer,
-	verProntuario Integer,
-	cadProntuario Integer,
-	ediProntuario Integer,
-	delProntuario Integer,
-	delProntuarioFoto Integer,
-	valoresFinanceiro Integer,
-	autorizacaoValorFinanceiro Integer,
-	confirmarPagamentoFinanceiro Integer,
-	gerenciarSorteios Integer,
-	envioRecusa Integer,
-	envioIntercorrencia Integer,
-	envioCancelamento Integer,
-	envioAvaliacao Integer,
-	envioPedido Integer,
-	alertaAtendimento Integer,
-	ativo Integer,
-	envioGlosado Integer,
-	emergencia Integer,
-	token Integer,
-	editAtendimento Integer,
-	ouvirLigacao Integer required,
-	verPainelIndicadores Integer,
-	prorrogarPad Integer,
-	cancelarAtendMassa Integer,
-	cadMatMed Integer,
-	ediMatMed Integer,
-	delMatMed Integer,
-	verColPta Integer,
-	verColFoto Integer,
-	verColLc Integer,
-	verAtendCancelado Integer,
-	verAtendAgConfirmacao Integer,
-	ediGeoLocalizacaoAtendimento Integer,
-	copiarEvolucao Integer,
-	copiarNomeProf Integer,
-	copiarRegistroProf Integer,
+	verAtendimento Boolean,
+	cadAtendimento Boolean,
+	ediAtendimento Boolean,
+	baixaManualAtendimento Boolean,
+	delAtendimento Boolean,
+	relAtendimento Boolean,
+	verPad Boolean,
+	cadPad Boolean,
+	ediPad Boolean,
+	delPad Boolean,
+	relPad Boolean,
+	verDiario Boolean,
+	cadDiario Boolean,
+	ediDiario Boolean,
+	delDiario Boolean,
+	relDiario Boolean,
+	verCategoria Boolean,
+	cadCategoria Boolean,
+	ediCategoria Boolean,
+	delCategoria Boolean,
+	verEspecialidade Boolean,
+	cadEspecialidade Boolean,
+	ediEspecialidade Boolean,
+	delEspecialidade Boolean,
+	relEspecialidade Boolean,
+	verEspecialidadeValor Boolean,
+	cadEspecialidadeValor Boolean,
+	ediEspecialidadeValor Boolean,
+	delEspecialidadeValor Boolean,
+	relEspecialidadeValor Boolean,
+	verOperadora Boolean,
+	cadOperadora Boolean,
+	ediOperadora Boolean,
+	delOperadora Boolean,
+	verPaciente Boolean,
+	cadPaciente Boolean,
+	ediPaciente Boolean,
+	delPaciente Boolean,
+	relPaciente Boolean,
+	verProfissional Boolean,
+	cadProfissional Boolean,
+	ediProfissional Boolean,
+	delProfissional Boolean,
+	ativProfissional Boolean,
+	relProfissional Boolean,
+	verPush Boolean,
+	cadPushPaciente Boolean,
+	cadPushProfissional Boolean,
+	verTermoPaciente Boolean,
+	ediTermoPaciente Boolean,
+	verTermoProfissional Boolean,
+	ediTermoProfissional Boolean,
+	verOutros Boolean,
+	cadOutros Boolean,
+	ediOutros Boolean,
+	delOutros Boolean,
+	relOutros Boolean,
+	verUnidadeEasy Boolean,
+	cadUnidadeEasy Boolean,
+	ediUnidadeEasy Boolean,
+	delUnidadeEasy Boolean,
+	verUsuario Boolean,
+	cadUsuario Boolean,
+	ediUsuario Boolean,
+	delUsuario Boolean,
+	verPtaResultado Boolean,
+	cadPtaResultado Boolean,
+	delPtaResultado Boolean,
+	verPtaAtividade Boolean,
+	cadPtaAtividade Boolean,
+	delPtaAtividade Boolean,
+	permissaoUsuario Boolean,
+	verProntuario Boolean,
+	cadProntuario Boolean,
+	ediProntuario Boolean,
+	delProntuario Boolean,
+	delProntuarioFoto Boolean,
+	valoresFinanceiro Boolean,
+	autorizacaoValorFinanceiro Boolean,
+	confirmarPagamentoFinanceiro Boolean,
+	gerenciarSorteios Boolean,
+	envioRecusa Boolean,
+	envioIntercorrencia Boolean,
+	envioCancelamento Boolean,
+	envioAvaliacao Boolean,
+	envioPedido Boolean,
+	alertaAtendimento Boolean,
+	ativo Boolean,
+	envioGlosado Boolean,
+	emergencia Boolean,
+	token Boolean,
+	editAtendimento Boolean,
+	ouvirLigacao Boolean,
+	verPainelIndicadores Boolean,
+	prorrogarPad Boolean,
+	cancelarAtendMassa Boolean,
+	cadMatMed Boolean,
+	ediMatMed Boolean,
+	delMatMed Boolean,
+	verColPta Boolean,
+	verColFoto Boolean,
+	verColLc Boolean,
+	verAtendCancelado Boolean,
+	verAtendAgConfirmacao Boolean,
+	ediGeoLocalizacaoAtendimento Boolean,
+	copiarEvolucao Boolean,
+	copiarNomeProf Boolean,
+	copiarRegistroProf Boolean,
 	idAreaAtuacao String maxlength(100)
 	// ,
-	// envioCidSemPta Integer,
-	// envioAnaliseResultadoEsperado Integer,
-	// envioDescumprimento Integer,
+	// envioCidSemPta Boolean,
+	// envioAnaliseResultadoEsperado Boolean,
+	// envioDescumprimento Boolean,
 	// envioMelhoraTempo Boolean
 }
 
@@ -1677,45 +1726,45 @@ entity UsuarioAcao {
 }
 
 entity UsuarioPainelGerencial {
-	verCronicos Integer,
-	verPacientesAtivosCr Integer,
-	filtroPacientesAtivosCr Integer,
-	verNumHospCr Integer,
-	filtroNumHospCr Integer,
-	verNumDesospCr Integer,
-	filtroNumDesospCr Integer,
-	verNumPsCr Integer,
-	filtroNumPsCr Integer,
-	verNumObitoCr Integer,
-	filtroNumObitoCr Integer,
-	verIndCliEstaveisCr Integer,
-	filtroIndCliEstaveisCr Integer,
-	verNumConsMedInternasCr Integer,
-	filtroNumConsMedInternasCr Integer,
-	verNumConsMedExternasCr Integer,
-	filtroNumConsMedExternasCr Integer,
-	verNumLaboratorialCr Integer,
-	filtroNumLaboratorialCr Integer,
-	verNumImagemCr Integer,
-	filtroNumImagemCr Integer,
-	verNumOutrosCr Integer,
-	filtroNumOutrosCr Integer,
-	verNumAtCatCr Integer,
-	filtroNumAtCatCr Integer,
-	verNumCatCompCr Integer,
-	filtroNumCatCompCr Integer,
-	verAtCmSucessoCr Integer,
-	filtroAtCmSucessoCr Integer,
-	verMediaPadAbertoCr Integer,
-	filtroMediaPadAbertoCr Integer,
-	verAtIntercorrenciaCr Integer,
-	filtroAtIntercorrenciaCr Integer,
-	verTempoMedioAtCr Integer,
-	filtroTempoMedioAtCr Integer,
-	verMediaPtaCr Integer,
-	filtroMediaPtaCr Integer,
-	verIndicadorUsoAppCr Integer,
-	filtroIndicadorUsoAppCr Integer
+	verCronicos Boolean,
+	verPacientesAtivosCr Boolean,
+	filtroPacientesAtivosCr Boolean,
+	verNumHospCr Boolean,
+	filtroNumHospCr Boolean,
+	verNumDesospCr Boolean,
+	filtroNumDesospCr Boolean,
+	verNumPsCr Boolean,
+	filtroNumPsCr Boolean,
+	verNumObitoCr Boolean,
+	filtroNumObitoCr Boolean,
+	verIndCliEstaveisCr Boolean,
+	filtroIndCliEstaveisCr Boolean,
+	verNumConsMedInternasCr Boolean,
+	filtroNumConsMedInternasCr Boolean,
+	verNumConsMedExternasCr Boolean,
+	filtroNumConsMedExternasCr Boolean,
+	verNumLaboratorialCr Boolean,
+	filtroNumLaboratorialCr Boolean,
+	verNumImagemCr Boolean,
+	filtroNumImagemCr Boolean,
+	verNumOutrosCr Boolean,
+	filtroNumOutrosCr Boolean,
+	verNumAtCatCr Boolean,
+	filtroNumAtCatCr Boolean,
+	verNumCatCompCr Boolean,
+	filtroNumCatCompCr Boolean,
+	verAtCmSucessoCr Boolean,
+	filtroAtCmSucessoCr Boolean,
+	verMediaPadAbertoCr Boolean,
+	filtroMediaPadAbertoCr Boolean,
+	verAtIntercorrenciaCr Boolean,
+	filtroAtIntercorrenciaCr Boolean,
+	verTempoMedioAtCr Boolean,
+	filtroTempoMedioAtCr Boolean,
+	verMediaPtaCr Boolean,
+	filtroMediaPtaCr Boolean,
+	verIndicadorUsoAppCr Boolean,
+	filtroIndicadorUsoAppCr Boolean
 }
 
 entity UsuarioPanico {
@@ -1729,7 +1778,7 @@ entity UsuarioPanico {
 entity UsuarioStatusAtual {
 	statusAtual Integer,
 	obs String maxlength(255),
-	ativo Integer
+	ativo Boolean
 }
 
 /** VIEW */
@@ -1774,10 +1823,8 @@ relationship ManyToOne {
 	 Paciente{profissionalPref(nome)} to Profissional
 	 Paciente{tipohospital(servico)} to PacienteHospital
 
-
 	 PacienteStatusAtual{paciente(nome)} to Paciente
 	 PacienteStatusAtual{status(statusAtual)} to StatusAtual
-
 
 	 Questionarios{paciente(nome)} to Paciente
 	 PacienteArquivo{paciente(nome)} to Paciente
@@ -1794,19 +1841,21 @@ relationship ManyToOne {
 	 PacientePedido{unidade(razaoSocial)} to UnidadeEasy
 	 UnidadeEasyAreaAtuacao{unidade(razaoSocial)} to UnidadeEasy
 
-
-
 	 Atendimento{padItem(id)} to PadItem
 	 Atendimento{paciente(nome)} to Paciente
 	 Atendimento{operadora(nomeFantasia)} to Operadora
 	 Atendimento{profissional(nome)} to Profissional
 	 Atendimento{franquia(nomeFantasia)} to Franquia
 
+	 Pad{operadora(nomeFantasia)} to Operadora
+	 Pad{franquia(nomeFantasia)} to Franquia
+	 Pad{paciente(nome)} to Paciente
 }
 
 
 relationship ManyToMany {
 	 Categoria{unidade(razaoSocial)} to UnidadeEasy{categoria(categoria)}
+	 Profissional{especialidade(especialidade)} to Especialidade{profissional(nome)}
 	// CidXPtaNovoCategorias{cidXPtaNovoId required} to CidXPtaNovo{cidXPtaNovoCategorias}
 	// CidXPtaNovoCategorias{categoriasId required} to Categoria{cidXPtaNovoCategorias}
 	// QuestionariosSegmentosPerguntas{questionariosId required} to Questionarios{questionariosSegmentosPerguntas}
@@ -1869,7 +1918,6 @@ relationship OneToMany {
 	 PacienteDadosCartao{pacientePedido} to PacientePedido{cartao}
 	 Especialidade{pacientePedido} to PacientePedido{especialidade}
 	 Paciente{pacientePush} to PacientePush{paciente}
-	 Paciente{pad} to Pad{paciente}
 	 Pad{padCid} to PadCid{pad}
 	 Cid{padCid} to PadCid{cid}
 	 Pad{padItem} to PadItem{pad}

@@ -148,7 +148,6 @@ export class Paciente extends React.Component<IPacienteProps, IPacienteState> {
         detalhes: '',
         liminar: '',
         expoToken: '',
-        atendimento: '',
         atendimentoAssinaturas: '',
         diario: '',
         pacienteDadosCartao: '',
@@ -158,7 +157,6 @@ export class Paciente extends React.Component<IPacienteProps, IPacienteState> {
         pacienteOperadora: '',
         pacientePedido: '',
         pacientePush: '',
-        pad: '',
         unidade: '',
         franquia: '',
         cidade: '',
@@ -375,9 +373,6 @@ export class Paciente extends React.Component<IPacienteProps, IPacienteState> {
       'expoToken=' +
       this.state.expoToken +
       '&' +
-      'atendimento=' +
-      this.state.atendimento +
-      '&' +
       'atendimentoAssinaturas=' +
       this.state.atendimentoAssinaturas +
       '&' +
@@ -404,9 +399,6 @@ export class Paciente extends React.Component<IPacienteProps, IPacienteState> {
       '&' +
       'pacientePush=' +
       this.state.pacientePush +
-      '&' +
-      'pad=' +
-      this.state.pad +
       '&' +
       'unidade=' +
       this.state.unidade +
@@ -492,7 +484,6 @@ export class Paciente extends React.Component<IPacienteProps, IPacienteState> {
       detalhes,
       liminar,
       expoToken,
-      atendimento,
       atendimentoAssinaturas,
       diario,
       pacienteDadosCartao,
@@ -502,7 +493,6 @@ export class Paciente extends React.Component<IPacienteProps, IPacienteState> {
       pacienteOperadora,
       pacientePedido,
       pacientePush,
-      pad,
       unidade,
       franquia,
       cidade,
@@ -571,7 +561,6 @@ export class Paciente extends React.Component<IPacienteProps, IPacienteState> {
       detalhes,
       liminar,
       expoToken,
-      atendimento,
       atendimentoAssinaturas,
       diario,
       pacienteDadosCartao,
@@ -581,7 +570,6 @@ export class Paciente extends React.Component<IPacienteProps, IPacienteState> {
       pacienteOperadora,
       pacientePedido,
       pacientePush,
-      pad,
       unidade,
       franquia,
       cidade,

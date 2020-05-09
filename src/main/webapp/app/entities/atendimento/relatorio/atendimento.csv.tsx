@@ -16,6 +16,10 @@ import {
   UncontrolledCollapse,
   CardHeader,
   CardBody,
+  Dropdown,
+  DropdownToggle,
+  DropdownMenu,
+  DropdownItem,
   Modal,
   ModalHeader,
   ModalBody,
@@ -45,14 +49,18 @@ import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
 import { IUnidadeEasy } from 'app/shared/model/unidade-easy.model';
 import { getEntities as getUnidadeEasies } from 'app/entities/unidade-easy/unidade-easy.reducer';
+import { IPadItem } from 'app/shared/model/pad-item.model';
+import { getEntities as getPadItems } from 'app/entities/pad-item/pad-item.reducer';
 import { IPaciente } from 'app/shared/model/paciente.model';
 import { getEntities as getPacientes } from 'app/entities/paciente/paciente.reducer';
 import { IOperadora } from 'app/shared/model/operadora.model';
 import { getEntities as getOperadoras } from 'app/entities/operadora/operadora.reducer';
+import { IProfissional } from 'app/shared/model/profissional.model';
+import { getEntities as getProfissionals } from 'app/entities/profissional/profissional.reducer';
+import { IFranquia } from 'app/shared/model/franquia.model';
+import { getEntities as getFranquias } from 'app/entities/franquia/franquia.reducer';
 import { IEspecialidade } from 'app/shared/model/especialidade.model';
 import { getEntities as getEspecialidades } from 'app/entities/especialidade/especialidade.reducer';
-import { IPadItem } from 'app/shared/model/pad-item.model';
-import { getEntities as getPadItems } from 'app/entities/pad-item/pad-item.reducer';
 import { IStatusAtendimento } from 'app/shared/model/status-atendimento.model';
 import { getEntities as getStatusAtendimentos } from 'app/entities/status-atendimento/status-atendimento.reducer';
 import { IPeriodo } from 'app/shared/model/periodo.model';
@@ -82,10 +90,12 @@ export class Atendimento extends React.Component<IAtendimentoProps, IAtendimento
     this.getEntities();
 
     this.props.getUnidadeEasies();
+    this.props.getPadItems();
     this.props.getPacientes();
     this.props.getOperadoras();
+    this.props.getProfissionals();
+    this.props.getFranquias();
     this.props.getEspecialidades();
-    this.props.getPadItems();
     this.props.getStatusAtendimentos();
     this.props.getPeriodos();
     this.props.getCidades();
@@ -94,8 +104,6 @@ export class Atendimento extends React.Component<IAtendimentoProps, IAtendimento
   cancelCourse = () => {
     this.setState(
       {
-        idFranquia: '',
-        idProfissional: '',
         cep: '',
         endereco: '',
         numero: '',
@@ -131,10 +139,12 @@ export class Atendimento extends React.Component<IAtendimentoProps, IAtendimento
         atendimentoAssinaturas: '',
         atendimentoAtividades: '',
         unidade: '',
+        padItem: '',
         paciente: '',
         operadora: '',
+        profissional: '',
+        franquia: '',
         especialidade: '',
-        padItem: '',
         statusAtendimento: '',
         periodo: '',
         cidade: ''
@@ -181,12 +191,6 @@ export class Atendimento extends React.Component<IAtendimentoProps, IAtendimento
       this.state.sort +
       ',' +
       this.state.order +
-      '&' +
-      'idFranquia=' +
-      this.state.idFranquia +
-      '&' +
-      'idProfissional=' +
-      this.state.idProfissional +
       '&' +
       'cep=' +
       this.state.cep +
@@ -293,17 +297,23 @@ export class Atendimento extends React.Component<IAtendimentoProps, IAtendimento
       'unidade=' +
       this.state.unidade +
       '&' +
+      'padItem=' +
+      this.state.padItem +
+      '&' +
       'paciente=' +
       this.state.paciente +
       '&' +
       'operadora=' +
       this.state.operadora +
       '&' +
+      'profissional=' +
+      this.state.profissional +
+      '&' +
+      'franquia=' +
+      this.state.franquia +
+      '&' +
       'especialidade=' +
       this.state.especialidade +
-      '&' +
-      'padItem=' +
-      this.state.padItem +
       '&' +
       'statusAtendimento=' +
       this.state.statusAtendimento +
@@ -322,8 +332,6 @@ export class Atendimento extends React.Component<IAtendimentoProps, IAtendimento
 
   getEntities = () => {
     const {
-      idFranquia,
-      idProfissional,
       cep,
       endereco,
       numero,
@@ -359,10 +367,12 @@ export class Atendimento extends React.Component<IAtendimentoProps, IAtendimento
       atendimentoAssinaturas,
       atendimentoAtividades,
       unidade,
+      padItem,
       paciente,
       operadora,
+      profissional,
+      franquia,
       especialidade,
-      padItem,
       statusAtendimento,
       periodo,
       cidade,
@@ -372,8 +382,6 @@ export class Atendimento extends React.Component<IAtendimentoProps, IAtendimento
       order
     } = this.state;
     this.props.getEntitiesExport(
-      idFranquia,
-      idProfissional,
       cep,
       endereco,
       numero,
@@ -409,10 +417,12 @@ export class Atendimento extends React.Component<IAtendimentoProps, IAtendimento
       atendimentoAssinaturas,
       atendimentoAtividades,
       unidade,
+      padItem,
       paciente,
       operadora,
+      profissional,
+      franquia,
       especialidade,
-      padItem,
       statusAtendimento,
       periodo,
       cidade,
@@ -469,10 +479,12 @@ export class Atendimento extends React.Component<IAtendimentoProps, IAtendimento
 
 const mapStateToProps = ({ atendimento, ...storeState }: IRootState) => ({
   unidadeEasies: storeState.unidadeEasy.entities,
+  padItems: storeState.padItem.entities,
   pacientes: storeState.paciente.entities,
   operadoras: storeState.operadora.entities,
+  profissionals: storeState.profissional.entities,
+  franquias: storeState.franquia.entities,
   especialidades: storeState.especialidade.entities,
-  padItems: storeState.padItem.entities,
   statusAtendimentos: storeState.statusAtendimento.entities,
   periodos: storeState.periodo.entities,
   cidades: storeState.cidade.entities,
@@ -482,10 +494,12 @@ const mapStateToProps = ({ atendimento, ...storeState }: IRootState) => ({
 
 const mapDispatchToProps = {
   getUnidadeEasies,
+  getPadItems,
   getPacientes,
   getOperadoras,
+  getProfissionals,
+  getFranquias,
   getEspecialidades,
-  getPadItems,
   getStatusAtendimentos,
   getPeriodos,
   getCidades,

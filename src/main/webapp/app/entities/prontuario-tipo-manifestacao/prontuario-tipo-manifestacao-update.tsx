@@ -203,13 +203,16 @@ export class ProntuarioTipoManifestacaoUpdate extends React.Component<
                           <Col md="ativo">
                             <AvGroup>
                               <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="ativoLabel" for="prontuario-tipo-manifestacao-ativo">
+                                <Col md="12">
+                                  <Label className="mt-2" id="ativoLabel" check>
+                                    <AvInput
+                                      id="prontuario-tipo-manifestacao-ativo"
+                                      type="checkbox"
+                                      className="form-control"
+                                      name="ativo"
+                                    />
                                     <Translate contentKey="generadorApp.prontuarioTipoManifestacao.ativo">Ativo</Translate>
                                   </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField id="prontuario-tipo-manifestacao-ativo" type="string" className="form-control" name="ativo" />
                                 </Col>
                               </Row>
                             </AvGroup>

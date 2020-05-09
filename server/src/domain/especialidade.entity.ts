@@ -14,6 +14,7 @@ import UnidadeEasy from './unidade-easy.entity';
 import Categoria from './categoria.entity';
 import TipoEspecialidade from './tipo-especialidade.entity';
 import TipoUnidade from './tipo-unidade.entity';
+import Profissional from './profissional.entity';
 
 /**
  * A Especialidade.
@@ -35,8 +36,8 @@ export default class Especialidade extends BaseEntity {
   @Column({ name: 'IMPORTANTE', length: 255 })
   importante: string;
 
-  @Column({ type: 'integer', name: 'ATIVO' })
-  ativo: number;
+  @Column({ type: 'boolean', name: 'ATIVO' })
+  ativo: boolean;
 
   @OneToMany(
     type => Atendimento,
@@ -89,6 +90,9 @@ export default class Especialidade extends BaseEntity {
   @ManyToOne(type => TipoUnidade)
   @JoinColumn({ name: 'ID_TIPO_UNIDADE', referencedColumnName: 'id' })
   tipoUnidade: TipoUnidade;
+
+  @ManyToMany(type => Profissional)
+  profissionals: Profissional[];
 
   // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
 }

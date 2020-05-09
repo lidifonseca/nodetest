@@ -118,7 +118,7 @@ export class ProfissionalStatusAtualNewDetail extends React.Component<
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{profissionalStatusAtualNewEntity.ativo}</dd>
+                        <dd>{profissionalStatusAtualNewEntity.ativo ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>

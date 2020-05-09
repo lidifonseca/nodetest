@@ -173,13 +173,11 @@ export class TipoProntuarioUpdate extends React.Component<ITipoProntuarioUpdateP
                           <Col md="ativo">
                             <AvGroup>
                               <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="ativoLabel" for="tipo-prontuario-ativo">
+                                <Col md="12">
+                                  <Label className="mt-2" id="ativoLabel" check>
+                                    <AvInput id="tipo-prontuario-ativo" type="checkbox" className="form-control" name="ativo" />
                                     <Translate contentKey="generadorApp.tipoProntuario.ativo">Ativo</Translate>
                                   </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField id="tipo-prontuario-ativo" type="string" className="form-control" name="ativo" />
                                 </Col>
                               </Row>
                             </AvGroup>

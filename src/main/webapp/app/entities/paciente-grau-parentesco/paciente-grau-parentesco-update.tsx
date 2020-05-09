@@ -182,13 +182,11 @@ export class PacienteGrauParentescoUpdate extends React.Component<IPacienteGrauP
                           <Col md="ativo">
                             <AvGroup>
                               <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="ativoLabel" for="paciente-grau-parentesco-ativo">
+                                <Col md="12">
+                                  <Label className="mt-2" id="ativoLabel" check>
+                                    <AvInput id="paciente-grau-parentesco-ativo" type="checkbox" className="form-control" name="ativo" />
                                     <Translate contentKey="generadorApp.pacienteGrauParentesco.ativo">Ativo</Translate>
                                   </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField id="paciente-grau-parentesco-ativo" type="string" className="form-control" name="ativo" />
                                 </Col>
                               </Row>
                             </AvGroup>

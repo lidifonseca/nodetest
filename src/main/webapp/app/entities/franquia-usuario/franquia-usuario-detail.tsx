@@ -604,7 +604,7 @@ export class FranquiaUsuarioDetail extends React.Component<IFranquiaUsuarioDetai
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{franquiaUsuarioEntity.ativo}</dd>
+                        <dd>{franquiaUsuarioEntity.ativo ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>

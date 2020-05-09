@@ -635,7 +635,7 @@ export class ProfissionalNewDetail extends React.Component<IProfissionalNewDetai
                             </dt>
                           </Col>
                           <Col md="9">
-                            <dd>{profissionalNewEntity.ativo}</dd>
+                            <dd>{profissionalNewEntity.ativo ? 'true' : 'false'}</dd>
                           </Col>
                         </Row>
                       </Col>

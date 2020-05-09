@@ -33,8 +33,6 @@ export type PadState = Readonly<typeof initialState>;
 
 export interface IPadBaseState {
   baseFilters: any;
-  idOperadora: any;
-  idFranquia: any;
   nroPad: any;
   dataInicio: any;
   dataFim: any;
@@ -44,6 +42,8 @@ export interface IPadBaseState {
   padCid: any;
   padItem: any;
   unidade: any;
+  operadora: any;
+  franquia: any;
   paciente: any;
 }
 
@@ -51,9 +51,13 @@ export interface IPadUpdateState {
   fieldsBase: IPadBaseState;
 
   unidadeEasySelectValue: any;
+  operadoraSelectValue: any;
+  franquiaSelectValue: any;
   pacienteSelectValue: any;
   isNew: boolean;
   unidadeId: string;
+  operadoraId: string;
+  franquiaId: string;
   pacienteId: string;
 }
 
@@ -135,8 +139,6 @@ const apiUrl = 'api/pads';
 
 // Actions
 export type ICrudGetAllActionPad<T> = (
-  idOperadora?: any,
-  idFranquia?: any,
   nroPad?: any,
   dataInicio?: any,
   dataFim?: any,
@@ -146,6 +148,8 @@ export type ICrudGetAllActionPad<T> = (
   padCid?: any,
   padItem?: any,
   unidade?: any,
+  operadora?: any,
+  franquia?: any,
   paciente?: any,
   page?: number,
   size?: number,
@@ -153,8 +157,6 @@ export type ICrudGetAllActionPad<T> = (
 ) => IPayload<T> | ((dispatch: any) => IPayload<T>);
 
 export const getEntities: ICrudGetAllActionPad<IPad> = (
-  idOperadora,
-  idFranquia,
   nroPad,
   dataInicio,
   dataFim,
@@ -164,13 +166,13 @@ export const getEntities: ICrudGetAllActionPad<IPad> = (
   padCid,
   padItem,
   unidade,
+  operadora,
+  franquia,
   paciente,
   page,
   size,
   sort
 ) => {
-  const idOperadoraRequest = idOperadora ? `idOperadora.contains=${idOperadora}&` : '';
-  const idFranquiaRequest = idFranquia ? `idFranquia.contains=${idFranquia}&` : '';
   const nroPadRequest = nroPad ? `nroPad.contains=${nroPad}&` : '';
   const dataInicioRequest = dataInicio ? `dataInicio.equals=${dataInicio}&` : '';
   const dataFimRequest = dataFim ? `dataFim.equals=${dataFim}&` : '';
@@ -180,13 +182,15 @@ export const getEntities: ICrudGetAllActionPad<IPad> = (
   const padCidRequest = padCid ? `padCid.equals=${padCid}&` : '';
   const padItemRequest = padItem ? `padItem.equals=${padItem}&` : '';
   const unidadeRequest = unidade ? `unidade.equals=${unidade}&` : '';
+  const operadoraRequest = operadora ? `operadora.equals=${operadora}&` : '';
+  const franquiaRequest = franquia ? `franquia.equals=${franquia}&` : '';
   const pacienteRequest = paciente ? `paciente.equals=${paciente}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_PAD_LIST,
     payload: axios.get<IPad>(
-      `${requestUrl}${idOperadoraRequest}${idFranquiaRequest}${nroPadRequest}${dataInicioRequest}${dataFimRequest}${dataConferidoRequest}${ativoRequest}${statusPadRequest}${padCidRequest}${padItemRequest}${unidadeRequest}${pacienteRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${nroPadRequest}${dataInicioRequest}${dataFimRequest}${dataConferidoRequest}${ativoRequest}${statusPadRequest}${padCidRequest}${padItemRequest}${unidadeRequest}${operadoraRequest}${franquiaRequest}${pacienteRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };
@@ -199,8 +203,6 @@ export const getEntity: ICrudGetAction<IPad> = id => {
 };
 
 export const getEntitiesExport: ICrudGetAllActionPad<IPad> = (
-  idOperadora,
-  idFranquia,
   nroPad,
   dataInicio,
   dataFim,
@@ -210,13 +212,13 @@ export const getEntitiesExport: ICrudGetAllActionPad<IPad> = (
   padCid,
   padItem,
   unidade,
+  operadora,
+  franquia,
   paciente,
   page,
   size,
   sort
 ) => {
-  const idOperadoraRequest = idOperadora ? `idOperadora.contains=${idOperadora}&` : '';
-  const idFranquiaRequest = idFranquia ? `idFranquia.contains=${idFranquia}&` : '';
   const nroPadRequest = nroPad ? `nroPad.contains=${nroPad}&` : '';
   const dataInicioRequest = dataInicio ? `dataInicio.equals=${dataInicio}&` : '';
   const dataFimRequest = dataFim ? `dataFim.equals=${dataFim}&` : '';
@@ -226,13 +228,15 @@ export const getEntitiesExport: ICrudGetAllActionPad<IPad> = (
   const padCidRequest = padCid ? `padCid.equals=${padCid}&` : '';
   const padItemRequest = padItem ? `padItem.equals=${padItem}&` : '';
   const unidadeRequest = unidade ? `unidade.equals=${unidade}&` : '';
+  const operadoraRequest = operadora ? `operadora.equals=${operadora}&` : '';
+  const franquiaRequest = franquia ? `franquia.equals=${franquia}&` : '';
   const pacienteRequest = paciente ? `paciente.equals=${paciente}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_PAD_LIST,
     payload: axios.get<IPad>(
-      `${requestUrl}${idOperadoraRequest}${idFranquiaRequest}${nroPadRequest}${dataInicioRequest}${dataFimRequest}${dataConferidoRequest}${ativoRequest}${statusPadRequest}${padCidRequest}${padItemRequest}${unidadeRequest}${pacienteRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${nroPadRequest}${dataInicioRequest}${dataFimRequest}${dataConferidoRequest}${ativoRequest}${statusPadRequest}${padCidRequest}${padItemRequest}${unidadeRequest}${operadoraRequest}${franquiaRequest}${pacienteRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };
@@ -241,6 +245,8 @@ export const createEntity: ICrudPutAction<IPad> = entity => async dispatch => {
   entity = {
     ...entity,
     unidade: entity.unidade === 'null' ? null : entity.unidade,
+    operadora: entity.operadora === 'null' ? null : entity.operadora,
+    franquia: entity.franquia === 'null' ? null : entity.franquia,
     paciente: entity.paciente === 'null' ? null : entity.paciente
   };
   const result = await dispatch({
@@ -255,6 +261,8 @@ export const updateEntity: ICrudPutAction<IPad> = entity => async dispatch => {
   entity = {
     ...entity,
     unidade: entity.unidade === 'null' ? null : entity.unidade,
+    operadora: entity.operadora === 'null' ? null : entity.operadora,
+    franquia: entity.franquia === 'null' ? null : entity.franquia,
     paciente: entity.paciente === 'null' ? null : entity.paciente
   };
   const result = await dispatch({
@@ -282,8 +290,6 @@ export const reset = () => ({
 export const getPadState = (location): IPadBaseState => {
   const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
   const baseFilters = url.searchParams.get('baseFilters') || '';
-  const idOperadora = url.searchParams.get('idOperadora') || '';
-  const idFranquia = url.searchParams.get('idFranquia') || '';
   const nroPad = url.searchParams.get('nroPad') || '';
   const dataInicio = url.searchParams.get('dataInicio') || '';
   const dataFim = url.searchParams.get('dataFim') || '';
@@ -294,12 +300,12 @@ export const getPadState = (location): IPadBaseState => {
   const padCid = url.searchParams.get('padCid') || '';
   const padItem = url.searchParams.get('padItem') || '';
   const unidade = url.searchParams.get('unidade') || '';
+  const operadora = url.searchParams.get('operadora') || '';
+  const franquia = url.searchParams.get('franquia') || '';
   const paciente = url.searchParams.get('paciente') || '';
 
   return {
     baseFilters,
-    idOperadora,
-    idFranquia,
     nroPad,
     dataInicio,
     dataFim,
@@ -309,6 +315,8 @@ export const getPadState = (location): IPadBaseState => {
     padCid,
     padItem,
     unidade,
+    operadora,
+    franquia,
     paciente
   };
 };

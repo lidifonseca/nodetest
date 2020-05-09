@@ -3,7 +3,9 @@ export interface IApiName {
   apiName?: string;
   apiReceiver?: string;
   apiObs?: string;
-  ativo?: number;
+  ativo?: boolean;
 }
 
-export const defaultValue: Readonly<IApiName> = {};
+export const defaultValue: Readonly<IApiName> = {
+  ativo: false
+};

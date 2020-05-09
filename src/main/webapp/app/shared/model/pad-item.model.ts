@@ -1,5 +1,4 @@
 import { Moment } from 'moment';
-import { IAtendimento } from 'app/shared/model/atendimento.model';
 import { IAtendimentoCepRecusado } from 'app/shared/model/atendimento-cep-recusado.model';
 import { IAtendimentoSorteioFeito } from 'app/shared/model/atendimento-sorteio-feito.model';
 import { IPadItemAtividade } from 'app/shared/model/pad-item-atividade.model';
@@ -19,11 +18,10 @@ export interface IPadItem {
   qtdSessoes?: number;
   observacao?: any;
   sub?: number;
-  ativo?: number;
+  ativo?: boolean;
   dataPadItemIncompleto?: Moment;
   dataPadItemCompleto?: Moment;
   numGhc?: string;
-  atendimentos?: IAtendimento[];
   atendimentoCepRecusados?: IAtendimentoCepRecusado[];
   atendimentoSorteioFeitos?: IAtendimentoSorteioFeito[];
   padItemAtividades?: IPadItemAtividade[];
@@ -36,4 +34,6 @@ export interface IPadItem {
   periodo?: string | any;
 }
 
-export const defaultValue: Readonly<IPadItem> = {};
+export const defaultValue: Readonly<IPadItem> = {
+  ativo: false
+};

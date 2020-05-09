@@ -14,8 +14,8 @@ export default class Periodicidade extends BaseEntity {
   @Column({ name: 'PERIODICIDADE', length: 40 })
   periodicidade: string;
 
-  @Column({ type: 'integer', name: 'ATIVO' })
-  ativo: number;
+  @Column({ type: 'boolean', name: 'ATIVO' })
+  ativo: boolean;
 
   @OneToMany(
     type => PadItem,

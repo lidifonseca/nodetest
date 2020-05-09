@@ -93,7 +93,7 @@ export class MotivoPsDetail extends React.Component<IMotivoPsDetailProps, IMotiv
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{motivoPsEntity.ativo}</dd>
+                        <dd>{motivoPsEntity.ativo ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>

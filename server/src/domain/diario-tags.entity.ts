@@ -18,8 +18,8 @@ export default class DiarioTags extends BaseEntity {
   @Column({ name: 'NOME_ID', length: 45 })
   nomeId: string;
 
-  @Column({ type: 'integer', name: 'ATIVO' })
-  ativo: number;
+  @Column({ type: 'boolean', name: 'ATIVO' })
+  ativo: boolean;
 
   // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
 }

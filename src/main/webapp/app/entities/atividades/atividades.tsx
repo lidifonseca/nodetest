@@ -167,10 +167,10 @@ export class Atividades extends React.Component<IAtividadesProps, IAtividadesSta
                       {this.state.baseFilters !== 'ativo' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="ativoLabel" for="atividades-ativo">
+                            <Label id="ativoLabel" check>
+                              <AvInput id="atividades-ativo" type="checkbox" className="form-control" name="ativo" />
                               <Translate contentKey="generadorApp.atividades.ativo">Ativo</Translate>
                             </Label>
-                            <AvInput type="string" name="ativo" id="atividades-ativo" value={this.state.ativo} />
                           </Row>
                         </Col>
                       ) : null}
@@ -229,7 +229,7 @@ export class Atividades extends React.Component<IAtividadesProps, IAtividadesSta
 
                         {this.state.baseFilters !== 'atividade' ? <td>{atividades.atividade}</td> : null}
 
-                        {this.state.baseFilters !== 'ativo' ? <td>{atividades.ativo}</td> : null}
+                        {this.state.baseFilters !== 'ativo' ? <td>{atividades.ativo ? 'true' : 'false'}</td> : null}
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">

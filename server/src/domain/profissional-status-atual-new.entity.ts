@@ -16,8 +16,8 @@ export default class ProfissionalStatusAtualNew extends BaseEntity {
   @Column({ name: 'OBS' })
   obs: string;
 
-  @Column({ type: 'integer', name: 'ATIVO' })
-  ativo: number;
+  @Column({ type: 'boolean', name: 'ATIVO' })
+  ativo: boolean;
 
   // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
 }

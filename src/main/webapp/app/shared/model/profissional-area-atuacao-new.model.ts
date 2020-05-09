@@ -3,8 +3,10 @@ export interface IProfissionalAreaAtuacaoNew {
   idProfissional?: string;
   cepArea?: string;
   cepFim?: string;
-  ativo?: number;
+  ativo?: boolean;
   cepIni?: string;
 }
 
-export const defaultValue: Readonly<IProfissionalAreaAtuacaoNew> = {};
+export const defaultValue: Readonly<IProfissionalAreaAtuacaoNew> = {
+  ativo: false
+};

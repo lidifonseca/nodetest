@@ -209,13 +209,11 @@ export class DiarioTagsUpdate extends React.Component<IDiarioTagsUpdateProps, ID
                           <Col md="ativo">
                             <AvGroup>
                               <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="ativoLabel" for="diario-tags-ativo">
+                                <Col md="12">
+                                  <Label className="mt-2" id="ativoLabel" check>
+                                    <AvInput id="diario-tags-ativo" type="checkbox" className="form-control" name="ativo" />
                                     <Translate contentKey="generadorApp.diarioTags.ativo">Ativo</Translate>
                                   </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField id="diario-tags-ativo" type="string" className="form-control" name="ativo" />
                                 </Col>
                               </Row>
                             </AvGroup>

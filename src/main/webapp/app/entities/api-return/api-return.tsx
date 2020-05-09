@@ -214,10 +214,10 @@ export class ApiReturn extends React.Component<IApiReturnProps, IApiReturnState>
                       {this.state.baseFilters !== 'ativo' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="ativoLabel" for="api-return-ativo">
+                            <Label id="ativoLabel" check>
+                              <AvInput id="api-return-ativo" type="checkbox" className="form-control" name="ativo" />
                               <Translate contentKey="generadorApp.apiReturn.ativo">Ativo</Translate>
                             </Label>
-                            <AvInput type="string" name="ativo" id="api-return-ativo" value={this.state.ativo} />
                           </Row>
                         </Col>
                       ) : null}
@@ -300,7 +300,7 @@ export class ApiReturn extends React.Component<IApiReturnProps, IApiReturnState>
 
                         {this.state.baseFilters !== 'obs' ? <td>{apiReturn.obs}</td> : null}
 
-                        {this.state.baseFilters !== 'ativo' ? <td>{apiReturn.ativo}</td> : null}
+                        {this.state.baseFilters !== 'ativo' ? <td>{apiReturn.ativo ? 'true' : 'false'}</td> : null}
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">

@@ -43,7 +43,7 @@
         },
         {
             "fieldName": "ativo",
-            "fieldType": "Integer"
+            "fieldType": "Boolean"
         },
         {
             "fieldName": "endereco",
@@ -119,12 +119,6 @@
         }
     ],
     "relationships": [
-        {
-            "relationshipType": "one-to-many",
-            "otherEntityName": "atendimento",
-            "otherEntityRelationshipName": "operadora",
-            "relationshipName": "atendimento"
-        },
         {
             "relationshipType": "one-to-many",
             "otherEntityName": "especialidadeOperadora",

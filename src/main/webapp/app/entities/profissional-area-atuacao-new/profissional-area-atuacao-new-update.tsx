@@ -223,13 +223,16 @@ export class ProfissionalAreaAtuacaoNewUpdate extends React.Component<
                           <Col md="ativo">
                             <AvGroup>
                               <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="ativoLabel" for="profissional-area-atuacao-new-ativo">
+                                <Col md="12">
+                                  <Label className="mt-2" id="ativoLabel" check>
+                                    <AvInput
+                                      id="profissional-area-atuacao-new-ativo"
+                                      type="checkbox"
+                                      className="form-control"
+                                      name="ativo"
+                                    />
                                     <Translate contentKey="generadorApp.profissionalAreaAtuacaoNew.ativo">Ativo</Translate>
                                   </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField id="profissional-area-atuacao-new-ativo" type="string" className="form-control" name="ativo" />
                                 </Col>
                               </Row>
                             </AvGroup>

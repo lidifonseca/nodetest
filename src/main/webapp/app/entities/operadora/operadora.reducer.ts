@@ -48,7 +48,6 @@ export interface IOperadoraBaseState {
   nomeContatoFinanceiro: any;
   contatoFinanceiro: any;
   emailFinanceiro: any;
-  atendimento: any;
   especialidadeOperadora: any;
   pacienteOperadora: any;
   unidade: any;
@@ -158,7 +157,6 @@ export type ICrudGetAllActionOperadora<T> = (
   nomeContatoFinanceiro?: any,
   contatoFinanceiro?: any,
   emailFinanceiro?: any,
-  atendimento?: any,
   especialidadeOperadora?: any,
   pacienteOperadora?: any,
   unidade?: any,
@@ -184,7 +182,6 @@ export const getEntities: ICrudGetAllActionOperadora<IOperadora> = (
   nomeContatoFinanceiro,
   contatoFinanceiro,
   emailFinanceiro,
-  atendimento,
   especialidadeOperadora,
   pacienteOperadora,
   unidade,
@@ -210,7 +207,6 @@ export const getEntities: ICrudGetAllActionOperadora<IOperadora> = (
   const nomeContatoFinanceiroRequest = nomeContatoFinanceiro ? `nomeContatoFinanceiro.contains=${nomeContatoFinanceiro}&` : '';
   const contatoFinanceiroRequest = contatoFinanceiro ? `contatoFinanceiro.contains=${contatoFinanceiro}&` : '';
   const emailFinanceiroRequest = emailFinanceiro ? `emailFinanceiro.contains=${emailFinanceiro}&` : '';
-  const atendimentoRequest = atendimento ? `atendimento.equals=${atendimento}&` : '';
   const especialidadeOperadoraRequest = especialidadeOperadora ? `especialidadeOperadora.equals=${especialidadeOperadora}&` : '';
   const pacienteOperadoraRequest = pacienteOperadora ? `pacienteOperadora.equals=${pacienteOperadora}&` : '';
   const unidadeRequest = unidade ? `unidade.equals=${unidade}&` : '';
@@ -220,7 +216,7 @@ export const getEntities: ICrudGetAllActionOperadora<IOperadora> = (
   return {
     type: ACTION_TYPES.FETCH_OPERADORA_LIST,
     payload: axios.get<IOperadora>(
-      `${requestUrl}${nomeFantasiaRequest}${razaoSocialRequest}${cnpjRequest}${ieRequest}${siteRequest}${ativoRequest}${enderecoRequest}${contatoCentralAtendimentoRequest}${emailCentralAtendimentoRequest}${nomeContatoComercialRequest}${contatoComercialRequest}${emailComercialRequest}${nomeContatoFinanceiroRequest}${contatoFinanceiroRequest}${emailFinanceiroRequest}${atendimentoRequest}${especialidadeOperadoraRequest}${pacienteOperadoraRequest}${unidadeRequest}${tipoOperadoraRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${nomeFantasiaRequest}${razaoSocialRequest}${cnpjRequest}${ieRequest}${siteRequest}${ativoRequest}${enderecoRequest}${contatoCentralAtendimentoRequest}${emailCentralAtendimentoRequest}${nomeContatoComercialRequest}${contatoComercialRequest}${emailComercialRequest}${nomeContatoFinanceiroRequest}${contatoFinanceiroRequest}${emailFinanceiroRequest}${especialidadeOperadoraRequest}${pacienteOperadoraRequest}${unidadeRequest}${tipoOperadoraRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };
@@ -248,7 +244,6 @@ export const getEntitiesExport: ICrudGetAllActionOperadora<IOperadora> = (
   nomeContatoFinanceiro,
   contatoFinanceiro,
   emailFinanceiro,
-  atendimento,
   especialidadeOperadora,
   pacienteOperadora,
   unidade,
@@ -274,7 +269,6 @@ export const getEntitiesExport: ICrudGetAllActionOperadora<IOperadora> = (
   const nomeContatoFinanceiroRequest = nomeContatoFinanceiro ? `nomeContatoFinanceiro.contains=${nomeContatoFinanceiro}&` : '';
   const contatoFinanceiroRequest = contatoFinanceiro ? `contatoFinanceiro.contains=${contatoFinanceiro}&` : '';
   const emailFinanceiroRequest = emailFinanceiro ? `emailFinanceiro.contains=${emailFinanceiro}&` : '';
-  const atendimentoRequest = atendimento ? `atendimento.equals=${atendimento}&` : '';
   const especialidadeOperadoraRequest = especialidadeOperadora ? `especialidadeOperadora.equals=${especialidadeOperadora}&` : '';
   const pacienteOperadoraRequest = pacienteOperadora ? `pacienteOperadora.equals=${pacienteOperadora}&` : '';
   const unidadeRequest = unidade ? `unidade.equals=${unidade}&` : '';
@@ -284,7 +278,7 @@ export const getEntitiesExport: ICrudGetAllActionOperadora<IOperadora> = (
   return {
     type: ACTION_TYPES.FETCH_OPERADORA_LIST,
     payload: axios.get<IOperadora>(
-      `${requestUrl}${nomeFantasiaRequest}${razaoSocialRequest}${cnpjRequest}${ieRequest}${siteRequest}${ativoRequest}${enderecoRequest}${contatoCentralAtendimentoRequest}${emailCentralAtendimentoRequest}${nomeContatoComercialRequest}${contatoComercialRequest}${emailComercialRequest}${nomeContatoFinanceiroRequest}${contatoFinanceiroRequest}${emailFinanceiroRequest}${atendimentoRequest}${especialidadeOperadoraRequest}${pacienteOperadoraRequest}${unidadeRequest}${tipoOperadoraRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${nomeFantasiaRequest}${razaoSocialRequest}${cnpjRequest}${ieRequest}${siteRequest}${ativoRequest}${enderecoRequest}${contatoCentralAtendimentoRequest}${emailCentralAtendimentoRequest}${nomeContatoComercialRequest}${contatoComercialRequest}${emailComercialRequest}${nomeContatoFinanceiroRequest}${contatoFinanceiroRequest}${emailFinanceiroRequest}${especialidadeOperadoraRequest}${pacienteOperadoraRequest}${unidadeRequest}${tipoOperadoraRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };
@@ -350,7 +344,6 @@ export const getOperadoraState = (location): IOperadoraBaseState => {
   const contatoFinanceiro = url.searchParams.get('contatoFinanceiro') || '';
   const emailFinanceiro = url.searchParams.get('emailFinanceiro') || '';
 
-  const atendimento = url.searchParams.get('atendimento') || '';
   const especialidadeOperadora = url.searchParams.get('especialidadeOperadora') || '';
   const pacienteOperadora = url.searchParams.get('pacienteOperadora') || '';
   const unidade = url.searchParams.get('unidade') || '';
@@ -373,7 +366,6 @@ export const getOperadoraState = (location): IOperadoraBaseState => {
     nomeContatoFinanceiro,
     contatoFinanceiro,
     emailFinanceiro,
-    atendimento,
     especialidadeOperadora,
     pacienteOperadora,
     unidade,

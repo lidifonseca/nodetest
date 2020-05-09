@@ -109,7 +109,7 @@ export class ProfissionalPushDetail extends React.Component<IProfissionalPushDet
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{profissionalPushEntity.ativo}</dd>
+                        <dd>{profissionalPushEntity.ativo ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>

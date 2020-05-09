@@ -173,13 +173,11 @@ export class TipoMatMedUpdate extends React.Component<ITipoMatMedUpdateProps, IT
                           <Col md="ativo">
                             <AvGroup>
                               <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="ativoLabel" for="tipo-mat-med-ativo">
+                                <Col md="12">
+                                  <Label className="mt-2" id="ativoLabel" check>
+                                    <AvInput id="tipo-mat-med-ativo" type="checkbox" className="form-control" name="ativo" />
                                     <Translate contentKey="generadorApp.tipoMatMed.ativo">Ativo</Translate>
                                   </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField id="tipo-mat-med-ativo" type="string" className="form-control" name="ativo" />
                                 </Col>
                               </Row>
                             </AvGroup>

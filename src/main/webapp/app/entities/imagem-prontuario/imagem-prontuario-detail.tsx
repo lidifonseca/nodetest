@@ -94,7 +94,7 @@ export class ImagemProntuarioDetail extends React.Component<IImagemProntuarioDet
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{imagemProntuarioEntity.ativo}</dd>
+                        <dd>{imagemProntuarioEntity.ativo ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>

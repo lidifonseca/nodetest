@@ -4,7 +4,6 @@ import { BaseEntity } from './base/base.entity';
 
 import { validate, Contains, IsInt, Length, IsEmail, IsFQDN, IsDate, Min, Max } from 'class-validator';
 
-import Atendimento from './atendimento.entity';
 import AtendimentoCepRecusado from './atendimento-cep-recusado.entity';
 import AtendimentoSorteioFeito from './atendimento-sorteio-feito.entity';
 import PadItemAtividade from './pad-item-atividade.entity';
@@ -39,8 +38,8 @@ export default class PadItem extends BaseEntity {
   @Column({ type: 'integer', name: 'SUB' })
   sub: number;
 
-  @Column({ type: 'integer', name: 'ATIVO' })
-  ativo: number;
+  @Column({ type: 'boolean', name: 'ATIVO' })
+  ativo: boolean;
 
   @Column({ type: 'timestamp', name: 'DATA_PAD_ITEM_INCOMPLETO' })
   dataPadItemIncompleto: any;
@@ -50,12 +49,6 @@ export default class PadItem extends BaseEntity {
 
   @Column({ name: 'NUM_GHC', length: 40 })
   numGhc: string;
-
-  @OneToMany(
-    type => Atendimento,
-    other => other.padItem
-  )
-  atendimentos: Atendimento[];
 
   @OneToMany(
     type => AtendimentoCepRecusado,

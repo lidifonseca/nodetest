@@ -96,7 +96,7 @@ export class PacienteStatusAtualDetail extends React.Component<IPacienteStatusAt
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{pacienteStatusAtualEntity.ativo}</dd>
+                        <dd>{pacienteStatusAtualEntity.ativo ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>

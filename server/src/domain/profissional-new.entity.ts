@@ -119,8 +119,8 @@ export default class ProfissionalNew extends BaseEntity {
   @Column({ name: 'CHAVE_PRIVADA', length: 255 })
   chavePrivada: string;
 
-  @Column({ type: 'integer', name: 'ATIVO' })
-  ativo: number;
+  @Column({ type: 'boolean', name: 'ATIVO' })
+  ativo: boolean;
 
   @ManyToOne(type => UnidadeEasy)
   @JoinColumn({ name: 'ID_UNIDADE', referencedColumnName: 'id' })

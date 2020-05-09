@@ -93,7 +93,7 @@ export class PacientePushDetail extends React.Component<IPacientePushDetailProps
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{pacientePushEntity.ativo}</dd>
+                        <dd>{pacientePushEntity.ativo ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>

@@ -108,7 +108,7 @@ export class ApiNameDetail extends React.Component<IApiNameDetailProps, IApiName
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{apiNameEntity.ativo}</dd>
+                        <dd>{apiNameEntity.ativo ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>

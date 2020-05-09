@@ -196,10 +196,10 @@ export class ProfissionalStatusAtual extends React.Component<IProfissionalStatus
                       {this.state.baseFilters !== 'ativo' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="ativoLabel" for="profissional-status-atual-ativo">
+                            <Label id="ativoLabel" check>
+                              <AvInput id="profissional-status-atual-ativo" type="checkbox" className="form-control" name="ativo" />
                               <Translate contentKey="generadorApp.profissionalStatusAtual.ativo">Ativo</Translate>
                             </Label>
-                            <AvInput type="string" name="ativo" id="profissional-status-atual-ativo" value={this.state.ativo} />
                           </Row>
                         </Col>
                       ) : null}
@@ -302,7 +302,7 @@ export class ProfissionalStatusAtual extends React.Component<IProfissionalStatus
                           <td>{profissionalStatusAtual.obs ? Buffer.from(profissionalStatusAtual.obs).toString() : null}</td>
                         ) : null}
 
-                        {this.state.baseFilters !== 'ativo' ? <td>{profissionalStatusAtual.ativo}</td> : null}
+                        {this.state.baseFilters !== 'ativo' ? <td>{profissionalStatusAtual.ativo ? 'true' : 'false'}</td> : null}
 
                         {this.state.baseFilters !== 'statusAtualProf' ? (
                           <td>

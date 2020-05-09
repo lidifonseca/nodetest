@@ -12,14 +12,18 @@ import { IRootState } from 'app/shared/reducers';
 
 import { IUnidadeEasy } from 'app/shared/model/unidade-easy.model';
 import { getEntities as getUnidadeEasies } from 'app/entities/unidade-easy/unidade-easy.reducer';
+import { IPadItem } from 'app/shared/model/pad-item.model';
+import { getEntities as getPadItems } from 'app/entities/pad-item/pad-item.reducer';
 import { IPaciente } from 'app/shared/model/paciente.model';
 import { getEntities as getPacientes } from 'app/entities/paciente/paciente.reducer';
 import { IOperadora } from 'app/shared/model/operadora.model';
 import { getEntities as getOperadoras } from 'app/entities/operadora/operadora.reducer';
+import { IProfissional } from 'app/shared/model/profissional.model';
+import { getEntities as getProfissionals } from 'app/entities/profissional/profissional.reducer';
+import { IFranquia } from 'app/shared/model/franquia.model';
+import { getEntities as getFranquias } from 'app/entities/franquia/franquia.reducer';
 import { IEspecialidade } from 'app/shared/model/especialidade.model';
 import { getEntities as getEspecialidades } from 'app/entities/especialidade/especialidade.reducer';
-import { IPadItem } from 'app/shared/model/pad-item.model';
-import { getEntities as getPadItems } from 'app/entities/pad-item/pad-item.reducer';
 import { IStatusAtendimento } from 'app/shared/model/status-atendimento.model';
 import { getEntities as getStatusAtendimentos } from 'app/entities/status-atendimento/status-atendimento.reducer';
 import { IPeriodo } from 'app/shared/model/periodo.model';
@@ -47,19 +51,23 @@ export class AtendimentoUpdate extends React.Component<IAtendimentoUpdateProps, 
 
     this.state = {
       unidadeEasySelectValue: null,
+      padItemSelectValue: null,
       pacienteSelectValue: null,
       operadoraSelectValue: null,
+      profissionalSelectValue: null,
+      franquiaSelectValue: null,
       especialidadeSelectValue: null,
-      padItemSelectValue: null,
       statusAtendimentoSelectValue: null,
       periodoSelectValue: null,
       cidadeSelectValue: null,
       fieldsBase: getAtendimentoState(this.props.location),
       unidadeId: '0',
+      padItemId: '0',
       pacienteId: '0',
       operadoraId: '0',
+      profissionalId: '0',
+      franquiaId: '0',
       especialidadeId: '0',
-      padItemId: '0',
       statusAtendimentoId: '0',
       periodoId: '0',
       cidadeId: '0',
@@ -85,6 +93,19 @@ export class AtendimentoUpdate extends React.Component<IAtendimentoUpdateProps, 
     }
 
     if (
+      nextProps.padItems.length > 0 &&
+      this.state.padItemSelectValue === null &&
+      nextProps.atendimentoEntity.padItem &&
+      nextProps.atendimentoEntity.padItem.id
+    ) {
+      this.setState({
+        padItemSelectValue: nextProps.padItems.map(p =>
+          nextProps.atendimentoEntity.padItem.id === p.id ? { value: p.id, label: p.id } : null
+        )
+      });
+    }
+
+    if (
       nextProps.pacientes.length > 0 &&
       this.state.pacienteSelectValue === null &&
       nextProps.atendimentoEntity.paciente &&
@@ -92,7 +113,7 @@ export class AtendimentoUpdate extends React.Component<IAtendimentoUpdateProps, 
     ) {
       this.setState({
         pacienteSelectValue: nextProps.pacientes.map(p =>
-          nextProps.atendimentoEntity.paciente.id === p.id ? { value: p.id, label: p.id } : null
+          nextProps.atendimentoEntity.paciente.id === p.id ? { value: p.id, label: p.nome } : null
         )
       });
     }
@@ -105,7 +126,33 @@ export class AtendimentoUpdate extends React.Component<IAtendimentoUpdateProps, 
     ) {
       this.setState({
         operadoraSelectValue: nextProps.operadoras.map(p =>
-          nextProps.atendimentoEntity.operadora.id === p.id ? { value: p.id, label: p.id } : null
+          nextProps.atendimentoEntity.operadora.id === p.id ? { value: p.id, label: p.nomeFantasia } : null
+        )
+      });
+    }
+
+    if (
+      nextProps.profissionals.length > 0 &&
+      this.state.profissionalSelectValue === null &&
+      nextProps.atendimentoEntity.profissional &&
+      nextProps.atendimentoEntity.profissional.id
+    ) {
+      this.setState({
+        profissionalSelectValue: nextProps.profissionals.map(p =>
+          nextProps.atendimentoEntity.profissional.id === p.id ? { value: p.id, label: p.nome } : null
+        )
+      });
+    }
+
+    if (
+      nextProps.franquias.length > 0 &&
+      this.state.franquiaSelectValue === null &&
+      nextProps.atendimentoEntity.franquia &&
+      nextProps.atendimentoEntity.franquia.id
+    ) {
+      this.setState({
+        franquiaSelectValue: nextProps.franquias.map(p =>
+          nextProps.atendimentoEntity.franquia.id === p.id ? { value: p.id, label: p.nomeFantasia } : null
         )
       });
     }
@@ -119,19 +166,6 @@ export class AtendimentoUpdate extends React.Component<IAtendimentoUpdateProps, 
       this.setState({
         especialidadeSelectValue: nextProps.especialidades.map(p =>
           nextProps.atendimentoEntity.especialidade.id === p.id ? { value: p.id, label: p.id } : null
-        )
-      });
-    }
-
-    if (
-      nextProps.padItems.length > 0 &&
-      this.state.padItemSelectValue === null &&
-      nextProps.atendimentoEntity.padItem &&
-      nextProps.atendimentoEntity.padItem.id
-    ) {
-      this.setState({
-        padItemSelectValue: nextProps.padItems.map(p =>
-          nextProps.atendimentoEntity.padItem.id === p.id ? { value: p.id, label: p.id } : null
         )
       });
     }
@@ -184,10 +218,12 @@ export class AtendimentoUpdate extends React.Component<IAtendimentoUpdateProps, 
     }
 
     this.props.getUnidadeEasies();
+    this.props.getPadItems();
     this.props.getPacientes();
     this.props.getOperadoras();
+    this.props.getProfissionals();
+    this.props.getFranquias();
     this.props.getEspecialidades();
-    this.props.getPadItems();
     this.props.getStatusAtendimentos();
     this.props.getPeriodos();
     this.props.getCidades();
@@ -212,10 +248,12 @@ export class AtendimentoUpdate extends React.Component<IAtendimentoUpdateProps, 
       const entity = {
         ...atendimentoEntity,
         unidadeEasy: this.state.unidadeEasySelectValue ? this.state.unidadeEasySelectValue['value'] : null,
+        padItem: this.state.padItemSelectValue ? this.state.padItemSelectValue['value'] : null,
         paciente: this.state.pacienteSelectValue ? this.state.pacienteSelectValue['value'] : null,
         operadora: this.state.operadoraSelectValue ? this.state.operadoraSelectValue['value'] : null,
+        profissional: this.state.profissionalSelectValue ? this.state.profissionalSelectValue['value'] : null,
+        franquia: this.state.franquiaSelectValue ? this.state.franquiaSelectValue['value'] : null,
         especialidade: this.state.especialidadeSelectValue ? this.state.especialidadeSelectValue['value'] : null,
-        padItem: this.state.padItemSelectValue ? this.state.padItemSelectValue['value'] : null,
         statusAtendimento: this.state.statusAtendimentoSelectValue ? this.state.statusAtendimentoSelectValue['value'] : null,
         periodo: this.state.periodoSelectValue ? this.state.periodoSelectValue['value'] : null,
         cidade: this.state.cidadeSelectValue ? this.state.cidadeSelectValue['value'] : null,
@@ -238,10 +276,12 @@ export class AtendimentoUpdate extends React.Component<IAtendimentoUpdateProps, 
     const {
       atendimentoEntity,
       unidadeEasies,
+      padItems,
       pacientes,
       operadoras,
+      profissionals,
+      franquias,
       especialidades,
-      padItems,
       statusAtendimentos,
       periodos,
       cidades,
@@ -260,10 +300,12 @@ export class AtendimentoUpdate extends React.Component<IAtendimentoUpdateProps, 
               : {
                   ...atendimentoEntity,
                   unidade: atendimentoEntity.unidade ? atendimentoEntity.unidade.id : null,
+                  padItem: atendimentoEntity.padItem ? atendimentoEntity.padItem.id : null,
                   paciente: atendimentoEntity.paciente ? atendimentoEntity.paciente.id : null,
                   operadora: atendimentoEntity.operadora ? atendimentoEntity.operadora.id : null,
+                  profissional: atendimentoEntity.profissional ? atendimentoEntity.profissional.id : null,
+                  franquia: atendimentoEntity.franquia ? atendimentoEntity.franquia.id : null,
                   especialidade: atendimentoEntity.especialidade ? atendimentoEntity.especialidade.id : null,
-                  padItem: atendimentoEntity.padItem ? atendimentoEntity.padItem.id : null,
                   statusAtendimento: atendimentoEntity.statusAtendimento ? atendimentoEntity.statusAtendimento.id : null,
                   periodo: atendimentoEntity.periodo ? atendimentoEntity.periodo.id : null,
                   cidade: atendimentoEntity.cidade ? atendimentoEntity.cidade.id : null
@@ -328,42 +370,6 @@ export class AtendimentoUpdate extends React.Component<IAtendimentoUpdateProps, 
                         </AvGroup>
                       ) : null}
                       <Row>
-                        {baseFilters !== 'idFranquia' ? (
-                          <Col md="idFranquia">
-                            <AvGroup>
-                              <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="idFranquiaLabel" for="atendimento-idFranquia">
-                                    <Translate contentKey="generadorApp.atendimento.idFranquia">Id Franquia</Translate>
-                                  </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField id="atendimento-idFranquia" type="text" name="idFranquia" />
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
-                        ) : (
-                          <AvInput type="hidden" name="idFranquia" value={this.state.fieldsBase[baseFilters]} />
-                        )}
-                        {baseFilters !== 'idProfissional' ? (
-                          <Col md="idProfissional">
-                            <AvGroup>
-                              <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="idProfissionalLabel" for="atendimento-idProfissional">
-                                    <Translate contentKey="generadorApp.atendimento.idProfissional">Id Profissional</Translate>
-                                  </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField id="atendimento-idProfissional" type="text" name="idProfissional" />
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
-                        ) : (
-                          <AvInput type="hidden" name="idProfissional" value={this.state.fieldsBase[baseFilters]} />
-                        )}
                         {baseFilters !== 'cep' ? (
                           <Col md="cep">
                             <AvGroup>
@@ -826,13 +832,11 @@ export class AtendimentoUpdate extends React.Component<IAtendimentoUpdateProps, 
                           <Col md="ativo">
                             <AvGroup>
                               <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="ativoLabel" for="atendimento-ativo">
+                                <Col md="12">
+                                  <Label className="mt-2" id="ativoLabel" check>
+                                    <AvInput id="atendimento-ativo" type="checkbox" className="form-control" name="ativo" />
                                     <Translate contentKey="generadorApp.atendimento.ativo">Ativo</Translate>
                                   </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField id="atendimento-ativo" type="string" className="form-control" name="ativo" />
                                 </Col>
                               </Row>
                             </AvGroup>
@@ -1008,6 +1012,31 @@ export class AtendimentoUpdate extends React.Component<IAtendimentoUpdateProps, 
                         ) : (
                           <AvInput type="hidden" name="unidade" value={this.state.fieldsBase[baseFilters]} />
                         )}
+                        {baseFilters !== 'padItem' ? (
+                          <Col md="12">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" for="atendimento-padItem">
+                                    <Translate contentKey="generadorApp.atendimento.padItem">Pad Item</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <Select
+                                    id="atendimento-padItem"
+                                    className={'css-select-control'}
+                                    value={this.state.padItemSelectValue}
+                                    options={padItems ? padItems.map(option => ({ value: option.id, label: option.id })) : null}
+                                    onChange={options => this.setState({ padItemSelectValue: options })}
+                                    name={'padItem'}
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="padItem" value={this.state.fieldsBase[baseFilters]} />
+                        )}
                         {baseFilters !== 'paciente' ? (
                           <Col md="12">
                             <AvGroup>
@@ -1022,7 +1051,7 @@ export class AtendimentoUpdate extends React.Component<IAtendimentoUpdateProps, 
                                     id="atendimento-paciente"
                                     className={'css-select-control'}
                                     value={this.state.pacienteSelectValue}
-                                    options={pacientes ? pacientes.map(option => ({ value: option.id, label: option.id })) : null}
+                                    options={pacientes ? pacientes.map(option => ({ value: option.id, label: option.nome })) : null}
                                     onChange={options => this.setState({ pacienteSelectValue: options })}
                                     name={'paciente'}
                                   />
@@ -1047,7 +1076,9 @@ export class AtendimentoUpdate extends React.Component<IAtendimentoUpdateProps, 
                                     id="atendimento-operadora"
                                     className={'css-select-control'}
                                     value={this.state.operadoraSelectValue}
-                                    options={operadoras ? operadoras.map(option => ({ value: option.id, label: option.id })) : null}
+                                    options={
+                                      operadoras ? operadoras.map(option => ({ value: option.id, label: option.nomeFantasia })) : null
+                                    }
                                     onChange={options => this.setState({ operadoraSelectValue: options })}
                                     name={'operadora'}
                                   />
@@ -1057,6 +1088,56 @@ export class AtendimentoUpdate extends React.Component<IAtendimentoUpdateProps, 
                           </Col>
                         ) : (
                           <AvInput type="hidden" name="operadora" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'profissional' ? (
+                          <Col md="12">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" for="atendimento-profissional">
+                                    <Translate contentKey="generadorApp.atendimento.profissional">Profissional</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <Select
+                                    id="atendimento-profissional"
+                                    className={'css-select-control'}
+                                    value={this.state.profissionalSelectValue}
+                                    options={profissionals ? profissionals.map(option => ({ value: option.id, label: option.nome })) : null}
+                                    onChange={options => this.setState({ profissionalSelectValue: options })}
+                                    name={'profissional'}
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="profissional" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'franquia' ? (
+                          <Col md="12">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" for="atendimento-franquia">
+                                    <Translate contentKey="generadorApp.atendimento.franquia">Franquia</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <Select
+                                    id="atendimento-franquia"
+                                    className={'css-select-control'}
+                                    value={this.state.franquiaSelectValue}
+                                    options={franquias ? franquias.map(option => ({ value: option.id, label: option.nomeFantasia })) : null}
+                                    onChange={options => this.setState({ franquiaSelectValue: options })}
+                                    name={'franquia'}
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="franquia" value={this.state.fieldsBase[baseFilters]} />
                         )}
                         {baseFilters !== 'especialidade' ? (
                           <Col md="12">
@@ -1082,31 +1163,6 @@ export class AtendimentoUpdate extends React.Component<IAtendimentoUpdateProps, 
                           </Col>
                         ) : (
                           <AvInput type="hidden" name="especialidade" value={this.state.fieldsBase[baseFilters]} />
-                        )}
-                        {baseFilters !== 'padItem' ? (
-                          <Col md="12">
-                            <AvGroup>
-                              <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" for="atendimento-padItem">
-                                    <Translate contentKey="generadorApp.atendimento.padItem">Pad Item</Translate>
-                                  </Label>
-                                </Col>
-                                <Col md="9">
-                                  <Select
-                                    id="atendimento-padItem"
-                                    className={'css-select-control'}
-                                    value={this.state.padItemSelectValue}
-                                    options={padItems ? padItems.map(option => ({ value: option.id, label: option.id })) : null}
-                                    onChange={options => this.setState({ padItemSelectValue: options })}
-                                    name={'padItem'}
-                                  />
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
-                        ) : (
-                          <AvInput type="hidden" name="padItem" value={this.state.fieldsBase[baseFilters]} />
                         )}
                         {baseFilters !== 'statusAtendimento' ? (
                           <Col md="12">
@@ -1200,10 +1256,12 @@ export class AtendimentoUpdate extends React.Component<IAtendimentoUpdateProps, 
 
 const mapStateToProps = (storeState: IRootState) => ({
   unidadeEasies: storeState.unidadeEasy.entities,
+  padItems: storeState.padItem.entities,
   pacientes: storeState.paciente.entities,
   operadoras: storeState.operadora.entities,
+  profissionals: storeState.profissional.entities,
+  franquias: storeState.franquia.entities,
   especialidades: storeState.especialidade.entities,
-  padItems: storeState.padItem.entities,
   statusAtendimentos: storeState.statusAtendimento.entities,
   periodos: storeState.periodo.entities,
   cidades: storeState.cidade.entities,
@@ -1215,10 +1273,12 @@ const mapStateToProps = (storeState: IRootState) => ({
 
 const mapDispatchToProps = {
   getUnidadeEasies,
+  getPadItems,
   getPacientes,
   getOperadoras,
+  getProfissionals,
+  getFranquias,
   getEspecialidades,
-  getPadItems,
   getStatusAtendimentos,
   getPeriodos,
   getCidades,

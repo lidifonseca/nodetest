@@ -167,10 +167,10 @@ export class TipoMatMed extends React.Component<ITipoMatMedProps, ITipoMatMedSta
                       {this.state.baseFilters !== 'ativo' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="ativoLabel" for="tipo-mat-med-ativo">
+                            <Label id="ativoLabel" check>
+                              <AvInput id="tipo-mat-med-ativo" type="checkbox" className="form-control" name="ativo" />
                               <Translate contentKey="generadorApp.tipoMatMed.ativo">Ativo</Translate>
                             </Label>
-                            <AvInput type="string" name="ativo" id="tipo-mat-med-ativo" value={this.state.ativo} />
                           </Row>
                         </Col>
                       ) : null}
@@ -229,7 +229,7 @@ export class TipoMatMed extends React.Component<ITipoMatMedProps, ITipoMatMedSta
 
                         {this.state.baseFilters !== 'tipo' ? <td>{tipoMatMed.tipo}</td> : null}
 
-                        {this.state.baseFilters !== 'ativo' ? <td>{tipoMatMed.ativo}</td> : null}
+                        {this.state.baseFilters !== 'ativo' ? <td>{tipoMatMed.ativo ? 'true' : 'false'}</td> : null}
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">

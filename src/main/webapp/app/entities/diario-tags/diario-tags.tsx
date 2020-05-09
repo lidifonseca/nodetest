@@ -198,10 +198,10 @@ export class DiarioTags extends React.Component<IDiarioTagsProps, IDiarioTagsSta
                       {this.state.baseFilters !== 'ativo' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="ativoLabel" for="diario-tags-ativo">
+                            <Label id="ativoLabel" check>
+                              <AvInput id="diario-tags-ativo" type="checkbox" className="form-control" name="ativo" />
                               <Translate contentKey="generadorApp.diarioTags.ativo">Ativo</Translate>
                             </Label>
-                            <AvInput type="string" name="ativo" id="diario-tags-ativo" value={this.state.ativo} />
                           </Row>
                         </Col>
                       ) : null}
@@ -276,7 +276,7 @@ export class DiarioTags extends React.Component<IDiarioTagsProps, IDiarioTagsSta
 
                         {this.state.baseFilters !== 'nomeId' ? <td>{diarioTags.nomeId}</td> : null}
 
-                        {this.state.baseFilters !== 'ativo' ? <td>{diarioTags.ativo}</td> : null}
+                        {this.state.baseFilters !== 'ativo' ? <td>{diarioTags.ativo ? 'true' : 'false'}</td> : null}
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">

@@ -2,14 +2,6 @@
     "name": "Pad",
     "fields": [
         {
-            "fieldName": "idOperadora",
-            "fieldType": "Integer"
-        },
-        {
-            "fieldName": "idFranquia",
-            "fieldType": "String"
-        },
-        {
             "fieldName": "nroPad",
             "fieldType": "String",
             "fieldValidateRules": [
@@ -31,7 +23,7 @@
         },
         {
             "fieldName": "ativo",
-            "fieldType": "Integer"
+            "fieldType": "Boolean"
         },
         {
             "fieldName": "statusPad",
@@ -60,10 +52,24 @@
         },
         {
             "relationshipType": "many-to-one",
+            "otherEntityName": "operadora",
+            "otherEntityRelationshipName": "pad",
+            "relationshipName": "operadora",
+            "otherEntityField": "nomeFantasia"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "franquia",
+            "otherEntityRelationshipName": "pad",
+            "relationshipName": "franquia",
+            "otherEntityField": "nomeFantasia"
+        },
+        {
+            "relationshipType": "many-to-one",
             "otherEntityName": "paciente",
             "otherEntityRelationshipName": "pad",
             "relationshipName": "paciente",
-            "otherEntityField": "id"
+            "otherEntityField": "nome"
         }
     ],
     "changelogDate": "20200508231300",
@@ -76,5 +82,6 @@
     "readOnly": false,
     "embedded": false,
     "clientRootFolder": "",
-    "applications": "*"
+    "applications": "*",
+    "javadoc": "@listTableLayout nroPad operadora paciente dataInicio dataFim ativo statusPad@@\\n@listFilterLayout\\nnroPad{Label:top,Size:6}\\noperadora{Label:top,Size:6}\\npaciente{Label:top,Size:6}\\ndataInicio{Label:top,Size:6}\\ndataFim{Label:top,Size:6}\\nativo{Label:top,Size:6}\\nstatusPad{Label:top,Size:6}\\n@@\\n@listButtons\\nVisualizarPTA{inDropdown:true,tag:Link,to:`${match.url}/${pad.id}`,color:info,size:sm,icon:eye,text:VisualizarPTA}\\ndetalhes{inDropdown:true,tag:Link,to:`${match.url}/${pad.id}`,color:info,size:sm,icon:eye,text:Detalhes}\\nRelatorioConsolidado{inDropdown:true,tag:Link,to:`${match.url}/${pad.id}/delete`,color:info,size:sm,icon:file-text-o,text:RelatórioConsolidado}\\nedit{inDropdown:true,tag:Link,to:`${match.url}/${pad.id}/edit`,color:info,size:sm,icon:pencil-alt,text:Editar}\\nStatus{inDropdown:true,tag:Link,to:`/pad-status-atual?baseFilters=pad&pad=${pad.id}`,color:info,size:sm,icon:upload,text:Status}\\nAditivos{inDropdown:true,tag:Link,to:`/pad-arquivo?baseFilters=pad&pad=${pad.id}`,color:info,size:sm,icon:upload,text:Aditivos}\\nResultadosEsperados{inDropdown:true,tag:Link,to:`${match.url}/${pad.id}/delete`,color:info,size:sm,icon:list,text:ResultadosEsperados}\\nAtividadesdosAtendimentos{inDropdown:true,tag:Link,to:`${match.url}/${pad.id}/delete`,color:info,size:sm,icon:list-ol,text:AtividadesdosAtendimentos}\\n@@"
 }

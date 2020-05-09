@@ -15,8 +15,8 @@ export default class ProfissionalStatusAtual extends BaseEntity {
   @Column({ name: 'OBS' })
   obs: string;
 
-  @Column({ type: 'integer', name: 'ATIVO' })
-  ativo: number;
+  @Column({ type: 'boolean', name: 'ATIVO' })
+  ativo: boolean;
 
   @ManyToOne(type => StatusAtualProf)
   @JoinColumn({ name: 'ID_STATUS_ATUAL_PROF', referencedColumnName: 'id' })

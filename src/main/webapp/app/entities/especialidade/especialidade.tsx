@@ -36,6 +36,8 @@ import { ITipoEspecialidade } from 'app/shared/model/tipo-especialidade.model';
 import { getEntities as getTipoEspecialidades } from 'app/entities/tipo-especialidade/tipo-especialidade.reducer';
 import { ITipoUnidade } from 'app/shared/model/tipo-unidade.model';
 import { getEntities as getTipoUnidades } from 'app/entities/tipo-unidade/tipo-unidade.reducer';
+import { IProfissional } from 'app/shared/model/profissional.model';
+import { getEntities as getProfissionals } from 'app/entities/profissional/profissional.reducer';
 
 export interface IEspecialidadeProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
@@ -59,6 +61,7 @@ export class Especialidade extends React.Component<IEspecialidadeProps, IEspecia
     this.props.getCategorias();
     this.props.getTipoEspecialidades();
     this.props.getTipoUnidades();
+    this.props.getProfissionals();
   }
 
   cancelCourse = () => {
@@ -79,7 +82,8 @@ export class Especialidade extends React.Component<IEspecialidadeProps, IEspecia
         unidade: '',
         categoria: '',
         tipoEspecialidade: '',
-        tipoUnidade: ''
+        tipoUnidade: '',
+        profissional: ''
       },
       () => this.sortEntities()
     );
@@ -174,6 +178,9 @@ export class Especialidade extends React.Component<IEspecialidadeProps, IEspecia
       'tipoUnidade=' +
       this.state.tipoUnidade +
       '&' +
+      'profissional=' +
+      this.state.profissional +
+      '&' +
       ''
     );
   };
@@ -198,6 +205,7 @@ export class Especialidade extends React.Component<IEspecialidadeProps, IEspecia
       categoria,
       tipoEspecialidade,
       tipoUnidade,
+      profissional,
       activePage,
       itemsPerPage,
       sort,
@@ -220,6 +228,7 @@ export class Especialidade extends React.Component<IEspecialidadeProps, IEspecia
       categoria,
       tipoEspecialidade,
       tipoUnidade,
+      profissional,
       activePage - 1,
       itemsPerPage,
       `${sort},${order}`
@@ -227,7 +236,7 @@ export class Especialidade extends React.Component<IEspecialidadeProps, IEspecia
   };
 
   render() {
-    const { unidadeEasies, categorias, tipoEspecialidades, tipoUnidades, especialidadeList, match, totalItems } = this.props;
+    const { unidadeEasies, categorias, tipoEspecialidades, tipoUnidades, profissionals, especialidadeList, match, totalItems } = this.props;
     return (
       <div>
         <h2 id="page-heading">
@@ -324,10 +333,10 @@ export class Especialidade extends React.Component<IEspecialidadeProps, IEspecia
                       {this.state.baseFilters !== 'ativo' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="ativoLabel" for="especialidade-ativo">
+                            <Label id="ativoLabel" check>
+                              <AvInput id="especialidade-ativo" type="checkbox" className="form-control" name="ativo" />
                               <Translate contentKey="generadorApp.especialidade.ativo">Ativo</Translate>
                             </Label>
-                            <AvInput type="string" name="ativo" id="especialidade-ativo" value={this.state.ativo} />
                           </Row>
                         </Col>
                       ) : null}
@@ -479,6 +488,12 @@ export class Especialidade extends React.Component<IEspecialidadeProps, IEspecia
                           </Row>
                         </Col>
                       ) : null}
+
+                      {this.state.baseFilters !== 'profissional' ? (
+                        <Col md="3">
+                          <Row className="mr-1 mt-1"></Row>
+                        </Col>
+                      ) : null}
                     </div>
 
                     <div className="row mb-2 mr-4 justify-content-end">
@@ -596,12 +611,12 @@ export class Especialidade extends React.Component<IEspecialidadeProps, IEspecia
 
                         {this.state.baseFilters !== 'importante' ? <td>{especialidade.importante}</td> : null}
 
-                        {this.state.baseFilters !== 'ativo' ? <td>{especialidade.ativo}</td> : null}
+                        {this.state.baseFilters !== 'ativo' ? <td>{especialidade.ativo ? 'true' : 'false'}</td> : null}
 
                         {this.state.baseFilters !== 'unidade' ? (
                           <td>
                             {especialidade.unidade ? (
-                              <Link to={`unidade-easy/${especialidade.unidade.id}`}>{especialidade.unidade.id}</Link>
+                              <Link to={`unidade-easy/${especialidade.unidade.id}`}>{especialidade.unidade.razaoSocial}</Link>
                             ) : (
                               ''
                             )}
@@ -710,6 +725,7 @@ const mapStateToProps = ({ especialidade, ...storeState }: IRootState) => ({
   categorias: storeState.categoria.entities,
   tipoEspecialidades: storeState.tipoEspecialidade.entities,
   tipoUnidades: storeState.tipoUnidade.entities,
+  profissionals: storeState.profissional.entities,
   especialidadeList: especialidade.entities,
   totalItems: especialidade.totalItems
 });
@@ -719,6 +735,7 @@ const mapDispatchToProps = {
   getCategorias,
   getTipoEspecialidades,
   getTipoUnidades,
+  getProfissionals,
   getEntities
 };
 

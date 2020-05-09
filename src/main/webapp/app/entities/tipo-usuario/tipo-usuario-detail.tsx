@@ -78,7 +78,7 @@ export class TipoUsuarioDetail extends React.Component<ITipoUsuarioDetailProps, 
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{tipoUsuarioEntity.ativo}</dd>
+                        <dd>{tipoUsuarioEntity.ativo ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>

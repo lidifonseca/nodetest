@@ -211,13 +211,11 @@ export class PacientePushUpdate extends React.Component<IPacientePushUpdateProps
                           <Col md="ativo">
                             <AvGroup>
                               <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="ativoLabel" for="paciente-push-ativo">
+                                <Col md="12">
+                                  <Label className="mt-2" id="ativoLabel" check>
+                                    <AvInput id="paciente-push-ativo" type="checkbox" className="form-control" name="ativo" />
                                     <Translate contentKey="generadorApp.pacientePush.ativo">Ativo</Translate>
                                   </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField id="paciente-push-ativo" type="string" className="form-control" name="ativo" />
                                 </Col>
                               </Row>
                             </AvGroup>

@@ -5,8 +5,8 @@ import AtendimentoAtividades from '../domain/atendimento-atividades.entity';
 import { AtendimentoAtividadesRepository } from '../repository/atendimento-atividades.repository';
 
 const relationshipNames = [];
-relationshipNames.push('atividade');
 relationshipNames.push('atendimento');
+relationshipNames.push('atividade');
 
 @Injectable()
 export class AtendimentoAtividadesService {

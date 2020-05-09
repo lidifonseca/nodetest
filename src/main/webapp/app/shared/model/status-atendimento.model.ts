@@ -5,8 +5,10 @@ export interface IStatusAtendimento {
   statusAtendimento?: string;
   styleLabel?: string;
   ordenacao?: number;
-  ativo?: number;
+  ativo?: boolean;
   atendimentos?: IAtendimento[];
 }
 
-export const defaultValue: Readonly<IStatusAtendimento> = {};
+export const defaultValue: Readonly<IStatusAtendimento> = {
+  ativo: false
+};

@@ -116,7 +116,7 @@ export class ProfissionalAreaAtuacaoNewDetail extends React.Component<
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{profissionalAreaAtuacaoNewEntity.ativo}</dd>
+                        <dd>{profissionalAreaAtuacaoNewEntity.ativo ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>

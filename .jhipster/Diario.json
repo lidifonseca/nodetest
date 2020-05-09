@@ -3,15 +3,12 @@
     "fields": [
         {
             "fieldName": "historico",
-            "fieldType": "String",
-            "fieldValidateRules": [
-                "maxlength"
-            ],
-            "fieldValidateRulesMaxlength": "255"
+            "fieldType": "byte[]",
+            "fieldTypeBlobContent": "text"
         },
         {
             "fieldName": "gerarPdf",
-            "fieldType": "Integer"
+            "fieldType": "Boolean"
         }
     ],
     "relationships": [

@@ -214,10 +214,10 @@ export class ProfissionalAreaAtuacaoNew extends React.Component<IProfissionalAre
                       {this.state.baseFilters !== 'ativo' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="ativoLabel" for="profissional-area-atuacao-new-ativo">
+                            <Label id="ativoLabel" check>
+                              <AvInput id="profissional-area-atuacao-new-ativo" type="checkbox" className="form-control" name="ativo" />
                               <Translate contentKey="generadorApp.profissionalAreaAtuacaoNew.ativo">Ativo</Translate>
                             </Label>
-                            <AvInput type="string" name="ativo" id="profissional-area-atuacao-new-ativo" value={this.state.ativo} />
                           </Row>
                         </Col>
                       ) : null}
@@ -310,7 +310,7 @@ export class ProfissionalAreaAtuacaoNew extends React.Component<IProfissionalAre
 
                         {this.state.baseFilters !== 'cepFim' ? <td>{profissionalAreaAtuacaoNew.cepFim}</td> : null}
 
-                        {this.state.baseFilters !== 'ativo' ? <td>{profissionalAreaAtuacaoNew.ativo}</td> : null}
+                        {this.state.baseFilters !== 'ativo' ? <td>{profissionalAreaAtuacaoNew.ativo ? 'true' : 'false'}</td> : null}
 
                         {this.state.baseFilters !== 'cepIni' ? <td>{profissionalAreaAtuacaoNew.cepIni}</td> : null}
 

@@ -15,8 +15,8 @@ export default class Periodo extends BaseEntity {
   @Column({ name: 'PERIODO', length: 40 })
   periodo: string;
 
-  @Column({ type: 'integer', name: 'ATIVO' })
-  ativo: number;
+  @Column({ type: 'boolean', name: 'ATIVO' })
+  ativo: boolean;
 
   @OneToMany(
     type => Atendimento,

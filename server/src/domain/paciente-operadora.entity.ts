@@ -15,8 +15,8 @@ export default class PacienteOperadora extends BaseEntity {
   @Column({ name: 'REGISTRO', length: 100 })
   registro: string;
 
-  @Column({ type: 'integer', name: 'ATIVO' })
-  ativo: number;
+  @Column({ type: 'boolean', name: 'ATIVO' })
+  ativo: boolean;
 
   @ManyToOne(type => Paciente)
   @JoinColumn({ name: 'ID_PACIENTE', referencedColumnName: 'id' })

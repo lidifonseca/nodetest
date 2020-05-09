@@ -14,8 +14,8 @@ export default class TipoUsuario extends BaseEntity {
   @Column({ name: 'TIPO_USUARIO', length: 30 })
   tipoUsuario: string;
 
-  @Column({ type: 'integer', name: 'ATIVO' })
-  ativo: number;
+  @Column({ type: 'boolean', name: 'ATIVO' })
+  ativo: boolean;
 
   @OneToMany(
     type => Usuario,

@@ -187,10 +187,10 @@ export class ImagemProntuario extends React.Component<IImagemProntuarioProps, II
                       {this.state.baseFilters !== 'ativo' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="ativoLabel" for="imagem-prontuario-ativo">
+                            <Label id="ativoLabel" check>
+                              <AvInput id="imagem-prontuario-ativo" type="checkbox" className="form-control" name="ativo" />
                               <Translate contentKey="generadorApp.imagemProntuario.ativo">Ativo</Translate>
                             </Label>
-                            <AvInput type="string" name="ativo" id="imagem-prontuario-ativo" value={this.state.ativo} />
                           </Row>
                         </Col>
                       ) : null}
@@ -275,7 +275,7 @@ export class ImagemProntuario extends React.Component<IImagemProntuarioProps, II
 
                         {this.state.baseFilters !== 'imagem' ? <td>{imagemProntuario.imagem}</td> : null}
 
-                        {this.state.baseFilters !== 'ativo' ? <td>{imagemProntuario.ativo}</td> : null}
+                        {this.state.baseFilters !== 'ativo' ? <td>{imagemProntuario.ativo ? 'true' : 'false'}</td> : null}
 
                         {this.state.baseFilters !== 'diretorio' ? <td>{imagemProntuario.diretorio}</td> : null}
 

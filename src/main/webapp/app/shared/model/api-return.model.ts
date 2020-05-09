@@ -4,7 +4,9 @@ export interface IApiReturn {
   apiReturn?: string;
   apiType?: string;
   obs?: string;
-  ativo?: number;
+  ativo?: boolean;
 }
 
-export const defaultValue: Readonly<IApiReturn> = {};
+export const defaultValue: Readonly<IApiReturn> = {
+  ativo: false
+};

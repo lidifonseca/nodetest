@@ -21,8 +21,8 @@ export default class PacienteProntuario extends BaseEntity {
   @Column({ name: 'RESULTADO' })
   resultado: string;
 
-  @Column({ type: 'integer', name: 'ATIVO', nullable: false })
-  ativo: number;
+  @Column({ type: 'boolean', name: 'ATIVO', nullable: false })
+  ativo: boolean;
 
   @Column({ type: 'integer', name: 'ID_ESPECIALIDADE' })
   idEspecialidade: number;

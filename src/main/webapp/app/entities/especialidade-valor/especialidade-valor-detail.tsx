@@ -94,7 +94,7 @@ export class EspecialidadeValorDetail extends React.Component<IEspecialidadeValo
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{especialidadeValorEntity.ativo}</dd>
+                        <dd>{especialidadeValorEntity.ativo ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>

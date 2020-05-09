@@ -57,36 +57,6 @@ export class PadDetail extends React.Component<IPadDetailProps, IPadState> {
                     <Row>
                       <Col md="3">
                         <dt>
-                          <span id="idOperadora">
-                            <Translate contentKey="generadorApp.pad.idOperadora">Id Operadora</Translate>
-                          </span>
-                        </dt>
-                      </Col>
-                      <Col md="9">
-                        <dd>{padEntity.idOperadora}</dd>
-                      </Col>
-                    </Row>
-                  </Col>
-
-                  <Col md="12">
-                    <Row>
-                      <Col md="3">
-                        <dt>
-                          <span id="idFranquia">
-                            <Translate contentKey="generadorApp.pad.idFranquia">Id Franquia</Translate>
-                          </span>
-                        </dt>
-                      </Col>
-                      <Col md="9">
-                        <dd>{padEntity.idFranquia}</dd>
-                      </Col>
-                    </Row>
-                  </Col>
-
-                  <Col md="12">
-                    <Row>
-                      <Col md="3">
-                        <dt>
                           <span id="nroPad">
                             <Translate contentKey="generadorApp.pad.nroPad">Nro Pad</Translate>
                           </span>
@@ -159,7 +129,7 @@ export class PadDetail extends React.Component<IPadDetailProps, IPadState> {
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{padEntity.ativo}</dd>
+                        <dd>{padEntity.ativo ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>
@@ -188,6 +158,32 @@ export class PadDetail extends React.Component<IPadDetailProps, IPadState> {
                       </Col>
                       <Col md="9">
                         <dd>{padEntity.unidade ? padEntity.unidade.id : ''}</dd>
+                      </Col>
+                    </Row>
+                  </Col>
+
+                  <Col md="12">
+                    <Row>
+                      <Col md="3">
+                        <dt>
+                          <Translate contentKey="generadorApp.pad.operadora">Operadora</Translate>
+                        </dt>
+                      </Col>
+                      <Col md="9">
+                        <dd>{padEntity.operadora ? padEntity.operadora.id : ''}</dd>
+                      </Col>
+                    </Row>
+                  </Col>
+
+                  <Col md="12">
+                    <Row>
+                      <Col md="3">
+                        <dt>
+                          <Translate contentKey="generadorApp.pad.franquia">Franquia</Translate>
+                        </dt>
+                      </Col>
+                      <Col md="9">
+                        <dd>{padEntity.franquia ? padEntity.franquia.id : ''}</dd>
                       </Col>
                     </Row>
                   </Col>

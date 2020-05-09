@@ -15,8 +15,8 @@ export default class PacienteDiagnostico extends BaseEntity {
   @Column({ name: 'OBSERVACAO', length: 255 })
   observacao: string;
 
-  @Column({ type: 'integer', name: 'ATIVO' })
-  ativo: number;
+  @Column({ type: 'boolean', name: 'ATIVO' })
+  ativo: boolean;
 
   @Column({ type: 'boolean', name: 'CID_PRIMARIO' })
   cidPrimario: boolean;

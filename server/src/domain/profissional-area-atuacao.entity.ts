@@ -18,8 +18,8 @@ export default class ProfissionalAreaAtuacao extends BaseEntity {
   @Column({ name: 'CEP_FIM', length: 10 })
   cepFim: string;
 
-  @Column({ type: 'integer', name: 'ATIVO' })
-  ativo: number;
+  @Column({ type: 'boolean', name: 'ATIVO' })
+  ativo: boolean;
 
   @Column({ name: 'CEP_INI', length: 45 })
   cepIni: string;

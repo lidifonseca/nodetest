@@ -14,8 +14,8 @@ export default class CategoriaContrato extends BaseEntity {
 
   @Column({ name: 'CONTRATO_CONTENT_TYPE' })
   contratoContentType: string;
-  @Column({ type: 'integer', name: 'ATIVO' })
-  ativo: number;
+  @Column({ type: 'boolean', name: 'ATIVO' })
+  ativo: boolean;
 
   @ManyToOne(type => Categoria)
   @JoinColumn({ name: 'ID_CATEGORIA', referencedColumnName: 'id' })

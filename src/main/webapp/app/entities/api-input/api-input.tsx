@@ -214,10 +214,10 @@ export class ApiInput extends React.Component<IApiInputProps, IApiInputState> {
                       {this.state.baseFilters !== 'ativo' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="ativoLabel" for="api-input-ativo">
+                            <Label id="ativoLabel" check>
+                              <AvInput id="api-input-ativo" type="checkbox" className="form-control" name="ativo" />
                               <Translate contentKey="generadorApp.apiInput.ativo">Ativo</Translate>
                             </Label>
-                            <AvInput type="string" name="ativo" id="api-input-ativo" value={this.state.ativo} />
                           </Row>
                         </Col>
                       ) : null}
@@ -300,7 +300,7 @@ export class ApiInput extends React.Component<IApiInputProps, IApiInputState> {
 
                         {this.state.baseFilters !== 'obs' ? <td>{apiInput.obs}</td> : null}
 
-                        {this.state.baseFilters !== 'ativo' ? <td>{apiInput.ativo}</td> : null}
+                        {this.state.baseFilters !== 'ativo' ? <td>{apiInput.ativo ? 'true' : 'false'}</td> : null}
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">

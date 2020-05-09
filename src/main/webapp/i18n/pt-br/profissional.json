@@ -1,7 +1,15 @@
 {
   "generadorApp": {
     "profissional": {
-      "listButtons": {},
+      "listButtons": {
+        "detalhes": "Detalhes",
+        "RelatoriodeInformacoes": "RelatóriodeInformações",
+        "edit": "Editar",
+        "Status": "Status",
+        "Arquivos": "Arquivos",
+        "AlterarSenha": "AlterarSenha",
+        "delete": "Excluir"
+      },
       "viewButtons": {},
       "dropdown_btn": "Actions",
       "home": {
@@ -65,6 +73,8 @@
       "atendimentoAssinaturas": "Atendimento Assinaturas",
       "unidade_empty": "Sem Unidade",
       "unidade": "Unidade",
+      "especialidade_empty": "Sem Especialidade",
+      "especialidade": "Especialidade",
       "help": {}
     }
   }

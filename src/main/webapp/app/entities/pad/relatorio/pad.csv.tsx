@@ -16,6 +16,10 @@ import {
   UncontrolledCollapse,
   CardHeader,
   CardBody,
+  Dropdown,
+  DropdownToggle,
+  DropdownMenu,
+  DropdownItem,
   Modal,
   ModalHeader,
   ModalBody,
@@ -45,6 +49,10 @@ import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
 import { IUnidadeEasy } from 'app/shared/model/unidade-easy.model';
 import { getEntities as getUnidadeEasies } from 'app/entities/unidade-easy/unidade-easy.reducer';
+import { IOperadora } from 'app/shared/model/operadora.model';
+import { getEntities as getOperadoras } from 'app/entities/operadora/operadora.reducer';
+import { IFranquia } from 'app/shared/model/franquia.model';
+import { getEntities as getFranquias } from 'app/entities/franquia/franquia.reducer';
 import { IPaciente } from 'app/shared/model/paciente.model';
 import { getEntities as getPacientes } from 'app/entities/paciente/paciente.reducer';
 
@@ -70,14 +78,14 @@ export class Pad extends React.Component<IPadProps, IPadState> {
     this.getEntities();
 
     this.props.getUnidadeEasies();
+    this.props.getOperadoras();
+    this.props.getFranquias();
     this.props.getPacientes();
   }
 
   cancelCourse = () => {
     this.setState(
       {
-        idOperadora: '',
-        idFranquia: '',
         nroPad: '',
         dataInicio: '',
         dataFim: '',
@@ -87,6 +95,8 @@ export class Pad extends React.Component<IPadProps, IPadState> {
         padCid: '',
         padItem: '',
         unidade: '',
+        operadora: '',
+        franquia: '',
         paciente: ''
       },
       () => this.sortEntities()
@@ -132,12 +142,6 @@ export class Pad extends React.Component<IPadProps, IPadState> {
       ',' +
       this.state.order +
       '&' +
-      'idOperadora=' +
-      this.state.idOperadora +
-      '&' +
-      'idFranquia=' +
-      this.state.idFranquia +
-      '&' +
       'nroPad=' +
       this.state.nroPad +
       '&' +
@@ -165,6 +169,12 @@ export class Pad extends React.Component<IPadProps, IPadState> {
       'unidade=' +
       this.state.unidade +
       '&' +
+      'operadora=' +
+      this.state.operadora +
+      '&' +
+      'franquia=' +
+      this.state.franquia +
+      '&' +
       'paciente=' +
       this.state.paciente +
       '&' +
@@ -176,8 +186,6 @@ export class Pad extends React.Component<IPadProps, IPadState> {
 
   getEntities = () => {
     const {
-      idOperadora,
-      idFranquia,
       nroPad,
       dataInicio,
       dataFim,
@@ -187,6 +195,8 @@ export class Pad extends React.Component<IPadProps, IPadState> {
       padCid,
       padItem,
       unidade,
+      operadora,
+      franquia,
       paciente,
       activePage,
       itemsPerPage,
@@ -194,8 +204,6 @@ export class Pad extends React.Component<IPadProps, IPadState> {
       order
     } = this.state;
     this.props.getEntitiesExport(
-      idOperadora,
-      idFranquia,
       nroPad,
       dataInicio,
       dataFim,
@@ -205,6 +213,8 @@ export class Pad extends React.Component<IPadProps, IPadState> {
       padCid,
       padItem,
       unidade,
+      operadora,
+      franquia,
       paciente,
       activePage - 1,
       itemsPerPage,
@@ -259,6 +269,8 @@ export class Pad extends React.Component<IPadProps, IPadState> {
 
 const mapStateToProps = ({ pad, ...storeState }: IRootState) => ({
   unidadeEasies: storeState.unidadeEasy.entities,
+  operadoras: storeState.operadora.entities,
+  franquias: storeState.franquia.entities,
   pacientes: storeState.paciente.entities,
   padList: pad.entities,
   totalItems: pad.totalItems
@@ -266,6 +278,8 @@ const mapStateToProps = ({ pad, ...storeState }: IRootState) => ({
 
 const mapDispatchToProps = {
   getUnidadeEasies,
+  getOperadoras,
+  getFranquias,
   getPacientes,
   getEntitiesExport
 };

@@ -126,7 +126,7 @@ export class PacienteDadosCartaoDetail extends React.Component<IPacienteDadosCar
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{pacienteDadosCartaoEntity.ativo}</dd>
+                        <dd>{pacienteDadosCartaoEntity.ativo ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>

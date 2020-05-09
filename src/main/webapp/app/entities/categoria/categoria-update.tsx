@@ -315,9 +315,7 @@ export class CategoriaUpdate extends React.Component<ICategoriaUpdateProps, ICat
                                     className={'css-select-control'}
                                     value={
                                       unidadeEasies
-                                        ? unidadeEasies.map(p =>
-                                            this.state.categoriaEntity.unidade === p.id ? { value: p.id, label: p.id } : null
-                                          )
+                                        ? unidadeEasies.map(p => (categoriaEntity.unidade === p.id ? { value: p.id, label: p.id } : null))
                                         : null
                                     }
                                     options={

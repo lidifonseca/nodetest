@@ -196,13 +196,11 @@ export class UsuarioStatusAtualUpdate extends React.Component<IUsuarioStatusAtua
                           <Col md="ativo">
                             <AvGroup>
                               <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="ativoLabel" for="usuario-status-atual-ativo">
+                                <Col md="12">
+                                  <Label className="mt-2" id="ativoLabel" check>
+                                    <AvInput id="usuario-status-atual-ativo" type="checkbox" className="form-control" name="ativo" />
                                     <Translate contentKey="generadorApp.usuarioStatusAtual.ativo">Ativo</Translate>
                                   </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField id="usuario-status-atual-ativo" type="string" className="form-control" name="ativo" />
                                 </Col>
                               </Row>
                             </AvGroup>

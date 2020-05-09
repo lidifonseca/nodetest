@@ -33,8 +33,8 @@ export default class EspecialidadeOperadora extends BaseEntity {
   @Column({ type: 'float', name: 'DESCONTO_VENDA' })
   descontoVenda: number;
 
-  @Column({ type: 'integer', name: 'ATIVO' })
-  ativo: number;
+  @Column({ type: 'boolean', name: 'ATIVO' })
+  ativo: boolean;
 
   @ManyToOne(type => Operadora)
   @JoinColumn({ name: 'ID_OPERADORA', referencedColumnName: 'id' })

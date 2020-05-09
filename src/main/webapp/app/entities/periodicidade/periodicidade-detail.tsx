@@ -78,7 +78,7 @@ export class PeriodicidadeDetail extends React.Component<IPeriodicidadeDetailPro
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{periodicidadeEntity.ativo}</dd>
+                        <dd>{periodicidadeEntity.ativo ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>

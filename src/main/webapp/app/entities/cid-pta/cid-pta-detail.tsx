@@ -108,7 +108,7 @@ export class CidPtaDetail extends React.Component<ICidPtaDetailProps, ICidPtaSta
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{cidPtaEntity.ativo}</dd>
+                        <dd>{cidPtaEntity.ativo ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>

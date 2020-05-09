@@ -3,7 +3,9 @@ export interface IProfissionalPush {
   idProfissional?: string;
   idFranquia?: string;
   mensagem?: string;
-  ativo?: number;
+  ativo?: boolean;
 }
 
-export const defaultValue: Readonly<IProfissionalPush> = {};
+export const defaultValue: Readonly<IProfissionalPush> = {
+  ativo: false
+};

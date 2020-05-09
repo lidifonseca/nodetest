@@ -35,9 +35,11 @@ export interface IProfissionalNew {
   origemCadastro?: string;
   obs?: any;
   chavePrivada?: string;
-  ativo?: number;
+  ativo?: boolean;
   unidadeRazaoSocial?: string;
   unidade?: string | any;
 }
 
-export const defaultValue: Readonly<IProfissionalNew> = {};
+export const defaultValue: Readonly<IProfissionalNew> = {
+  ativo: false
+};

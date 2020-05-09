@@ -78,7 +78,7 @@ export class PeriodoDetail extends React.Component<IPeriodoDetailProps, IPeriodo
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{periodoEntity.ativo}</dd>
+                        <dd>{periodoEntity.ativo ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>

@@ -232,7 +232,7 @@
         },
         {
             "fieldName": "ativo",
-            "fieldType": "Integer"
+            "fieldType": "Boolean"
         },
         {
             "fieldName": "senhaOriginal",
@@ -278,6 +278,14 @@
             "otherEntityRelationshipName": "profissional",
             "relationshipName": "unidade",
             "otherEntityField": "razaoSocial"
+        },
+        {
+            "relationshipType": "many-to-many",
+            "otherEntityName": "especialidade",
+            "otherEntityRelationshipName": "profissional",
+            "relationshipName": "especialidade",
+            "otherEntityField": "especialidade",
+            "ownerSide": true
         }
     ],
     "changelogDate": "20200508233100",
@@ -290,5 +298,6 @@
     "readOnly": false,
     "embedded": false,
     "clientRootFolder": "",
-    "applications": "*"
+    "applications": "*",
+    "javadoc": "@listTableLayout nome registro cep categoria especialidade ativo@@\\n@listFilterLayout\\nnome{Label:top,Size:6}\\nregistro{Label:top,Size:6}\\ncep{Label:top,Size:6}\\ncategoria{Label:top,Size:6}\\nespecialidade{Label:top,Size:6}\\nativo{Label:top,Size:6}\\n@@\\n@listButtons\\ndetalhes{inDropdown:true,tag:Link,to:`${match.url}/${profissional.id}`,color:info,size:sm,icon:eye,text:Detalhes}\\nRelatoriodeInformacoes{inDropdown:true,tag:Link,to:`${match.url}/${profissional.id}/delete`,color:info,size:sm,icon:file-text-o,text:RelatóriodeInformações}\\nedit{inDropdown:true,tag:Link,to:`${match.url}/${profissional.id}/edit`,color:info,size:sm,icon:pencil-alt,text:Editar}\\nStatus{inDropdown:true,tag:Link,to:`/profissional-status-atual?baseFilters=profissional&profissional=${profissional.id}`,color:info,size:sm,icon:upload,text:Status}\\nArquivos{inDropdown:true,tag:Link,to:`/profissional-arquivo?baseFilters=profissional&profissional=${profissional.id}`,color:info,size:sm,icon:upload,text:Arquivos}\\nAlterarSenha{inDropdown:true,tag:Link,to:`${match.url}/${profissional.id}/delete`,color:info,size:sm,icon:refresh,text:AlterarSenha}\\ndelete{inDropdown:true,tag:Link,to:`${match.url}/${profissional.id}/delete`,color:info,size:sm,icon:trash,text:Excluir}\\n@@"
 }

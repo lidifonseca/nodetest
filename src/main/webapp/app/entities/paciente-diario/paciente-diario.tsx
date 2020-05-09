@@ -197,10 +197,10 @@ export class PacienteDiario extends React.Component<IPacienteDiarioProps, IPacie
                       {this.state.baseFilters !== 'ativo' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="ativoLabel" for="paciente-diario-ativo">
+                            <Label id="ativoLabel" check>
+                              <AvInput id="paciente-diario-ativo" type="checkbox" className="form-control" name="ativo" />
                               <Translate contentKey="generadorApp.pacienteDiario.ativo">Ativo</Translate>
                             </Label>
-                            <AvInput type="string" name="ativo" id="paciente-diario-ativo" value={this.state.ativo} />
                           </Row>
                         </Col>
                       ) : null}
@@ -337,7 +337,7 @@ export class PacienteDiario extends React.Component<IPacienteDiarioProps, IPacie
                           <td>{pacienteDiario.historico ? Buffer.from(pacienteDiario.historico).toString() : null}</td>
                         ) : null}
 
-                        {this.state.baseFilters !== 'ativo' ? <td>{pacienteDiario.ativo}</td> : null}
+                        {this.state.baseFilters !== 'ativo' ? <td>{pacienteDiario.ativo ? 'true' : 'false'}</td> : null}
 
                         {this.state.baseFilters !== 'paciente' ? (
                           <td>

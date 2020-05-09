@@ -21,8 +21,8 @@ export default class ApiInput extends BaseEntity {
   @Column({ name: 'OBS', length: 255 })
   obs: string;
 
-  @Column({ type: 'integer', name: 'ATIVO' })
-  ativo: number;
+  @Column({ type: 'boolean', name: 'ATIVO' })
+  ativo: boolean;
 
   // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
 }

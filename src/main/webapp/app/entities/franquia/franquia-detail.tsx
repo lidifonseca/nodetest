@@ -377,7 +377,7 @@ export class FranquiaDetail extends React.Component<IFranquiaDetailProps, IFranq
                             </dt>
                           </Col>
                           <Col md="9">
-                            <dd>{franquiaEntity.ativo}</dd>
+                            <dd>{franquiaEntity.ativo ? 'true' : 'false'}</dd>
                           </Col>
                         </Row>
                       </Col>

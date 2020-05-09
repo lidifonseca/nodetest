@@ -24,8 +24,8 @@ export default class PacienteDadosCartao extends BaseEntity {
   @Column({ type: 'integer', name: 'COD_ATIVACAO' })
   codAtivacao: number;
 
-  @Column({ type: 'integer', name: 'ATIVO' })
-  ativo: number;
+  @Column({ type: 'boolean', name: 'ATIVO' })
+  ativo: boolean;
 
   @OneToMany(
     type => PacientePedido,

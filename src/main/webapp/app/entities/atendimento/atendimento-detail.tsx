@@ -57,36 +57,6 @@ export class AtendimentoDetail extends React.Component<IAtendimentoDetailProps, 
                     <Row>
                       <Col md="3">
                         <dt>
-                          <span id="idFranquia">
-                            <Translate contentKey="generadorApp.atendimento.idFranquia">Id Franquia</Translate>
-                          </span>
-                        </dt>
-                      </Col>
-                      <Col md="9">
-                        <dd>{atendimentoEntity.idFranquia}</dd>
-                      </Col>
-                    </Row>
-                  </Col>
-
-                  <Col md="12">
-                    <Row>
-                      <Col md="3">
-                        <dt>
-                          <span id="idProfissional">
-                            <Translate contentKey="generadorApp.atendimento.idProfissional">Id Profissional</Translate>
-                          </span>
-                        </dt>
-                      </Col>
-                      <Col md="9">
-                        <dd>{atendimentoEntity.idProfissional}</dd>
-                      </Col>
-                    </Row>
-                  </Col>
-
-                  <Col md="12">
-                    <Row>
-                      <Col md="3">
-                        <dt>
                           <span id="cep">
                             <Translate contentKey="generadorApp.atendimento.cep">Cep</Translate>
                           </span>
@@ -459,7 +429,7 @@ export class AtendimentoDetail extends React.Component<IAtendimentoDetailProps, 
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{atendimentoEntity.ativo}</dd>
+                        <dd>{atendimentoEntity.ativo ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>
@@ -575,6 +545,19 @@ export class AtendimentoDetail extends React.Component<IAtendimentoDetailProps, 
                     <Row>
                       <Col md="3">
                         <dt>
+                          <Translate contentKey="generadorApp.atendimento.padItem">Pad Item</Translate>
+                        </dt>
+                      </Col>
+                      <Col md="9">
+                        <dd>{atendimentoEntity.padItem ? atendimentoEntity.padItem.id : ''}</dd>
+                      </Col>
+                    </Row>
+                  </Col>
+
+                  <Col md="12">
+                    <Row>
+                      <Col md="3">
+                        <dt>
                           <Translate contentKey="generadorApp.atendimento.paciente">Paciente</Translate>
                         </dt>
                       </Col>
@@ -601,11 +584,11 @@ export class AtendimentoDetail extends React.Component<IAtendimentoDetailProps, 
                     <Row>
                       <Col md="3">
                         <dt>
-                          <Translate contentKey="generadorApp.atendimento.especialidade">Especialidade</Translate>
+                          <Translate contentKey="generadorApp.atendimento.profissional">Profissional</Translate>
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{atendimentoEntity.especialidade ? atendimentoEntity.especialidade.id : ''}</dd>
+                        <dd>{atendimentoEntity.profissional ? atendimentoEntity.profissional.id : ''}</dd>
                       </Col>
                     </Row>
                   </Col>
@@ -614,11 +597,24 @@ export class AtendimentoDetail extends React.Component<IAtendimentoDetailProps, 
                     <Row>
                       <Col md="3">
                         <dt>
-                          <Translate contentKey="generadorApp.atendimento.padItem">Pad Item</Translate>
+                          <Translate contentKey="generadorApp.atendimento.franquia">Franquia</Translate>
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{atendimentoEntity.padItem ? atendimentoEntity.padItem.id : ''}</dd>
+                        <dd>{atendimentoEntity.franquia ? atendimentoEntity.franquia.id : ''}</dd>
+                      </Col>
+                    </Row>
+                  </Col>
+
+                  <Col md="12">
+                    <Row>
+                      <Col md="3">
+                        <dt>
+                          <Translate contentKey="generadorApp.atendimento.especialidade">Especialidade</Translate>
+                        </dt>
+                      </Col>
+                      <Col md="9">
+                        <dd>{atendimentoEntity.especialidade ? atendimentoEntity.especialidade.id : ''}</dd>
                       </Col>
                     </Row>
                   </Col>

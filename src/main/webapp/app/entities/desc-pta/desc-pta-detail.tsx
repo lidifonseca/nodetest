@@ -93,7 +93,7 @@ export class DescPtaDetail extends React.Component<IDescPtaDetailProps, IDescPta
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{descPtaEntity.ativo}</dd>
+                        <dd>{descPtaEntity.ativo ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>

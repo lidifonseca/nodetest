@@ -94,7 +94,7 @@ export class MotivoInternacaoDetail extends React.Component<IMotivoInternacaoDet
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{motivoInternacaoEntity.ativo}</dd>
+                        <dd>{motivoInternacaoEntity.ativo ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>

@@ -209,13 +209,11 @@ export class StatusPadItemMetaUpdate extends React.Component<IStatusPadItemMetaU
                           <Col md="ativo">
                             <AvGroup>
                               <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="ativoLabel" for="status-pad-item-meta-ativo">
+                                <Col md="12">
+                                  <Label className="mt-2" id="ativoLabel" check>
+                                    <AvInput id="status-pad-item-meta-ativo" type="checkbox" className="form-control" name="ativo" />
                                     <Translate contentKey="generadorApp.statusPadItemMeta.ativo">Ativo</Translate>
                                   </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField id="status-pad-item-meta-ativo" type="string" className="form-control" name="ativo" />
                                 </Col>
                               </Row>
                             </AvGroup>

@@ -15,8 +15,8 @@ export default class ProfissionalArquivo extends BaseEntity {
   @Column({ name: 'ARQUIVO', length: 100 })
   arquivo: string;
 
-  @Column({ type: 'integer', name: 'ATIVO' })
-  ativo: number;
+  @Column({ type: 'boolean', name: 'ATIVO' })
+  ativo: boolean;
 
   // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
 }

@@ -19,7 +19,7 @@
         },
         {
             "fieldName": "ativo",
-            "fieldType": "Integer",
+            "fieldType": "Boolean",
             "fieldValidateRules": [
                 "required"
             ]

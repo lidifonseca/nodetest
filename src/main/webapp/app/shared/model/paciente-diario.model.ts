@@ -5,9 +5,11 @@ export interface IPacienteDiario {
   id?: string;
   idOperadora?: number;
   historico?: any;
-  ativo?: number;
+  ativo?: boolean;
   paciente?: string | any;
   usuario?: string | any;
 }
 
-export const defaultValue: Readonly<IPacienteDiario> = {};
+export const defaultValue: Readonly<IPacienteDiario> = {
+  ativo: false
+};

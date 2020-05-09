@@ -2,8 +2,10 @@ export interface IImagemProntuario {
   id?: string;
   idProntuario?: string;
   imagem?: string;
-  ativo?: number;
+  ativo?: boolean;
   diretorio?: string;
 }
 
-export const defaultValue: Readonly<IImagemProntuario> = {};
+export const defaultValue: Readonly<IImagemProntuario> = {
+  ativo: false
+};

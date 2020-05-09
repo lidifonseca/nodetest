@@ -21,10 +21,12 @@ export interface IFranquia {
   cidade?: string;
   uf?: string;
   observacao?: string;
-  ativo?: number;
+  ativo?: boolean;
   franquiaAreaAtuacaos?: IFranquiaAreaAtuacao[];
   franquiaStatusAtuals?: IFranquiaStatusAtual[];
   franquiaUsuarios?: IFranquiaUsuario[];
 }
 
-export const defaultValue: Readonly<IFranquia> = {};
+export const defaultValue: Readonly<IFranquia> = {
+  ativo: false
+};

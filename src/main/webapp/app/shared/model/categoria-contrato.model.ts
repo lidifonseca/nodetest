@@ -5,8 +5,10 @@ export interface ICategoriaContrato {
   contratoContentType?: string;
   contratoBase64?: string;
   contrato?: any;
-  ativo?: number;
+  ativo?: boolean;
   categoria?: string | any;
 }
 
-export const defaultValue: Readonly<ICategoriaContrato> = {};
+export const defaultValue: Readonly<ICategoriaContrato> = {
+  ativo: false
+};

@@ -1029,10 +1029,10 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
                       {this.state.baseFilters !== 'verAtendimento' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="verAtendimentoLabel" for="usuario-verAtendimento">
+                            <Label id="verAtendimentoLabel" check>
+                              <AvInput id="usuario-verAtendimento" type="checkbox" className="form-control" name="verAtendimento" />
                               <Translate contentKey="generadorApp.usuario.verAtendimento">Ver Atendimento</Translate>
                             </Label>
-                            <AvInput type="string" name="verAtendimento" id="usuario-verAtendimento" value={this.state.verAtendimento} />
                           </Row>
                         </Col>
                       ) : null}
@@ -1040,10 +1040,10 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
                       {this.state.baseFilters !== 'cadAtendimento' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="cadAtendimentoLabel" for="usuario-cadAtendimento">
+                            <Label id="cadAtendimentoLabel" check>
+                              <AvInput id="usuario-cadAtendimento" type="checkbox" className="form-control" name="cadAtendimento" />
                               <Translate contentKey="generadorApp.usuario.cadAtendimento">Cad Atendimento</Translate>
                             </Label>
-                            <AvInput type="string" name="cadAtendimento" id="usuario-cadAtendimento" value={this.state.cadAtendimento} />
                           </Row>
                         </Col>
                       ) : null}
@@ -1051,10 +1051,10 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
                       {this.state.baseFilters !== 'ediAtendimento' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="ediAtendimentoLabel" for="usuario-ediAtendimento">
+                            <Label id="ediAtendimentoLabel" check>
+                              <AvInput id="usuario-ediAtendimento" type="checkbox" className="form-control" name="ediAtendimento" />
                               <Translate contentKey="generadorApp.usuario.ediAtendimento">Edi Atendimento</Translate>
                             </Label>
-                            <AvInput type="string" name="ediAtendimento" id="usuario-ediAtendimento" value={this.state.ediAtendimento} />
                           </Row>
                         </Col>
                       ) : null}
@@ -1062,15 +1062,15 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
                       {this.state.baseFilters !== 'baixaManualAtendimento' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="baixaManualAtendimentoLabel" for="usuario-baixaManualAtendimento">
+                            <Label id="baixaManualAtendimentoLabel" check>
+                              <AvInput
+                                id="usuario-baixaManualAtendimento"
+                                type="checkbox"
+                                className="form-control"
+                                name="baixaManualAtendimento"
+                              />
                               <Translate contentKey="generadorApp.usuario.baixaManualAtendimento">Baixa Manual Atendimento</Translate>
                             </Label>
-                            <AvInput
-                              type="string"
-                              name="baixaManualAtendimento"
-                              id="usuario-baixaManualAtendimento"
-                              value={this.state.baixaManualAtendimento}
-                            />
                           </Row>
                         </Col>
                       ) : null}
@@ -1078,10 +1078,10 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
                       {this.state.baseFilters !== 'delAtendimento' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="delAtendimentoLabel" for="usuario-delAtendimento">
+                            <Label id="delAtendimentoLabel" check>
+                              <AvInput id="usuario-delAtendimento" type="checkbox" className="form-control" name="delAtendimento" />
                               <Translate contentKey="generadorApp.usuario.delAtendimento">Del Atendimento</Translate>
                             </Label>
-                            <AvInput type="string" name="delAtendimento" id="usuario-delAtendimento" value={this.state.delAtendimento} />
                           </Row>
                         </Col>
                       ) : null}
@@ -1089,10 +1089,10 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
                       {this.state.baseFilters !== 'relAtendimento' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="relAtendimentoLabel" for="usuario-relAtendimento">
+                            <Label id="relAtendimentoLabel" check>
+                              <AvInput id="usuario-relAtendimento" type="checkbox" className="form-control" name="relAtendimento" />
                               <Translate contentKey="generadorApp.usuario.relAtendimento">Rel Atendimento</Translate>
                             </Label>
-                            <AvInput type="string" name="relAtendimento" id="usuario-relAtendimento" value={this.state.relAtendimento} />
                           </Row>
                         </Col>
                       ) : null}
@@ -1100,10 +1100,10 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
                       {this.state.baseFilters !== 'verPad' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="verPadLabel" for="usuario-verPad">
+                            <Label id="verPadLabel" check>
+                              <AvInput id="usuario-verPad" type="checkbox" className="form-control" name="verPad" />
                               <Translate contentKey="generadorApp.usuario.verPad">Ver Pad</Translate>
                             </Label>
-                            <AvInput type="string" name="verPad" id="usuario-verPad" value={this.state.verPad} />
                           </Row>
                         </Col>
                       ) : null}
@@ -1111,10 +1111,10 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
                       {this.state.baseFilters !== 'cadPad' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="cadPadLabel" for="usuario-cadPad">
+                            <Label id="cadPadLabel" check>
+                              <AvInput id="usuario-cadPad" type="checkbox" className="form-control" name="cadPad" />
                               <Translate contentKey="generadorApp.usuario.cadPad">Cad Pad</Translate>
                             </Label>
-                            <AvInput type="string" name="cadPad" id="usuario-cadPad" value={this.state.cadPad} />
                           </Row>
                         </Col>
                       ) : null}
@@ -1122,10 +1122,10 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
                       {this.state.baseFilters !== 'ediPad' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="ediPadLabel" for="usuario-ediPad">
+                            <Label id="ediPadLabel" check>
+                              <AvInput id="usuario-ediPad" type="checkbox" className="form-control" name="ediPad" />
                               <Translate contentKey="generadorApp.usuario.ediPad">Edi Pad</Translate>
                             </Label>
-                            <AvInput type="string" name="ediPad" id="usuario-ediPad" value={this.state.ediPad} />
                           </Row>
                         </Col>
                       ) : null}
@@ -1133,10 +1133,10 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
                       {this.state.baseFilters !== 'delPad' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="delPadLabel" for="usuario-delPad">
+                            <Label id="delPadLabel" check>
+                              <AvInput id="usuario-delPad" type="checkbox" className="form-control" name="delPad" />
                               <Translate contentKey="generadorApp.usuario.delPad">Del Pad</Translate>
                             </Label>
-                            <AvInput type="string" name="delPad" id="usuario-delPad" value={this.state.delPad} />
                           </Row>
                         </Col>
                       ) : null}
@@ -1144,10 +1144,10 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
                       {this.state.baseFilters !== 'relPad' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="relPadLabel" for="usuario-relPad">
+                            <Label id="relPadLabel" check>
+                              <AvInput id="usuario-relPad" type="checkbox" className="form-control" name="relPad" />
                               <Translate contentKey="generadorApp.usuario.relPad">Rel Pad</Translate>
                             </Label>
-                            <AvInput type="string" name="relPad" id="usuario-relPad" value={this.state.relPad} />
                           </Row>
                         </Col>
                       ) : null}
@@ -1155,10 +1155,10 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
                       {this.state.baseFilters !== 'verDiario' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="verDiarioLabel" for="usuario-verDiario">
+                            <Label id="verDiarioLabel" check>
+                              <AvInput id="usuario-verDiario" type="checkbox" className="form-control" name="verDiario" />
                               <Translate contentKey="generadorApp.usuario.verDiario">Ver Diario</Translate>
                             </Label>
-                            <AvInput type="string" name="verDiario" id="usuario-verDiario" value={this.state.verDiario} />
                           </Row>
                         </Col>
                       ) : null}
@@ -1166,10 +1166,10 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
                       {this.state.baseFilters !== 'cadDiario' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="cadDiarioLabel" for="usuario-cadDiario">
+                            <Label id="cadDiarioLabel" check>
+                              <AvInput id="usuario-cadDiario" type="checkbox" className="form-control" name="cadDiario" />
                               <Translate contentKey="generadorApp.usuario.cadDiario">Cad Diario</Translate>
                             </Label>
-                            <AvInput type="string" name="cadDiario" id="usuario-cadDiario" value={this.state.cadDiario} />
                           </Row>
                         </Col>
                       ) : null}
@@ -1177,10 +1177,10 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
                       {this.state.baseFilters !== 'ediDiario' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="ediDiarioLabel" for="usuario-ediDiario">
+                            <Label id="ediDiarioLabel" check>
+                              <AvInput id="usuario-ediDiario" type="checkbox" className="form-control" name="ediDiario" />
                               <Translate contentKey="generadorApp.usuario.ediDiario">Edi Diario</Translate>
                             </Label>
-                            <AvInput type="string" name="ediDiario" id="usuario-ediDiario" value={this.state.ediDiario} />
                           </Row>
                         </Col>
                       ) : null}
@@ -1188,10 +1188,10 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
                       {this.state.baseFilters !== 'delDiario' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="delDiarioLabel" for="usuario-delDiario">
+                            <Label id="delDiarioLabel" check>
+                              <AvInput id="usuario-delDiario" type="checkbox" className="form-control" name="delDiario" />
                               <Translate contentKey="generadorApp.usuario.delDiario">Del Diario</Translate>
                             </Label>
-                            <AvInput type="string" name="delDiario" id="usuario-delDiario" value={this.state.delDiario} />
                           </Row>
                         </Col>
                       ) : null}
@@ -1199,10 +1199,10 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
                       {this.state.baseFilters !== 'relDiario' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="relDiarioLabel" for="usuario-relDiario">
+                            <Label id="relDiarioLabel" check>
+                              <AvInput id="usuario-relDiario" type="checkbox" className="form-control" name="relDiario" />
                               <Translate contentKey="generadorApp.usuario.relDiario">Rel Diario</Translate>
                             </Label>
-                            <AvInput type="string" name="relDiario" id="usuario-relDiario" value={this.state.relDiario} />
                           </Row>
                         </Col>
                       ) : null}
@@ -1210,10 +1210,10 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
                       {this.state.baseFilters !== 'verCategoria' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="verCategoriaLabel" for="usuario-verCategoria">
+                            <Label id="verCategoriaLabel" check>
+                              <AvInput id="usuario-verCategoria" type="checkbox" className="form-control" name="verCategoria" />
                               <Translate contentKey="generadorApp.usuario.verCategoria">Ver Categoria</Translate>
                             </Label>
-                            <AvInput type="string" name="verCategoria" id="usuario-verCategoria" value={this.state.verCategoria} />
                           </Row>
                         </Col>
                       ) : null}
@@ -1221,10 +1221,10 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
                       {this.state.baseFilters !== 'cadCategoria' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="cadCategoriaLabel" for="usuario-cadCategoria">
+                            <Label id="cadCategoriaLabel" check>
+                              <AvInput id="usuario-cadCategoria" type="checkbox" className="form-control" name="cadCategoria" />
                               <Translate contentKey="generadorApp.usuario.cadCategoria">Cad Categoria</Translate>
                             </Label>
-                            <AvInput type="string" name="cadCategoria" id="usuario-cadCategoria" value={this.state.cadCategoria} />
                           </Row>
                         </Col>
                       ) : null}
@@ -1232,10 +1232,10 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
                       {this.state.baseFilters !== 'ediCategoria' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="ediCategoriaLabel" for="usuario-ediCategoria">
+                            <Label id="ediCategoriaLabel" check>
+                              <AvInput id="usuario-ediCategoria" type="checkbox" className="form-control" name="ediCategoria" />
                               <Translate contentKey="generadorApp.usuario.ediCategoria">Edi Categoria</Translate>
                             </Label>
-                            <AvInput type="string" name="ediCategoria" id="usuario-ediCategoria" value={this.state.ediCategoria} />
                           </Row>
                         </Col>
                       ) : null}
@@ -1243,10 +1243,10 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
                       {this.state.baseFilters !== 'delCategoria' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="delCategoriaLabel" for="usuario-delCategoria">
+                            <Label id="delCategoriaLabel" check>
+                              <AvInput id="usuario-delCategoria" type="checkbox" className="form-control" name="delCategoria" />
                               <Translate contentKey="generadorApp.usuario.delCategoria">Del Categoria</Translate>
                             </Label>
-                            <AvInput type="string" name="delCategoria" id="usuario-delCategoria" value={this.state.delCategoria} />
                           </Row>
                         </Col>
                       ) : null}
@@ -1254,15 +1254,10 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
                       {this.state.baseFilters !== 'verEspecialidade' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="verEspecialidadeLabel" for="usuario-verEspecialidade">
+                            <Label id="verEspecialidadeLabel" check>
+                              <AvInput id="usuario-verEspecialidade" type="checkbox" className="form-control" name="verEspecialidade" />
                               <Translate contentKey="generadorApp.usuario.verEspecialidade">Ver Especialidade</Translate>
                             </Label>
-                            <AvInput
-                              type="string"
-                              name="verEspecialidade"
-                              id="usuario-verEspecialidade"
-                              value={this.state.verEspecialidade}
-                            />
                           </Row>
                         </Col>
                       ) : null}
@@ -1270,15 +1265,10 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
                       {this.state.baseFilters !== 'cadEspecialidade' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="cadEspecialidadeLabel" for="usuario-cadEspecialidade">
+                            <Label id="cadEspecialidadeLabel" check>
+                              <AvInput id="usuario-cadEspecialidade" type="checkbox" className="form-control" name="cadEspecialidade" />
                               <Translate contentKey="generadorApp.usuario.cadEspecialidade">Cad Especialidade</Translate>
                             </Label>
-                            <AvInput
-                              type="string"
-                              name="cadEspecialidade"
-                              id="usuario-cadEspecialidade"
-                              value={this.state.cadEspecialidade}
-                            />
                           </Row>
                         </Col>
                       ) : null}
@@ -1286,15 +1276,10 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
                       {this.state.baseFilters !== 'ediEspecialidade' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="ediEspecialidadeLabel" for="usuario-ediEspecialidade">
+                            <Label id="ediEspecialidadeLabel" check>
+                              <AvInput id="usuario-ediEspecialidade" type="checkbox" className="form-control" name="ediEspecialidade" />
                               <Translate contentKey="generadorApp.usuario.ediEspecialidade">Edi Especialidade</Translate>
                             </Label>
-                            <AvInput
-                              type="string"
-                              name="ediEspecialidade"
-                              id="usuario-ediEspecialidade"
-                              value={this.state.ediEspecialidade}
-                            />
                           </Row>
                         </Col>
                       ) : null}
@@ -1302,15 +1287,10 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
                       {this.state.baseFilters !== 'delEspecialidade' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="delEspecialidadeLabel" for="usuario-delEspecialidade">
+                            <Label id="delEspecialidadeLabel" check>
+                              <AvInput id="usuario-delEspecialidade" type="checkbox" className="form-control" name="delEspecialidade" />
                               <Translate contentKey="generadorApp.usuario.delEspecialidade">Del Especialidade</Translate>
                             </Label>
-                            <AvInput
-                              type="string"
-                              name="delEspecialidade"
-                              id="usuario-delEspecialidade"
-                              value={this.state.delEspecialidade}
-                            />
                           </Row>
                         </Col>
                       ) : null}
@@ -1318,15 +1298,10 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
                       {this.state.baseFilters !== 'relEspecialidade' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="relEspecialidadeLabel" for="usuario-relEspecialidade">
+                            <Label id="relEspecialidadeLabel" check>
+                              <AvInput id="usuario-relEspecialidade" type="checkbox" className="form-control" name="relEspecialidade" />
                               <Translate contentKey="generadorApp.usuario.relEspecialidade">Rel Especialidade</Translate>
                             </Label>
-                            <AvInput
-                              type="string"
-                              name="relEspecialidade"
-                              id="usuario-relEspecialidade"
-                              value={this.state.relEspecialidade}
-                            />
                           </Row>
                         </Col>
                       ) : null}
@@ -1334,15 +1309,15 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
                       {this.state.baseFilters !== 'verEspecialidadeValor' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="verEspecialidadeValorLabel" for="usuario-verEspecialidadeValor">
+                            <Label id="verEspecialidadeValorLabel" check>
+                              <AvInput
+                                id="usuario-verEspecialidadeValor"
+                                type="checkbox"
+                                className="form-control"
+                                name="verEspecialidadeValor"
+                              />
                               <Translate contentKey="generadorApp.usuario.verEspecialidadeValor">Ver Especialidade Valor</Translate>
                             </Label>
-                            <AvInput
-                              type="string"
-                              name="verEspecialidadeValor"
-                              id="usuario-verEspecialidadeValor"
-                              value={this.state.verEspecialidadeValor}
-                            />
                           </Row>
                         </Col>
                       ) : null}
@@ -1350,15 +1325,15 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
                       {this.state.baseFilters !== 'cadEspecialidadeValor' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="cadEspecialidadeValorLabel" for="usuario-cadEspecialidadeValor">
+                            <Label id="cadEspecialidadeValorLabel" check>
+                              <AvInput
+                                id="usuario-cadEspecialidadeValor"
+                                type="checkbox"
+                                className="form-control"
+                                name="cadEspecialidadeValor"
+                              />
                               <Translate contentKey="generadorApp.usuario.cadEspecialidadeValor">Cad Especialidade Valor</Translate>
                             </Label>
-                            <AvInput
-                              type="string"
-                              name="cadEspecialidadeValor"
-                              id="usuario-cadEspecialidadeValor"
-                              value={this.state.cadEspecialidadeValor}
-                            />
                           </Row>
                         </Col>
                       ) : null}
@@ -1366,15 +1341,15 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
                       {this.state.baseFilters !== 'ediEspecialidadeValor' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="ediEspecialidadeValorLabel" for="usuario-ediEspecialidadeValor">
+                            <Label id="ediEspecialidadeValorLabel" check>
+                              <AvInput
+                                id="usuario-ediEspecialidadeValor"
+                                type="checkbox"
+                                className="form-control"
+                                name="ediEspecialidadeValor"
+                              />
                               <Translate contentKey="generadorApp.usuario.ediEspecialidadeValor">Edi Especialidade Valor</Translate>
                             </Label>
-                            <AvInput
-                              type="string"
-                              name="ediEspecialidadeValor"
-                              id="usuario-ediEspecialidadeValor"
-                              value={this.state.ediEspecialidadeValor}
-                            />
                           </Row>
                         </Col>
                       ) : null}
@@ -1382,15 +1357,15 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
                       {this.state.baseFilters !== 'delEspecialidadeValor' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="delEspecialidadeValorLabel" for="usuario-delEspecialidadeValor">
+                            <Label id="delEspecialidadeValorLabel" check>
+                              <AvInput
+                                id="usuario-delEspecialidadeValor"
+                                type="checkbox"
+                                className="form-control"
+                                name="delEspecialidadeValor"
+                              />
                               <Translate contentKey="generadorApp.usuario.delEspecialidadeValor">Del Especialidade Valor</Translate>
                             </Label>
-                            <AvInput
-                              type="string"
-                              name="delEspecialidadeValor"
-                              id="usuario-delEspecialidadeValor"
-                              value={this.state.delEspecialidadeValor}
-                            />
                           </Row>
                         </Col>
                       ) : null}
@@ -1398,15 +1373,15 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
                       {this.state.baseFilters !== 'relEspecialidadeValor' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="relEspecialidadeValorLabel" for="usuario-relEspecialidadeValor">
+                            <Label id="relEspecialidadeValorLabel" check>
+                              <AvInput
+                                id="usuario-relEspecialidadeValor"
+                                type="checkbox"
+                                className="form-control"
+                                name="relEspecialidadeValor"
+                              />
                               <Translate contentKey="generadorApp.usuario.relEspecialidadeValor">Rel Especialidade Valor</Translate>
                             </Label>
-                            <AvInput
-                              type="string"
-                              name="relEspecialidadeValor"
-                              id="usuario-relEspecialidadeValor"
-                              value={this.state.relEspecialidadeValor}
-                            />
                           </Row>
                         </Col>
                       ) : null}
@@ -1414,10 +1389,10 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
                       {this.state.baseFilters !== 'verOperadora' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="verOperadoraLabel" for="usuario-verOperadora">
+                            <Label id="verOperadoraLabel" check>
+                              <AvInput id="usuario-verOperadora" type="checkbox" className="form-control" name="verOperadora" />
                               <Translate contentKey="generadorApp.usuario.verOperadora">Ver Operadora</Translate>
                             </Label>
-                            <AvInput type="string" name="verOperadora" id="usuario-verOperadora" value={this.state.verOperadora} />
                           </Row>
                         </Col>
                       ) : null}
@@ -1425,10 +1400,10 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
                       {this.state.baseFilters !== 'cadOperadora' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="cadOperadoraLabel" for="usuario-cadOperadora">
+                            <Label id="cadOperadoraLabel" check>
+                              <AvInput id="usuario-cadOperadora" type="checkbox" className="form-control" name="cadOperadora" />
                               <Translate contentKey="generadorApp.usuario.cadOperadora">Cad Operadora</Translate>
                             </Label>
-                            <AvInput type="string" name="cadOperadora" id="usuario-cadOperadora" value={this.state.cadOperadora} />
                           </Row>
                         </Col>
                       ) : null}
@@ -1436,10 +1411,10 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
                       {this.state.baseFilters !== 'ediOperadora' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="ediOperadoraLabel" for="usuario-ediOperadora">
+                            <Label id="ediOperadoraLabel" check>
+                              <AvInput id="usuario-ediOperadora" type="checkbox" className="form-control" name="ediOperadora" />
                               <Translate contentKey="generadorApp.usuario.ediOperadora">Edi Operadora</Translate>
                             </Label>
-                            <AvInput type="string" name="ediOperadora" id="usuario-ediOperadora" value={this.state.ediOperadora} />
                           </Row>
                         </Col>
                       ) : null}
@@ -1447,10 +1422,10 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
                       {this.state.baseFilters !== 'delOperadora' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="delOperadoraLabel" for="usuario-delOperadora">
+                            <Label id="delOperadoraLabel" check>
+                              <AvInput id="usuario-delOperadora" type="checkbox" className="form-control" name="delOperadora" />
                               <Translate contentKey="generadorApp.usuario.delOperadora">Del Operadora</Translate>
                             </Label>
-                            <AvInput type="string" name="delOperadora" id="usuario-delOperadora" value={this.state.delOperadora} />
                           </Row>
                         </Col>
                       ) : null}
@@ -1458,10 +1433,10 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
                       {this.state.baseFilters !== 'verPaciente' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="verPacienteLabel" for="usuario-verPaciente">
+                            <Label id="verPacienteLabel" check>
+                              <AvInput id="usuario-verPaciente" type="checkbox" className="form-control" name="verPaciente" />
                               <Translate contentKey="generadorApp.usuario.verPaciente">Ver Paciente</Translate>
                             </Label>
-                            <AvInput type="string" name="verPaciente" id="usuario-verPaciente" value={this.state.verPaciente} />
                           </Row>
                         </Col>
                       ) : null}
@@ -1469,10 +1444,10 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
                       {this.state.baseFilters !== 'cadPaciente' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="cadPacienteLabel" for="usuario-cadPaciente">
+                            <Label id="cadPacienteLabel" check>
+                              <AvInput id="usuario-cadPaciente" type="checkbox" className="form-control" name="cadPaciente" />
                               <Translate contentKey="generadorApp.usuario.cadPaciente">Cad Paciente</Translate>
                             </Label>
-                            <AvInput type="string" name="cadPaciente" id="usuario-cadPaciente" value={this.state.cadPaciente} />
                           </Row>
                         </Col>
                       ) : null}
@@ -1480,10 +1455,10 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
                       {this.state.baseFilters !== 'ediPaciente' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="ediPacienteLabel" for="usuario-ediPaciente">
+                            <Label id="ediPacienteLabel" check>
+                              <AvInput id="usuario-ediPaciente" type="checkbox" className="form-control" name="ediPaciente" />
                               <Translate contentKey="generadorApp.usuario.ediPaciente">Edi Paciente</Translate>
                             </Label>
-                            <AvInput type="string" name="ediPaciente" id="usuario-ediPaciente" value={this.state.ediPaciente} />
                           </Row>
                         </Col>
                       ) : null}
@@ -1491,10 +1466,10 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
                       {this.state.baseFilters !== 'delPaciente' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="delPacienteLabel" for="usuario-delPaciente">
+                            <Label id="delPacienteLabel" check>
+                              <AvInput id="usuario-delPaciente" type="checkbox" className="form-control" name="delPaciente" />
                               <Translate contentKey="generadorApp.usuario.delPaciente">Del Paciente</Translate>
                             </Label>
-                            <AvInput type="string" name="delPaciente" id="usuario-delPaciente" value={this.state.delPaciente} />
                           </Row>
                         </Col>
                       ) : null}
@@ -1502,10 +1477,10 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
                       {this.state.baseFilters !== 'relPaciente' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="relPacienteLabel" for="usuario-relPaciente">
+                            <Label id="relPacienteLabel" check>
+                              <AvInput id="usuario-relPaciente" type="checkbox" className="form-control" name="relPaciente" />
                               <Translate contentKey="generadorApp.usuario.relPaciente">Rel Paciente</Translate>
                             </Label>
-                            <AvInput type="string" name="relPaciente" id="usuario-relPaciente" value={this.state.relPaciente} />
                           </Row>
                         </Col>
                       ) : null}
@@ -1513,10 +1488,10 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
                       {this.state.baseFilters !== 'verProfissional' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="verProfissionalLabel" for="usuario-verProfissional">
+                            <Label id="verProfissionalLabel" check>
+                              <AvInput id="usuario-verProfissional" type="checkbox" className="form-control" name="verProfissional" />
                               <Translate contentKey="generadorApp.usuario.verProfissional">Ver Profissional</Translate>
                             </Label>
-                            <AvInput type="string" name="verProfissional" id="usuario-verProfissional" value={this.state.verProfissional} />
                           </Row>
                         </Col>
                       ) : null}
@@ -1524,10 +1499,10 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
                       {this.state.baseFilters !== 'cadProfissional' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="cadProfissionalLabel" for="usuario-cadProfissional">
+                            <Label id="cadProfissionalLabel" check>
+                              <AvInput id="usuario-cadProfissional" type="checkbox" className="form-control" name="cadProfissional" />
                               <Translate contentKey="generadorApp.usuario.cadProfissional">Cad Profissional</Translate>
                             </Label>
-                            <AvInput type="string" name="cadProfissional" id="usuario-cadProfissional" value={this.state.cadProfissional} />
                           </Row>
                         </Col>
                       ) : null}
@@ -1535,10 +1510,10 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
                       {this.state.baseFilters !== 'ediProfissional' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="ediProfissionalLabel" for="usuario-ediProfissional">
+                            <Label id="ediProfissionalLabel" check>
+                              <AvInput id="usuario-ediProfissional" type="checkbox" className="form-control" name="ediProfissional" />
                               <Translate contentKey="generadorApp.usuario.ediProfissional">Edi Profissional</Translate>
                             </Label>
-                            <AvInput type="string" name="ediProfissional" id="usuario-ediProfissional" value={this.state.ediProfissional} />
                           </Row>
                         </Col>
                       ) : null}
@@ -1546,10 +1521,10 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
                       {this.state.baseFilters !== 'delProfissional' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="delProfissionalLabel" for="usuario-delProfissional">
+                            <Label id="delProfissionalLabel" check>
+                              <AvInput id="usuario-delProfissional" type="checkbox" className="form-control" name="delProfissional" />
                               <Translate contentKey="generadorApp.usuario.delProfissional">Del Profissional</Translate>
                             </Label>
-                            <AvInput type="string" name="delProfissional" id="usuario-delProfissional" value={this.state.delProfissional} />
                           </Row>
                         </Col>
                       ) : null}
@@ -1557,15 +1532,10 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
                       {this.state.baseFilters !== 'ativProfissional' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="ativProfissionalLabel" for="usuario-ativProfissional">
+                            <Label id="ativProfissionalLabel" check>
+                              <AvInput id="usuario-ativProfissional" type="checkbox" className="form-control" name="ativProfissional" />
                               <Translate contentKey="generadorApp.usuario.ativProfissional">Ativ Profissional</Translate>
                             </Label>
-                            <AvInput
-                              type="string"
-                              name="ativProfissional"
-                              id="usuario-ativProfissional"
-                              value={this.state.ativProfissional}
-                            />
                           </Row>
                         </Col>
                       ) : null}
@@ -1573,10 +1543,10 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
                       {this.state.baseFilters !== 'relProfissional' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="relProfissionalLabel" for="usuario-relProfissional">
+                            <Label id="relProfissionalLabel" check>
+                              <AvInput id="usuario-relProfissional" type="checkbox" className="form-control" name="relProfissional" />
                               <Translate contentKey="generadorApp.usuario.relProfissional">Rel Profissional</Translate>
                             </Label>
-                            <AvInput type="string" name="relProfissional" id="usuario-relProfissional" value={this.state.relProfissional} />
                           </Row>
                         </Col>
                       ) : null}
@@ -1584,10 +1554,10 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
                       {this.state.baseFilters !== 'verPush' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="verPushLabel" for="usuario-verPush">
+                            <Label id="verPushLabel" check>
+                              <AvInput id="usuario-verPush" type="checkbox" className="form-control" name="verPush" />
                               <Translate contentKey="generadorApp.usuario.verPush">Ver Push</Translate>
                             </Label>
-                            <AvInput type="string" name="verPush" id="usuario-verPush" value={this.state.verPush} />
                           </Row>
                         </Col>
                       ) : null}
@@ -1595,10 +1565,10 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
                       {this.state.baseFilters !== 'cadPushPaciente' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="cadPushPacienteLabel" for="usuario-cadPushPaciente">
+                            <Label id="cadPushPacienteLabel" check>
+                              <AvInput id="usuario-cadPushPaciente" type="checkbox" className="form-control" name="cadPushPaciente" />
                               <Translate contentKey="generadorApp.usuario.cadPushPaciente">Cad Push Paciente</Translate>
                             </Label>
-                            <AvInput type="string" name="cadPushPaciente" id="usuario-cadPushPaciente" value={this.state.cadPushPaciente} />
                           </Row>
                         </Col>
                       ) : null}
@@ -1606,15 +1576,15 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
                       {this.state.baseFilters !== 'cadPushProfissional' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="cadPushProfissionalLabel" for="usuario-cadPushProfissional">
+                            <Label id="cadPushProfissionalLabel" check>
+                              <AvInput
+                                id="usuario-cadPushProfissional"
+                                type="checkbox"
+                                className="form-control"
+                                name="cadPushProfissional"
+                              />
                               <Translate contentKey="generadorApp.usuario.cadPushProfissional">Cad Push Profissional</Translate>
                             </Label>
-                            <AvInput
-                              type="string"
-                              name="cadPushProfissional"
-                              id="usuario-cadPushProfissional"
-                              value={this.state.cadPushProfissional}
-                            />
                           </Row>
                         </Col>
                       ) : null}
@@ -1622,15 +1592,10 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
                       {this.state.baseFilters !== 'verTermoPaciente' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="verTermoPacienteLabel" for="usuario-verTermoPaciente">
+                            <Label id="verTermoPacienteLabel" check>
+                              <AvInput id="usuario-verTermoPaciente" type="checkbox" className="form-control" name="verTermoPaciente" />
                               <Translate contentKey="generadorApp.usuario.verTermoPaciente">Ver Termo Paciente</Translate>
                             </Label>
-                            <AvInput
-                              type="string"
-                              name="verTermoPaciente"
-                              id="usuario-verTermoPaciente"
-                              value={this.state.verTermoPaciente}
-                            />
                           </Row>
                         </Col>
                       ) : null}
@@ -1638,15 +1603,10 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
                       {this.state.baseFilters !== 'ediTermoPaciente' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="ediTermoPacienteLabel" for="usuario-ediTermoPaciente">
+                            <Label id="ediTermoPacienteLabel" check>
+                              <AvInput id="usuario-ediTermoPaciente" type="checkbox" className="form-control" name="ediTermoPaciente" />
                               <Translate contentKey="generadorApp.usuario.ediTermoPaciente">Edi Termo Paciente</Translate>
                             </Label>
-                            <AvInput
-                              type="string"
-                              name="ediTermoPaciente"
-                              id="usuario-ediTermoPaciente"
-                              value={this.state.ediTermoPaciente}
-                            />
                           </Row>
                         </Col>
                       ) : null}
@@ -1654,15 +1614,15 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
                       {this.state.baseFilters !== 'verTermoProfissional' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="verTermoProfissionalLabel" for="usuario-verTermoProfissional">
+                            <Label id="verTermoProfissionalLabel" check>
+                              <AvInput
+                                id="usuario-verTermoProfissional"
+                                type="checkbox"
+                                className="form-control"
+                                name="verTermoProfissional"
+                              />
                               <Translate contentKey="generadorApp.usuario.verTermoProfissional">Ver Termo Profissional</Translate>
                             </Label>
-                            <AvInput
-                              type="string"
-                              name="verTermoProfissional"
-                              id="usuario-verTermoProfissional"
-                              value={this.state.verTermoProfissional}
-                            />
                           </Row>
                         </Col>
                       ) : null}
@@ -1670,15 +1630,15 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
                       {this.state.baseFilters !== 'ediTermoProfissional' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="ediTermoProfissionalLabel" for="usuario-ediTermoProfissional">
+                            <Label id="ediTermoProfissionalLabel" check>
+                              <AvInput
+                                id="usuario-ediTermoProfissional"
+                                type="checkbox"
+                                className="form-control"
+                                name="ediTermoProfissional"
+                              />
                               <Translate contentKey="generadorApp.usuario.ediTermoProfissional">Edi Termo Profissional</Translate>
                             </Label>
-                            <AvInput
-                              type="string"
-                              name="ediTermoProfissional"
-                              id="usuario-ediTermoProfissional"
-                              value={this.state.ediTermoProfissional}
-                            />
                           </Row>
                         </Col>
                       ) : null}
@@ -1686,10 +1646,10 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
                       {this.state.baseFilters !== 'verOutros' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="verOutrosLabel" for="usuario-verOutros">
+                            <Label id="verOutrosLabel" check>
+                              <AvInput id="usuario-verOutros" type="checkbox" className="form-control" name="verOutros" />
                               <Translate contentKey="generadorApp.usuario.verOutros">Ver Outros</Translate>
                             </Label>
-                            <AvInput type="string" name="verOutros" id="usuario-verOutros" value={this.state.verOutros} />
                           </Row>
                         </Col>
                       ) : null}
@@ -1697,10 +1657,10 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
                       {this.state.baseFilters !== 'cadOutros' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="cadOutrosLabel" for="usuario-cadOutros">
+                            <Label id="cadOutrosLabel" check>
+                              <AvInput id="usuario-cadOutros" type="checkbox" className="form-control" name="cadOutros" />
                               <Translate contentKey="generadorApp.usuario.cadOutros">Cad Outros</Translate>
                             </Label>
-                            <AvInput type="string" name="cadOutros" id="usuario-cadOutros" value={this.state.cadOutros} />
                           </Row>
                         </Col>
                       ) : null}
@@ -1708,10 +1668,10 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
                       {this.state.baseFilters !== 'ediOutros' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="ediOutrosLabel" for="usuario-ediOutros">
+                            <Label id="ediOutrosLabel" check>
+                              <AvInput id="usuario-ediOutros" type="checkbox" className="form-control" name="ediOutros" />
                               <Translate contentKey="generadorApp.usuario.ediOutros">Edi Outros</Translate>
                             </Label>
-                            <AvInput type="string" name="ediOutros" id="usuario-ediOutros" value={this.state.ediOutros} />
                           </Row>
                         </Col>
                       ) : null}
@@ -1719,10 +1679,10 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
                       {this.state.baseFilters !== 'delOutros' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="delOutrosLabel" for="usuario-delOutros">
+                            <Label id="delOutrosLabel" check>
+                              <AvInput id="usuario-delOutros" type="checkbox" className="form-control" name="delOutros" />
                               <Translate contentKey="generadorApp.usuario.delOutros">Del Outros</Translate>
                             </Label>
-                            <AvInput type="string" name="delOutros" id="usuario-delOutros" value={this.state.delOutros} />
                           </Row>
                         </Col>
                       ) : null}
@@ -1730,10 +1690,10 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
                       {this.state.baseFilters !== 'relOutros' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="relOutrosLabel" for="usuario-relOutros">
+                            <Label id="relOutrosLabel" check>
+                              <AvInput id="usuario-relOutros" type="checkbox" className="form-control" name="relOutros" />
                               <Translate contentKey="generadorApp.usuario.relOutros">Rel Outros</Translate>
                             </Label>
-                            <AvInput type="string" name="relOutros" id="usuario-relOutros" value={this.state.relOutros} />
                           </Row>
                         </Col>
                       ) : null}
@@ -1741,10 +1701,10 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
                       {this.state.baseFilters !== 'verUnidadeEasy' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="verUnidadeEasyLabel" for="usuario-verUnidadeEasy">
+                            <Label id="verUnidadeEasyLabel" check>
+                              <AvInput id="usuario-verUnidadeEasy" type="checkbox" className="form-control" name="verUnidadeEasy" />
                               <Translate contentKey="generadorApp.usuario.verUnidadeEasy">Ver Unidade Easy</Translate>
                             </Label>
-                            <AvInput type="string" name="verUnidadeEasy" id="usuario-verUnidadeEasy" value={this.state.verUnidadeEasy} />
                           </Row>
                         </Col>
                       ) : null}
@@ -1752,10 +1712,10 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
                       {this.state.baseFilters !== 'cadUnidadeEasy' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="cadUnidadeEasyLabel" for="usuario-cadUnidadeEasy">
+                            <Label id="cadUnidadeEasyLabel" check>
+                              <AvInput id="usuario-cadUnidadeEasy" type="checkbox" className="form-control" name="cadUnidadeEasy" />
                               <Translate contentKey="generadorApp.usuario.cadUnidadeEasy">Cad Unidade Easy</Translate>
                             </Label>
-                            <AvInput type="string" name="cadUnidadeEasy" id="usuario-cadUnidadeEasy" value={this.state.cadUnidadeEasy} />
                           </Row>
                         </Col>
                       ) : null}
@@ -1763,10 +1723,10 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
                       {this.state.baseFilters !== 'ediUnidadeEasy' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="ediUnidadeEasyLabel" for="usuario-ediUnidadeEasy">
+                            <Label id="ediUnidadeEasyLabel" check>
+                              <AvInput id="usuario-ediUnidadeEasy" type="checkbox" className="form-control" name="ediUnidadeEasy" />
                               <Translate contentKey="generadorApp.usuario.ediUnidadeEasy">Edi Unidade Easy</Translate>
                             </Label>
-                            <AvInput type="string" name="ediUnidadeEasy" id="usuario-ediUnidadeEasy" value={this.state.ediUnidadeEasy} />
                           </Row>
                         </Col>
                       ) : null}
@@ -1774,10 +1734,10 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
                       {this.state.baseFilters !== 'delUnidadeEasy' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="delUnidadeEasyLabel" for="usuario-delUnidadeEasy">
+                            <Label id="delUnidadeEasyLabel" check>
+                              <AvInput id="usuario-delUnidadeEasy" type="checkbox" className="form-control" name="delUnidadeEasy" />
                               <Translate contentKey="generadorApp.usuario.delUnidadeEasy">Del Unidade Easy</Translate>
                             </Label>
-                            <AvInput type="string" name="delUnidadeEasy" id="usuario-delUnidadeEasy" value={this.state.delUnidadeEasy} />
                           </Row>
                         </Col>
                       ) : null}
@@ -1785,10 +1745,10 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
                       {this.state.baseFilters !== 'verUsuario' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="verUsuarioLabel" for="usuario-verUsuario">
+                            <Label id="verUsuarioLabel" check>
+                              <AvInput id="usuario-verUsuario" type="checkbox" className="form-control" name="verUsuario" />
                               <Translate contentKey="generadorApp.usuario.verUsuario">Ver Usuario</Translate>
                             </Label>
-                            <AvInput type="string" name="verUsuario" id="usuario-verUsuario" value={this.state.verUsuario} />
                           </Row>
                         </Col>
                       ) : null}
@@ -1796,10 +1756,10 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
                       {this.state.baseFilters !== 'cadUsuario' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="cadUsuarioLabel" for="usuario-cadUsuario">
+                            <Label id="cadUsuarioLabel" check>
+                              <AvInput id="usuario-cadUsuario" type="checkbox" className="form-control" name="cadUsuario" />
                               <Translate contentKey="generadorApp.usuario.cadUsuario">Cad Usuario</Translate>
                             </Label>
-                            <AvInput type="string" name="cadUsuario" id="usuario-cadUsuario" value={this.state.cadUsuario} />
                           </Row>
                         </Col>
                       ) : null}
@@ -1807,10 +1767,10 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
                       {this.state.baseFilters !== 'ediUsuario' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="ediUsuarioLabel" for="usuario-ediUsuario">
+                            <Label id="ediUsuarioLabel" check>
+                              <AvInput id="usuario-ediUsuario" type="checkbox" className="form-control" name="ediUsuario" />
                               <Translate contentKey="generadorApp.usuario.ediUsuario">Edi Usuario</Translate>
                             </Label>
-                            <AvInput type="string" name="ediUsuario" id="usuario-ediUsuario" value={this.state.ediUsuario} />
                           </Row>
                         </Col>
                       ) : null}
@@ -1818,10 +1778,10 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
                       {this.state.baseFilters !== 'delUsuario' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="delUsuarioLabel" for="usuario-delUsuario">
+                            <Label id="delUsuarioLabel" check>
+                              <AvInput id="usuario-delUsuario" type="checkbox" className="form-control" name="delUsuario" />
                               <Translate contentKey="generadorApp.usuario.delUsuario">Del Usuario</Translate>
                             </Label>
-                            <AvInput type="string" name="delUsuario" id="usuario-delUsuario" value={this.state.delUsuario} />
                           </Row>
                         </Col>
                       ) : null}
@@ -1829,10 +1789,10 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
                       {this.state.baseFilters !== 'verPtaResultado' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="verPtaResultadoLabel" for="usuario-verPtaResultado">
+                            <Label id="verPtaResultadoLabel" check>
+                              <AvInput id="usuario-verPtaResultado" type="checkbox" className="form-control" name="verPtaResultado" />
                               <Translate contentKey="generadorApp.usuario.verPtaResultado">Ver Pta Resultado</Translate>
                             </Label>
-                            <AvInput type="string" name="verPtaResultado" id="usuario-verPtaResultado" value={this.state.verPtaResultado} />
                           </Row>
                         </Col>
                       ) : null}
@@ -1840,10 +1800,10 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
                       {this.state.baseFilters !== 'cadPtaResultado' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="cadPtaResultadoLabel" for="usuario-cadPtaResultado">
+                            <Label id="cadPtaResultadoLabel" check>
+                              <AvInput id="usuario-cadPtaResultado" type="checkbox" className="form-control" name="cadPtaResultado" />
                               <Translate contentKey="generadorApp.usuario.cadPtaResultado">Cad Pta Resultado</Translate>
                             </Label>
-                            <AvInput type="string" name="cadPtaResultado" id="usuario-cadPtaResultado" value={this.state.cadPtaResultado} />
                           </Row>
                         </Col>
                       ) : null}
@@ -1851,10 +1811,10 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
                       {this.state.baseFilters !== 'delPtaResultado' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="delPtaResultadoLabel" for="usuario-delPtaResultado">
+                            <Label id="delPtaResultadoLabel" check>
+                              <AvInput id="usuario-delPtaResultado" type="checkbox" className="form-control" name="delPtaResultado" />
                               <Translate contentKey="generadorApp.usuario.delPtaResultado">Del Pta Resultado</Translate>
                             </Label>
-                            <AvInput type="string" name="delPtaResultado" id="usuario-delPtaResultado" value={this.state.delPtaResultado} />
                           </Row>
                         </Col>
                       ) : null}
@@ -1862,10 +1822,10 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
                       {this.state.baseFilters !== 'verPtaAtividade' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="verPtaAtividadeLabel" for="usuario-verPtaAtividade">
+                            <Label id="verPtaAtividadeLabel" check>
+                              <AvInput id="usuario-verPtaAtividade" type="checkbox" className="form-control" name="verPtaAtividade" />
                               <Translate contentKey="generadorApp.usuario.verPtaAtividade">Ver Pta Atividade</Translate>
                             </Label>
-                            <AvInput type="string" name="verPtaAtividade" id="usuario-verPtaAtividade" value={this.state.verPtaAtividade} />
                           </Row>
                         </Col>
                       ) : null}
@@ -1873,10 +1833,10 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
                       {this.state.baseFilters !== 'cadPtaAtividade' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="cadPtaAtividadeLabel" for="usuario-cadPtaAtividade">
+                            <Label id="cadPtaAtividadeLabel" check>
+                              <AvInput id="usuario-cadPtaAtividade" type="checkbox" className="form-control" name="cadPtaAtividade" />
                               <Translate contentKey="generadorApp.usuario.cadPtaAtividade">Cad Pta Atividade</Translate>
                             </Label>
-                            <AvInput type="string" name="cadPtaAtividade" id="usuario-cadPtaAtividade" value={this.state.cadPtaAtividade} />
                           </Row>
                         </Col>
                       ) : null}
@@ -1884,10 +1844,10 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
                       {this.state.baseFilters !== 'delPtaAtividade' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="delPtaAtividadeLabel" for="usuario-delPtaAtividade">
+                            <Label id="delPtaAtividadeLabel" check>
+                              <AvInput id="usuario-delPtaAtividade" type="checkbox" className="form-control" name="delPtaAtividade" />
                               <Translate contentKey="generadorApp.usuario.delPtaAtividade">Del Pta Atividade</Translate>
                             </Label>
-                            <AvInput type="string" name="delPtaAtividade" id="usuario-delPtaAtividade" value={this.state.delPtaAtividade} />
                           </Row>
                         </Col>
                       ) : null}
@@ -1895,15 +1855,10 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
                       {this.state.baseFilters !== 'permissaoUsuario' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="permissaoUsuarioLabel" for="usuario-permissaoUsuario">
+                            <Label id="permissaoUsuarioLabel" check>
+                              <AvInput id="usuario-permissaoUsuario" type="checkbox" className="form-control" name="permissaoUsuario" />
                               <Translate contentKey="generadorApp.usuario.permissaoUsuario">Permissao Usuario</Translate>
                             </Label>
-                            <AvInput
-                              type="string"
-                              name="permissaoUsuario"
-                              id="usuario-permissaoUsuario"
-                              value={this.state.permissaoUsuario}
-                            />
                           </Row>
                         </Col>
                       ) : null}
@@ -1911,10 +1866,10 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
                       {this.state.baseFilters !== 'verProntuario' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="verProntuarioLabel" for="usuario-verProntuario">
+                            <Label id="verProntuarioLabel" check>
+                              <AvInput id="usuario-verProntuario" type="checkbox" className="form-control" name="verProntuario" />
                               <Translate contentKey="generadorApp.usuario.verProntuario">Ver Prontuario</Translate>
                             </Label>
-                            <AvInput type="string" name="verProntuario" id="usuario-verProntuario" value={this.state.verProntuario} />
                           </Row>
                         </Col>
                       ) : null}
@@ -1922,10 +1877,10 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
                       {this.state.baseFilters !== 'cadProntuario' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="cadProntuarioLabel" for="usuario-cadProntuario">
+                            <Label id="cadProntuarioLabel" check>
+                              <AvInput id="usuario-cadProntuario" type="checkbox" className="form-control" name="cadProntuario" />
                               <Translate contentKey="generadorApp.usuario.cadProntuario">Cad Prontuario</Translate>
                             </Label>
-                            <AvInput type="string" name="cadProntuario" id="usuario-cadProntuario" value={this.state.cadProntuario} />
                           </Row>
                         </Col>
                       ) : null}
@@ -1933,10 +1888,10 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
                       {this.state.baseFilters !== 'ediProntuario' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="ediProntuarioLabel" for="usuario-ediProntuario">
+                            <Label id="ediProntuarioLabel" check>
+                              <AvInput id="usuario-ediProntuario" type="checkbox" className="form-control" name="ediProntuario" />
                               <Translate contentKey="generadorApp.usuario.ediProntuario">Edi Prontuario</Translate>
                             </Label>
-                            <AvInput type="string" name="ediProntuario" id="usuario-ediProntuario" value={this.state.ediProntuario} />
                           </Row>
                         </Col>
                       ) : null}
@@ -1944,10 +1899,10 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
                       {this.state.baseFilters !== 'delProntuario' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="delProntuarioLabel" for="usuario-delProntuario">
+                            <Label id="delProntuarioLabel" check>
+                              <AvInput id="usuario-delProntuario" type="checkbox" className="form-control" name="delProntuario" />
                               <Translate contentKey="generadorApp.usuario.delProntuario">Del Prontuario</Translate>
                             </Label>
-                            <AvInput type="string" name="delProntuario" id="usuario-delProntuario" value={this.state.delProntuario} />
                           </Row>
                         </Col>
                       ) : null}
@@ -1955,15 +1910,10 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
                       {this.state.baseFilters !== 'delProntuarioFoto' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="delProntuarioFotoLabel" for="usuario-delProntuarioFoto">
+                            <Label id="delProntuarioFotoLabel" check>
+                              <AvInput id="usuario-delProntuarioFoto" type="checkbox" className="form-control" name="delProntuarioFoto" />
                               <Translate contentKey="generadorApp.usuario.delProntuarioFoto">Del Prontuario Foto</Translate>
                             </Label>
-                            <AvInput
-                              type="string"
-                              name="delProntuarioFoto"
-                              id="usuario-delProntuarioFoto"
-                              value={this.state.delProntuarioFoto}
-                            />
                           </Row>
                         </Col>
                       ) : null}
@@ -1971,15 +1921,10 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
                       {this.state.baseFilters !== 'valoresFinanceiro' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="valoresFinanceiroLabel" for="usuario-valoresFinanceiro">
+                            <Label id="valoresFinanceiroLabel" check>
+                              <AvInput id="usuario-valoresFinanceiro" type="checkbox" className="form-control" name="valoresFinanceiro" />
                               <Translate contentKey="generadorApp.usuario.valoresFinanceiro">Valores Financeiro</Translate>
                             </Label>
-                            <AvInput
-                              type="string"
-                              name="valoresFinanceiro"
-                              id="usuario-valoresFinanceiro"
-                              value={this.state.valoresFinanceiro}
-                            />
                           </Row>
                         </Col>
                       ) : null}
@@ -1987,17 +1932,17 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
                       {this.state.baseFilters !== 'autorizacaoValorFinanceiro' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="autorizacaoValorFinanceiroLabel" for="usuario-autorizacaoValorFinanceiro">
+                            <Label id="autorizacaoValorFinanceiroLabel" check>
+                              <AvInput
+                                id="usuario-autorizacaoValorFinanceiro"
+                                type="checkbox"
+                                className="form-control"
+                                name="autorizacaoValorFinanceiro"
+                              />
                               <Translate contentKey="generadorApp.usuario.autorizacaoValorFinanceiro">
                                 Autorizacao Valor Financeiro
                               </Translate>
                             </Label>
-                            <AvInput
-                              type="string"
-                              name="autorizacaoValorFinanceiro"
-                              id="usuario-autorizacaoValorFinanceiro"
-                              value={this.state.autorizacaoValorFinanceiro}
-                            />
                           </Row>
                         </Col>
                       ) : null}
@@ -2005,17 +1950,17 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
                       {this.state.baseFilters !== 'confirmarPagamentoFinanceiro' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="confirmarPagamentoFinanceiroLabel" for="usuario-confirmarPagamentoFinanceiro">
+                            <Label id="confirmarPagamentoFinanceiroLabel" check>
+                              <AvInput
+                                id="usuario-confirmarPagamentoFinanceiro"
+                                type="checkbox"
+                                className="form-control"
+                                name="confirmarPagamentoFinanceiro"
+                              />
                               <Translate contentKey="generadorApp.usuario.confirmarPagamentoFinanceiro">
                                 Confirmar Pagamento Financeiro
                               </Translate>
                             </Label>
-                            <AvInput
-                              type="string"
-                              name="confirmarPagamentoFinanceiro"
-                              id="usuario-confirmarPagamentoFinanceiro"
-                              value={this.state.confirmarPagamentoFinanceiro}
-                            />
                           </Row>
                         </Col>
                       ) : null}
@@ -2023,15 +1968,10 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
                       {this.state.baseFilters !== 'gerenciarSorteios' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="gerenciarSorteiosLabel" for="usuario-gerenciarSorteios">
+                            <Label id="gerenciarSorteiosLabel" check>
+                              <AvInput id="usuario-gerenciarSorteios" type="checkbox" className="form-control" name="gerenciarSorteios" />
                               <Translate contentKey="generadorApp.usuario.gerenciarSorteios">Gerenciar Sorteios</Translate>
                             </Label>
-                            <AvInput
-                              type="string"
-                              name="gerenciarSorteios"
-                              id="usuario-gerenciarSorteios"
-                              value={this.state.gerenciarSorteios}
-                            />
                           </Row>
                         </Col>
                       ) : null}
@@ -2039,10 +1979,10 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
                       {this.state.baseFilters !== 'envioRecusa' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="envioRecusaLabel" for="usuario-envioRecusa">
+                            <Label id="envioRecusaLabel" check>
+                              <AvInput id="usuario-envioRecusa" type="checkbox" className="form-control" name="envioRecusa" />
                               <Translate contentKey="generadorApp.usuario.envioRecusa">Envio Recusa</Translate>
                             </Label>
-                            <AvInput type="string" name="envioRecusa" id="usuario-envioRecusa" value={this.state.envioRecusa} />
                           </Row>
                         </Col>
                       ) : null}
@@ -2050,15 +1990,15 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
                       {this.state.baseFilters !== 'envioIntercorrencia' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="envioIntercorrenciaLabel" for="usuario-envioIntercorrencia">
+                            <Label id="envioIntercorrenciaLabel" check>
+                              <AvInput
+                                id="usuario-envioIntercorrencia"
+                                type="checkbox"
+                                className="form-control"
+                                name="envioIntercorrencia"
+                              />
                               <Translate contentKey="generadorApp.usuario.envioIntercorrencia">Envio Intercorrencia</Translate>
                             </Label>
-                            <AvInput
-                              type="string"
-                              name="envioIntercorrencia"
-                              id="usuario-envioIntercorrencia"
-                              value={this.state.envioIntercorrencia}
-                            />
                           </Row>
                         </Col>
                       ) : null}
@@ -2066,15 +2006,10 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
                       {this.state.baseFilters !== 'envioCancelamento' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="envioCancelamentoLabel" for="usuario-envioCancelamento">
+                            <Label id="envioCancelamentoLabel" check>
+                              <AvInput id="usuario-envioCancelamento" type="checkbox" className="form-control" name="envioCancelamento" />
                               <Translate contentKey="generadorApp.usuario.envioCancelamento">Envio Cancelamento</Translate>
                             </Label>
-                            <AvInput
-                              type="string"
-                              name="envioCancelamento"
-                              id="usuario-envioCancelamento"
-                              value={this.state.envioCancelamento}
-                            />
                           </Row>
                         </Col>
                       ) : null}
@@ -2082,10 +2017,10 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
                       {this.state.baseFilters !== 'envioAvaliacao' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="envioAvaliacaoLabel" for="usuario-envioAvaliacao">
+                            <Label id="envioAvaliacaoLabel" check>
+                              <AvInput id="usuario-envioAvaliacao" type="checkbox" className="form-control" name="envioAvaliacao" />
                               <Translate contentKey="generadorApp.usuario.envioAvaliacao">Envio Avaliacao</Translate>
                             </Label>
-                            <AvInput type="string" name="envioAvaliacao" id="usuario-envioAvaliacao" value={this.state.envioAvaliacao} />
                           </Row>
                         </Col>
                       ) : null}
@@ -2093,10 +2028,10 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
                       {this.state.baseFilters !== 'envioPedido' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="envioPedidoLabel" for="usuario-envioPedido">
+                            <Label id="envioPedidoLabel" check>
+                              <AvInput id="usuario-envioPedido" type="checkbox" className="form-control" name="envioPedido" />
                               <Translate contentKey="generadorApp.usuario.envioPedido">Envio Pedido</Translate>
                             </Label>
-                            <AvInput type="string" name="envioPedido" id="usuario-envioPedido" value={this.state.envioPedido} />
                           </Row>
                         </Col>
                       ) : null}
@@ -2104,15 +2039,10 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
                       {this.state.baseFilters !== 'alertaAtendimento' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="alertaAtendimentoLabel" for="usuario-alertaAtendimento">
+                            <Label id="alertaAtendimentoLabel" check>
+                              <AvInput id="usuario-alertaAtendimento" type="checkbox" className="form-control" name="alertaAtendimento" />
                               <Translate contentKey="generadorApp.usuario.alertaAtendimento">Alerta Atendimento</Translate>
                             </Label>
-                            <AvInput
-                              type="string"
-                              name="alertaAtendimento"
-                              id="usuario-alertaAtendimento"
-                              value={this.state.alertaAtendimento}
-                            />
                           </Row>
                         </Col>
                       ) : null}
@@ -2120,10 +2050,10 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
                       {this.state.baseFilters !== 'ativo' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="ativoLabel" for="usuario-ativo">
+                            <Label id="ativoLabel" check>
+                              <AvInput id="usuario-ativo" type="checkbox" className="form-control" name="ativo" />
                               <Translate contentKey="generadorApp.usuario.ativo">Ativo</Translate>
                             </Label>
-                            <AvInput type="string" name="ativo" id="usuario-ativo" value={this.state.ativo} />
                           </Row>
                         </Col>
                       ) : null}
@@ -2131,10 +2061,10 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
                       {this.state.baseFilters !== 'envioGlosado' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="envioGlosadoLabel" for="usuario-envioGlosado">
+                            <Label id="envioGlosadoLabel" check>
+                              <AvInput id="usuario-envioGlosado" type="checkbox" className="form-control" name="envioGlosado" />
                               <Translate contentKey="generadorApp.usuario.envioGlosado">Envio Glosado</Translate>
                             </Label>
-                            <AvInput type="string" name="envioGlosado" id="usuario-envioGlosado" value={this.state.envioGlosado} />
                           </Row>
                         </Col>
                       ) : null}
@@ -2142,10 +2072,10 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
                       {this.state.baseFilters !== 'emergencia' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="emergenciaLabel" for="usuario-emergencia">
+                            <Label id="emergenciaLabel" check>
+                              <AvInput id="usuario-emergencia" type="checkbox" className="form-control" name="emergencia" />
                               <Translate contentKey="generadorApp.usuario.emergencia">Emergencia</Translate>
                             </Label>
-                            <AvInput type="string" name="emergencia" id="usuario-emergencia" value={this.state.emergencia} />
                           </Row>
                         </Col>
                       ) : null}
@@ -2153,10 +2083,10 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
                       {this.state.baseFilters !== 'token' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="tokenLabel" for="usuario-token">
+                            <Label id="tokenLabel" check>
+                              <AvInput id="usuario-token" type="checkbox" className="form-control" name="token" />
                               <Translate contentKey="generadorApp.usuario.token">Token</Translate>
                             </Label>
-                            <AvInput type="string" name="token" id="usuario-token" value={this.state.token} />
                           </Row>
                         </Col>
                       ) : null}
@@ -2164,10 +2094,10 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
                       {this.state.baseFilters !== 'editAtendimento' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="editAtendimentoLabel" for="usuario-editAtendimento">
+                            <Label id="editAtendimentoLabel" check>
+                              <AvInput id="usuario-editAtendimento" type="checkbox" className="form-control" name="editAtendimento" />
                               <Translate contentKey="generadorApp.usuario.editAtendimento">Edit Atendimento</Translate>
                             </Label>
-                            <AvInput type="string" name="editAtendimento" id="usuario-editAtendimento" value={this.state.editAtendimento} />
                           </Row>
                         </Col>
                       ) : null}
@@ -2175,10 +2105,10 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
                       {this.state.baseFilters !== 'ouvirLigacao' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="ouvirLigacaoLabel" for="usuario-ouvirLigacao">
+                            <Label id="ouvirLigacaoLabel" check>
+                              <AvInput id="usuario-ouvirLigacao" type="checkbox" className="form-control" name="ouvirLigacao" />
                               <Translate contentKey="generadorApp.usuario.ouvirLigacao">Ouvir Ligacao</Translate>
                             </Label>
-                            <AvInput type="string" name="ouvirLigacao" id="usuario-ouvirLigacao" value={this.state.ouvirLigacao} />
                           </Row>
                         </Col>
                       ) : null}
@@ -2186,15 +2116,15 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
                       {this.state.baseFilters !== 'verPainelIndicadores' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="verPainelIndicadoresLabel" for="usuario-verPainelIndicadores">
+                            <Label id="verPainelIndicadoresLabel" check>
+                              <AvInput
+                                id="usuario-verPainelIndicadores"
+                                type="checkbox"
+                                className="form-control"
+                                name="verPainelIndicadores"
+                              />
                               <Translate contentKey="generadorApp.usuario.verPainelIndicadores">Ver Painel Indicadores</Translate>
                             </Label>
-                            <AvInput
-                              type="string"
-                              name="verPainelIndicadores"
-                              id="usuario-verPainelIndicadores"
-                              value={this.state.verPainelIndicadores}
-                            />
                           </Row>
                         </Col>
                       ) : null}
@@ -2202,10 +2132,10 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
                       {this.state.baseFilters !== 'prorrogarPad' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="prorrogarPadLabel" for="usuario-prorrogarPad">
+                            <Label id="prorrogarPadLabel" check>
+                              <AvInput id="usuario-prorrogarPad" type="checkbox" className="form-control" name="prorrogarPad" />
                               <Translate contentKey="generadorApp.usuario.prorrogarPad">Prorrogar Pad</Translate>
                             </Label>
-                            <AvInput type="string" name="prorrogarPad" id="usuario-prorrogarPad" value={this.state.prorrogarPad} />
                           </Row>
                         </Col>
                       ) : null}
@@ -2213,15 +2143,10 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
                       {this.state.baseFilters !== 'cancelarAtendMassa' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="cancelarAtendMassaLabel" for="usuario-cancelarAtendMassa">
+                            <Label id="cancelarAtendMassaLabel" check>
+                              <AvInput id="usuario-cancelarAtendMassa" type="checkbox" className="form-control" name="cancelarAtendMassa" />
                               <Translate contentKey="generadorApp.usuario.cancelarAtendMassa">Cancelar Atend Massa</Translate>
                             </Label>
-                            <AvInput
-                              type="string"
-                              name="cancelarAtendMassa"
-                              id="usuario-cancelarAtendMassa"
-                              value={this.state.cancelarAtendMassa}
-                            />
                           </Row>
                         </Col>
                       ) : null}
@@ -2229,10 +2154,10 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
                       {this.state.baseFilters !== 'cadMatMed' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="cadMatMedLabel" for="usuario-cadMatMed">
+                            <Label id="cadMatMedLabel" check>
+                              <AvInput id="usuario-cadMatMed" type="checkbox" className="form-control" name="cadMatMed" />
                               <Translate contentKey="generadorApp.usuario.cadMatMed">Cad Mat Med</Translate>
                             </Label>
-                            <AvInput type="string" name="cadMatMed" id="usuario-cadMatMed" value={this.state.cadMatMed} />
                           </Row>
                         </Col>
                       ) : null}
@@ -2240,10 +2165,10 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
                       {this.state.baseFilters !== 'ediMatMed' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="ediMatMedLabel" for="usuario-ediMatMed">
+                            <Label id="ediMatMedLabel" check>
+                              <AvInput id="usuario-ediMatMed" type="checkbox" className="form-control" name="ediMatMed" />
                               <Translate contentKey="generadorApp.usuario.ediMatMed">Edi Mat Med</Translate>
                             </Label>
-                            <AvInput type="string" name="ediMatMed" id="usuario-ediMatMed" value={this.state.ediMatMed} />
                           </Row>
                         </Col>
                       ) : null}
@@ -2251,10 +2176,10 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
                       {this.state.baseFilters !== 'delMatMed' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="delMatMedLabel" for="usuario-delMatMed">
+                            <Label id="delMatMedLabel" check>
+                              <AvInput id="usuario-delMatMed" type="checkbox" className="form-control" name="delMatMed" />
                               <Translate contentKey="generadorApp.usuario.delMatMed">Del Mat Med</Translate>
                             </Label>
-                            <AvInput type="string" name="delMatMed" id="usuario-delMatMed" value={this.state.delMatMed} />
                           </Row>
                         </Col>
                       ) : null}
@@ -2262,10 +2187,10 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
                       {this.state.baseFilters !== 'verColPta' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="verColPtaLabel" for="usuario-verColPta">
+                            <Label id="verColPtaLabel" check>
+                              <AvInput id="usuario-verColPta" type="checkbox" className="form-control" name="verColPta" />
                               <Translate contentKey="generadorApp.usuario.verColPta">Ver Col Pta</Translate>
                             </Label>
-                            <AvInput type="string" name="verColPta" id="usuario-verColPta" value={this.state.verColPta} />
                           </Row>
                         </Col>
                       ) : null}
@@ -2273,10 +2198,10 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
                       {this.state.baseFilters !== 'verColFoto' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="verColFotoLabel" for="usuario-verColFoto">
+                            <Label id="verColFotoLabel" check>
+                              <AvInput id="usuario-verColFoto" type="checkbox" className="form-control" name="verColFoto" />
                               <Translate contentKey="generadorApp.usuario.verColFoto">Ver Col Foto</Translate>
                             </Label>
-                            <AvInput type="string" name="verColFoto" id="usuario-verColFoto" value={this.state.verColFoto} />
                           </Row>
                         </Col>
                       ) : null}
@@ -2284,10 +2209,10 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
                       {this.state.baseFilters !== 'verColLc' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="verColLcLabel" for="usuario-verColLc">
+                            <Label id="verColLcLabel" check>
+                              <AvInput id="usuario-verColLc" type="checkbox" className="form-control" name="verColLc" />
                               <Translate contentKey="generadorApp.usuario.verColLc">Ver Col Lc</Translate>
                             </Label>
-                            <AvInput type="string" name="verColLc" id="usuario-verColLc" value={this.state.verColLc} />
                           </Row>
                         </Col>
                       ) : null}
@@ -2295,15 +2220,10 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
                       {this.state.baseFilters !== 'verAtendCancelado' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="verAtendCanceladoLabel" for="usuario-verAtendCancelado">
+                            <Label id="verAtendCanceladoLabel" check>
+                              <AvInput id="usuario-verAtendCancelado" type="checkbox" className="form-control" name="verAtendCancelado" />
                               <Translate contentKey="generadorApp.usuario.verAtendCancelado">Ver Atend Cancelado</Translate>
                             </Label>
-                            <AvInput
-                              type="string"
-                              name="verAtendCancelado"
-                              id="usuario-verAtendCancelado"
-                              value={this.state.verAtendCancelado}
-                            />
                           </Row>
                         </Col>
                       ) : null}
@@ -2311,15 +2231,15 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
                       {this.state.baseFilters !== 'verAtendAgConfirmacao' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="verAtendAgConfirmacaoLabel" for="usuario-verAtendAgConfirmacao">
+                            <Label id="verAtendAgConfirmacaoLabel" check>
+                              <AvInput
+                                id="usuario-verAtendAgConfirmacao"
+                                type="checkbox"
+                                className="form-control"
+                                name="verAtendAgConfirmacao"
+                              />
                               <Translate contentKey="generadorApp.usuario.verAtendAgConfirmacao">Ver Atend Ag Confirmacao</Translate>
                             </Label>
-                            <AvInput
-                              type="string"
-                              name="verAtendAgConfirmacao"
-                              id="usuario-verAtendAgConfirmacao"
-                              value={this.state.verAtendAgConfirmacao}
-                            />
                           </Row>
                         </Col>
                       ) : null}
@@ -2327,17 +2247,17 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
                       {this.state.baseFilters !== 'ediGeoLocalizacaoAtendimento' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="ediGeoLocalizacaoAtendimentoLabel" for="usuario-ediGeoLocalizacaoAtendimento">
+                            <Label id="ediGeoLocalizacaoAtendimentoLabel" check>
+                              <AvInput
+                                id="usuario-ediGeoLocalizacaoAtendimento"
+                                type="checkbox"
+                                className="form-control"
+                                name="ediGeoLocalizacaoAtendimento"
+                              />
                               <Translate contentKey="generadorApp.usuario.ediGeoLocalizacaoAtendimento">
                                 Edi Geo Localizacao Atendimento
                               </Translate>
                             </Label>
-                            <AvInput
-                              type="string"
-                              name="ediGeoLocalizacaoAtendimento"
-                              id="usuario-ediGeoLocalizacaoAtendimento"
-                              value={this.state.ediGeoLocalizacaoAtendimento}
-                            />
                           </Row>
                         </Col>
                       ) : null}
@@ -2345,10 +2265,10 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
                       {this.state.baseFilters !== 'copiarEvolucao' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="copiarEvolucaoLabel" for="usuario-copiarEvolucao">
+                            <Label id="copiarEvolucaoLabel" check>
+                              <AvInput id="usuario-copiarEvolucao" type="checkbox" className="form-control" name="copiarEvolucao" />
                               <Translate contentKey="generadorApp.usuario.copiarEvolucao">Copiar Evolucao</Translate>
                             </Label>
-                            <AvInput type="string" name="copiarEvolucao" id="usuario-copiarEvolucao" value={this.state.copiarEvolucao} />
                           </Row>
                         </Col>
                       ) : null}
@@ -2356,10 +2276,10 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
                       {this.state.baseFilters !== 'copiarNomeProf' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="copiarNomeProfLabel" for="usuario-copiarNomeProf">
+                            <Label id="copiarNomeProfLabel" check>
+                              <AvInput id="usuario-copiarNomeProf" type="checkbox" className="form-control" name="copiarNomeProf" />
                               <Translate contentKey="generadorApp.usuario.copiarNomeProf">Copiar Nome Prof</Translate>
                             </Label>
-                            <AvInput type="string" name="copiarNomeProf" id="usuario-copiarNomeProf" value={this.state.copiarNomeProf} />
                           </Row>
                         </Col>
                       ) : null}
@@ -2367,15 +2287,10 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
                       {this.state.baseFilters !== 'copiarRegistroProf' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="copiarRegistroProfLabel" for="usuario-copiarRegistroProf">
+                            <Label id="copiarRegistroProfLabel" check>
+                              <AvInput id="usuario-copiarRegistroProf" type="checkbox" className="form-control" name="copiarRegistroProf" />
                               <Translate contentKey="generadorApp.usuario.copiarRegistroProf">Copiar Registro Prof</Translate>
                             </Label>
-                            <AvInput
-                              type="string"
-                              name="copiarRegistroProf"
-                              id="usuario-copiarRegistroProf"
-                              value={this.state.copiarRegistroProf}
-                            />
                           </Row>
                         </Col>
                       ) : null}
@@ -3256,226 +3171,258 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
                           </td>
                         ) : null}
 
-                        {this.state.baseFilters !== 'verAtendimento' ? <td>{usuario.verAtendimento}</td> : null}
+                        {this.state.baseFilters !== 'verAtendimento' ? <td>{usuario.verAtendimento ? 'true' : 'false'}</td> : null}
 
-                        {this.state.baseFilters !== 'cadAtendimento' ? <td>{usuario.cadAtendimento}</td> : null}
+                        {this.state.baseFilters !== 'cadAtendimento' ? <td>{usuario.cadAtendimento ? 'true' : 'false'}</td> : null}
 
-                        {this.state.baseFilters !== 'ediAtendimento' ? <td>{usuario.ediAtendimento}</td> : null}
+                        {this.state.baseFilters !== 'ediAtendimento' ? <td>{usuario.ediAtendimento ? 'true' : 'false'}</td> : null}
 
-                        {this.state.baseFilters !== 'baixaManualAtendimento' ? <td>{usuario.baixaManualAtendimento}</td> : null}
+                        {this.state.baseFilters !== 'baixaManualAtendimento' ? (
+                          <td>{usuario.baixaManualAtendimento ? 'true' : 'false'}</td>
+                        ) : null}
 
-                        {this.state.baseFilters !== 'delAtendimento' ? <td>{usuario.delAtendimento}</td> : null}
+                        {this.state.baseFilters !== 'delAtendimento' ? <td>{usuario.delAtendimento ? 'true' : 'false'}</td> : null}
 
-                        {this.state.baseFilters !== 'relAtendimento' ? <td>{usuario.relAtendimento}</td> : null}
+                        {this.state.baseFilters !== 'relAtendimento' ? <td>{usuario.relAtendimento ? 'true' : 'false'}</td> : null}
 
-                        {this.state.baseFilters !== 'verPad' ? <td>{usuario.verPad}</td> : null}
+                        {this.state.baseFilters !== 'verPad' ? <td>{usuario.verPad ? 'true' : 'false'}</td> : null}
 
-                        {this.state.baseFilters !== 'cadPad' ? <td>{usuario.cadPad}</td> : null}
+                        {this.state.baseFilters !== 'cadPad' ? <td>{usuario.cadPad ? 'true' : 'false'}</td> : null}
 
-                        {this.state.baseFilters !== 'ediPad' ? <td>{usuario.ediPad}</td> : null}
+                        {this.state.baseFilters !== 'ediPad' ? <td>{usuario.ediPad ? 'true' : 'false'}</td> : null}
 
-                        {this.state.baseFilters !== 'delPad' ? <td>{usuario.delPad}</td> : null}
+                        {this.state.baseFilters !== 'delPad' ? <td>{usuario.delPad ? 'true' : 'false'}</td> : null}
 
-                        {this.state.baseFilters !== 'relPad' ? <td>{usuario.relPad}</td> : null}
+                        {this.state.baseFilters !== 'relPad' ? <td>{usuario.relPad ? 'true' : 'false'}</td> : null}
 
-                        {this.state.baseFilters !== 'verDiario' ? <td>{usuario.verDiario}</td> : null}
+                        {this.state.baseFilters !== 'verDiario' ? <td>{usuario.verDiario ? 'true' : 'false'}</td> : null}
 
-                        {this.state.baseFilters !== 'cadDiario' ? <td>{usuario.cadDiario}</td> : null}
+                        {this.state.baseFilters !== 'cadDiario' ? <td>{usuario.cadDiario ? 'true' : 'false'}</td> : null}
 
-                        {this.state.baseFilters !== 'ediDiario' ? <td>{usuario.ediDiario}</td> : null}
+                        {this.state.baseFilters !== 'ediDiario' ? <td>{usuario.ediDiario ? 'true' : 'false'}</td> : null}
 
-                        {this.state.baseFilters !== 'delDiario' ? <td>{usuario.delDiario}</td> : null}
+                        {this.state.baseFilters !== 'delDiario' ? <td>{usuario.delDiario ? 'true' : 'false'}</td> : null}
 
-                        {this.state.baseFilters !== 'relDiario' ? <td>{usuario.relDiario}</td> : null}
+                        {this.state.baseFilters !== 'relDiario' ? <td>{usuario.relDiario ? 'true' : 'false'}</td> : null}
 
-                        {this.state.baseFilters !== 'verCategoria' ? <td>{usuario.verCategoria}</td> : null}
+                        {this.state.baseFilters !== 'verCategoria' ? <td>{usuario.verCategoria ? 'true' : 'false'}</td> : null}
 
-                        {this.state.baseFilters !== 'cadCategoria' ? <td>{usuario.cadCategoria}</td> : null}
+                        {this.state.baseFilters !== 'cadCategoria' ? <td>{usuario.cadCategoria ? 'true' : 'false'}</td> : null}
 
-                        {this.state.baseFilters !== 'ediCategoria' ? <td>{usuario.ediCategoria}</td> : null}
+                        {this.state.baseFilters !== 'ediCategoria' ? <td>{usuario.ediCategoria ? 'true' : 'false'}</td> : null}
 
-                        {this.state.baseFilters !== 'delCategoria' ? <td>{usuario.delCategoria}</td> : null}
+                        {this.state.baseFilters !== 'delCategoria' ? <td>{usuario.delCategoria ? 'true' : 'false'}</td> : null}
 
-                        {this.state.baseFilters !== 'verEspecialidade' ? <td>{usuario.verEspecialidade}</td> : null}
+                        {this.state.baseFilters !== 'verEspecialidade' ? <td>{usuario.verEspecialidade ? 'true' : 'false'}</td> : null}
 
-                        {this.state.baseFilters !== 'cadEspecialidade' ? <td>{usuario.cadEspecialidade}</td> : null}
+                        {this.state.baseFilters !== 'cadEspecialidade' ? <td>{usuario.cadEspecialidade ? 'true' : 'false'}</td> : null}
 
-                        {this.state.baseFilters !== 'ediEspecialidade' ? <td>{usuario.ediEspecialidade}</td> : null}
+                        {this.state.baseFilters !== 'ediEspecialidade' ? <td>{usuario.ediEspecialidade ? 'true' : 'false'}</td> : null}
 
-                        {this.state.baseFilters !== 'delEspecialidade' ? <td>{usuario.delEspecialidade}</td> : null}
+                        {this.state.baseFilters !== 'delEspecialidade' ? <td>{usuario.delEspecialidade ? 'true' : 'false'}</td> : null}
 
-                        {this.state.baseFilters !== 'relEspecialidade' ? <td>{usuario.relEspecialidade}</td> : null}
+                        {this.state.baseFilters !== 'relEspecialidade' ? <td>{usuario.relEspecialidade ? 'true' : 'false'}</td> : null}
 
-                        {this.state.baseFilters !== 'verEspecialidadeValor' ? <td>{usuario.verEspecialidadeValor}</td> : null}
+                        {this.state.baseFilters !== 'verEspecialidadeValor' ? (
+                          <td>{usuario.verEspecialidadeValor ? 'true' : 'false'}</td>
+                        ) : null}
 
-                        {this.state.baseFilters !== 'cadEspecialidadeValor' ? <td>{usuario.cadEspecialidadeValor}</td> : null}
+                        {this.state.baseFilters !== 'cadEspecialidadeValor' ? (
+                          <td>{usuario.cadEspecialidadeValor ? 'true' : 'false'}</td>
+                        ) : null}
 
-                        {this.state.baseFilters !== 'ediEspecialidadeValor' ? <td>{usuario.ediEspecialidadeValor}</td> : null}
+                        {this.state.baseFilters !== 'ediEspecialidadeValor' ? (
+                          <td>{usuario.ediEspecialidadeValor ? 'true' : 'false'}</td>
+                        ) : null}
 
-                        {this.state.baseFilters !== 'delEspecialidadeValor' ? <td>{usuario.delEspecialidadeValor}</td> : null}
+                        {this.state.baseFilters !== 'delEspecialidadeValor' ? (
+                          <td>{usuario.delEspecialidadeValor ? 'true' : 'false'}</td>
+                        ) : null}
 
-                        {this.state.baseFilters !== 'relEspecialidadeValor' ? <td>{usuario.relEspecialidadeValor}</td> : null}
+                        {this.state.baseFilters !== 'relEspecialidadeValor' ? (
+                          <td>{usuario.relEspecialidadeValor ? 'true' : 'false'}</td>
+                        ) : null}
 
-                        {this.state.baseFilters !== 'verOperadora' ? <td>{usuario.verOperadora}</td> : null}
+                        {this.state.baseFilters !== 'verOperadora' ? <td>{usuario.verOperadora ? 'true' : 'false'}</td> : null}
 
-                        {this.state.baseFilters !== 'cadOperadora' ? <td>{usuario.cadOperadora}</td> : null}
+                        {this.state.baseFilters !== 'cadOperadora' ? <td>{usuario.cadOperadora ? 'true' : 'false'}</td> : null}
 
-                        {this.state.baseFilters !== 'ediOperadora' ? <td>{usuario.ediOperadora}</td> : null}
+                        {this.state.baseFilters !== 'ediOperadora' ? <td>{usuario.ediOperadora ? 'true' : 'false'}</td> : null}
 
-                        {this.state.baseFilters !== 'delOperadora' ? <td>{usuario.delOperadora}</td> : null}
+                        {this.state.baseFilters !== 'delOperadora' ? <td>{usuario.delOperadora ? 'true' : 'false'}</td> : null}
 
-                        {this.state.baseFilters !== 'verPaciente' ? <td>{usuario.verPaciente}</td> : null}
+                        {this.state.baseFilters !== 'verPaciente' ? <td>{usuario.verPaciente ? 'true' : 'false'}</td> : null}
 
-                        {this.state.baseFilters !== 'cadPaciente' ? <td>{usuario.cadPaciente}</td> : null}
+                        {this.state.baseFilters !== 'cadPaciente' ? <td>{usuario.cadPaciente ? 'true' : 'false'}</td> : null}
 
-                        {this.state.baseFilters !== 'ediPaciente' ? <td>{usuario.ediPaciente}</td> : null}
+                        {this.state.baseFilters !== 'ediPaciente' ? <td>{usuario.ediPaciente ? 'true' : 'false'}</td> : null}
 
-                        {this.state.baseFilters !== 'delPaciente' ? <td>{usuario.delPaciente}</td> : null}
+                        {this.state.baseFilters !== 'delPaciente' ? <td>{usuario.delPaciente ? 'true' : 'false'}</td> : null}
 
-                        {this.state.baseFilters !== 'relPaciente' ? <td>{usuario.relPaciente}</td> : null}
+                        {this.state.baseFilters !== 'relPaciente' ? <td>{usuario.relPaciente ? 'true' : 'false'}</td> : null}
 
-                        {this.state.baseFilters !== 'verProfissional' ? <td>{usuario.verProfissional}</td> : null}
+                        {this.state.baseFilters !== 'verProfissional' ? <td>{usuario.verProfissional ? 'true' : 'false'}</td> : null}
 
-                        {this.state.baseFilters !== 'cadProfissional' ? <td>{usuario.cadProfissional}</td> : null}
+                        {this.state.baseFilters !== 'cadProfissional' ? <td>{usuario.cadProfissional ? 'true' : 'false'}</td> : null}
 
-                        {this.state.baseFilters !== 'ediProfissional' ? <td>{usuario.ediProfissional}</td> : null}
+                        {this.state.baseFilters !== 'ediProfissional' ? <td>{usuario.ediProfissional ? 'true' : 'false'}</td> : null}
 
-                        {this.state.baseFilters !== 'delProfissional' ? <td>{usuario.delProfissional}</td> : null}
+                        {this.state.baseFilters !== 'delProfissional' ? <td>{usuario.delProfissional ? 'true' : 'false'}</td> : null}
 
-                        {this.state.baseFilters !== 'ativProfissional' ? <td>{usuario.ativProfissional}</td> : null}
+                        {this.state.baseFilters !== 'ativProfissional' ? <td>{usuario.ativProfissional ? 'true' : 'false'}</td> : null}
 
-                        {this.state.baseFilters !== 'relProfissional' ? <td>{usuario.relProfissional}</td> : null}
+                        {this.state.baseFilters !== 'relProfissional' ? <td>{usuario.relProfissional ? 'true' : 'false'}</td> : null}
 
-                        {this.state.baseFilters !== 'verPush' ? <td>{usuario.verPush}</td> : null}
+                        {this.state.baseFilters !== 'verPush' ? <td>{usuario.verPush ? 'true' : 'false'}</td> : null}
 
-                        {this.state.baseFilters !== 'cadPushPaciente' ? <td>{usuario.cadPushPaciente}</td> : null}
+                        {this.state.baseFilters !== 'cadPushPaciente' ? <td>{usuario.cadPushPaciente ? 'true' : 'false'}</td> : null}
 
-                        {this.state.baseFilters !== 'cadPushProfissional' ? <td>{usuario.cadPushProfissional}</td> : null}
+                        {this.state.baseFilters !== 'cadPushProfissional' ? (
+                          <td>{usuario.cadPushProfissional ? 'true' : 'false'}</td>
+                        ) : null}
 
-                        {this.state.baseFilters !== 'verTermoPaciente' ? <td>{usuario.verTermoPaciente}</td> : null}
+                        {this.state.baseFilters !== 'verTermoPaciente' ? <td>{usuario.verTermoPaciente ? 'true' : 'false'}</td> : null}
 
-                        {this.state.baseFilters !== 'ediTermoPaciente' ? <td>{usuario.ediTermoPaciente}</td> : null}
+                        {this.state.baseFilters !== 'ediTermoPaciente' ? <td>{usuario.ediTermoPaciente ? 'true' : 'false'}</td> : null}
 
-                        {this.state.baseFilters !== 'verTermoProfissional' ? <td>{usuario.verTermoProfissional}</td> : null}
+                        {this.state.baseFilters !== 'verTermoProfissional' ? (
+                          <td>{usuario.verTermoProfissional ? 'true' : 'false'}</td>
+                        ) : null}
 
-                        {this.state.baseFilters !== 'ediTermoProfissional' ? <td>{usuario.ediTermoProfissional}</td> : null}
+                        {this.state.baseFilters !== 'ediTermoProfissional' ? (
+                          <td>{usuario.ediTermoProfissional ? 'true' : 'false'}</td>
+                        ) : null}
 
-                        {this.state.baseFilters !== 'verOutros' ? <td>{usuario.verOutros}</td> : null}
+                        {this.state.baseFilters !== 'verOutros' ? <td>{usuario.verOutros ? 'true' : 'false'}</td> : null}
 
-                        {this.state.baseFilters !== 'cadOutros' ? <td>{usuario.cadOutros}</td> : null}
+                        {this.state.baseFilters !== 'cadOutros' ? <td>{usuario.cadOutros ? 'true' : 'false'}</td> : null}
 
-                        {this.state.baseFilters !== 'ediOutros' ? <td>{usuario.ediOutros}</td> : null}
+                        {this.state.baseFilters !== 'ediOutros' ? <td>{usuario.ediOutros ? 'true' : 'false'}</td> : null}
 
-                        {this.state.baseFilters !== 'delOutros' ? <td>{usuario.delOutros}</td> : null}
+                        {this.state.baseFilters !== 'delOutros' ? <td>{usuario.delOutros ? 'true' : 'false'}</td> : null}
 
-                        {this.state.baseFilters !== 'relOutros' ? <td>{usuario.relOutros}</td> : null}
+                        {this.state.baseFilters !== 'relOutros' ? <td>{usuario.relOutros ? 'true' : 'false'}</td> : null}
 
-                        {this.state.baseFilters !== 'verUnidadeEasy' ? <td>{usuario.verUnidadeEasy}</td> : null}
+                        {this.state.baseFilters !== 'verUnidadeEasy' ? <td>{usuario.verUnidadeEasy ? 'true' : 'false'}</td> : null}
 
-                        {this.state.baseFilters !== 'cadUnidadeEasy' ? <td>{usuario.cadUnidadeEasy}</td> : null}
+                        {this.state.baseFilters !== 'cadUnidadeEasy' ? <td>{usuario.cadUnidadeEasy ? 'true' : 'false'}</td> : null}
 
-                        {this.state.baseFilters !== 'ediUnidadeEasy' ? <td>{usuario.ediUnidadeEasy}</td> : null}
+                        {this.state.baseFilters !== 'ediUnidadeEasy' ? <td>{usuario.ediUnidadeEasy ? 'true' : 'false'}</td> : null}
 
-                        {this.state.baseFilters !== 'delUnidadeEasy' ? <td>{usuario.delUnidadeEasy}</td> : null}
+                        {this.state.baseFilters !== 'delUnidadeEasy' ? <td>{usuario.delUnidadeEasy ? 'true' : 'false'}</td> : null}
 
-                        {this.state.baseFilters !== 'verUsuario' ? <td>{usuario.verUsuario}</td> : null}
+                        {this.state.baseFilters !== 'verUsuario' ? <td>{usuario.verUsuario ? 'true' : 'false'}</td> : null}
 
-                        {this.state.baseFilters !== 'cadUsuario' ? <td>{usuario.cadUsuario}</td> : null}
+                        {this.state.baseFilters !== 'cadUsuario' ? <td>{usuario.cadUsuario ? 'true' : 'false'}</td> : null}
 
-                        {this.state.baseFilters !== 'ediUsuario' ? <td>{usuario.ediUsuario}</td> : null}
+                        {this.state.baseFilters !== 'ediUsuario' ? <td>{usuario.ediUsuario ? 'true' : 'false'}</td> : null}
 
-                        {this.state.baseFilters !== 'delUsuario' ? <td>{usuario.delUsuario}</td> : null}
+                        {this.state.baseFilters !== 'delUsuario' ? <td>{usuario.delUsuario ? 'true' : 'false'}</td> : null}
 
-                        {this.state.baseFilters !== 'verPtaResultado' ? <td>{usuario.verPtaResultado}</td> : null}
+                        {this.state.baseFilters !== 'verPtaResultado' ? <td>{usuario.verPtaResultado ? 'true' : 'false'}</td> : null}
 
-                        {this.state.baseFilters !== 'cadPtaResultado' ? <td>{usuario.cadPtaResultado}</td> : null}
+                        {this.state.baseFilters !== 'cadPtaResultado' ? <td>{usuario.cadPtaResultado ? 'true' : 'false'}</td> : null}
 
-                        {this.state.baseFilters !== 'delPtaResultado' ? <td>{usuario.delPtaResultado}</td> : null}
+                        {this.state.baseFilters !== 'delPtaResultado' ? <td>{usuario.delPtaResultado ? 'true' : 'false'}</td> : null}
 
-                        {this.state.baseFilters !== 'verPtaAtividade' ? <td>{usuario.verPtaAtividade}</td> : null}
+                        {this.state.baseFilters !== 'verPtaAtividade' ? <td>{usuario.verPtaAtividade ? 'true' : 'false'}</td> : null}
 
-                        {this.state.baseFilters !== 'cadPtaAtividade' ? <td>{usuario.cadPtaAtividade}</td> : null}
+                        {this.state.baseFilters !== 'cadPtaAtividade' ? <td>{usuario.cadPtaAtividade ? 'true' : 'false'}</td> : null}
 
-                        {this.state.baseFilters !== 'delPtaAtividade' ? <td>{usuario.delPtaAtividade}</td> : null}
+                        {this.state.baseFilters !== 'delPtaAtividade' ? <td>{usuario.delPtaAtividade ? 'true' : 'false'}</td> : null}
 
-                        {this.state.baseFilters !== 'permissaoUsuario' ? <td>{usuario.permissaoUsuario}</td> : null}
+                        {this.state.baseFilters !== 'permissaoUsuario' ? <td>{usuario.permissaoUsuario ? 'true' : 'false'}</td> : null}
 
-                        {this.state.baseFilters !== 'verProntuario' ? <td>{usuario.verProntuario}</td> : null}
+                        {this.state.baseFilters !== 'verProntuario' ? <td>{usuario.verProntuario ? 'true' : 'false'}</td> : null}
 
-                        {this.state.baseFilters !== 'cadProntuario' ? <td>{usuario.cadProntuario}</td> : null}
+                        {this.state.baseFilters !== 'cadProntuario' ? <td>{usuario.cadProntuario ? 'true' : 'false'}</td> : null}
 
-                        {this.state.baseFilters !== 'ediProntuario' ? <td>{usuario.ediProntuario}</td> : null}
+                        {this.state.baseFilters !== 'ediProntuario' ? <td>{usuario.ediProntuario ? 'true' : 'false'}</td> : null}
 
-                        {this.state.baseFilters !== 'delProntuario' ? <td>{usuario.delProntuario}</td> : null}
+                        {this.state.baseFilters !== 'delProntuario' ? <td>{usuario.delProntuario ? 'true' : 'false'}</td> : null}
 
-                        {this.state.baseFilters !== 'delProntuarioFoto' ? <td>{usuario.delProntuarioFoto}</td> : null}
+                        {this.state.baseFilters !== 'delProntuarioFoto' ? <td>{usuario.delProntuarioFoto ? 'true' : 'false'}</td> : null}
 
-                        {this.state.baseFilters !== 'valoresFinanceiro' ? <td>{usuario.valoresFinanceiro}</td> : null}
+                        {this.state.baseFilters !== 'valoresFinanceiro' ? <td>{usuario.valoresFinanceiro ? 'true' : 'false'}</td> : null}
 
-                        {this.state.baseFilters !== 'autorizacaoValorFinanceiro' ? <td>{usuario.autorizacaoValorFinanceiro}</td> : null}
+                        {this.state.baseFilters !== 'autorizacaoValorFinanceiro' ? (
+                          <td>{usuario.autorizacaoValorFinanceiro ? 'true' : 'false'}</td>
+                        ) : null}
 
-                        {this.state.baseFilters !== 'confirmarPagamentoFinanceiro' ? <td>{usuario.confirmarPagamentoFinanceiro}</td> : null}
+                        {this.state.baseFilters !== 'confirmarPagamentoFinanceiro' ? (
+                          <td>{usuario.confirmarPagamentoFinanceiro ? 'true' : 'false'}</td>
+                        ) : null}
 
-                        {this.state.baseFilters !== 'gerenciarSorteios' ? <td>{usuario.gerenciarSorteios}</td> : null}
+                        {this.state.baseFilters !== 'gerenciarSorteios' ? <td>{usuario.gerenciarSorteios ? 'true' : 'false'}</td> : null}
 
-                        {this.state.baseFilters !== 'envioRecusa' ? <td>{usuario.envioRecusa}</td> : null}
+                        {this.state.baseFilters !== 'envioRecusa' ? <td>{usuario.envioRecusa ? 'true' : 'false'}</td> : null}
 
-                        {this.state.baseFilters !== 'envioIntercorrencia' ? <td>{usuario.envioIntercorrencia}</td> : null}
+                        {this.state.baseFilters !== 'envioIntercorrencia' ? (
+                          <td>{usuario.envioIntercorrencia ? 'true' : 'false'}</td>
+                        ) : null}
 
-                        {this.state.baseFilters !== 'envioCancelamento' ? <td>{usuario.envioCancelamento}</td> : null}
+                        {this.state.baseFilters !== 'envioCancelamento' ? <td>{usuario.envioCancelamento ? 'true' : 'false'}</td> : null}
 
-                        {this.state.baseFilters !== 'envioAvaliacao' ? <td>{usuario.envioAvaliacao}</td> : null}
+                        {this.state.baseFilters !== 'envioAvaliacao' ? <td>{usuario.envioAvaliacao ? 'true' : 'false'}</td> : null}
 
-                        {this.state.baseFilters !== 'envioPedido' ? <td>{usuario.envioPedido}</td> : null}
+                        {this.state.baseFilters !== 'envioPedido' ? <td>{usuario.envioPedido ? 'true' : 'false'}</td> : null}
 
-                        {this.state.baseFilters !== 'alertaAtendimento' ? <td>{usuario.alertaAtendimento}</td> : null}
+                        {this.state.baseFilters !== 'alertaAtendimento' ? <td>{usuario.alertaAtendimento ? 'true' : 'false'}</td> : null}
 
-                        {this.state.baseFilters !== 'ativo' ? <td>{usuario.ativo}</td> : null}
+                        {this.state.baseFilters !== 'ativo' ? <td>{usuario.ativo ? 'true' : 'false'}</td> : null}
 
-                        {this.state.baseFilters !== 'envioGlosado' ? <td>{usuario.envioGlosado}</td> : null}
+                        {this.state.baseFilters !== 'envioGlosado' ? <td>{usuario.envioGlosado ? 'true' : 'false'}</td> : null}
 
-                        {this.state.baseFilters !== 'emergencia' ? <td>{usuario.emergencia}</td> : null}
+                        {this.state.baseFilters !== 'emergencia' ? <td>{usuario.emergencia ? 'true' : 'false'}</td> : null}
 
-                        {this.state.baseFilters !== 'token' ? <td>{usuario.token}</td> : null}
+                        {this.state.baseFilters !== 'token' ? <td>{usuario.token ? 'true' : 'false'}</td> : null}
 
-                        {this.state.baseFilters !== 'editAtendimento' ? <td>{usuario.editAtendimento}</td> : null}
+                        {this.state.baseFilters !== 'editAtendimento' ? <td>{usuario.editAtendimento ? 'true' : 'false'}</td> : null}
 
-                        {this.state.baseFilters !== 'ouvirLigacao' ? <td>{usuario.ouvirLigacao}</td> : null}
+                        {this.state.baseFilters !== 'ouvirLigacao' ? <td>{usuario.ouvirLigacao ? 'true' : 'false'}</td> : null}
 
-                        {this.state.baseFilters !== 'verPainelIndicadores' ? <td>{usuario.verPainelIndicadores}</td> : null}
+                        {this.state.baseFilters !== 'verPainelIndicadores' ? (
+                          <td>{usuario.verPainelIndicadores ? 'true' : 'false'}</td>
+                        ) : null}
 
-                        {this.state.baseFilters !== 'prorrogarPad' ? <td>{usuario.prorrogarPad}</td> : null}
+                        {this.state.baseFilters !== 'prorrogarPad' ? <td>{usuario.prorrogarPad ? 'true' : 'false'}</td> : null}
 
-                        {this.state.baseFilters !== 'cancelarAtendMassa' ? <td>{usuario.cancelarAtendMassa}</td> : null}
+                        {this.state.baseFilters !== 'cancelarAtendMassa' ? <td>{usuario.cancelarAtendMassa ? 'true' : 'false'}</td> : null}
 
-                        {this.state.baseFilters !== 'cadMatMed' ? <td>{usuario.cadMatMed}</td> : null}
+                        {this.state.baseFilters !== 'cadMatMed' ? <td>{usuario.cadMatMed ? 'true' : 'false'}</td> : null}
 
-                        {this.state.baseFilters !== 'ediMatMed' ? <td>{usuario.ediMatMed}</td> : null}
+                        {this.state.baseFilters !== 'ediMatMed' ? <td>{usuario.ediMatMed ? 'true' : 'false'}</td> : null}
 
-                        {this.state.baseFilters !== 'delMatMed' ? <td>{usuario.delMatMed}</td> : null}
+                        {this.state.baseFilters !== 'delMatMed' ? <td>{usuario.delMatMed ? 'true' : 'false'}</td> : null}
 
-                        {this.state.baseFilters !== 'verColPta' ? <td>{usuario.verColPta}</td> : null}
+                        {this.state.baseFilters !== 'verColPta' ? <td>{usuario.verColPta ? 'true' : 'false'}</td> : null}
 
-                        {this.state.baseFilters !== 'verColFoto' ? <td>{usuario.verColFoto}</td> : null}
+                        {this.state.baseFilters !== 'verColFoto' ? <td>{usuario.verColFoto ? 'true' : 'false'}</td> : null}
 
-                        {this.state.baseFilters !== 'verColLc' ? <td>{usuario.verColLc}</td> : null}
+                        {this.state.baseFilters !== 'verColLc' ? <td>{usuario.verColLc ? 'true' : 'false'}</td> : null}
 
-                        {this.state.baseFilters !== 'verAtendCancelado' ? <td>{usuario.verAtendCancelado}</td> : null}
+                        {this.state.baseFilters !== 'verAtendCancelado' ? <td>{usuario.verAtendCancelado ? 'true' : 'false'}</td> : null}
 
-                        {this.state.baseFilters !== 'verAtendAgConfirmacao' ? <td>{usuario.verAtendAgConfirmacao}</td> : null}
+                        {this.state.baseFilters !== 'verAtendAgConfirmacao' ? (
+                          <td>{usuario.verAtendAgConfirmacao ? 'true' : 'false'}</td>
+                        ) : null}
 
-                        {this.state.baseFilters !== 'ediGeoLocalizacaoAtendimento' ? <td>{usuario.ediGeoLocalizacaoAtendimento}</td> : null}
+                        {this.state.baseFilters !== 'ediGeoLocalizacaoAtendimento' ? (
+                          <td>{usuario.ediGeoLocalizacaoAtendimento ? 'true' : 'false'}</td>
+                        ) : null}
 
-                        {this.state.baseFilters !== 'copiarEvolucao' ? <td>{usuario.copiarEvolucao}</td> : null}
+                        {this.state.baseFilters !== 'copiarEvolucao' ? <td>{usuario.copiarEvolucao ? 'true' : 'false'}</td> : null}
 
-                        {this.state.baseFilters !== 'copiarNomeProf' ? <td>{usuario.copiarNomeProf}</td> : null}
+                        {this.state.baseFilters !== 'copiarNomeProf' ? <td>{usuario.copiarNomeProf ? 'true' : 'false'}</td> : null}
 
-                        {this.state.baseFilters !== 'copiarRegistroProf' ? <td>{usuario.copiarRegistroProf}</td> : null}
+                        {this.state.baseFilters !== 'copiarRegistroProf' ? <td>{usuario.copiarRegistroProf ? 'true' : 'false'}</td> : null}
 
                         {this.state.baseFilters !== 'idAreaAtuacao' ? <td>{usuario.idAreaAtuacao}</td> : null}
 
                         {this.state.baseFilters !== 'unidade' ? (
-                          <td>{usuario.unidade ? <Link to={`unidade-easy/${usuario.unidade.id}`}>{usuario.unidade.id}</Link> : ''}</td>
+                          <td>
+                            {usuario.unidade ? <Link to={`unidade-easy/${usuario.unidade.id}`}>{usuario.unidade.razaoSocial}</Link> : ''}
+                          </td>
                         ) : null}
 
                         {this.state.baseFilters !== 'tipoUsuario' ? (

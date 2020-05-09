@@ -34,18 +34,18 @@ export type AtendimentoAtividadesState = Readonly<typeof initialState>;
 export interface IAtendimentoAtividadesBaseState {
   baseFilters: any;
   feito: any;
-  atividade: any;
   atendimento: any;
+  atividade: any;
 }
 
 export interface IAtendimentoAtividadesUpdateState {
   fieldsBase: IAtendimentoAtividadesBaseState;
 
-  categoriaAtividadeSelectValue: any;
   atendimentoSelectValue: any;
+  categoriaAtividadeSelectValue: any;
   isNew: boolean;
-  atividadeId: string;
   atendimentoId: string;
+  atividadeId: string;
 }
 
 // Reducer
@@ -127,8 +127,8 @@ const apiUrl = 'api/atendimento-atividades';
 // Actions
 export type ICrudGetAllActionAtendimentoAtividades<T> = (
   feito?: any,
-  atividade?: any,
   atendimento?: any,
+  atividade?: any,
   page?: number,
   size?: number,
   sort?: string
@@ -136,21 +136,21 @@ export type ICrudGetAllActionAtendimentoAtividades<T> = (
 
 export const getEntities: ICrudGetAllActionAtendimentoAtividades<IAtendimentoAtividades> = (
   feito,
-  atividade,
   atendimento,
+  atividade,
   page,
   size,
   sort
 ) => {
   const feitoRequest = feito ? `feito.contains=${feito}&` : '';
-  const atividadeRequest = atividade ? `atividade.equals=${atividade}&` : '';
   const atendimentoRequest = atendimento ? `atendimento.equals=${atendimento}&` : '';
+  const atividadeRequest = atividade ? `atividade.equals=${atividade}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_ATENDIMENTOATIVIDADES_LIST,
     payload: axios.get<IAtendimentoAtividades>(
-      `${requestUrl}${feitoRequest}${atividadeRequest}${atendimentoRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${feitoRequest}${atendimentoRequest}${atividadeRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };
@@ -164,21 +164,21 @@ export const getEntity: ICrudGetAction<IAtendimentoAtividades> = id => {
 
 export const getEntitiesExport: ICrudGetAllActionAtendimentoAtividades<IAtendimentoAtividades> = (
   feito,
-  atividade,
   atendimento,
+  atividade,
   page,
   size,
   sort
 ) => {
   const feitoRequest = feito ? `feito.contains=${feito}&` : '';
-  const atividadeRequest = atividade ? `atividade.equals=${atividade}&` : '';
   const atendimentoRequest = atendimento ? `atendimento.equals=${atendimento}&` : '';
+  const atividadeRequest = atividade ? `atividade.equals=${atividade}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_ATENDIMENTOATIVIDADES_LIST,
     payload: axios.get<IAtendimentoAtividades>(
-      `${requestUrl}${feitoRequest}${atividadeRequest}${atendimentoRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${feitoRequest}${atendimentoRequest}${atividadeRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };
@@ -186,8 +186,8 @@ export const getEntitiesExport: ICrudGetAllActionAtendimentoAtividades<IAtendime
 export const createEntity: ICrudPutAction<IAtendimentoAtividades> = entity => async dispatch => {
   entity = {
     ...entity,
-    atividade: entity.atividade === 'null' ? null : entity.atividade,
-    atendimento: entity.atendimento === 'null' ? null : entity.atendimento
+    atendimento: entity.atendimento === 'null' ? null : entity.atendimento,
+    atividade: entity.atividade === 'null' ? null : entity.atividade
   };
   const result = await dispatch({
     type: ACTION_TYPES.CREATE_ATENDIMENTOATIVIDADES,
@@ -200,8 +200,8 @@ export const createEntity: ICrudPutAction<IAtendimentoAtividades> = entity => as
 export const updateEntity: ICrudPutAction<IAtendimentoAtividades> = entity => async dispatch => {
   entity = {
     ...entity,
-    atividade: entity.atividade === 'null' ? null : entity.atividade,
-    atendimento: entity.atendimento === 'null' ? null : entity.atendimento
+    atendimento: entity.atendimento === 'null' ? null : entity.atendimento,
+    atividade: entity.atividade === 'null' ? null : entity.atividade
   };
   const result = await dispatch({
     type: ACTION_TYPES.UPDATE_ATENDIMENTOATIVIDADES,
@@ -230,13 +230,13 @@ export const getAtendimentoAtividadesState = (location): IAtendimentoAtividadesB
   const baseFilters = url.searchParams.get('baseFilters') || '';
   const feito = url.searchParams.get('feito') || '';
 
-  const atividade = url.searchParams.get('atividade') || '';
   const atendimento = url.searchParams.get('atendimento') || '';
+  const atividade = url.searchParams.get('atividade') || '';
 
   return {
     baseFilters,
     feito,
-    atividade,
-    atendimento
+    atendimento,
+    atividade
   };
 };

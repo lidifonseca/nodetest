@@ -191,13 +191,11 @@ export class MotivoPsUpdate extends React.Component<IMotivoPsUpdateProps, IMotiv
                           <Col md="ativo">
                             <AvGroup>
                               <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="ativoLabel" for="motivo-ps-ativo">
+                                <Col md="12">
+                                  <Label className="mt-2" id="ativoLabel" check>
+                                    <AvInput id="motivo-ps-ativo" type="checkbox" className="form-control" name="ativo" />
                                     <Translate contentKey="generadorApp.motivoPs.ativo">Ativo</Translate>
                                   </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField id="motivo-ps-ativo" type="string" className="form-control" name="ativo" />
                                 </Col>
                               </Row>
                             </AvGroup>

@@ -3,7 +3,9 @@ export interface IProfissionalStatusAtualNew {
   idProfissional?: string;
   idStatusAtualProf?: number;
   obs?: any;
-  ativo?: number;
+  ativo?: boolean;
 }
 
-export const defaultValue: Readonly<IProfissionalStatusAtualNew> = {};
+export const defaultValue: Readonly<IProfissionalStatusAtualNew> = {
+  ativo: false
+};

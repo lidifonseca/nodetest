@@ -1546,12 +1546,10 @@ export class PacienteUpdate extends React.Component<IPacienteUpdateProps, IPacie
                               <AvGroup>
                                 <Row>
                                   <Col md="12">
-                                    <Label className="mt-2" id="ativoLabel" for="paciente-ativo">
+                                    <Label className="mt-2" id="ativoLabel" check>
+                                      <AvInput id="paciente-ativo" type="checkbox" className="form-control" name="ativo" />
                                       <Translate contentKey="generadorApp.paciente.ativo">Ativo</Translate>
                                     </Label>
-                                  </Col>
-                                  <Col md="12">
-                                    <AvField id="paciente-ativo" type="string" className="form-control" name="ativo" />
                                   </Col>
                                 </Row>
                               </AvGroup>

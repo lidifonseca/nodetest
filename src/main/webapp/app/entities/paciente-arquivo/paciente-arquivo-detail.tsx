@@ -94,7 +94,7 @@ export class PacienteArquivoDetail extends React.Component<IPacienteArquivoDetai
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{pacienteArquivoEntity.ativo}</dd>
+                        <dd>{pacienteArquivoEntity.ativo ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>

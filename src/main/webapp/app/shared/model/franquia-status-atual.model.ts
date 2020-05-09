@@ -4,8 +4,10 @@ export interface IFranquiaStatusAtual {
   id?: string;
   statusAtual?: number;
   obs?: string;
-  ativo?: number;
+  ativo?: boolean;
   franquia?: string | any;
 }
 
-export const defaultValue: Readonly<IFranquiaStatusAtual> = {};
+export const defaultValue: Readonly<IFranquiaStatusAtual> = {
+  ativo: false
+};

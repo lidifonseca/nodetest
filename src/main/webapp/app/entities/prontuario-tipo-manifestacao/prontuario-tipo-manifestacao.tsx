@@ -188,10 +188,10 @@ export class ProntuarioTipoManifestacao extends React.Component<IProntuarioTipoM
                       {this.state.baseFilters !== 'ativo' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="ativoLabel" for="prontuario-tipo-manifestacao-ativo">
+                            <Label id="ativoLabel" check>
+                              <AvInput id="prontuario-tipo-manifestacao-ativo" type="checkbox" className="form-control" name="ativo" />
                               <Translate contentKey="generadorApp.prontuarioTipoManifestacao.ativo">Ativo</Translate>
                             </Label>
-                            <AvInput type="string" name="ativo" id="prontuario-tipo-manifestacao-ativo" value={this.state.ativo} />
                           </Row>
                         </Col>
                       ) : null}
@@ -258,7 +258,7 @@ export class ProntuarioTipoManifestacao extends React.Component<IProntuarioTipoM
 
                         {this.state.baseFilters !== 'idPai' ? <td>{prontuarioTipoManifestacao.idPai}</td> : null}
 
-                        {this.state.baseFilters !== 'ativo' ? <td>{prontuarioTipoManifestacao.ativo}</td> : null}
+                        {this.state.baseFilters !== 'ativo' ? <td>{prontuarioTipoManifestacao.ativo ? 'true' : 'false'}</td> : null}
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">

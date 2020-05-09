@@ -36,7 +36,7 @@
         },
         {
             "fieldName": "ativo",
-            "fieldType": "Integer"
+            "fieldType": "Boolean"
         }
     ],
     "relationships": [
@@ -103,6 +103,14 @@
             "otherEntityRelationshipName": "especialidade",
             "relationshipName": "tipoUnidade",
             "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-many",
+            "otherEntityName": "profissional",
+            "otherEntityRelationshipName": "especialidade",
+            "relationshipName": "profissional",
+            "otherEntityField": "nome",
+            "ownerSide": false
         }
     ],
     "changelogDate": "20200508222200",

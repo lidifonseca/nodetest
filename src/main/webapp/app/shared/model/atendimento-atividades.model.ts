@@ -1,11 +1,11 @@
-import { ICategoriaAtividade } from 'app/shared/model/categoria-atividade.model';
 import { IAtendimento } from 'app/shared/model/atendimento.model';
+import { ICategoriaAtividade } from 'app/shared/model/categoria-atividade.model';
 
 export interface IAtendimentoAtividades {
   id?: string;
   feito?: number;
-  atividade?: string | any;
   atendimento?: string | any;
+  atividade?: string | any;
 }
 
 export const defaultValue: Readonly<IAtendimentoAtividades> = {};

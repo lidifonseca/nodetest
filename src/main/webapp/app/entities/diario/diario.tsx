@@ -174,8 +174,7 @@ export class Diario extends React.Component<IDiarioProps, IDiarioState> {
                             <Label id="historicoLabel" for="diario-historico">
                               <Translate contentKey="generadorApp.diario.historico">Historico</Translate>
                             </Label>
-
-                            <AvInput type="text" name="historico" id="diario-historico" value={this.state.historico} />
+                            <AvInput id="diario-historico" type="textarea" name="historico" />
                           </Row>
                         </Col>
                       ) : null}
@@ -183,10 +182,10 @@ export class Diario extends React.Component<IDiarioProps, IDiarioState> {
                       {this.state.baseFilters !== 'gerarPdf' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="gerarPdfLabel" for="diario-gerarPdf">
+                            <Label id="gerarPdfLabel" check>
+                              <AvInput id="diario-gerarPdf" type="checkbox" className="form-control" name="gerarPdf" />
                               <Translate contentKey="generadorApp.diario.gerarPdf">Gerar Pdf</Translate>
                             </Label>
-                            <AvInput type="string" name="gerarPdf" id="diario-gerarPdf" value={this.state.gerarPdf} />
                           </Row>
                         </Col>
                       ) : null}
@@ -311,9 +310,11 @@ export class Diario extends React.Component<IDiarioProps, IDiarioState> {
                           </Button>
                         </td>
 
-                        {this.state.baseFilters !== 'historico' ? <td>{diario.historico}</td> : null}
+                        {this.state.baseFilters !== 'historico' ? (
+                          <td>{diario.historico ? Buffer.from(diario.historico).toString() : null}</td>
+                        ) : null}
 
-                        {this.state.baseFilters !== 'gerarPdf' ? <td>{diario.gerarPdf}</td> : null}
+                        {this.state.baseFilters !== 'gerarPdf' ? <td>{diario.gerarPdf ? 'true' : 'false'}</td> : null}
 
                         {this.state.baseFilters !== 'usuario' ? (
                           <td>{diario.usuario ? <Link to={`usuario/${diario.usuario.id}`}>{diario.usuario.id}</Link> : ''}</td>

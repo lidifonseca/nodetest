@@ -78,7 +78,7 @@ export class PadCidDetail extends React.Component<IPadCidDetailProps, IPadCidSta
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{padCidEntity.ativo}</dd>
+                        <dd>{padCidEntity.ativo ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>

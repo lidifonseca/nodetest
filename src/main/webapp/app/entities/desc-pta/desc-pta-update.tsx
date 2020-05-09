@@ -183,13 +183,11 @@ export class DescPtaUpdate extends React.Component<IDescPtaUpdateProps, IDescPta
                           <Col md="ativo">
                             <AvGroup>
                               <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="ativoLabel" for="desc-pta-ativo">
+                                <Col md="12">
+                                  <Label className="mt-2" id="ativoLabel" check>
+                                    <AvInput id="desc-pta-ativo" type="checkbox" className="form-control" name="ativo" />
                                     <Translate contentKey="generadorApp.descPta.ativo">Ativo</Translate>
                                   </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField id="desc-pta-ativo" type="string" className="form-control" name="ativo" />
                                 </Col>
                               </Row>
                             </AvGroup>

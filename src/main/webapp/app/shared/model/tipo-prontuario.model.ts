@@ -1,7 +1,9 @@
 export interface ITipoProntuario {
   id?: string;
   prontuario?: string;
-  ativo?: number;
+  ativo?: boolean;
 }
 
-export const defaultValue: Readonly<ITipoProntuario> = {};
+export const defaultValue: Readonly<ITipoProntuario> = {
+  ativo: false
+};

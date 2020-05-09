@@ -51,6 +51,8 @@ import { ITipoEspecialidade } from 'app/shared/model/tipo-especialidade.model';
 import { getEntities as getTipoEspecialidades } from 'app/entities/tipo-especialidade/tipo-especialidade.reducer';
 import { ITipoUnidade } from 'app/shared/model/tipo-unidade.model';
 import { getEntities as getTipoUnidades } from 'app/entities/tipo-unidade/tipo-unidade.reducer';
+import { IProfissional } from 'app/shared/model/profissional.model';
+import { getEntities as getProfissionals } from 'app/entities/profissional/profissional.reducer';
 
 export interface IEspecialidadeProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
@@ -77,6 +79,7 @@ export class Especialidade extends React.Component<IEspecialidadeProps, IEspecia
     this.props.getCategorias();
     this.props.getTipoEspecialidades();
     this.props.getTipoUnidades();
+    this.props.getProfissionals();
   }
 
   cancelCourse = () => {
@@ -97,7 +100,8 @@ export class Especialidade extends React.Component<IEspecialidadeProps, IEspecia
         unidade: '',
         categoria: '',
         tipoEspecialidade: '',
-        tipoUnidade: ''
+        tipoUnidade: '',
+        profissional: ''
       },
       () => this.sortEntities()
     );
@@ -190,6 +194,9 @@ export class Especialidade extends React.Component<IEspecialidadeProps, IEspecia
       'tipoUnidade=' +
       this.state.tipoUnidade +
       '&' +
+      'profissional=' +
+      this.state.profissional +
+      '&' +
       ''
     );
   };
@@ -214,6 +221,7 @@ export class Especialidade extends React.Component<IEspecialidadeProps, IEspecia
       categoria,
       tipoEspecialidade,
       tipoUnidade,
+      profissional,
       activePage,
       itemsPerPage,
       sort,
@@ -236,6 +244,7 @@ export class Especialidade extends React.Component<IEspecialidadeProps, IEspecia
       categoria,
       tipoEspecialidade,
       tipoUnidade,
+      profissional,
       activePage - 1,
       itemsPerPage,
       `${sort},${order}`
@@ -292,6 +301,7 @@ const mapStateToProps = ({ especialidade, ...storeState }: IRootState) => ({
   categorias: storeState.categoria.entities,
   tipoEspecialidades: storeState.tipoEspecialidade.entities,
   tipoUnidades: storeState.tipoUnidade.entities,
+  profissionals: storeState.profissional.entities,
   especialidadeList: especialidade.entities,
   totalItems: especialidade.totalItems
 });
@@ -301,6 +311,7 @@ const mapDispatchToProps = {
   getCategorias,
   getTipoEspecialidades,
   getTipoUnidades,
+  getProfissionals,
   getEntitiesExport
 };
 

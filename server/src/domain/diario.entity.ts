@@ -2,8 +2,6 @@
 import { Entity, Column, PrimaryGeneratedColumn, JoinColumn, OneToOne, ManyToOne, OneToMany, ManyToMany, JoinTable } from 'typeorm';
 import { BaseEntity } from './base/base.entity';
 
-import { validate, Contains, IsInt, Length, IsEmail, IsFQDN, IsDate, Min, Max } from 'class-validator';
-
 import Usuario from './usuario.entity';
 import Paciente from './paciente.entity';
 
@@ -12,11 +10,11 @@ import Paciente from './paciente.entity';
  */
 @Entity('tb_diario')
 export default class Diario extends BaseEntity {
-  @Column({ name: 'HISTORICO', length: 255 })
+  @Column({ name: 'HISTORICO' })
   historico: string;
 
-  @Column({ type: 'integer', name: 'GERAR_PDF' })
-  gerarPdf: number;
+  @Column({ type: 'boolean', name: 'GERAR_PDF' })
+  gerarPdf: boolean;
 
   @ManyToOne(type => Usuario)
   @JoinColumn({ name: 'ID_USUARIO', referencedColumnName: 'id' })

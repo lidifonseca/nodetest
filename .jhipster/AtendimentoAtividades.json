@@ -9,16 +9,16 @@
     "relationships": [
         {
             "relationshipType": "many-to-one",
-            "otherEntityName": "categoriaAtividade",
+            "otherEntityName": "atendimento",
             "otherEntityRelationshipName": "atendimentoAtividades",
-            "relationshipName": "atividade",
+            "relationshipName": "atendimento",
             "otherEntityField": "id"
         },
         {
             "relationshipType": "many-to-one",
-            "otherEntityName": "atendimento",
+            "otherEntityName": "categoriaAtividade",
             "otherEntityRelationshipName": "atendimentoAtividades",
-            "relationshipName": "atendimento",
+            "relationshipName": "atividade",
             "otherEntityField": "id"
         }
     ],

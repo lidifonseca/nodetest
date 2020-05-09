@@ -124,7 +124,7 @@ export class PacienteProntuarioDetail extends React.Component<IPacienteProntuari
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{pacienteProntuarioEntity.ativo}</dd>
+                        <dd>{pacienteProntuarioEntity.ativo ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>

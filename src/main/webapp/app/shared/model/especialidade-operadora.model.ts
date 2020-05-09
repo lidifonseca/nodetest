@@ -10,9 +10,11 @@ export interface IEspecialidadeOperadora {
   valorVenda?: number;
   descontoCusto?: number;
   descontoVenda?: number;
-  ativo?: number;
+  ativo?: boolean;
   operadora?: string | any;
   especialidade?: string | any;
 }
 
-export const defaultValue: Readonly<IEspecialidadeOperadora> = {};
+export const defaultValue: Readonly<IEspecialidadeOperadora> = {
+  ativo: false
+};

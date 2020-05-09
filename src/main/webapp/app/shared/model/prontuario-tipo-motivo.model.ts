@@ -2,10 +2,12 @@ export interface IProntuarioTipoMotivo {
   id?: string;
   nome?: string;
   idPai?: number;
-  ativo?: number;
+  ativo?: boolean;
   classe?: string;
   name?: string;
   idTipoProntuario?: number;
 }
 
-export const defaultValue: Readonly<IProntuarioTipoMotivo> = {};
+export const defaultValue: Readonly<IProntuarioTipoMotivo> = {
+  ativo: false
+};

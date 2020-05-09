@@ -215,7 +215,7 @@ export class UsuarioDetail extends React.Component<IUsuarioDetailProps, IUsuario
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{usuarioEntity.verAtendimento}</dd>
+                        <dd>{usuarioEntity.verAtendimento ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>
@@ -230,7 +230,7 @@ export class UsuarioDetail extends React.Component<IUsuarioDetailProps, IUsuario
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{usuarioEntity.cadAtendimento}</dd>
+                        <dd>{usuarioEntity.cadAtendimento ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>
@@ -245,7 +245,7 @@ export class UsuarioDetail extends React.Component<IUsuarioDetailProps, IUsuario
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{usuarioEntity.ediAtendimento}</dd>
+                        <dd>{usuarioEntity.ediAtendimento ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>
@@ -260,7 +260,7 @@ export class UsuarioDetail extends React.Component<IUsuarioDetailProps, IUsuario
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{usuarioEntity.baixaManualAtendimento}</dd>
+                        <dd>{usuarioEntity.baixaManualAtendimento ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>
@@ -275,7 +275,7 @@ export class UsuarioDetail extends React.Component<IUsuarioDetailProps, IUsuario
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{usuarioEntity.delAtendimento}</dd>
+                        <dd>{usuarioEntity.delAtendimento ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>
@@ -290,7 +290,7 @@ export class UsuarioDetail extends React.Component<IUsuarioDetailProps, IUsuario
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{usuarioEntity.relAtendimento}</dd>
+                        <dd>{usuarioEntity.relAtendimento ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>
@@ -305,7 +305,7 @@ export class UsuarioDetail extends React.Component<IUsuarioDetailProps, IUsuario
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{usuarioEntity.verPad}</dd>
+                        <dd>{usuarioEntity.verPad ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>
@@ -320,7 +320,7 @@ export class UsuarioDetail extends React.Component<IUsuarioDetailProps, IUsuario
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{usuarioEntity.cadPad}</dd>
+                        <dd>{usuarioEntity.cadPad ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>
@@ -335,7 +335,7 @@ export class UsuarioDetail extends React.Component<IUsuarioDetailProps, IUsuario
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{usuarioEntity.ediPad}</dd>
+                        <dd>{usuarioEntity.ediPad ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>
@@ -350,7 +350,7 @@ export class UsuarioDetail extends React.Component<IUsuarioDetailProps, IUsuario
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{usuarioEntity.delPad}</dd>
+                        <dd>{usuarioEntity.delPad ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>
@@ -365,7 +365,7 @@ export class UsuarioDetail extends React.Component<IUsuarioDetailProps, IUsuario
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{usuarioEntity.relPad}</dd>
+                        <dd>{usuarioEntity.relPad ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>
@@ -380,7 +380,7 @@ export class UsuarioDetail extends React.Component<IUsuarioDetailProps, IUsuario
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{usuarioEntity.verDiario}</dd>
+                        <dd>{usuarioEntity.verDiario ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>
@@ -395,7 +395,7 @@ export class UsuarioDetail extends React.Component<IUsuarioDetailProps, IUsuario
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{usuarioEntity.cadDiario}</dd>
+                        <dd>{usuarioEntity.cadDiario ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>
@@ -410,7 +410,7 @@ export class UsuarioDetail extends React.Component<IUsuarioDetailProps, IUsuario
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{usuarioEntity.ediDiario}</dd>
+                        <dd>{usuarioEntity.ediDiario ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>
@@ -425,7 +425,7 @@ export class UsuarioDetail extends React.Component<IUsuarioDetailProps, IUsuario
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{usuarioEntity.delDiario}</dd>
+                        <dd>{usuarioEntity.delDiario ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>
@@ -440,7 +440,7 @@ export class UsuarioDetail extends React.Component<IUsuarioDetailProps, IUsuario
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{usuarioEntity.relDiario}</dd>
+                        <dd>{usuarioEntity.relDiario ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>
@@ -455,7 +455,7 @@ export class UsuarioDetail extends React.Component<IUsuarioDetailProps, IUsuario
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{usuarioEntity.verCategoria}</dd>
+                        <dd>{usuarioEntity.verCategoria ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>
@@ -470,7 +470,7 @@ export class UsuarioDetail extends React.Component<IUsuarioDetailProps, IUsuario
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{usuarioEntity.cadCategoria}</dd>
+                        <dd>{usuarioEntity.cadCategoria ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>
@@ -485,7 +485,7 @@ export class UsuarioDetail extends React.Component<IUsuarioDetailProps, IUsuario
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{usuarioEntity.ediCategoria}</dd>
+                        <dd>{usuarioEntity.ediCategoria ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>
@@ -500,7 +500,7 @@ export class UsuarioDetail extends React.Component<IUsuarioDetailProps, IUsuario
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{usuarioEntity.delCategoria}</dd>
+                        <dd>{usuarioEntity.delCategoria ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>
@@ -515,7 +515,7 @@ export class UsuarioDetail extends React.Component<IUsuarioDetailProps, IUsuario
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{usuarioEntity.verEspecialidade}</dd>
+                        <dd>{usuarioEntity.verEspecialidade ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>
@@ -530,7 +530,7 @@ export class UsuarioDetail extends React.Component<IUsuarioDetailProps, IUsuario
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{usuarioEntity.cadEspecialidade}</dd>
+                        <dd>{usuarioEntity.cadEspecialidade ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>
@@ -545,7 +545,7 @@ export class UsuarioDetail extends React.Component<IUsuarioDetailProps, IUsuario
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{usuarioEntity.ediEspecialidade}</dd>
+                        <dd>{usuarioEntity.ediEspecialidade ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>
@@ -560,7 +560,7 @@ export class UsuarioDetail extends React.Component<IUsuarioDetailProps, IUsuario
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{usuarioEntity.delEspecialidade}</dd>
+                        <dd>{usuarioEntity.delEspecialidade ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>
@@ -575,7 +575,7 @@ export class UsuarioDetail extends React.Component<IUsuarioDetailProps, IUsuario
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{usuarioEntity.relEspecialidade}</dd>
+                        <dd>{usuarioEntity.relEspecialidade ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>
@@ -590,7 +590,7 @@ export class UsuarioDetail extends React.Component<IUsuarioDetailProps, IUsuario
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{usuarioEntity.verEspecialidadeValor}</dd>
+                        <dd>{usuarioEntity.verEspecialidadeValor ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>
@@ -605,7 +605,7 @@ export class UsuarioDetail extends React.Component<IUsuarioDetailProps, IUsuario
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{usuarioEntity.cadEspecialidadeValor}</dd>
+                        <dd>{usuarioEntity.cadEspecialidadeValor ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>
@@ -620,7 +620,7 @@ export class UsuarioDetail extends React.Component<IUsuarioDetailProps, IUsuario
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{usuarioEntity.ediEspecialidadeValor}</dd>
+                        <dd>{usuarioEntity.ediEspecialidadeValor ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>
@@ -635,7 +635,7 @@ export class UsuarioDetail extends React.Component<IUsuarioDetailProps, IUsuario
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{usuarioEntity.delEspecialidadeValor}</dd>
+                        <dd>{usuarioEntity.delEspecialidadeValor ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>
@@ -650,7 +650,7 @@ export class UsuarioDetail extends React.Component<IUsuarioDetailProps, IUsuario
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{usuarioEntity.relEspecialidadeValor}</dd>
+                        <dd>{usuarioEntity.relEspecialidadeValor ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>
@@ -665,7 +665,7 @@ export class UsuarioDetail extends React.Component<IUsuarioDetailProps, IUsuario
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{usuarioEntity.verOperadora}</dd>
+                        <dd>{usuarioEntity.verOperadora ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>
@@ -680,7 +680,7 @@ export class UsuarioDetail extends React.Component<IUsuarioDetailProps, IUsuario
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{usuarioEntity.cadOperadora}</dd>
+                        <dd>{usuarioEntity.cadOperadora ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>
@@ -695,7 +695,7 @@ export class UsuarioDetail extends React.Component<IUsuarioDetailProps, IUsuario
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{usuarioEntity.ediOperadora}</dd>
+                        <dd>{usuarioEntity.ediOperadora ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>
@@ -710,7 +710,7 @@ export class UsuarioDetail extends React.Component<IUsuarioDetailProps, IUsuario
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{usuarioEntity.delOperadora}</dd>
+                        <dd>{usuarioEntity.delOperadora ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>
@@ -725,7 +725,7 @@ export class UsuarioDetail extends React.Component<IUsuarioDetailProps, IUsuario
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{usuarioEntity.verPaciente}</dd>
+                        <dd>{usuarioEntity.verPaciente ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>
@@ -740,7 +740,7 @@ export class UsuarioDetail extends React.Component<IUsuarioDetailProps, IUsuario
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{usuarioEntity.cadPaciente}</dd>
+                        <dd>{usuarioEntity.cadPaciente ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>
@@ -755,7 +755,7 @@ export class UsuarioDetail extends React.Component<IUsuarioDetailProps, IUsuario
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{usuarioEntity.ediPaciente}</dd>
+                        <dd>{usuarioEntity.ediPaciente ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>
@@ -770,7 +770,7 @@ export class UsuarioDetail extends React.Component<IUsuarioDetailProps, IUsuario
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{usuarioEntity.delPaciente}</dd>
+                        <dd>{usuarioEntity.delPaciente ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>
@@ -785,7 +785,7 @@ export class UsuarioDetail extends React.Component<IUsuarioDetailProps, IUsuario
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{usuarioEntity.relPaciente}</dd>
+                        <dd>{usuarioEntity.relPaciente ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>
@@ -800,7 +800,7 @@ export class UsuarioDetail extends React.Component<IUsuarioDetailProps, IUsuario
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{usuarioEntity.verProfissional}</dd>
+                        <dd>{usuarioEntity.verProfissional ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>
@@ -815,7 +815,7 @@ export class UsuarioDetail extends React.Component<IUsuarioDetailProps, IUsuario
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{usuarioEntity.cadProfissional}</dd>
+                        <dd>{usuarioEntity.cadProfissional ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>
@@ -830,7 +830,7 @@ export class UsuarioDetail extends React.Component<IUsuarioDetailProps, IUsuario
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{usuarioEntity.ediProfissional}</dd>
+                        <dd>{usuarioEntity.ediProfissional ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>
@@ -845,7 +845,7 @@ export class UsuarioDetail extends React.Component<IUsuarioDetailProps, IUsuario
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{usuarioEntity.delProfissional}</dd>
+                        <dd>{usuarioEntity.delProfissional ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>
@@ -860,7 +860,7 @@ export class UsuarioDetail extends React.Component<IUsuarioDetailProps, IUsuario
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{usuarioEntity.ativProfissional}</dd>
+                        <dd>{usuarioEntity.ativProfissional ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>
@@ -875,7 +875,7 @@ export class UsuarioDetail extends React.Component<IUsuarioDetailProps, IUsuario
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{usuarioEntity.relProfissional}</dd>
+                        <dd>{usuarioEntity.relProfissional ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>
@@ -890,7 +890,7 @@ export class UsuarioDetail extends React.Component<IUsuarioDetailProps, IUsuario
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{usuarioEntity.verPush}</dd>
+                        <dd>{usuarioEntity.verPush ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>
@@ -905,7 +905,7 @@ export class UsuarioDetail extends React.Component<IUsuarioDetailProps, IUsuario
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{usuarioEntity.cadPushPaciente}</dd>
+                        <dd>{usuarioEntity.cadPushPaciente ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>
@@ -920,7 +920,7 @@ export class UsuarioDetail extends React.Component<IUsuarioDetailProps, IUsuario
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{usuarioEntity.cadPushProfissional}</dd>
+                        <dd>{usuarioEntity.cadPushProfissional ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>
@@ -935,7 +935,7 @@ export class UsuarioDetail extends React.Component<IUsuarioDetailProps, IUsuario
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{usuarioEntity.verTermoPaciente}</dd>
+                        <dd>{usuarioEntity.verTermoPaciente ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>
@@ -950,7 +950,7 @@ export class UsuarioDetail extends React.Component<IUsuarioDetailProps, IUsuario
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{usuarioEntity.ediTermoPaciente}</dd>
+                        <dd>{usuarioEntity.ediTermoPaciente ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>
@@ -965,7 +965,7 @@ export class UsuarioDetail extends React.Component<IUsuarioDetailProps, IUsuario
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{usuarioEntity.verTermoProfissional}</dd>
+                        <dd>{usuarioEntity.verTermoProfissional ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>
@@ -980,7 +980,7 @@ export class UsuarioDetail extends React.Component<IUsuarioDetailProps, IUsuario
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{usuarioEntity.ediTermoProfissional}</dd>
+                        <dd>{usuarioEntity.ediTermoProfissional ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>
@@ -995,7 +995,7 @@ export class UsuarioDetail extends React.Component<IUsuarioDetailProps, IUsuario
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{usuarioEntity.verOutros}</dd>
+                        <dd>{usuarioEntity.verOutros ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>
@@ -1010,7 +1010,7 @@ export class UsuarioDetail extends React.Component<IUsuarioDetailProps, IUsuario
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{usuarioEntity.cadOutros}</dd>
+                        <dd>{usuarioEntity.cadOutros ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>
@@ -1025,7 +1025,7 @@ export class UsuarioDetail extends React.Component<IUsuarioDetailProps, IUsuario
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{usuarioEntity.ediOutros}</dd>
+                        <dd>{usuarioEntity.ediOutros ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>
@@ -1040,7 +1040,7 @@ export class UsuarioDetail extends React.Component<IUsuarioDetailProps, IUsuario
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{usuarioEntity.delOutros}</dd>
+                        <dd>{usuarioEntity.delOutros ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>
@@ -1055,7 +1055,7 @@ export class UsuarioDetail extends React.Component<IUsuarioDetailProps, IUsuario
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{usuarioEntity.relOutros}</dd>
+                        <dd>{usuarioEntity.relOutros ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>
@@ -1070,7 +1070,7 @@ export class UsuarioDetail extends React.Component<IUsuarioDetailProps, IUsuario
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{usuarioEntity.verUnidadeEasy}</dd>
+                        <dd>{usuarioEntity.verUnidadeEasy ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>
@@ -1085,7 +1085,7 @@ export class UsuarioDetail extends React.Component<IUsuarioDetailProps, IUsuario
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{usuarioEntity.cadUnidadeEasy}</dd>
+                        <dd>{usuarioEntity.cadUnidadeEasy ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>
@@ -1100,7 +1100,7 @@ export class UsuarioDetail extends React.Component<IUsuarioDetailProps, IUsuario
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{usuarioEntity.ediUnidadeEasy}</dd>
+                        <dd>{usuarioEntity.ediUnidadeEasy ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>
@@ -1115,7 +1115,7 @@ export class UsuarioDetail extends React.Component<IUsuarioDetailProps, IUsuario
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{usuarioEntity.delUnidadeEasy}</dd>
+                        <dd>{usuarioEntity.delUnidadeEasy ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>
@@ -1130,7 +1130,7 @@ export class UsuarioDetail extends React.Component<IUsuarioDetailProps, IUsuario
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{usuarioEntity.verUsuario}</dd>
+                        <dd>{usuarioEntity.verUsuario ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>
@@ -1145,7 +1145,7 @@ export class UsuarioDetail extends React.Component<IUsuarioDetailProps, IUsuario
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{usuarioEntity.cadUsuario}</dd>
+                        <dd>{usuarioEntity.cadUsuario ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>
@@ -1160,7 +1160,7 @@ export class UsuarioDetail extends React.Component<IUsuarioDetailProps, IUsuario
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{usuarioEntity.ediUsuario}</dd>
+                        <dd>{usuarioEntity.ediUsuario ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>
@@ -1175,7 +1175,7 @@ export class UsuarioDetail extends React.Component<IUsuarioDetailProps, IUsuario
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{usuarioEntity.delUsuario}</dd>
+                        <dd>{usuarioEntity.delUsuario ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>
@@ -1190,7 +1190,7 @@ export class UsuarioDetail extends React.Component<IUsuarioDetailProps, IUsuario
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{usuarioEntity.verPtaResultado}</dd>
+                        <dd>{usuarioEntity.verPtaResultado ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>
@@ -1205,7 +1205,7 @@ export class UsuarioDetail extends React.Component<IUsuarioDetailProps, IUsuario
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{usuarioEntity.cadPtaResultado}</dd>
+                        <dd>{usuarioEntity.cadPtaResultado ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>
@@ -1220,7 +1220,7 @@ export class UsuarioDetail extends React.Component<IUsuarioDetailProps, IUsuario
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{usuarioEntity.delPtaResultado}</dd>
+                        <dd>{usuarioEntity.delPtaResultado ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>
@@ -1235,7 +1235,7 @@ export class UsuarioDetail extends React.Component<IUsuarioDetailProps, IUsuario
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{usuarioEntity.verPtaAtividade}</dd>
+                        <dd>{usuarioEntity.verPtaAtividade ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>
@@ -1250,7 +1250,7 @@ export class UsuarioDetail extends React.Component<IUsuarioDetailProps, IUsuario
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{usuarioEntity.cadPtaAtividade}</dd>
+                        <dd>{usuarioEntity.cadPtaAtividade ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>
@@ -1265,7 +1265,7 @@ export class UsuarioDetail extends React.Component<IUsuarioDetailProps, IUsuario
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{usuarioEntity.delPtaAtividade}</dd>
+                        <dd>{usuarioEntity.delPtaAtividade ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>
@@ -1280,7 +1280,7 @@ export class UsuarioDetail extends React.Component<IUsuarioDetailProps, IUsuario
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{usuarioEntity.permissaoUsuario}</dd>
+                        <dd>{usuarioEntity.permissaoUsuario ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>
@@ -1295,7 +1295,7 @@ export class UsuarioDetail extends React.Component<IUsuarioDetailProps, IUsuario
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{usuarioEntity.verProntuario}</dd>
+                        <dd>{usuarioEntity.verProntuario ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>
@@ -1310,7 +1310,7 @@ export class UsuarioDetail extends React.Component<IUsuarioDetailProps, IUsuario
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{usuarioEntity.cadProntuario}</dd>
+                        <dd>{usuarioEntity.cadProntuario ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>
@@ -1325,7 +1325,7 @@ export class UsuarioDetail extends React.Component<IUsuarioDetailProps, IUsuario
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{usuarioEntity.ediProntuario}</dd>
+                        <dd>{usuarioEntity.ediProntuario ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>
@@ -1340,7 +1340,7 @@ export class UsuarioDetail extends React.Component<IUsuarioDetailProps, IUsuario
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{usuarioEntity.delProntuario}</dd>
+                        <dd>{usuarioEntity.delProntuario ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>
@@ -1355,7 +1355,7 @@ export class UsuarioDetail extends React.Component<IUsuarioDetailProps, IUsuario
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{usuarioEntity.delProntuarioFoto}</dd>
+                        <dd>{usuarioEntity.delProntuarioFoto ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>
@@ -1370,7 +1370,7 @@ export class UsuarioDetail extends React.Component<IUsuarioDetailProps, IUsuario
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{usuarioEntity.valoresFinanceiro}</dd>
+                        <dd>{usuarioEntity.valoresFinanceiro ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>
@@ -1385,7 +1385,7 @@ export class UsuarioDetail extends React.Component<IUsuarioDetailProps, IUsuario
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{usuarioEntity.autorizacaoValorFinanceiro}</dd>
+                        <dd>{usuarioEntity.autorizacaoValorFinanceiro ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>
@@ -1402,7 +1402,7 @@ export class UsuarioDetail extends React.Component<IUsuarioDetailProps, IUsuario
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{usuarioEntity.confirmarPagamentoFinanceiro}</dd>
+                        <dd>{usuarioEntity.confirmarPagamentoFinanceiro ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>
@@ -1417,7 +1417,7 @@ export class UsuarioDetail extends React.Component<IUsuarioDetailProps, IUsuario
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{usuarioEntity.gerenciarSorteios}</dd>
+                        <dd>{usuarioEntity.gerenciarSorteios ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>
@@ -1432,7 +1432,7 @@ export class UsuarioDetail extends React.Component<IUsuarioDetailProps, IUsuario
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{usuarioEntity.envioRecusa}</dd>
+                        <dd>{usuarioEntity.envioRecusa ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>
@@ -1447,7 +1447,7 @@ export class UsuarioDetail extends React.Component<IUsuarioDetailProps, IUsuario
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{usuarioEntity.envioIntercorrencia}</dd>
+                        <dd>{usuarioEntity.envioIntercorrencia ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>
@@ -1462,7 +1462,7 @@ export class UsuarioDetail extends React.Component<IUsuarioDetailProps, IUsuario
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{usuarioEntity.envioCancelamento}</dd>
+                        <dd>{usuarioEntity.envioCancelamento ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>
@@ -1477,7 +1477,7 @@ export class UsuarioDetail extends React.Component<IUsuarioDetailProps, IUsuario
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{usuarioEntity.envioAvaliacao}</dd>
+                        <dd>{usuarioEntity.envioAvaliacao ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>
@@ -1492,7 +1492,7 @@ export class UsuarioDetail extends React.Component<IUsuarioDetailProps, IUsuario
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{usuarioEntity.envioPedido}</dd>
+                        <dd>{usuarioEntity.envioPedido ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>
@@ -1507,7 +1507,7 @@ export class UsuarioDetail extends React.Component<IUsuarioDetailProps, IUsuario
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{usuarioEntity.alertaAtendimento}</dd>
+                        <dd>{usuarioEntity.alertaAtendimento ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>
@@ -1522,7 +1522,7 @@ export class UsuarioDetail extends React.Component<IUsuarioDetailProps, IUsuario
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{usuarioEntity.ativo}</dd>
+                        <dd>{usuarioEntity.ativo ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>
@@ -1537,7 +1537,7 @@ export class UsuarioDetail extends React.Component<IUsuarioDetailProps, IUsuario
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{usuarioEntity.envioGlosado}</dd>
+                        <dd>{usuarioEntity.envioGlosado ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>
@@ -1552,7 +1552,7 @@ export class UsuarioDetail extends React.Component<IUsuarioDetailProps, IUsuario
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{usuarioEntity.emergencia}</dd>
+                        <dd>{usuarioEntity.emergencia ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>
@@ -1567,7 +1567,7 @@ export class UsuarioDetail extends React.Component<IUsuarioDetailProps, IUsuario
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{usuarioEntity.token}</dd>
+                        <dd>{usuarioEntity.token ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>
@@ -1582,7 +1582,7 @@ export class UsuarioDetail extends React.Component<IUsuarioDetailProps, IUsuario
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{usuarioEntity.editAtendimento}</dd>
+                        <dd>{usuarioEntity.editAtendimento ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>
@@ -1597,7 +1597,7 @@ export class UsuarioDetail extends React.Component<IUsuarioDetailProps, IUsuario
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{usuarioEntity.ouvirLigacao}</dd>
+                        <dd>{usuarioEntity.ouvirLigacao ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>
@@ -1612,7 +1612,7 @@ export class UsuarioDetail extends React.Component<IUsuarioDetailProps, IUsuario
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{usuarioEntity.verPainelIndicadores}</dd>
+                        <dd>{usuarioEntity.verPainelIndicadores ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>
@@ -1627,7 +1627,7 @@ export class UsuarioDetail extends React.Component<IUsuarioDetailProps, IUsuario
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{usuarioEntity.prorrogarPad}</dd>
+                        <dd>{usuarioEntity.prorrogarPad ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>
@@ -1642,7 +1642,7 @@ export class UsuarioDetail extends React.Component<IUsuarioDetailProps, IUsuario
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{usuarioEntity.cancelarAtendMassa}</dd>
+                        <dd>{usuarioEntity.cancelarAtendMassa ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>
@@ -1657,7 +1657,7 @@ export class UsuarioDetail extends React.Component<IUsuarioDetailProps, IUsuario
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{usuarioEntity.cadMatMed}</dd>
+                        <dd>{usuarioEntity.cadMatMed ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>
@@ -1672,7 +1672,7 @@ export class UsuarioDetail extends React.Component<IUsuarioDetailProps, IUsuario
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{usuarioEntity.ediMatMed}</dd>
+                        <dd>{usuarioEntity.ediMatMed ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>
@@ -1687,7 +1687,7 @@ export class UsuarioDetail extends React.Component<IUsuarioDetailProps, IUsuario
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{usuarioEntity.delMatMed}</dd>
+                        <dd>{usuarioEntity.delMatMed ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>
@@ -1702,7 +1702,7 @@ export class UsuarioDetail extends React.Component<IUsuarioDetailProps, IUsuario
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{usuarioEntity.verColPta}</dd>
+                        <dd>{usuarioEntity.verColPta ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>
@@ -1717,7 +1717,7 @@ export class UsuarioDetail extends React.Component<IUsuarioDetailProps, IUsuario
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{usuarioEntity.verColFoto}</dd>
+                        <dd>{usuarioEntity.verColFoto ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>
@@ -1732,7 +1732,7 @@ export class UsuarioDetail extends React.Component<IUsuarioDetailProps, IUsuario
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{usuarioEntity.verColLc}</dd>
+                        <dd>{usuarioEntity.verColLc ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>
@@ -1747,7 +1747,7 @@ export class UsuarioDetail extends React.Component<IUsuarioDetailProps, IUsuario
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{usuarioEntity.verAtendCancelado}</dd>
+                        <dd>{usuarioEntity.verAtendCancelado ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>
@@ -1762,7 +1762,7 @@ export class UsuarioDetail extends React.Component<IUsuarioDetailProps, IUsuario
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{usuarioEntity.verAtendAgConfirmacao}</dd>
+                        <dd>{usuarioEntity.verAtendAgConfirmacao ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>
@@ -1779,7 +1779,7 @@ export class UsuarioDetail extends React.Component<IUsuarioDetailProps, IUsuario
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{usuarioEntity.ediGeoLocalizacaoAtendimento}</dd>
+                        <dd>{usuarioEntity.ediGeoLocalizacaoAtendimento ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>
@@ -1794,7 +1794,7 @@ export class UsuarioDetail extends React.Component<IUsuarioDetailProps, IUsuario
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{usuarioEntity.copiarEvolucao}</dd>
+                        <dd>{usuarioEntity.copiarEvolucao ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>
@@ -1809,7 +1809,7 @@ export class UsuarioDetail extends React.Component<IUsuarioDetailProps, IUsuario
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{usuarioEntity.copiarNomeProf}</dd>
+                        <dd>{usuarioEntity.copiarNomeProf ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>
@@ -1824,7 +1824,7 @@ export class UsuarioDetail extends React.Component<IUsuarioDetailProps, IUsuario
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{usuarioEntity.copiarRegistroProf}</dd>
+                        <dd>{usuarioEntity.copiarRegistroProf ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>

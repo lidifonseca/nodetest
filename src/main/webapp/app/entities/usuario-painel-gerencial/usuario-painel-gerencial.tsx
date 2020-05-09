@@ -390,15 +390,15 @@ export class UsuarioPainelGerencial extends React.Component<IUsuarioPainelGerenc
                       {this.state.baseFilters !== 'verCronicos' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="verCronicosLabel" for="usuario-painel-gerencial-verCronicos">
+                            <Label id="verCronicosLabel" check>
+                              <AvInput
+                                id="usuario-painel-gerencial-verCronicos"
+                                type="checkbox"
+                                className="form-control"
+                                name="verCronicos"
+                              />
                               <Translate contentKey="generadorApp.usuarioPainelGerencial.verCronicos">Ver Cronicos</Translate>
                             </Label>
-                            <AvInput
-                              type="string"
-                              name="verCronicos"
-                              id="usuario-painel-gerencial-verCronicos"
-                              value={this.state.verCronicos}
-                            />
                           </Row>
                         </Col>
                       ) : null}
@@ -406,17 +406,17 @@ export class UsuarioPainelGerencial extends React.Component<IUsuarioPainelGerenc
                       {this.state.baseFilters !== 'verPacientesAtivosCr' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="verPacientesAtivosCrLabel" for="usuario-painel-gerencial-verPacientesAtivosCr">
+                            <Label id="verPacientesAtivosCrLabel" check>
+                              <AvInput
+                                id="usuario-painel-gerencial-verPacientesAtivosCr"
+                                type="checkbox"
+                                className="form-control"
+                                name="verPacientesAtivosCr"
+                              />
                               <Translate contentKey="generadorApp.usuarioPainelGerencial.verPacientesAtivosCr">
                                 Ver Pacientes Ativos Cr
                               </Translate>
                             </Label>
-                            <AvInput
-                              type="string"
-                              name="verPacientesAtivosCr"
-                              id="usuario-painel-gerencial-verPacientesAtivosCr"
-                              value={this.state.verPacientesAtivosCr}
-                            />
                           </Row>
                         </Col>
                       ) : null}
@@ -424,17 +424,17 @@ export class UsuarioPainelGerencial extends React.Component<IUsuarioPainelGerenc
                       {this.state.baseFilters !== 'filtroPacientesAtivosCr' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="filtroPacientesAtivosCrLabel" for="usuario-painel-gerencial-filtroPacientesAtivosCr">
+                            <Label id="filtroPacientesAtivosCrLabel" check>
+                              <AvInput
+                                id="usuario-painel-gerencial-filtroPacientesAtivosCr"
+                                type="checkbox"
+                                className="form-control"
+                                name="filtroPacientesAtivosCr"
+                              />
                               <Translate contentKey="generadorApp.usuarioPainelGerencial.filtroPacientesAtivosCr">
                                 Filtro Pacientes Ativos Cr
                               </Translate>
                             </Label>
-                            <AvInput
-                              type="string"
-                              name="filtroPacientesAtivosCr"
-                              id="usuario-painel-gerencial-filtroPacientesAtivosCr"
-                              value={this.state.filtroPacientesAtivosCr}
-                            />
                           </Row>
                         </Col>
                       ) : null}
@@ -442,15 +442,15 @@ export class UsuarioPainelGerencial extends React.Component<IUsuarioPainelGerenc
                       {this.state.baseFilters !== 'verNumHospCr' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="verNumHospCrLabel" for="usuario-painel-gerencial-verNumHospCr">
+                            <Label id="verNumHospCrLabel" check>
+                              <AvInput
+                                id="usuario-painel-gerencial-verNumHospCr"
+                                type="checkbox"
+                                className="form-control"
+                                name="verNumHospCr"
+                              />
                               <Translate contentKey="generadorApp.usuarioPainelGerencial.verNumHospCr">Ver Num Hosp Cr</Translate>
                             </Label>
-                            <AvInput
-                              type="string"
-                              name="verNumHospCr"
-                              id="usuario-painel-gerencial-verNumHospCr"
-                              value={this.state.verNumHospCr}
-                            />
                           </Row>
                         </Col>
                       ) : null}
@@ -458,15 +458,15 @@ export class UsuarioPainelGerencial extends React.Component<IUsuarioPainelGerenc
                       {this.state.baseFilters !== 'filtroNumHospCr' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="filtroNumHospCrLabel" for="usuario-painel-gerencial-filtroNumHospCr">
+                            <Label id="filtroNumHospCrLabel" check>
+                              <AvInput
+                                id="usuario-painel-gerencial-filtroNumHospCr"
+                                type="checkbox"
+                                className="form-control"
+                                name="filtroNumHospCr"
+                              />
                               <Translate contentKey="generadorApp.usuarioPainelGerencial.filtroNumHospCr">Filtro Num Hosp Cr</Translate>
                             </Label>
-                            <AvInput
-                              type="string"
-                              name="filtroNumHospCr"
-                              id="usuario-painel-gerencial-filtroNumHospCr"
-                              value={this.state.filtroNumHospCr}
-                            />
                           </Row>
                         </Col>
                       ) : null}
@@ -474,15 +474,15 @@ export class UsuarioPainelGerencial extends React.Component<IUsuarioPainelGerenc
                       {this.state.baseFilters !== 'verNumDesospCr' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="verNumDesospCrLabel" for="usuario-painel-gerencial-verNumDesospCr">
+                            <Label id="verNumDesospCrLabel" check>
+                              <AvInput
+                                id="usuario-painel-gerencial-verNumDesospCr"
+                                type="checkbox"
+                                className="form-control"
+                                name="verNumDesospCr"
+                              />
                               <Translate contentKey="generadorApp.usuarioPainelGerencial.verNumDesospCr">Ver Num Desosp Cr</Translate>
                             </Label>
-                            <AvInput
-                              type="string"
-                              name="verNumDesospCr"
-                              id="usuario-painel-gerencial-verNumDesospCr"
-                              value={this.state.verNumDesospCr}
-                            />
                           </Row>
                         </Col>
                       ) : null}
@@ -490,15 +490,15 @@ export class UsuarioPainelGerencial extends React.Component<IUsuarioPainelGerenc
                       {this.state.baseFilters !== 'filtroNumDesospCr' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="filtroNumDesospCrLabel" for="usuario-painel-gerencial-filtroNumDesospCr">
+                            <Label id="filtroNumDesospCrLabel" check>
+                              <AvInput
+                                id="usuario-painel-gerencial-filtroNumDesospCr"
+                                type="checkbox"
+                                className="form-control"
+                                name="filtroNumDesospCr"
+                              />
                               <Translate contentKey="generadorApp.usuarioPainelGerencial.filtroNumDesospCr">Filtro Num Desosp Cr</Translate>
                             </Label>
-                            <AvInput
-                              type="string"
-                              name="filtroNumDesospCr"
-                              id="usuario-painel-gerencial-filtroNumDesospCr"
-                              value={this.state.filtroNumDesospCr}
-                            />
                           </Row>
                         </Col>
                       ) : null}
@@ -506,15 +506,15 @@ export class UsuarioPainelGerencial extends React.Component<IUsuarioPainelGerenc
                       {this.state.baseFilters !== 'verNumPsCr' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="verNumPsCrLabel" for="usuario-painel-gerencial-verNumPsCr">
+                            <Label id="verNumPsCrLabel" check>
+                              <AvInput
+                                id="usuario-painel-gerencial-verNumPsCr"
+                                type="checkbox"
+                                className="form-control"
+                                name="verNumPsCr"
+                              />
                               <Translate contentKey="generadorApp.usuarioPainelGerencial.verNumPsCr">Ver Num Ps Cr</Translate>
                             </Label>
-                            <AvInput
-                              type="string"
-                              name="verNumPsCr"
-                              id="usuario-painel-gerencial-verNumPsCr"
-                              value={this.state.verNumPsCr}
-                            />
                           </Row>
                         </Col>
                       ) : null}
@@ -522,15 +522,15 @@ export class UsuarioPainelGerencial extends React.Component<IUsuarioPainelGerenc
                       {this.state.baseFilters !== 'filtroNumPsCr' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="filtroNumPsCrLabel" for="usuario-painel-gerencial-filtroNumPsCr">
+                            <Label id="filtroNumPsCrLabel" check>
+                              <AvInput
+                                id="usuario-painel-gerencial-filtroNumPsCr"
+                                type="checkbox"
+                                className="form-control"
+                                name="filtroNumPsCr"
+                              />
                               <Translate contentKey="generadorApp.usuarioPainelGerencial.filtroNumPsCr">Filtro Num Ps Cr</Translate>
                             </Label>
-                            <AvInput
-                              type="string"
-                              name="filtroNumPsCr"
-                              id="usuario-painel-gerencial-filtroNumPsCr"
-                              value={this.state.filtroNumPsCr}
-                            />
                           </Row>
                         </Col>
                       ) : null}
@@ -538,15 +538,15 @@ export class UsuarioPainelGerencial extends React.Component<IUsuarioPainelGerenc
                       {this.state.baseFilters !== 'verNumObitoCr' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="verNumObitoCrLabel" for="usuario-painel-gerencial-verNumObitoCr">
+                            <Label id="verNumObitoCrLabel" check>
+                              <AvInput
+                                id="usuario-painel-gerencial-verNumObitoCr"
+                                type="checkbox"
+                                className="form-control"
+                                name="verNumObitoCr"
+                              />
                               <Translate contentKey="generadorApp.usuarioPainelGerencial.verNumObitoCr">Ver Num Obito Cr</Translate>
                             </Label>
-                            <AvInput
-                              type="string"
-                              name="verNumObitoCr"
-                              id="usuario-painel-gerencial-verNumObitoCr"
-                              value={this.state.verNumObitoCr}
-                            />
                           </Row>
                         </Col>
                       ) : null}
@@ -554,15 +554,15 @@ export class UsuarioPainelGerencial extends React.Component<IUsuarioPainelGerenc
                       {this.state.baseFilters !== 'filtroNumObitoCr' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="filtroNumObitoCrLabel" for="usuario-painel-gerencial-filtroNumObitoCr">
+                            <Label id="filtroNumObitoCrLabel" check>
+                              <AvInput
+                                id="usuario-painel-gerencial-filtroNumObitoCr"
+                                type="checkbox"
+                                className="form-control"
+                                name="filtroNumObitoCr"
+                              />
                               <Translate contentKey="generadorApp.usuarioPainelGerencial.filtroNumObitoCr">Filtro Num Obito Cr</Translate>
                             </Label>
-                            <AvInput
-                              type="string"
-                              name="filtroNumObitoCr"
-                              id="usuario-painel-gerencial-filtroNumObitoCr"
-                              value={this.state.filtroNumObitoCr}
-                            />
                           </Row>
                         </Col>
                       ) : null}
@@ -570,17 +570,17 @@ export class UsuarioPainelGerencial extends React.Component<IUsuarioPainelGerenc
                       {this.state.baseFilters !== 'verIndCliEstaveisCr' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="verIndCliEstaveisCrLabel" for="usuario-painel-gerencial-verIndCliEstaveisCr">
+                            <Label id="verIndCliEstaveisCrLabel" check>
+                              <AvInput
+                                id="usuario-painel-gerencial-verIndCliEstaveisCr"
+                                type="checkbox"
+                                className="form-control"
+                                name="verIndCliEstaveisCr"
+                              />
                               <Translate contentKey="generadorApp.usuarioPainelGerencial.verIndCliEstaveisCr">
                                 Ver Ind Cli Estaveis Cr
                               </Translate>
                             </Label>
-                            <AvInput
-                              type="string"
-                              name="verIndCliEstaveisCr"
-                              id="usuario-painel-gerencial-verIndCliEstaveisCr"
-                              value={this.state.verIndCliEstaveisCr}
-                            />
                           </Row>
                         </Col>
                       ) : null}
@@ -588,17 +588,17 @@ export class UsuarioPainelGerencial extends React.Component<IUsuarioPainelGerenc
                       {this.state.baseFilters !== 'filtroIndCliEstaveisCr' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="filtroIndCliEstaveisCrLabel" for="usuario-painel-gerencial-filtroIndCliEstaveisCr">
+                            <Label id="filtroIndCliEstaveisCrLabel" check>
+                              <AvInput
+                                id="usuario-painel-gerencial-filtroIndCliEstaveisCr"
+                                type="checkbox"
+                                className="form-control"
+                                name="filtroIndCliEstaveisCr"
+                              />
                               <Translate contentKey="generadorApp.usuarioPainelGerencial.filtroIndCliEstaveisCr">
                                 Filtro Ind Cli Estaveis Cr
                               </Translate>
                             </Label>
-                            <AvInput
-                              type="string"
-                              name="filtroIndCliEstaveisCr"
-                              id="usuario-painel-gerencial-filtroIndCliEstaveisCr"
-                              value={this.state.filtroIndCliEstaveisCr}
-                            />
                           </Row>
                         </Col>
                       ) : null}
@@ -606,17 +606,17 @@ export class UsuarioPainelGerencial extends React.Component<IUsuarioPainelGerenc
                       {this.state.baseFilters !== 'verNumConsMedInternasCr' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="verNumConsMedInternasCrLabel" for="usuario-painel-gerencial-verNumConsMedInternasCr">
+                            <Label id="verNumConsMedInternasCrLabel" check>
+                              <AvInput
+                                id="usuario-painel-gerencial-verNumConsMedInternasCr"
+                                type="checkbox"
+                                className="form-control"
+                                name="verNumConsMedInternasCr"
+                              />
                               <Translate contentKey="generadorApp.usuarioPainelGerencial.verNumConsMedInternasCr">
                                 Ver Num Cons Med Internas Cr
                               </Translate>
                             </Label>
-                            <AvInput
-                              type="string"
-                              name="verNumConsMedInternasCr"
-                              id="usuario-painel-gerencial-verNumConsMedInternasCr"
-                              value={this.state.verNumConsMedInternasCr}
-                            />
                           </Row>
                         </Col>
                       ) : null}
@@ -624,17 +624,17 @@ export class UsuarioPainelGerencial extends React.Component<IUsuarioPainelGerenc
                       {this.state.baseFilters !== 'filtroNumConsMedInternasCr' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="filtroNumConsMedInternasCrLabel" for="usuario-painel-gerencial-filtroNumConsMedInternasCr">
+                            <Label id="filtroNumConsMedInternasCrLabel" check>
+                              <AvInput
+                                id="usuario-painel-gerencial-filtroNumConsMedInternasCr"
+                                type="checkbox"
+                                className="form-control"
+                                name="filtroNumConsMedInternasCr"
+                              />
                               <Translate contentKey="generadorApp.usuarioPainelGerencial.filtroNumConsMedInternasCr">
                                 Filtro Num Cons Med Internas Cr
                               </Translate>
                             </Label>
-                            <AvInput
-                              type="string"
-                              name="filtroNumConsMedInternasCr"
-                              id="usuario-painel-gerencial-filtroNumConsMedInternasCr"
-                              value={this.state.filtroNumConsMedInternasCr}
-                            />
                           </Row>
                         </Col>
                       ) : null}
@@ -642,17 +642,17 @@ export class UsuarioPainelGerencial extends React.Component<IUsuarioPainelGerenc
                       {this.state.baseFilters !== 'verNumConsMedExternasCr' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="verNumConsMedExternasCrLabel" for="usuario-painel-gerencial-verNumConsMedExternasCr">
+                            <Label id="verNumConsMedExternasCrLabel" check>
+                              <AvInput
+                                id="usuario-painel-gerencial-verNumConsMedExternasCr"
+                                type="checkbox"
+                                className="form-control"
+                                name="verNumConsMedExternasCr"
+                              />
                               <Translate contentKey="generadorApp.usuarioPainelGerencial.verNumConsMedExternasCr">
                                 Ver Num Cons Med Externas Cr
                               </Translate>
                             </Label>
-                            <AvInput
-                              type="string"
-                              name="verNumConsMedExternasCr"
-                              id="usuario-painel-gerencial-verNumConsMedExternasCr"
-                              value={this.state.verNumConsMedExternasCr}
-                            />
                           </Row>
                         </Col>
                       ) : null}
@@ -660,17 +660,17 @@ export class UsuarioPainelGerencial extends React.Component<IUsuarioPainelGerenc
                       {this.state.baseFilters !== 'filtroNumConsMedExternasCr' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="filtroNumConsMedExternasCrLabel" for="usuario-painel-gerencial-filtroNumConsMedExternasCr">
+                            <Label id="filtroNumConsMedExternasCrLabel" check>
+                              <AvInput
+                                id="usuario-painel-gerencial-filtroNumConsMedExternasCr"
+                                type="checkbox"
+                                className="form-control"
+                                name="filtroNumConsMedExternasCr"
+                              />
                               <Translate contentKey="generadorApp.usuarioPainelGerencial.filtroNumConsMedExternasCr">
                                 Filtro Num Cons Med Externas Cr
                               </Translate>
                             </Label>
-                            <AvInput
-                              type="string"
-                              name="filtroNumConsMedExternasCr"
-                              id="usuario-painel-gerencial-filtroNumConsMedExternasCr"
-                              value={this.state.filtroNumConsMedExternasCr}
-                            />
                           </Row>
                         </Col>
                       ) : null}
@@ -678,17 +678,17 @@ export class UsuarioPainelGerencial extends React.Component<IUsuarioPainelGerenc
                       {this.state.baseFilters !== 'verNumLaboratorialCr' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="verNumLaboratorialCrLabel" for="usuario-painel-gerencial-verNumLaboratorialCr">
+                            <Label id="verNumLaboratorialCrLabel" check>
+                              <AvInput
+                                id="usuario-painel-gerencial-verNumLaboratorialCr"
+                                type="checkbox"
+                                className="form-control"
+                                name="verNumLaboratorialCr"
+                              />
                               <Translate contentKey="generadorApp.usuarioPainelGerencial.verNumLaboratorialCr">
                                 Ver Num Laboratorial Cr
                               </Translate>
                             </Label>
-                            <AvInput
-                              type="string"
-                              name="verNumLaboratorialCr"
-                              id="usuario-painel-gerencial-verNumLaboratorialCr"
-                              value={this.state.verNumLaboratorialCr}
-                            />
                           </Row>
                         </Col>
                       ) : null}
@@ -696,17 +696,17 @@ export class UsuarioPainelGerencial extends React.Component<IUsuarioPainelGerenc
                       {this.state.baseFilters !== 'filtroNumLaboratorialCr' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="filtroNumLaboratorialCrLabel" for="usuario-painel-gerencial-filtroNumLaboratorialCr">
+                            <Label id="filtroNumLaboratorialCrLabel" check>
+                              <AvInput
+                                id="usuario-painel-gerencial-filtroNumLaboratorialCr"
+                                type="checkbox"
+                                className="form-control"
+                                name="filtroNumLaboratorialCr"
+                              />
                               <Translate contentKey="generadorApp.usuarioPainelGerencial.filtroNumLaboratorialCr">
                                 Filtro Num Laboratorial Cr
                               </Translate>
                             </Label>
-                            <AvInput
-                              type="string"
-                              name="filtroNumLaboratorialCr"
-                              id="usuario-painel-gerencial-filtroNumLaboratorialCr"
-                              value={this.state.filtroNumLaboratorialCr}
-                            />
                           </Row>
                         </Col>
                       ) : null}
@@ -714,15 +714,15 @@ export class UsuarioPainelGerencial extends React.Component<IUsuarioPainelGerenc
                       {this.state.baseFilters !== 'verNumImagemCr' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="verNumImagemCrLabel" for="usuario-painel-gerencial-verNumImagemCr">
+                            <Label id="verNumImagemCrLabel" check>
+                              <AvInput
+                                id="usuario-painel-gerencial-verNumImagemCr"
+                                type="checkbox"
+                                className="form-control"
+                                name="verNumImagemCr"
+                              />
                               <Translate contentKey="generadorApp.usuarioPainelGerencial.verNumImagemCr">Ver Num Imagem Cr</Translate>
                             </Label>
-                            <AvInput
-                              type="string"
-                              name="verNumImagemCr"
-                              id="usuario-painel-gerencial-verNumImagemCr"
-                              value={this.state.verNumImagemCr}
-                            />
                           </Row>
                         </Col>
                       ) : null}
@@ -730,15 +730,15 @@ export class UsuarioPainelGerencial extends React.Component<IUsuarioPainelGerenc
                       {this.state.baseFilters !== 'filtroNumImagemCr' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="filtroNumImagemCrLabel" for="usuario-painel-gerencial-filtroNumImagemCr">
+                            <Label id="filtroNumImagemCrLabel" check>
+                              <AvInput
+                                id="usuario-painel-gerencial-filtroNumImagemCr"
+                                type="checkbox"
+                                className="form-control"
+                                name="filtroNumImagemCr"
+                              />
                               <Translate contentKey="generadorApp.usuarioPainelGerencial.filtroNumImagemCr">Filtro Num Imagem Cr</Translate>
                             </Label>
-                            <AvInput
-                              type="string"
-                              name="filtroNumImagemCr"
-                              id="usuario-painel-gerencial-filtroNumImagemCr"
-                              value={this.state.filtroNumImagemCr}
-                            />
                           </Row>
                         </Col>
                       ) : null}
@@ -746,15 +746,15 @@ export class UsuarioPainelGerencial extends React.Component<IUsuarioPainelGerenc
                       {this.state.baseFilters !== 'verNumOutrosCr' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="verNumOutrosCrLabel" for="usuario-painel-gerencial-verNumOutrosCr">
+                            <Label id="verNumOutrosCrLabel" check>
+                              <AvInput
+                                id="usuario-painel-gerencial-verNumOutrosCr"
+                                type="checkbox"
+                                className="form-control"
+                                name="verNumOutrosCr"
+                              />
                               <Translate contentKey="generadorApp.usuarioPainelGerencial.verNumOutrosCr">Ver Num Outros Cr</Translate>
                             </Label>
-                            <AvInput
-                              type="string"
-                              name="verNumOutrosCr"
-                              id="usuario-painel-gerencial-verNumOutrosCr"
-                              value={this.state.verNumOutrosCr}
-                            />
                           </Row>
                         </Col>
                       ) : null}
@@ -762,15 +762,15 @@ export class UsuarioPainelGerencial extends React.Component<IUsuarioPainelGerenc
                       {this.state.baseFilters !== 'filtroNumOutrosCr' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="filtroNumOutrosCrLabel" for="usuario-painel-gerencial-filtroNumOutrosCr">
+                            <Label id="filtroNumOutrosCrLabel" check>
+                              <AvInput
+                                id="usuario-painel-gerencial-filtroNumOutrosCr"
+                                type="checkbox"
+                                className="form-control"
+                                name="filtroNumOutrosCr"
+                              />
                               <Translate contentKey="generadorApp.usuarioPainelGerencial.filtroNumOutrosCr">Filtro Num Outros Cr</Translate>
                             </Label>
-                            <AvInput
-                              type="string"
-                              name="filtroNumOutrosCr"
-                              id="usuario-painel-gerencial-filtroNumOutrosCr"
-                              value={this.state.filtroNumOutrosCr}
-                            />
                           </Row>
                         </Col>
                       ) : null}
@@ -778,15 +778,15 @@ export class UsuarioPainelGerencial extends React.Component<IUsuarioPainelGerenc
                       {this.state.baseFilters !== 'verNumAtCatCr' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="verNumAtCatCrLabel" for="usuario-painel-gerencial-verNumAtCatCr">
+                            <Label id="verNumAtCatCrLabel" check>
+                              <AvInput
+                                id="usuario-painel-gerencial-verNumAtCatCr"
+                                type="checkbox"
+                                className="form-control"
+                                name="verNumAtCatCr"
+                              />
                               <Translate contentKey="generadorApp.usuarioPainelGerencial.verNumAtCatCr">Ver Num At Cat Cr</Translate>
                             </Label>
-                            <AvInput
-                              type="string"
-                              name="verNumAtCatCr"
-                              id="usuario-painel-gerencial-verNumAtCatCr"
-                              value={this.state.verNumAtCatCr}
-                            />
                           </Row>
                         </Col>
                       ) : null}
@@ -794,15 +794,15 @@ export class UsuarioPainelGerencial extends React.Component<IUsuarioPainelGerenc
                       {this.state.baseFilters !== 'filtroNumAtCatCr' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="filtroNumAtCatCrLabel" for="usuario-painel-gerencial-filtroNumAtCatCr">
+                            <Label id="filtroNumAtCatCrLabel" check>
+                              <AvInput
+                                id="usuario-painel-gerencial-filtroNumAtCatCr"
+                                type="checkbox"
+                                className="form-control"
+                                name="filtroNumAtCatCr"
+                              />
                               <Translate contentKey="generadorApp.usuarioPainelGerencial.filtroNumAtCatCr">Filtro Num At Cat Cr</Translate>
                             </Label>
-                            <AvInput
-                              type="string"
-                              name="filtroNumAtCatCr"
-                              id="usuario-painel-gerencial-filtroNumAtCatCr"
-                              value={this.state.filtroNumAtCatCr}
-                            />
                           </Row>
                         </Col>
                       ) : null}
@@ -810,15 +810,15 @@ export class UsuarioPainelGerencial extends React.Component<IUsuarioPainelGerenc
                       {this.state.baseFilters !== 'verNumCatCompCr' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="verNumCatCompCrLabel" for="usuario-painel-gerencial-verNumCatCompCr">
+                            <Label id="verNumCatCompCrLabel" check>
+                              <AvInput
+                                id="usuario-painel-gerencial-verNumCatCompCr"
+                                type="checkbox"
+                                className="form-control"
+                                name="verNumCatCompCr"
+                              />
                               <Translate contentKey="generadorApp.usuarioPainelGerencial.verNumCatCompCr">Ver Num Cat Comp Cr</Translate>
                             </Label>
-                            <AvInput
-                              type="string"
-                              name="verNumCatCompCr"
-                              id="usuario-painel-gerencial-verNumCatCompCr"
-                              value={this.state.verNumCatCompCr}
-                            />
                           </Row>
                         </Col>
                       ) : null}
@@ -826,17 +826,17 @@ export class UsuarioPainelGerencial extends React.Component<IUsuarioPainelGerenc
                       {this.state.baseFilters !== 'filtroNumCatCompCr' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="filtroNumCatCompCrLabel" for="usuario-painel-gerencial-filtroNumCatCompCr">
+                            <Label id="filtroNumCatCompCrLabel" check>
+                              <AvInput
+                                id="usuario-painel-gerencial-filtroNumCatCompCr"
+                                type="checkbox"
+                                className="form-control"
+                                name="filtroNumCatCompCr"
+                              />
                               <Translate contentKey="generadorApp.usuarioPainelGerencial.filtroNumCatCompCr">
                                 Filtro Num Cat Comp Cr
                               </Translate>
                             </Label>
-                            <AvInput
-                              type="string"
-                              name="filtroNumCatCompCr"
-                              id="usuario-painel-gerencial-filtroNumCatCompCr"
-                              value={this.state.filtroNumCatCompCr}
-                            />
                           </Row>
                         </Col>
                       ) : null}
@@ -844,15 +844,15 @@ export class UsuarioPainelGerencial extends React.Component<IUsuarioPainelGerenc
                       {this.state.baseFilters !== 'verAtCmSucessoCr' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="verAtCmSucessoCrLabel" for="usuario-painel-gerencial-verAtCmSucessoCr">
+                            <Label id="verAtCmSucessoCrLabel" check>
+                              <AvInput
+                                id="usuario-painel-gerencial-verAtCmSucessoCr"
+                                type="checkbox"
+                                className="form-control"
+                                name="verAtCmSucessoCr"
+                              />
                               <Translate contentKey="generadorApp.usuarioPainelGerencial.verAtCmSucessoCr">Ver At Cm Sucesso Cr</Translate>
                             </Label>
-                            <AvInput
-                              type="string"
-                              name="verAtCmSucessoCr"
-                              id="usuario-painel-gerencial-verAtCmSucessoCr"
-                              value={this.state.verAtCmSucessoCr}
-                            />
                           </Row>
                         </Col>
                       ) : null}
@@ -860,17 +860,17 @@ export class UsuarioPainelGerencial extends React.Component<IUsuarioPainelGerenc
                       {this.state.baseFilters !== 'filtroAtCmSucessoCr' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="filtroAtCmSucessoCrLabel" for="usuario-painel-gerencial-filtroAtCmSucessoCr">
+                            <Label id="filtroAtCmSucessoCrLabel" check>
+                              <AvInput
+                                id="usuario-painel-gerencial-filtroAtCmSucessoCr"
+                                type="checkbox"
+                                className="form-control"
+                                name="filtroAtCmSucessoCr"
+                              />
                               <Translate contentKey="generadorApp.usuarioPainelGerencial.filtroAtCmSucessoCr">
                                 Filtro At Cm Sucesso Cr
                               </Translate>
                             </Label>
-                            <AvInput
-                              type="string"
-                              name="filtroAtCmSucessoCr"
-                              id="usuario-painel-gerencial-filtroAtCmSucessoCr"
-                              value={this.state.filtroAtCmSucessoCr}
-                            />
                           </Row>
                         </Col>
                       ) : null}
@@ -878,17 +878,17 @@ export class UsuarioPainelGerencial extends React.Component<IUsuarioPainelGerenc
                       {this.state.baseFilters !== 'verMediaPadAbertoCr' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="verMediaPadAbertoCrLabel" for="usuario-painel-gerencial-verMediaPadAbertoCr">
+                            <Label id="verMediaPadAbertoCrLabel" check>
+                              <AvInput
+                                id="usuario-painel-gerencial-verMediaPadAbertoCr"
+                                type="checkbox"
+                                className="form-control"
+                                name="verMediaPadAbertoCr"
+                              />
                               <Translate contentKey="generadorApp.usuarioPainelGerencial.verMediaPadAbertoCr">
                                 Ver Media Pad Aberto Cr
                               </Translate>
                             </Label>
-                            <AvInput
-                              type="string"
-                              name="verMediaPadAbertoCr"
-                              id="usuario-painel-gerencial-verMediaPadAbertoCr"
-                              value={this.state.verMediaPadAbertoCr}
-                            />
                           </Row>
                         </Col>
                       ) : null}
@@ -896,17 +896,17 @@ export class UsuarioPainelGerencial extends React.Component<IUsuarioPainelGerenc
                       {this.state.baseFilters !== 'filtroMediaPadAbertoCr' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="filtroMediaPadAbertoCrLabel" for="usuario-painel-gerencial-filtroMediaPadAbertoCr">
+                            <Label id="filtroMediaPadAbertoCrLabel" check>
+                              <AvInput
+                                id="usuario-painel-gerencial-filtroMediaPadAbertoCr"
+                                type="checkbox"
+                                className="form-control"
+                                name="filtroMediaPadAbertoCr"
+                              />
                               <Translate contentKey="generadorApp.usuarioPainelGerencial.filtroMediaPadAbertoCr">
                                 Filtro Media Pad Aberto Cr
                               </Translate>
                             </Label>
-                            <AvInput
-                              type="string"
-                              name="filtroMediaPadAbertoCr"
-                              id="usuario-painel-gerencial-filtroMediaPadAbertoCr"
-                              value={this.state.filtroMediaPadAbertoCr}
-                            />
                           </Row>
                         </Col>
                       ) : null}
@@ -914,17 +914,17 @@ export class UsuarioPainelGerencial extends React.Component<IUsuarioPainelGerenc
                       {this.state.baseFilters !== 'verAtIntercorrenciaCr' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="verAtIntercorrenciaCrLabel" for="usuario-painel-gerencial-verAtIntercorrenciaCr">
+                            <Label id="verAtIntercorrenciaCrLabel" check>
+                              <AvInput
+                                id="usuario-painel-gerencial-verAtIntercorrenciaCr"
+                                type="checkbox"
+                                className="form-control"
+                                name="verAtIntercorrenciaCr"
+                              />
                               <Translate contentKey="generadorApp.usuarioPainelGerencial.verAtIntercorrenciaCr">
                                 Ver At Intercorrencia Cr
                               </Translate>
                             </Label>
-                            <AvInput
-                              type="string"
-                              name="verAtIntercorrenciaCr"
-                              id="usuario-painel-gerencial-verAtIntercorrenciaCr"
-                              value={this.state.verAtIntercorrenciaCr}
-                            />
                           </Row>
                         </Col>
                       ) : null}
@@ -932,17 +932,17 @@ export class UsuarioPainelGerencial extends React.Component<IUsuarioPainelGerenc
                       {this.state.baseFilters !== 'filtroAtIntercorrenciaCr' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="filtroAtIntercorrenciaCrLabel" for="usuario-painel-gerencial-filtroAtIntercorrenciaCr">
+                            <Label id="filtroAtIntercorrenciaCrLabel" check>
+                              <AvInput
+                                id="usuario-painel-gerencial-filtroAtIntercorrenciaCr"
+                                type="checkbox"
+                                className="form-control"
+                                name="filtroAtIntercorrenciaCr"
+                              />
                               <Translate contentKey="generadorApp.usuarioPainelGerencial.filtroAtIntercorrenciaCr">
                                 Filtro At Intercorrencia Cr
                               </Translate>
                             </Label>
-                            <AvInput
-                              type="string"
-                              name="filtroAtIntercorrenciaCr"
-                              id="usuario-painel-gerencial-filtroAtIntercorrenciaCr"
-                              value={this.state.filtroAtIntercorrenciaCr}
-                            />
                           </Row>
                         </Col>
                       ) : null}
@@ -950,17 +950,17 @@ export class UsuarioPainelGerencial extends React.Component<IUsuarioPainelGerenc
                       {this.state.baseFilters !== 'verTempoMedioAtCr' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="verTempoMedioAtCrLabel" for="usuario-painel-gerencial-verTempoMedioAtCr">
+                            <Label id="verTempoMedioAtCrLabel" check>
+                              <AvInput
+                                id="usuario-painel-gerencial-verTempoMedioAtCr"
+                                type="checkbox"
+                                className="form-control"
+                                name="verTempoMedioAtCr"
+                              />
                               <Translate contentKey="generadorApp.usuarioPainelGerencial.verTempoMedioAtCr">
                                 Ver Tempo Medio At Cr
                               </Translate>
                             </Label>
-                            <AvInput
-                              type="string"
-                              name="verTempoMedioAtCr"
-                              id="usuario-painel-gerencial-verTempoMedioAtCr"
-                              value={this.state.verTempoMedioAtCr}
-                            />
                           </Row>
                         </Col>
                       ) : null}
@@ -968,17 +968,17 @@ export class UsuarioPainelGerencial extends React.Component<IUsuarioPainelGerenc
                       {this.state.baseFilters !== 'filtroTempoMedioAtCr' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="filtroTempoMedioAtCrLabel" for="usuario-painel-gerencial-filtroTempoMedioAtCr">
+                            <Label id="filtroTempoMedioAtCrLabel" check>
+                              <AvInput
+                                id="usuario-painel-gerencial-filtroTempoMedioAtCr"
+                                type="checkbox"
+                                className="form-control"
+                                name="filtroTempoMedioAtCr"
+                              />
                               <Translate contentKey="generadorApp.usuarioPainelGerencial.filtroTempoMedioAtCr">
                                 Filtro Tempo Medio At Cr
                               </Translate>
                             </Label>
-                            <AvInput
-                              type="string"
-                              name="filtroTempoMedioAtCr"
-                              id="usuario-painel-gerencial-filtroTempoMedioAtCr"
-                              value={this.state.filtroTempoMedioAtCr}
-                            />
                           </Row>
                         </Col>
                       ) : null}
@@ -986,15 +986,15 @@ export class UsuarioPainelGerencial extends React.Component<IUsuarioPainelGerenc
                       {this.state.baseFilters !== 'verMediaPtaCr' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="verMediaPtaCrLabel" for="usuario-painel-gerencial-verMediaPtaCr">
+                            <Label id="verMediaPtaCrLabel" check>
+                              <AvInput
+                                id="usuario-painel-gerencial-verMediaPtaCr"
+                                type="checkbox"
+                                className="form-control"
+                                name="verMediaPtaCr"
+                              />
                               <Translate contentKey="generadorApp.usuarioPainelGerencial.verMediaPtaCr">Ver Media Pta Cr</Translate>
                             </Label>
-                            <AvInput
-                              type="string"
-                              name="verMediaPtaCr"
-                              id="usuario-painel-gerencial-verMediaPtaCr"
-                              value={this.state.verMediaPtaCr}
-                            />
                           </Row>
                         </Col>
                       ) : null}
@@ -1002,15 +1002,15 @@ export class UsuarioPainelGerencial extends React.Component<IUsuarioPainelGerenc
                       {this.state.baseFilters !== 'filtroMediaPtaCr' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="filtroMediaPtaCrLabel" for="usuario-painel-gerencial-filtroMediaPtaCr">
+                            <Label id="filtroMediaPtaCrLabel" check>
+                              <AvInput
+                                id="usuario-painel-gerencial-filtroMediaPtaCr"
+                                type="checkbox"
+                                className="form-control"
+                                name="filtroMediaPtaCr"
+                              />
                               <Translate contentKey="generadorApp.usuarioPainelGerencial.filtroMediaPtaCr">Filtro Media Pta Cr</Translate>
                             </Label>
-                            <AvInput
-                              type="string"
-                              name="filtroMediaPtaCr"
-                              id="usuario-painel-gerencial-filtroMediaPtaCr"
-                              value={this.state.filtroMediaPtaCr}
-                            />
                           </Row>
                         </Col>
                       ) : null}
@@ -1018,17 +1018,17 @@ export class UsuarioPainelGerencial extends React.Component<IUsuarioPainelGerenc
                       {this.state.baseFilters !== 'verIndicadorUsoAppCr' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="verIndicadorUsoAppCrLabel" for="usuario-painel-gerencial-verIndicadorUsoAppCr">
+                            <Label id="verIndicadorUsoAppCrLabel" check>
+                              <AvInput
+                                id="usuario-painel-gerencial-verIndicadorUsoAppCr"
+                                type="checkbox"
+                                className="form-control"
+                                name="verIndicadorUsoAppCr"
+                              />
                               <Translate contentKey="generadorApp.usuarioPainelGerencial.verIndicadorUsoAppCr">
                                 Ver Indicador Uso App Cr
                               </Translate>
                             </Label>
-                            <AvInput
-                              type="string"
-                              name="verIndicadorUsoAppCr"
-                              id="usuario-painel-gerencial-verIndicadorUsoAppCr"
-                              value={this.state.verIndicadorUsoAppCr}
-                            />
                           </Row>
                         </Col>
                       ) : null}
@@ -1036,17 +1036,17 @@ export class UsuarioPainelGerencial extends React.Component<IUsuarioPainelGerenc
                       {this.state.baseFilters !== 'filtroIndicadorUsoAppCr' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="filtroIndicadorUsoAppCrLabel" for="usuario-painel-gerencial-filtroIndicadorUsoAppCr">
+                            <Label id="filtroIndicadorUsoAppCrLabel" check>
+                              <AvInput
+                                id="usuario-painel-gerencial-filtroIndicadorUsoAppCr"
+                                type="checkbox"
+                                className="form-control"
+                                name="filtroIndicadorUsoAppCr"
+                              />
                               <Translate contentKey="generadorApp.usuarioPainelGerencial.filtroIndicadorUsoAppCr">
                                 Filtro Indicador Uso App Cr
                               </Translate>
                             </Label>
-                            <AvInput
-                              type="string"
-                              name="filtroIndicadorUsoAppCr"
-                              id="usuario-painel-gerencial-filtroIndicadorUsoAppCr"
-                              value={this.state.filtroIndicadorUsoAppCr}
-                            />
                           </Row>
                         </Col>
                       ) : null}
@@ -1361,104 +1361,156 @@ export class UsuarioPainelGerencial extends React.Component<IUsuarioPainelGerenc
                           </Button>
                         </td>
 
-                        {this.state.baseFilters !== 'verCronicos' ? <td>{usuarioPainelGerencial.verCronicos}</td> : null}
+                        {this.state.baseFilters !== 'verCronicos' ? <td>{usuarioPainelGerencial.verCronicos ? 'true' : 'false'}</td> : null}
 
-                        {this.state.baseFilters !== 'verPacientesAtivosCr' ? <td>{usuarioPainelGerencial.verPacientesAtivosCr}</td> : null}
-
-                        {this.state.baseFilters !== 'filtroPacientesAtivosCr' ? (
-                          <td>{usuarioPainelGerencial.filtroPacientesAtivosCr}</td>
+                        {this.state.baseFilters !== 'verPacientesAtivosCr' ? (
+                          <td>{usuarioPainelGerencial.verPacientesAtivosCr ? 'true' : 'false'}</td>
                         ) : null}
 
-                        {this.state.baseFilters !== 'verNumHospCr' ? <td>{usuarioPainelGerencial.verNumHospCr}</td> : null}
+                        {this.state.baseFilters !== 'filtroPacientesAtivosCr' ? (
+                          <td>{usuarioPainelGerencial.filtroPacientesAtivosCr ? 'true' : 'false'}</td>
+                        ) : null}
 
-                        {this.state.baseFilters !== 'filtroNumHospCr' ? <td>{usuarioPainelGerencial.filtroNumHospCr}</td> : null}
+                        {this.state.baseFilters !== 'verNumHospCr' ? (
+                          <td>{usuarioPainelGerencial.verNumHospCr ? 'true' : 'false'}</td>
+                        ) : null}
 
-                        {this.state.baseFilters !== 'verNumDesospCr' ? <td>{usuarioPainelGerencial.verNumDesospCr}</td> : null}
+                        {this.state.baseFilters !== 'filtroNumHospCr' ? (
+                          <td>{usuarioPainelGerencial.filtroNumHospCr ? 'true' : 'false'}</td>
+                        ) : null}
 
-                        {this.state.baseFilters !== 'filtroNumDesospCr' ? <td>{usuarioPainelGerencial.filtroNumDesospCr}</td> : null}
+                        {this.state.baseFilters !== 'verNumDesospCr' ? (
+                          <td>{usuarioPainelGerencial.verNumDesospCr ? 'true' : 'false'}</td>
+                        ) : null}
 
-                        {this.state.baseFilters !== 'verNumPsCr' ? <td>{usuarioPainelGerencial.verNumPsCr}</td> : null}
+                        {this.state.baseFilters !== 'filtroNumDesospCr' ? (
+                          <td>{usuarioPainelGerencial.filtroNumDesospCr ? 'true' : 'false'}</td>
+                        ) : null}
 
-                        {this.state.baseFilters !== 'filtroNumPsCr' ? <td>{usuarioPainelGerencial.filtroNumPsCr}</td> : null}
+                        {this.state.baseFilters !== 'verNumPsCr' ? <td>{usuarioPainelGerencial.verNumPsCr ? 'true' : 'false'}</td> : null}
 
-                        {this.state.baseFilters !== 'verNumObitoCr' ? <td>{usuarioPainelGerencial.verNumObitoCr}</td> : null}
+                        {this.state.baseFilters !== 'filtroNumPsCr' ? (
+                          <td>{usuarioPainelGerencial.filtroNumPsCr ? 'true' : 'false'}</td>
+                        ) : null}
 
-                        {this.state.baseFilters !== 'filtroNumObitoCr' ? <td>{usuarioPainelGerencial.filtroNumObitoCr}</td> : null}
+                        {this.state.baseFilters !== 'verNumObitoCr' ? (
+                          <td>{usuarioPainelGerencial.verNumObitoCr ? 'true' : 'false'}</td>
+                        ) : null}
 
-                        {this.state.baseFilters !== 'verIndCliEstaveisCr' ? <td>{usuarioPainelGerencial.verIndCliEstaveisCr}</td> : null}
+                        {this.state.baseFilters !== 'filtroNumObitoCr' ? (
+                          <td>{usuarioPainelGerencial.filtroNumObitoCr ? 'true' : 'false'}</td>
+                        ) : null}
+
+                        {this.state.baseFilters !== 'verIndCliEstaveisCr' ? (
+                          <td>{usuarioPainelGerencial.verIndCliEstaveisCr ? 'true' : 'false'}</td>
+                        ) : null}
 
                         {this.state.baseFilters !== 'filtroIndCliEstaveisCr' ? (
-                          <td>{usuarioPainelGerencial.filtroIndCliEstaveisCr}</td>
+                          <td>{usuarioPainelGerencial.filtroIndCliEstaveisCr ? 'true' : 'false'}</td>
                         ) : null}
 
                         {this.state.baseFilters !== 'verNumConsMedInternasCr' ? (
-                          <td>{usuarioPainelGerencial.verNumConsMedInternasCr}</td>
+                          <td>{usuarioPainelGerencial.verNumConsMedInternasCr ? 'true' : 'false'}</td>
                         ) : null}
 
                         {this.state.baseFilters !== 'filtroNumConsMedInternasCr' ? (
-                          <td>{usuarioPainelGerencial.filtroNumConsMedInternasCr}</td>
+                          <td>{usuarioPainelGerencial.filtroNumConsMedInternasCr ? 'true' : 'false'}</td>
                         ) : null}
 
                         {this.state.baseFilters !== 'verNumConsMedExternasCr' ? (
-                          <td>{usuarioPainelGerencial.verNumConsMedExternasCr}</td>
+                          <td>{usuarioPainelGerencial.verNumConsMedExternasCr ? 'true' : 'false'}</td>
                         ) : null}
 
                         {this.state.baseFilters !== 'filtroNumConsMedExternasCr' ? (
-                          <td>{usuarioPainelGerencial.filtroNumConsMedExternasCr}</td>
+                          <td>{usuarioPainelGerencial.filtroNumConsMedExternasCr ? 'true' : 'false'}</td>
                         ) : null}
 
-                        {this.state.baseFilters !== 'verNumLaboratorialCr' ? <td>{usuarioPainelGerencial.verNumLaboratorialCr}</td> : null}
+                        {this.state.baseFilters !== 'verNumLaboratorialCr' ? (
+                          <td>{usuarioPainelGerencial.verNumLaboratorialCr ? 'true' : 'false'}</td>
+                        ) : null}
 
                         {this.state.baseFilters !== 'filtroNumLaboratorialCr' ? (
-                          <td>{usuarioPainelGerencial.filtroNumLaboratorialCr}</td>
+                          <td>{usuarioPainelGerencial.filtroNumLaboratorialCr ? 'true' : 'false'}</td>
                         ) : null}
 
-                        {this.state.baseFilters !== 'verNumImagemCr' ? <td>{usuarioPainelGerencial.verNumImagemCr}</td> : null}
+                        {this.state.baseFilters !== 'verNumImagemCr' ? (
+                          <td>{usuarioPainelGerencial.verNumImagemCr ? 'true' : 'false'}</td>
+                        ) : null}
 
-                        {this.state.baseFilters !== 'filtroNumImagemCr' ? <td>{usuarioPainelGerencial.filtroNumImagemCr}</td> : null}
+                        {this.state.baseFilters !== 'filtroNumImagemCr' ? (
+                          <td>{usuarioPainelGerencial.filtroNumImagemCr ? 'true' : 'false'}</td>
+                        ) : null}
 
-                        {this.state.baseFilters !== 'verNumOutrosCr' ? <td>{usuarioPainelGerencial.verNumOutrosCr}</td> : null}
+                        {this.state.baseFilters !== 'verNumOutrosCr' ? (
+                          <td>{usuarioPainelGerencial.verNumOutrosCr ? 'true' : 'false'}</td>
+                        ) : null}
 
-                        {this.state.baseFilters !== 'filtroNumOutrosCr' ? <td>{usuarioPainelGerencial.filtroNumOutrosCr}</td> : null}
+                        {this.state.baseFilters !== 'filtroNumOutrosCr' ? (
+                          <td>{usuarioPainelGerencial.filtroNumOutrosCr ? 'true' : 'false'}</td>
+                        ) : null}
 
-                        {this.state.baseFilters !== 'verNumAtCatCr' ? <td>{usuarioPainelGerencial.verNumAtCatCr}</td> : null}
+                        {this.state.baseFilters !== 'verNumAtCatCr' ? (
+                          <td>{usuarioPainelGerencial.verNumAtCatCr ? 'true' : 'false'}</td>
+                        ) : null}
 
-                        {this.state.baseFilters !== 'filtroNumAtCatCr' ? <td>{usuarioPainelGerencial.filtroNumAtCatCr}</td> : null}
+                        {this.state.baseFilters !== 'filtroNumAtCatCr' ? (
+                          <td>{usuarioPainelGerencial.filtroNumAtCatCr ? 'true' : 'false'}</td>
+                        ) : null}
 
-                        {this.state.baseFilters !== 'verNumCatCompCr' ? <td>{usuarioPainelGerencial.verNumCatCompCr}</td> : null}
+                        {this.state.baseFilters !== 'verNumCatCompCr' ? (
+                          <td>{usuarioPainelGerencial.verNumCatCompCr ? 'true' : 'false'}</td>
+                        ) : null}
 
-                        {this.state.baseFilters !== 'filtroNumCatCompCr' ? <td>{usuarioPainelGerencial.filtroNumCatCompCr}</td> : null}
+                        {this.state.baseFilters !== 'filtroNumCatCompCr' ? (
+                          <td>{usuarioPainelGerencial.filtroNumCatCompCr ? 'true' : 'false'}</td>
+                        ) : null}
 
-                        {this.state.baseFilters !== 'verAtCmSucessoCr' ? <td>{usuarioPainelGerencial.verAtCmSucessoCr}</td> : null}
+                        {this.state.baseFilters !== 'verAtCmSucessoCr' ? (
+                          <td>{usuarioPainelGerencial.verAtCmSucessoCr ? 'true' : 'false'}</td>
+                        ) : null}
 
-                        {this.state.baseFilters !== 'filtroAtCmSucessoCr' ? <td>{usuarioPainelGerencial.filtroAtCmSucessoCr}</td> : null}
+                        {this.state.baseFilters !== 'filtroAtCmSucessoCr' ? (
+                          <td>{usuarioPainelGerencial.filtroAtCmSucessoCr ? 'true' : 'false'}</td>
+                        ) : null}
 
-                        {this.state.baseFilters !== 'verMediaPadAbertoCr' ? <td>{usuarioPainelGerencial.verMediaPadAbertoCr}</td> : null}
+                        {this.state.baseFilters !== 'verMediaPadAbertoCr' ? (
+                          <td>{usuarioPainelGerencial.verMediaPadAbertoCr ? 'true' : 'false'}</td>
+                        ) : null}
 
                         {this.state.baseFilters !== 'filtroMediaPadAbertoCr' ? (
-                          <td>{usuarioPainelGerencial.filtroMediaPadAbertoCr}</td>
+                          <td>{usuarioPainelGerencial.filtroMediaPadAbertoCr ? 'true' : 'false'}</td>
                         ) : null}
 
                         {this.state.baseFilters !== 'verAtIntercorrenciaCr' ? (
-                          <td>{usuarioPainelGerencial.verAtIntercorrenciaCr}</td>
+                          <td>{usuarioPainelGerencial.verAtIntercorrenciaCr ? 'true' : 'false'}</td>
                         ) : null}
 
                         {this.state.baseFilters !== 'filtroAtIntercorrenciaCr' ? (
-                          <td>{usuarioPainelGerencial.filtroAtIntercorrenciaCr}</td>
+                          <td>{usuarioPainelGerencial.filtroAtIntercorrenciaCr ? 'true' : 'false'}</td>
                         ) : null}
 
-                        {this.state.baseFilters !== 'verTempoMedioAtCr' ? <td>{usuarioPainelGerencial.verTempoMedioAtCr}</td> : null}
+                        {this.state.baseFilters !== 'verTempoMedioAtCr' ? (
+                          <td>{usuarioPainelGerencial.verTempoMedioAtCr ? 'true' : 'false'}</td>
+                        ) : null}
 
-                        {this.state.baseFilters !== 'filtroTempoMedioAtCr' ? <td>{usuarioPainelGerencial.filtroTempoMedioAtCr}</td> : null}
+                        {this.state.baseFilters !== 'filtroTempoMedioAtCr' ? (
+                          <td>{usuarioPainelGerencial.filtroTempoMedioAtCr ? 'true' : 'false'}</td>
+                        ) : null}
 
-                        {this.state.baseFilters !== 'verMediaPtaCr' ? <td>{usuarioPainelGerencial.verMediaPtaCr}</td> : null}
+                        {this.state.baseFilters !== 'verMediaPtaCr' ? (
+                          <td>{usuarioPainelGerencial.verMediaPtaCr ? 'true' : 'false'}</td>
+                        ) : null}
 
-                        {this.state.baseFilters !== 'filtroMediaPtaCr' ? <td>{usuarioPainelGerencial.filtroMediaPtaCr}</td> : null}
+                        {this.state.baseFilters !== 'filtroMediaPtaCr' ? (
+                          <td>{usuarioPainelGerencial.filtroMediaPtaCr ? 'true' : 'false'}</td>
+                        ) : null}
 
-                        {this.state.baseFilters !== 'verIndicadorUsoAppCr' ? <td>{usuarioPainelGerencial.verIndicadorUsoAppCr}</td> : null}
+                        {this.state.baseFilters !== 'verIndicadorUsoAppCr' ? (
+                          <td>{usuarioPainelGerencial.verIndicadorUsoAppCr ? 'true' : 'false'}</td>
+                        ) : null}
 
                         {this.state.baseFilters !== 'filtroIndicadorUsoAppCr' ? (
-                          <td>{usuarioPainelGerencial.filtroIndicadorUsoAppCr}</td>
+                          <td>{usuarioPainelGerencial.filtroIndicadorUsoAppCr ? 'true' : 'false'}</td>
                         ) : null}
 
                         <td className="text-right">

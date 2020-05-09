@@ -111,7 +111,7 @@ export class MatMedDetail extends React.Component<IMatMedDetailProps, IMatMedSta
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{matMedEntity.ativo}</dd>
+                        <dd>{matMedEntity.ativo ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>

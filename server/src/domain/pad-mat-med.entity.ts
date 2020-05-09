@@ -18,8 +18,8 @@ export default class PadMatMed extends BaseEntity {
   @Column({ type: 'integer', name: 'QTD', nullable: false })
   qtd: number;
 
-  @Column({ type: 'integer', name: 'ATIVO', nullable: false })
-  ativo: number;
+  @Column({ type: 'boolean', name: 'ATIVO', nullable: false })
+  ativo: boolean;
 
   // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
 }

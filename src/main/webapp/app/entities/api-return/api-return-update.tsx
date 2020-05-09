@@ -227,13 +227,11 @@ export class ApiReturnUpdate extends React.Component<IApiReturnUpdateProps, IApi
                           <Col md="ativo">
                             <AvGroup>
                               <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="ativoLabel" for="api-return-ativo">
+                                <Col md="12">
+                                  <Label className="mt-2" id="ativoLabel" check>
+                                    <AvInput id="api-return-ativo" type="checkbox" className="form-control" name="ativo" />
                                     <Translate contentKey="generadorApp.apiReturn.ativo">Ativo</Translate>
                                   </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField id="api-return-ativo" type="string" className="form-control" name="ativo" />
                                 </Col>
                               </Row>
                             </AvGroup>

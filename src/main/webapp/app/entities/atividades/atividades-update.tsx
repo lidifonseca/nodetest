@@ -173,13 +173,11 @@ export class AtividadesUpdate extends React.Component<IAtividadesUpdateProps, IA
                           <Col md="ativo">
                             <AvGroup>
                               <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="ativoLabel" for="atividades-ativo">
+                                <Col md="12">
+                                  <Label className="mt-2" id="ativoLabel" check>
+                                    <AvInput id="atividades-ativo" type="checkbox" className="form-control" name="ativo" />
                                     <Translate contentKey="generadorApp.atividades.ativo">Ativo</Translate>
                                   </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField id="atividades-ativo" type="string" className="form-control" name="ativo" />
                                 </Col>
                               </Row>
                             </AvGroup>

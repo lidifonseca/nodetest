@@ -33,8 +33,6 @@ export type AtendimentoState = Readonly<typeof initialState>;
 
 export interface IAtendimentoBaseState {
   baseFilters: any;
-  idFranquia: any;
-  idProfissional: any;
   cep: any;
   endereco: any;
   numero: any;
@@ -70,10 +68,12 @@ export interface IAtendimentoBaseState {
   atendimentoAssinaturas: any;
   atendimentoAtividades: any;
   unidade: any;
+  padItem: any;
   paciente: any;
   operadora: any;
+  profissional: any;
+  franquia: any;
   especialidade: any;
-  padItem: any;
   statusAtendimento: any;
   periodo: any;
   cidade: any;
@@ -83,19 +83,23 @@ export interface IAtendimentoUpdateState {
   fieldsBase: IAtendimentoBaseState;
 
   unidadeEasySelectValue: any;
+  padItemSelectValue: any;
   pacienteSelectValue: any;
   operadoraSelectValue: any;
+  profissionalSelectValue: any;
+  franquiaSelectValue: any;
   especialidadeSelectValue: any;
-  padItemSelectValue: any;
   statusAtendimentoSelectValue: any;
   periodoSelectValue: any;
   cidadeSelectValue: any;
   isNew: boolean;
   unidadeId: string;
+  padItemId: string;
   pacienteId: string;
   operadoraId: string;
+  profissionalId: string;
+  franquiaId: string;
   especialidadeId: string;
-  padItemId: string;
   statusAtendimentoId: string;
   periodoId: string;
   cidadeId: string;
@@ -179,8 +183,6 @@ const apiUrl = 'api/atendimentos';
 
 // Actions
 export type ICrudGetAllActionAtendimento<T> = (
-  idFranquia?: any,
-  idProfissional?: any,
   cep?: any,
   endereco?: any,
   numero?: any,
@@ -216,10 +218,12 @@ export type ICrudGetAllActionAtendimento<T> = (
   atendimentoAssinaturas?: any,
   atendimentoAtividades?: any,
   unidade?: any,
+  padItem?: any,
   paciente?: any,
   operadora?: any,
+  profissional?: any,
+  franquia?: any,
   especialidade?: any,
-  padItem?: any,
   statusAtendimento?: any,
   periodo?: any,
   cidade?: any,
@@ -229,8 +233,6 @@ export type ICrudGetAllActionAtendimento<T> = (
 ) => IPayload<T> | ((dispatch: any) => IPayload<T>);
 
 export const getEntities: ICrudGetAllActionAtendimento<IAtendimento> = (
-  idFranquia,
-  idProfissional,
   cep,
   endereco,
   numero,
@@ -266,10 +268,12 @@ export const getEntities: ICrudGetAllActionAtendimento<IAtendimento> = (
   atendimentoAssinaturas,
   atendimentoAtividades,
   unidade,
+  padItem,
   paciente,
   operadora,
+  profissional,
+  franquia,
   especialidade,
-  padItem,
   statusAtendimento,
   periodo,
   cidade,
@@ -277,8 +281,6 @@ export const getEntities: ICrudGetAllActionAtendimento<IAtendimento> = (
   size,
   sort
 ) => {
-  const idFranquiaRequest = idFranquia ? `idFranquia.contains=${idFranquia}&` : '';
-  const idProfissionalRequest = idProfissional ? `idProfissional.contains=${idProfissional}&` : '';
   const cepRequest = cep ? `cep.contains=${cep}&` : '';
   const enderecoRequest = endereco ? `endereco.contains=${endereco}&` : '';
   const numeroRequest = numero ? `numero.contains=${numero}&` : '';
@@ -314,10 +316,12 @@ export const getEntities: ICrudGetAllActionAtendimento<IAtendimento> = (
   const atendimentoAssinaturasRequest = atendimentoAssinaturas ? `atendimentoAssinaturas.equals=${atendimentoAssinaturas}&` : '';
   const atendimentoAtividadesRequest = atendimentoAtividades ? `atendimentoAtividades.equals=${atendimentoAtividades}&` : '';
   const unidadeRequest = unidade ? `unidade.equals=${unidade}&` : '';
+  const padItemRequest = padItem ? `padItem.equals=${padItem}&` : '';
   const pacienteRequest = paciente ? `paciente.equals=${paciente}&` : '';
   const operadoraRequest = operadora ? `operadora.equals=${operadora}&` : '';
+  const profissionalRequest = profissional ? `profissional.equals=${profissional}&` : '';
+  const franquiaRequest = franquia ? `franquia.equals=${franquia}&` : '';
   const especialidadeRequest = especialidade ? `especialidade.equals=${especialidade}&` : '';
-  const padItemRequest = padItem ? `padItem.equals=${padItem}&` : '';
   const statusAtendimentoRequest = statusAtendimento ? `statusAtendimento.equals=${statusAtendimento}&` : '';
   const periodoRequest = periodo ? `periodo.equals=${periodo}&` : '';
   const cidadeRequest = cidade ? `cidade.equals=${cidade}&` : '';
@@ -326,7 +330,7 @@ export const getEntities: ICrudGetAllActionAtendimento<IAtendimento> = (
   return {
     type: ACTION_TYPES.FETCH_ATENDIMENTO_LIST,
     payload: axios.get<IAtendimento>(
-      `${requestUrl}${idFranquiaRequest}${idProfissionalRequest}${cepRequest}${enderecoRequest}${numeroRequest}${complementoRequest}${bairroRequest}${ufRequest}${latitudeRequest}${longitudeRequest}${dataAgendaRequest}${horarioRequest}${dataChegadaRequest}${latitudeChegadaRequest}${longitudeChegadaRequest}${dataSaidaRequest}${latitudeSaidaRequest}${longitudeSaidaRequest}${evolucaoRequest}${observacaoRequest}${intercorrenciaRequest}${avaliacaoRequest}${aceitoRequest}${motivoRequest}${valorRequest}${ordemAtendimentoRequest}${ativoRequest}${dataForaHoraRequest}${idUsuarioCancelamentoRequest}${dataCancelamentoRequest}${tipoUsuarioCancelamentoRequest}${confidencialProfissionalRequest}${confidencialPacienteRequest}${atendimentoAceiteRequest}${atendimentoAssinaturasRequest}${atendimentoAtividadesRequest}${unidadeRequest}${pacienteRequest}${operadoraRequest}${especialidadeRequest}${padItemRequest}${statusAtendimentoRequest}${periodoRequest}${cidadeRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${cepRequest}${enderecoRequest}${numeroRequest}${complementoRequest}${bairroRequest}${ufRequest}${latitudeRequest}${longitudeRequest}${dataAgendaRequest}${horarioRequest}${dataChegadaRequest}${latitudeChegadaRequest}${longitudeChegadaRequest}${dataSaidaRequest}${latitudeSaidaRequest}${longitudeSaidaRequest}${evolucaoRequest}${observacaoRequest}${intercorrenciaRequest}${avaliacaoRequest}${aceitoRequest}${motivoRequest}${valorRequest}${ordemAtendimentoRequest}${ativoRequest}${dataForaHoraRequest}${idUsuarioCancelamentoRequest}${dataCancelamentoRequest}${tipoUsuarioCancelamentoRequest}${confidencialProfissionalRequest}${confidencialPacienteRequest}${atendimentoAceiteRequest}${atendimentoAssinaturasRequest}${atendimentoAtividadesRequest}${unidadeRequest}${padItemRequest}${pacienteRequest}${operadoraRequest}${profissionalRequest}${franquiaRequest}${especialidadeRequest}${statusAtendimentoRequest}${periodoRequest}${cidadeRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };
@@ -339,8 +343,6 @@ export const getEntity: ICrudGetAction<IAtendimento> = id => {
 };
 
 export const getEntitiesExport: ICrudGetAllActionAtendimento<IAtendimento> = (
-  idFranquia,
-  idProfissional,
   cep,
   endereco,
   numero,
@@ -376,10 +378,12 @@ export const getEntitiesExport: ICrudGetAllActionAtendimento<IAtendimento> = (
   atendimentoAssinaturas,
   atendimentoAtividades,
   unidade,
+  padItem,
   paciente,
   operadora,
+  profissional,
+  franquia,
   especialidade,
-  padItem,
   statusAtendimento,
   periodo,
   cidade,
@@ -387,8 +391,6 @@ export const getEntitiesExport: ICrudGetAllActionAtendimento<IAtendimento> = (
   size,
   sort
 ) => {
-  const idFranquiaRequest = idFranquia ? `idFranquia.contains=${idFranquia}&` : '';
-  const idProfissionalRequest = idProfissional ? `idProfissional.contains=${idProfissional}&` : '';
   const cepRequest = cep ? `cep.contains=${cep}&` : '';
   const enderecoRequest = endereco ? `endereco.contains=${endereco}&` : '';
   const numeroRequest = numero ? `numero.contains=${numero}&` : '';
@@ -424,10 +426,12 @@ export const getEntitiesExport: ICrudGetAllActionAtendimento<IAtendimento> = (
   const atendimentoAssinaturasRequest = atendimentoAssinaturas ? `atendimentoAssinaturas.equals=${atendimentoAssinaturas}&` : '';
   const atendimentoAtividadesRequest = atendimentoAtividades ? `atendimentoAtividades.equals=${atendimentoAtividades}&` : '';
   const unidadeRequest = unidade ? `unidade.equals=${unidade}&` : '';
+  const padItemRequest = padItem ? `padItem.equals=${padItem}&` : '';
   const pacienteRequest = paciente ? `paciente.equals=${paciente}&` : '';
   const operadoraRequest = operadora ? `operadora.equals=${operadora}&` : '';
+  const profissionalRequest = profissional ? `profissional.equals=${profissional}&` : '';
+  const franquiaRequest = franquia ? `franquia.equals=${franquia}&` : '';
   const especialidadeRequest = especialidade ? `especialidade.equals=${especialidade}&` : '';
-  const padItemRequest = padItem ? `padItem.equals=${padItem}&` : '';
   const statusAtendimentoRequest = statusAtendimento ? `statusAtendimento.equals=${statusAtendimento}&` : '';
   const periodoRequest = periodo ? `periodo.equals=${periodo}&` : '';
   const cidadeRequest = cidade ? `cidade.equals=${cidade}&` : '';
@@ -436,7 +440,7 @@ export const getEntitiesExport: ICrudGetAllActionAtendimento<IAtendimento> = (
   return {
     type: ACTION_TYPES.FETCH_ATENDIMENTO_LIST,
     payload: axios.get<IAtendimento>(
-      `${requestUrl}${idFranquiaRequest}${idProfissionalRequest}${cepRequest}${enderecoRequest}${numeroRequest}${complementoRequest}${bairroRequest}${ufRequest}${latitudeRequest}${longitudeRequest}${dataAgendaRequest}${horarioRequest}${dataChegadaRequest}${latitudeChegadaRequest}${longitudeChegadaRequest}${dataSaidaRequest}${latitudeSaidaRequest}${longitudeSaidaRequest}${evolucaoRequest}${observacaoRequest}${intercorrenciaRequest}${avaliacaoRequest}${aceitoRequest}${motivoRequest}${valorRequest}${ordemAtendimentoRequest}${ativoRequest}${dataForaHoraRequest}${idUsuarioCancelamentoRequest}${dataCancelamentoRequest}${tipoUsuarioCancelamentoRequest}${confidencialProfissionalRequest}${confidencialPacienteRequest}${atendimentoAceiteRequest}${atendimentoAssinaturasRequest}${atendimentoAtividadesRequest}${unidadeRequest}${pacienteRequest}${operadoraRequest}${especialidadeRequest}${padItemRequest}${statusAtendimentoRequest}${periodoRequest}${cidadeRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${cepRequest}${enderecoRequest}${numeroRequest}${complementoRequest}${bairroRequest}${ufRequest}${latitudeRequest}${longitudeRequest}${dataAgendaRequest}${horarioRequest}${dataChegadaRequest}${latitudeChegadaRequest}${longitudeChegadaRequest}${dataSaidaRequest}${latitudeSaidaRequest}${longitudeSaidaRequest}${evolucaoRequest}${observacaoRequest}${intercorrenciaRequest}${avaliacaoRequest}${aceitoRequest}${motivoRequest}${valorRequest}${ordemAtendimentoRequest}${ativoRequest}${dataForaHoraRequest}${idUsuarioCancelamentoRequest}${dataCancelamentoRequest}${tipoUsuarioCancelamentoRequest}${confidencialProfissionalRequest}${confidencialPacienteRequest}${atendimentoAceiteRequest}${atendimentoAssinaturasRequest}${atendimentoAtividadesRequest}${unidadeRequest}${padItemRequest}${pacienteRequest}${operadoraRequest}${profissionalRequest}${franquiaRequest}${especialidadeRequest}${statusAtendimentoRequest}${periodoRequest}${cidadeRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };
@@ -445,10 +449,12 @@ export const createEntity: ICrudPutAction<IAtendimento> = entity => async dispat
   entity = {
     ...entity,
     unidade: entity.unidade === 'null' ? null : entity.unidade,
+    padItem: entity.padItem === 'null' ? null : entity.padItem,
     paciente: entity.paciente === 'null' ? null : entity.paciente,
     operadora: entity.operadora === 'null' ? null : entity.operadora,
+    profissional: entity.profissional === 'null' ? null : entity.profissional,
+    franquia: entity.franquia === 'null' ? null : entity.franquia,
     especialidade: entity.especialidade === 'null' ? null : entity.especialidade,
-    padItem: entity.padItem === 'null' ? null : entity.padItem,
     statusAtendimento: entity.statusAtendimento === 'null' ? null : entity.statusAtendimento,
     periodo: entity.periodo === 'null' ? null : entity.periodo,
     cidade: entity.cidade === 'null' ? null : entity.cidade
@@ -465,10 +471,12 @@ export const updateEntity: ICrudPutAction<IAtendimento> = entity => async dispat
   entity = {
     ...entity,
     unidade: entity.unidade === 'null' ? null : entity.unidade,
+    padItem: entity.padItem === 'null' ? null : entity.padItem,
     paciente: entity.paciente === 'null' ? null : entity.paciente,
     operadora: entity.operadora === 'null' ? null : entity.operadora,
+    profissional: entity.profissional === 'null' ? null : entity.profissional,
+    franquia: entity.franquia === 'null' ? null : entity.franquia,
     especialidade: entity.especialidade === 'null' ? null : entity.especialidade,
-    padItem: entity.padItem === 'null' ? null : entity.padItem,
     statusAtendimento: entity.statusAtendimento === 'null' ? null : entity.statusAtendimento,
     periodo: entity.periodo === 'null' ? null : entity.periodo,
     cidade: entity.cidade === 'null' ? null : entity.cidade
@@ -498,8 +506,6 @@ export const reset = () => ({
 export const getAtendimentoState = (location): IAtendimentoBaseState => {
   const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
   const baseFilters = url.searchParams.get('baseFilters') || '';
-  const idFranquia = url.searchParams.get('idFranquia') || '';
-  const idProfissional = url.searchParams.get('idProfissional') || '';
   const cep = url.searchParams.get('cep') || '';
   const endereco = url.searchParams.get('endereco') || '';
   const numero = url.searchParams.get('numero') || '';
@@ -536,18 +542,18 @@ export const getAtendimentoState = (location): IAtendimentoBaseState => {
   const atendimentoAssinaturas = url.searchParams.get('atendimentoAssinaturas') || '';
   const atendimentoAtividades = url.searchParams.get('atendimentoAtividades') || '';
   const unidade = url.searchParams.get('unidade') || '';
+  const padItem = url.searchParams.get('padItem') || '';
   const paciente = url.searchParams.get('paciente') || '';
   const operadora = url.searchParams.get('operadora') || '';
+  const profissional = url.searchParams.get('profissional') || '';
+  const franquia = url.searchParams.get('franquia') || '';
   const especialidade = url.searchParams.get('especialidade') || '';
-  const padItem = url.searchParams.get('padItem') || '';
   const statusAtendimento = url.searchParams.get('statusAtendimento') || '';
   const periodo = url.searchParams.get('periodo') || '';
   const cidade = url.searchParams.get('cidade') || '';
 
   return {
     baseFilters,
-    idFranquia,
-    idProfissional,
     cep,
     endereco,
     numero,
@@ -583,10 +589,12 @@ export const getAtendimentoState = (location): IAtendimentoBaseState => {
     atendimentoAssinaturas,
     atendimentoAtividades,
     unidade,
+    padItem,
     paciente,
     operadora,
+    profissional,
+    franquia,
     especialidade,
-    padItem,
     statusAtendimento,
     periodo,
     cidade

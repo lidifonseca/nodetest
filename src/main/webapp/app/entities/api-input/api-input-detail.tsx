@@ -123,7 +123,7 @@ export class ApiInputDetail extends React.Component<IApiInputDetailProps, IApiIn
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{apiInputEntity.ativo}</dd>
+                        <dd>{apiInputEntity.ativo ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>

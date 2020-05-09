@@ -4,9 +4,11 @@ import { IPadItem } from 'app/shared/model/pad-item.model';
 export interface IPeriodo {
   id?: string;
   periodo?: string;
-  ativo?: number;
+  ativo?: boolean;
   atendimentos?: IAtendimento[];
   padItems?: IPadItem[];
 }
 
-export const defaultValue: Readonly<IPeriodo> = {};
+export const defaultValue: Readonly<IPeriodo> = {
+  ativo: false
+};

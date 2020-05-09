@@ -1,8 +1,10 @@
 export interface IProfissionalDispositivoComplexidade {
   id?: string;
   caracteristica?: string;
-  ativo?: number;
+  ativo?: boolean;
   tipo?: string;
 }
 
-export const defaultValue: Readonly<IProfissionalDispositivoComplexidade> = {};
+export const defaultValue: Readonly<IProfissionalDispositivoComplexidade> = {
+  ativo: false
+};

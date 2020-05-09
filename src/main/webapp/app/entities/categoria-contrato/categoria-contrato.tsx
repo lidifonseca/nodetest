@@ -179,10 +179,10 @@ export class CategoriaContrato extends React.Component<ICategoriaContratoProps, 
                       {this.state.baseFilters !== 'ativo' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="ativoLabel" for="categoria-contrato-ativo">
+                            <Label id="ativoLabel" check>
+                              <AvInput id="categoria-contrato-ativo" type="checkbox" className="form-control" name="ativo" />
                               <Translate contentKey="generadorApp.categoriaContrato.ativo">Ativo</Translate>
                             </Label>
-                            <AvInput type="string" name="ativo" id="categoria-contrato-ativo" value={this.state.ativo} />
                           </Row>
                         </Col>
                       ) : null}
@@ -289,7 +289,7 @@ export class CategoriaContrato extends React.Component<ICategoriaContratoProps, 
                           </td>
                         ) : null}
 
-                        {this.state.baseFilters !== 'ativo' ? <td>{categoriaContrato.ativo}</td> : null}
+                        {this.state.baseFilters !== 'ativo' ? <td>{categoriaContrato.ativo ? 'true' : 'false'}</td> : null}
 
                         {this.state.baseFilters !== 'categoria' ? (
                           <td>

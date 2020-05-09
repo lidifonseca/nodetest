@@ -78,7 +78,7 @@ export class TipoMatMedDetail extends React.Component<ITipoMatMedDetailProps, IT
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{tipoMatMedEntity.ativo}</dd>
+                        <dd>{tipoMatMedEntity.ativo ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>

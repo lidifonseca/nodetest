@@ -8,9 +8,11 @@ export interface IPacienteDadosCartao {
   numeroCartao?: string;
   validade?: Moment;
   codAtivacao?: number;
-  ativo?: number;
+  ativo?: boolean;
   pacientePedidos?: IPacientePedido[];
   paciente?: string | any;
 }
 
-export const defaultValue: Readonly<IPacienteDadosCartao> = {};
+export const defaultValue: Readonly<IPacienteDadosCartao> = {
+  ativo: false
+};

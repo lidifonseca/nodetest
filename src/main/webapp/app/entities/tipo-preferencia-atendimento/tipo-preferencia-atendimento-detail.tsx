@@ -86,7 +86,7 @@ export class TipoPreferenciaAtendimentoDetail extends React.Component<
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{tipoPreferenciaAtendimentoEntity.ativo}</dd>
+                        <dd>{tipoPreferenciaAtendimentoEntity.ativo ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>

@@ -213,13 +213,11 @@ export class FranquiaAreaAtuacaoUpdate extends React.Component<IFranquiaAreaAtua
                           <Col md="ativo">
                             <AvGroup>
                               <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="ativoLabel" for="franquia-area-atuacao-ativo">
+                                <Col md="12">
+                                  <Label className="mt-2" id="ativoLabel" check>
+                                    <AvInput id="franquia-area-atuacao-ativo" type="checkbox" className="form-control" name="ativo" />
                                     <Translate contentKey="generadorApp.franquiaAreaAtuacao.ativo">Ativo</Translate>
                                   </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField id="franquia-area-atuacao-ativo" type="string" className="form-control" name="ativo" />
                                 </Col>
                               </Row>
                             </AvGroup>

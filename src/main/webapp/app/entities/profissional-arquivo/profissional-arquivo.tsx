@@ -188,10 +188,10 @@ export class ProfissionalArquivo extends React.Component<IProfissionalArquivoPro
                       {this.state.baseFilters !== 'ativo' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="ativoLabel" for="profissional-arquivo-ativo">
+                            <Label id="ativoLabel" check>
+                              <AvInput id="profissional-arquivo-ativo" type="checkbox" className="form-control" name="ativo" />
                               <Translate contentKey="generadorApp.profissionalArquivo.ativo">Ativo</Translate>
                             </Label>
-                            <AvInput type="string" name="ativo" id="profissional-arquivo-ativo" value={this.state.ativo} />
                           </Row>
                         </Col>
                       ) : null}
@@ -258,7 +258,7 @@ export class ProfissionalArquivo extends React.Component<IProfissionalArquivoPro
 
                         {this.state.baseFilters !== 'arquivo' ? <td>{profissionalArquivo.arquivo}</td> : null}
 
-                        {this.state.baseFilters !== 'ativo' ? <td>{profissionalArquivo.ativo}</td> : null}
+                        {this.state.baseFilters !== 'ativo' ? <td>{profissionalArquivo.ativo ? 'true' : 'false'}</td> : null}
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">

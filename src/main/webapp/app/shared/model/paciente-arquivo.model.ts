@@ -5,9 +5,11 @@ export interface IPacienteArquivo {
   arquivoContentType?: string;
   arquivoBase64?: string;
   arquivo?: any;
-  ativo?: number;
+  ativo?: boolean;
   pacienteNome?: string;
   paciente?: string | any;
 }
 
-export const defaultValue: Readonly<IPacienteArquivo> = {};
+export const defaultValue: Readonly<IPacienteArquivo> = {
+  ativo: false
+};

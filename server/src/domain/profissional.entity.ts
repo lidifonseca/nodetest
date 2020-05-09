@@ -7,9 +7,10 @@ import { validate, Contains, IsInt, Length, IsEmail, IsFQDN, IsDate, Min, Max } 
 import AtendimentoAceite from './atendimento-aceite.entity';
 import AtendimentoAssinaturas from './atendimento-assinaturas.entity';
 import UnidadeEasy from './unidade-easy.entity';
+import Especialidade from './especialidade.entity';
 
 /**
- * A Profissional.
+ * \n\n
  */
 @Entity('tb_profissional')
 export default class Profissional extends BaseEntity {
@@ -121,8 +122,8 @@ export default class Profissional extends BaseEntity {
   @Column({ name: 'CHAVE_PRIVADA', length: 255 })
   chavePrivada: string;
 
-  @Column({ type: 'integer', name: 'ATIVO' })
-  ativo: number;
+  @Column({ type: 'boolean', name: 'ATIVO' })
+  ativo: boolean;
 
   @Column({ name: 'SENHA_ORIGINAL', length: 100 })
   senhaOriginal: string;
@@ -151,6 +152,14 @@ export default class Profissional extends BaseEntity {
   @ManyToOne(type => UnidadeEasy)
   @JoinColumn({ name: 'ID_UNIDADE', referencedColumnName: 'id' })
   unidade: UnidadeEasy;
+
+  @ManyToMany(type => Especialidade)
+  @JoinTable({
+    name: 'tb_profissional_especialidade',
+    joinColumn: { name: 'ID_PROFISSIONAL', referencedColumnName: 'id' },
+    inverseJoinColumn: { name: 'ID_ESPECIALIDADE', referencedColumnName: 'id' }
+  })
+  especialidades: Especialidade[];
 
   // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
 }

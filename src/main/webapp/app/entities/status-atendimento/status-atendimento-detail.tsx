@@ -109,7 +109,7 @@ export class StatusAtendimentoDetail extends React.Component<IStatusAtendimentoD
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{statusAtendimentoEntity.ativo}</dd>
+                        <dd>{statusAtendimentoEntity.ativo ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>

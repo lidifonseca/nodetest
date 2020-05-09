@@ -191,13 +191,11 @@ export class ImagemProntuarioUpdate extends React.Component<IImagemProntuarioUpd
                           <Col md="ativo">
                             <AvGroup>
                               <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="ativoLabel" for="imagem-prontuario-ativo">
+                                <Col md="12">
+                                  <Label className="mt-2" id="ativoLabel" check>
+                                    <AvInput id="imagem-prontuario-ativo" type="checkbox" className="form-control" name="ativo" />
                                     <Translate contentKey="generadorApp.imagemProntuario.ativo">Ativo</Translate>
                                   </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField id="imagem-prontuario-ativo" type="string" className="form-control" name="ativo" />
                                 </Col>
                               </Row>
                             </AvGroup>

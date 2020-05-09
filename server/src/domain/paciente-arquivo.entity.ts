@@ -14,8 +14,8 @@ export default class PacienteArquivo extends BaseEntity {
 
   @Column({ name: 'ARQUIVO_CONTENT_TYPE' })
   arquivoContentType: string;
-  @Column({ type: 'integer', name: 'ATIVO' })
-  ativo: number;
+  @Column({ type: 'boolean', name: 'ATIVO' })
+  ativo: boolean;
 
   @ManyToOne(type => Paciente)
   @JoinColumn({ name: 'ID_PACIENTE', referencedColumnName: 'id' })

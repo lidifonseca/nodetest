@@ -78,7 +78,7 @@ export class AtividadesDetail extends React.Component<IAtividadesDetailProps, IA
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{atividadesEntity.ativo}</dd>
+                        <dd>{atividadesEntity.ativo ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>

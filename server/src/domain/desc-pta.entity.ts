@@ -15,8 +15,8 @@ export default class DescPta extends BaseEntity {
   @Column({ name: 'RESULTADO_ESPERADO', length: 255 })
   resultadoEsperado: string;
 
-  @Column({ type: 'integer', name: 'ATIVO', nullable: false })
-  ativo: number;
+  @Column({ type: 'boolean', name: 'ATIVO', nullable: false })
+  ativo: boolean;
 
   // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
 }

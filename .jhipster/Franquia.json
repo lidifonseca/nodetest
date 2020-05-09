@@ -137,7 +137,7 @@
         },
         {
             "fieldName": "ativo",
-            "fieldType": "Integer"
+            "fieldType": "Boolean"
         }
     ],
     "relationships": [

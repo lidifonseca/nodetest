@@ -227,13 +227,11 @@ export class ApiInputUpdate extends React.Component<IApiInputUpdateProps, IApiIn
                           <Col md="ativo">
                             <AvGroup>
                               <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="ativoLabel" for="api-input-ativo">
+                                <Col md="12">
+                                  <Label className="mt-2" id="ativoLabel" check>
+                                    <AvInput id="api-input-ativo" type="checkbox" className="form-control" name="ativo" />
                                     <Translate contentKey="generadorApp.apiInput.ativo">Ativo</Translate>
                                   </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField id="api-input-ativo" type="string" className="form-control" name="ativo" />
                                 </Col>
                               </Row>
                             </AvGroup>

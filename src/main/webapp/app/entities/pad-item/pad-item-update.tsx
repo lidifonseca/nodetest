@@ -351,13 +351,11 @@ export class PadItemUpdate extends React.Component<IPadItemUpdateProps, IPadItem
                           <Col md="ativo">
                             <AvGroup>
                               <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="ativoLabel" for="pad-item-ativo">
+                                <Col md="12">
+                                  <Label className="mt-2" id="ativoLabel" check>
+                                    <AvInput id="pad-item-ativo" type="checkbox" className="form-control" name="ativo" />
                                     <Translate contentKey="generadorApp.padItem.ativo">Ativo</Translate>
                                   </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField id="pad-item-ativo" type="string" className="form-control" name="ativo" />
                                 </Col>
                               </Row>
                             </AvGroup>
@@ -432,11 +430,6 @@ export class PadItemUpdate extends React.Component<IPadItemUpdateProps, IPadItem
                           </Col>
                         ) : (
                           <AvInput type="hidden" name="numGhc" value={this.state.fieldsBase[baseFilters]} />
-                        )}
-                        {baseFilters !== 'atendimento' ? (
-                          <Col md="12"></Col>
-                        ) : (
-                          <AvInput type="hidden" name="atendimento" value={this.state.fieldsBase[baseFilters]} />
                         )}
                         {baseFilters !== 'atendimentoCepRecusado' ? (
                           <Col md="12"></Col>

@@ -108,7 +108,7 @@ export class DiarioTagsDetail extends React.Component<IDiarioTagsDetailProps, ID
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{diarioTagsEntity.ativo}</dd>
+                        <dd>{diarioTagsEntity.ativo ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>

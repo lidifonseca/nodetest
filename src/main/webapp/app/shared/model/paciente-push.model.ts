@@ -4,8 +4,10 @@ export interface IPacientePush {
   id?: string;
   idFranquia?: string;
   mensagem?: string;
-  ativo?: number;
+  ativo?: boolean;
   paciente?: string | any;
 }
 
-export const defaultValue: Readonly<IPacientePush> = {};
+export const defaultValue: Readonly<IPacientePush> = {
+  ativo: false
+};

@@ -70,8 +70,8 @@ export default class Franquia extends BaseEntity {
   @Column({ name: 'OBSERVACAO', length: 255 })
   observacao: string;
 
-  @Column({ type: 'integer', name: 'ATIVO' })
-  ativo: number;
+  @Column({ type: 'boolean', name: 'ATIVO' })
+  ativo: boolean;
 
   @OneToMany(
     type => FranquiaAreaAtuacao,

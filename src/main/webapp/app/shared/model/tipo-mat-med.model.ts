@@ -1,7 +1,9 @@
 export interface ITipoMatMed {
   id?: string;
   tipo?: string;
-  ativo?: number;
+  ativo?: boolean;
 }
 
-export const defaultValue: Readonly<ITipoMatMed> = {};
+export const defaultValue: Readonly<ITipoMatMed> = {
+  ativo: false
+};

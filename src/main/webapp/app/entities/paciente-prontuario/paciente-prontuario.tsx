@@ -311,10 +311,10 @@ export class PacienteProntuario extends React.Component<IPacienteProntuarioProps
                       {this.state.baseFilters !== 'ativo' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="ativoLabel" for="paciente-prontuario-ativo">
+                            <Label id="ativoLabel" check>
+                              <AvInput id="paciente-prontuario-ativo" type="checkbox" className="form-control" name="ativo" />
                               <Translate contentKey="generadorApp.pacienteProntuario.ativo">Ativo</Translate>
                             </Label>
-                            <AvInput type="string" name="ativo" id="paciente-prontuario-ativo" value={this.state.ativo} />
                           </Row>
                         </Col>
                       ) : null}
@@ -624,7 +624,7 @@ export class PacienteProntuario extends React.Component<IPacienteProntuarioProps
                           <td>{pacienteProntuario.resultado ? Buffer.from(pacienteProntuario.resultado).toString() : null}</td>
                         ) : null}
 
-                        {this.state.baseFilters !== 'ativo' ? <td>{pacienteProntuario.ativo}</td> : null}
+                        {this.state.baseFilters !== 'ativo' ? <td>{pacienteProntuario.ativo ? 'true' : 'false'}</td> : null}
 
                         {this.state.baseFilters !== 'idEspecialidade' ? <td>{pacienteProntuario.idEspecialidade}</td> : null}
 

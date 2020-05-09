@@ -188,10 +188,10 @@ export class DescPta extends React.Component<IDescPtaProps, IDescPtaState> {
                       {this.state.baseFilters !== 'ativo' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
-                            <Label id="ativoLabel" for="desc-pta-ativo">
+                            <Label id="ativoLabel" check>
+                              <AvInput id="desc-pta-ativo" type="checkbox" className="form-control" name="ativo" />
                               <Translate contentKey="generadorApp.descPta.ativo">Ativo</Translate>
                             </Label>
-                            <AvInput type="string" name="ativo" id="desc-pta-ativo" value={this.state.ativo} />
                           </Row>
                         </Col>
                       ) : null}
@@ -258,7 +258,7 @@ export class DescPta extends React.Component<IDescPtaProps, IDescPtaState> {
 
                         {this.state.baseFilters !== 'resultadoEsperado' ? <td>{descPta.resultadoEsperado}</td> : null}
 
-                        {this.state.baseFilters !== 'ativo' ? <td>{descPta.ativo}</td> : null}
+                        {this.state.baseFilters !== 'ativo' ? <td>{descPta.ativo ? 'true' : 'false'}</td> : null}
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">

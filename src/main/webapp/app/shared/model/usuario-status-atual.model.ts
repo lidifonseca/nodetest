@@ -2,7 +2,9 @@ export interface IUsuarioStatusAtual {
   id?: string;
   statusAtual?: number;
   obs?: string;
-  ativo?: number;
+  ativo?: boolean;
 }
 
-export const defaultValue: Readonly<IUsuarioStatusAtual> = {};
+export const defaultValue: Readonly<IUsuarioStatusAtual> = {
+  ativo: false
+};

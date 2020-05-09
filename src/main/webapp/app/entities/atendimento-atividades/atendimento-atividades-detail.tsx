@@ -73,11 +73,11 @@ export class AtendimentoAtividadesDetail extends React.Component<IAtendimentoAti
                     <Row>
                       <Col md="3">
                         <dt>
-                          <Translate contentKey="generadorApp.atendimentoAtividades.atividade">Atividade</Translate>
+                          <Translate contentKey="generadorApp.atendimentoAtividades.atendimento">Atendimento</Translate>
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{atendimentoAtividadesEntity.atividade ? atendimentoAtividadesEntity.atividade.id : ''}</dd>
+                        <dd>{atendimentoAtividadesEntity.atendimento ? atendimentoAtividadesEntity.atendimento.id : ''}</dd>
                       </Col>
                     </Row>
                   </Col>
@@ -86,11 +86,11 @@ export class AtendimentoAtividadesDetail extends React.Component<IAtendimentoAti
                     <Row>
                       <Col md="3">
                         <dt>
-                          <Translate contentKey="generadorApp.atendimentoAtividades.atendimento">Atendimento</Translate>
+                          <Translate contentKey="generadorApp.atendimentoAtividades.atividade">Atividade</Translate>
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{atendimentoAtividadesEntity.atendimento ? atendimentoAtividadesEntity.atendimento.id : ''}</dd>
+                        <dd>{atendimentoAtividadesEntity.atividade ? atendimentoAtividadesEntity.atividade.id : ''}</dd>
                       </Col>
                     </Row>
                   </Col>

@@ -193,13 +193,11 @@ export class ProntuarioTipoMotivoUpdate extends React.Component<IProntuarioTipoM
                           <Col md="ativo">
                             <AvGroup>
                               <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="ativoLabel" for="prontuario-tipo-motivo-ativo">
+                                <Col md="12">
+                                  <Label className="mt-2" id="ativoLabel" check>
+                                    <AvInput id="prontuario-tipo-motivo-ativo" type="checkbox" className="form-control" name="ativo" />
                                     <Translate contentKey="generadorApp.prontuarioTipoMotivo.ativo">Ativo</Translate>
                                   </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField id="prontuario-tipo-motivo-ativo" type="string" className="form-control" name="ativo" />
                                 </Col>
                               </Row>
                             </AvGroup>

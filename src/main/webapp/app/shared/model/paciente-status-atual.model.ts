@@ -6,11 +6,13 @@ export interface IPacienteStatusAtual {
   id?: string;
   dataStatus?: Moment;
   observacao?: any;
-  ativo?: number;
+  ativo?: boolean;
   pacienteNome?: string;
   paciente?: string | any;
   statusStatusAtual?: string;
   status?: string | any;
 }
 
-export const defaultValue: Readonly<IPacienteStatusAtual> = {};
+export const defaultValue: Readonly<IPacienteStatusAtual> = {
+  ativo: false
+};

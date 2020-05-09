@@ -16,6 +16,7 @@ export const ACTION_TYPES = {
   CREATE_DIARIO: 'diario/CREATE_DIARIO',
   UPDATE_DIARIO: 'diario/UPDATE_DIARIO',
   DELETE_DIARIO: 'diario/DELETE_DIARIO',
+  SET_BLOB: 'diario/SET_BLOB',
   RESET: 'diario/RESET'
 };
 
@@ -92,6 +93,9 @@ export default (state: DiarioState = initialState, action): DiarioState => {
         totalItems: parseInt(action.payload.headers['x-total-count'], 10)
       };
     case SUCCESS(ACTION_TYPES.FETCH_DIARIO):
+      action.payload.data.historico = action.payload.data.historico
+        ? Buffer.from(action.payload.data.historico).toString()
+        : action.payload.data.historico;
       return {
         ...state,
         loading: false,
@@ -112,6 +116,18 @@ export default (state: DiarioState = initialState, action): DiarioState => {
         updateSuccess: true,
         entity: {}
       };
+    case ACTION_TYPES.SET_BLOB: {
+      const { name, data, contentType, fileName } = action.payload;
+      return {
+        ...state,
+        entity: {
+          ...state.entity,
+          [name + 'Base64']: data,
+          [name + 'ContentType']: contentType,
+          [name + 'FileName']: fileName
+        }
+      };
+    }
     case ACTION_TYPES.RESET:
       return {
         ...initialState
@@ -210,6 +226,16 @@ export const deleteEntity: ICrudDeleteAction<IDiario> = id => async dispatch => 
   dispatch(getEntities());
   return result;
 };
+
+export const setBlob = (name, data, contentType?, fileName?) => ({
+  type: ACTION_TYPES.SET_BLOB,
+  payload: {
+    name,
+    data,
+    contentType,
+    fileName
+  }
+});
 
 export const reset = () => ({
   type: ACTION_TYPES.RESET

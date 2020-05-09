@@ -94,7 +94,7 @@ export class UsuarioStatusAtualDetail extends React.Component<IUsuarioStatusAtua
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{usuarioStatusAtualEntity.ativo}</dd>
+                        <dd>{usuarioStatusAtualEntity.ativo ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>

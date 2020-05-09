@@ -94,7 +94,7 @@ export class ProntuarioTipoMotivoDetail extends React.Component<IProntuarioTipoM
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{prontuarioTipoMotivoEntity.ativo}</dd>
+                        <dd>{prontuarioTipoMotivoEntity.ativo ? 'true' : 'false'}</dd>
                       </Col>
                     </Row>
                   </Col>
