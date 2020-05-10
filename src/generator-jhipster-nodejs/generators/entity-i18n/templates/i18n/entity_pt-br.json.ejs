@@ -30,6 +30,12 @@ let helpBlocks = 0; %>
                     "<%= viewButtons[idx].name %>": "<%= viewButtons[idx].attributes && viewButtons[idx].attributes.text ? viewButtons[idx].attributes.text : viewButtons[idx].name  
                 %>",<% } %>
             },
+            <%_ for (let i in listTableLayout) { %>
+                <%_ if (listTableLayout[i].type == "sub-relationship" ) { %>
+                    "<%= listTableLayout[idx].entity.relationshipName %>": "<%= listTableLayout[idx].attributes && listTableLayout[idx].attributes.text ? listTableLayout[idx].attributes.text : listTableLayout[idx].entity.relationshipNameHumanized  
+                    %>",
+                <%_ } %>
+            <%_ } %>
             "dropdown_btn": "Actions",
             "home": {
                 "title": "<%= entityClassPluralHumanized %>",

@@ -240,25 +240,12 @@ export class PacienteArquivo extends React.Component<IPacienteArquivoProps, IPac
                         <Translate contentKey="global.field.id">ID</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      {this.state.baseFilters !== 'arquivo' ? (
-                        <th className="hand" onClick={this.sort('arquivo')}>
-                          <Translate contentKey="generadorApp.pacienteArquivo.arquivo">Arquivo</Translate>
-                          <FontAwesomeIcon icon="sort" />
-                        </th>
-                      ) : null}
-                      {this.state.baseFilters !== 'ativo' ? (
-                        <th className="hand" onClick={this.sort('ativo')}>
-                          <Translate contentKey="generadorApp.pacienteArquivo.ativo">Ativo</Translate>
-                          <FontAwesomeIcon icon="sort" />
-                        </th>
-                      ) : null}
-
-                      {this.state.baseFilters !== 'paciente' ? (
-                        <th>
-                          <Translate contentKey="generadorApp.pacienteArquivo.paciente">Paciente</Translate>
-                          <FontAwesomeIcon icon="sort" />
-                        </th>
-                      ) : null}
+                      <th>
+                        <Translate contentKey="generadorApp.pacienteArquivo.paciente_pacienteDiagnostico_observacao">
+                          Paciente Diagnostico
+                        </Translate>
+                        <FontAwesomeIcon icon="sort" />
+                      </th>
 
                       <th />
                     </tr>
@@ -273,28 +260,12 @@ export class PacienteArquivo extends React.Component<IPacienteArquivoProps, IPac
                           </Button>
                         </td>
 
-                        {this.state.baseFilters !== 'arquivo' ? (
+                        {this.state.baseFilters !== 'paciente.pacienteDiagnostico' ? (
                           <td>
-                            {pacienteArquivo.arquivo ? (
-                              <div>
-                                <a rel="noopener noreferrer" target={'_blank'} href={`${pacienteArquivo.arquivo}`}>
-                                  {pacienteArquivo.arquivoContentType && pacienteArquivo.arquivoContentType.includes('image/') ? (
-                                    <img src={`${pacienteArquivo.arquivo}`} style={{ maxHeight: '30px' }} />
-                                  ) : (
-                                    <Translate contentKey="entity.action.open">Open</Translate>
-                                  )}
-                                </a>
-                              </div>
-                            ) : null}
-                          </td>
-                        ) : null}
-
-                        {this.state.baseFilters !== 'ativo' ? <td>{pacienteArquivo.ativo ? 'true' : 'false'}</td> : null}
-
-                        {this.state.baseFilters !== 'paciente' ? (
-                          <td>
-                            {pacienteArquivo.paciente ? (
-                              <Link to={`paciente/${pacienteArquivo.paciente.id}`}>{pacienteArquivo.paciente.nome}</Link>
+                            {pacienteArquivo.paciente.pacienteDiagnostico ? (
+                              <Link to={`pacienteDiagnostico/${pacienteArquivo.paciente.pacienteDiagnostico.id}`}>
+                                {pacienteArquivo.paciente.pacienteDiagnostico.observacao}
+                              </Link>
                             ) : (
                               ''
                             )}

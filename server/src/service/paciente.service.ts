@@ -33,6 +33,7 @@ export class PacienteService {
     filters?: Array<{ column: string; value: string; operation: string }>[]
   ): Promise<[Paciente[], number]> {
     options.relations = relationshipNames;
+
     let where = {};
     for (const i in filters) {
       if (filters.hasOwnProperty(i)) {

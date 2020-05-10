@@ -1,21 +1,3 @@
-/**
- * Copyright 2013-2020 the original author or authors from the JHipster project.
- *
- * This file is part of the JHipster project, see https://www.jhipster.tech/
- * for more information.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 /* eslint-disable no-console */
 
 
@@ -587,6 +569,7 @@ function getJavadoc(text, indentSize) {
 
 function analizeJavadoc(generator) {
 
+    generator.addSubRelation = [];
     generator.formTabs = [];
     generator.viewTabs = [];
     generator.toStringFields = [];
@@ -606,7 +589,13 @@ function analizeJavadoc(generator) {
             let parameter =  generatorJavadoc.substring(generatorJavadoc.indexOf('@')+1, generatorJavadoc.indexOf('@@'))
                                     .split(" ").join("_*JOIN*_").split("\\n").join("_*JOIN*_").split("_*JOIN*_");
             if(parameter.length > 1) {
-                if(parameter[0] === "formTab") {
+                if(parameter[0] === "addSubRelation") {
+                    let value = parameter[1].trim();
+                    if(generator.addSubRelation.indexOf(value) === -1) {
+                        generator.addSubRelation.push(value);
+                    }
+                }
+                else if(parameter[0] === "formTab") {
                     let value = parameter[1].trim().split(">")[0].split("<");
                     let fields = value[1].split(",");
                     if(generator.formTabs.indexOf(value[0]) === -1) {
@@ -684,6 +673,88 @@ function analizeJavadoc(generator) {
                                         generator.fields[idx][parameter[0]] = true;
                                     }
                                 }
+                            }
+                            for (idx in generator.addSubRelation) { 
+                                if(generator.addSubRelation[idx] === value[0]){
+                                    generator[parameter[0]].push({
+                                        name: value[0],
+                                        type: 'sub-relationship',
+                                        relationshipName: "id",
+                                        relationship: value[0],
+                                        entity: {
+                                            relationshipType: 'many-to-one',
+                                            otherEntityName: 'otherEntityName',
+                                            otherEntityRelationshipName: 'otherEntityRelationshipName',
+                                            relationshipName: value[0].split('.').join('_'),
+                                            otherEntityField: 'id',
+                                            otherEntityRelationshipNamePlural: 'otherEntityRelationshipNamePlural',
+                                            otherEntityRelationshipNameCapitalized: 'otherEntityRelationshipNameCapitalized',
+                                            otherEntityRelationshipNameCapitalizedPlural: 'otherEntityRelationshipNameCapitalizedPlural',
+                                            relationshipNameCapitalized: 'relationshipNameCapitalized',
+                                            relationshipNameCapitalizedPlural: 'relationshipNameCapitalizedPlural',
+                                            relationshipNameHumanized: _.startCase(value[0].split('.').slice(1, -1).join('.')),
+                                            relationshipNamePlural: 'relationshipNamePlural',
+                                            relationshipFieldName: value[0],
+                                            relationshipFieldNamePlural: value[0]+'s',
+                                            otherEntityTableName: 'otherEntityTableName',
+                                            otherEntityNamePlural: 'otherEntityNamePlural',
+                                            otherEntityNameCapitalized: 'otherEntityNameCapitalized',
+                                            otherEntityAngularName: 'otherEntityAngularName',
+                                            otherEntityNameCapitalizedPlural: 'otherEntityNameCapitalizedPlural',
+                                            otherEntityFieldCapitalized: 'otherEntityFieldCapitalized',
+                                            otherEntityStateName: value[0].split('.').slice(0, -1).join('.'),
+                                            otherEntityModuleName: 'otherEntityModuleName',
+                                            otherEntityFileName: 'otherEntityFileName',
+                                            otherEntityFolderName: 'otherEntityFolderName',
+                                            otherEntityClientRootFolder: 'otherEntityClientRootFolder',
+                                            otherEntityModulePath: 'otherEntityModulePath',
+                                            otherEntityModelName: 'otherEntityModelName',
+                                            otherEntityPath: 'otherEntityPath',
+                                            jpaMetamodelFiltering: true
+                                        }
+                                    });
+                                } else if(generator.addSubRelation[idx] === value[0].split('.').slice(0, -1).join('.') ){
+                                    generator[parameter[0]].push({
+                                        name: generator.addSubRelation[idx],
+                                        type: 'sub-relationship',
+                                        relationshipName: (/(?:\.([^.]+))?$/).exec(value[0])[1],
+                                        relationship: value[0].split('.').slice(0, -1).join('.'),
+                                        entity:{
+                                            relationshipType: 'many-to-one',
+                                            otherEntityName: 'otherEntityName',
+                                            otherEntityRelationshipName: 'otherEntityRelationshipName',
+                                            relationshipName: value[0].split('.').join('_'),
+                                            otherEntityField: (/(?:\.([^.]+))?$/).exec(value[0])[1],
+                                            otherEntityRelationshipNamePlural: 'otherEntityRelationshipNamePlural',
+                                            otherEntityRelationshipNameCapitalized: 'otherEntityRelationshipNameCapitalized',
+                                            otherEntityRelationshipNameCapitalizedPlural: 'otherEntityRelationshipNameCapitalizedPlural',
+                                            relationshipNameCapitalized: 'relationshipNameCapitalized',
+                                            relationshipNameCapitalizedPlural: 'relationshipNameCapitalizedPlural',
+                                            relationshipNameHumanized: _.startCase(value[0].split('.').slice(1, -1).join('.')),
+                                            relationshipNamePlural: 'relationshipNamePlural',
+                                            relationshipFieldName: value[0].split('.').slice(0, -1).join('.'),
+                                            relationshipFieldNamePlural: value[0].split('.').slice(0, -1).join('.')+'s',
+                                            otherEntityTableName: 'otherEntityTableName',
+                                            otherEntityNamePlural: 'otherEntityNamePlural',
+                                            otherEntityNameCapitalized: 'otherEntityNameCapitalized',
+                                            otherEntityAngularName: 'otherEntityAngularName',
+                                            otherEntityNameCapitalizedPlural: 'otherEntityNameCapitalizedPlural',
+                                            otherEntityFieldCapitalized: 'otherEntityFieldCapitalized',
+                                            otherEntityStateName: value[0].split('.').slice(1, -1).join('.'),
+                                            otherEntityModuleName: 'otherEntityModuleName',
+                                            otherEntityFileName: 'otherEntityFileName',
+                                            otherEntityFolderName: 'otherEntityFolderName',
+                                            otherEntityClientRootFolder: 'otherEntityClientRootFolder',
+                                            otherEntityModulePath: 'otherEntityModulePath',
+                                            otherEntityModelName: 'otherEntityModelName',
+                                            otherEntityPath: 'otherEntityPath',
+                                            jpaMetamodelFiltering: true
+                                        },
+                                    });
+                                console.info(generator[parameter[0]]);
+
+                                }
+                                
                             }
                             for (idx in generator.relationships) { 
                                 if(generator.relationships[idx].relationshipName === value[0] ){

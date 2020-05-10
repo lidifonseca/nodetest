@@ -752,6 +752,10 @@ entity Paciente {
 	expoToken String maxlength(255)
 }
 
+/**
+	@addSubRelation paciente.pacienteDiagnostico@@ 
+	@listTableLayout paciente.pacienteDiagnostico.observacao @@ 
+*/
 entity PacienteArquivo {
 	arquivo ImageBlob,
 	ativo Boolean

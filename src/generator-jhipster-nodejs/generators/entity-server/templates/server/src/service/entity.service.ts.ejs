@@ -38,6 +38,11 @@ export class <%= entityClass %>Service {
 
       async findAndCount(options: FindManyOptions<<%= entityClass %>>, filters?: Array<{column: string; value: string; operation: string;}>[]): Promise<[<%= entityClass %>[], number]> {
         options.relations = relationshipNames;
+        <%_ for (let i in listTableLayout) { %>
+          <%_ if (listTableLayout[i].type == "sub-relationship" ) { %>
+            options.relations.push('<%= listTableLayout[i].name %>');
+          <%_ } %>
+        <%_ } %>
         let where = {};
         for (const i in filters) {
           if (filters.hasOwnProperty(i)) {

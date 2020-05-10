@@ -30,5 +30,6 @@
     "readOnly": false,
     "embedded": false,
     "clientRootFolder": "",
-    "applications": "*"
+    "applications": "*",
+    "javadoc": "@addSubRelation paciente.pacienteDiagnostico@@\\n@listTableLayout paciente.pacienteDiagnostico.observacao @@"
 }

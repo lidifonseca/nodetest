@@ -27,6 +27,9 @@ export class PacienteArquivoService {
     filters?: Array<{ column: string; value: string; operation: string }>[]
   ): Promise<[PacienteArquivo[], number]> {
     options.relations = relationshipNames;
+
+    options.relations.push('paciente.pacienteDiagnostico');
+
     let where = {};
     for (const i in filters) {
       if (filters.hasOwnProperty(i)) {
