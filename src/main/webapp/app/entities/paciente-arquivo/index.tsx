@@ -12,13 +12,13 @@ import PacienteArquivoDeleteDialog from './paciente-arquivo-delete-dialog';
 const Routes = ({ match }) => (
   <>
     <Switch>
-      <ErrorBoundaryRoute exact path={`${match.url}/relatorio/csv`} component={PacienteArquivoRelatorioCSV} />
-      <ErrorBoundaryRoute exact path={`${match.url}/new`} component={PacienteArquivoUpdate} />
-      <ErrorBoundaryRoute exact path={`${match.url}/:id/edit`} component={PacienteArquivoUpdate} />
-      <ErrorBoundaryRoute exact path={`${match.url}/:id`} component={PacienteArquivoDetail} />
-      <ErrorBoundaryRoute path={match.url} component={PacienteArquivo} />
+      <ErrorBoundaryRoute exact path={`${match.path}/relatorio/csv`} component={PacienteArquivoRelatorioCSV} />
+      <ErrorBoundaryRoute exact path={`${match.path}/new`} component={PacienteArquivoUpdate} />
+      <ErrorBoundaryRoute exact path={`${match.path}/:id/edit`} component={PacienteArquivoUpdate} />
+      <ErrorBoundaryRoute exact path={`${match.path}/:id`} component={PacienteArquivoDetail} />
+      <ErrorBoundaryRoute path={match.path} component={PacienteArquivo} />
     </Switch>
-    <ErrorBoundaryRoute path={`${match.url}/:id/delete`} component={PacienteArquivoDeleteDialog} />
+    <ErrorBoundaryRoute path={`${match.path}/:id/delete`} component={PacienteArquivoDeleteDialog} />
   </>
 );
 

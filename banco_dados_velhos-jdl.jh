@@ -755,6 +755,7 @@ entity Paciente {
 /**
 	@addSubRelation paciente.pacienteDiagnostico@@ 
 	@listTableLayout paciente.pacienteDiagnostico.observacao @@ 
+	@baseFilters paciente@@
 */
 entity PacienteArquivo {
 	arquivo ImageBlob,

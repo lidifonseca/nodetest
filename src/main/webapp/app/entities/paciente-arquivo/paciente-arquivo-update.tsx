@@ -38,7 +38,11 @@ export class PacienteArquivoUpdate extends React.Component<IPacienteArquivoUpdat
 
     this.state = {
       pacienteSelectValue: null,
-      fieldsBase: getPacienteArquivoState(this.props.location),
+      fieldsBase: {
+        ...getPacienteArquivoState(this.props.location),
+        paciente: this.props.match.params['idPaciente'],
+        baseFilters: 'paciente'
+      },
       pacienteId: '0',
       isNew: !this.props.match.params || !this.props.match.params.id
     };
@@ -106,7 +110,7 @@ export class PacienteArquivoUpdate extends React.Component<IPacienteArquivoUpdat
   };
 
   handleClose = () => {
-    this.props.history.push('/paciente-arquivo?' + this.getFiltersURL());
+    this.props.history.push('/paciente/' + this.state.fieldsBase.paciente + '/paciente-arquivo?' + this.getFiltersURL());
   };
 
   render() {
@@ -141,7 +145,7 @@ export class PacienteArquivoUpdate extends React.Component<IPacienteArquivoUpdat
             <Button
               tag={Link}
               id="cancel-save"
-              to={'/paciente-arquivo?' + this.getFiltersURL()}
+              to={'/paciente/' + this.state.fieldsBase.paciente + '/paciente-arquivo?' + this.getFiltersURL()}
               replace
               color="info"
               className="float-right jh-create-entity"

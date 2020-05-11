@@ -51,7 +51,9 @@ export class PacienteArquivo extends React.Component<IPacienteArquivoProps, IPac
     super(props);
     this.state = {
       ...getSortState(this.props.location, ITEMS_PER_PAGE),
-      ...getPacienteArquivoState(this.props.location)
+      ...getPacienteArquivoState(this.props.location),
+      paciente: this.props.match.params['idPaciente'],
+      baseFilters: 'paciente'
     };
   }
 

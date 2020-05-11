@@ -178,7 +178,6 @@ const Routes = ({ match }) => (
   <div>
     <Switch>
       {/* prettier-ignore */}
-      <ErrorBoundaryRoute path={`${match.url}paciente`} component={Paciente} />
       <ErrorBoundaryRoute path={`${match.url}cidade`} component={Cidade} />
       <ErrorBoundaryRoute path={`${match.url}cepbr-bairro`} component={CepbrBairro} />
       <ErrorBoundaryRoute path={`${match.url}cepbr-cidade`} component={CepbrCidade} />
@@ -248,7 +247,8 @@ const Routes = ({ match }) => (
       <ErrorBoundaryRoute path={`${match.url}notificacao-config-usuario`} component={NotificacaoConfigUsuario} />
       <ErrorBoundaryRoute path={`${match.url}ocorrencia-prontuario`} component={OcorrenciaProntuario} />
       <ErrorBoundaryRoute path={`${match.url}operadora`} component={Operadora} />
-      <ErrorBoundaryRoute path={`${match.url}paciente-arquivo`} component={PacienteArquivo} />
+      <ErrorBoundaryRoute path={`${match.url}paciente/:idPaciente/paciente-arquivo`} component={PacienteArquivo} />
+      <ErrorBoundaryRoute path={`${match.url}paciente`} component={Paciente} />
       <ErrorBoundaryRoute path={`${match.url}paciente-caracteristica-atual`} component={PacienteCaracteristicaAtual} />
       <ErrorBoundaryRoute path={`${match.url}paciente-complexidade-atual`} component={PacienteComplexidadeAtual} />
       <ErrorBoundaryRoute path={`${match.url}paciente-dados-cartao`} component={PacienteDadosCartao} />

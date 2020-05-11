@@ -22,7 +22,11 @@ export class PacienteArquivoDetail extends React.Component<IPacienteArquivoDetai
     super(props);
     this.state = {
       ...this.state,
-      fieldsBase: getPacienteArquivoState(this.props.location)
+      fieldsBase: {
+        paciente: this.props.match.params['idPaciente'],
+        baseFilters: 'paciente',
+        ...getPacienteArquivoState(this.props.location),
+      }
     };
   }
 
@@ -71,7 +75,7 @@ export class PacienteArquivoDetail extends React.Component<IPacienteArquivoDetai
                                 <img src={`${pacienteArquivoEntity.arquivo}`} style={{ maxHeight: '30px' }} />
                               </a>
                               <a rel="noopener noreferrer" target={'_blank'} href={`${pacienteArquivoEntity.arquivo}`}>
-                                {pacienteArquivoEntity.arquivoContentType.includes('image/') ? (
+                                {pacienteArquivoEntity.arquivoContentType && pacienteArquivoEntity.arquivoContentType.includes('image/') ? (
                                   <img src={`${pacienteArquivoEntity.arquivo}`} style={{ maxHeight: '30px' }} />
                                 ) : (
                                   <Translate contentKey="entity.action.open">Open</Translate>
@@ -112,14 +116,14 @@ export class PacienteArquivoDetail extends React.Component<IPacienteArquivoDetai
                     </Row>
                   </Col>
                 </Row>
-                <Button tag={Link} to="/paciente-arquivo" replace color="info">
+                <Button tag={Link} to={`/paciente/${this.state.fieldsBase.paciente}/paciente-arquivo/${pacienteArquivoEntity.id}`} replace color="info">
                   <FontAwesomeIcon icon="arrow-left" />{' '}
                   <span className="d-none d-md-inline">
                     <Translate contentKey="entity.action.back">Back</Translate>
                   </span>
                 </Button>
                 &nbsp;
-                <Button tag={Link} to={`/paciente-arquivo/${pacienteArquivoEntity.id}/edit`} replace color="primary">
+                <Button tag={Link} to={`/paciente/${this.state.fieldsBase.paciente}/paciente-arquivo/${pacienteArquivoEntity.id}/edit`} replace color="primary">
                   <FontAwesomeIcon icon="pencil-alt" />{' '}
                   <span className="d-none d-md-inline">
                     <Translate contentKey="entity.action.edit">Edit</Translate>
