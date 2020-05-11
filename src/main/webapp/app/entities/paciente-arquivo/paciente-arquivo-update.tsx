@@ -242,22 +242,6 @@ export class PacienteArquivoUpdate extends React.Component<IPacienteArquivoUpdat
                         ) : (
                           <AvInput type="hidden" name="arquivo" value={this.state.fieldsBase[baseFilters]} />
                         )}
-                        {baseFilters !== 'ativo' ? (
-                          <Col md="ativo">
-                            <AvGroup>
-                              <Row>
-                                <Col md="12">
-                                  <Label className="mt-2" id="ativoLabel" check>
-                                    <AvInput id="paciente-arquivo-ativo" type="checkbox" className="form-control" name="ativo" />
-                                    <Translate contentKey="generadorApp.pacienteArquivo.ativo">Ativo</Translate>
-                                  </Label>
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
-                        ) : (
-                          <AvInput type="hidden" name="ativo" value={this.state.fieldsBase[baseFilters]} />
-                        )}
                         {baseFilters !== 'paciente' ? (
                           <Col md="12">
                             <AvGroup>

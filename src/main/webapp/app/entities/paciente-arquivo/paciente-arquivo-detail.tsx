@@ -23,12 +23,21 @@ export class PacienteArquivoDetail extends React.Component<IPacienteArquivoDetai
     this.state = {
       ...this.state,
       fieldsBase: {
-        paciente: this.props.match.params['idPaciente'],
-        baseFilters: 'paciente',
         ...getPacienteArquivoState(this.props.location),
+        paciente: this.props.match.params['idPaciente'],
+        baseFilters: 'paciente'
       }
     };
   }
+
+  getFiltersURL = (offset = null) => {
+    const fieldsBase = this.state.fieldsBase;
+    let url = '_back=1' + (offset !== null ? '&offset=' + offset : '');
+    Object.keys(fieldsBase).map(key => {
+      url += '&' + key + '=' + fieldsBase[key];
+    });
+    return url;
+  };
 
   componentDidMount() {
     this.props.getEntity(this.props.match.params.id);
@@ -116,14 +125,26 @@ export class PacienteArquivoDetail extends React.Component<IPacienteArquivoDetai
                     </Row>
                   </Col>
                 </Row>
-                <Button tag={Link} to={`/paciente/${this.state.fieldsBase.paciente}/paciente-arquivo/${pacienteArquivoEntity.id}`} replace color="info">
+                <Button
+                  tag={Link}
+                  to={'/paciente/' + this.state.fieldsBase.paciente + '/paciente-arquivo?' + this.getFiltersURL()}
+                  replace
+                  color="info"
+                >
                   <FontAwesomeIcon icon="arrow-left" />{' '}
                   <span className="d-none d-md-inline">
                     <Translate contentKey="entity.action.back">Back</Translate>
                   </span>
                 </Button>
                 &nbsp;
-                <Button tag={Link} to={`/paciente/${this.state.fieldsBase.paciente}/paciente-arquivo/${pacienteArquivoEntity.id}/edit`} replace color="primary">
+                <Button
+                  tag={Link}
+                  to={`/paciente/${this.state.fieldsBase.paciente}/paciente-arquivo/${
+                    pacienteArquivoEntity.id
+                  }/edit?+${this.getFiltersURL()}`}
+                  replace
+                  color="primary"
+                >
                   <FontAwesomeIcon icon="pencil-alt" />{' '}
                   <span className="d-none d-md-inline">
                     <Translate contentKey="entity.action.edit">Edit</Translate>

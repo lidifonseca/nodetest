@@ -31,5 +31,5 @@
     "embedded": false,
     "clientRootFolder": "",
     "applications": "*",
-    "javadoc": "@addSubRelation paciente.pacienteDiagnostico@@\\n@listTableLayout paciente.pacienteDiagnostico.observacao @@"
+    "javadoc": "@baseFilters paciente@@\\n@listTableLayout arquivo paciente @@\\n@formLayout arquivo paciente @@"
 }

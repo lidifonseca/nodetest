@@ -452,7 +452,13 @@
       <%_ } _%>
         this.state = {
         <% uniqueRealtionFields.forEach(rel => { %> <%= rel.name %>SelectValue: null, <% }) %>
-        fieldsBase: get<%= entityReactName %>State(this.props.location),
+        fieldsBase: {
+          ...get<%= entityReactName %>State(this.props.location),
+          <%_ if (typeof baseFilters !== 'undefined' && baseFilters) { _%>
+            <%= baseFilters _%>: this.props.match.params['id<%= _.upperFirst(baseFilters) _%>'],
+            baseFilters: '<%= baseFilters _%>',
+          <%_ } _%>  
+        },
         <%_ if (formTabs.length > 0) { _%>activeTab: 0,<%_ } _%>
         <%_ manyToManyOwners.forEach(val => { _%>
         ids<%= val.relationshipName %>: [],
@@ -551,7 +557,9 @@
         }
   
         handleClose = () => {
-        this.props.history.push("/<%= entityFileName %>?"+this.getFiltersURL());
+        this.props.history.push(<%_ if (typeof baseFilters !== 'undefined' && baseFilters) { 
+          _%> "/<%= baseFilters %>/" + this.state.fieldsBase.<%= baseFilters %> + <%_ 
+        } %>"/<%= entityFileName %>?"+this.getFiltersURL());
         }
   
         render() {
@@ -601,7 +609,9 @@
                 <FontAwesomeIcon icon="save" />&nbsp;
                 <Translate contentKey="entity.action.save">Save</Translate>
               </Button>
-              <Button tag={Link} id="cancel-save" to={"/<%= entityFileName %>?"+this.getFiltersURL()} replace color="info"
+              <Button tag={Link} id="cancel-save" to={<%_ if (typeof baseFilters !== 'undefined' && baseFilters) { 
+                _%> "/<%= baseFilters %>/" + this.state.fieldsBase.<%= baseFilters %> + <%_ 
+              } %>"/<%= entityFileName %>?"+this.getFiltersURL()} replace color="info"
                 className="float-right jh-create-entity">
                 <FontAwesomeIcon icon="arrow-left" />&nbsp;
                 <span className="d-none d-md-inline">

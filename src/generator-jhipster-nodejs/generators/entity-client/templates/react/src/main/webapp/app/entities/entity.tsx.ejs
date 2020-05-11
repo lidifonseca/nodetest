@@ -455,6 +455,10 @@ export class <%= entityReactName %> extends React.Component<I<%= entityReactName
         <%_ if (pagination !== 'no') { _%>
         ...getSortState(this.props.location, ITEMS_PER_PAGE),
         ...get<%= entityReactName %>State(this.props.location)
+        <%_ if (typeof baseFilters !== 'undefined' && baseFilters) { _%>
+          , <%= baseFilters _%>: this.props.match.params['id<%= _.upperFirst(baseFilters) _%>']
+          , baseFilters: '<%= baseFilters _%>' 
+        <%_ } _%>
         <%_ } _%>
       };
       <%_ } _%>

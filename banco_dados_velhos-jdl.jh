@@ -751,11 +751,12 @@ entity Paciente {
 	liminar String maxlength(50),
 	expoToken String maxlength(255)
 }
-
+//	@addSubRelation paciente.pacienteDiagnostico@@ 
+//	@listTableLayout paciente.pacienteDiagnostico.observacao @@ 
 /**
-	@addSubRelation paciente.pacienteDiagnostico@@ 
-	@listTableLayout paciente.pacienteDiagnostico.observacao @@ 
 	@baseFilters paciente@@
+	@listTableLayout arquivo paciente @@ 
+	@formLayout arquivo paciente @@ 
 */
 entity PacienteArquivo {
 	arquivo ImageBlob,

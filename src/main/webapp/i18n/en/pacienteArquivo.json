@@ -3,6 +3,7 @@
     "pacienteArquivo": {
       "listButtons": {},
       "viewButtons": {},
+
       "dropdown_btn": "Ações",
       "home": {
         "title": "Paciente Arquivos",

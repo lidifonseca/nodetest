@@ -751,8 +751,6 @@ function analizeJavadoc(generator) {
                                             jpaMetamodelFiltering: true
                                         },
                                     });
-                                console.info(generator[parameter[0]]);
-
                                 }
                                 
                             }
@@ -839,11 +837,6 @@ function analizeJavadoc(generator) {
     } else {
         generator.defaultViewTab = true;
     }
-
-    // console.info(generator.toStringFields)
-    // console.info(generator.listFilterLayout)
-    //   console.info(generator.viewButtons)
-    // console.info(generator.viewLayout)
 
     return generator;
 }

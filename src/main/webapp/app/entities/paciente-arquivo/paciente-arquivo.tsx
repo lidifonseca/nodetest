@@ -242,10 +242,12 @@ export class PacienteArquivo extends React.Component<IPacienteArquivoProps, IPac
                         <Translate contentKey="global.field.id">ID</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
+                      <th className="hand" onClick={this.sort('arquivo')}>
+                        <Translate contentKey="generadorApp.pacienteArquivo.arquivo"></Translate>
+                        <FontAwesomeIcon icon="sort" />
+                      </th>
                       <th>
-                        <Translate contentKey="generadorApp.pacienteArquivo.paciente_pacienteDiagnostico_observacao">
-                          Paciente Diagnostico
-                        </Translate>
+                        <Translate contentKey="generadorApp.pacienteArquivo.paciente">Paciente</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
 
@@ -262,12 +264,26 @@ export class PacienteArquivo extends React.Component<IPacienteArquivoProps, IPac
                           </Button>
                         </td>
 
-                        {this.state.baseFilters !== 'paciente.pacienteDiagnostico' ? (
+                        {this.state.baseFilters !== 'arquivo' ? (
                           <td>
-                            {pacienteArquivo.paciente.pacienteDiagnostico ? (
-                              <Link to={`pacienteDiagnostico/${pacienteArquivo.paciente.pacienteDiagnostico.id}`}>
-                                {pacienteArquivo.paciente.pacienteDiagnostico.observacao}
-                              </Link>
+                            {pacienteArquivo.arquivo ? (
+                              <div>
+                                <a rel="noopener noreferrer" target={'_blank'} href={`${pacienteArquivo.arquivo}`}>
+                                  {pacienteArquivo.arquivoContentType && pacienteArquivo.arquivoContentType.includes('image/') ? (
+                                    <img src={`${pacienteArquivo.arquivo}`} style={{ maxHeight: '30px' }} />
+                                  ) : (
+                                    <Translate contentKey="entity.action.open">Open</Translate>
+                                  )}
+                                </a>
+                              </div>
+                            ) : null}
+                          </td>
+                        ) : null}
+
+                        {this.state.baseFilters !== 'paciente' ? (
+                          <td>
+                            {pacienteArquivo.paciente ? (
+                              <Link to={`paciente/${pacienteArquivo.paciente.id}`}>{pacienteArquivo.paciente.nome}</Link>
                             ) : (
                               ''
                             )}

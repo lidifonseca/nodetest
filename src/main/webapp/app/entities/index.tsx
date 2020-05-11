@@ -372,6 +372,7 @@ const Routes = ({ match }) => (
         path={`${match.url}profissional-dispositivo-complexidade-atual`}
         component={ProfissionalDispositivoComplexidadeAtual}
       />
+      <ErrorBoundaryRoute path={`${match.url}paciente-arquivo`} component={PacienteArquivo} />
       {/* jhipster-needle-add-route-path - JHipster will add routes here */}
       <ErrorBoundaryRoute component={PageNotFound} />
     </Switch>

@@ -69,7 +69,7 @@
                 <%_ } _%>
                 </a>
                 <a rel="noopener noreferrer" target={"_blank"} href={`${<%= entityInstance %>Entity.<%= fieldName %>}`}>
-                  { (<%= entityInstance %>Entity.<%= fieldName %>ContentType.includes("image/")) ? 
+                  { (<%= entityInstance %>Entity.<%= fieldName %>ContentType && <%= entityInstance %>Entity.<%= fieldName %>ContentType.includes("image/")) ? 
                     <img src={`${<%= entityInstance %>Entity.<%= fieldName %>}`} style={{ maxHeight: '30px' }} />
                     :
                     <Translate contentKey="entity.action.open">Open</Translate>
@@ -204,8 +204,14 @@ export class <%= entityReactName %>Detail extends React.Component<I<%= entityRea
     super(props);
     this.state = {
       ...this.state,
-      fieldsBase: get<%= entityReactName %>State(this.props.location),
       <%_ if (viewTabs.length > 0) { _%>activeTab: 0,<%_ } _%>
+      fieldsBase: {
+        ...get<%= entityReactName %>State(this.props.location),
+        <%_ if (typeof baseFilters !== 'undefined' && baseFilters) { _%>
+          <%= baseFilters _%>: this.props.match.params['id<%= _.upperFirst(baseFilters) _%>'],
+          baseFilters: '<%= baseFilters _%>',
+        <%_ } _%>  
+      },
     };
   }
 
@@ -218,6 +224,15 @@ export class <%= entityReactName %>Detail extends React.Component<I<%= entityRea
       }
     }
   <%_ } _%>
+
+  getFiltersURL = (offset = null) => {
+    const fieldsBase = this.state.fieldsBase;
+    let url = '_back=1' + (offset !== null ? '&offset=' + offset : '');
+    Object.keys(fieldsBase).map((key)=>{
+      url += '&'+key+'=' + fieldsBase[key];
+    }); 
+    return url;
+  };
 
   componentDidMount() {
     this.props.getEntity(this.props.match.params.id);
@@ -368,11 +383,15 @@ export class <%= entityReactName %>Detail extends React.Component<I<%= entityRea
                     <%_ } _%>
                     </Row>
 
-                <Button tag={Link} to="/<%= entityFileName %>" replace color="info">
+                <Button tag={Link} to={<%_ if (typeof baseFilters !== 'undefined' && baseFilters) { 
+                  _%> "/<%= baseFilters %>/" + this.state.fieldsBase.<%= baseFilters %> + <%_ 
+                } %>"/<%= entityFileName %>?"+this.getFiltersURL()} replace color="info">
                   <FontAwesomeIcon icon="arrow-left" /> <span className="d-none d-md-inline" ><Translate contentKey="entity.action.back">Back</Translate></span>
                 </Button>&nbsp;
                 <%_ if (!readOnly) { _%>
-                <Button tag={Link} to={`/<%= entityFileName %>/${<%=entityInstance %>Entity.id}/edit`} replace color="primary">
+                <Button tag={Link} to={`<%_ if (typeof baseFilters !== 'undefined' && baseFilters) { 
+                  _%> /<%= baseFilters %>/${this.state.fieldsBase.<%= baseFilters %>}<%_ 
+                } %>/<%= entityFileName %>/${<%=entityInstance %>Entity.id}/edit?+${this.getFiltersURL()}`} replace color="primary">
                   <FontAwesomeIcon icon="pencil-alt" /> <span className="d-none d-md-inline"><Translate contentKey="entity.action.edit">Edit</Translate></span>
                 </Button>
                 <%_ } _%>
