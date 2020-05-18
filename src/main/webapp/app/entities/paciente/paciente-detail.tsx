@@ -27,8 +27,10 @@ export class PacienteDetail extends React.Component<IPacienteDetailProps, IPacie
     super(props);
     this.state = {
       ...this.state,
-      fieldsBase: getPacienteState(this.props.location),
-      activeTab: 0
+      activeTab: 0,
+      fieldsBase: {
+        ...getPacienteState(this.props.location)
+      }
     };
   }
 
@@ -40,6 +42,15 @@ export class PacienteDetail extends React.Component<IPacienteDetailProps, IPacie
     }
   }
 
+  getFiltersURL = (offset = null) => {
+    const fieldsBase = this.state.fieldsBase;
+    let url = '_back=1' + (offset !== null ? '&offset=' + offset : '');
+    Object.keys(fieldsBase).map(key => {
+      url += '&' + key + '=' + fieldsBase[key];
+    });
+    return url;
+  };
+
   componentDidMount() {
     this.props.getEntity(this.props.match.params.id);
   }
@@ -48,36 +59,51 @@ export class PacienteDetail extends React.Component<IPacienteDetailProps, IPacie
     const { pacienteEntity } = this.props;
     return (
       <div>
-        <h2 id="page-heading">
-          <span className="page-header ml-3">Pacientes</span>
-          <Button className="float-right jh-create-entity" tag={Link} to={`/paciente/${pacienteEntity.id}`} color="info" size="sm">
-            <FontAwesomeIcon icon="eye" />{' '}
-            <span className="d-none d-md-inline">
-              <Translate contentKey="generadorApp.paciente.viewButtons.view">View</Translate>
-            </span>
-          </Button>
-          <Button className="float-right jh-create-entity" tag={Link} to={`/paciente/${pacienteEntity.id}/edit`} color="primary" size="sm">
-            <FontAwesomeIcon icon="pencil-alt" />{' '}
-            <span className="d-none d-md-inline">
-              <Translate contentKey="generadorApp.paciente.viewButtons.edit">Edit</Translate>
-            </span>
-          </Button>
-          <Button className="float-right jh-create-entity" tag={Link} to={`/paciente/${pacienteEntity.id}/delete`} color="danger" size="sm">
-            <FontAwesomeIcon icon="trash" />{' '}
-            <span className="d-none d-md-inline">
-              <Translate contentKey="generadorApp.paciente.viewButtons.delete">Delete</Translate>
-            </span>
-          </Button>
-        </h2>
-        <ol className="breadcrumb">
-          <li className="breadcrumb-item">
-            <Link to="/">Inicio</Link>
-          </li>
-          <li className="breadcrumb-item active">Pacientes</li>
-          <li className="breadcrumb-item active">Pacientes details</li>
-        </ol>
         <Panel>
-          <PanelHeader></PanelHeader>
+          <PanelHeader>
+            <h2 id="page-heading">
+              <span className="page-header ml-3">Pacientes</span>
+              <Button className="float-right jh-create-entity" tag={Link} to={`/paciente/${pacienteEntity.id}`} color="info" size="sm">
+                <FontAwesomeIcon icon="eye" />{' '}
+                <span className="d-none d-md-inline">
+                  <Translate contentKey="generadorApp.paciente.viewButtons.view">View</Translate>
+                </span>
+              </Button>
+              <Button
+                className="float-right jh-create-entity"
+                tag={Link}
+                to={`/paciente/${pacienteEntity.id}/edit`}
+                color="primary"
+                size="sm"
+              >
+                <FontAwesomeIcon icon="pencil-alt" />{' '}
+                <span className="d-none d-md-inline">
+                  <Translate contentKey="generadorApp.paciente.viewButtons.edit">Edit</Translate>
+                </span>
+              </Button>
+              <Button
+                className="float-right jh-create-entity"
+                tag={Link}
+                to={`/paciente/${pacienteEntity.id}/delete`}
+                color="danger"
+                size="sm"
+              >
+                <FontAwesomeIcon icon="trash" />{' '}
+                <span className="d-none d-md-inline">
+                  <Translate contentKey="generadorApp.paciente.viewButtons.delete">Delete</Translate>
+                </span>
+              </Button>
+            </h2>
+            <ol className="breadcrumb">
+              <li className="breadcrumb-item">
+                <Link to="/">Inicio</Link>
+              </li>
+              <li className="breadcrumb-item active">
+                <Link to={'/paciente'}>Pacientes</Link>
+              </li>
+              <li className="breadcrumb-item active">Pacientes details</li>
+            </ol>
+          </PanelHeader>
           <PanelBody>
             <Row>
               <Col md="8">
@@ -239,14 +265,14 @@ export class PacienteDetail extends React.Component<IPacienteDetailProps, IPacie
                     </TabPane>
                   </TabContent>
                 </Row>
-                <Button tag={Link} to="/paciente" replace color="info">
+                <Button tag={Link} to={'/paciente?' + this.getFiltersURL()} replace color="info">
                   <FontAwesomeIcon icon="arrow-left" />{' '}
                   <span className="d-none d-md-inline">
                     <Translate contentKey="entity.action.back">Back</Translate>
                   </span>
                 </Button>
                 &nbsp;
-                <Button tag={Link} to={`/paciente/${pacienteEntity.id}/edit`} replace color="primary">
+                <Button tag={Link} to={`/paciente/${pacienteEntity.id}/edit?+${this.getFiltersURL()}`} replace color="primary">
                   <FontAwesomeIcon icon="pencil-alt" />{' '}
                   <span className="d-none d-md-inline">
                     <Translate contentKey="entity.action.edit">Edit</Translate>

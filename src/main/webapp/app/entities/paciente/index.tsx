@@ -9,16 +9,22 @@ import PacienteRelatorioCSV from './relatorio/paciente.csv';
 import PacienteUpdate from './paciente-update';
 import PacienteDeleteDialog from './paciente-delete-dialog';
 
+import PacienteArquivo from '../paciente-arquivo/index';
+
 const Routes = ({ match }) => (
   <>
     <Switch>
-      <ErrorBoundaryRoute exact path={`${match.url}/relatorio/csv`} component={PacienteRelatorioCSV} />
-      <ErrorBoundaryRoute exact path={`${match.url}/new`} component={PacienteUpdate} />
-      <ErrorBoundaryRoute exact path={`${match.url}/:id/edit`} component={PacienteUpdate} />
-      <ErrorBoundaryRoute exact path={`${match.url}/:id`} component={PacienteDetail} />
-      <ErrorBoundaryRoute path={match.url} component={Paciente} />
+      <ErrorBoundaryRoute exact path={`${match.path}/relatorio/csv`} component={PacienteRelatorioCSV} />
+      <ErrorBoundaryRoute exact path={`${match.path}/new`} component={PacienteUpdate} />
+      <ErrorBoundaryRoute exact path={`${match.path}/:id/edit`} component={PacienteUpdate} />
+      <ErrorBoundaryRoute exact path={`${match.path}/:id`} component={PacienteDetail} />
+      <ErrorBoundaryRoute path={match.path} component={Paciente} />
     </Switch>
-    <ErrorBoundaryRoute path={`${match.url}/:id/delete`} component={PacienteDeleteDialog} />
+    <ErrorBoundaryRoute path={`${match.path}/:id/delete`} component={PacienteDeleteDialog} />
+
+    <Switch>
+      <ErrorBoundaryRoute path={`${match.path}/:idPaciente/paciente-arquivo`} component={PacienteArquivo} />
+    </Switch>
   </>
 );
 

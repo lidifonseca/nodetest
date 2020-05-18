@@ -37,7 +37,7 @@ const swaggerItem = (
 );
 
 export const AdminMenu = ({ showSwagger }) => (
-  <NavDropdown icon="" name="Administração" style={{ width: '127px' }}>
+  <NavDropdown icon="user" name="Administração" style={{ width: '127px' }}>
     {adminMenuItems}
     {showSwagger && swaggerItem}
   </NavDropdown>

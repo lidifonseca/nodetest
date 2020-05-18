@@ -484,7 +484,7 @@ export class Pad extends React.Component<IPadProps, IPadState> {
                                 </span>
                               </DropdownItem>
                               <DropdownItem tag={Link} to={`${match.url}/${pad.id}/delete`} color="info" size="sm">
-                                <FontAwesomeIcon icon="file-text-o" />{' '}
+                                <FontAwesomeIcon icon="file" />{' '}
                                 <span className="d-none d-md-inline">
                                   <Translate contentKey="generadorApp.pad.listButtons.RelatorioConsolidado">RelatórioConsolidado</Translate>
                                 </span>
@@ -514,7 +514,7 @@ export class Pad extends React.Component<IPadProps, IPadState> {
                                 </span>
                               </DropdownItem>
                               <DropdownItem tag={Link} to={`${match.url}/${pad.id}/delete`} color="info" size="sm">
-                                <FontAwesomeIcon icon="list-ol" />{' '}
+                                <FontAwesomeIcon icon="list" />{' '}
                                 <span className="d-none d-md-inline">
                                   <Translate contentKey="generadorApp.pad.listButtons.AtividadesdosAtendimentos">
                                     AtividadesdosAtendimentos

@@ -68,9 +68,7 @@ export class PacienteController {
   })
   @ApiResponse({ status: 403, description: 'Forbidden.' })
   async post(@Req() req: Request, @Body() paciente: Paciente): Promise<Paciente> {
-    console.info(paciente);
     const created = await this.pacienteService.save(paciente);
-    console.info(created);
     HeaderUtil.addEntityCreatedHeaders(req.res, 'Paciente', created.id);
     return created;
   }

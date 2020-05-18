@@ -26704,15 +26704,25 @@ body .datepicker .datepicker-years table thead tr th.prev:hover:before {
 }
 .panel [class^='col-'].ui-sortable {
   min-height: 0;
+  background: transparent;
+}
+.panel {
+  background: transparent;
 }
 .panel.panel-default > .panel-heading,
 .tab-overflow .nav.nav-tabs.nav-tabs-inverse > li > a.active {
   background: #fff;
   color: #1f2225;
 }
-.panel.panel-inverse > .panel-heading {
-  background: #0e0f10;
-  color: #fff;
+.panel.panel-inverse > .panel-heading,
+.panel.panel-inverse #panel-heading {
+  color: #0e0f10;
+  background: transparent;
+}
+.panel.panel-inverse > .panel-body {
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+  background: #fff;
 }
 .panel.panel-success > .panel-heading {
   background: #0c7b30;

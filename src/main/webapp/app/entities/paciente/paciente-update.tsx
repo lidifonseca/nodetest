@@ -60,7 +60,9 @@ export class PacienteUpdate extends React.Component<IPacienteUpdateProps, IPacie
       grauParentescoSelectValue: null,
       profissionalSelectValue: null,
       pacienteHospitalSelectValue: null,
-      fieldsBase: getPacienteState(this.props.location),
+      fieldsBase: {
+        ...getPacienteState(this.props.location)
+      },
       activeTab: 0,
       unidadeId: '0',
       franquiaId: '0',
@@ -256,40 +258,43 @@ export class PacienteUpdate extends React.Component<IPacienteUpdateProps, IPacie
           }
           onSubmit={this.saveEntity}
         >
-          <h2 id="page-heading">
-            <span className="page-header ml-3">
-              <Translate contentKey="generadorApp.paciente.home.createOrEditLabel">Create or edit a Paciente</Translate>
-            </span>
-
-            <Button color="primary" id="save-entity" type="submit" disabled={updating} className="float-right jh-create-entity">
-              <FontAwesomeIcon icon="save" />
-              &nbsp;
-              <Translate contentKey="entity.action.save">Save</Translate>
-            </Button>
-            <Button
-              tag={Link}
-              id="cancel-save"
-              to={'/paciente?' + this.getFiltersURL()}
-              replace
-              color="info"
-              className="float-right jh-create-entity"
-            >
-              <FontAwesomeIcon icon="arrow-left" />
-              &nbsp;
-              <span className="d-none d-md-inline">
-                <Translate contentKey="entity.action.back">Back</Translate>
-              </span>
-            </Button>
-          </h2>
-          <ol className="breadcrumb">
-            <li className="breadcrumb-item">
-              <Link to="/">Inicio</Link>
-            </li>
-            <li className="breadcrumb-item active">Pacientes</li>
-            <li className="breadcrumb-item active">Pacientes edit</li>
-          </ol>
-
           <Panel>
+            <PanelHeader>
+              <h2 id="page-heading">
+                <span className="page-header ml-3">
+                  <Translate contentKey="generadorApp.paciente.home.createOrEditLabel">Create or edit a Paciente</Translate>
+                </span>
+
+                <Button color="primary" id="save-entity" type="submit" disabled={updating} className="float-right jh-create-entity">
+                  <FontAwesomeIcon icon="save" />
+                  &nbsp;
+                  <Translate contentKey="entity.action.save">Save</Translate>
+                </Button>
+                <Button
+                  tag={Link}
+                  id="cancel-save"
+                  to={'/paciente?' + this.getFiltersURL()}
+                  replace
+                  color="info"
+                  className="float-right jh-create-entity"
+                >
+                  <FontAwesomeIcon icon="arrow-left" />
+                  &nbsp;
+                  <span className="d-none d-md-inline">
+                    <Translate contentKey="entity.action.back">Back</Translate>
+                  </span>
+                </Button>
+              </h2>
+              <ol className="breadcrumb">
+                <li className="breadcrumb-item">
+                  <Link to="/">Inicio</Link>
+                </li>
+                <li className="breadcrumb-item active">
+                  <Link to={'/paciente'}>Pacientes</Link>
+                </li>
+                <li className="breadcrumb-item active">Pacientes edit</li>
+              </ol>
+            </PanelHeader>
             <PanelBody>
               <Row className="justify-content-center">
                 <Col md="8">

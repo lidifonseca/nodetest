@@ -588,7 +588,7 @@ export class Profissional extends React.Component<IProfissionalProps, IProfissio
                                 </span>
                               </DropdownItem>
                               <DropdownItem tag={Link} to={`${match.url}/${profissional.id}/delete`} color="info" size="sm">
-                                <FontAwesomeIcon icon="file-text-o" />{' '}
+                                <FontAwesomeIcon icon="file" />{' '}
                                 <span className="d-none d-md-inline">
                                   <Translate contentKey="generadorApp.profissional.listButtons.RelatoriodeInformacoes">
                                     RelatóriodeInformações
@@ -624,7 +624,7 @@ export class Profissional extends React.Component<IProfissionalProps, IProfissio
                                 </span>
                               </DropdownItem>
                               <DropdownItem tag={Link} to={`${match.url}/${profissional.id}/delete`} color="info" size="sm">
-                                <FontAwesomeIcon icon="refresh" />{' '}
+                                <FontAwesomeIcon icon="retweet" />{' '}
                                 <span className="d-none d-md-inline">
                                   <Translate contentKey="generadorApp.profissional.listButtons.AlterarSenha">AlterarSenha</Translate>
                                 </span>

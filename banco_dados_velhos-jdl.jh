@@ -65,7 +65,7 @@ entity ApiReturn {
 		detalhes{inDropdown:true,tag:Link,to:`${match.url}/${atendimento.id}`,color:info,size:sm,icon:eye,text:Detalhes} 
 	  VisualizarPTA{inDropdown:true,tag:Link,to:`${match.url}/${atendimento.id}/delete`,color:info,size:sm,icon:search,text:VisualizarPTA}
 	  VisualizarPTA{inDropdown:true,tag:Link,to:`${match.url}/${atendimento.id}/delete`,color:info,size:sm,icon:search,text:VisualizarPTA}
-	  LicaodeCasa{inDropdown:true,tag:Link,to:`${match.url}/${atendimento.id}/delete`,color:info,size:sm,icon:file-text-o,text:LiçãodeCasa}
+	  LicaodeCasa{inDropdown:true,tag:Link,to:`${match.url}/${atendimento.id}/delete`,color:info,size:sm,icon:file,text:LiçãodeCasa}
 	  Fotos{inDropdown:true,tag:Link,to:`${match.url}/${atendimento.id}/delete`,color:info,size:sm,icon:calendar-check-o,text:Fotos}
 		edit{inDropdown:true,tag:Link,to:`${match.url}/${atendimento.id}/edit`,color:info,size:sm,icon:pencil-alt,text:Editar} 
 	  delete{inDropdown:true,tag:Link,to:`${match.url}/${atendimento.id}/delete`,color:info,size:sm,icon:trash,text:Excluir} 
@@ -587,6 +587,7 @@ entity Operadora {
 	emailFinanceiro String maxlength(50)
 }
 /**
+	@openModalRoutes paciente-arquivo@@
 	@toStringFields nome@@ 
 	@listTableLayout nome cep bairro rg registro@@ 
 	@listFilterLayout 
@@ -602,19 +603,19 @@ entity Operadora {
 		view{inDropdown:true,tag:Link,to:`${match.url}/${paciente.id}`,color:info,size:sm,icon:eye,text:View} 
 		edit{inDropdown:true,tag:Link,to:`${match.url}/${paciente.id}/edit`,color:info,size:sm,icon:pencil-alt,text:Edit} 
 	  delete{inDropdown:true,tag:Link,to:`${match.url}/${paciente.id}/delete`,color:info,size:sm,icon:trash,text:Delete} 
-	  RelatoriodeInformacoes{inDropdown:true,tag:Link,to:`${match.url}/${paciente.id}/delete`,color:info,size:sm,icon:file-text-o,text:RelatoriodeInformacoes}
+	  RelatoriodeInformacoes{inDropdown:true,tag:Link,to:`${match.url}/${paciente.id}/delete`,color:info,size:sm,icon:file,text:RelatoriodeInformacoes}
 	  IndicadoresClinicos{inDropdown:true,tag:Link,to:`${match.url}/${paciente.id}/delete`,color:info,size:sm,icon:list,text:IndicadoresClinicos}
 	  Monitoramento{inDropdown:true,tag:Link,to:`${match.url}/${paciente.id}/delete`,color:info,size:sm,icon:list,text:Monitoramento}
 	  VisualizarProntuario{inDropdown:true,tag:Link,to:`${match.url}/${paciente.id}/delete`,color:info,size:sm,icon:search,text:VisualizarProntuario}
-	  Status{inDropdown:true,tag:Link,to:`/paciente-status-atual?baseFilters=paciente&paciente=${paciente.id}`,color:info,size:sm,icon:pencil,text:Status}
-	  Arquivos{inDropdown:true,tag:Link,to:`/paciente-arquivo?baseFilters=paciente&paciente=${paciente.id}`,color:info,size:sm,icon:upload,text:Arquivos}
+	  Status{inDropdown:true,tag:Link,to:`/paciente-status-atual?baseFilters=paciente&paciente=${paciente.id}`,color:info,size:sm,icon:pencil-alt,text:Status}
+	  Arquivos{inDropdown:true,tag:Link,to:`/paciente/${paciente.id}/paciente-arquivo?`,color:info,size:sm,icon:upload,text:Arquivos}
 	  Diagnostico{inDropdown:true,tag:Link,to:`/paciente-diagnostico?baseFilters=paciente&paciente=${paciente.id}`,color:info,size:sm,icon:stethoscope,text:Diagnostico}
 	  Operadora{inDropdown:true,tag:Link,to:`/paciente-operadora?baseFilters=paciente&paciente=${paciente.id}`,color:info,size:sm,icon:medkit,text:Operadora}
-	  ResetSenha{inDropdown:true,tag:Link,to:`/reset-senha?baseFilters=paciente&paciente=${paciente.id}`,color:info,size:sm,icon:refresh,text:ResetSenha}
+	  ResetSenha{inDropdown:true,tag:Link,to:`/reset-senha?baseFilters=paciente&paciente=${paciente.id}`,color:info,size:sm,icon:retweet,text:ResetSenha}
 	  ProntuarioEletronico{inDropdown:true,tag:Link,to:`/paciente-prontuario?baseFilters=paciente&paciente=${paciente.id}`,color:info,size:sm,icon:stethoscope,text:ProntuarioEletronico}
 	  Token{inDropdown:true,tag:Link,to:`/paciente-?baseFilters=paciente&paciente=${paciente.id}`,color:info,size:sm,icon:key,text:Token}
 	  Questionario{inDropdown:true,tag:Link,to:`/questionarios?baseFilters=paciente&paciente=${paciente.id}`,color:info,size:sm,icon:question,text:Questionario}
-	  TratamentoIndicado{inDropdown:true,tag:Link,to:`/paciente-?baseFilters=paciente&paciente=${paciente.id}`,color:info,size:sm,icon:fa-list-ol,text:TratamentoIndicado}
+	  TratamentoIndicado{inDropdown:true,tag:Link,to:`/paciente-?baseFilters=paciente&paciente=${paciente.id}`,color:info,size:sm,icon:list,text:TratamentoIndicado}
 	@@	
 	@viewButtons 
 		view{tag:Link,to:`/paciente/${pacienteEntity.id}`,color:info,size:sm,icon:eye,text:View} 
@@ -754,8 +755,9 @@ entity Paciente {
 //	@addSubRelation paciente.pacienteDiagnostico@@ 
 //	@listTableLayout paciente.pacienteDiagnostico.observacao @@ 
 /**
-	@baseFilters paciente@@
-	@listTableLayout arquivo paciente @@ 
+	@notListFilterLayout @@ 
+	@baseFilters paciente{showField:nome,window:modal}@@
+	@listTableLayout arquivo paciente@@ 
 	@formLayout arquivo paciente @@ 
 */
 entity PacienteArquivo {
@@ -1004,12 +1006,12 @@ entity PacienteStatusAtual {
 	@listButtons 
 		VisualizarPTA{inDropdown:true,tag:Link,to:`${match.url}/${pad.id}`,color:info,size:sm,icon:eye,text:VisualizarPTA} 
 		detalhes{inDropdown:true,tag:Link,to:`${match.url}/${pad.id}`,color:info,size:sm,icon:eye,text:Detalhes} 
-	  RelatorioConsolidado{inDropdown:true,tag:Link,to:`${match.url}/${pad.id}/delete`,color:info,size:sm,icon:file-text-o,text:RelatórioConsolidado}
+	  RelatorioConsolidado{inDropdown:true,tag:Link,to:`${match.url}/${pad.id}/delete`,color:info,size:sm,icon:file,text:RelatórioConsolidado}
 		edit{inDropdown:true,tag:Link,to:`${match.url}/${pad.id}/edit`,color:info,size:sm,icon:pencil-alt,text:Editar} 
 	  Status{inDropdown:true,tag:Link,to:`/pad-status-atual?baseFilters=pad&pad=${pad.id}`,color:info,size:sm,icon:upload,text:Status}
 	  Aditivos{inDropdown:true,tag:Link,to:`/pad-arquivo?baseFilters=pad&pad=${pad.id}`,color:info,size:sm,icon:upload,text:Aditivos}
 	  ResultadosEsperados{inDropdown:true,tag:Link,to:`${match.url}/${pad.id}/delete`,color:info,size:sm,icon:list,text:ResultadosEsperados}
-	  AtividadesdosAtendimentos{inDropdown:true,tag:Link,to:`${match.url}/${pad.id}/delete`,color:info,size:sm,icon:list-ol,text:AtividadesdosAtendimentos} 
+	  AtividadesdosAtendimentos{inDropdown:true,tag:Link,to:`${match.url}/${pad.id}/delete`,color:info,size:sm,icon:list,text:AtividadesdosAtendimentos} 
 	@@
 */
 entity Pad {
@@ -1178,11 +1180,11 @@ entity Periodo {
 	@@
 	@listButtons 
 		detalhes{inDropdown:true,tag:Link,to:`${match.url}/${profissional.id}`,color:info,size:sm,icon:eye,text:Detalhes} 
-	  RelatoriodeInformacoes{inDropdown:true,tag:Link,to:`${match.url}/${profissional.id}/delete`,color:info,size:sm,icon:file-text-o,text:RelatóriodeInformações}
+	  RelatoriodeInformacoes{inDropdown:true,tag:Link,to:`${match.url}/${profissional.id}/delete`,color:info,size:sm,icon:file,text:RelatóriodeInformações}
 		edit{inDropdown:true,tag:Link,to:`${match.url}/${profissional.id}/edit`,color:info,size:sm,icon:pencil-alt,text:Editar} 
 	  Status{inDropdown:true,tag:Link,to:`/profissional-status-atual?baseFilters=profissional&profissional=${profissional.id}`,color:info,size:sm,icon:upload,text:Status}
 	  Arquivos{inDropdown:true,tag:Link,to:`/profissional-arquivo?baseFilters=profissional&profissional=${profissional.id}`,color:info,size:sm,icon:upload,text:Arquivos}
-	  AlterarSenha{inDropdown:true,tag:Link,to:`${match.url}/${profissional.id}/delete`,color:info,size:sm,icon:refresh,text:AlterarSenha}
+	  AlterarSenha{inDropdown:true,tag:Link,to:`${match.url}/${profissional.id}/delete`,color:info,size:sm,icon:retweet,text:AlterarSenha}
 	  delete{inDropdown:true,tag:Link,to:`${match.url}/${profissional.id}/delete`,color:info,size:sm,icon:trash,text:Excluir} 
 	@@
 */

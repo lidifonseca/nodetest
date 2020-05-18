@@ -334,7 +334,13 @@
   import { connect } from 'react-redux';
   import Select from 'react-select';
   import { Link, RouteComponentProps } from 'react-router-dom';
+<%_ let baseFiltersModal = false; _%>
+<%_  if(this.generator.baseFiltersAttributes && this.generator.baseFiltersAttributes['window'] === "modal") { _%>
+  <%_ baseFiltersModal = true; _%>
+  import { Modal as Panel, ModalHeader as PanelHeader, ModalBody as PanelBody, ModalFooter as PanelFooter } from 'reactstrap';
+<%_ } else { _%> 
   import {Panel, PanelHeader, PanelBody, PanelFooter} from 'app/shared/layout/panel/panel.tsx';
+<%_ } _%> 
   import {
   Button,
   Row,
@@ -588,15 +594,16 @@
         <%_ } _%>
         const baseFilters = this.state.fieldsBase && this.state.fieldsBase['baseFilters'] ? this.state.fieldsBase['baseFilters'] : null;
         return (
-  
-        <div>
-            <AvForm model={isNew ? {} : {
-              ...<%= entityInstance %>Entity, 
-              <%_ if (formTabs.length > 0) { _%>activeTab: 0,<%_ } _%>
-              <%_ relFieldNames.forEach(val => { _%>
-                <%= val.relationshipFieldName %>:<%= entityInstance %>Entity.<%= val.relationshipFieldName %> ? <%= entityInstance %>Entity.<%= val.relationshipFieldName %>.id: null,
-              <%_ }) _%>
-            } } onSubmit={this.saveEntity}>
+          <div>
+              <AvForm model={isNew ? {} : {
+                ...<%= entityInstance %>Entity, 
+                <%_ if (formTabs.length > 0) { _%>activeTab: 0,<%_ } _%>
+                <%_ relFieldNames.forEach(val => { _%>
+                  <%= val.relationshipFieldName %>:<%= entityInstance %>Entity.<%= val.relationshipFieldName %> ? <%= entityInstance %>Entity.<%= val.relationshipFieldName %>.id: null,
+                <%_ }) _%>
+              } } onSubmit={this.saveEntity}>
+          <Panel <%_ if(baseFiltersModal) { %> isOpen <%_ } %>>
+          <PanelHeader>
           <h2 id="page-heading">
               <span className="page-header ml-3">
                 <Translate contentKey="<%= i18nKeyPrefix %>.home.createOrEditLabel">Create or edit a
@@ -623,11 +630,23 @@
             <li className="breadcrumb-item">
               <Link to="/">Inicio</Link>
             </li>
-            <li className="breadcrumb-item active"><%= entityClassPluralHumanized %></li>
+            <%_ if((typeof baseFilters !== 'undefined' && baseFilters)) { _%>
+              <li className="breadcrumb-item"><Link to={"/<%= baseFilters %>"}><%= _.startCase((baseFilters+"s")) %></Link></li>
+              <li className="breadcrumb-item"><Link to={"/<%= baseFilters %>/" + this.state[this.state.baseFilters]}>{
+                <%if (typeof baseFiltersAttributes !== 'undefined' && typeof baseFiltersAttributes['showField']!== 'undefined') { %>
+                  <%= entityInstance %>Entity.<%= baseFilters %> ? <%= entityInstance %>Entity.<%= baseFilters %>.<%= baseFiltersAttributes['showField'] %> : this.state[this.state.baseFilters]
+                <% } else {%>
+                  this.state[this.state.baseFilters]
+                <% }%>
+              }</Link></li>
+              <li className="breadcrumb-item"><Link to={"/<%= baseFilters %>/" + this.state[this.state.baseFilters] + "/<%= entityFileName %>"}><%= entityClassPluralHumanized %></Link></li>
+            <%_ } else { _%>
+              <li className="breadcrumb-item active"><Link to={"/<%= entityFileName %>"}><%= entityClassPluralHumanized %></Link></li>
+            <%_ } _%>
             <li className="breadcrumb-item active"><%= entityClassPluralHumanized %> edit</li>
           </ol>
-  
-            <Panel>
+          
+        </PanelHeader>
               <PanelBody>
                 <Row className="justify-content-center">
                   <Col md="8">

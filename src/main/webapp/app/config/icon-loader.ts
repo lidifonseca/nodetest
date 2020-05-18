@@ -1,5 +1,10 @@
 /* eslint no-console: off */
 import { faSort } from '@fortawesome/free-solid-svg-icons/faSort';
+import { faUpload } from '@fortawesome/free-solid-svg-icons/faUpload';
+import { faRetweet } from '@fortawesome/free-solid-svg-icons/faRetweet';
+import { faStethoscope } from '@fortawesome/free-solid-svg-icons/faStethoscope';
+import { faListOl } from '@fortawesome/free-solid-svg-icons/faListOl';
+import { faQuestion } from '@fortawesome/free-solid-svg-icons/faQuestion';
 import { faSortDown } from '@fortawesome/free-solid-svg-icons/faSortDown';
 import { faSortUp } from '@fortawesome/free-solid-svg-icons/faSortUp';
 import { faEye } from '@fortawesome/free-solid-svg-icons/faEye';
@@ -42,10 +47,23 @@ import { faTrashAlt } from '@fortawesome/free-solid-svg-icons/faTrashAlt';
 import { faSpinner } from '@fortawesome/free-solid-svg-icons/faSpinner';
 import { faDownload } from '@fortawesome/free-solid-svg-icons/faDownload';
 import { faCaretDown } from '@fortawesome/free-solid-svg-icons';
+import { faKey } from '@fortawesome/free-solid-svg-icons/faKey';
+import { faMedkit } from '@fortawesome/free-solid-svg-icons/faMedkit';
+
+import { faFile } from '@fortawesome/free-solid-svg-icons/faFile';
+// import { fadddd } from '@fortawesome/free-solid-svg-icons/fa';
 export const loadIcons = () => {
   library.add(
     faSort,
     faSortDown,
+    faFile,
+    faRetweet,
+    faKey,
+    faUpload,
+    faMedkit,
+    faStethoscope,
+    faListOl,
+    faQuestion,
     faSortUp,
     faEye,
     faSync,

@@ -794,7 +794,7 @@ export class Atendimento extends React.Component<IAtendimentoProps, IAtendimento
                                 </span>
                               </DropdownItem>
                               <DropdownItem tag={Link} to={`${match.url}/${atendimento.id}/delete`} color="info" size="sm">
-                                <FontAwesomeIcon icon="file-text-o" />{' '}
+                                <FontAwesomeIcon icon="file" />{' '}
                                 <span className="d-none d-md-inline">
                                   <Translate contentKey="generadorApp.atendimento.listButtons.LicaodeCasa">LiçãodeCasa</Translate>
                                 </span>

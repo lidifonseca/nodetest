@@ -164,7 +164,13 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { Button, <% if (haveFieldWithJavadoc) { %>UncontrolledTooltip, <% } %>Row, Col } from 'reactstrap';
-import {Panel, PanelHeader, PanelBody, PanelFooter} from 'app/shared/layout/panel/panel.tsx';
+<%_ let baseFiltersModal = false; _%>
+<%_  if(this.generator.baseFiltersAttributes && this.generator.baseFiltersAttributes['window'] === "modal") { _%>
+  <%_ baseFiltersModal = true; _%>
+  import { Modal as Panel, ModalHeader as PanelHeader, ModalBody as PanelBody, ModalFooter as PanelFooter } from 'reactstrap';
+<%_ } else { _%> 
+  import {Panel, PanelHeader, PanelBody, PanelFooter} from 'app/shared/layout/panel/panel.tsx';
+<%_ } _%> 
 import {
   Translate,
   ICrudGetAction,
@@ -242,9 +248,10 @@ export class <%= entityReactName %>Detail extends React.Component<I<%= entityRea
     const { <%= entityInstance %>Entity } = this.props;
     return (
       <div>
+      <Panel <%_ if(baseFiltersModal) { %> isOpen <%_ } %>>
+      <PanelHeader>
         <h2 id="page-heading">
           <span className="page-header ml-3"><%= entityClassPluralHumanized %></span>
-          <%_ console.info(viewButtons) _%>
           <%_ for (idx in viewButtons) { _%>
             <%_ const attrib = viewButtons[idx].attributes; _%>
               <Button className="float-right jh-create-entity" tag={<%=attrib['tag'] %>} to={<%=attrib['to'] %>} color="<%=attrib['color'] %>" size="<%=attrib['size'] %>">
@@ -255,11 +262,21 @@ export class <%= entityReactName %>Detail extends React.Component<I<%= entityRea
         </h2>
         <ol className="breadcrumb">
           <li className="breadcrumb-item"><Link to="/">Inicio</Link></li>
-          <li className="breadcrumb-item active"><%= entityClassPluralHumanized %></li>
+          <%_ if((typeof baseFilters !== 'undefined' && baseFilters)) { _%>
+            <li className="breadcrumb-item"><Link to={"/<%= baseFilters %>"}><%= _.startCase((baseFilters+"s")) %></Link></li>
+            <li className="breadcrumb-item"><Link to={"/<%= baseFilters %>/" + this.state[this.state.baseFilters]}>{
+              <%if (typeof baseFiltersAttributes !== 'undefined' && typeof baseFiltersAttributes['showField']!== 'undefined') { %>
+                <%= entityInstance %>Entity.<%= baseFilters %> ? <%= entityInstance %>Entity.<%= baseFilters %>.<%= baseFiltersAttributes['showField'] %> : this.state[this.state.baseFilters]
+              <% } else {%>
+                this.state[this.state.baseFilters]
+              <% }%>
+            }</Link></li> 
+            <li className="breadcrumb-item"><Link to={"/<%= baseFilters %>/" + this.state[this.state.baseFilters] + "/<%= entityFileName %>"}><%= entityClassPluralHumanized %></Link></li>
+          <%_ } else { _%>
+            <li className="breadcrumb-item active"><Link to={"/<%= entityFileName %>"}><%= entityClassPluralHumanized %></Link></li>
+          <%_ } _%>
           <li className="breadcrumb-item active"><%= entityClassPluralHumanized %> details</li>
         </ol>
-        <Panel>
-          <PanelHeader>
           </PanelHeader>
           <PanelBody>
             <Row>

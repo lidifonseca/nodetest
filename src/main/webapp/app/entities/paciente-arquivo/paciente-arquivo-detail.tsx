@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { Button, Row, Col } from 'reactstrap';
-import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
+import { Modal as Panel, ModalHeader as PanelHeader, ModalBody as PanelBody, ModalFooter as PanelFooter } from 'reactstrap';
 import { Translate, ICrudGetAction, openFile } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
@@ -47,18 +47,29 @@ export class PacienteArquivoDetail extends React.Component<IPacienteArquivoDetai
     const { pacienteArquivoEntity } = this.props;
     return (
       <div>
-        <h2 id="page-heading">
-          <span className="page-header ml-3">Paciente Arquivos</span>
-        </h2>
-        <ol className="breadcrumb">
-          <li className="breadcrumb-item">
-            <Link to="/">Inicio</Link>
-          </li>
-          <li className="breadcrumb-item active">Paciente Arquivos</li>
-          <li className="breadcrumb-item active">Paciente Arquivos details</li>
-        </ol>
-        <Panel>
-          <PanelHeader></PanelHeader>
+        <Panel isOpen>
+          <PanelHeader>
+            <h2 id="page-heading">
+              <span className="page-header ml-3">Paciente Arquivos</span>
+            </h2>
+            <ol className="breadcrumb">
+              <li className="breadcrumb-item">
+                <Link to="/">Inicio</Link>
+              </li>
+              <li className="breadcrumb-item">
+                <Link to={'/paciente'}>Pacientes</Link>
+              </li>
+              <li className="breadcrumb-item">
+                <Link to={'/paciente/' + this.state[this.state.baseFilters]}>
+                  {pacienteArquivoEntity.paciente ? pacienteArquivoEntity.paciente.nome : this.state[this.state.baseFilters]}
+                </Link>
+              </li>
+              <li className="breadcrumb-item">
+                <Link to={'/paciente/' + this.state[this.state.baseFilters] + '/paciente-arquivo'}>Paciente Arquivos</Link>
+              </li>
+              <li className="breadcrumb-item active">Paciente Arquivos details</li>
+            </ol>
+          </PanelHeader>
           <PanelBody>
             <Row>
               <Col md="8">

@@ -31,5 +31,5 @@
     "embedded": false,
     "clientRootFolder": "",
     "applications": "*",
-    "javadoc": "@baseFilters paciente@@\\n@listTableLayout arquivo paciente @@\\n@formLayout arquivo paciente @@"
+    "javadoc": "@notListFilterLayout @@\\n@baseFilters paciente{showField:nome,window:modal}@@\\n@listTableLayout arquivo paciente@@\\n@formLayout arquivo paciente @@"
 }

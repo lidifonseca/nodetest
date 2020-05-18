@@ -96,9 +96,7 @@ export class <%= entityClass %>Controller {
         <%_ } %>
       <%_ } %>
     <%_ } _%>
-    console.info(<%= asEntity(entityInstance) %>);
     const created = await this.<%= asEntity(entityInstance) %>Service.save(<%= asEntity(entityInstance) %>);
-    console.info(created);
     HeaderUtil.addEntityCreatedHeaders(req.res, '<%= entityClass %>', created.id);
     return created;
   }

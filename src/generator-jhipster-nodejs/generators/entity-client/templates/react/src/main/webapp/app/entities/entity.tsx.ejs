@@ -1,5 +1,4 @@
 <%_ function printRelationshipsFilters(rel){ 
-
     const listFilterLayoutLabel = rel.listFilterLayoutLabel ? rel.listFilterLayoutLabel : 'left' ; 
     const listFilterLayoutSize = rel.listFilterLayoutSize ? rel.listFilterLayoutSize : 3; 
     const relationshipType = rel.relationshipType;
@@ -328,7 +327,10 @@ import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/u
 import { connect } from 'react-redux';
 import Select from 'react-select';
 import { Link, RouteComponentProps } from 'react-router-dom';
-import { Button, <% if (searchEngine === 'elasticsearch') { %>InputGroup, <% } %>Col, Row, Table, Label, UncontrolledTooltip, UncontrolledCollapse, CardHeader, CardBody,
+import { Button, <% if (searchEngine === 'elasticsearch') { %>InputGroup, <% } %>Col, Row, Table, Label, UncontrolledTooltip, 
+<%_ if (typeof notListFilterLayout === 'undefined') {  _%>
+  UncontrolledCollapse,
+<%_ } _%> CardHeader, CardBody,
 <%_  if (listButtonsInDropdown === true) { _%> Dropdown, DropdownToggle,  DropdownMenu,  DropdownItem, <%_ } _%> UncontrolledAlert } from 'reactstrap';
 import { AvForm, div, AvInput } from 'availity-reactstrap-validation';
 import {
@@ -347,7 +349,13 @@ import {
 } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import {Panel, PanelHeader, PanelBody, PanelFooter} from 'app/shared/layout/panel/panel.tsx';
+<%_ let baseFiltersModal = false; _%>
+<%_  if(this.generator.baseFiltersAttributes && this.generator.baseFiltersAttributes['window'] === "modal") { _%>
+  <%_ baseFiltersModal = true; _%>
+  import { Modal as Panel, ModalHeader as PanelHeader, ModalBody as PanelBody, ModalFooter as PanelFooter } from 'reactstrap';
+<%_ } else { _%> 
+  import {Panel, PanelHeader, PanelBody, PanelFooter} from 'app/shared/layout/panel/panel.tsx';
+<%_ } _%> 
 
 import { IRootState } from 'app/shared/reducers';
 import {
@@ -618,10 +626,17 @@ export class <%= entityReactName %> extends React.Component<I<%= entityReactName
 
   render() {
     const { <% uniqueRealtionFields.forEach(rel => {%> <%= rel %>,<% }) %> <%=entityInstance %>List, match<% if (pagination === 'pagination' || pagination === 'pager') { %>, totalItems<% } %>} = this.props;
+    <%_ if((typeof baseFilters !== 'undefined' && baseFilters)) { _%>
+      let <%= baseFilters %>BaseFilter = null; 
+      <%= baseFilters %>s.map((p)=>{ if(p.id === this.state.<%= baseFilters %>) <%= baseFilters %>BaseFilter = p });
+    <%_ } _%>
+
     return (
-      <div>
-          <h2 id="page-heading">
-            <span className="page-header"><%= entityClassPluralHumanized %></span>
+      <Panel <%_ if(baseFiltersModal) { %> isOpen <%_ } %>>
+      <PanelHeader>
+        <h2 id="page-heading">
+          <span className="page-header"><%= entityClassPluralHumanized %></span>
+            <%_ if(typeof notListFilterLayout === 'undefined') { _%>
             <Button id="togglerFilter<%= entityReactName %>" className="btn btn-primary float-right jh-create-entity">
                 <Translate contentKey="<%= i18nKeyPrefix %>.home.btn_filter_open">
                   Filters
@@ -629,6 +644,7 @@ export class <%= entityReactName %> extends React.Component<I<%= entityReactName
                 &nbsp;
               <FontAwesomeIcon icon="caret-down" />
             </Button>  &nbsp;
+            <%_ } _%>
             <%_ if (!readOnly) { _%>
             <Link to={`${match.url}/new?${this.getFiltersURL()}`} className="btn btn-primary float-right jh-create-entity" id="jh-create-entity">
               <FontAwesomeIcon icon="plus" />&nbsp;
@@ -641,9 +657,19 @@ export class <%= entityReactName %> extends React.Component<I<%= entityReactName
 
         <ol className="breadcrumb">
           <li className="breadcrumb-item"><Link to="/">Inicio</Link></li>
+          <%_ if((typeof baseFilters !== 'undefined' && baseFilters)) { _%>
+            <li className="breadcrumb-item"><Link to={"/<%= baseFilters %>"}><%= _.startCase((baseFilters+"s")) %></Link></li>
+            <li className="breadcrumb-item"><Link to={"/<%= baseFilters %>/" + this.state[this.state.baseFilters]}>{
+              <%if (typeof baseFiltersAttributes !== 'undefined' && typeof baseFiltersAttributes['showField']!== 'undefined') { %>
+                <%= baseFilters %>BaseFilter ? <%= baseFilters %>BaseFilter.<%= baseFiltersAttributes['showField'] %> : this.state[this.state.baseFilters]
+              <% } else {%>
+                this.state[this.state.baseFilters]
+              <% }%>
+            }</Link></li>
+          <%_ } _%>
           <li className="breadcrumb-item active"><%= entityClassPluralHumanized %></li>
         </ol>
-        <Panel>
+      </PanelHeader>
           <PanelBody>
             <%_ if (searchEngine === 'elasticsearch') { _%>
             <Row>
@@ -674,11 +700,11 @@ export class <%= entityReactName %> extends React.Component<I<%= entityReactName
                               threshold={0}
                               initialLoad={false}>
               <%_ } _%>
-               
+              <%_ if (typeof notListFilterLayout === 'undefined') {  _%>
                 <UncontrolledCollapse toggler="#togglerFilter<%= entityReactName %>">
                   <CardBody>
                     <AvForm ref={(el) => this.myFormRef = el} id="form-filter" onSubmit={this.filterEntity} >
-                      <div className="row mt-1 ml-3 mr-3">
+                        <div className="row mt-1 ml-3 mr-3">
                           <%_ if (listFilterLayout.length > 0) {  _%>
                             <%_ for (idx in listFilterLayout) { _%>
                               <%_ if(listFilterLayout[idx].type == 'field'){  _%>
@@ -691,25 +717,26 @@ export class <%= entityReactName %> extends React.Component<I<%= entityReactName
                             <%_ for (idx in fields) { printFieldsFilters(fields[idx]) } _%>
                             <%_ relationships.forEach(rel => printRelationshipsFilters(rel) ) _%>
                           <%_ } _%>
-                      </div>
-
-                      <div className="row mb-2 mr-4 justify-content-end">
-                          <Button className="btn btn-success" type="submit">
-                            <i className="fa fa-filter" aria-hidden={"true"}></i>
-                            &nbsp;
-                            <Translate contentKey="<%= i18nKeyPrefix %>.home.btn_filter">Filter</Translate>
-                          </Button>
-                          &nbsp;
-                          <div className="btn btn-secondary hand" onClick={this.cancelCourse}>
-                            <FontAwesomeIcon icon="trash-alt" />
-                            &nbsp;
-                            <Translate contentKey="<%= i18nKeyPrefix %>.home.btn_filter_clean">Clean</Translate>
-                          </div>
                         </div>
-                
-                    </AvForm>
-                  </CardBody>
-                </UncontrolledCollapse>
+
+                        <div className="row mb-2 mr-4 justify-content-end">
+                            <Button className="btn btn-success" type="submit">
+                              <i className="fa fa-filter" aria-hidden={"true"}></i>
+                              &nbsp;
+                              <Translate contentKey="<%= i18nKeyPrefix %>.home.btn_filter">Filter</Translate>
+                            </Button>
+                            &nbsp;
+                            <div className="btn btn-secondary hand" onClick={this.cancelCourse}>
+                              <FontAwesomeIcon icon="trash-alt" />
+                              &nbsp;
+                              <Translate contentKey="<%= i18nKeyPrefix %>.home.btn_filter_clean">Clean</Translate>
+                            </div>
+                          </div>
+                  
+                      </AvForm>
+                    </CardBody>
+                  </UncontrolledCollapse>
+                <%_ } _%>
 
               {
                 <%= entityInstance %>List && <%= entityInstance %>List.length > 0 ?(
@@ -724,18 +751,20 @@ export class <%= entityReactName %> extends React.Component<I<%= entityReactName
                         <%_ if (listTableLayout.length > 0) {  _%>
                           <%_ for (idx in listTableLayout) { _%>
                             <%_ if(listTableLayout[idx].type == 'field'){  _%>
+                              { this.state.baseFilters !== '<%= listTableLayout[idx].name %>' ?
                               <th<% if (pagination !== 'no') { %> className="hand" onClick={this.sort('<%=listTableLayout[idx].entity.fieldName%>')} <%_ } _%>>
                                 <Translate contentKey="<%= `${i18nKeyPrefix}.${listTableLayout[idx].entity.fieldName}` %>">
                                   <%= listTableLayout[idx].fieldNameHumanized %>
                                 </Translate>
                                 <% if (pagination !== 'no') { %> <FontAwesomeIcon icon="sort" /><% } %>
-                              </th>
+                              </th> : null }
                             <%_ } else { _%>
+                              { this.state.baseFilters !== '<%= listTableLayout[idx].name %>' ?
                               <th<% if (pagination !== 'no') { %> <% } %>>
                                   <Translate contentKey="<%= `${i18nKeyPrefix}.${listTableLayout[idx].entity.relationshipName}` %>">
                                     <%= listTableLayout[idx].entity.relationshipNameHumanized %></Translate>
                                     <% if (pagination !== 'no') { %> <FontAwesomeIcon icon="sort" /><% } %>
-                              </th>
+                              </th> : null }
                             <%_ } _%>
                           <%_ } _%>
                         <%_ } else {  _%>
@@ -883,7 +912,6 @@ export class <%= entityReactName %> extends React.Component<I<%= entityReactName
             <%_ } _%>
           </PanelFooter>
         </Panel>
-      </div>
     );
   }
 }

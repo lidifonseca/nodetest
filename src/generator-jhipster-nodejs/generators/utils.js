@@ -570,6 +570,7 @@ function getJavadoc(text, indentSize) {
 function analizeJavadoc(generator) {
 
     generator.addSubRelation = [];
+    generator.openModalRoutes = [];
     generator.formTabs = [];
     generator.viewTabs = [];
     generator.toStringFields = [];
@@ -594,6 +595,24 @@ function analizeJavadoc(generator) {
                     if(generator.addSubRelation.indexOf(value) === -1) {
                         generator.addSubRelation.push(value);
                     }
+                }else if(parameter[0] === "openModalRoutes") {
+                    let value = parameter[1].trim();
+                    if(generator.openModalRoutes.indexOf(value) === -1) {
+                        generator.openModalRoutes.push(value);
+                    }
+                }else if(parameter[0] === "baseFilters") {
+                    const values = parameter[1].trim().split("}")[0].split("{");
+                    generator["baseFilters"] = values[0].trim();
+                    if(values.length > 1){
+                        let filtersAttributes = {};
+                        values[1].trim().split("}")[0].split("{")[0].split(",").map(function (v) {
+                            filtersAttributes[v.split(':')[0]] = v.split(':').length > 1 ? v.split(':')[1] : 'true'; 
+                        });
+                        generator["baseFiltersAttributes"] = filtersAttributes;
+
+                    }
+
+
                 }
                 else if(parameter[0] === "formTab") {
                     let value = parameter[1].trim().split(">")[0].split("<");
@@ -775,7 +794,7 @@ function analizeJavadoc(generator) {
                         }
                     }
                 } else {
-                    generator[parameter[0]] = parameter[1];
+                    generator[parameter[0].trim()] = parameter[1].trim();
                 }
             }
             generatorJavadoc = generatorJavadoc.substring(0,generatorJavadoc.indexOf('@')) + generatorJavadoc.substring(generatorJavadoc.indexOf('@@')+2).trim();

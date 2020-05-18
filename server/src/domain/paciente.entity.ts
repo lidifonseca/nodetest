@@ -21,7 +21,7 @@ import Profissional from './profissional.entity';
 import PacienteHospital from './paciente-hospital.entity';
 
 /**
- * \n\n\n\n\n\n\n\n
+ * \n\n\n\n\n\n\n\n\n
  */
 @Entity('tb_paciente')
 export default class Paciente extends BaseEntity {

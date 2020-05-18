@@ -30,7 +30,7 @@ const accountMenuItems = (
 );
 
 export const AccountMenu = ({ isAuthenticated = false }) => (
-  <NavDropdown icon="" name="Conta">
+  <NavDropdown icon="user" name="Conta">
     {isAuthenticated ? accountMenuItemsAuthenticated : accountMenuItems}
   </NavDropdown>
 );

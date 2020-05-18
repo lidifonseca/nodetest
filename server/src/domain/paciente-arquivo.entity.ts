@@ -5,7 +5,7 @@ import { BaseEntity } from './base/base.entity';
 import Paciente from './paciente.entity';
 
 /**
- * \n\n
+ * \n\n\n
  */
 @Entity('tb_paciente_arquivo')
 export default class PacienteArquivo extends BaseEntity {

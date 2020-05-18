@@ -3,7 +3,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import Select from 'react-select';
 import { Link, RouteComponentProps } from 'react-router-dom';
-import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
+import { Modal as Panel, ModalHeader as PanelHeader, ModalBody as PanelBody, ModalFooter as PanelFooter } from 'reactstrap';
 import { Button, Row, Col, Label } from 'reactstrap';
 import { AvFeedback, AvForm, AvGroup, AvInput, AvField } from 'availity-reactstrap-validation';
 import { Translate, translate, ICrudGetAction, ICrudGetAllAction, setFileData, openFile, ICrudPutAction } from 'react-jhipster';
@@ -132,40 +132,51 @@ export class PacienteArquivoUpdate extends React.Component<IPacienteArquivoUpdat
           }
           onSubmit={this.saveEntity}
         >
-          <h2 id="page-heading">
-            <span className="page-header ml-3">
-              <Translate contentKey="generadorApp.pacienteArquivo.home.createOrEditLabel">Create or edit a PacienteArquivo</Translate>
-            </span>
+          <Panel isOpen>
+            <PanelHeader>
+              <h2 id="page-heading">
+                <span className="page-header ml-3">
+                  <Translate contentKey="generadorApp.pacienteArquivo.home.createOrEditLabel">Create or edit a PacienteArquivo</Translate>
+                </span>
 
-            <Button color="primary" id="save-entity" type="submit" disabled={updating} className="float-right jh-create-entity">
-              <FontAwesomeIcon icon="save" />
-              &nbsp;
-              <Translate contentKey="entity.action.save">Save</Translate>
-            </Button>
-            <Button
-              tag={Link}
-              id="cancel-save"
-              to={'/paciente/' + this.state.fieldsBase.paciente + '/paciente-arquivo?' + this.getFiltersURL()}
-              replace
-              color="info"
-              className="float-right jh-create-entity"
-            >
-              <FontAwesomeIcon icon="arrow-left" />
-              &nbsp;
-              <span className="d-none d-md-inline">
-                <Translate contentKey="entity.action.back">Back</Translate>
-              </span>
-            </Button>
-          </h2>
-          <ol className="breadcrumb">
-            <li className="breadcrumb-item">
-              <Link to="/">Inicio</Link>
-            </li>
-            <li className="breadcrumb-item active">Paciente Arquivos</li>
-            <li className="breadcrumb-item active">Paciente Arquivos edit</li>
-          </ol>
-
-          <Panel>
+                <Button color="primary" id="save-entity" type="submit" disabled={updating} className="float-right jh-create-entity">
+                  <FontAwesomeIcon icon="save" />
+                  &nbsp;
+                  <Translate contentKey="entity.action.save">Save</Translate>
+                </Button>
+                <Button
+                  tag={Link}
+                  id="cancel-save"
+                  to={'/paciente/' + this.state.fieldsBase.paciente + '/paciente-arquivo?' + this.getFiltersURL()}
+                  replace
+                  color="info"
+                  className="float-right jh-create-entity"
+                >
+                  <FontAwesomeIcon icon="arrow-left" />
+                  &nbsp;
+                  <span className="d-none d-md-inline">
+                    <Translate contentKey="entity.action.back">Back</Translate>
+                  </span>
+                </Button>
+              </h2>
+              <ol className="breadcrumb">
+                <li className="breadcrumb-item">
+                  <Link to="/">Inicio</Link>
+                </li>
+                <li className="breadcrumb-item">
+                  <Link to={'/paciente'}>Pacientes</Link>
+                </li>
+                <li className="breadcrumb-item">
+                  <Link to={'/paciente/' + this.state[this.state.baseFilters]}>
+                    {pacienteArquivoEntity.paciente ? pacienteArquivoEntity.paciente.nome : this.state[this.state.baseFilters]}
+                  </Link>
+                </li>
+                <li className="breadcrumb-item">
+                  <Link to={'/paciente/' + this.state[this.state.baseFilters] + '/paciente-arquivo'}>Paciente Arquivos</Link>
+                </li>
+                <li className="breadcrumb-item active">Paciente Arquivos edit</li>
+              </ol>
+            </PanelHeader>
             <PanelBody>
               <Row className="justify-content-center">
                 <Col md="8">

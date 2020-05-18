@@ -54,9 +54,6 @@ export default class <%= asEntity(entityClass) %> extends BaseEntity  {
     const fieldNameUnderscored = fields[idx].fieldNameUnderscored;
     const fieldNameAsDatabaseColumn = fields[idx].fieldNameAsDatabaseColumn;
     const fieldColumnType=addDbType(fieldType);
-    if(fields[idx].dbName){
-        console.info(entityTableName + "." +fieldNameAsDatabaseColumn +"=>" +fields[idx].dbName);
-    }
     if (fieldValidate === true) {
         if (fieldValidateRules.includes('required')) {
             required = true;

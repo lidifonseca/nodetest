@@ -75,7 +75,6 @@ import NotificacaoConfig from './notificacao-config';
 import NotificacaoConfigUsuario from './notificacao-config-usuario';
 import OcorrenciaProntuario from './ocorrencia-prontuario';
 import Operadora from './operadora';
-import PacienteArquivo from './paciente-arquivo';
 import PacienteCaracteristicaAtual from './paciente-caracteristica-atual';
 import PacienteComplexidadeAtual from './paciente-complexidade-atual';
 import PacienteDadosCartao from './paciente-dados-cartao';
@@ -247,7 +246,6 @@ const Routes = ({ match }) => (
       <ErrorBoundaryRoute path={`${match.url}notificacao-config-usuario`} component={NotificacaoConfigUsuario} />
       <ErrorBoundaryRoute path={`${match.url}ocorrencia-prontuario`} component={OcorrenciaProntuario} />
       <ErrorBoundaryRoute path={`${match.url}operadora`} component={Operadora} />
-      <ErrorBoundaryRoute path={`${match.url}paciente/:idPaciente/paciente-arquivo`} component={PacienteArquivo} />
       <ErrorBoundaryRoute path={`${match.url}paciente`} component={Paciente} />
       <ErrorBoundaryRoute path={`${match.url}paciente-caracteristica-atual`} component={PacienteCaracteristicaAtual} />
       <ErrorBoundaryRoute path={`${match.url}paciente-complexidade-atual`} component={PacienteComplexidadeAtual} />
@@ -372,7 +370,6 @@ const Routes = ({ match }) => (
         path={`${match.url}profissional-dispositivo-complexidade-atual`}
         component={ProfissionalDispositivoComplexidadeAtual}
       />
-      <ErrorBoundaryRoute path={`${match.url}paciente-arquivo`} component={PacienteArquivo} />
       {/* jhipster-needle-add-route-path - JHipster will add routes here */}
       <ErrorBoundaryRoute component={PageNotFound} />
     </Switch>

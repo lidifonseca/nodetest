@@ -94,9 +94,7 @@ export class PacienteArquivoController {
       }
     });
 
-    console.info(pacienteArquivo);
     const created = await this.pacienteArquivoService.save(pacienteArquivo);
-    console.info(created);
     HeaderUtil.addEntityCreatedHeaders(req.res, 'PacienteArquivo', created.id);
     return created;
   }
